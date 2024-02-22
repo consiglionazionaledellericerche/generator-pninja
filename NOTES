@@ -1,0 +1,34 @@
+ 1983  composer create-project laravel/lumen rest-api
+ 1984  cd rest-api/
+ 1985  ..
+ 1986  ll
+ 1987  cd rest-api/
+ 1988  code .
+ 1989  composer install
+ 1990  composer require maxsky/lumen-app-key-generator
+ 1991  php artisan key:generate
+ 1992  composer require maxsky/lumen-app-key-generator
+ 1993  php artisan key:generate
+ 1994  php -r "echo md5(uniqid()).\"\n\";"
+ 1995  php -S localhost:8000 -t public
+ 1996  cd ..
+ 1997  rm -rf rest-api/
+ 1998  exit
+ 1999  php artisan make:migration create_authors_table
+ 2000  code .
+ 2001  php -r "echo md5(uniqid()).\"\n\";"
+ 2002  php artisan migrate
+ 2003  sudo apt-get install php-mysql
+ 2004  php artisan migrate
+ 2005  touch app/Author.php
+ 2006  touch app/Http/Controllers/AuthorController.php
+ 2007  history 
+ 2008  php artisan make:migration create_articles_table
+ 2009  php artisan migrate
+ 2010  git log -5
+ 2011  php artisan migrate
+ 2012  history 
+ 2013  touch app/Http/Controllers/ArticleController.php
+ 2014  php artisan make:migration rename_articles_column --table="articles" --create
+ 2015  php artisan migrate
+ 2016  history 

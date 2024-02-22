@@ -1,0 +1,24 @@
+{
+  "name": "generator-genpv",
+  "version": "0.1.0",
+  "description": "Generator for PHP/Vue applications",
+  "files": [
+    "generators"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "Gianluca Troiani",
+  "license": "ISC",
+  "devDependencies": {
+    "yeoman-generator": "^4.0.0"
+  },
+  "dependencies": {
+    "ansi-colors": "^4.1.3",
+    "randomstring": "^1.3.0",
+    "to-case": "^2.0.0"
+  }
+}
