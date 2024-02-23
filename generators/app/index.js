@@ -134,23 +134,13 @@ module.exports = class extends Generator {
       projectVersion: this.projectVersion,
       authorName: this.authorName
     });
-    // let bootContent = fs.readFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, { encoding: 'utf8', flag: 'w' });
-    // bootContent = bootContent.replace(/^\/\/ (\$app->withFacades\(\);)/m, '$1');
-    // bootContent = bootContent.replace(/^\/\/ (\$app->withEloquent\(\);)/m, '$1');
-    // fs.writeFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, bootContent, { encoding: 'utf8', flag: 'w' });
-    // this.log(fs.readFileSync(`${this.destinationPath('server')}/.env`), { encoding: 'utf8', flag: 'r' });
-    
-    // this.log(JSON.stringify(this.config.getAll()));
-    // this.spawnCommandSync('mkdir', this.destinationPath('server'));
-    // this.spawnCommandSync('cd', this.destinationPath('server'));
-    // this.log(JSON.stringify(this.props));
-    // this.log("app name", this.answers.name);
-    // this.log("app packageManager", this.answers.packageManager);
-    // this.log("app installDeps", this.answers.installDeps);
-    // this.log(this.destinationRoot());
-    // this.log(this.destinationPath('index.js'));
-    // this.log(this.sourceRoot());
-    // this.log(this.templatePath('index.js'));
+
+    // Enable Facades and Eloquent
+    const bootPath = `${this.destinationPath('server/bootstrap/app.php')}`;
+    let bootContent = fs.readFileSync(bootPath, { encoding: 'utf8', flag: 'r' });
+    bootContent = bootContent.replace(/^\/\/ (\$app->withFacades\(\);)/m, '$1');
+    bootContent = bootContent.replace(/^\/\/ (\$app->withEloquent\(\);)/m, '$1');
+    fs.writeFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, bootContent, { encoding: 'utf8', flag: 'w' });
   }
   
   end() {
