@@ -134,6 +134,10 @@ module.exports = class extends Generator {
       projectVersion: this.projectVersion,
       authorName: this.authorName
     });
+    // let bootContent = fs.readFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, { encoding: 'utf8', flag: 'w' });
+    // bootContent = bootContent.replace(/^\/\/ (\$app->withFacades\(\);)/m, '$1');
+    // bootContent = bootContent.replace(/^\/\/ (\$app->withEloquent\(\);)/m, '$1');
+    // fs.writeFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, bootContent, { encoding: 'utf8', flag: 'w' });
     // this.log(fs.readFileSync(`${this.destinationPath('server')}/.env`), { encoding: 'utf8', flag: 'r' });
     
     // this.log(JSON.stringify(this.config.getAll()));

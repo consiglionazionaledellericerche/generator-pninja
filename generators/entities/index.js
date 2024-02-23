@@ -62,11 +62,13 @@ module.exports = class extends Generator {
     if(Array.isArray(entities.entities)) {
       for (let index = 0; index < entities.entities.length; index++) {
         const entity = entities.entities[index];
+        const entityProperties = [];
         const ups = [];
         const downs = [];
         for(const col in entity.schema) {
           ups.push(utils.getAddColumnUp(col, entity.schema[col]));
           downs.push(utils.getAddColumnDown(col));
+          entityProperties.push(col);
         }
         // Create entity table migration file
         this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity.name)}_table`], {cwd: 'server'});
@@ -78,6 +80,30 @@ module.exports = class extends Generator {
           up: ups.join("\n"),
           down: downs.join("\n"),
         });
+
+        // Create entity model
+        this.fs.copyTpl(this.templatePath("entity_model.php.ejs"), this.destinationPath(`server/app/Models/${utils.getClassNameFromEntityName(entity.name)}.php`),
+        {
+          className: utils.getClassNameFromEntityName(entity.name),
+          fillable: entityProperties.map(p => `'${p}'`).join(', ')
+        });
+
+        // Create entity controller
+        this.fs.copyTpl(this.templatePath("entity_controller.php.ejs"), this.destinationPath(`server/app/Http/Controllers/${utils.getClassNameFromEntityName(entity.name)}Controller.php`),
+        {
+          className: utils.getClassNameFromEntityName(entity.name),
+          entityName: utils.getVariableNameFromEntityName(entity.name)
+        });
+
+        // Create entity routes
+        this.fs.copyTpl(this.templatePath("entity_router.php.ejs"), this.destinationPath(`server/routes/${utils.getVariableNameFromEntityName(entity.name)}.php`),
+        {
+          className: utils.getClassNameFromEntityName(entity.name),
+          rootPath: utils.getRootPathFromEntityName(entity.name)
+        });
+        setTimeout(()=> {
+          fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getVariableNameFromEntityName(entity.name)}.php';`);
+        }, 1000)
       }
     }
     // Parsing relations from entities definition file

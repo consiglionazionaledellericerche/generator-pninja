@@ -2,6 +2,12 @@ const to = require('to-case');
 
 const getTableNameFromEntityName = (name) => `${to.snake(name)}s`;
 
+const getClassNameFromEntityName = (name) => `${to.pascal(name)}`;
+
+const getVariableNameFromEntityName = (name) => `${to.camel(name)}`;
+
+const getRootPathFromEntityName = (name) => `${to.camel(name).toLowerCase()}s`;
+
 const getAddColumnUp = (name, type) => {
     switch (type.toLowerCase()) {
         case 'string':
@@ -63,7 +69,10 @@ const getRelationPropertyOwner = (relation) => {
 
 
 module.exports = {
+    getClassNameFromEntityName,
     getTableNameFromEntityName,
+    getVariableNameFromEntityName,
+    getRootPathFromEntityName,
     getAddColumnUp,
     getAddColumnDown,
     getAddRelationUp,

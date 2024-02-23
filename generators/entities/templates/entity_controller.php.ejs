@@ -1,0 +1,40 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\Models\<%- className %>;
+use Illuminate\Http\Request;
+
+class <%- className %>Controller extends Controller
+{
+
+    public function readAll()
+    {
+        return response()->json(<%- className %>::all());
+    }
+
+    public function read($id)
+    {
+        return response()->json(<%- className %>::find($id));
+    }
+
+    public function create(Request $request)
+    {
+        $<%- entityName %> = <%- className %>::create($request->all());
+
+        return response()->json($<%- entityName %>, 201);
+    }
+
+    public function update($id, Request $request)
+    {
+        $<%- entityName %> = <%- className %>::findOrFail($id);
+        $<%- entityName %>->update($request->all());
+
+        return response()->json($<%- entityName %>, 200);
+    }
+
+    public function delete($id)
+    {
+        <%- className %>::findOrFail($id)->delete();
+        return response('Deleted Successfully', 200);
+    }
+}
