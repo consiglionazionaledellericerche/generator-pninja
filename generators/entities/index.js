@@ -3,65 +3,7 @@ const fs = require('fs');
 const to = require('to-case');
 const colors = require('ansi-colors');
 const moment = require('moment');
-
-const getAddColumnUp = (name, type) => {
-  switch (type.toLowerCase()) {
-    case 'string':
-      return `\n\t\t\t$table->string('${name}', 255);`
-      break;
-  
-    default:
-      return undefined;
-      break;
-  }
-}
-const getAddColumnDown = (name) => {
-  return `\n\t\t\t$table->dropColumn('${name}');`
-}
-
-const getAddRelationUp = (relation) => {
-  switch (relation.type.toLowerCase()) {
-    case 'many-to-one':
-      return `
-\t\t\t$table->bigInteger('${relation.name}')->unsigned();
-\t\t\t$table->foreign('${relation.name}')
-\t\t\t      ->references('id')
-\t\t\t      ->on('${to.snake(relation.to)}')
-\t\t\t      ->onDelete('cascade');
-      `
-      break;
-  
-    default:
-      return undefined;
-      break;
-  }
-}
-const getAddRelationDown = (relation) => {
-  switch (relation.type.toLowerCase()) {
-    case 'many-to-one':
-      return `
-\t\t\t$table->dropForeign(['${relation.name}']);
-\t\t\t$table->dropColumn('${relation.name}');
-      `
-      break;
-  
-    default:
-      return undefined;
-      break;
-  }
-}
-
-const getRelationPropertyOwner = (relation) => {
-  switch (relation.type.toLowerCase()) {
-    case 'many-to-one':
-      return to.snake(relation.from)
-      break;
-  
-    default:
-      return undefined;
-      break;
-  }
-}
+const utils = require('./utils');
 
 module.exports = class extends Generator {
   async prompting() {
@@ -90,6 +32,11 @@ module.exports = class extends Generator {
         name: "entitiesFilePath",
         message: "Entities definition file path",
         default: '.vamp.entities.json'
+      },{
+        type: "confirm",
+        name: "migrateFresh",
+        message: "Cleanup database?",
+        default: false
       }]);
       this.answers = {...this.answers, ...answers};
     }
@@ -108,18 +55,18 @@ module.exports = class extends Generator {
     const entities = this.fs.readJSON(entitiesFilePath) || {};
     if(Array.isArray(entities.entities)) {
       for (let index = 0; index < entities.entities.length; index++) {
-        const {name, schema} = entities.entities[index];
+        const entity = entities.entities[index];
         const ups = [];
         const downs = [];
-        for(const col in schema) {
-          ups.push(getAddColumnUp(col, schema[col]));
-          downs.push(getAddColumnDown(col));
+        for(const col in entity.schema) {
+          ups.push(utils.getAddColumnUp(col, entity.schema[col]));
+          downs.push(utils.getAddColumnDown(col));
         }
-        this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${to.snake(name)}_table`], {cwd: 'server'});
-        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${to.snake(name)}_table.php`;
+        this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity.name)}_table`], {cwd: 'server'});
+        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${utils.getTableNameFromEntityName(entity.name)}_table.php`;
         this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
         {
-          tabName: to.snake(name),
+          tabName: utils.getTableNameFromEntityName(entity.name),
           up: ups.join("\n"),
           down: downs.join("\n"),
         });
@@ -130,12 +77,12 @@ module.exports = class extends Generator {
       const downs = [];
       for (let index = 0; index < entities.relations.length; index++) {
         const relation = entities.relations[index];
-        ups.push(getAddRelationUp(relation));
-        downs.push(getAddRelationDown(relation));
-        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.name)}_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
+        ups.push(utils.getAddRelationUp(relation));
+        downs.push(utils.getAddRelationDown(relation));
+        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
         this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
         {
-          tabName: getRelationPropertyOwner(relation),
+          tabName: utils.getRelationPropertyOwner(relation),
           up: ups.join("\n"),
           down: downs.join("\n"),
         });
@@ -200,6 +147,12 @@ module.exports = class extends Generator {
     // });
   }
   end() {
-    this.spawnCommandSync('php', ['artisan', 'migrate'], {cwd: 'server'});
+    if(this.answers.build || this.answers.rebuild) {
+      if(this.answers.migrateFresh) {
+        this.spawnCommandSync('php', ['artisan', 'migrate:fresh'], {cwd: 'server'});
+      } else {
+        this.spawnCommandSync('php', ['artisan', 'migrate'], {cwd: 'server'});
+      }
+    }
   }
 };
