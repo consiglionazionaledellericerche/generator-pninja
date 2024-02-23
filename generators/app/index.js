@@ -113,7 +113,6 @@ module.exports = class extends Generator {
   }
   
   writing() {
-    this.log(colors.dim(JSON.stringify(this.answers)));
     this.spawnCommandSync('composer', ['create-project',`laravel/lumen`,'server']);
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
