@@ -19,6 +19,7 @@
   "dependencies": {
     "ansi-colors": "^4.1.3",
     "moment": "^2.30.1",
+    "pluralize": "^8.0.0",
     "randomstring": "^1.3.0",
     "to-case": "^2.0.0"
   }
