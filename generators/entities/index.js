@@ -56,10 +56,7 @@ module.exports = class extends Generator {
     } else {
       this.log(colors.green(`Entities configuration file found! Generating entities from ${entitiesFilePath}`));
     }
-    // Reading entities definition file
-    // const entities = this.fs.readJSON(entitiesFilePath) || {};
-    // Parsing entities from entities definition file
-    console.log(`\n\n\n\n\n\n\n\n\n\n\n%o\n\n\n\n\n\n\n\n\n\n\n`, utils.getEntitiesAndRelations(entitiesFilePath));
+
     const {entities, properties, relations} = utils.getEntitiesAndRelations(entitiesFilePath);
     for (let index = 0; index < entities.length; index++) {
       const entity = entities[index];
@@ -105,26 +102,23 @@ module.exports = class extends Generator {
         rootPath: utils.getRootPathFromEntityName(entityName)
       });
       fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getVariableNameFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
-      // setTimeout(()=> {
-      //   fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getVariableNameFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
-      // }, 1000)
     }
 
 
     for(entityName in relations) {
       const rels = relations[entityName];
-      const tabName = utils.getTableNameFromEntityName(entityName);
       const ups = [];
       const downs = [];
       // Create migration files for relations
       for (let index = 0; index < rels.length; index++) {
         const relation = rels[index];
+        const tabName = utils.getTableNameFromEntityName(utils.getRelationPropertyOwner(relation));
         ups.push(utils.getAddRelationUp(relation));
         downs.push(utils.getAddRelationDown(relation));
         const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
         this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
         {
-          tabName: utils.getTableNameFromEntityName(utils.getRelationPropertyOwner(relation)),
+          tabName,
           up: ups.join("\n"),
           down: downs.join("\n"),
         });

@@ -145,9 +145,7 @@ module.exports = class extends Generator {
   
   end() {
     this.log(colors.bold.green(`\nApplication generated successfully with`) + colors.bold.red(' ♥️ ') + colors.bold.green(`& 🦇!\n`));
-    // this.log(`${colors.whiteBright('Running dev server')} ${colors.green(`npm run server`)}`);
     this.log(`${colors.green(`Start your Webpack development server with:`)}\n  ${colors.yellowBright(`${this.answers.packageManager} run server`)}\n`);
     this.log(colors.green(`\nCongratulations, Vamp execution is complete!\n`))
-    // this.spawnCommandSync(this.answers.packageManager, ['run', 'server']);
   }
 };

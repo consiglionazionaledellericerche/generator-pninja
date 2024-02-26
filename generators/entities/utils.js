@@ -67,17 +67,17 @@ const getRelationPropertyOwner = (relation) => {
         break;
     }
 }
-const getRelationDestination = (relation) => {
-    switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
-        return relation.to;
-        break;
+// const getRelationDestination = (relation) => {
+//     switch (relation.type.toLowerCase()) {
+//         case 'many-to-one':
+//         return relation.to;
+//         break;
         
-        default:
-        return undefined;
-        break;
-    }
-}
+//         default:
+//         return undefined;
+//         break;
+//     }
+// }
 const getRelationPropertyName = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'many-to-one':
@@ -135,5 +135,5 @@ module.exports = {
     getAddRelationUp,
     getAddRelationDown,
     getRelationPropertyOwner,
-    getRelationDestination
+    // getRelationDestination
 }
