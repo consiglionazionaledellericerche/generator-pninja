@@ -107,20 +107,20 @@ module.exports = class extends Generator {
 
     for(entityName in relations) {
       const rels = relations[entityName];
-      const ups = [];
-      const downs = [];
+      // const ups = [];
+      // const downs = [];
       // Create migration files for relations
       for (let index = 0; index < rels.length; index++) {
         const relation = rels[index];
         const tabName = utils.getTableNameFromEntityName(utils.getRelationPropertyOwner(relation));
-        ups.push(utils.getAddRelationUp(relation));
-        downs.push(utils.getAddRelationDown(relation));
+        // ups.push(utils.getAddRelationUp(relation));
+        // downs.push(utils.getAddRelationDown(relation));
         const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
         this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
         {
           tabName,
-          up: ups.join("\n"),
-          down: downs.join("\n"),
+          up: utils.getAddRelationUp(relation),
+          down: utils.getAddRelationDown(relation),
         });
       }
     }
