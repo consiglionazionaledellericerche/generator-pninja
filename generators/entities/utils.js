@@ -38,7 +38,13 @@ const getAddRelationUp = (relation) => {
         \t\t\t      ->onDelete('cascade');
         `
         break;
-        
+        case 'one-to-many':
+        return `
+        \t\t\t$table->foreign('${to.snake(relation.from)}_id')
+        \t\t\t      ->references('id')
+        \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
+        \t\t\t      ->onDelete('cascade');
+        `        
         default:
         return undefined;
         break;
@@ -49,7 +55,9 @@ const getAddRelationDown = (relation) => {
         case 'many-to-one':
         return `\t\t\t$table->dropForeign(['${to.snake(relation.to)}_id']);`
         break;
-        
+        case 'one-tom-many':
+        return `\t\t\t$table->dropForeign(['${to.snake(relation.from)}_id']);`
+        break;
         default:
         return undefined;
         break;
@@ -60,30 +68,36 @@ const getRelationPropertyOwner = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'many-to-one':
         return relation.from;
+        break
+        case 'one-to-many':
+        return relation.to;
         break;
-        
         default:
         return undefined;
         break;
     }
 }
-// const getRelationDestination = (relation) => {
-//     switch (relation.type.toLowerCase()) {
-//         case 'many-to-one':
-//         return relation.to;
-//         break;
-        
-//         default:
-//         return undefined;
-//         break;
-//     }
-// }
+const getRelationDestination = (relation) => {
+    switch (relation.type.toLowerCase()) {
+        case 'many-to-one':
+        return relation.to;
+        break;
+        case 'one-to-many':
+        return relation.from;
+        break;
+        default:
+        return undefined;
+        break;
+    }
+}
 const getRelationPropertyName = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'many-to-one':
         return `${to.snake(relation.to)}_id`;
         break;
-        
+        case 'one-to-many':
+        return `${to.snake(relation.from)}_id`;
+        break;
         default:
         return undefined;
         break;
