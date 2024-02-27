@@ -58,7 +58,7 @@ const getAddRelationDown = (relation) => {
         case 'one-to-one':
         return `\t\t\t$table->dropForeign(['${to.snake(relation.to)}_id']);`
         break;
-        case 'one-tom-many':
+        case 'one-to-many':
         return `\t\t\t$table->dropForeign(['${to.snake(relation.from)}_id']);`
         break;
         default:
