@@ -31,8 +31,8 @@ const getAddColumnDown = (name) => {
 
 const getAddRelationUp = (relation) => {
     switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
         case 'one-to-one':
+        case 'many-to-one':
         return `
         \t\t\t$table->foreign('${to.snake(relation.to)}_id')
         \t\t\t      ->references('id')
@@ -54,8 +54,8 @@ const getAddRelationUp = (relation) => {
 }
 const getAddRelationDown = (relation) => {
     switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
         case 'one-to-one':
+        case 'many-to-one':
         return `\t\t\t$table->dropForeign(['${to.snake(relation.to)}_id']);`
         break;
         case 'one-to-many':
@@ -69,8 +69,8 @@ const getAddRelationDown = (relation) => {
 
 const getRelationPropertyOwner = (relation) => {
     switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
         case 'one-to-one':
+        case 'many-to-one':
         return relation.from;
         break
         case 'one-to-many':
@@ -83,8 +83,8 @@ const getRelationPropertyOwner = (relation) => {
 }
 const getRelationDestination = (relation) => {
     switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
         case 'one-to-one':
+        case 'many-to-one':
         return relation.to;
         break;
         case 'one-to-many':
@@ -97,8 +97,8 @@ const getRelationDestination = (relation) => {
 }
 const getRelationPropertyName = (relation) => {
     switch (relation.type.toLowerCase()) {
-        case 'many-to-one':
         case 'one-to-one':
+        case 'many-to-one':
         return `${to.snake(relation.to)}_id`;
         break;
         case 'one-to-many':
