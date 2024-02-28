@@ -60,6 +60,7 @@ module.exports = class extends Generator {
     const {entities, properties, relations} = utils.getEntitiesAndRelations(entitiesFilePath);
     for (let index = 0; index < entities.length; index++) {
       const entity = entities[index];
+      // Create migration for entity table
       this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity)}_table`], {cwd: 'server'});
     }
     
@@ -96,12 +97,12 @@ module.exports = class extends Generator {
       });
       
       // Create entity routes
-      this.fs.copyTpl(this.templatePath("entity_router.php.ejs"), this.destinationPath(`server/routes/${utils.getVariableNameFromEntityName(entityName)}.php`),
+      this.fs.copyTpl(this.templatePath("entity_router.php.ejs"), this.destinationPath(`server/routes/${utils.getRootPathFromEntityName(entityName)}.php`),
       {
         className: utils.getClassNameFromEntityName(entityName),
         rootPath: utils.getRootPathFromEntityName(entityName)
       });
-      fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getVariableNameFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
+      fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getRootPathFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
     }
 
 

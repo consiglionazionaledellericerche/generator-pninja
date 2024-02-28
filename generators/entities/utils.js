@@ -133,7 +133,7 @@ const getEntitiesAndRelations = (entitiesFilePath) => {
         for (let index = 0; index < relations.length; index++) {
             const relation = relations[index];
             const entityName = getRelationPropertyOwner(relation);
-            if(res.entities[entityName] === undefined) { res.entities.push(entityName); }
+            if(res.entities.indexOf(entityName) === -1) { res.entities.push(entityName); }
             if(res.properties[entityName] === undefined) { res.properties[entityName] = []; }
             res.properties[entityName].push({name: getRelationPropertyName(relation), type: 'unsignedBigInteger'});
             if(res.relations[entityName] === undefined) { res.relations[entityName] = []; }
