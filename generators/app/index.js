@@ -1,8 +1,9 @@
-var Generator = require('yeoman-generator');
+const Generator = require('yeoman-generator');
 const fs = require('fs');
 const to = require('to-case');
 const colors = require('ansi-colors');
-var randomstring = require("randomstring");
+const utils = require('./utils');
+const randomstring = require("randomstring");
 
 module.exports = class extends Generator {
   // note: arguments and options should be defined in the constructor.
@@ -16,20 +17,8 @@ module.exports = class extends Generator {
     // this.log(this.options.appname);
   }
   async initializing() {
-    this.log(colors.red("┓┏            _   ,_,   _     "));
-    this.log(colors.red("┃┃┏┓┏┳┓┏┓    / `'=) (='` \\    "));
-    this.log(colors.red("┗┛┗┻┛┗┗┣┛   /.-.-.\\ /.-.-.\\   "));
-    this.log(colors.red('       ┛    `      "      `   '));
-    this.log(`${colors.bold.red(`Vamp`)}: ${colors.whiteBright(`Vue and MySQL/PHP Generator`)}`);
-    // this.log(colors.red("                                                            "));
-    // this.log(colors.red("   ██╗   ██╗ █████╗ ███╗   ███╗██████╗      _   ,_,   _     "));
-    // this.log(colors.red("   ██║   ██║██╔══██╗████╗ ████║██╔══██╗    / `'=) (='` \\    "));
-    // this.log(colors.red("   ██║   ██║███████║██╔████╔██║██████╔╝   /.-.-.\\ /.-.-.\\   ")); 
-    // this.log(colors.red("   ╚██╗ ██╔╝██╔══██║██║╚██╔╝██║██╔═══╝    `      \"      `   "));
-    // this.log(colors.red("    ╚████╔╝ ██║  ██║██║ ╚═╝ ██║██║       Vue and MySQL/PHP  "));
-    // this.log(colors.red("     ╚═══╝  ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝       Generator v.0.1.0  "));
-    // this.log(colors.red("                                                            "));
-    this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(__dirname)}\n\n`);
+    utils.hello(this.log);
+    this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n\n`);
     this.composeWith(require.resolve("../entities"),{fromMain: true});
   }
   async prompting() {
@@ -144,7 +133,7 @@ module.exports = class extends Generator {
   }
   
   end() {
-    this.log(colors.bold.green(`\nApplication generated successfully with`) + colors.bold.red(' ♥️ ') + colors.bold.green(`& 🦇!\n`));
+    this.log(colors.bold.green(`\nApplication generated successfully with `) + colors.bold.red('♥️') + colors.bold.green(`  & 🚀!\n`));
     this.log(`${colors.green(`Start your Webpack development server with:`)}\n  ${colors.yellowBright(`${this.answers.packageManager} run server`)}\n`);
     this.log(colors.green(`\nCongratulations, Vamp execution is complete!\n`))
   }
