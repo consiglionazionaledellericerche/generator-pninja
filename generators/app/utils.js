@@ -2,12 +2,6 @@ const colors = require('ansi-colors');
 
 const hello = (log) => {
 log(colors.redBright(`\nIt's a Bird? It's a Plane? It's Superman? `) + colors.blueBright(`It's a `) + colors.bold.blueBright(`Rocket Elephant`) + colors.redBright('!\n'));
-// log(colors.redBright('               ▄▄▄'));
-// log(colors.blue('┏┓            ') + colors.white('  ▄▄') + colors.blueBright('▄▄▄▄'));
-// log(colors.blue('┃┃┏┓┏┓┏╋┏┓   ') + colors.yellowBright('■■█') + colors.white('██') + colors.blueBright('███▄█'));
-// log(colors.blue('┣┛┛ ┗ ┛┗┗┛    ') + colors.white('  ▀▀') + colors.blueBright('▀▀▀▀█') + colors.white('▀'));
-// log(colors.redBright('               ▀▀▀') + colors.blueBright('   ▀'));
-// log(`${colors.bold.blueBright(`Presto`)}: ${colors.bold.whiteBright(`P`)}${colors.whiteBright(`hp, `)}${colors.bold.whiteBright(`RE`)}${colors.whiteBright(`act, `)}${colors.bold.whiteBright(`S`)}${colors.whiteBright(`ql `)}${colors.bold.whiteBright(`TO`)}${colors.whiteBright(`olkit`)} ${colors.yellow(`v.0.1.0`)}`)
 log(colors.blueBright('    ____  ________  _____/ /_____ ') + `   ` + colors.redBright('  ▄▄▄'));
 log(colors.blueBright('   / __ \\/ ___/ _ \\/ ___/ __/ __ \\') + `   ` + colors.white('   ▄▄') + colors.blueBright('▄▄▄▄'));
 log(colors.blueBright('  / /_/ / /  /  __(__  ) /_/ /_/ /') + `   ` + colors.yellowBright('■■█') + colors.white('██') + colors.blueBright('███▄█'));
