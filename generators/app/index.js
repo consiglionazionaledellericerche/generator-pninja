@@ -18,8 +18,9 @@ module.exports = class extends Generator {
   }
   async initializing() {
     utils.hello(this.log);
-    this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n\n`);
+    this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
     this.composeWith(require.resolve("../entities"),{fromMain: true});
+    this.composeWith(require.resolve("../final"),{fromMain: true});
   }
   async prompting() {
     this.answers = await this.prompt([
@@ -98,6 +99,10 @@ module.exports = class extends Generator {
         }
       ]);
       this.answers = {...this.answers, ...answers};
+      for(const key in this.answers){
+        this.config.set(key, this.answers[key])
+      }
+      this.config.save();
     }
   }
   
@@ -130,11 +135,5 @@ module.exports = class extends Generator {
     bootContent = bootContent.replace(/^\/\/ (\$app->withFacades\(\);)/m, '$1');
     bootContent = bootContent.replace(/^\/\/ (\$app->withEloquent\(\);)/m, '$1');
     fs.writeFileSync(`${this.destinationPath('server/bootstrap/app.php')}`, bootContent, { encoding: 'utf8', flag: 'w' });
-  }
-  
-  end() {
-    this.log(colors.bold.green(`\nApplication generated successfully with `) + colors.bold.red('♥️') + colors.bold.green(`  & 🚀!\n`));
-    this.log(`${colors.green(`Start your Webpack development server with:`)}\n  ${colors.yellowBright(`${this.answers.packageManager} run server`)}\n`);
-    this.log(colors.green(`\nCongratulations, Vamp execution is complete!\n`))
   }
 };

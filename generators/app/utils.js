@@ -1,6 +1,7 @@
 const colors = require('ansi-colors');
 
 const hello = (log) => {
+log(colors.redBright(`\nIt's a Bird? It's a Plane? It's Superman? `) + colors.blueBright(`It's a `) + colors.bold.blueBright(`Rocket Elephant`) + colors.redBright('!\n'));
 // log(colors.redBright('               ▄▄▄'));
 // log(colors.blue('┏┓            ') + colors.white('  ▄▄') + colors.blueBright('▄▄▄▄'));
 // log(colors.blue('┃┃┏┓┏┓┏╋┏┓   ') + colors.yellowBright('■■█') + colors.white('██') + colors.blueBright('███▄█'));

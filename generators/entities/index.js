@@ -42,6 +42,13 @@ module.exports = class extends Generator {
       this.answers = {...this.answers, ...answers};
     }
   }
+
+  configuring() {
+    for(const key in this.answers){
+      this.config.set(key, this.answers[key]);
+    }
+    this.config.save();
+  }
   
   writing() {
     if(!this.answers.build && !this.answers.rebuild) {
@@ -104,7 +111,6 @@ module.exports = class extends Generator {
       });
       fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getRootPathFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
     }
-
 
     for(entityName in relations) {
       const rels = relations[entityName];
