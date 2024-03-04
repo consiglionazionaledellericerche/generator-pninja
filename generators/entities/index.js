@@ -1,3 +1,4 @@
+'use strict';
 var Generator = require('yeoman-generator');
 const fs = require('fs');
 const to = require('to-case');
@@ -6,6 +7,9 @@ const moment = require('moment');
 const utils = require('./utils');
 
 module.exports = class extends Generator {
+  constructor(args, opts) {
+    super(args, opts);
+  }
   async prompting() {
     let prompts = [];
     if(this.options["fromMain"]) {
