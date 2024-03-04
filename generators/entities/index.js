@@ -54,7 +54,7 @@ module.exports = class extends Generator {
     this.config.save();
   }
   
-  writing() {
+  async writing() {
     if(!this.answers.build && !this.answers.rebuild) {
       // Nothing to do
       return;
@@ -68,7 +68,10 @@ module.exports = class extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating entities from ${entitiesFilePath}`));
     }
 
-    const {entities, properties, relations} = utils.getEntitiesAndRelations(entitiesFilePath);
+    await utils.writeEntitiesAndRelationsCSV(entitiesFilePath);
+    
+    const {entities, properties, relations} = await utils.getEntitiesAndRelations(entitiesFilePath);
+
     for (let index = 0; index < entities.length; index++) {
       const entity = entities[index];
       // Create migration for entity table
@@ -97,7 +100,8 @@ module.exports = class extends Generator {
       this.fs.copyTpl(this.templatePath("entity_model.php.ejs"), this.destinationPath(`server/app/Models/${utils.getClassNameFromEntityName(entityName)}.php`),
       {
         className: utils.getClassNameFromEntityName(entityName),
-        fillable: properties[entityName].map(p => `'${p.name}'`).join(', ')
+        fillable: properties[entityName].map(p => `'${p.name}'`).join(', '),
+        relations: (relations && relations[entityName] && Array.isArray(relations[entityName])) ? relations[entityName].map(r => utils.getRelationForModel(r)).join("\n\t") : ""
       });
       
       // Create entity controller

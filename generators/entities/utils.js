@@ -1,4 +1,32 @@
 const fs = require('fs');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const entitiesWriter = createCsvWriter({
+    path: './.entities.csv',
+    header: [
+        {id: 'name', title: 'name'},
+        {id: 'class', title: 'class'},
+        {id: 'table', title: 'table'},
+        {id: 'variable', title: 'variable'},
+        {id: 'path', title: 'path'}
+    ]
+});
+const propertiesWriter = createCsvWriter({
+    path: './.properties.csv',
+    header: [
+        {id: 'entity', title: 'entity'},
+        {id: 'column', title: 'column'},
+        {id: 'type', title: 'type'},
+    ]
+});
+const relationsWriter = createCsvWriter({
+    path: './.relations.csv',
+    header: [
+        {id: 'type', title: 'type'},
+        {id: 'from', title: 'from'},
+        {id: 'to', title: 'to'},
+    ]
+});
+
 var pluralize = require('pluralize')
 
 const to = require('to-case');
@@ -109,8 +137,54 @@ const getRelationPropertyName = (relation) => {
         break;
     }
 }
+const getRelationForModel = (relation) => {
+    switch (relation.type) {
+        case 'many-to-one':
+            return `public function ${getVariableNameFromEntityName(relation.to)}() { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class); }`
+            break;
+        case 'one-to-many':
+            return `public function ${getVariableNameFromEntityName(relation.from)}() { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class); }`
+            break;
+        default:
+            return `// TODO ${JSON.stringify(relation)}`;
+            break;
+    }
+}
 
-const getEntitiesAndRelations = (entitiesFilePath) => {
+const writeEntitiesAndRelationsCSV = async (entitiesFilePath) => {
+    const {entities, relations} = JSON.parse(fs.readFileSync(entitiesFilePath) || '{}');
+    if(Array.isArray(entities)) {
+        const es = [];
+        const ps = [];
+        for (let index = 0; index < entities.length; index++) {
+            const entity = entities[index];
+            entityName = entity.name;
+            entitySchema = entity.schema;
+            es.push({
+                name: entityName,
+                class: getClassNameFromEntityName(entityName),
+                table: getTableNameFromEntityName(entityName),
+                variable: getVariableNameFromEntityName(entityName),
+                path: getRootPathFromEntityName(entityName)
+            });
+            for(const col in entitySchema) {
+                ps.push({entity: entityName, column: col, type: entitySchema[col]});
+            }
+        }
+        await entitiesWriter.writeRecords(es);
+        await propertiesWriter.writeRecords(ps);
+    }
+    if(Array.isArray(relations)) {
+        const rs = [];
+        for (let index = 0; index < relations.length; index++) {
+            const {type, from, to} = relations[index];
+            rs.push({type, from, to});
+        }
+        await relationsWriter.writeRecords(rs);
+    }
+}
+
+const getEntitiesAndRelations = async (entitiesFilePath) => {
     const {entities, relations} = JSON.parse(fs.readFileSync(entitiesFilePath) || '{}');
     const res = {
         entities: [],
@@ -140,7 +214,6 @@ const getEntitiesAndRelations = (entitiesFilePath) => {
             res.relations[entityName].push(relation);
         }
     }
-    console.log("\n\n\n\n%o\n\n\n", res);
     return res;
 }
 
@@ -156,5 +229,7 @@ module.exports = {
     getAddRelationUp,
     getAddRelationDown,
     getRelationPropertyOwner,
+    getRelationForModel,
+    writeEntitiesAndRelationsCSV
     // getRelationDestination
 }
