@@ -68,15 +68,19 @@ module.exports = class extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating entities from ${entitiesFilePath}`));
     }
 
-    await utils.writeEntitiesAndRelationsCSV(entitiesFilePath);
-    
+    await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
+    await utils.createMigrationsFromCSV(this);
+    await utils.createAddColumnsFromCSV(this);
+    await utils.createAddRelationsFromCSV(this);
+    await utils.createEntityModelFromCSV(this);
+
     const {entities, properties, relations} = await utils.getEntitiesAndRelations(entitiesFilePath);
 
-    for (let index = 0; index < entities.length; index++) {
-      const entity = entities[index];
-      // Create migration for entity table
-      this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity)}_table`], {cwd: 'server'});
-    }
+    // for (let index = 0; index < entities.length; index++) {
+    //   const entity = entities[index];
+    //   // Create migration for entity table
+    //   this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity)}_table`], {cwd: 'server'});
+    // }
     
     for(entityName in properties) {
       const props = properties[entityName];
@@ -90,19 +94,19 @@ module.exports = class extends Generator {
       }
       const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${tabName}_table.php`;
       // Create migration file for columns in entity table
-      this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
-      {
-        tabName,
-        up: ups.join("\n"),
-        down: downs.join("\n"),
-      });
+      // this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
+      // {
+      //   tabName,
+      //   up: ups.join("\n"),
+      //   down: downs.join("\n"),
+      // });
       // Create entity model
-      this.fs.copyTpl(this.templatePath("entity_model.php.ejs"), this.destinationPath(`server/app/Models/${utils.getClassNameFromEntityName(entityName)}.php`),
-      {
-        className: utils.getClassNameFromEntityName(entityName),
-        fillable: properties[entityName].map(p => `'${p.name}'`).join(', '),
-        relations: (relations && relations[entityName] && Array.isArray(relations[entityName])) ? relations[entityName].map(r => utils.getRelationForModel(r)).join("\n\t") : ""
-      });
+      // this.fs.copyTpl(this.templatePath("entity_model.php.ejs"), this.destinationPath(`server/app/Models/${utils.getClassNameFromEntityName(entityName)}.php`),
+      // {
+      //   className: utils.getClassNameFromEntityName(entityName),
+      //   fillable: properties[entityName].map(p => `'${p.name}'`).join(', '),
+      //   relations: (relations && relations[entityName] && Array.isArray(relations[entityName])) ? relations[entityName].map(r => utils.getRelationForModel(r)).join("\n\t") : ""
+      // });
       
       // Create entity controller
       this.fs.copyTpl(this.templatePath("entity_controller.php.ejs"), this.destinationPath(`server/app/Http/Controllers/${utils.getClassNameFromEntityName(entityName)}Controller.php`),
@@ -130,13 +134,13 @@ module.exports = class extends Generator {
         const tabName = utils.getTableNameFromEntityName(utils.getRelationPropertyOwner(relation));
         // ups.push(utils.getAddRelationUp(relation));
         // downs.push(utils.getAddRelationDown(relation));
-        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
-        this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
-        {
-          tabName,
-          up: utils.getAddRelationUp(relation),
-          down: utils.getAddRelationDown(relation),
-        });
+        // const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
+        // this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
+        // {
+        //   tabName,
+        //   up: utils.getAddRelationUp(relation),
+        //   down: utils.getAddRelationDown(relation),
+        // });
       }
     }
   }
