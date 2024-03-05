@@ -1,7 +1,12 @@
 const fs = require('fs');
+
+const pluralize = require('pluralize')
+
+const toCase = require('to-case');
+
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const entitiesWriter = createCsvWriter({
-    path: './.entities.csv',
+    path: './.presto-entities.csv',
     header: [
         {id: 'name', title: 'name'},
         {id: 'class', title: 'class'},
@@ -11,7 +16,7 @@ const entitiesWriter = createCsvWriter({
     ]
 });
 const propertiesWriter = createCsvWriter({
-    path: './.properties.csv',
+    path: './.presto-properties.csv',
     header: [
         {id: 'entity', title: 'entity'},
         {id: 'column', title: 'column'},
@@ -19,7 +24,7 @@ const propertiesWriter = createCsvWriter({
     ]
 });
 const relationsWriter = createCsvWriter({
-    path: './.relations.csv',
+    path: './.presto-relations.csv',
     header: [
         {id: 'type', title: 'type'},
         {id: 'from', title: 'from'},
@@ -27,17 +32,14 @@ const relationsWriter = createCsvWriter({
     ]
 });
 
-var pluralize = require('pluralize')
 
-const to = require('to-case');
+const getTableNameFromEntityName = (name) => `${toCase.snake(pluralize(name))}`;
 
-const getTableNameFromEntityName = (name) => `${to.snake(pluralize(name))}`;
+const getClassNameFromEntityName = (name) => `${toCase.pascal(name)}`;
 
-const getClassNameFromEntityName = (name) => `${to.pascal(name)}`;
+const getVariableNameFromEntityName = (name) => `${toCase.camel(name)}`;
 
-const getVariableNameFromEntityName = (name) => `${to.camel(name)}`;
-
-const getRootPathFromEntityName = (name) => `${to.camel(pluralize(name)).toLowerCase()}`;
+const getRootPathFromEntityName = (name) => `${toCase.camel(pluralize(name)).toLowerCase()}`;
 
 const getAddColumnUp = (name, type) => {
     switch (type.toLowerCase()) {
@@ -62,7 +64,7 @@ const getAddRelationUp = (relation) => {
         case 'one-to-one':
         case 'many-to-one':
         return `
-        \t\t\t$table->foreign('${to.snake(relation.to)}_id')
+        \t\t\t$table->foreign('${toCase.snake(relation.to)}_id')
         \t\t\t      ->references('id')
         \t\t\t      ->on('${getTableNameFromEntityName(relation.to)}')
         \t\t\t      ->onDelete('cascade');
@@ -70,7 +72,7 @@ const getAddRelationUp = (relation) => {
         break;
         case 'one-to-many':
         return `
-        \t\t\t$table->foreign('${to.snake(relation.from)}_id')
+        \t\t\t$table->foreign('${toCase.snake(relation.from)}_id')
         \t\t\t      ->references('id')
         \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
         \t\t\t      ->onDelete('cascade');
@@ -84,10 +86,10 @@ const getAddRelationDown = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'one-to-one':
         case 'many-to-one':
-        return `\t\t\t$table->dropForeign(['${to.snake(relation.to)}_id']);`
+        return `\t\t\t$table->dropForeign(['${toCase.snake(relation.to)}_id']);`
         break;
         case 'one-to-many':
-        return `\t\t\t$table->dropForeign(['${to.snake(relation.from)}_id']);`
+        return `\t\t\t$table->dropForeign(['${toCase.snake(relation.from)}_id']);`
         break;
         default:
         return undefined;
@@ -127,10 +129,10 @@ const getRelationPropertyName = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'one-to-one':
         case 'many-to-one':
-        return `${to.snake(relation.to)}_id`;
+        return `${toCase.snake(relation.to)}_id`;
         break;
         case 'one-to-many':
-        return `${to.snake(relation.from)}_id`;
+        return `${toCase.snake(relation.from)}_id`;
         break;
         default:
         return undefined;
@@ -153,9 +155,10 @@ const getRelationForModel = (relation) => {
 
 const writeEntitiesAndRelationsCSV = async (entitiesFilePath) => {
     const {entities, relations} = JSON.parse(fs.readFileSync(entitiesFilePath) || '{}');
+    const es = [];
+    const ps = [];
+    const rs = [];
     if(Array.isArray(entities)) {
-        const es = [];
-        const ps = [];
         for (let index = 0; index < entities.length; index++) {
             const entity = entities[index];
             entityName = entity.name;
@@ -171,17 +174,30 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath) => {
                 ps.push({entity: entityName, column: col, type: entitySchema[col]});
             }
         }
-        await entitiesWriter.writeRecords(es);
-        await propertiesWriter.writeRecords(ps);
     }
     if(Array.isArray(relations)) {
-        const rs = [];
         for (let index = 0; index < relations.length; index++) {
-            const {type, from, to} = relations[index];
+            let {type, from, to} = relations[index];
+            type = type.toLowerCase();
             rs.push({type, from, to});
+            switch (type) {
+                case 'one-to-one':
+                    ps.push({entity: from, column: `${toCase.snake(to)}_id`, type: 'UnsignedBigInteger'});
+                    break;
+                case 'many-to-one':
+                    ps.push({entity: from, column: `${toCase.snake(to)}_id`, type: 'UnsignedBigInteger'});
+                    break;
+                case 'one-to-many':
+                    ps.push({entity: to, column: `${toCase.snake(from)}_id`, type: 'UnsignedBigInteger'});
+                    break;
+                default:
+                    break;
+            }
         }
-        await relationsWriter.writeRecords(rs);
     }
+    await entitiesWriter.writeRecords(es);
+    await propertiesWriter.writeRecords(ps);
+    await relationsWriter.writeRecords(rs);
 }
 
 const getEntitiesAndRelations = async (entitiesFilePath) => {
