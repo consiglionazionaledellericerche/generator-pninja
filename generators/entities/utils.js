@@ -39,6 +39,13 @@ const getAddColumnDown = (name) => {
 const getAddRelationUp = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'one-to-one':
+        return `
+        \t\t\t$table->foreign('${toCase.snake(relation.from)}_id')
+        \t\t\t      ->references('id')
+        \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
+        \t\t\t      ->onDelete('cascade');
+        `
+        break;
         case 'many-to-one':
         return `
         \t\t\t$table->foreign('${toCase.snake(relation.to)}_id')
@@ -77,6 +84,8 @@ const getAddRelationDown = (relation) => {
 const getRelationPropertyOwner = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'one-to-one':
+        return relation.to;
+        break
         case 'many-to-one':
         return relation.from;
         break
@@ -266,7 +275,7 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
             rs.push({type, from, to});
             switch (type) {
                 case 'one-to-one':
-                    ps.push({entity: from, column: `${toCase.snake(to)}_id`, type: 'UnsignedBigInteger'});
+                    ps.push({entity: to, column: `${toCase.snake(from)}_id`, type: 'UnsignedBigInteger'});
                     break;
                 case 'many-to-one':
                     ps.push({entity: from, column: `${toCase.snake(to)}_id`, type: 'UnsignedBigInteger'});
