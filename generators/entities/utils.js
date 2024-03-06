@@ -142,7 +142,7 @@ const getRelationForModel = (relation) => {
     }
 }
 
-const createEntityRoutesFromCSV = async (that) => {
+const createEntityRoutes = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
     .columns(["name","class","table","variable","path"])
     .rows();
@@ -157,7 +157,7 @@ const createEntityRoutesFromCSV = async (that) => {
     }
 }
 
-const createEntityControllersFromCSV = async (that) => {
+const createEntityControllers = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
     .columns(["name","class","table","variable","path"])
     .rows();
@@ -171,7 +171,7 @@ const createEntityControllersFromCSV = async (that) => {
     }
 }
 
-const createEntityModelsFromCSV = async (that) => {
+const createEntityModels = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
     .columns(["name","class","table","variable","path"])
     .rows();
@@ -194,7 +194,7 @@ const createEntityModelsFromCSV = async (that) => {
     }
 }
 
-const createMigrationsForRelationsFromCSV = async (that) => {
+const createMigrationsForRelations = async (that) => {
     const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
         .columns(["type","from","to"])
         .rows();
@@ -211,7 +211,7 @@ const createMigrationsForRelationsFromCSV = async (that) => {
     }
 }
 
-const createMigrationsForColumnsFromCSV = async (that) => {
+const createMigrationsForColumns = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name","class","table","variable","path"])
         .rows();
@@ -238,7 +238,7 @@ const createMigrationsForColumnsFromCSV = async (that) => {
     }
 }
 
-const createMigrationsForTablesFromCSV = async (that) => {
+const createMigrationsForTables = async (that) => {
     const tables = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name","class","table","variable","path"])
         .map(row => row.table)
@@ -369,10 +369,10 @@ module.exports = {
     getRelationPropertyOwner,
     getRelationForModel,
     writeEntitiesAndRelationsCSV,
-    createMigrationsForTablesFromCSV,
-    createMigrationsForColumnsFromCSV,
-    createEntityModelsFromCSV,
-    createMigrationsForRelationsFromCSV,
-    createEntityControllersFromCSV,
-    createEntityRoutesFromCSV
+    createMigrationsForTables,
+    createMigrationsForColumns,
+    createEntityModels,
+    createMigrationsForRelations,
+    createEntityControllers,
+    createEntityRoutes
 }

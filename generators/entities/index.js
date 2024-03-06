@@ -68,12 +68,12 @@ module.exports = class extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
     }
     await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
-    await utils.createMigrationsForTablesFromCSV(this);
-    await utils.createMigrationsForColumnsFromCSV(this);
-    await utils.createMigrationsForRelationsFromCSV(this);
-    await utils.createEntityModelsFromCSV(this);
-    await utils.createEntityControllersFromCSV(this);
-    await utils.createEntityRoutesFromCSV(this);
+    await utils.createMigrationsForTables(this);
+    await utils.createMigrationsForColumns(this);
+    await utils.createMigrationsForRelations(this);
+    await utils.createEntityModels(this);
+    await utils.createEntityControllers(this);
+    await utils.createEntityRoutes(this);
   }
   end() {
     if(this.answers.build || this.answers.rebuild) {
