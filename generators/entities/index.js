@@ -65,84 +65,15 @@ module.exports = class extends Generator {
       this.log(colors.red(`! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`));
       return;
     } else {
-      this.log(colors.green(`Entities configuration file found! Generating entities from ${entitiesFilePath}`));
+      this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
     }
-
     await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
-    await utils.createMigrationsFromCSV(this);
-    await utils.createAddColumnsFromCSV(this);
-    await utils.createAddRelationsFromCSV(this);
-    await utils.createEntityModelFromCSV(this);
-
-    const {entities, properties, relations} = await utils.getEntitiesAndRelations(entitiesFilePath);
-
-    // for (let index = 0; index < entities.length; index++) {
-    //   const entity = entities[index];
-    //   // Create migration for entity table
-    //   this.spawnCommandSync('php', ['artisan', 'make:migration', `create_${utils.getTableNameFromEntityName(entity)}_table`], {cwd: 'server'});
-    // }
-    
-    for(entityName in properties) {
-      const props = properties[entityName];
-      const tabName = utils.getTableNameFromEntityName(entityName);
-      const ups = [];
-      const downs = [];
-      for (let index = 0; index < props.length; index++) {
-        const property = props[index];
-        ups.push(utils.getAddColumnUp(property.name, property.type));
-        downs.push(utils.getAddColumnDown(property.name));
-      }
-      const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${tabName}_table.php`;
-      // Create migration file for columns in entity table
-      // this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
-      // {
-      //   tabName,
-      //   up: ups.join("\n"),
-      //   down: downs.join("\n"),
-      // });
-      // Create entity model
-      // this.fs.copyTpl(this.templatePath("entity_model.php.ejs"), this.destinationPath(`server/app/Models/${utils.getClassNameFromEntityName(entityName)}.php`),
-      // {
-      //   className: utils.getClassNameFromEntityName(entityName),
-      //   fillable: properties[entityName].map(p => `'${p.name}'`).join(', '),
-      //   relations: (relations && relations[entityName] && Array.isArray(relations[entityName])) ? relations[entityName].map(r => utils.getRelationForModel(r)).join("\n\t") : ""
-      // });
-      
-      // Create entity controller
-      this.fs.copyTpl(this.templatePath("entity_controller.php.ejs"), this.destinationPath(`server/app/Http/Controllers/${utils.getClassNameFromEntityName(entityName)}Controller.php`),
-      {
-        className: utils.getClassNameFromEntityName(entityName),
-        entityName: utils.getVariableNameFromEntityName(entityName)
-      });
-      
-      // Create entity routes
-      this.fs.copyTpl(this.templatePath("entity_router.php.ejs"), this.destinationPath(`server/routes/${utils.getRootPathFromEntityName(entityName)}.php`),
-      {
-        className: utils.getClassNameFromEntityName(entityName),
-        rootPath: utils.getRootPathFromEntityName(entityName)
-      });
-      fs.appendFileSync(this.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${utils.getRootPathFromEntityName(entityName)}.php';`), { encoding: 'utf8', flag: 'w' };
-    }
-
-    for(entityName in relations) {
-      const rels = relations[entityName];
-      // const ups = [];
-      // const downs = [];
-      // Create migration files for relations
-      for (let index = 0; index < rels.length; index++) {
-        const relation = rels[index];
-        const tabName = utils.getTableNameFromEntityName(utils.getRelationPropertyOwner(relation));
-        // ups.push(utils.getAddRelationUp(relation));
-        // downs.push(utils.getAddRelationDown(relation));
-        // const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${to.snake(relation.type)}_from_${to.snake(relation.from)}_to_${to.snake(relation.to)}.php`;
-        // this.fs.copyTpl(this.templatePath("make_migrations_update_table.php.ejs"), this.destinationPath(migrationFilePath),
-        // {
-        //   tabName,
-        //   up: utils.getAddRelationUp(relation),
-        //   down: utils.getAddRelationDown(relation),
-        // });
-      }
-    }
+    await utils.createMigrationsForTablesFromCSV(this);
+    await utils.createMigrationsForColumnsFromCSV(this);
+    await utils.createMigrationsForRelationsFromCSV(this);
+    await utils.createEntityModelsFromCSV(this);
+    await utils.createEntityControllersFromCSV(this);
+    await utils.createEntityRoutesFromCSV(this);
   }
   end() {
     if(this.answers.build || this.answers.rebuild) {

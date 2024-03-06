@@ -142,7 +142,36 @@ const getRelationForModel = (relation) => {
     }
 }
 
-const createEntityModelFromCSV = async (that) => {
+const createEntityRoutesFromCSV = async (that) => {
+    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
+    .columns(["name","class","table","variable","path"])
+    .rows();
+    for (let index = 0; index < entities.length; index++) {
+        const entity = entities[index];        
+        that.fs.copyTpl(that.templatePath("entity_router.php.ejs"), that.destinationPath(`server/routes/${entity.path}.php`),
+        {
+          className: entity.class,
+          rootPath: entity.path
+        });
+        fs.appendFileSync(that.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${entity.path}.php';`), { encoding: 'utf8', flag: 'w' };
+    }
+}
+
+const createEntityControllersFromCSV = async (that) => {
+    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
+    .columns(["name","class","table","variable","path"])
+    .rows();
+    for (let index = 0; index < entities.length; index++) {
+        const entity = entities[index];
+        that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
+        {
+          className: entity.class,
+          entityName: entity.variable
+        });
+    }
+}
+
+const createEntityModelsFromCSV = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
     .columns(["name","class","table","variable","path"])
     .rows();
@@ -165,7 +194,7 @@ const createEntityModelFromCSV = async (that) => {
     }
 }
 
-const createAddRelationsFromCSV = async (that) => {
+const createMigrationsForRelationsFromCSV = async (that) => {
     const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
         .columns(["type","from","to"])
         .rows();
@@ -182,7 +211,7 @@ const createAddRelationsFromCSV = async (that) => {
     }
 }
 
-const createAddColumnsFromCSV = async (that) => {
+const createMigrationsForColumnsFromCSV = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name","class","table","variable","path"])
         .rows();
@@ -209,7 +238,7 @@ const createAddColumnsFromCSV = async (that) => {
     }
 }
 
-const createMigrationsFromCSV = async (that) => {
+const createMigrationsForTablesFromCSV = async (that) => {
     const tables = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name","class","table","variable","path"])
         .map(row => row.table)
@@ -340,8 +369,10 @@ module.exports = {
     getRelationPropertyOwner,
     getRelationForModel,
     writeEntitiesAndRelationsCSV,
-    createMigrationsFromCSV,
-    createAddColumnsFromCSV,
-    createEntityModelFromCSV,
-    createAddRelationsFromCSV
+    createMigrationsForTablesFromCSV,
+    createMigrationsForColumnsFromCSV,
+    createEntityModelsFromCSV,
+    createMigrationsForRelationsFromCSV,
+    createEntityControllersFromCSV,
+    createEntityRoutesFromCSV
 }
