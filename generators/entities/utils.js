@@ -136,10 +136,31 @@ const createEntityControllers = async (that) => {
     .rows();
     for (let index = 0; index < entities.length; index++) {
         const entity = entities[index];
+        const withs = await withCSV(that.destinationPath(`.presto-relations.csv`))
+            .columns(["type","from","to"])
+            .filter(relation => relation.from === entity.name)
+            .map(relation => {
+                switch (relation.type) {
+                    case 'many-to-one':
+                        return getVariableNameFromEntityName(relation.to);
+                        break;
+                    case 'one-to-many':
+                        return getTableNameFromEntityName(relation.to);
+                        break;
+                    case 'one-to-one':
+                        return getVariableNameFromEntityName(relation.to);
+                        break;
+                    default:
+                        return `// TODO ${JSON.stringify(relation)}`;
+                        break;
+                }
+            })
+            .rows();
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
           className: entity.class,
-          entityName: entity.variable
+          entityName: entity.variable,
+          withs: (withs && withs.length) ? `['${withs.join(`','`)}']` : null
         });
     }
 }

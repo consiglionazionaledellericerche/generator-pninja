@@ -9,12 +9,20 @@ class <%- className %>Controller extends Controller
 
     public function readAll()
     {
+        <% if (withs) { %>
+        return response()->json(<%- className %>::with(<%- withs %>)->get());
+        <%} else { %>
         return response()->json(<%- className %>::all());
+        <% } %>
     }
 
     public function read($id)
     {
+        <% if (withs) { %>
+        return response()->json(<%- className %>::with(<%- withs %>)->find($id));
+        <%} else { %>
         return response()->json(<%- className %>::find($id));
+        <% } %>
     }
 
     public function create(Request $request)
