@@ -3,7 +3,6 @@ var Generator = require('yeoman-generator');
 const fs = require('fs');
 const to = require('to-case');
 const colors = require('ansi-colors');
-const moment = require('moment');
 const utils = require('./utils');
 
 module.exports = class extends Generator {

@@ -97,34 +97,7 @@ const getRelationPropertyOwner = (relation) => {
         break;
     }
 }
-const getRelationDestination = (relation) => {
-    switch (relation.type.toLowerCase()) {
-        case 'one-to-one':
-        case 'many-to-one':
-        return relation.to;
-        break;
-        case 'one-to-many':
-        return relation.from;
-        break;
-        default:
-        return undefined;
-        break;
-    }
-}
-const getRelationPropertyName = (relation) => {
-    switch (relation.type.toLowerCase()) {
-        case 'one-to-one':
-        case 'many-to-one':
-        return `${toCase.snake(relation.to)}_id`;
-        break;
-        case 'one-to-many':
-        return `${toCase.snake(relation.from)}_id`;
-        break;
-        default:
-        return undefined;
-        break;
-    }
-}
+
 const getRelationForModel = (relation) => {
     switch (relation.type) {
         case 'many-to-one':
@@ -322,52 +295,7 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
     await relationsWriter.writeRecords(rs);
 }
 
-const getEntitiesAndRelations = async (entitiesFilePath) => {
-    const {entities, relations} = JSON.parse(fs.readFileSync(entitiesFilePath) || '{}');
-    const res = {
-        entities: [],
-        properties: {},
-        relations: {}
-    }
-    if(Array.isArray(entities)) {
-        for (let index = 0; index < entities.length; index++) {
-            const entity = entities[index];
-            entityName = entity.name;
-            res.entities.push(entityName);
-            for(const col in entity.schema) {
-                if(res.properties[entityName] === undefined) { res.properties[entityName] = []; }
-                res.properties[entityName].push({name: col, type: entity.schema[col]});
-            }            
-        }
-    }
-    // Parsing relations from entities definition file
-    if(Array.isArray(relations)) {
-        for (let index = 0; index < relations.length; index++) {
-            const relation = relations[index];
-            const entityName = getRelationPropertyOwner(relation);
-            if(res.entities.indexOf(entityName) === -1) { res.entities.push(entityName); }
-            if(res.properties[entityName] === undefined) { res.properties[entityName] = []; }
-            res.properties[entityName].push({name: getRelationPropertyName(relation), type: 'unsignedBigInteger'});
-            if(res.relations[entityName] === undefined) { res.relations[entityName] = []; }
-            res.relations[entityName].push(relation);
-        }
-    }
-    return res;
-}
-
-
 module.exports = {
-    getEntitiesAndRelations,
-    getClassNameFromEntityName,
-    getTableNameFromEntityName,
-    getVariableNameFromEntityName,
-    getRootPathFromEntityName,
-    getAddColumnUp,
-    getAddColumnDown,
-    getAddRelationUp,
-    getAddRelationDown,
-    getRelationPropertyOwner,
-    getRelationForModel,
     writeEntitiesAndRelationsCSV,
     createMigrationsForTables,
     createMigrationsForColumns,
