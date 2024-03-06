@@ -101,13 +101,13 @@ const getRelationPropertyOwner = (relation) => {
 const getRelationForModel = (relation) => {
     switch (relation.type) {
         case 'many-to-one':
-            return `public function ${getVariableNameFromEntityName(relation.to)}() { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class); }`
+            return `public function ${getVariableNameFromEntityName(relation.to)}():BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class); }`
             break;
         case 'one-to-many':
-            return `public function ${getTableNameFromEntityName(relation.to)}() { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`
+            return `public function ${getTableNameFromEntityName(relation.to)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`
             break;
         case 'one-to-one':
-            return `public function ${getVariableNameFromEntityName(relation.to)}() { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;   //`// TODO ${JSON.stringify(relation)}`;
+            return `public function ${getVariableNameFromEntityName(relation.to)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;   //`// TODO ${JSON.stringify(relation)}`;
             break;
         default:
             return `// TODO ${JSON.stringify(relation)}`;
