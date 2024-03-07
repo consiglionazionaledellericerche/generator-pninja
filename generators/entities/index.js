@@ -34,7 +34,7 @@ module.exports = class extends Generator {
         type: "input",
         name: "entitiesFilePath",
         message: "Entities definition file path",
-        default: '.vamp.entities.json'
+        default: '.presto-entities.json'
       },{
         store: true,
         type: "confirm",
