@@ -101,13 +101,13 @@ const getRelationPropertyOwner = (relation) => {
 const getRelationForModel = (relation) => {
     switch (relation.type) {
         case 'many-to-one':
-            return `public function ${getVariableNameFromEntityName(relation.to)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class); }`
+            return `public function ${relation.fromProp}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class, '${getVariableNameFromEntityName(relation.to)}_id'); }`
             break;
         case 'one-to-many':
-            return `public function ${getTableNameFromEntityName(relation.to)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`
+            return `public function ${relation.fromProp}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`
             break;
         case 'one-to-one':
-            return `public function ${getVariableNameFromEntityName(relation.to)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;   //`// TODO ${JSON.stringify(relation)}`;
+            return `public function ${relation.fromProp}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;   //`// TODO ${JSON.stringify(relation)}`;
             break;
         default:
             return `// TODO ${JSON.stringify(relation)}`;
@@ -137,24 +137,9 @@ const createEntityControllers = async (that) => {
     for (let index = 0; index < entities.length; index++) {
         const entity = entities[index];
         const withs = await withCSV(that.destinationPath(`.presto-relations.csv`))
-            .columns(["type","from","to"])
+            .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
             .filter(relation => relation.from === entity.name)
-            .map(relation => {
-                switch (relation.type) {
-                    case 'many-to-one':
-                        return getVariableNameFromEntityName(relation.to);
-                        break;
-                    case 'one-to-many':
-                        return getTableNameFromEntityName(relation.to);
-                        break;
-                    case 'one-to-one':
-                        return getVariableNameFromEntityName(relation.to);
-                        break;
-                    default:
-                        return `// TODO ${JSON.stringify(relation)}`;
-                        break;
-                }
-            })
+            .map(relation => relation.fromProp)
             .rows();
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
@@ -176,7 +161,7 @@ const createEntityModels = async (that) => {
             .filter(row => row.entity === entity.name)
             .rows();
         const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
-            .columns(["type","from","to"])
+            .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
             .filter(row => row.from === entity.name)
             .rows();
         that.fs.copyTpl(that.templatePath("entity_model.php.ejs"), that.destinationPath(`server/app/Models/${entity.class}.php`),
@@ -190,7 +175,7 @@ const createEntityModels = async (that) => {
 
 const createMigrationsForRelations = async (that) => {
     const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
-        .columns(["type","from","to"])
+        .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
         .rows();
     for (let index = 0; index < relations.length; index++) {
         const relation = relations[index];
@@ -268,6 +253,10 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
             {id: 'type', title: 'type'},
             {id: 'from', title: 'from'},
             {id: 'to', title: 'to'},
+            {id: 'fromProp', title: 'fromProp'},
+            {id: 'toProp', title: 'toProp'},
+            {id: 'fromLabel', title: 'fromLabel'},
+            {id: 'toLabel', title: 'toLabel'},
         ]
     });
     const {entities, relations} = JSON.parse(fs.readFileSync(entitiesFilePath) || '{}');
@@ -293,9 +282,35 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
     }
     if(Array.isArray(relations)) {
         for (let index = 0; index < relations.length; index++) {
-            let {type, from, to} = relations[index];
+            let {type, from, to, fromProp, toProp, fromLabel, toLabel} = relations[index];
             type = type.toLowerCase();
-            rs.push({type, from, to});
+            const re = /^([a-zA-Z][a-zA-Z0-9_]*)(?:\{([a-zA-Z][a-zA-Z0-9_]*)\})?$/;
+            if(!re.test(from) || !re.test(to)) throw new Error('Relations are not valid!');
+            let fromMatches = from.match(re);
+            let toMatches = to.match(re);
+            from = fromMatches[1];
+            fromProp = fromMatches[2];
+            to = toMatches[1];
+            toProp = toMatches[2];
+            if(!fromProp && !toProp) {
+                fromProp = to;
+                toProp = from;
+                switch (type) {
+                    case 'many-to-one':
+                        fromProp = fromProp && getVariableNameFromEntityName(fromProp);
+                        toProp = toProp && getTableNameFromEntityName(toProp);
+                        break;
+                    case 'one-to-many':
+                        fromProp = fromProp && getTableNameFromEntityName(fromProp);
+                        toProp = toProp && getVariableNameFromEntityName(toProp);
+                        break;
+                    case 'one-to-one':
+                        fromProp = fromProp && getVariableNameFromEntityName(fromProp);
+                        toProp = toProp && getVariableNameFromEntityName(toProp);
+                        break;
+                }
+            }
+            rs.push({type, from, to, fromProp, toProp, fromLabel, toLabel});
             switch (type) {
                 case 'one-to-one':
                     ps.push({entity: to, column: `${toCase.snake(from)}_id`, type: 'UnsignedBigInteger'});
