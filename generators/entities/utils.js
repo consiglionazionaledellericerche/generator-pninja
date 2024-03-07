@@ -163,7 +163,7 @@ const createEntityControllers = async (that) => {
         {
           className: entity.class,
           entityName: entity.variable,
-          withs: (withs.length || inverseWiths.length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null
+          withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null
         });
     }
 }
