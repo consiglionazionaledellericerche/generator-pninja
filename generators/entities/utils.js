@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+var _ = require('lodash');
+
 const moment = require('moment');
 
 const { withCSV } = require('with-csv');
@@ -99,19 +101,30 @@ const getRelationPropertyOwner = (relation) => {
 }
 
 const getRelationForModel = (relation) => {
+    if (!relation.fromProp) return;
     switch (relation.type) {
         case 'many-to-one':
-            return `public function ${relation.fromProp}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class, '${getVariableNameFromEntityName(relation.to)}_id'); }`
-            break;
+            return `public function ${toCase.snake(relation.fromProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class, '${getVariableNameFromEntityName(relation.to)}_id'); }`;
         case 'one-to-many':
-            return `public function ${relation.fromProp}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`
-            break;
+            return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
         case 'one-to-one':
-            return `public function ${relation.fromProp}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;   //`// TODO ${JSON.stringify(relation)}`;
-            break;
+            return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
         default:
             return `// TODO ${JSON.stringify(relation)}`;
-            break;
+    }
+}
+
+const getInverseRelationForModel = (relation) => {
+    if (!relation.toProp) return null;
+    switch (relation.type) {
+        case 'many-to-one':
+            return `public function ${toCase.snake(relation.toProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.from)}::class); }`;
+        case 'one-to-many':
+            return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
+        case 'one-to-one':
+            return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
+        default:
+            return `// TODO ${JSON.stringify(relation)}`;
     }
 }
 
@@ -139,13 +152,18 @@ const createEntityControllers = async (that) => {
         const withs = await withCSV(that.destinationPath(`.presto-relations.csv`))
             .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
             .filter(relation => relation.from === entity.name)
-            .map(relation => relation.fromProp)
+            .map(relation => toCase.snake(relation.fromProp))
+            .rows();
+        const inverseWiths = await withCSV(that.destinationPath(`.presto-relations.csv`))
+            .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
+            .filter(relation => relation.to === entity.name)
+            .map(relation => toCase.snake(relation.toProp))
             .rows();
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
           className: entity.class,
           entityName: entity.variable,
-          withs: (withs && withs.length) ? `['${withs.join(`','`)}']` : null
+          withs: (withs.length || inverseWiths.length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null
         });
     }
 }
@@ -164,11 +182,15 @@ const createEntityModels = async (that) => {
             .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
             .filter(row => row.from === entity.name)
             .rows();
+        const inverseRelations = await withCSV(that.destinationPath(`.presto-relations.csv`))
+            .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
+            .filter(row => row.to === entity.name)
+            .rows();
         that.fs.copyTpl(that.templatePath("entity_model.php.ejs"), that.destinationPath(`server/app/Models/${entity.class}.php`),
         {
           className: entity.class,
           fillable: props.map(p => `'${p.column}'`).join(', '),
-          relations: relations.map(r => getRelationForModel(r)).join("\n\t")
+          relations: [...relations.map(r => getRelationForModel(r)),...inverseRelations.map(r => getInverseRelationForModel(r))].join("\n\t")
         });
     }
 }
