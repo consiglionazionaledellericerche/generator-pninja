@@ -1,4 +1,7 @@
-// See: https://laravel.com/docs/10.x/eloquent-relationships
+/*
+ * See: https://laravel.com/docs/10.x/eloquent-relationships
+ *      https://medium.com/@prevailexcellent/laravel-many-to-many-relationship-complete-tutorial-16025acd5450
+ */
 
 const fs = require('fs');
 
