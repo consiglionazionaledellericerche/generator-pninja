@@ -1,3 +1,5 @@
+// See: https://laravel.com/docs/10.x/eloquent-relationships
+
 const fs = require('fs');
 
 var _ = require('lodash');
@@ -63,6 +65,17 @@ const getAddRelationUp = (relation) => {
         \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
         \t\t\t      ->onDelete('cascade');
         `        
+        case 'many-to-many':
+        return `
+        \t\t\t$table->foreign('${toCase.snake(relation.from)}_id')
+        \t\t\t      ->references('id')
+        \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
+        \t\t\t      ->onDelete('cascade');
+        \t\t\t$table->foreign('${toCase.snake(relation.to)}_id')
+        \t\t\t      ->references('id')
+        \t\t\t      ->on('${getTableNameFromEntityName(relation.to)}')
+        \t\t\t      ->onDelete('cascade');
+        `        
         default:
         return undefined;
         break;
@@ -76,6 +89,12 @@ const getAddRelationDown = (relation) => {
         break;
         case 'one-to-many':
         return `\t\t\t$table->dropForeign(['${toCase.snake(relation.from)}_id']);`
+        break;
+        case 'many-to-many':
+        return `
+        \t\t\t$table->dropForeign(['${toCase.snake(relation.from)}_id']);
+        \t\t\t$table->dropForeign(['${toCase.snake(relation.to)}_id']);
+        `
         break;
         default:
         return undefined;
@@ -95,7 +114,7 @@ const getRelationPropertyOwner = (relation) => {
         return relation.to;
         break;
         default:
-        return undefined;
+        return ([relation.to, relation.from].sort()).join('_');
         break;
     }
 }
@@ -110,7 +129,7 @@ const getRelationForModel = (relation) => {
         case 'one-to-one':
             return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
         default:
-            return `// TODO ${JSON.stringify(relation)}`;
+            return `public function ${toCase.snake(relation.fromProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.to)}::class); }`;
     }
 }
 
@@ -124,7 +143,7 @@ const getInverseRelationForModel = (relation) => {
         case 'one-to-one':
             return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
         default:
-            return `// TODO ${JSON.stringify(relation)}`;
+            return `public function ${toCase.snake(relation.toProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.from)}::class); }`;
     }
 }
 
@@ -201,7 +220,26 @@ const createMigrationsForRelations = async (that) => {
         .rows();
     for (let index = 0; index < relations.length; index++) {
         const relation = relations[index];
-        const tabName = getTableNameFromEntityName(getRelationPropertyOwner(relation));
+        let tabName = getTableNameFromEntityName(getRelationPropertyOwner(relation));
+        if (relation.type === 'many-to-many') {
+            tabName = toCase.snake(getRelationPropertyOwner(relation));
+            that.spawnCommandSync('php', ['artisan', 'make:migration', `create_${toCase.snake(getRelationPropertyOwner(relation))}_table`], {cwd: 'server'});
+            const ups = [
+                getAddColumnUp(`${toCase.snake(relation.from)}_id`, 'UnsignedBigInteger'),
+                getAddColumnUp(`${toCase.snake(relation.to)}_id`, 'UnsignedBigInteger')
+            ];
+            const downs = [
+                getAddColumnDown(`${toCase.snake(relation.from)}_id`),
+                getAddColumnDown(`${toCase.snake(relation.to)}_id`)
+            ];
+            const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${tabName}_table.php`;
+            that.fs.copyTpl(that.templatePath("make_migrations_update_table.php.ejs"), that.destinationPath(migrationFilePath),
+            {
+              tabName: tabName,
+              up: ups.join("\n"),
+              down: downs.join("\n"),
+            });            
+        }
         const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${toCase.snake(relation.type)}_from_${toCase.snake(relation.from)}_to_${toCase.snake(relation.to)}.php`;
         that.fs.copyTpl(that.templatePath("make_migrations_update_table.php.ejs"), that.destinationPath(migrationFilePath),
         {
@@ -329,6 +367,10 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
                     case 'one-to-one':
                         fromProp = fromProp && getVariableNameFromEntityName(fromProp);
                         toProp = toProp && getVariableNameFromEntityName(toProp);
+                        break;
+                    case 'many-to-many':
+                        fromProp = fromProp && getTableNameFromEntityName(fromProp);
+                        toProp = toProp && getTableNameFromEntityName(toProp);
                         break;
                 }
             }
