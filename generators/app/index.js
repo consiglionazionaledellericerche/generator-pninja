@@ -107,7 +107,7 @@ module.exports = class extends Generator {
   }
   
   writing() {
-    this.spawnCommandSync('composer', ['create-project',`laravel/lumen`,'server']);
+    this.spawnCommandSync('composer', ['create-project',`laravel/lumen`,'server', "10.0.0"]);
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
