@@ -109,16 +109,12 @@ const getRelationPropertyOwner = (relation) => {
     switch (relation.type.toLowerCase()) {
         case 'one-to-one':
         return relation.to;
-        break
         case 'many-to-one':
         return relation.from;
-        break
         case 'one-to-many':
         return relation.to;
-        break;
-        default:
+        case 'many-to-many':
         return ([relation.to, relation.from].sort()).join('_');
-        break;
     }
 }
 
@@ -402,8 +398,8 @@ module.exports = {
     writeEntitiesAndRelationsCSV,
     createMigrationsForTables,
     createMigrationsForColumns,
-    createEntityModels,
     createMigrationsForRelations,
+    createEntityModels,
     createEntityControllers,
     createEntityRoutes
 }
