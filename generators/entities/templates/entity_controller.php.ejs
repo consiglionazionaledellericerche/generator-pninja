@@ -28,13 +28,19 @@ class <%- className %>Controller extends Controller
     public function create(Request $request)
     {
         $<%- entityName %> = <%- className %>::create($request->all());
-
+        <% if (withs) { %>
+        $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
+        <% } %>
         return response()->json($<%- entityName %>, 201);
     }
 
     public function update($id, Request $request)
     {
+        <% if (withs) { %>
+        $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
+        <%} else { %>
         $<%- entityName %> = <%- className %>::findOrFail($id);
+        <% } %>
         $<%- entityName %>->update($request->all());
 
         return response()->json($<%- entityName %>, 200);
