@@ -159,10 +159,17 @@ const getCreateRelated = (relation) => {
             }
             $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->save($${toCase.snake(relation.fromProp)});
         };`;
-        // case 'one-to-many':
-        //     return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
         // case 'one-to-one':
         //     return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
+        case 'one-to-many':
+            return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
+            $related = array_map(function($o) {
+                if(is_numeric($o)) return \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($o);
+                if(array_key_exists("id", $o)) return \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($o["id"]);
+                return new \\App\\Models\\${getClassNameFromEntityName(relation.to)}($o);
+            }, $request->all()["${toCase.snake(relation.fromProp)}"]);
+            $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->saveMany($related);
+        };`
         case 'many-to-many': 
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
             $ids = array_map(function($o) {
