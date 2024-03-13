@@ -225,7 +225,7 @@ const createEntityControllers = async (that) => {
           className: entity.class,
           entityName: entity.variable,
           withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-          createRelated: _.compact(createRelated).join("\n\t")
+          createRelated: _.compact(createRelated).join()
         });
     }
 }
