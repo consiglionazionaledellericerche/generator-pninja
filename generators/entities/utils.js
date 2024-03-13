@@ -167,9 +167,8 @@ const getCreateRelated = (relation) => {
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
             $ids = array_map(function($o) {
                 if(is_numeric($o)) return $o;
-                if(array_key_exists("id", $o)) return $o["id"];
-                $related = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::create($o) ;
-                return $related->id;
+                if(array_key_exists("id", $o)) return (\\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($o["id"]))->id;
+                return (\\App\\Models\\${getClassNameFromEntityName(relation.to)}::create($o))->id;
             }, $request->all()["${toCase.snake(relation.fromProp)}"]);
             $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->sync($ids);
         };`
