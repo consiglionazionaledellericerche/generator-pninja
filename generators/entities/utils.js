@@ -170,6 +170,19 @@ const getCreateRelated = (relation) => {
             }, $request->all()["${toCase.snake(relation.fromProp)}"]);
             $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->saveMany($related);
         };`
+        case 'many-to-one':
+        return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
+            $request_${toCase.snake(relation.fromProp)} = $request->all()["${toCase.snake(relation.fromProp)}"];
+            if (is_numeric($request_${toCase.snake(relation.fromProp)})) {
+                $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)});
+            } elseif (array_key_exists("id", $request_${toCase.snake(relation.fromProp)})) {
+                $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)}["id"]);
+            } else {
+                $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::create($request_${toCase.snake(relation.fromProp)});
+            }
+            $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->associate($${toCase.snake(relation.fromProp)});
+            $${getVariableNameFromEntityName(relation.from)}->save();
+        };`;
         case 'many-to-many': 
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
             $ids = array_map(function($o) {
@@ -232,7 +245,7 @@ const createEntityControllers = async (that) => {
           className: entity.class,
           entityName: entity.variable,
           withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-          createRelated: _.compact(createRelated).join()
+          createRelated: _.compact(createRelated).join("\n\t\t")
         });
     }
 }
