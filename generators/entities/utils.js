@@ -127,7 +127,7 @@ const getRelationForModel = (relation) => {
             return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
         case 'one-to-one':
             return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
-        default:
+        case 'many-to-many':
             return `public function ${toCase.snake(relation.fromProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.to)}::class); }`;
     }
 }
@@ -141,8 +141,30 @@ const getInverseRelationForModel = (relation) => {
             return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
         case 'one-to-one':
             return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
-        default:
+        case 'many-to-many':
             return `public function ${toCase.snake(relation.toProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.from)}::class); }`;
+    }
+}
+
+const getCreateRelated = (relation) => {
+    if (!relation.fromProp) return;
+    switch (relation.type) {
+        case 'one-to-one':
+            return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
+            $request_${toCase.snake(relation.fromProp)} = $request->all()["${toCase.snake(relation.fromProp)}"];
+            if (array_key_exists("id", $request_${toCase.snake(relation.fromProp)})) {
+                $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)}["id"]);
+            } else {
+                $${toCase.snake(relation.fromProp)} = new \\App\\Models\\${getClassNameFromEntityName(relation.to)}($request_${toCase.snake(relation.fromProp)});
+            }
+            $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->save($${toCase.snake(relation.fromProp)});
+        };`;
+        // case 'one-to-many':
+        //     return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
+        // case 'one-to-one':
+        //     return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
+        default:
+            return null;
     }
 }
 
@@ -177,11 +199,20 @@ const createEntityControllers = async (that) => {
             .filter(relation => relation.to === entity.name)
             .map(relation => toCase.snake(relation.toProp))
             .rows();
+        const createRelated = await withCSV(that.destinationPath(`.presto-relations.csv`))
+        .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
+        .filter(relation => relation.from === entity.name)
+        .map(relation => getCreateRelated(relation))
+        .rows();
+        console.log(`\n\n\n\n`);
+        console.log(createRelated);
+        console.log(`\n\n\n\n`);
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
           className: entity.class,
           entityName: entity.variable,
-          withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null
+          withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
+          createRelated: _.compact(createRelated).join("\n\t")
         });
     }
 }
