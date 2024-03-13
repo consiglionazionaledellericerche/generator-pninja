@@ -163,6 +163,16 @@ const getCreateRelated = (relation) => {
         //     return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
         // case 'one-to-one':
         //     return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
+        case 'many-to-many': 
+            return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
+            $ids = array_map(function($o) {
+                if(is_numeric($o)) return $o;
+                if(array_key_exists("id", $o)) return $o["id"];
+                $related = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::create($o) ;
+                return $related->id;
+            }, $request->all()["${toCase.snake(relation.fromProp)}"]);
+            $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->sync($ids);
+        };`
         default:
             return null;
     }
@@ -205,6 +215,10 @@ const createEntityControllers = async (that) => {
         .map(relation => getCreateRelated(relation))
         .rows();
         console.log(`\n\n\n\n`);
+        console.log(await withCSV(that.destinationPath(`.presto-relations.csv`))
+        .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
+        .filter(relation => relation.from === entity.name)
+        .rows());
         console.log(createRelated);
         console.log(`\n\n\n\n`);
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
