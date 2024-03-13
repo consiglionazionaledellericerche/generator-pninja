@@ -11,7 +11,7 @@ class <%- className %>Controller extends Controller
     {
         <% if (withs) { %>
         return response()->json(<%- className %>::with(<%- withs %>)->get());
-        <%} else { %>
+        <% } else { %>
         return response()->json(<%- className %>::all());
         <% } %>
     }
@@ -20,7 +20,7 @@ class <%- className %>Controller extends Controller
     {
         <% if (withs) { %>
         return response()->json(<%- className %>::with(<%- withs %>)->find($id));
-        <%} else { %>
+        <% } else { %>
         return response()->json(<%- className %>::find($id));
         <% } %>
     }
@@ -40,7 +40,7 @@ class <%- className %>Controller extends Controller
     {
         <% if (withs) { %>
         $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
-        <%} else { %>
+        <% } else { %>
         $<%- entityName %> = <%- className %>::findOrFail($id);
         <% } %>
         $<%- entityName %>->update($request->all());
