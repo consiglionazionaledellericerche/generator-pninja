@@ -161,8 +161,6 @@ const getCreateRelated = (relation) => {
             }
             $${getVariableNameFromEntityName(relation.from)}->${toCase.snake(relation.fromProp)}()->save($${toCase.snake(relation.fromProp)});
         };`;
-        // case 'one-to-one':
-        //     return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
         case 'one-to-many':
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
             $related = array_map(function($o) {
