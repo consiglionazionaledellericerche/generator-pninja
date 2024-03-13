@@ -152,7 +152,9 @@ const getCreateRelated = (relation) => {
         case 'one-to-one':
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
             $request_${toCase.snake(relation.fromProp)} = $request->all()["${toCase.snake(relation.fromProp)}"];
-            if (array_key_exists("id", $request_${toCase.snake(relation.fromProp)})) {
+            if (is_numeric($request_${toCase.snake(relation.fromProp)})) {
+                $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)});
+            } elseif (array_key_exists("id", $request_${toCase.snake(relation.fromProp)})) {
                 $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)}["id"]);
             } else {
                 $${toCase.snake(relation.fromProp)} = new \\App\\Models\\${getClassNameFromEntityName(relation.to)}($request_${toCase.snake(relation.fromProp)});
