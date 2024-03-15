@@ -233,13 +233,6 @@ const createEntityControllers = async (that) => {
         .filter(relation => relation.from === entity.name)
         .map(relation => getCreateRelated(relation))
         .rows();
-        console.log(`\n\n\n\n`);
-        console.log(await withCSV(that.destinationPath(`.presto-relations.csv`))
-        .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
-        .filter(relation => relation.from === entity.name)
-        .rows());
-        console.log(createRelated);
-        console.log(`\n\n\n\n`);
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
           className: entity.class,
