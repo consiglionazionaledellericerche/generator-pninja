@@ -28,7 +28,9 @@ class <%- className %>Controller extends Controller
     public function create(Request $request)
     {
         $<%- entityName %> = <%- className %>::create($request->all());
+
         <% if (createRelated) { %><%- createRelated %><% } %>
+
         <% if (withs) { %>$<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);<% } %>
         
         return response()->json($<%- entityName %>, 201);
