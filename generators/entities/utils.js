@@ -185,8 +185,14 @@ const getCreateInverseRelated = (relation) => {
             $${getVariableNameFromEntityName(relation.to)}->${toCase.snake(relation.toProp)}()->saveMany($related);
         };`
         case 'many-to-many':
-            console.log(relation);
-            return null;
+            return `if(array_key_exists("${toCase.snake(relation.toProp)}", $request->all())) {
+            $related = array_map(function($o) {
+                if(is_numeric($o)) return \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($o);
+                if(array_key_exists("id", $o)) return \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($o["id"]);
+                return new \\App\\Models\\${getClassNameFromEntityName(relation.from)}($o);
+            }, $request->all()["${toCase.snake(relation.toProp)}"]);
+            $${getVariableNameFromEntityName(relation.to)}->${toCase.snake(relation.toProp)}()->saveMany($related);
+        };`
     }
     return null;
 }
