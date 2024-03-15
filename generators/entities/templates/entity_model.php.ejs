@@ -10,17 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class <%- className %> extends Model
 {
-
+    <% if (relations) { %><%- relations %><% } %>
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        <%- fillable %>
-    ];
-
-    <%- relations %>
+    protected $fillable = [<%- fillable %>];
 
     /**
      * The attributes excluded from the model's JSON form.
