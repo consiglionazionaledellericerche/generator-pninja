@@ -146,8 +146,28 @@ const getInverseRelationForModel = (relation) => {
     }
 }
 
+const getCreateInverseRelated = (relation) => {
+    if (!relation.toProp) return null;
+    switch (relation.type) {
+        case 'one-to-one':
+            console.log(relation);
+            return `if(array_key_exists("${toCase.snake(relation.toProp)}", $request->all())) {
+            $request_${toCase.snake(relation.toProp)} = $request->all()["${toCase.snake(relation.toProp)}"];
+            if (is_numeric($request_${toCase.snake(relation.toProp)})) {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($request_${toCase.snake(relation.toProp)});
+            } elseif (array_key_exists("id", $request_${toCase.snake(relation.toProp)})) {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($request_${toCase.snake(relation.toProp)}["id"]);
+            } else {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::create($request_${toCase.snake(relation.toProp)});
+            }
+            $${getVariableNameFromEntityName(relation.to)}->${toCase.snake(relation.toProp)}()->associate($${toCase.snake(relation.toProp)});
+            $${getVariableNameFromEntityName(relation.to)}->save();
+        };`;
+    }
+    return null;
+}
 const getCreateRelated = (relation) => {
-    if (!relation.fromProp) return;
+    if (!relation.fromProp) return null;
     switch (relation.type) {
         case 'one-to-one':
             return `if(array_key_exists("${toCase.snake(relation.fromProp)}", $request->all())) {
@@ -233,12 +253,17 @@ const createEntityControllers = async (that) => {
         .filter(relation => relation.from === entity.name)
         .map(relation => getCreateRelated(relation))
         .rows();
+        const createInverseRelated = await withCSV(that.destinationPath(`.presto-relations.csv`))
+        .columns(["type","from","to","fromProp","toProp","fromLabel","toLabel"])
+        .filter(relation => relation.to === entity.name)
+        .map(relation => getCreateInverseRelated(relation))
+        .rows();
         that.fs.copyTpl(that.templatePath("entity_controller.php.ejs"), that.destinationPath(`server/app/Http/Controllers/${entity.class}Controller.php`),
         {
           className: entity.class,
           entityName: entity.variable,
           withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-          createRelated: _.compact(createRelated).join("\n\n\t\t")
+          createRelated: _.compact([...createRelated,...createInverseRelated]).join("\n\n\t\t")
         });
     }
 }
