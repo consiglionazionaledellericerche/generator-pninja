@@ -238,7 +238,7 @@ const createEntityControllers = async (that) => {
           className: entity.class,
           entityName: entity.variable,
           withs: (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-          createRelated: createRelated.length ? `\n\t\t${_.compact(createRelated).join("\n\n\t\t")}\n` : ''
+          createRelated: _.compact(createRelated).join("\n\n\t\t")
         });
     }
 }
@@ -265,7 +265,7 @@ const createEntityModels = async (that) => {
         {
           className: entity.class,
           fillable: props.map(p => `'${p.column}'`).join(', '),
-          relations: relations.length ? `\n\t${[...relations.map(r => getRelationForModel(r)),...inverseRelations.map(r => getInverseRelationForModel(r))].join("\n\n\t")}\n` : ''
+          relations: [...relations.map(r => getRelationForModel(r)),...inverseRelations.map(r => getInverseRelationForModel(r))].join("\n\n\t")
         });
     }
 }
