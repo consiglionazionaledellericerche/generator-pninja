@@ -150,7 +150,6 @@ const getCreateInverseRelated = (relation) => {
     if (!relation.toProp) return null;
     switch (relation.type) {
         case 'one-to-one':
-            console.log(relation);
             return `if(array_key_exists("${toCase.snake(relation.toProp)}", $request->all())) {
             $request_${toCase.snake(relation.toProp)} = $request->all()["${toCase.snake(relation.toProp)}"];
             if (is_numeric($request_${toCase.snake(relation.toProp)})) {
@@ -163,6 +162,25 @@ const getCreateInverseRelated = (relation) => {
             $${getVariableNameFromEntityName(relation.to)}->${toCase.snake(relation.toProp)}()->associate($${toCase.snake(relation.toProp)});
             $${getVariableNameFromEntityName(relation.to)}->save();
         };`;
+        case 'one-to-many':
+            return `if(array_key_exists("${toCase.snake(relation.toProp)}", $request->all())) {
+            $request_${toCase.snake(relation.toProp)} = $request->all()["${toCase.snake(relation.toProp)}"];
+            if (is_numeric($request_${toCase.snake(relation.toProp)})) {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($request_${toCase.snake(relation.toProp)});
+            } elseif (array_key_exists("id", $request_${toCase.snake(relation.toProp)})) {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::findOrFail($request_${toCase.snake(relation.toProp)}["id"]);
+            } else {
+                $${toCase.snake(relation.toProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.from)}::create($request_${toCase.snake(relation.toProp)});
+            }
+            $${getVariableNameFromEntityName(relation.to)}->${toCase.snake(relation.toProp)}()->associate($${toCase.snake(relation.toProp)});
+            $${getVariableNameFromEntityName(relation.to)}->save();
+        }`;
+        case 'many-to-one':
+            console.log(relation);
+            return null;
+        case 'many-to-many':
+            console.log(relation);
+            return null;
     }
     return null;
 }
