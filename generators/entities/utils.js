@@ -28,10 +28,10 @@ const getRootPathFromEntityName = (name) => `${toCase.camel(pluralize(name)).toL
 const getAddColumnUp = (name, type) => {
     switch (type.toLowerCase()) {
         case 'string':
-        return `\n\t\t\t$table->string('${name}', 255);`
+        return `\n\t\t\t$table->string('${name}', 255)->nullable(true);`
         break;
         case 'unsignedbiginteger':
-        return `\n\t\t\t$table->unsignedBigInteger('${name}');`
+        return `\n\t\t\t$table->unsignedBigInteger('${name}')->nullable(true);`
         break;
         
         default:
