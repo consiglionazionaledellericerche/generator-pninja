@@ -21,9 +21,9 @@ const getTableNameFromEntityName = (name) => `${toCase.snake(pluralize(name))}`;
 
 const getClassNameFromEntityName = (name) => `${toCase.pascal(name)}`;
 
-const getVariableNameFromEntityName = (name) => `${toCase.camel(name)}`;
+const getVariableNameFromEntityName = (name) => `${toCase.snake(name)}`;
 
-const getRootPathFromEntityName = (name) => `${toCase.camel(pluralize(name)).toLowerCase()}`;
+const getRootPathFromEntityName = (name) => `${toCase.slug(pluralize(name)).toLowerCase()}`;
 
 const getAddColumnUp = (name, type) => {
     switch (type.toLowerCase()) {
@@ -114,7 +114,7 @@ const getRelationPropertyOwner = (relation) => {
         case 'one-to-many':
         return relation.to;
         case 'many-to-many':
-        return ([relation.to, relation.from].sort()).join('_');
+        return ([getVariableNameFromEntityName(relation.to), getVariableNameFromEntityName(relation.from)].sort()).join('_');
     }
 }
 
