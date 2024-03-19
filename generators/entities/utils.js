@@ -447,7 +447,7 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
                 path: getRootPathFromEntityName(entityName)
             });
             for(const col in entitySchema) {
-                ps.push({entity: entityName, column: col, type: entitySchema[col]});
+                ps.push({entity: entityName, column: toCase.snake(col), type: entitySchema[col]});
             }
         }
     }
