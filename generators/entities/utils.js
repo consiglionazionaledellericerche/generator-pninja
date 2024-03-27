@@ -258,7 +258,7 @@ const createEntityRoutes = async (that) => {
           className: entity.class,
           rootPath: entity.path
         });
-        fs.appendFileSync(that.destinationPath(`server/routes/web.php`), `\nrequire __DIR__ . '/${entity.path}.php';`), { encoding: 'utf8', flag: 'w' };
+        fs.appendFileSync(that.destinationPath(`server/routes/api.php`), `\nrequire __DIR__ . '/${entity.path}.php';`), { encoding: 'utf8', flag: 'w' };
     }
 }
 

@@ -107,17 +107,18 @@ module.exports = class extends Generator {
   }
   
   writing() {
-    this.spawnCommandSync('composer', ['create-project',`laravel/lumen`,'server', "10.0.0"]);
+    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel','server']);
+    this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], {cwd: 'server'});
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=${this.answers.dbms}`);
-    envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=${this.answers.dbmsDB_HOST}`);
-    envFileContents = envFileContents.replace(/^DB_PORT=.*$/m, `DB_PORT=${this.answers.dbmsDB_PORT}`);
-    envFileContents = envFileContents.replace(/^DB_DATABASE=.*$/m, `DB_DATABASE=${this.answers.dbmsDB_DATABASE}`);
-    envFileContents = envFileContents.replace(/^DB_USERNAME=.*$/m, `DB_USERNAME=${this.answers.dbmsDB_USERNAME}`);
-    envFileContents = envFileContents.replace(/^DB_PASSWORD=.*$/m, `DB_PASSWORD=${this.answers.dbmsDB_PASSWORD}`);
+    envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=${this.answers.dbmsDB_HOST}`);
+    envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=${this.answers.dbmsDB_PORT}`);
+    envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=${this.answers.dbmsDB_DATABASE}`);
+    envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=${this.answers.dbmsDB_USERNAME}`);
+    envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=${this.answers.dbmsDB_PASSWORD}`);
     fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
     // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
