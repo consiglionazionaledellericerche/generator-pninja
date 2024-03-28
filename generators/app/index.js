@@ -107,7 +107,7 @@ module.exports = class extends Generator {
   }
   
   writing() {
-    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel','server']);
+    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3','server']);
     this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], {cwd: 'server'});
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
