@@ -1,4 +1,4 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\<%- className %>Controller;
-Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
+Route::apiResource('<%- rootPath %>', <%- className %>Controller::class)->middleware('auth:api');
