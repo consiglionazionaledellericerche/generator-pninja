@@ -48,6 +48,7 @@ module.exports = class extends Generator {
     let configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
     configAuthFileContents = configAuthFileContents.replace(regexprConfigAuthDefaults,replaceConfigAuthDefaults);
     fs.writeFileSync(`${this.destinationPath('server')}/config/auth.php`, configAuthFileContents, { encoding: 'utf8', flag: 'w' });
+
     if(this.answers.authentication === 'keycloak') {
       this.spawnCommandSync('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], {cwd: 'server'});
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], {cwd: 'server'});
@@ -63,11 +64,29 @@ KEYCLOAK_IGNORE_RESOURCES_VALIDATION=false
 KEYCLOAK_LEEWAY=0
 KEYCLOAK_TOKEN_INPUT_KEY=null
       `), { encoding: 'utf8', flag: 'w' };
+
       configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
       const regexprConfigAuthGuards = /(?<='guards'\s*=>\s*\[)\s*('[a-z][a-z-0-9]*'\s*=>\s*\[.*?],?\s*)*?(?=])/gmis;
       const replaceConfigAuthGuards = `\n${tab+tab}'api' => [\n${tab+tab+tab}'driver' => 'keycloak',\n${tab+tab+tab}'provider' => 'users'\n${tab+tab}]\n${tab}`;
       configAuthFileContents = configAuthFileContents.replace(regexprConfigAuthGuards,replaceConfigAuthGuards);
       fs.writeFileSync(`${this.destinationPath('server')}/config/auth.php`, configAuthFileContents, { encoding: 'utf8', flag: 'w' });
+
+      let bootstrapAppFileContents = fs.readFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, { encoding: 'utf8', flag: 'r' });
+      const regexprBootstrapAppUse = /(?=use Illuminate\\Foundation\\Application;)/gmis;
+      const replaceBootstrapAppUse = `use Illuminate\\Http\\Request;\nuse KeycloakGuard\\Exceptions\\KeycloakGuardException;\nuse KeycloakGuard\\Exceptions\\TokenException;\n`;
+      bootstrapAppFileContents = bootstrapAppFileContents.replace(regexprBootstrapAppUse,replaceBootstrapAppUse);
+      const regexprBootstrapAppExc = /(?<=->withExceptions\(function \(Exceptions \$exceptions\) {)\n\s+\/\/\n\s+(?=}\)->create\(\);)/gmis;
+      const replaceBootstrapAppExc = `
+      $exceptions->render(function (KeycloakGuardException $e, Request $request) {
+          if ($request->is('api/*')) {
+              return response()->json([
+                  'message' => $e->getMessage()
+              ], 401);
+          }
+      });
+      `;
+      bootstrapAppFileContents = bootstrapAppFileContents.replace(regexprBootstrapAppExc,replaceBootstrapAppExc);
+      fs.writeFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, bootstrapAppFileContents, { encoding: 'utf8', flag: 'w' });
     }
   }
 };
