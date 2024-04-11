@@ -21,6 +21,7 @@ module.exports = class extends Generator {
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
     this.composeWith(require.resolve("../auth"),{fromMain: true});
     this.composeWith(require.resolve("../entities"),{fromMain: true});
+    this.composeWith(require.resolve("../client"),{fromMain: true});
     this.composeWith(require.resolve("../final"),{fromMain: true});
   }
   async prompting() {
