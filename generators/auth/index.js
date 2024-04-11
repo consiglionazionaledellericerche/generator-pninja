@@ -18,7 +18,7 @@ module.exports = class extends Generator {
         message: `Which ${colors.yellow('*type*')} of authentication would you like to use?`,
         choices: [
           {name: 'Keycloak', value: 'keycloak'},
-          {name: 'Sanctum', value: 'sanctum'}
+          {name: 'Sanctum (Not implemented yet)', value: 'sanctum'}
         ]
       }]]
     }
