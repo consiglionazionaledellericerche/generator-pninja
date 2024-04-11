@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "axios": "^1.4.0",
+    "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "keycloak-js": "^21.1.1",
     "pinia": "^2.0.36",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
+    "sass": "^1.74.1",
     "vite": "^4.3.2"
   }
 }
