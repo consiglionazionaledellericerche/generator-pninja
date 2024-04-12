@@ -17,6 +17,7 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue"), that.destinationPath("client/src/components/NavBar.vue"));
     
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.js"), that.destinationPath("client/src/plugins/authStore.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/plugins/i18n.ts"), that.destinationPath("client/src/plugins/i18n.ts"));
     
     that.fs.copyTpl(that.templatePath("vue/src/router/index.js"), that.destinationPath("client/src/router/index.js"));
     
@@ -32,5 +33,8 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/assets/presto-p.svg"), that.destinationPath("client/src/assets/presto-p.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vite.svg"), that.destinationPath("client/src/assets/vite.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vue.svg"), that.destinationPath("client/src/assets/vue.svg"));
+
+    that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json"), that.destinationPath("client/src/locales/en-EN.json"));
+    that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json"), that.destinationPath("client/src/locales/it-IT.json"));
 }
 module.exports = { createVueClient }

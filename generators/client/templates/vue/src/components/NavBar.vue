@@ -1,51 +1,71 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t, locale } = useI18n({
+  inheritLocale: true,
+  useScope: 'global'
+})
+const setLocale = (l) => {
+  locale.value = l;
+}
+
+</script>
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
         <img
-          src="@/assets/presto-p.svg"
-          alt="Logo"
-          height="30"
-          class="d-inline-block align-text-top"
+        src="@/assets/presto-p.svg"
+        alt="Logo"
+        height="30"
+        class="d-inline-block align-text-top"
         />
-        Application
+        {{ t('App Name') }}
       </a>
       <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <span class="flex-fill"></span>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider" /></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <span class="flex-fill"></span>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          >
+          {{ t('Entities') }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Entity 1</a></li>
+          <li><a class="dropdown-item" href="#">Entity 2</a></li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
-      </div>
-    </div>
-  </nav>
+      </li>
+      <li class="nav-item dropdown">
+        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-translate"></i> {{ locale }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+          <button class="dropdown-item" type="button" @click="setLocale('en-EN')">English</button>
+          <button class="dropdown-item" type="button" @click="setLocale('it-IT')">Italiano</button>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</nav>
 </template>

@@ -1,12 +1,20 @@
 import { fileURLToPath, URL } from 'url';
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 
 export default defineConfig((mode) => {
   const env = loadEnv(mode, process.cwd());
 
   return {
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      VueI18nPlugin({
+        include: fileURLToPath(new URL('./src/locales/**', import.meta.url)),
+        fullInstall: false,
+        compositionOnly: true,
+      })
+    ],
     server: {
       port: env.VITE_APP_PORT,
       hot: true

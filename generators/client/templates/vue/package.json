@@ -9,14 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@intlify/unplugin-vue-i18n": "^4.0.0",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
     "cors": "^2.8.5",
     "keycloak-js": "^21.1.1",
     "pinia": "^2.0.36",
     "pinia-plugin-persistedstate": "^3.1.0",
     "vue": "^3.2.47",
+    "vue-i18n": "^9.9.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
