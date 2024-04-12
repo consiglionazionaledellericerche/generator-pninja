@@ -14,10 +14,11 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/main.js"), that.destinationPath("client/src/main.js"));
     
     that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
-    that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue"), that.destinationPath("client/src/components/NavBar.vue"));
+    that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"));
     
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.js"), that.destinationPath("client/src/plugins/authStore.js"));
     that.fs.copyTpl(that.templatePath("vue/src/plugins/i18n.ts"), that.destinationPath("client/src/plugins/i18n.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/plugins/localeStore.js"), that.destinationPath("client/src/plugins/localeStore.js"));
     
     that.fs.copyTpl(that.templatePath("vue/src/router/index.js"), that.destinationPath("client/src/router/index.js"));
     
@@ -28,6 +29,7 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/services/tokenInterceptors.js"), that.destinationPath("client/src/services/tokenInterceptors.js"));
     
     that.fs.copyTpl(that.templatePath("vue/src/stores/authStore.js"), that.destinationPath("client/src/stores/authStore.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/stores/localeStore.js"), that.destinationPath("client/src/stores/localeStore.js"));
 
     that.fs.copyTpl(that.templatePath("vue/src/assets/pinia.svg"), that.destinationPath("client/src/assets/pinia.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/presto-p.svg"), that.destinationPath("client/src/assets/presto-p.svg"));

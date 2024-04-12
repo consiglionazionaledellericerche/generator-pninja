@@ -119,8 +119,6 @@ export default {
     <!-- Logout button -->
     <button type="button" class="btn btn-primary" @click="$store.logout">Logout</button>
   </div>
-  <div><span>aaa</span>
-    <span>bbb</span></div>
     <pre id="response-data">{{ responseData }}</pre>
     <h2>Keycloak User</h2>
     <p class="my-5">Username: {{ $store.user.username }}</p>

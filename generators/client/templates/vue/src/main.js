@@ -5,6 +5,7 @@ import App from './App.vue';
 import router from './router';
 import keycloakService from '@services/keycloak';
 import AuthStorePlugin from './plugins/authStore';
+import LocaleStorePlugin from './plugins/localeStore';
 import { createI18n } from 'vue-i18n'
 import messages from '@intlify/unplugin-vue-i18n/messages'
 import './scss/styles.scss'
@@ -24,6 +25,7 @@ const renderApp = () => {
   const app = createApp(App);
   app.use(pinia);
   app.use(AuthStorePlugin, { pinia });
+  app.use(LocaleStorePlugin, { pinia });
   app.use(router);
   app.use(i18n);
   app.mount('#app');
