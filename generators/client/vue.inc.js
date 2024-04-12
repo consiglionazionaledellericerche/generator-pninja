@@ -34,7 +34,7 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/assets/vite.svg"), that.destinationPath("client/src/assets/vite.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vue.svg"), that.destinationPath("client/src/assets/vue.svg"));
 
-    that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json"), that.destinationPath("client/src/locales/en-EN.json"));
-    that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json"), that.destinationPath("client/src/locales/it-IT.json"));
+    that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json.ejs"), that.destinationPath("client/src/locales/en-EN.json"), {appName: that.config.get('name')});
+    that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json.ejs"), that.destinationPath("client/src/locales/it-IT.json"), {appName: that.config.get('name')});
 }
 module.exports = { createVueClient }
