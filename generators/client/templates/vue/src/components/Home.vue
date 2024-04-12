@@ -81,19 +81,19 @@ export default {
 
 <template>
   <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="@/assets/presto-p.svg" style="height: 16px;" class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small>11 mins ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Hello, world! This is a toast message.
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <img src="@/assets/presto-p.svg" style="height: 16px;" class="rounded me-2" alt="...">
+        <strong class="me-auto">Bootstrap</strong>
+        <small>11 mins ago</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Hello, world! This is a toast message.
+      </div>
     </div>
   </div>
-</div>
-<button type="button" class="btn btn-primary" id="liveToastBtn" @click="toast">Show live toast</button>
+  <button type="button" class="btn btn-primary" id="liveToastBtn" @click="toast">Show live toast</button>
 
   <div id="logos">
     <a href="https://vitejs.dev" target="_blank">
@@ -106,32 +106,21 @@ export default {
       <img src="@/assets/presto-p.svg" class="logo presto" alt="Presto logo" />
     </a>
   </div>
-
-  <p class="read-the-docs">This project is for a tutorial on how to use Keycloak authentication with Vue 3 + Pinia + Node.</p>
-  <p class="read-the-docs">
-    Go to this
-    <a :href="blogLink" target="_blank"> link </a>
-    for the full tutorial.
-  </p>
-
-  <div class="card">
+  <div>
     <!-- Test Pinia persisted state button -->
-    <button class="mr-15" type="button" title="Test persisted state" @click="$store.testAction">Test ({{ $store.test }})</button>
-
+    <button type="button" class="btn btn-primary" title="Test persisted state" @click="$store.testAction">Test ({{ $store.test }})</button>
     <!-- Refresh token button -->
-    <button class="mr-15" type="button" title="Refreshes user token" @click="$store.refreshUserToken">Refresh Token</button>
-
+    <button type="button" class="btn btn-primary" title="Refreshes user token" @click="$store.refreshUserToken">Refresh Token</button>
     <!-- BE validation button -->
-    <button class="mr-15" type="button" title="Write test data" :disabled="loading" @click="postData">Post Validation</button>
-
-    <button class="mr-15" type="button" title="Check Console with Dev Tools" :disabled="loading" @click="getAuthors">
+    <button type="button" class="btn btn-primary" title="Write test data" :disabled="loading" @click="postData">Post Validation</button>
+    <button type="button" class="btn btn-primary" title="Check Console with Dev Tools" :disabled="loading" @click="getAuthors">
       Backend Validation
     </button>
-
     <!-- Logout button -->
-    <button type="button" title="Logout Keycloak user" @click="$store.logout">Logout</button>
+    <button type="button" class="btn btn-primary" @click="$store.logout">Logout</button>
   </div>
-  <div class="card py-10">
+  <div><span>aaa</span>
+    <span>bbb</span></div>
     <pre id="response-data">{{ responseData }}</pre>
     <h2>Keycloak User</h2>
     <p class="my-5">Username: {{ $store.user.username }}</p>
@@ -139,10 +128,12 @@ export default {
     <pre>{{ $store.user.token }}</pre>
     <p class="my-5">Refresh Token:</p>
     <pre>{{ $store.user.refToken }}</pre>
-  </div>
 </template>
 
 <style scoped>
+.btn {
+    margin: 0.25rem 0.125rem;
+}
 #logos {
   text-align: center;
 }
@@ -169,31 +160,5 @@ pre {
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.my-5 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.mr-15 {
-  margin-right: 15px;
-}
-
-.py-10 {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.wrap-text {
-  word-wrap: break-word;
-}
-
-.font-small {
-  font-size: 10px;
 }
 </style>
