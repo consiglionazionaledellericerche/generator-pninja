@@ -5,11 +5,7 @@ import App from './App.vue';
 import router from './router';
 import keycloakService from '@services/keycloak';
 import AuthStorePlugin from './plugins/authStore';
-// Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap'
-// Styles
-import './style.css';
-// Import our custom CSS
+
 import './scss/styles.scss'
 
 // Create Pinia instance

@@ -12,7 +12,6 @@ const createVueClient = (that) => {
 
     that.fs.copyTpl(that.templatePath("vue/src/App.vue"), that.destinationPath("client/src/App.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/main.js"), that.destinationPath("client/src/main.js"));
-    that.fs.copyTpl(that.templatePath("vue/src/style.css"), that.destinationPath("client/src/style.css"));
     
     that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
     

@@ -1,15 +1,20 @@
 <script>
 import api from '@services/api';
+import {Toast} from 'bootstrap'
 
 export default {
   data() {
     return {
       loading: false,
       blogLink: import.meta.env.VITE_BLOG_LINK,
+      responseData: `...`,
     };
   },
   created() {},
   methods: {
+    toast() {
+      (new Toast(document.getElementById('liveToast'))).show()
+    },
     async postData() {
       this.loading = true;
       try {
@@ -75,7 +80,22 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="@/assets/presto-p.svg" style="height: 16px;" class="rounded me-2" alt="...">
+      <strong class="me-auto">Bootstrap</strong>
+      <small>11 mins ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+  </div>
+</div>
+<button type="button" class="btn btn-primary" id="liveToastBtn" @click="toast">Show live toast</button>
+
+  <div id="logos">
     <a href="https://vitejs.dev" target="_blank">
       <img src="@/assets/vite.svg" class="logo" alt="Vite logo" />
     </a>
@@ -123,6 +143,9 @@ export default {
 </template>
 
 <style scoped>
+#logos {
+  text-align: center;
+}
 pre {
   text-align: left;
   white-space: pre-wrap;
