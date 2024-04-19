@@ -60,7 +60,7 @@ module.exports = class extends Generator {
             value: "npm"
           },
           {
-            name: "Yarn",
+            name: "Yarn (Not implemented yet)",
             value: "yarn"
           }
         ]
