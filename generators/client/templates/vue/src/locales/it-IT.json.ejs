@@ -4,5 +4,16 @@
     "entities": "Entità",
     "language": "Lingua",
     "home": "Home"
+  },
+  "entities": {
+    <% entities.forEach(function(entity, index) { %>
+      "<%= pluralize(entity.name) %>": "<%= pluralize(to.sentence(entity.name)) %>",
+      "<%= entity.variable %>": {
+        <% entity._presto__properties.forEach(function(property, jndex) { %>
+          "<%= property.column%>": "<%= to.sentence(property.column)%>",
+        <% }); %>
+        "id": "ID"
+      }<% if(index < entities.length - 1) {%>,<% }%>
+    <% }); %>
   }
 }

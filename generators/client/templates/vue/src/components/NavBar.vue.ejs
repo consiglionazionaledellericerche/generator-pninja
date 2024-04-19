@@ -58,10 +58,9 @@ export default {
           {{ t('menu.entities') }}
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">Entity 1</a></li>
-          <li><a class="dropdown-item" href="#">Entity 2</a></li>
-          <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <% entities.forEach(function(entity) { %>
+            <li><RouterLink class="dropdown-item" to="/<%= entity.path %>">{{t(`entities.<%= pluralize(entity.name) %>`)}}</RouterLink></li>
+          <% }); %>
         </ul>
       </li>
       <li class="nav-item dropdown">

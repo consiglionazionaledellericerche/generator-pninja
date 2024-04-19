@@ -1,0 +1,72 @@
+<script>
+import api from '@services/api';
+import { useI18n } from 'vue-i18n'
+export default {
+  setup() {
+    const { t, locale } = useI18n({
+      inheritLocale: true,
+      useScope: 'global'
+    })
+    return { t, locale }
+  },
+  data() {
+    return {
+      responseData: `...`,
+    };
+  },
+  created() {},
+  beforeMount() {
+   this.getAllRecords()
+  },
+  methods: {
+    async getAllRecords() {
+      this.loading = true;
+      try {
+        this.responseData = (await api.get('/<%- entity.path %>')).data;
+        this.loading = false;
+        return;
+      } catch (error) {
+        this.loading = false;
+        console.error(error);
+        return;
+      }
+    },
+  },
+};
+</script>
+
+<template>
+    <h1 class="display-6">{{ t(`entities.<%= pluralize(entity.name) %>`) }}</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">{{ t(`entities.<%= entity.variable %>.id`) }}</th>
+            <% entity._presto__properties.forEach(function(property) { %>
+                <th scope="col">{{ t(`entities.<%= entity.variable %>.<%= property.column %>`) }}</th>
+            <% }); %>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(row, index) in responseData" :key="index">
+                <th scope="row">{{ row.id }}</th>
+            <% entity._presto__properties.forEach(function(property) { %>
+                <td>{{ row['<%= property.column%>'] }}</td>
+            <% }); %>
+            </tr>
+        </tbody>
+    </table>
+    <pre class="text-info bg-dark">{{ responseData }}</pre>
+</template>
+
+<style scoped>
+pre {
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 1em;
+  border-radius: 0.5rem;
+  min-height: 3rem;
+  max-height: 50vh;
+  overflow: auto;
+}
+</style>

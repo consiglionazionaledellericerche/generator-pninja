@@ -36,6 +36,6 @@ module.exports = class extends Generator {
     }
     
     async writing() {
-        if(this.answers.clientType === 'vue') createVueClient(this);
+        if(this.answers.clientType === 'vue') await createVueClient(this);
     }
 };

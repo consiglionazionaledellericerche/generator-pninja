@@ -11,6 +11,9 @@ export default {
     };
   },
   created() {},
+  beforeMount() {
+  //  this.postData()
+  },
   methods: {
     toast() {
       (new Toast(document.getElementById('liveToast'))).show()

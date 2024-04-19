@@ -1,4 +1,45 @@
-const createVueClient = (that) => {
+const { withCSV } = require('with-csv');
+const to = require('to-case')
+const pluralize = require('pluralize')
+const createEntityComponents = async (that) => {
+    const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
+    .columns(["entity","column","type"])
+    .rows();
+    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
+    .columns(["name","class","table","variable","path"])
+    .map(entity => {        
+        entity._presto__properties = properties.filter((property) => property.entity === entity.name);
+        return entity
+    })
+    .rows();
+    for (let index = 0; index < entities.length; index++) {
+        const entity = entities[index];        
+        console.log(`\n\n\nEntity:\n`)
+        console.log(entity)
+        console.log(`\n\n\n`)
+        that.fs.copyTpl(
+            that.templatePath("vue/src/components/entity/Entity.vue.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}.vue`),
+            {
+                entity,
+                pluralize
+            }
+        );
+    }
+}
+
+
+const createVueClient = async (that) => {
+    const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
+    .columns(["entity","column","type"])
+    .rows();
+    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
+    .columns(["name","class","table","variable","path"])
+    .map(entity => {        
+        entity._presto__properties = properties.filter((property) => property.entity === entity.name);
+        return entity
+    })
+    .rows();
     that.fs.copyTpl(that.templatePath("vue/package.json"), that.destinationPath("client/package.json"));
     that.fs.copyTpl(that.templatePath("vue/package-lock.json"), that.destinationPath("client/package-lock.json"));
     that.fs.copyTpl(that.templatePath("vue/vite.config.js"), that.destinationPath("client/vite.config.js"));
@@ -10,17 +51,18 @@ const createVueClient = (that) => {
         that.fs.copyTpl(that.templatePath("vue/public/keycloak.json.example"), that.destinationPath("client/public/keycloak.json"));
     }
 
-    that.fs.copyTpl(that.templatePath("vue/src/App.vue"), that.destinationPath("client/src/App.vue"));
+    that.fs.copyTpl(that.templatePath("vue/src/App.vue.ejs"), that.destinationPath("client/src/App.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/main.js"), that.destinationPath("client/src/main.js"));
     
     that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
-    that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"));
+    that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
+    await createEntityComponents(that);
     
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.js"), that.destinationPath("client/src/plugins/authStore.js"));
     that.fs.copyTpl(that.templatePath("vue/src/plugins/i18n.ts"), that.destinationPath("client/src/plugins/i18n.ts"));
     that.fs.copyTpl(that.templatePath("vue/src/plugins/localeStore.js"), that.destinationPath("client/src/plugins/localeStore.js"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/router/index.js"), that.destinationPath("client/src/router/index.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/router/index.js.ejs"), that.destinationPath("client/src/router/index.js"), { entities });
     
     that.fs.copyTpl(that.templatePath("vue/src/scss/styles.scss"), that.destinationPath("client/src/scss/styles.scss"));
     
@@ -36,7 +78,7 @@ const createVueClient = (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/assets/vite.svg"), that.destinationPath("client/src/assets/vite.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vue.svg"), that.destinationPath("client/src/assets/vue.svg"));
 
-    that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json.ejs"), that.destinationPath("client/src/locales/en-EN.json"), {appName: that.config.get('name')});
-    that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json.ejs"), that.destinationPath("client/src/locales/it-IT.json"), {appName: that.config.get('name')});
+    that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json.ejs"), that.destinationPath("client/src/locales/en-EN.json"), {appName: that.config.get('name'), entities, pluralize, to});
+    that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json.ejs"), that.destinationPath("client/src/locales/it-IT.json"), {appName: that.config.get('name'), entities, pluralize, to});
 }
 module.exports = { createVueClient }
