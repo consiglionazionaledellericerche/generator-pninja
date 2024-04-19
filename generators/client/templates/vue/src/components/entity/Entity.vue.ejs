@@ -1,7 +1,11 @@
 <script>
 import api from '@services/api';
 import { useI18n } from 'vue-i18n'
+import TablePlaceholder from '@/components/TablePlaceholder.vue';
 export default {
+  components: {
+    TablePlaceholder
+  },
   setup() {
     const { t, locale } = useI18n({
       inheritLocale: true,
@@ -37,7 +41,9 @@ export default {
 
 <template>
     <h1 class="display-6">{{ t(`entities.<%= pluralize(entity.name) %>`) }}</h1>
-    <table class="table">
+    <table-placeholder v-if="loading"></table-placeholder>
+    <div v-if="!loading && responseData && !responseData.length" class="alert alert-info" role="alert">No data</div>
+    <table class="table" v-if="!loading && responseData && responseData.length">
         <thead>
             <tr>
                 <th scope="col">{{ t(`entities.<%= entity.variable %>.id`) }}</th>
