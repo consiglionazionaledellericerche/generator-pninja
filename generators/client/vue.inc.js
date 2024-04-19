@@ -1,33 +1,6 @@
 const { withCSV } = require('with-csv');
 const to = require('to-case')
 const pluralize = require('pluralize')
-const createEntityComponents = async (that) => {
-    const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
-    .columns(["entity","column","type"])
-    .rows();
-    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
-    .columns(["name","class","table","variable","path"])
-    .map(entity => {        
-        entity._presto__properties = properties.filter((property) => property.entity === entity.name);
-        return entity
-    })
-    .rows();
-    for (let index = 0; index < entities.length; index++) {
-        const entity = entities[index];        
-        console.log(`\n\n\nEntity:\n`)
-        console.log(entity)
-        console.log(`\n\n\n`)
-        that.fs.copyTpl(
-            that.templatePath("vue/src/components/entity/Entity.vue.ejs"),
-            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}.vue`),
-            {
-                entity,
-                pluralize
-            }
-        );
-    }
-}
-
 
 const createVueClient = async (that) => {
     const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
@@ -56,7 +29,19 @@ const createVueClient = async (that) => {
     
     that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
-    await createEntityComponents(that);
+
+    // ENTITIES COMPONENTS
+    for (let index = 0; index < entities.length; index++) {
+        const entity = entities[index];        
+        that.fs.copyTpl(
+            that.templatePath("vue/src/components/entity/Entity.vue.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}.vue`),
+            {
+                entity,
+                pluralize
+            }
+        );
+    }
     
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.js"), that.destinationPath("client/src/plugins/authStore.js"));
     that.fs.copyTpl(that.templatePath("vue/src/plugins/i18n.ts"), that.destinationPath("client/src/plugins/i18n.ts"));
