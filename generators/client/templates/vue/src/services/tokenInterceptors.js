@@ -1,4 +1,4 @@
-import axiosInstance from "@services/api";
+import axiosInstance from "@/services/api";
 
 const setup = (store) => {
   axiosInstance.interceptors.request.use(

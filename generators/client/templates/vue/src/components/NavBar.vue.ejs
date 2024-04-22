@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import {getCurrentInstance, ref} from 'vue'
 
@@ -7,9 +7,9 @@ const { t, locale } = useI18n({
   useScope: 'global'
 });
 
-const localstore = ref(getCurrentInstance().appContext.config.globalProperties.$localeStore);
+const localstore = ref(getCurrentInstance()?.appContext.config.globalProperties.$localeStore);
 
-const setLocale = (l) => {
+const setLocale = (l: string) => {
   locale.value = l;
   localstore.value.setSelected(l)
 }
@@ -55,18 +55,26 @@ const setLocale = (l) => {
           {{ t('menu.entities') }}
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
-          <% entities.forEach(function(entity) { %>
-            <li><RouterLink class="dropdown-item" to="/<%= entity.path %>">{{t(`entities.<%= pluralize(entity.name) %>`)}}</RouterLink></li>
-          <% }); %>
+
+            <li><RouterLink class="dropdown-item" to="/authors">{{t(`entities.Authors`)}}</RouterLink></li>
+
+            <li><RouterLink class="dropdown-item" to="/books">{{t(`entities.Books`)}}</RouterLink></li>
+
+            <li><RouterLink class="dropdown-item" to="/publishers">{{t(`entities.Publishers`)}}</RouterLink></li>
+
+            <li><RouterLink class="dropdown-item" to="/registries">{{t(`entities.Registries`)}}</RouterLink></li>
+
+            <li><RouterLink class="dropdown-item" to="/countries">{{t(`entities.Countries`)}}</RouterLink></li>
+
         </ul>
       </li>
       <li class="nav-item dropdown">
         <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" :title="t('menu.language')">
-          <i class="bi bi-translate"></i> {{ locale.toUpperCase() }}
+          <i class="bi bi-translate"></i> {{ locale }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-          <button class="dropdown-item" type="button" @click="setLocale('en-EN', locale, $localeStore)">English</button>
-          <button class="dropdown-item" type="button" @click="setLocale('it-IT', locale, $localeStore)">Italiano</button>
+          <button class="dropdown-item" type="button" @click="setLocale('en-EN')">English</button>
+          <button class="dropdown-item" type="button" @click="setLocale('it-IT')">Italiano</button>
         </ul>
       </li>
     </ul>

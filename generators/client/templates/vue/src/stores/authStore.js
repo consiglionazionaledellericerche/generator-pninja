@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import keycloakService from '@services/keycloak';
+import keycloakService from '@/services/keycloak';
 
 export const useAuthStore = defineStore({
   id: "storeAuth",
@@ -7,15 +7,11 @@ export const useAuthStore = defineStore({
     return {
       authenticated: false,
       user: {},
-      test: false
     }
   },
   persist: true,
   getters: {},
   actions: {
-    testAction() {
-      this.test = !this.test;
-    },
     // Initialize Keycloak OAuth
     async initOauth(keycloak, clearData = true) {
       if(clearData) { await this.clearUserData(); }

@@ -15,8 +15,17 @@ const createVueClient = async (that) => {
     .rows();
     that.fs.copyTpl(that.templatePath("vue/package.json"), that.destinationPath("client/package.json"));
     that.fs.copyTpl(that.templatePath("vue/package-lock.json"), that.destinationPath("client/package-lock.json"));
-    that.fs.copyTpl(that.templatePath("vue/vite.config.js"), that.destinationPath("client/vite.config.js"));
+    that.fs.copyTpl(that.templatePath("vue/vite.config.ts.ejs"), that.destinationPath("client/vite.config.ts"));
+    that.fs.copyTpl(that.templatePath("vue/tsconfig.app.json"), that.destinationPath("client/tsconfig.app.json"));
+    that.fs.copyTpl(that.templatePath("vue/tsconfig.json"), that.destinationPath("client/tsconfig.json"));
+    that.fs.copyTpl(that.templatePath("vue/tsconfig.app.json"), that.destinationPath("client/tsconfig.app.json"));
+    that.fs.copyTpl(that.templatePath("vue/tsconfig.node.json"), that.destinationPath("client/tsconfig.node.json"));
     that.fs.copyTpl(that.templatePath("vue/.env.example"), that.destinationPath("client/.env.example"));
+    that.fs.copyTpl(that.templatePath("vue/.eslintrc.cjs"), that.destinationPath("client/.eslintrc.cjs"));
+    that.fs.copyTpl(that.templatePath("vue/.eslintrc.cjs"), that.destinationPath("client/.eslintrc.cjs"));
+    that.fs.copyTpl(that.templatePath("vue/.gitignore"), that.destinationPath("client/.gitignore"));
+    that.fs.copyTpl(that.templatePath("vue/.prettierrc.json"), that.destinationPath("client/.prettierrc.json"));
+    that.fs.copyTpl(that.templatePath("vue/env.d.ts"), that.destinationPath("client/env.d.ts"));
     that.fs.copyTpl(that.templatePath("vue/index.html"), that.destinationPath("client/index.html"));
 
     that.fs.copyTpl(that.templatePath("vue/public/presto-p.svg"), that.destinationPath("client/public/presto-p.svg"));
@@ -24,8 +33,11 @@ const createVueClient = async (that) => {
         that.fs.copyTpl(that.templatePath("vue/public/keycloak.json.example"), that.destinationPath("client/public/keycloak.json"));
     }
 
+    that.fs.copyTpl(that.templatePath("vue/.vscode/extensions.json"), that.destinationPath("client/.vscode/extensions.json"));
+    that.fs.copyTpl(that.templatePath("vue/.vscode/settings.json"), that.destinationPath("client/.vscode/settings.json"));
+
     that.fs.copyTpl(that.templatePath("vue/src/App.vue.ejs"), that.destinationPath("client/src/App.vue"));
-    that.fs.copyTpl(that.templatePath("vue/src/main.js"), that.destinationPath("client/src/main.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/main.ts"), that.destinationPath("client/src/main.ts"));
     
     that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
@@ -51,7 +63,7 @@ const createVueClient = async (that) => {
     
     that.fs.copyTpl(that.templatePath("vue/src/scss/styles.scss"), that.destinationPath("client/src/scss/styles.scss"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/services/api.js"), that.destinationPath("client/src/services/api.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/services/api.ts"), that.destinationPath("client/src/services/api.ts"));
     that.fs.copyTpl(that.templatePath("vue/src/services/keycloak.js"), that.destinationPath("client/src/services/keycloak.js"));
     that.fs.copyTpl(that.templatePath("vue/src/services/tokenInterceptors.js"), that.destinationPath("client/src/services/tokenInterceptors.js"));
     

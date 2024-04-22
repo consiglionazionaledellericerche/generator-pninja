@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/stores/authStore.js";
-import keycloakService from '@services/keycloak';
-import setupInterceptors from '@services/tokenInterceptors';
+import keycloakService from '@/services/keycloak';
+import setupInterceptors from '@/services/tokenInterceptors';
 
 // Setup auth store as a plugin so it can be accessed globally in our FE
 const authStorePlugin = {

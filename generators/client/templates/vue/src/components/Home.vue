@@ -1,103 +1,57 @@
-<script>
-import api from '@services/api';
-import {Toast} from 'bootstrap'
+<script setup lang="ts">
+import api from '@/services/api';
+import { ref, Ref } from 'vue';
 
-export default {
-  data() {
-    return {
-      loading: false,
-      blogLink: import.meta.env.VITE_BLOG_LINK,
-      responseData: `...`,
-    };
-  },
-  created() {},
-  beforeMount() {
-  //  this.postData()
-  },
-  methods: {
-    toast() {
-      (new Toast(document.getElementById('liveToast'))).show()
-    },
-    async postData() {
-      this.loading = true;
-      try {
-        const res = [];
-        res.push((await api.post('/countries',{ name: 'IT_1'})).data);
-        res.push((await api.post('/countries',{ name: 'UK_2'})).data);
-        res.push((await api.post('/publishers',{ name: 'Publisher 1', country_id: 1})).data);
-        res.push((await api.post('/publishers',{ name: 'Publisher 2', country_id: 2})).data);
-        res.push((await api.post('/countries',{ name: 'US_3', publishers: [{ name: 'Pub 3',},{ name: 'Pub 4',}, ],}) ).data);
-        res.push((await api.post('/authors',{ first_name: 'Nome 1', last_name: 'Cognome 1', registry:{ address: 'Addr 1', phone: '11111',}, books: [{ title: 'Book 1', publisher_id: 1},{ title: 'Book 2', publisher_id: 2}, ],}) ).data);
-        res.push((await api.post('/authors',{ first_name: 'Nome 2', last_name: 'Cognome 2', registry:{ address: 'Address 2', phone: '2222222',}, books: [{ title: 'Book 3', publisher_id: 3},{ title: 'Book 4', publisher_id: 4}, ],}) ).data);
-        res.push((await api.post('/books',{ "title": "Book 5", "publisher":{ "name": "Publisher 5", "country_id": 1}, "authors": [ 1,{ "id": 2},{ "first_name":"Nome 3", "last_name":"Cognome 3"} ]})).data);
-        res.push((await api.post('/registries',{ "address": "Address 3", "phone": "333333333", "author_id": 3 })).data);
-        res.push((await api.post('/books',{ "title": "Book 6", "publisher":{ "name": "Publisher 6", "country_id": 1}, "authors": [1,2]})).data);
-        res.push((await api.post('/publishers',{"name": "Publisher 7","books": [1,{ "id": 2},{ "title": "Book 7"}],"country":{ "name": "JP_4"}})).data);
-        res.push((await api.post('/registries',{ "address": "Addr 4", "phone": "4444444", "author":{ "first_name": "Nome 4", "last_name": "Cognome 4"}})).data);
-        // res.push((await api.post('/',{})).data);
-        this.responseData = JSON.stringify(res, null, 4);
-        this.loading = false;
-        return;
-      } catch (error) {
-        this.loading = false;
-        console.error(error);
-        return;
-      }
-    },
-    async getAuthors() {
-      this.loading = true;
-      try {
-        const res = []
-        res.push({countries: (await api.get('/countries')).data});
-        res.push({registries: (await api.get('/registries')).data});
-        res.push({publishers: (await api.get('/publishers')).data});
-        res.push({authors: (await api.get('/authors')).data});
-        res.push({books: (await api.get('/books')).data});
-        this.responseData = JSON.stringify(res, null, 4);
-        this.loading = false;
-        return;
-      } catch (error) {
-        this.loading = false;
-        console.error(error);
-        return;
-      }
-    },
-    async validateUser() {
-      this.loading = true;
+const loading = ref(false);
+const responseData: Ref<any> = ref(undefined);
+async function postData() {
+  loading.value = true;
+  try {
+    const res = [];
+    res.push((await api.post('/countries',{ name: 'IT_1'})).data);
+    res.push((await api.post('/countries',{ name: 'UK_2'})).data);
+    res.push((await api.post('/publishers',{ name: 'Publisher 1', country_id: 1})).data);
+    res.push((await api.post('/publishers',{ name: 'Publisher 2', country_id: 2})).data);
+    res.push((await api.post('/countries',{ name: 'US_3', publishers: [{ name: 'Pub 3',},{ name: 'Pub 4',}, ],}) ).data);
+    res.push((await api.post('/authors',{ first_name: 'Nome 1', last_name: 'Cognome 1', registry:{ address: 'Addr 1', phone: '11111',}, books: [{ title: 'Book 1', publisher_id: 1},{ title: 'Book 2', publisher_id: 2}, ],}) ).data);
+    res.push((await api.post('/authors',{ first_name: 'Nome 2', last_name: 'Cognome 2', registry:{ address: 'Address 2', phone: '2222222',}, books: [{ title: 'Book 3', publisher_id: 3},{ title: 'Book 4', publisher_id: 4}, ],}) ).data);
+    res.push((await api.post('/books',{ "title": "Book 5", "publisher":{ "name": "Publisher 5", "country_id": 1}, "authors": [ 1,{ "id": 2},{ "first_name":"Nome 3", "last_name":"Cognome 3"} ]})).data);
+    res.push((await api.post('/registries',{ "address": "Address 3", "phone": "333333333", "author_id": 3 })).data);
+    res.push((await api.post('/books',{ "title": "Book 6", "publisher":{ "name": "Publisher 6", "country_id": 1}, "authors": [1,2]})).data);
+    res.push((await api.post('/publishers',{"name": "Publisher 7","books": [1,{ "id": 2},{ "title": "Book 7"}],"country":{ "name": "JP_4"}})).data);
+    res.push((await api.post('/registries',{ "address": "Addr 4", "phone": "4444444", "author":{ "first_name": "Nome 4", "last_name": "Cognome 4"}})).data);
+    // res.push((await api.post('/',{})).data);
+    responseData.value = res;
+    loading.value = false;
+    return;
+  } catch (error) {
+    loading.value = false;
+    console.error(error);
+    return;
+  }
+}
 
-      try {
-        const apiURL = '/keycloak/validate-token';
-        const res = await api.post(apiURL);
-        console.log(res.data);
-
-        this.loading = false;
-        return;
-      } catch (error) {
-        this.loading = false;
-        console.error(error);
-        return;
-      }
-    },
-  },
-};
+async function getAuthors() {
+  loading.value = true;
+  try {
+    const res = []
+    res.push({countries: (await api.get('/countries')).data});
+    res.push({registries: (await api.get('/registries')).data});
+    res.push({publishers: (await api.get('/publishers')).data});
+    res.push({authors: (await api.get('/authors')).data});
+    res.push({books: (await api.get('/books')).data});
+    responseData.value = res;
+    loading.value = false;
+    return;
+  } catch (error) {
+    loading.value = false;
+    console.error(error);
+    return;
+  }
+}
 </script>
 
 <template>
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-      <div class="toast-header">
-        <img src="@/assets/presto-p.svg" style="height: 16px;" class="rounded me-2" alt="...">
-        <strong class="me-auto">Bootstrap</strong>
-        <small>11 mins ago</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>
-      <div class="toast-body">
-        Hello, world! This is a toast message.
-      </div>
-    </div>
-  </div>
-  <button type="button" class="btn btn-primary" id="liveToastBtn" @click="toast">Show live toast</button>
-
   <div id="logos">
     <a href="https://vitejs.dev" target="_blank">
       <img src="@/assets/vite.svg" class="logo" alt="Vite logo" />
@@ -110,9 +64,6 @@ export default {
     </a>
   </div>
   <div>
-    <!-- Test Pinia persisted state button -->
-    <button type="button" class="btn btn-primary" title="Test persisted state" @click="$store.testAction">Test ({{ $store.test }})</button>
-    <!-- Refresh token button -->
     <button type="button" class="btn btn-primary" title="Refreshes user token" @click="$store.refreshUserToken">Refresh Token</button>
     <!-- BE validation button -->
     <button type="button" class="btn btn-primary" title="Write test data" :disabled="loading" @click="postData">Post Validation</button>
