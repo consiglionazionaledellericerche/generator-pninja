@@ -1,42 +1,31 @@
-<script>
+<script setup>
 import api from '@services/api';
 import { useI18n } from 'vue-i18n'
 import TablePlaceholder from '@/components/TablePlaceholder.vue';
-export default {
-  components: {
-    TablePlaceholder
-  },
-  setup() {
-    const { t, locale } = useI18n({
-      inheritLocale: true,
-      useScope: 'global'
-    })
-    return { t, locale }
-  },
-  data() {
-    return {
-      responseData: `...`,
-    };
-  },
-  created() {},
-  beforeMount() {
-   this.getAllRecords()
-  },
-  methods: {
-    async getAllRecords() {
-      this.loading = true;
-      try {
-        this.responseData = (await api.get('/<%- entity.path %>')).data;
-        this.loading = false;
-        return;
-      } catch (error) {
-        this.loading = false;
-        console.error(error);
-        return;
-      }
-    },
-  },
-};
+import { ref, onMounted } from 'vue';
+
+const { t, locale } = useI18n({
+  inheritLocale: true,
+  useScope: 'global'
+});
+
+const loading = ref(false);
+const responseData = ref(undefined);
+
+async function getAllRecords() {
+  loading.value = true;
+  try {
+    responseData.value = (await api.get('/<%- entity.path %>')).data;
+    loading.value = false;
+    return;
+  } catch (error) {
+    loading.value = false;
+    console.error(error);
+    return;
+  }
+}
+
+onMounted(() => getAllRecords())
 </script>
 
 <template>
