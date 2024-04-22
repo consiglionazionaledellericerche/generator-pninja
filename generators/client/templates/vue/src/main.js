@@ -16,18 +16,19 @@ const pinia = createPinia();
 // Use persisted state with Pinia so our store data will persist even after page refresh
 pinia.use(piniaPluginPersistedstate);
 
-const i18n = createI18n({
-  locale: 'en-EN',
-  messages,
-})
-
 const renderApp = () => {
   const app = createApp(App);
   app.use(pinia);
   app.use(AuthStorePlugin, { pinia });
   app.use(LocaleStorePlugin, { pinia });
-  app.use(router);
+  const i18n = createI18n({
+    locale: app.config.globalProperties.$localeStore.selected || navigator.language,
+    fallbackLocale: "en-EN",
+    messages,
+    legacy: false
+  });
   app.use(i18n);
+  app.use(router);
   app.mount('#app');
 }
 

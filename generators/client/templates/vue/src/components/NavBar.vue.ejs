@@ -1,23 +1,20 @@
-<script>
-import { useI18n } from 'vue-i18n'
-export default {
-  data() {},
-  created() {},
-  setup() {
-    const { t, locale } = useI18n({
-      inheritLocale: true,
-      useScope: 'global'
-    })
-    return { t, locale }
-  },
-  methods: {
-    setLocale(l,locale,store) {
-      this.locale = l;
-      this.$localeStore.setSelected(l);
-    }
-  }
+<script setup>
+import { useI18n } from 'vue-i18n';
+import {getCurrentInstance, ref} from 'vue'
+
+const { t, locale } = useI18n({
+  inheritLocale: true,
+  useScope: 'global'
+});
+
+const localstore = ref(getCurrentInstance().appContext.config.globalProperties.$localeStore);
+
+const setLocale = (l) => {
+  locale.value = l;
+  localstore.value.setSelected(l)
 }
 </script>
+
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
     <div class="container-fluid">

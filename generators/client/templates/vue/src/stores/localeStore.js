@@ -4,7 +4,7 @@ export const useLocaleStore = defineStore({
   id: "localeStore",
   state: () => {
     return {
-      selected: 'en-EN',
+      selected: undefined,
     }
   },
   persist: true,
