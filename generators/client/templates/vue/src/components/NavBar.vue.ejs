@@ -62,7 +62,7 @@ const setLocale = (l) => {
       </li>
       <li class="nav-item dropdown">
         <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" :title="t('menu.language')">
-          <i class="bi bi-translate"></i> {{ locale }}
+          <i class="bi bi-translate"></i> {{ locale.toUpperCase() }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
           <button class="dropdown-item" type="button" @click="setLocale('en', locale, $localeStore)">English</button>
