@@ -65,8 +65,8 @@ const setLocale = (l) => {
           <i class="bi bi-translate"></i> {{ locale }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-          <button class="dropdown-item" type="button" @click="setLocale('en-EN', locale, $localeStore)">English</button>
-          <button class="dropdown-item" type="button" @click="setLocale('it-IT', locale, $localeStore)">Italiano</button>
+          <button class="dropdown-item" type="button" @click="setLocale('en', locale, $localeStore)">English</button>
+          <button class="dropdown-item" type="button" @click="setLocale('it', locale, $localeStore)">Italiano</button>
         </ul>
       </li>
     </ul>
