@@ -23,7 +23,7 @@ const renderApp = () => {
   app.use(LocaleStorePlugin, { pinia });
   const i18n = createI18n({
     locale: app.config.globalProperties.$localeStore.selected || navigator.language,
-    fallbackLocale: "en",
+    fallbackLocale: "en-EN",
     messages,
     legacy: false
   });
