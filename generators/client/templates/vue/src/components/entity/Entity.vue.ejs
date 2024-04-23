@@ -1,16 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import api from '@/services/api';
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 import TablePlaceholder from '@/components/TablePlaceholder.vue';
-import { ref, onMounted } from 'vue';
+import { type Ref, ref, onMounted } from 'vue';
 
-const { t, locale } = useI18n({
+interface Datum {
+  [k: string]: any;
+}
+
+type Data = Datum[];
+
+const { t } = useI18n({
   inheritLocale: true,
   useScope: 'global'
 });
 
-const loading = ref(false);
-const responseData = ref(undefined);
+const loading: Ref<boolean> = ref(false);
+const responseData: Ref<Data | undefined> = ref(undefined);
 
 async function getAllRecords() {
   loading.value = true;

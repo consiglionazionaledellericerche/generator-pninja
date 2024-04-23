@@ -1,0 +1,25 @@
+import { defineStore } from 'pinia'
+
+export type State = {
+  selected: string | undefined
+}
+
+export type Actions = {
+  setSelected: (lang: string) => void
+}
+
+export const useLocaleStore = defineStore({
+  id: 'localeStore',
+  state: (): State => {
+    return {
+      selected: undefined
+    }
+  },
+  persist: true,
+  getters: {},
+  actions: {
+    setSelected(l: string) {
+      this.selected = l
+    }
+  }
+})

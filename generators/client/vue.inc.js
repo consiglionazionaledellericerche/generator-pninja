@@ -37,9 +37,9 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/.vscode/settings.json"), that.destinationPath("client/.vscode/settings.json"));
 
     that.fs.copyTpl(that.templatePath("vue/src/App.vue.ejs"), that.destinationPath("client/src/App.vue"));
-    that.fs.copyTpl(that.templatePath("vue/src/main.ts"), that.destinationPath("client/src/main.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/main.ts.ejs"), that.destinationPath("client/src/main.ts"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/components/Home.vue"), that.destinationPath("client/src/components/Home.vue"));
+    that.fs.copyTpl(that.templatePath("vue/src/components/HomePage.vue.ejs"), that.destinationPath("client/src/components/HomePage.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/TablePlaceholder.vue.ejs"), that.destinationPath("client/src/components/TablePlaceholder.vue"), { entities, pluralize });
 
@@ -48,7 +48,7 @@ const createVueClient = async (that) => {
         const entity = entities[index];        
         that.fs.copyTpl(
             that.templatePath("vue/src/components/entity/Entity.vue.ejs"),
-            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}.vue`),
+            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}Component.vue`),
             {
                 entity,
                 pluralize
@@ -56,19 +56,19 @@ const createVueClient = async (that) => {
         );
     }
     
-    that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.js"), that.destinationPath("client/src/plugins/authStore.js"));
-    that.fs.copyTpl(that.templatePath("vue/src/plugins/localeStore.js"), that.destinationPath("client/src/plugins/localeStore.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.ts.ejs"), that.destinationPath("client/src/plugins/authStore.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/plugins/localeStore.ts.ejs"), that.destinationPath("client/src/plugins/localeStore.ts"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/router/index.js.ejs"), that.destinationPath("client/src/router/index.js"), { entities });
+    that.fs.copyTpl(that.templatePath("vue/src/router/index.ts.ejs"), that.destinationPath("client/src/router/index.ts"), { entities });
     
     that.fs.copyTpl(that.templatePath("vue/src/scss/styles.scss"), that.destinationPath("client/src/scss/styles.scss"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/services/api.ts"), that.destinationPath("client/src/services/api.ts"));
-    that.fs.copyTpl(that.templatePath("vue/src/services/keycloak.js"), that.destinationPath("client/src/services/keycloak.js"));
-    that.fs.copyTpl(that.templatePath("vue/src/services/tokenInterceptors.js"), that.destinationPath("client/src/services/tokenInterceptors.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/services/api.ts.ejs"), that.destinationPath("client/src/services/api.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/services/keycloak.ts.ejs"), that.destinationPath("client/src/services/keycloak.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/services/tokenInterceptors.ts.ejs"), that.destinationPath("client/src/services/tokenInterceptors.ts"));
     
-    that.fs.copyTpl(that.templatePath("vue/src/stores/authStore.js"), that.destinationPath("client/src/stores/authStore.js"));
-    that.fs.copyTpl(that.templatePath("vue/src/stores/localeStore.js"), that.destinationPath("client/src/stores/localeStore.js"));
+    that.fs.copyTpl(that.templatePath("vue/src/stores/authStore.ts.ejs"), that.destinationPath("client/src/stores/authStore.ts"));
+    that.fs.copyTpl(that.templatePath("vue/src/stores/localeStore.ts.ejs"), that.destinationPath("client/src/stores/localeStore.ts"));
 
     that.fs.copyTpl(that.templatePath("vue/src/assets/pinia.svg"), that.destinationPath("client/src/assets/pinia.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/presto-p.svg"), that.destinationPath("client/src/assets/presto-p.svg"));
