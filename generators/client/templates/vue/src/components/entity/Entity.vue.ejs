@@ -56,14 +56,16 @@ onMounted(() => getAllRecords())
             </tr>
         </tbody>
     </table>
-    <pre class="text-info bg-dark">{{ responseData }}</pre>
+    <pre>{{ responseData }}</pre>
 </template>
 
 <style scoped>
-pre {
+  pre {
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
+  background-color: #333;
+  color: cyan;
   padding: 1em;
   border-radius: 0.5rem;
   min-height: 3rem;
