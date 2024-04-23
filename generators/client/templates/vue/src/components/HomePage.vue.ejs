@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import api from '@/services/api';
-import { ref, type Ref } from 'vue';
+import { type Ref, ref, getCurrentInstance } from 'vue';
+const $store = ref(getCurrentInstance()?.appContext.config.globalProperties.$store);
 interface Datum {
   [k: string]: any;
 }
@@ -184,7 +185,7 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
   background-color: #333;
-  color: #cf9;
+  color: cyan;
   padding: 1em;
   border-radius: 0.5rem;
   min-height: 3rem;
