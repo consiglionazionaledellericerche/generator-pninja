@@ -66,46 +66,6 @@ module.exports = class extends Generator {
         ]
       },
     ]);
-    if(this.answers.dbms === 'mysql') {
-      const answers = await this.prompt([
-        {
-          store: true,
-          type: "input",
-          name: "dbmsDB_HOST",
-          message: "DB Host",
-          default: '127.0.0.1'
-        },{
-          store: true,
-          type: "input",
-          name: "dbmsDB_PORT",
-          message: "DB Port",
-          default: '3306'
-        },{
-          store: true,
-          type: "input",
-          name: "dbmsDB_DATABASE",
-          message: "Database",
-          default: to.snake(this.answers.name)
-        },{
-          store: true,
-          type: "input",
-          name: "dbmsDB_USERNAME",
-          message: "Database username",
-          default: 'user'
-        },{
-          store: true,
-          type: "input",
-          name: "dbmsDB_PASSWORD",
-          message: "Database password",
-          default: 'secret'
-        }
-      ]);
-      this.answers = {...this.answers, ...answers};
-      for(const key in this.answers){
-        this.config.set(key, this.answers[key])
-      }
-      this.config.save();
-    }
   }
   
   writing() {
@@ -116,11 +76,16 @@ module.exports = class extends Generator {
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=${this.answers.dbms}`);
-    envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=${this.answers.dbmsDB_HOST}`);
-    envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=${this.answers.dbmsDB_PORT}`);
-    envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=${this.answers.dbmsDB_DATABASE}`);
-    envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=${this.answers.dbmsDB_USERNAME}`);
-    envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=${this.answers.dbmsDB_PASSWORD}`);
+    if(this.answers.dbms === 'mysql') {
+      envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
+      envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
+      envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
+      envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword`);
+    }
+    if(this.answers.dbms === 'sqlite') {
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=/absolute/path/to/database.sqlite`);
+    }
     fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
     // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
