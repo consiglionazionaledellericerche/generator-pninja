@@ -35,12 +35,6 @@ module.exports = class extends Generator {
         name: "entitiesFilePath",
         message: "Entities definition file path",
         default: '.presto-entities.json'
-      },{
-        store: true,
-        type: "confirm",
-        name: "migrateFresh",
-        message: "Cleanup database?",
-        default: false
       }]);
       this.answers = {...this.answers, ...answers};
     }
@@ -74,14 +68,5 @@ module.exports = class extends Generator {
     await utils.createEntityControllers(this);
     await utils.createEntityRoutes(this);
   }
-  end() {
-    if(this.answers.build || this.answers.rebuild) {
-      // Execute migrations
-      if(this.answers.migrateFresh) {
-        this.spawnCommandSync('php', ['artisan', 'migrate:fresh'], {cwd: 'server'});
-      } else {
-        this.spawnCommandSync('php', ['artisan', 'migrate'], {cwd: 'server'});
-      }
-    }
-  }
+  end() {}
 };

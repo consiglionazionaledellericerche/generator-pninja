@@ -7,6 +7,8 @@
     "dependencies": {
     },
     "scripts": {
+        "migrate-cleanup": "cd server && php artisan migrate:fresh",
+        "migrate": "cd server && php artisan migrate",
         "server": "cd server && php artisan serve",
         "client": "cd client && npm i && npm run dev"
     }
