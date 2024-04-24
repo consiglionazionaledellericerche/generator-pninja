@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import {getCurrentInstance, ref} from 'vue'
-
 const { t, locale } = useI18n({
   inheritLocale: true,
   useScope: 'global'
 });
 
-const localstore = ref(getCurrentInstance()?.appContext.config.globalProperties.$localeStore);
-
-const setLocale = (l: string) => {
-  locale.value = l;
-  localstore.value.setSelected(l)
-}
+const setLocale = ($event: Event) => {
+  locale.value = ($event.target as HTMLSelectElement).value;
+};
 </script>
 
 <template>
@@ -68,14 +63,20 @@ const setLocale = (l: string) => {
 
         </ul>
       </li>
-      <li class="nav-item dropdown">
-        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" :title="t('menu.language')">
-          <i class="bi bi-translate"></i> {{ locale }}
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-          <button class="dropdown-item" type="button" @click="setLocale('en-EN')">English</button>
-          <button class="dropdown-item" type="button" @click="setLocale('it-IT')">Italiano</button>
-        </ul>
+      <li class="nav-item">
+        <div class="input-group">
+          <label class="input-group-text" for="select-locale"><i class="bi bi-translate"></i></label>
+          <select
+            v-model="$localeStore.selected"
+            class="form-select form-select-sm"
+            aria-label="Filter select"
+            id="select-locale"
+            @change="($event) => setLocale($event)"
+          >
+            <option value="en-EN">English</option>
+            <option value="it-IT">Italiano</option>
+          </select>
+        </div>
       </li>
     </ul>
   </div>
