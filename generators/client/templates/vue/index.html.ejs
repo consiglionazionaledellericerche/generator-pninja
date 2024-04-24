@@ -6,10 +6,11 @@
   <link rel="icon" type="image/svg+xml" href="/presto-p.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><%= appName %></title>
+  <style>.loader{ width: 40px; aspect-ratio: 1; border-radius: 50%; background: #f03355; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); animation: l1 2s infinite cubic-bezier(0.3, 1, 0, 1); margin-left: calc(50vw - 20px); margin-top: calc(50vh - 20px)} @keyframes l1{ 33%{ border-radius: 0; background: #514b82; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%)} 66%{ border-radius: 0; background: #ffa516; clip-path: polygon(50% 0, 50% 0, 100% 100%, 0 100%)}}</style>
 </head>
 
 <body>
-  <div id="app"></div>
+  <div id="app"><div class="loader"></div></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 
