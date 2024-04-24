@@ -9,20 +9,20 @@ module.exports = class extends Generator {
   // note: arguments and options should be defined in the constructor.
   constructor(args, opts) {
     super(args, opts);
-    
+
     // This makes `appname` a required argument.
     // this.argument("appname", { type: String, required: true });
-    
+
     // And you can then access it later; e.g.
     // this.log(this.options.appname);
   }
   async initializing() {
     utils.hello(this.log);
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
-    this.composeWith(require.resolve("../auth"),{fromMain: true});
-    this.composeWith(require.resolve("../entities"),{fromMain: true});
-    this.composeWith(require.resolve("../client"),{fromMain: true});
-    this.composeWith(require.resolve("../final"),{fromMain: true});
+    this.composeWith(require.resolve("../auth"), { fromMain: true });
+    this.composeWith(require.resolve("../entities"), { fromMain: true });
+    this.composeWith(require.resolve("../client"), { fromMain: true });
+    this.composeWith(require.resolve("../final"), { fromMain: true });
   }
   async prompting() {
     this.answers = await this.prompt([
@@ -32,7 +32,7 @@ module.exports = class extends Generator {
         name: "name",
         message: "Your project name",
         default: this.options.appname || this.config.get('name') || this.appname // Default to current folder name
-      },{
+      }, {
         store: true,
         type: "list",
         name: "dbms",
@@ -46,9 +46,13 @@ module.exports = class extends Generator {
           {
             name: "MySQL",
             value: "mysql"
+          },
+          {
+            name: "PostgreSQL",
+            value: "pgsql"
           }
         ]
-      },{
+      }, {
         store: true,
         type: "list",
         name: "packageManager",
@@ -67,35 +71,45 @@ module.exports = class extends Generator {
       },
     ]);
   }
-  
+
   writing() {
-    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3','server']);
-    this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], {cwd: 'server'});
+    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3', 'server']);
+    this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=${this.answers.dbms}`);
-    if(this.answers.dbms === 'mysql') {
+    if (this.answers.dbms === 'sqlite') {
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=/absolute/path/to/database.sqlite`);
+    }
+    if (this.answers.dbms === 'mysql') {
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword`);
     }
-    if(this.answers.dbms === 'sqlite') {
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=/absolute/path/to/database.sqlite`);
+    if (this.answers.dbms === 'pgsql') {
+      let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
+      configDatabaseFileContents = configDatabaseFileContents.replace(/^\s+'search_path' => 'public',$/m, `'search_path' => env('DB_SCHEMA','public'),`);
+      fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
+      envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
+      envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=5432\nDB_SCHEMA=public`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
+      envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
+      envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword`);
     }
     fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
     // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
-    {
-      packageName: to.slug(this.answers.name),
-      projectName: to.title(this.answers.name),
-      projectDescription: this.projectDescription,
-      projectVersion: this.projectVersion,
-      authorName: this.authorName
-    });
+      {
+        packageName: to.slug(this.answers.name),
+        projectName: to.title(this.answers.name),
+        projectDescription: this.projectDescription,
+        projectVersion: this.projectVersion,
+        authorName: this.authorName
+      });
 
     // Enable Facades and Eloquent
     const bootPath = `${this.destinationPath('server/bootstrap/app.php')}`;
