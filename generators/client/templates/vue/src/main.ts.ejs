@@ -34,9 +34,11 @@ const renderApp = () => {
   app.use(pinia);
   app.use(AuthStorePlugin, { pinia });
   app.use(LocaleStorePlugin, { pinia });
+  if(!app.config.globalProperties.$localeStore.selected) {
+    app.config.globalProperties.$localeStore.setSelected(navigator.language);
+  }
   const i18n = createI18n({
-    locale: app.config.globalProperties.$localeStore.selected || navigator.language,
-    fallbackLocale: 'en-EN',
+    locale: app.config.globalProperties.$localeStore.selected || 'en-EN',
     messages,
     legacy: false
   });
