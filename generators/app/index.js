@@ -48,6 +48,10 @@ module.exports = class extends Generator {
             value: "mysql"
           },
           {
+            name: "MariaDB",
+            value: "mariadb"
+          },
+          {
             name: "PostgreSQL",
             value: "pgsql"
           }
@@ -79,11 +83,12 @@ module.exports = class extends Generator {
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
-    envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=${this.answers.dbms}`);
     if (this.answers.dbms === 'sqlite') {
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlite`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=/absolute/path/to/database.sqlite`);
     }
-    if (this.answers.dbms === 'mysql') {
+    if (this.answers.dbms === 'mariadb' || this.answers.dbms === 'mysql') {
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mysql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
@@ -94,6 +99,7 @@ module.exports = class extends Generator {
       let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
       configDatabaseFileContents = configDatabaseFileContents.replace(/^\s+'search_path' => 'public',$/m, `'search_path' => env('DB_SCHEMA','public'),`);
       fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=pgsql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=5432\nDB_SCHEMA=public`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
