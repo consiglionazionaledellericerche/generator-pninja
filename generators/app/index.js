@@ -100,9 +100,6 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword`);
     }
     if (this.answers.dbms === 'pgsql') {
-      let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
-      configDatabaseFileContents = configDatabaseFileContents.replace(/^\s+'search_path' => 'public',$/m, `'search_path' => env('DB_SCHEMA','public'),`);
-      fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=pgsql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=5432`);
@@ -119,6 +116,9 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=Pass@word`);
     }
     fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
+    let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
+    configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'search_path' => 'public',$/gmis, `'search_path' => env('DB_SCHEMA','public'),`);
+    fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
     // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
       {
