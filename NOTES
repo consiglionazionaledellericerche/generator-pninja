@@ -72,3 +72,4 @@ pecl install sqlsrv pdo_sqlsrv
   366  phpenmod -v 8.3 sqlsrv pdo_sqlsrv
   367  sudo phpenmod -v 8.3 sqlsrv pdo_sqlsrv
   368  php -m|grep sql
+curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
