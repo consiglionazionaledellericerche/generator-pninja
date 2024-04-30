@@ -32,3 +32,43 @@
  2014  php artisan make:migration rename_articles_column --table="articles" --create
  2015  php artisan migrate
  2016  history 
+
+
+$ sudo apt update
+$ sudo apt install composer php-xml php-sqlite3 php-mysql php-pgsql
+
+
+
+
+
+pecl install sqlsrv pdo_sqlsrv
+  339  sudo apt install php-pear
+  340  pecl install sqlsrv pdo_sqlsrv
+  341  sudo pecl install sqlsrv pdo_sqlsrv
+  342  sudo apt install php-dev
+  343  sudo pecl install sqlsrv pdo_sqlsrv
+  344  printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.1/mods-available/sqlsrv.ini
+  345  printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.1/mods-available/pdo_sqlsrv.ini
+  346  cd /etc/php/8.3/mods-available/
+  347  ls
+  348  ls -1|grep pdo
+  349  ls -1|grep sql
+  350  sudo pecl install sqlsrv pdo_sqlsrv
+  351  sudo apt-get install unixodbc unixodbc-dev
+  352  sudo pecl install sqlsrv pdo_sqlsrv
+  353  php -m |grep sql
+  354  sudo printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.3/mods-available/sqlsrv.ini
+  355  touch sqlsrv.ini
+  356  sudo touch sqlsrv.ini
+  357  ll
+  358  cat pdo_pgsql.ini
+  359  vim sqlsrv.ini
+  360  sudo vim sqlsrv.ini
+  361  sudo touch pdo_sqlsrv.ini
+  362  sudo vim pdo_sqlsrv.ini
+  363  php -v
+  364  phpenmod -v 8.3.6 sqlsrv pdo_sqlsrv
+  365  php -m|grep sql
+  366  phpenmod -v 8.3 sqlsrv pdo_sqlsrv
+  367  sudo phpenmod -v 8.3 sqlsrv pdo_sqlsrv
+  368  php -m|grep sql
