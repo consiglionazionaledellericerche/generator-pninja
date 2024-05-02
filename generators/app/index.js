@@ -89,7 +89,11 @@ module.exports = class extends Generator {
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     if (this.answers.dbms === 'sqlite') {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlite`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=/absolute/path/to/database.sqlite`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `# DB_DATABASE=/absolute/path/to/database.sqlite\n# DB_PREFIX=`);
+      envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$\n/m, ``);
+      envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$\n/m, ``);
+      envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$\n/m, ``);
+      envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$\n/m, ``);
     }
     if (this.answers.dbms === 'mysql') {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mysql`);
