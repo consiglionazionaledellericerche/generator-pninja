@@ -95,7 +95,7 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mysql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8mb4\nDB_COLLATION=utf8mb4_unicode_ci`);
     }
@@ -103,7 +103,7 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mariadb`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8mb4\nDB_COLLATION=utf8mb4_unicode_ci`);
     }
@@ -111,7 +111,7 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=pgsql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=5432`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\nDB_SCHEMA=public`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=\nDB_SCHEMA=public`);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=root`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8`);
     }
@@ -119,13 +119,14 @@ module.exports = class extends Generator {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlsrv`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=1433`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=sa`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=Pass@word\nDB_CHARSET=utf8`);
     }
     fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
     let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
     configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'search_path' => 'public',$/gmis, `'search_path' => env('DB_SCHEMA','public'),`);
+    configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'prefix' => '',$/gmis, `'prefix' => env('DB_PREFIX',''),`);
     fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
     // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
