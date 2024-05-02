@@ -3,7 +3,7 @@ import { type State, type Actions } from '@/stores/authStore';
 
 type AuthStore = State & Actions;
 
-const keycloak = new Keycloak();
+const keycloak = new Keycloak('/keycloak.json');
 let authenticated: boolean = false;
 let store = null;
 
