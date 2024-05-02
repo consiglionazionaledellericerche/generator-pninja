@@ -5,6 +5,13 @@
     "language": "Lingua",
     "home": "Home"
   },
+  "actions": {
+    "entity": {
+      "view": "Visualizza",
+      "edit": "Modifica",
+      "delete": "Elimina"
+    }
+  },
   "entities": {<% entities.forEach(function(entity, index) { %>
     "<%= pluralize(entity.name) %>": "<%= pluralize(to.sentence(entity.name)) %>",
     "<%= entity.variable %>": {

@@ -4,6 +4,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import HomePage from '@/components/HomePage.vue';
 <% entities.forEach(function(entity) { %>
 import <%= entity.name %>Component from '@/components/entities/<%= entity.variable %>/<%= entity.name %>Component.vue';
+import <%= entity.name %>DetailsComponent from '@/components/entities/<%= entity.variable %>/<%= entity.name %>DetailsComponent.vue';
 <% }); %> 
 // Keycloak returns a long ass path everytime, so we need to filter them out.
 const filterPath = (to: any, from: any, next: any) => {
@@ -25,6 +26,12 @@ const routes = [
     path: "/<%= entity.path %>",
     name: "<%= entity.name %>Component",
     component: <%= entity.name %>Component,
+    beforeEnter: filterPath
+  },
+  {
+    path: "/<%= entity.path %>/:id",
+    name: "<%= entity.name %>DetailsComponent",
+    component: <%= entity.name %>DetailsComponent,
     beforeEnter: filterPath
   }
   <% }); %> 

@@ -45,6 +45,7 @@ onMounted(() => getAllRecords())
             <% entity._presto__properties.forEach(function(property) { %>
                 <th scope="col">{{ t(`entities.<%= entity.variable %>.<%= property.column %>`) }}</th>
             <% }); %>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +54,9 @@ onMounted(() => getAllRecords())
             <% entity._presto__properties.forEach(function(property) { %>
                 <td>{{ row['<%= property.column%>'] }}</td>
             <% }); %>
+                <td>
+                  <router-link class="btn btn-primary" role="button" :to="`/<%= entity.path %>/${row.id}`">{{ t('actions.entity.view') }}</router-link>
+                </td>
             </tr>
         </tbody>
     </table>

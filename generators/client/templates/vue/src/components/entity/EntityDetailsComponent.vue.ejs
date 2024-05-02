@@ -1,0 +1,58 @@
+<script setup lang="ts">
+import api from '@/services/api';
+import { useI18n } from 'vue-i18n';
+import { type Ref, ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router'
+
+const route = useRoute();
+
+interface Datum {
+  [k: string]: any;
+}
+
+type Data = Datum[];
+
+const { t } = useI18n({
+  inheritLocale: true,
+  useScope: 'global'
+});
+
+const loading: Ref<boolean> = ref(false);
+const responseData: Ref<Data | undefined> = ref(undefined);
+
+async function getRecord() {
+  loading.value = true;
+  try {
+    responseData.value = (await api.get(`/<%- entity.path %>/${route.params.id}`)).data;
+    loading.value = false;
+    return;
+  } catch (error) {
+    loading.value = false;
+    console.error(error);
+    return;
+  }
+}
+
+onMounted(() => getRecord());
+watch(() => route.params.id, () => getRecord());
+</script>
+
+<template>
+    <h1 class="display-6">{{ t(`entities.<%= pluralize(entity.name) %>`) }} ID {{ $route.params.id }}</h1>
+    <pre>{{ responseData }}</pre>
+</template>
+
+<style scoped>
+  pre {
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #333;
+  color: cyan;
+  padding: 1em;
+  border-radius: 0.5rem;
+  min-height: 3rem;
+  max-height: 50vh;
+  overflow: auto;
+}
+</style>
