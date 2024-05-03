@@ -42,20 +42,22 @@ onMounted(() => getAllRecords())
         <thead>
             <tr>
                 <th scope="col">{{ t(`entities.<%= entity.variable %>.id`) }}</th>
-            <% entity._presto__properties.forEach(function(property) { %>
+<% entity._presto__properties.forEach(function(property) { %>
                 <th scope="col">{{ t(`entities.<%= entity.variable %>.<%= property.column %>`) }}</th>
-            <% }); %>
+<% }); %>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(row, index) in responseData" :key="index">
                 <th scope="row">{{ row.id }}</th>
-            <% entity._presto__properties.forEach(function(property) { %>
+<% entity._presto__properties.forEach(function(property) { %>
                 <td>{{ row['<%= property.column%>'] }}</td>
-            <% }); %>
+<% }); %>
                 <td>
-                  <router-link class="btn btn-primary" role="button" :to="`/<%= entity.path %>/${row.id}`">{{ t('actions.entity.view') }}</router-link>
+                  <router-link class="btn btn-primary" role="button" :to="{name: '<%= entity.path %>-details', params: {id: row.id}}">{{ t('actions.entity.view') }}</router-link>
+                  &nbsp;
+                  <router-link class="btn btn-primary" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: row.id}}">{{ t('actions.entity.edit') }}</router-link>
                 </td>
             </tr>
         </tbody>

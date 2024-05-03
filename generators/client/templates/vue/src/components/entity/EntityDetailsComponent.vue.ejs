@@ -23,11 +23,9 @@ async function getRecord() {
   try {
     responseData.value = (await api.get(`/<%- entity.path %>/${route.params.id}`)).data;
     loading.value = false;
-    return;
   } catch (error) {
     loading.value = false;
     console.error(error);
-    return;
   }
 }
 
@@ -43,6 +41,7 @@ watch(() => route.params.id, () => getRecord());
       <dd class="col-sm-9">{{ responseData.<%= property.column%> }}</dd>
 <% }); %>
     </dl>
+    <router-link class="btn btn-primary" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: responseData.id}}">{{ t('actions.entity.edit') }}</router-link>
     <div v-if="!loading && responseData && !responseData.id" class="alert alert-warning" role="alert">{{ t('warnings.recordNotFound') }}</div>
     <pre>{{ responseData }}</pre>
 </template>

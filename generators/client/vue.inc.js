@@ -60,6 +60,14 @@ const createVueClient = async (that) => {
                 pluralize
             }
         );
+        that.fs.copyTpl(
+            that.templatePath("vue/src/components/entity/EntityEditComponent.vue.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}EditComponent.vue`),
+            {
+                entity,
+                pluralize
+            }
+        );
     }
 
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.ts.ejs"), that.destinationPath("client/src/plugins/authStore.ts"));
