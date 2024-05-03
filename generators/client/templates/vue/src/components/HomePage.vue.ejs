@@ -93,11 +93,9 @@ async function postData() {
     // res.push((await api.post('/',{})).data);
     responseData.value = res;
     loading.value = false;
-    return;
   } catch (error) {
     loading.value = false;
     console.error(error);
-    return;
   }
 }
 
@@ -112,11 +110,9 @@ async function getAuthors() {
     res.push({ books: (await api.get('/books')).data });
     responseData.value = res;
     loading.value = false;
-    return;
   } catch (error) {
     loading.value = false;
     console.error(error);
-    return;
   }
 }
 </script>
