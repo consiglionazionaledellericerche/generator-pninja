@@ -3,6 +3,7 @@ import api from '@/services/api';
 import { useI18n } from 'vue-i18n';
 import TablePlaceholder from '@/components/TablePlaceholder.vue';
 import { type Ref, ref, onMounted } from 'vue';
+import ButtonActionConfirm from '@/components/ButtonActionConfirm.vue'
 
 interface Datum {
   [k: string]: any;
@@ -28,6 +29,17 @@ async function getAllRecords() {
     loading.value = false;
     console.error(error);
     return;
+  }
+}
+
+async function deleteRecord(id: number) {
+  try {
+    responseData.value = (await api.delete(`/<%- entity.path %>/${id}`)).data;
+    loading.value = false;
+    getAllRecords();
+  } catch (error) {
+    loading.value = false;
+    console.error(error);
   }
 }
 
@@ -62,8 +74,9 @@ onMounted(() => getAllRecords())
 <% }); %>
                 <td class="entity-actions">
                   <div class="d-inline-flex gap-1">
-                    <router-link class="btn btn-sm btn-primary" role="button" :to="{name: '<%= entity.path %>-details', params: {id: row.id}}">{{ t('actions.entity.view') }}</router-link>
-                    <router-link class="btn btn-sm btn-primary" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: row.id}}">{{ t('actions.entity.edit') }}</router-link>
+                    <router-link class="btn btn-sm btn-primary text-nowrap" role="button" :to="{name: '<%= entity.path %>-details', params: {id: row.id}}">{{ t('actions.entity.view') }}</router-link>
+                    <router-link class="btn btn-sm btn-primary text-nowrap" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: row.id}}">{{ t('actions.entity.edit') }}</router-link>
+                    <button-action-confirm :delay="5" :label="t('actions.entity.delete')" :labelConfirm="t('actions.entity.deleteConfirm')" class="btn btn-sm btn-danger text-nowrap" :action="() => deleteRecord(row.id)"></button-action-confirm>
                   </div>
                 </td>
             </tr>

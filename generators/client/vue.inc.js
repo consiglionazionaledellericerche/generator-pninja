@@ -39,6 +39,8 @@ const createVueClient = async (that) => {
 
     that.fs.copyTpl(that.templatePath("vue/src/components/HomePage.vue.ejs"), that.destinationPath("client/src/components/HomePage.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
+    that.fs.copyTpl(that.templatePath("vue/src/components/CountDownCircle.vue.ejs"), that.destinationPath("client/src/components/CountDownCircle.vue"), { entities, pluralize });
+    that.fs.copyTpl(that.templatePath("vue/src/components/ButtonActionConfirm.vue.ejs"), that.destinationPath("client/src/components/ButtonActionConfirm.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/TablePlaceholder.vue.ejs"), that.destinationPath("client/src/components/TablePlaceholder.vue"), { entities, pluralize });
 
     // ENTITIES COMPONENTS

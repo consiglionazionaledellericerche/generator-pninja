@@ -1,0 +1,33 @@
+<script setup lang="ts">
+import { type Ref, ref } from 'vue';
+import { defineProps } from "vue";
+import CountDownCircle from '@/components/CountDownCircle.vue'
+
+const props = defineProps(['label','labelConfirm','action', 'delay']);
+const waitConfirm: Ref<boolean> = ref(false);
+let t: number | null = null;
+function confirm() {
+  if(waitConfirm.value) {
+    cancel();
+    props.action();
+  } else {
+    waitConfirm.value = true;
+    t = setTimeout(cancel, parseInt(props.delay) * 1000)
+  }
+}
+function cancel() {
+  if (t) {
+    clearTimeout(t);
+  }
+  waitConfirm.value = false;
+}
+</script>
+<template>
+  <button @click="confirm">
+    <span v-if="!waitConfirm">{{ $props.label }}</span>
+    <span v-else>
+      <CountDownCircle :start="parseInt(props.delay)"></CountDownCircle>
+      {{ $props.labelConfirm }}
+    </span>
+  </button>
+</template>

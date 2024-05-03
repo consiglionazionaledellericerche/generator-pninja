@@ -1,0 +1,65 @@
+<script setup lang="ts">
+import { type Ref, ref } from 'vue';
+import { defineProps } from "vue";
+
+const props = defineProps(['start']);
+const counter: Ref<number> = ref(props.start);
+
+setInterval(function() {
+  counter.value = counter.value - 1;
+}, 1000);
+</script>
+<template>
+  <div id="countdown">
+  <div id="countdown-number">{{ counter }}</div>
+  <svg>
+    <circle r="9" cx="10" cy="10" :style="`--d: ${props.start}s`"></circle>
+  </svg>
+</div>
+</template>
+<style scoped>
+#countdown {
+  position: relative;
+  margin: auto;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+#countdown-number {
+  color: white;
+  display: inline-block;
+  line-height: 20px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+svg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+}
+
+svg circle {
+  stroke-dasharray: 56px;
+  stroke-dashoffset: 0px;
+  stroke-linecap: round;
+  stroke-width: 2px;
+  stroke: white;
+  fill: none;
+  animation: countdown var(--d) linear infinite forwards;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0px;
+  }
+  to {
+    stroke-dashoffset: 56px;
+  }
+}
+</style>
