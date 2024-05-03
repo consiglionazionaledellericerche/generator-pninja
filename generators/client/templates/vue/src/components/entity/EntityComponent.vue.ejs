@@ -36,6 +36,12 @@ onMounted(() => getAllRecords())
 
 <template>
     <h1 class="display-6">{{ t(`entities.<%= pluralize(entity.name) %>`) }}</h1>
+    <p class="my-3 text-end">
+      <router-link class="btn btn-lg btn-primary" role="button" :to="{name: '<%= entity.path %>-new'}">
+      <i class="bi bi-plus-lg"></i>
+      {{ t('actions.entity.create') }} {{ t(`entities.<%= to.sentence(entity.name) %>`) }}
+      </router-link>
+    </p>
     <table-placeholder v-if="loading"></table-placeholder>
     <div v-if="!loading && responseData && !responseData.length" class="alert alert-info" role="alert">No data</div>
     <table class="table" v-if="!loading && responseData && responseData.length">
@@ -54,10 +60,11 @@ onMounted(() => getAllRecords())
 <% entity._presto__properties.forEach(function(property) { %>
                 <td>{{ row['<%= property.column%>'] }}</td>
 <% }); %>
-                <td>
-                  <router-link class="btn btn-primary" role="button" :to="{name: '<%= entity.path %>-details', params: {id: row.id}}">{{ t('actions.entity.view') }}</router-link>
-                  &nbsp;
-                  <router-link class="btn btn-primary" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: row.id}}">{{ t('actions.entity.edit') }}</router-link>
+                <td class="entity-actions">
+                  <div class="d-inline-flex gap-1">
+                    <router-link class="btn btn-sm btn-primary" role="button" :to="{name: '<%= entity.path %>-details', params: {id: row.id}}">{{ t('actions.entity.view') }}</router-link>
+                    <router-link class="btn btn-sm btn-primary" role="button" :to="{name: '<%= entity.path %>-edit', params: {id: row.id}}">{{ t('actions.entity.edit') }}</router-link>
+                  </div>
                 </td>
             </tr>
         </tbody>

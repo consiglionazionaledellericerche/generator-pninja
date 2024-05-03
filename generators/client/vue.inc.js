@@ -49,7 +49,8 @@ const createVueClient = async (that) => {
             that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}Component.vue`),
             {
                 entity,
-                pluralize
+                pluralize,
+                to
             }
         );
         that.fs.copyTpl(
