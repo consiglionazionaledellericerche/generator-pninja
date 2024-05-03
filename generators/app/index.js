@@ -27,11 +27,10 @@ module.exports = class extends Generator {
   async prompting() {
     this.answers = await this.prompt([
       {
-        store: true,
         type: "input",
         name: "name",
         message: "Your project name",
-        default: this.options.appname || this.config.get('name') || this.appname // Default to current folder name
+        default: this.config.get('name') || this.appname // Default to current folder name
       }, {
         store: true,
         type: "list",
