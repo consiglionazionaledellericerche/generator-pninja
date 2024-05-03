@@ -80,6 +80,13 @@ module.exports = class extends Generator {
     ]);
   }
 
+  configuring() {
+    for (const key in this.answers) {
+      this.config.set(key, this.answers[key]);
+    }
+    this.config.save();
+  }
+
   writing() {
     this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3', 'server']);
     this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
