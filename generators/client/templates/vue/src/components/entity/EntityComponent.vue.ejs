@@ -24,11 +24,9 @@ async function getAllRecords() {
   try {
     responseData.value = (await api.get('/<%- entity.path %>')).data;
     loading.value = false;
-    return;
   } catch (error) {
     loading.value = false;
     console.error(error);
-    return;
   }
 }
 
