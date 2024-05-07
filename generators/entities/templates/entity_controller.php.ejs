@@ -27,6 +27,8 @@ class <%- className %>Controller extends Controller
 
     public function store(Request $request)
     {
+        dump($request->all());
+
         $<%- entityName %> = <%- className %>::create($request->all());
 
         <% if (createRelated) { %><%- createRelated %><% } %>
@@ -38,6 +40,8 @@ class <%- className %>Controller extends Controller
 
     public function update($id, Request $request)
     {
+        dump($request->all());
+
         <% if (withs) { %>
         $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
         <% } else { %>
@@ -45,6 +49,8 @@ class <%- className %>Controller extends Controller
         <% } %>
 
         $<%- entityName %>->update($request->all());
+
+        <% if (createRelated) { %><%- createRelated %><% } %>
 
         return response()->json($<%- entityName %>, 200);
     }

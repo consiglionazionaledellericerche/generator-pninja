@@ -206,6 +206,7 @@ const getCreateRelated = (relation) => {
                 $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)});
             } elseif (array_key_exists("id", $request_${toCase.snake(relation.fromProp)})) {
                 $${toCase.snake(relation.fromProp)} = \\App\\Models\\${getClassNameFromEntityName(relation.to)}::findOrFail($request_${toCase.snake(relation.fromProp)}["id"]);
+                $${toCase.snake(relation.fromProp)}->update($request_${toCase.snake(relation.fromProp)});
             } else {
                 $${toCase.snake(relation.fromProp)} = new \\App\\Models\\${getClassNameFromEntityName(relation.to)}($request_${toCase.snake(relation.fromProp)});
             }
