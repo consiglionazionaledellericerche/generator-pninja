@@ -37,15 +37,26 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/App.vue.ejs"), that.destinationPath("client/src/App.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/main.ts.ejs"), that.destinationPath("client/src/main.ts"));
 
+    that.fs.copyTpl(that.templatePath("vue/src/components/ButtonActionConfirm.vue.ejs"), that.destinationPath("client/src/components/ButtonActionConfirm.vue"), { entities, pluralize });
+    that.fs.copyTpl(that.templatePath("vue/src/components/CountDownCircle.vue.ejs"), that.destinationPath("client/src/components/CountDownCircle.vue"), { entities, pluralize });
+    that.fs.copyTpl(that.templatePath("vue/src/components/HttpErrorInterceptor.vue.ejs"), that.destinationPath("client/src/components/HttpErrorInterceptor.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/HomePage.vue.ejs"), that.destinationPath("client/src/components/HomePage.vue"));
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
-    that.fs.copyTpl(that.templatePath("vue/src/components/CountDownCircle.vue.ejs"), that.destinationPath("client/src/components/CountDownCircle.vue"), { entities, pluralize });
-    that.fs.copyTpl(that.templatePath("vue/src/components/ButtonActionConfirm.vue.ejs"), that.destinationPath("client/src/components/ButtonActionConfirm.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/TablePlaceholder.vue.ejs"), that.destinationPath("client/src/components/TablePlaceholder.vue"), { entities, pluralize });
+    that.fs.copyTpl(that.templatePath("vue/src/components/ToastAlert.vue.ejs"), that.destinationPath("client/src/components/ToastAlert.vue"), { entities, pluralize });
 
     // ENTITIES COMPONENTS
     for (let index = 0; index < entities.length; index++) {
         const entity = entities[index];
+        that.fs.copyTpl(
+            that.templatePath("vue/src/components/entity/entity.service.ts.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.variable}.service.ts`),
+            {
+                entity,
+                pluralize,
+                to
+            }
+        );
         that.fs.copyTpl(
             that.templatePath("vue/src/components/entity/EntityComponent.vue.ejs"),
             that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.name}Component.vue`),
@@ -71,7 +82,17 @@ const createVueClient = async (that) => {
                 pluralize
             }
         );
+        that.fs.copyTpl(
+            that.templatePath("vue/src/models/entity.model.ts.ejs"),
+            that.destinationPath(`client/src/models/${entity.variable}.model.ts`),
+            {
+                entity,
+                pluralize
+            }
+        );
     }
+
+    that.fs.copyTpl(that.templatePath("vue/src/models/toastError.model.ts.ejs"), that.destinationPath("client/src/models/toastError.model.ts"));
 
     that.fs.copyTpl(that.templatePath("vue/src/plugins/authStore.ts.ejs"), that.destinationPath("client/src/plugins/authStore.ts"));
     that.fs.copyTpl(that.templatePath("vue/src/plugins/localeStore.ts.ejs"), that.destinationPath("client/src/plugins/localeStore.ts"));

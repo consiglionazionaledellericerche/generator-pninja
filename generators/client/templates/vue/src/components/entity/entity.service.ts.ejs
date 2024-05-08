@@ -1,0 +1,35 @@
+import api from '@/services/api';
+import { type Datum, type Data } from '@/models/<%=entity.variable%>.model';
+
+async function save(record: Datum): Promise<Datum> {
+  if(record.id) {
+    const { data } = await api.put(`/<%=entity.path%>/${record.id}`, record);
+    return data;
+  } else {
+    const { data } = await api.post('/<%=entity.path%>', record);
+    return data;
+  }
+}
+
+async function find(id: number): Promise<Datum> {
+  const { data } = await api.get(`/<%=entity.path%>/${id}`);
+  return data;
+}
+
+async function findAll(): Promise<Data> {
+  const { data } = await api.get('/<%=entity.path%>');
+  return data;
+}
+
+async function deleteRecord(id: number) {
+  await api.delete(`/<%=entity.path%>/${id}`);
+}
+
+const <%=entity.variable%>Service =  {
+  save,
+  find,
+  findAll,
+  delete: deleteRecord
+}
+
+export default <%=entity.variable%>Service;

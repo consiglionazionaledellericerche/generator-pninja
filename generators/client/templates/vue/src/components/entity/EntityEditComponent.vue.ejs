@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import api from '@/services/api';
 import { useI18n } from 'vue-i18n';
 import { type Ref, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
+import <%= entity.variable %>Service from './<%= entity.variable %>.service';
+import { type Datum } from '@/models/<%= entity.variable %>.model';
 
 const router = useRouter();
 const route = useRoute();
-
-interface Datum {
-  [k: string]: any;
-}
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -20,33 +17,16 @@ const loading: Ref<boolean> = ref(false);
 const record: Ref<Datum> = ref({});
 
 async function saveRecord() {
-  let responseData: Datum = {};
   loading.value = true;
-  try {
-    if(route.params.id) {
-      responseData = (await api.put(`/<%- entity.path %>/${route.params.id}`, record.value)).data;
-    } else {
-      responseData = (await api.post('/<%- entity.path %>', record.value)).data;
-    }
-    loading.value = false;
-    router.push({ name: '<%- entity.path %>-details', params: { id: responseData.id } })
-  } catch (error) {
-    loading.value = false;
-    console.error(error);
-  }
+  let responseData: Datum = await <%= entity.variable %>Service.save(record.value);
+  loading.value = false;
+  router.push({ name: '<%= entity.path %>-details', params: { id: responseData.id } });
 }
 
 async function getRecord() {
   loading.value = true;
-  try {
-    record.value = (await api.get(`/<%- entity.path %>/${route.params.id}`)).data;
-    loading.value = false;
-    return;
-  } catch (error) {
-    loading.value = false;
-    console.error(error);
-    return;
-  }
+  record.value = await <%= entity.variable %>Service.find(parseInt(route.params.id.toString()));
+  loading.value = false;
 }
 
 onMounted(async () => {

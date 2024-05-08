@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import api from '@/services/api';
 import { useI18n } from 'vue-i18n';
 import { type Ref, ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router'
+import <%= entity.variable %>Service from './<%= entity.variable %>.service';
+import { type Datum } from '@/models/<%= entity.variable %>.model';
 
 const route = useRoute();
-
-interface Datum {
-  [k: string]: any;
-}
 
 const { t } = useI18n({
   inheritLocale: true,
@@ -20,13 +17,8 @@ const responseData: Ref<Datum> = ref({});
 
 async function getRecord() {
   loading.value = true;
-  try {
-    responseData.value = (await api.get(`/<%- entity.path %>/${route.params.id}`)).data;
-    loading.value = false;
-  } catch (error) {
-    loading.value = false;
-    console.error(error);
-  }
+  responseData.value = await <%= entity.variable %>Service.find(parseInt(route.params.id.toString()));;
+  loading.value = false;
 }
 
 onMounted(() => getRecord());
