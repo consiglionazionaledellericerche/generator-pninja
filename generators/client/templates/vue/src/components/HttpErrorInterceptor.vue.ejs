@@ -1,0 +1,20 @@
+<script setup lang="ts">
+import { reactive } from 'vue';
+import ToastAlert from "@/components/ToastAlert.vue";
+import { push } from "@/components/ToastAlert.vue";
+import axiosInstance from '@/services/api'
+axiosInstance.interceptors.response.use(
+    (res) => {
+      return res
+    },
+    async (error) => {
+      const id = Date.now();
+      push(state.errors, { id: id, error });
+      return Promise.reject(error)
+    }
+  )
+const state = reactive({ errors: [] });
+</script>
+<template>
+  <toast-alert :errors="state.errors"></toast-alert>
+</template>

@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue'
+import HttpErrorInterceptor from "@/components/HttpErrorInterceptor.vue"
 </script>
 <template>
   <nav-bar></nav-bar>
   <div class="container-fluid py-3">
     <router-view />
   </div>
+  <http-error-interceptor />
 </template>
