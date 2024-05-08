@@ -3,8 +3,8 @@ import { useI18n } from 'vue-i18n';
 import TablePlaceholder from '@/components/TablePlaceholder.vue';
 import { type Ref, ref, onMounted } from 'vue';
 import ButtonActionConfirm from '@/components/ButtonActionConfirm.vue'
-import <%= entity.variable %>Service from '@/services/<%= entity.variable %>.service';
-import { type Data } from '@/models/<%= entity.variable %>.model';
+import <%= entity.variable %>Service from '@/services/entities/<%= entity.variable %>.service';
+import { type Data } from '@/models/entities/<%= entity.variable %>.model';
 
 const { t } = useI18n({
   inheritLocale: true,

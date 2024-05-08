@@ -1,5 +1,5 @@
 import api from '@/services/api';
-import { type Datum, type Data } from '@/models/<%=entity.variable%>.model';
+import { type Datum, type Data } from '@/models/entities/<%=entity.variable%>.model';
 
 async function save(record: Datum): Promise<Datum> {
   if(record.id) {

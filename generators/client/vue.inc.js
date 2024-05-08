@@ -49,8 +49,8 @@ const createVueClient = async (that) => {
     for (let index = 0; index < entities.length; index++) {
         const entity = entities[index];
         that.fs.copyTpl(
-            that.templatePath("vue/src/services/entity.service.ts.ejs"),
-            that.destinationPath(`client/src/services/${entity.variable}.service.ts`),
+            that.templatePath("vue/src/services/entities/entity.service.ts.ejs"),
+            that.destinationPath(`client/src/services/entities/${entity.variable}.service.ts`),
             {
                 entity,
                 pluralize,
@@ -83,8 +83,8 @@ const createVueClient = async (that) => {
             }
         );
         that.fs.copyTpl(
-            that.templatePath("vue/src/models/entity.model.ts.ejs"),
-            that.destinationPath(`client/src/models/${entity.variable}.model.ts`),
+            that.templatePath("vue/src/models/entities/entity.model.ts.ejs"),
+            that.destinationPath(`client/src/models/entities/${entity.variable}.model.ts`),
             {
                 entity,
                 pluralize
