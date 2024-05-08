@@ -2,7 +2,7 @@
 import { useI18n } from 'vue-i18n';
 import { type Ref, ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router'
-import <%= entity.variable %>Service from './<%= entity.variable %>.service';
+import <%= entity.variable %>Service from '@/services/<%= entity.variable %>.service';
 import { type Datum } from '@/models/<%= entity.variable %>.model';
 
 const route = useRoute();

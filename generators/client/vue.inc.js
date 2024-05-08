@@ -49,8 +49,8 @@ const createVueClient = async (that) => {
     for (let index = 0; index < entities.length; index++) {
         const entity = entities[index];
         that.fs.copyTpl(
-            that.templatePath("vue/src/components/entity/entity.service.ts.ejs"),
-            that.destinationPath(`client/src/components/entities/${entity.variable}/${entity.variable}.service.ts`),
+            that.templatePath("vue/src/services/entity.service.ts.ejs"),
+            that.destinationPath(`client/src/services/${entity.variable}.service.ts`),
             {
                 entity,
                 pluralize,
