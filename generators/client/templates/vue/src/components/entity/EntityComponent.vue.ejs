@@ -33,7 +33,7 @@ onMounted(() => getAllRecords())
     <p class="my-3 text-end">
       <router-link class="btn btn-lg btn-primary" role="button" :to="{name: '<%= entity.path %>-new'}">
       <i class="bi bi-plus-lg"></i>
-      {{ t('actions.entity.create') }} {{ t(`entities.<%= to.sentence(entity.name) %>`) }}
+      {{ t('actions.entity.create') }} {{ t(`entities.<%= entity.name %>`) }}
       </router-link>
     </p>
     <table-placeholder v-if="loading"></table-placeholder>
