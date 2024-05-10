@@ -139,44 +139,6 @@ async function getAuthors() {
       <img src="@/assets/presto-h.svg" class="logo presto" alt="Presto" title="Presto" />
     </a>
   </div>
-  <div>
-    <button
-      type="button"
-      class="btn btn-primary"
-      title="Refreshes user token"
-      @click="$store.refreshUserToken"
-    >
-      Refresh Token
-    </button>
-    <!-- BE validation button -->
-    <button
-      type="button"
-      class="btn btn-primary"
-      title="Write test data"
-      :disabled="loading"
-      @click="postData"
-    >
-      Post Validation
-    </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      title="Check Console with Dev Tools"
-      :disabled="loading"
-      @click="getAuthors"
-    >
-      Backend Validation
-    </button>
-    <!-- Logout button -->
-    <button type="button" class="btn btn-primary" @click="$store.logout">Logout</button>
-  </div>
-  <pre id="response-data">{{ responseData }}</pre>
-  <h2>Keycloak User</h2>
-  <p class="my-5">Username: {{ $store.user.username }}</p>
-  <p class="my-5">Token:</p>
-  <pre>{{ $store.user.token }}</pre>
-  <p class="my-5">Refresh Token:</p>
-  <pre>{{ $store.user.refToken }}</pre>
 </template>
 
 <style scoped>
