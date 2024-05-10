@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import FooterComponent from '@/components/FooterComponent.vue';
 import NavBar from '@/components/NavBar.vue'
 import HttpErrorInterceptor from "@/components/HttpErrorInterceptor.vue"
 </script>
 <template>
-  <nav-bar></nav-bar>
-  <div class="container-fluid py-3">
-    <router-view />
+  <div class="d-flex flex-column min-vh-100">
+    <nav-bar></nav-bar>
+    <div class="container-fluid py-3 bg-body">
+      <router-view />
+    </div>
+    <footer-component class="bg-body-secondary flex-fill" />
   </div>
   <http-error-interceptor />
 </template>

@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+const { t, locale } = useI18n({
+  inheritLocale: true,
+  useScope: 'global'
+});
+
+const setLocale = ($event: Event) => {
+  locale.value = ($event.target as HTMLSelectElement).value;
+};
+</script>
+
+<template>
+  <footer>
+    <div class="d-flex">
+      <div class="text-nowrap mx-2 my-auto">User: {{ $store.user.username }}</div>
+      <div class="flex-fill"></div>
+      <div class="d-flex m-2">
+        <div class="input-group">
+          <label class="input-group-text" for="select-locale"><i class="bi bi-translate"></i></label>
+          <select
+            v-model="$localeStore.selected"
+            class="form-select form-select-sm"
+            aria-label="Filter select"
+            id="select-locale"
+            @change="($event) => setLocale($event)"
+          >
+            <option value="en-EN">English</option>
+            <option value="it-IT">Italiano</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </footer>
+</template>
