@@ -30,6 +30,9 @@ const getAddColumnUp = (name, type) => {
         case 'string':
             return `\n\t\t\t$table->string('${name}', 255)->nullable(true);`
             break;
+        case 'foreignid':
+            return `\n\t\t\t$table->foreignId('${name}')->nullable(true);`
+            break;
         case 'unsignedbiginteger':
             return `\n\t\t\t$table->unsignedBigInteger('${name}')->nullable(true);`
             break;
@@ -337,8 +340,8 @@ const createMigrationsForRelations = async (that) => {
             tabName = toCase.snake(getRelationPropertyOwner(relation));
             that.spawnCommandSync('php', ['artisan', 'make:migration', `create_${toCase.snake(getRelationPropertyOwner(relation))}_table`], { cwd: 'server' });
             const ups = [
-                getAddColumnUp(`${toCase.snake(relation.from)}_id`, 'UnsignedBigInteger'),
-                getAddColumnUp(`${toCase.snake(relation.to)}_id`, 'UnsignedBigInteger')
+                getAddColumnUp(`${toCase.snake(relation.from)}_id`, 'foreignId'),
+                getAddColumnUp(`${toCase.snake(relation.to)}_id`, 'foreignId')
             ];
             const downs = [
                 getAddColumnDown(`${toCase.snake(relation.from)}_id`),
@@ -489,13 +492,13 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
             rs.push({ type, from, to, fromProp, toProp, fromLabel, toLabel });
             switch (type) {
                 case 'one-to-one':
-                    ps.push({ entity: to, column: `${toCase.snake(from)}_id`, type: 'UnsignedBigInteger' });
+                    ps.push({ entity: to, column: `${toCase.snake(from)}_id`, type: 'foreignId' });
                     break;
                 case 'many-to-one':
-                    ps.push({ entity: from, column: `${toCase.snake(to)}_id`, type: 'UnsignedBigInteger' });
+                    ps.push({ entity: from, column: `${toCase.snake(to)}_id`, type: 'foreignId' });
                     break;
                 case 'one-to-many':
-                    ps.push({ entity: to, column: `${toCase.snake(from)}_id`, type: 'UnsignedBigInteger' });
+                    ps.push({ entity: to, column: `${toCase.snake(from)}_id`, type: 'foreignId' });
                     break;
                 default:
                     break;

@@ -4,12 +4,10 @@ import NavBar from '@/components/NavBar.vue'
 import HttpErrorInterceptor from "@/components/HttpErrorInterceptor.vue"
 </script>
 <template>
-  <div class="d-flex flex-column min-vh-100">
-    <nav-bar></nav-bar>
-    <div class="container-fluid py-3 bg-body">
-      <router-view />
-    </div>
-    <footer-component class="bg-body-secondary flex-fill" />
-  </div>
+  <nav-bar></nav-bar>
+  <main class="container-fluid py-3 bg-body flex-fill">
+    <router-view />
+  </main>
+  <footer-component class="bg-body-secondary" />
   <http-error-interceptor />
 </template>
