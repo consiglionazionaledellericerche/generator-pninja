@@ -52,6 +52,7 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/env.d.ts.ejs"), that.destinationPath("client/env.d.ts"));
     that.fs.copyTpl(that.templatePath("vue/index.html.ejs"), that.destinationPath("client/index.html"), { appName: that.config.get('name') });
 
+    that.fs.copyTpl(that.templatePath("vue/public/presto-meteor.svg"), that.destinationPath("client/public/presto-meteor.svg"));
     that.fs.copyTpl(that.templatePath("vue/public/presto-p.svg"), that.destinationPath("client/public/presto-p.svg"));
     if (that.config.get('authentication') === 'keycloak') {
         that.fs.copyTpl(that.templatePath("vue/public/keycloak.json.example.ejs"), that.destinationPath("client/public/keycloak.json"));
