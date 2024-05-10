@@ -1,7 +1,33 @@
 const { withCSV } = require('with-csv');
 const to = require('to-case')
 const pluralize = require('pluralize')
-
+const dbmms = {
+    "sqlite": {
+        name: "SQLite",
+        logo: "sqlite-logo.svg",
+        url: "https://www.sqlite.org/"
+    },
+    "mysql": {
+        name: "MySQL",
+        logo: "mysql-logo.svg",
+        url: "https://www.mysql.com/"
+    },
+    "mariadb": {
+        name: "MariaDB",
+        logo: "mariadb-logo.svg",
+        url: "https://mariadb.org/"
+    },
+    "pgsql": {
+        name: "PostgreSQL",
+        logo: "pgsql-logo.svg",
+        url: "https://www.postgresql.org/"
+    },
+    "sqlsrv": {
+        name: "SQL Server",
+        logo: "sqlsrv-logo.svg",
+        url: "https://www.microsoft.com/sql-server/"
+    }
+}
 const createVueClient = async (that) => {
     const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
         .columns(["entity", "column", "type"])
@@ -40,7 +66,10 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/components/ButtonActionConfirm.vue.ejs"), that.destinationPath("client/src/components/ButtonActionConfirm.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/CountDownCircle.vue.ejs"), that.destinationPath("client/src/components/CountDownCircle.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/HttpErrorInterceptor.vue.ejs"), that.destinationPath("client/src/components/HttpErrorInterceptor.vue"));
-    that.fs.copyTpl(that.templatePath("vue/src/components/HomePage.vue.ejs"), that.destinationPath("client/src/components/HomePage.vue"));
+    that.fs.copyTpl(that.templatePath("vue/src/components/HomePage.vue.ejs"), that.destinationPath("client/src/components/HomePage.vue"), {
+        db: dbmms[that.config.get('dbms')]
+    });
+    that.fs.copyTpl(that.templatePath("vue/src/components/FooterComponent.vue.ejs"), that.destinationPath("client/src/components/FooterComponent.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/NavBar.vue.ejs"), that.destinationPath("client/src/components/NavBar.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/TablePlaceholder.vue.ejs"), that.destinationPath("client/src/components/TablePlaceholder.vue"), { entities, pluralize });
     that.fs.copyTpl(that.templatePath("vue/src/components/ToastAlert.vue.ejs"), that.destinationPath("client/src/components/ToastAlert.vue"), { entities, pluralize });
@@ -109,10 +138,16 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/stores/localeStore.ts.ejs"), that.destinationPath("client/src/stores/localeStore.ts"));
 
     that.fs.copyTpl(that.templatePath("vue/src/assets/laravel-logo.svg"), that.destinationPath("client/src/assets/laravel-logo.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/mariadb-logo.svg"), that.destinationPath("client/src/assets/mariadb-logo.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/mysql-logo.svg"), that.destinationPath("client/src/assets/mysql-logo.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/pgsql-logo.svg"), that.destinationPath("client/src/assets/pgsql-logo.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/pinia.svg"), that.destinationPath("client/src/assets/pinia.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/presto-p.svg"), that.destinationPath("client/src/assets/presto-p.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/presto-h.svg"), that.destinationPath("client/src/assets/presto-h.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/presto-meteor-bw.svg"), that.destinationPath("client/src/assets/presto-meteor-bw.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/presto-meteor.svg"), that.destinationPath("client/src/assets/presto-meteor.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/presto-sq-bw.svg"), that.destinationPath("client/src/assets/presto-sq-bw.svg"));
+    that.fs.copyTpl(that.templatePath("vue/src/assets/presto-sq.svg"), that.destinationPath("client/src/assets/presto-sq.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/sqlite-logo.svg"), that.destinationPath("client/src/assets/sqlite-logo.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vite.svg"), that.destinationPath("client/src/assets/vite.svg"));
     that.fs.copyTpl(that.templatePath("vue/src/assets/vue.svg"), that.destinationPath("client/src/assets/vue.svg"));

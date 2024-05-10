@@ -119,14 +119,24 @@ async function getAuthors() {
 
 <template>
   <div id="logos">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="@/assets/vite.svg" class="logo" alt="Vite logo" />
+    <a href="https://laravel.com/">
+      <img src="@/assets/laravel-logo.svg" class="logo" alt="Laravel" />
     </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="@/assets/vue.svg" class="logo vue" alt="Vue logo" />
+    <span class="fs-1">+</span>
+    <a href="<%- db.url %>">
+      <img src="@/assets/<%- db.logo %>" class="logo" alt="<%- db.name %>" />
     </a>
-    <a href="https://http://git.si.cnr.it/gianluca.troiani/vamp/" target="_blank">
-      <img src="@/assets/presto-p.svg" class="logo presto" alt="Presto logo" />
+    <span class="fs-1">+</span>
+    <a href="https://vitejs.dev">
+      <img src="@/assets/vite.svg" class="logo" alt="Vite" />
+    </a>
+    <span class="fs-1">+</span>
+    <a href="https://vuejs.org/">
+      <img src="@/assets/vue.svg" class="logo vue" alt="Vue" />
+    </a>
+    <span class="fs-1">=</span>
+    <a href="http://git.si.cnr.it/development-tools/generator-presto">
+      <img src="@/assets/presto-h.svg" class="logo presto" alt="Presto" />
     </a>
   </div>
   <div>
