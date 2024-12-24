@@ -1,28 +1,16 @@
-/*
- * See: https://laravel.com/docs/10.x/eloquent-relationships
- *      https://medium.com/@prevailexcellent/laravel-many-to-many-relationship-complete-tutorial-16025acd5450
- */
+import fs from 'fs';
+import _ from 'lodash';
+import moment from 'moment';
+import { withCSV } from 'with-csv';
+import pluralize from 'pluralize';
+import toCase from 'to-case';
+import { createObjectCsvWriter } from 'csv-writer';
+import { JDLReader } from './jdl-reader.js';
 
-const fs = require('fs');
-
-var _ = require('lodash');
-
-const moment = require('moment');
-
-const { withCSV } = require('with-csv');
-
-const pluralize = require('pluralize')
-
-const toCase = require('to-case');
-
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-
+// Funzioni helper
 const getTableNameFromEntityName = (name) => `${toCase.snake(pluralize(name))}`;
-
 const getClassNameFromEntityName = (name) => `${toCase.pascal(name)}`;
-
 const getVariableNameFromEntityName = (name) => `${toCase.snake(name)}`;
-
 const getRootPathFromEntityName = (name) => `${toCase.slug(pluralize(name)).toLowerCase()}`;
 
 const getAddColumnUp = (name, type) => {
@@ -33,8 +21,12 @@ const getAddColumnUp = (name, type) => {
         case 'foreignid':
             return `\n\t\t\t$table->foreignId('${name}')->nullable(true);`
             break;
+        case 'integer':
         case 'unsignedbiginteger':
             return `\n\t\t\t$table->unsignedBigInteger('${name}')->nullable(true);`
+            break;
+        case 'BigDecimal':
+            return `\n\t\t\t$table->unsignedDecimal('${name}')->nullable(true);`
             break;
 
         default:
@@ -251,7 +243,7 @@ const getCreateRelated = (relation) => {
     }
 }
 
-const createEntityRoutes = async (that) => {
+export const createEntityRoutes = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name", "class", "table", "variable", "path"])
         .rows();
@@ -266,7 +258,7 @@ const createEntityRoutes = async (that) => {
     }
 }
 
-const createEntityControllers = async (that) => {
+export const createEntityControllers = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name", "class", "table", "variable", "path"])
         .rows();
@@ -302,7 +294,7 @@ const createEntityControllers = async (that) => {
     }
 }
 
-const createEntityModels = async (that) => {
+export const createEntityModels = async (that) => {
     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
         .columns(["name", "class", "table", "variable", "path"])
         .rows();
@@ -329,7 +321,7 @@ const createEntityModels = async (that) => {
     }
 }
 
-const createMigrationsForRelations = async (that) => {
+export const createMigrationsForRelations = async (that) => {
     const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
         .columns(["type", "from", "to", "fromProp", "toProp", "fromLabel", "toLabel"])
         .rows();
@@ -365,45 +357,41 @@ const createMigrationsForRelations = async (that) => {
     }
 }
 
-const createMigrationsForColumns = async (that) => {
-    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
-        .columns(["name", "class", "table", "variable", "path"])
-        .rows();
-    for (let index = 0; index < entities.length; index++) {
+export const createMigrationsForColumns = async (that) => {
+    const appJsonFilePath = that.destinationPath('.presto/application.json')
+    const reader = new JDLReader(appJsonFilePath);
+    await reader.load();
+    const entities = reader.getEntities();
+    entities.forEach(entity => {
         const ups = [];
         const downs = [];
-        const entity = entities[index];
-        const props = await withCSV(that.destinationPath(`.presto-properties.csv`))
-            .columns(["entity", "column", "type"])
-            .filter(row => row.entity === entity.name)
-            .rows();
-        for (let index = 0; index < props.length; index++) {
-            const property = props[index];
-            ups.push(getAddColumnUp(property.column, property.type));
-            downs.push(getAddColumnDown(property.column));
-        }
-        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${entity.table}_table.php`;
+        const props = entity.body;
+        props.forEach(property => {
+            ups.push(getAddColumnUp(property.name, property.type));
+            downs.push(getAddColumnDown(property.name));
+        })
+        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_columns_to_${entity.tableName.toLowerCase()}_table.php`;
         that.fs.copyTpl(that.templatePath("make_migrations_update_table.php.ejs"), that.destinationPath(migrationFilePath),
             {
-                tabName: entity.table,
+                tabName: entity.tableName.toLowerCase(),
                 up: ups.join("\n"),
                 down: downs.join("\n"),
             });
-    }
+    })
 }
 
-const createMigrationsForTables = async (that) => {
-    const tables = await withCSV(that.destinationPath(`.presto-entities.csv`))
-        .columns(["name", "class", "table", "variable", "path"])
-        .map(row => row.table)
-        .rows();
-    for (let index = 0; index < tables.length; index++) {
-        const table = tables[index];
-        that.spawnCommandSync('php', ['artisan', 'make:migration', `create_${table}_table`], { cwd: 'server' });
-    }
+export const createMigrationsForTables = async (that) => {
+    const appJsonFilePath = that.destinationPath('.presto/application.json')
+    const reader = new JDLReader(appJsonFilePath);
+    await reader.load();
+    const entities = reader.getEntities();
+    const tabNames = Array.from(entities).map(entity => entity.tableName);
+    tabNames.forEach(tabName => {
+        that.spawnCommandSync('php', ['artisan', 'make:migration', `create_${tabName.toLowerCase()}_table`], { cwd: 'server' });
+    });
 }
 
-const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
+export const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
     const entitiesWriter = createCsvWriter({
         path: that.destinationPath('.presto-entities.csv'),
         header: [
@@ -508,14 +496,4 @@ const writeEntitiesAndRelationsCSV = async (entitiesFilePath, that) => {
     await entitiesWriter.writeRecords(es);
     await propertiesWriter.writeRecords(ps);
     await relationsWriter.writeRecords(rs);
-}
-
-module.exports = {
-    writeEntitiesAndRelationsCSV,
-    createMigrationsForTables,
-    createMigrationsForColumns,
-    createMigrationsForRelations,
-    createEntityModels,
-    createEntityControllers,
-    createEntityRoutes
 }
