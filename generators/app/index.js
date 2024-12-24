@@ -21,10 +21,27 @@ export default class extends Generator {
   async initializing() {
     utils.hello(this.log);
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
-    // this.composeWith(require.resolve("../auth"), { fromMain: true });
-    const entitiesGeneratorPath = path.resolve(__dirname, '../entities/index.js');
+
+    // sub generator Auth
+    const authGeneratorPath = path.resolve(__dirname, '../auth/index.js');
+    const { default: AuthGenerator } = await import(authGeneratorPath);
+
     await this.composeWith({
-      Generator: (await import(entitiesGeneratorPath)).default,
+      Generator: AuthGenerator,
+      path: path.dirname(authGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: authGeneratorPath,
+      namespace: 'presto:auth'
+    });
+
+    // sub generator Entities
+    const entitiesGeneratorPath = path.resolve(__dirname, '../entities/index.js');
+    const { default: EntitiesGenerator } = await import(entitiesGeneratorPath);
+
+    await this.composeWith({
+      Generator: EntitiesGenerator,
       path: path.dirname(entitiesGeneratorPath)
     }, {
       fromMain: true,

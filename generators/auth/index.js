@@ -1,13 +1,21 @@
-'use strict';
-var Generator = require('yeoman-generator');
-const fs = require('fs');
-const to = require('to-case');
-const colors = require('ansi-colors');
+import Generator from 'yeoman-generator';
+import fs from 'fs';
+import to from 'to-case';
+import colors from 'ansi-colors';
+
 const tab = '    ';
-module.exports = class extends Generator {
+
+export default class AuthGenerator extends Generator {
+  static namespace = 'presto:auth';
+
   constructor(args, opts) {
     super(args, opts);
+    this.option('fromMain', {
+      type: Boolean,
+      default: false
+    });
   }
+
   async prompting() {
     let prompts = [];
     if (this.options["fromMain"]) {
@@ -23,16 +31,6 @@ module.exports = class extends Generator {
       }]]
     }
     this.answers = await this.prompt(prompts);
-    // if(this.answers.authentication === 'keycloack') {
-    //   const answers = await this.prompt([{
-    //     store: true,
-    //     type: "input",
-    //     name: "keycloak_realm_public_key",
-    //     message: "Keycloak realm public key",
-    //     default: ''
-    //   }]);
-    //   this.answers = {...this.answers, ...answers};
-    // }
   }
 
   configuring() {
@@ -62,7 +60,7 @@ KEYCLOAK_APPEND_DECODED_TOKEN=false
 KEYCLOAK_ALLOWED_RESOURCES=account
 KEYCLOAK_IGNORE_RESOURCES_VALIDATION=false
 KEYCLOAK_LEEWAY=0
-KEYCLOAK_TOKEN_INPUT_KEY=null`), { encoding: 'utf8', flag: 'w' };
+KEYCLOAK_TOKEN_INPUT_KEY=null`, { encoding: 'utf8', flag: 'w' });
 
       configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
       const regexprConfigAuthGuards = /(?<='guards'\s*=>\s*\[)\s*('[a-z][a-z-0-9]*'\s*=>\s*\[.*?],?\s*)*?(?=])/gmis;
@@ -88,4 +86,4 @@ KEYCLOAK_TOKEN_INPUT_KEY=null`), { encoding: 'utf8', flag: 'w' };
       fs.writeFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, bootstrapAppFileContents, { encoding: 'utf8', flag: 'w' });
     }
   }
-};
+}
