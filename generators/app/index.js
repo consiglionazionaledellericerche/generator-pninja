@@ -49,8 +49,22 @@ export default class extends Generator {
       resolved: entitiesGeneratorPath,
       namespace: 'presto:entities'
     });
+
     // this.composeWith(require.resolve("../client"), { fromMain: true });
-    // this.composeWith(require.resolve("../final"), { fromMain: true });
+
+    // sub generator Final
+    const finalGeneratorPath = path.resolve(__dirname, '../final/index.js');
+    const { default: FinalGenerator } = await import(finalGeneratorPath);
+
+    await this.composeWith({
+      Generator: FinalGenerator,
+      path: path.dirname(finalGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: finalGeneratorPath,
+      namespace: 'presto:final'
+    });
   }
   async prompting() {
     this.answers = await this.prompt([
@@ -162,7 +176,7 @@ export default class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$/m, `DB_USERNAME=sa`);
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=Pass@word\nDB_CHARSET=utf8`);
     }
-    fs.writeFileSync(`${this.destinationPath('server')}/.env`, envFileContents, { encoding: 'utf8', flag: 'w' });
+    fs.writeFileSync(this.destinationPath('server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
     let configDatabaseFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/database.php`, { encoding: 'utf8', flag: 'r' });
     configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'search_path' => 'public',$/gmis, `'search_path' => env('DB_SCHEMA','public'),`);
     configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'prefix' => '',$/gmis, `'prefix' => env('DB_PREFIX',''),`);

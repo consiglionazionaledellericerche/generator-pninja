@@ -50,7 +50,10 @@ export default class AuthGenerator extends Generator {
     if (this.answers.authentication === 'keycloak') {
       this.spawnCommandSync('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
-      fs.appendFileSync(this.destinationPath(`server/.env`), `
+
+      // Leggi il contenuto esistente
+      const envContent = this.fs.read(this.destinationPath(`server/.env`));
+      fs.writeFileSync(this.destinationPath('server/.env'), envContent + `
 KEYCLOAK_REALM_PUBLIC_KEY=null
 # How to get realm public key? Click on "Realm Settings" > "Keys" > "Algorithm RS256" Line > "Public Key" Button
 KEYCLOAK_LOAD_USER_FROM_DATABASE=false
@@ -61,7 +64,6 @@ KEYCLOAK_ALLOWED_RESOURCES=account
 KEYCLOAK_IGNORE_RESOURCES_VALIDATION=false
 KEYCLOAK_LEEWAY=0
 KEYCLOAK_TOKEN_INPUT_KEY=null`, { encoding: 'utf8', flag: 'w' });
-
       configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
       const regexprConfigAuthGuards = /(?<='guards'\s*=>\s*\[)\s*('[a-z][a-z-0-9]*'\s*=>\s*\[.*?],?\s*)*?(?=])/gmis;
       const replaceConfigAuthGuards = `\n${tab + tab}'api' => [\n${tab + tab + tab}'driver' => 'keycloak',\n${tab + tab + tab}'provider' => 'users'\n${tab + tab}]\n${tab}`;
