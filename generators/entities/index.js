@@ -1,17 +1,23 @@
-'use strict';
-var Generator = require('yeoman-generator');
-const fs = require('fs');
-const to = require('to-case');
-const colors = require('ansi-colors');
-const utils = require('./utils');
-
-module.exports = class extends Generator {
+import Generator from 'yeoman-generator';
+import ora from 'ora';
+import fs from 'fs';
+import to from 'to-case';
+import colors from 'ansi-colors';
+import { convertJDLtoJSON } from './jdl-converter.js';
+const dotPrestoDir = './.presto'
+export default class EntityGenerator extends Generator {
+  static namespace = 'presto:entities';  // Aggiungi questa riga
   constructor(args, opts) {
     super(args, opts);
+    this.option('fromMain', {
+      type: Boolean,
+      default: false
+    });
   }
+
   async prompting() {
     let prompts = [];
-    if(this.options["fromMain"]) {
+    if (this.options["fromMain"]) {
       prompts = [...prompts, ...[{
         store: true,
         type: "confirm",
@@ -28,45 +34,53 @@ module.exports = class extends Generator {
       }]]
     }
     this.answers = await this.prompt(prompts);
-    if(this.answers.build || this.answers.rebuild) {
+    if (this.answers.build || this.answers.rebuild) {
       const answers = await this.prompt([{
         store: true,
         type: "input",
         name: "entitiesFilePath",
         message: "Entities definition file path",
-        default: '.presto-entities.json'
+        default: '.presto.jdl'
       }]);
-      this.answers = {...this.answers, ...answers};
+      this.answers = { ...this.answers, ...answers };
     }
   }
 
   configuring() {
-    for(const key in this.answers){
+    for (const key in this.answers) {
       this.config.set(key, this.answers[key]);
     }
     this.config.save();
   }
-  
+
   async writing() {
-    if(!this.answers.build && !this.answers.rebuild) {
+    let convSpinner = undefined;
+    if (!this.answers.build && !this.answers.rebuild) {
       // Nothing to do
       return;
     }
     const entitiesFilePath = this.answers.entitiesFilePath[0] === '/' ? this.answers.entitiesFilePath : this.destinationPath(this.answers.entitiesFilePath);
-    if(!this.fs.exists(entitiesFilePath)) {
+    if (!this.fs.exists(entitiesFilePath)) {
       // Entities definition file not found, nothing to do
       this.log(colors.red(`! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`));
       return;
     } else {
       this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
     }
-    await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
-    await utils.createMigrationsForTables(this);
-    await utils.createMigrationsForColumns(this);
-    await utils.createMigrationsForRelations(this);
-    await utils.createEntityModels(this);
-    await utils.createEntityControllers(this);
-    await utils.createEntityRoutes(this);
+
+    convSpinner = ora(`converting ${entitiesFilePath} to ${this.destinationPath(dotPrestoDir)}/application.json`).start();
+    if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+    convertJDLtoJSON(entitiesFilePath, `${this.destinationPath(dotPrestoDir)}/application.json`)
+      .then(result => convSpinner.succeed(`Converted ${entitiesFilePath} to ${this.destinationPath('.presto/application.json')}`))
+      .catch(error => console.error('Errore:', error));
+
+    // await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
+    // await utils.createMigrationsForTables(this);
+    // await utils.createMigrationsForColumns(this);
+    // await utils.createMigrationsForRelations(this);
+    // await utils.createEntityModels(this);
+    // await utils.createEntityControllers(this);
+    // await utils.createEntityRoutes(this);
   }
-  end() {}
+  end() { }
 };

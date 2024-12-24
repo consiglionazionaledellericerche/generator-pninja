@@ -1,7 +1,8 @@
 {
   "name": "generator-presto",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Generator for PHP/Vue applications",
+  "type": "module",
   "files": [
     "generators"
   ],
@@ -14,11 +15,12 @@
   "author": "Gianluca Troiani",
   "license": "ISC",
   "devDependencies": {
-    "yeoman-generator": "^4.0.0"
+    "yeoman-generator": "^5.x.x"
   },
   "dependencies": {
     "ansi-colors": "^4.1.3",
     "csv-writer": "^1.6.0",
+    "jhipster-core": "^7.3.4",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "pluralize": "^8.0.0",

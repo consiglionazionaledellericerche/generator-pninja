@@ -1,28 +1,39 @@
-const Generator = require('yeoman-generator');
-const fs = require('fs');
-const to = require('to-case');
-const colors = require('ansi-colors');
-const utils = require('./utils');
-const randomstring = require("randomstring");
+import Generator from 'yeoman-generator';
+import fs from 'fs';
+import to from 'to-case';
+import colors from 'ansi-colors';
+import Utils from './utils.js';
+import randomstring from 'randomstring';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = class extends Generator {
-  // note: arguments and options should be defined in the constructor.
+const utils = new Utils();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+export default class extends Generator {
   constructor(args, opts) {
     super(args, opts);
-
-    // This makes `appname` a required argument.
-    // this.argument("appname", { type: String, required: true });
-
-    // And you can then access it later; e.g.
-    // this.log(this.options.appname);
+    this.option('fromMain', {
+      type: Boolean,
+      default: false
+    });
   }
   async initializing() {
     utils.hello(this.log);
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
-    this.composeWith(require.resolve("../auth"), { fromMain: true });
-    this.composeWith(require.resolve("../entities"), { fromMain: true });
-    this.composeWith(require.resolve("../client"), { fromMain: true });
-    this.composeWith(require.resolve("../final"), { fromMain: true });
+    // this.composeWith(require.resolve("../auth"), { fromMain: true });
+    const entitiesGeneratorPath = path.resolve(__dirname, '../entities/index.js');
+    await this.composeWith({
+      Generator: (await import(entitiesGeneratorPath)).default,
+      path: path.dirname(entitiesGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: entitiesGeneratorPath,
+      namespace: 'presto:entities'
+    });
+    // this.composeWith(require.resolve("../client"), { fromMain: true });
+    // this.composeWith(require.resolve("../final"), { fromMain: true });
   }
   async prompting() {
     this.answers = await this.prompt([
