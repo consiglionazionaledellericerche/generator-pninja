@@ -41,17 +41,10 @@ export default class AuthGenerator extends Generator {
   }
 
   async writing() {
-    const regexprConfigAuthDefaults = /(?<='defaults'\s*=>\s*\[\n\s*'guard' => env\('AUTH_GUARD', ')[a-z][a-z0-9]*(?='\))/gmsi;
-    const replaceConfigAuthDefaults = `api`;
-    let configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
-    configAuthFileContents = configAuthFileContents.replace(regexprConfigAuthDefaults, replaceConfigAuthDefaults);
-    fs.writeFileSync(`${this.destinationPath('server')}/config/auth.php`, configAuthFileContents, { encoding: 'utf8', flag: 'w' });
-
     if (this.answers.authentication === 'keycloak') {
       this.spawnCommandSync('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
 
-      // Leggi il contenuto esistente
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       fs.writeFileSync(this.destinationPath('server/.env'), envContent + `
 KEYCLOAK_REALM_PUBLIC_KEY=null
@@ -64,12 +57,11 @@ KEYCLOAK_ALLOWED_RESOURCES=account
 KEYCLOAK_IGNORE_RESOURCES_VALIDATION=false
 KEYCLOAK_LEEWAY=0
 KEYCLOAK_TOKEN_INPUT_KEY=null`, { encoding: 'utf8', flag: 'w' });
-      configAuthFileContents = fs.readFileSync(`${this.destinationPath('server')}/config/auth.php`, { encoding: 'utf8', flag: 'r' });
-      const regexprConfigAuthGuards = /(?<='guards'\s*=>\s*\[)\s*('[a-z][a-z-0-9]*'\s*=>\s*\[.*?],?\s*)*?(?=])/gmis;
-      const replaceConfigAuthGuards = `\n${tab + tab}'api' => [\n${tab + tab + tab}'driver' => 'keycloak',\n${tab + tab + tab}'provider' => 'users'\n${tab + tab}]\n${tab}`;
-      configAuthFileContents = configAuthFileContents.replace(regexprConfigAuthGuards, replaceConfigAuthGuards);
-      fs.writeFileSync(`${this.destinationPath('server')}/config/auth.php`, configAuthFileContents, { encoding: 'utf8', flag: 'w' });
 
+      if (this.fs.exists(`${this.destinationPath('server')}/config/auth.php`)) {
+        fs.unlinkSync(`${this.destinationPath('server')}/config/auth.php`);
+      }
+      this.fs.copyTpl(this.templatePath("keycloack.auth.php.ejs"), `${this.destinationPath('server')}/config/auth.php`);
       let bootstrapAppFileContents = fs.readFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, { encoding: 'utf8', flag: 'r' });
       const regexprBootstrapAppUse = /(?=use Illuminate\\Foundation\\Application;)/gmis;
       const replaceBootstrapAppUse = `use Illuminate\\Http\\Request;\nuse KeycloakGuard\\Exceptions\\KeycloakGuardException;\nuse KeycloakGuard\\Exceptions\\TokenException;\n`;
