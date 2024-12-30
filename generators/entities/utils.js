@@ -25,7 +25,7 @@ const getAddColumnUp = (name, type) => {
         case 'unsignedbiginteger':
             return `\n\t\t\t$table->unsignedBigInteger('${name}')->nullable(true);`
             break;
-        case 'BigDecimal':
+        case 'bigdecimal':
             return `\n\t\t\t$table->unsignedDecimal('${name}')->nullable(true);`
             break;
 
@@ -39,7 +39,7 @@ const getAddColumnDown = (name) => {
 }
 
 const getAddRelationUp = (relation) => {
-    switch (relation.type.toLowerCase()) {
+    switch (relation.cardinality) {
         case 'one-to-one':
             return `
         \t\t\t$table->foreign('${toCase.snake(relation.from)}_id')
@@ -50,17 +50,17 @@ const getAddRelationUp = (relation) => {
             break;
         case 'many-to-one':
             return `
-        \t\t\t$table->foreign('${toCase.snake(relation.to)}_id')
+        \t\t\t$table->foreign('${relation.to.name.toLowerCase()}_id')
         \t\t\t      ->references('id')
-        \t\t\t      ->on('${getTableNameFromEntityName(relation.to)}')
+        \t\t\t      ->on('${relation.to.name.toLowerCase()}')
         \t\t\t      ->onDelete('cascade');
         `
             break;
-        case 'one-to-many':
+        case 'OneToMany':
             return `
-        \t\t\t$table->foreign('${toCase.snake(relation.from)}_id')
+        \t\t\t$table->foreign('${relation.from.name.toLowerCase()}_id')
         \t\t\t      ->references('id')
-        \t\t\t      ->on('${getTableNameFromEntityName(relation.from)}')
+        \t\t\t      ->on('${relation.from.name.toLowerCase()}')
         \t\t\t      ->onDelete('cascade');
         `
         case 'many-to-many':
@@ -80,13 +80,13 @@ const getAddRelationUp = (relation) => {
     }
 }
 const getAddRelationDown = (relation) => {
-    switch (relation.type.toLowerCase()) {
+    switch (relation.cardinality) {
         case 'one-to-one':
         case 'many-to-one':
             return `\t\t\t$table->dropForeign(['${toCase.snake(relation.to)}_id']);`
             break;
-        case 'one-to-many':
-            return `\t\t\t$table->dropForeign(['${toCase.snake(relation.from)}_id']);`
+        case 'OneToMany':
+            return `\t\t\t$table->dropForeign(['${relation.from.name.toLowerCase()}_id']);`
             break;
         case 'many-to-many':
             return `
@@ -101,13 +101,13 @@ const getAddRelationDown = (relation) => {
 }
 
 const getRelationPropertyOwner = (relation) => {
-    switch (relation.type.toLowerCase()) {
+    switch (relation.cardinality) {
         case 'one-to-one':
             return relation.to;
         case 'many-to-one':
             return relation.from;
-        case 'one-to-many':
-            return relation.to;
+        case 'OneToMany':
+            return relation.to.name;
         case 'many-to-many':
             return ([getVariableNameFromEntityName(relation.to), getVariableNameFromEntityName(relation.from)].sort()).join('_');
     }
@@ -322,6 +322,25 @@ export const createEntityModels = async (that) => {
 }
 
 export const createMigrationsForRelations = async (that) => {
+    const appJsonFilePath = that.destinationPath('.presto/application.json')
+    const reader = new JDLReader(appJsonFilePath);
+    await reader.load();
+    const relationships = reader.getRelationships();
+
+    console.log(relationships)
+
+    relationships.forEach(relationship => {
+        const migrationFilePath = `server/database/migrations/${moment().format("YYYY_MM_DD_HHmmss")}_add_relation_${toCase.snake(relationship.cardinality)}_from_${relationship.from.name.toLowerCase()}_to_${relationship.to.name.toLowerCase()}.php`;
+        that.fs.copyTpl(that.templatePath("make_migrations_update_table.php.ejs"), that.destinationPath(migrationFilePath),
+            {
+                tabName: getRelationPropertyOwner(relationship).toLowerCase(),
+                up: getAddRelationUp(relationship),
+                down: getAddRelationDown(relationship),
+            });
+    });
+
+    return;
+
     const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
         .columns(["type", "from", "to", "fromProp", "toProp", "fromLabel", "toLabel"])
         .rows();
@@ -362,6 +381,7 @@ export const createMigrationsForColumns = async (that) => {
     const reader = new JDLReader(appJsonFilePath);
     await reader.load();
     const entities = reader.getEntities();
+    const relationships = reader.getRelationships();
     entities.forEach(entity => {
         const ups = [];
         const downs = [];

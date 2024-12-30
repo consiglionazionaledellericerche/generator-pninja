@@ -4,7 +4,8 @@ import fs from 'fs';
 import to from 'to-case';
 import colors from 'ansi-colors';
 import { convertJDLtoJSON } from './jdl-converter.js';
-import { createMigrationsForTables, createMigrationsForColumns } from './utils.js';
+import { JDLConverter } from './jdl-converter-2.js';
+import { createMigrationsForTables, createMigrationsForColumns, createMigrationsForRelations } from './utils.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -72,12 +73,17 @@ export default class EntityGenerator extends Generator {
 
     convSpinner = ora(`converting ${entitiesFilePath} to ${this.destinationPath(dotPrestoDir)}/application.json`).start();
     if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+    const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
     await convertJDLtoJSON(entitiesFilePath, `${this.destinationPath(dotPrestoDir)}/application.json`);
+    await converter.convertToJSON(entitiesFilePath);
     convSpinner.succeed(`Converted ${entitiesFilePath} to ${this.destinationPath('.presto/application.json')}`);
+
     // await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
-    await createMigrationsForTables(this);
-    await createMigrationsForColumns(this);
-    // await utils.createMigrationsForRelations(this);
+
+    // await createMigrationsForTables(this);
+    // await createMigrationsForColumns(this);
+    // await createMigrationsForRelations(this);
+
     // await utils.createEntityModels(this);
     // await utils.createEntityControllers(this);
     // await utils.createEntityRoutes(this);
