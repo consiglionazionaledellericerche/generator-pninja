@@ -3,8 +3,8 @@ import ora from 'ora';
 import fs from 'fs';
 import to from 'to-case';
 import colors from 'ansi-colors';
-import { JDLConverter } from './jdl-converter.js';
-import { MigrationConverter } from './migration-converter.js';
+import { JDLConverter } from './utils/jdl-converter.js';
+import { MigrationConverter } from './utils/migration-converter.js';
 import { ModelConverter } from './utils/model-converter.js';
 
 const dotPrestoDir = './.presto'
