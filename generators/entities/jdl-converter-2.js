@@ -19,12 +19,14 @@ export class JDLConverter {
                 const entityName = entity.name;
                 const fields = this._convertFields(entity.body);
                 const relationships = this._convertRelationships(entityName, parsedJDL.relationships);
+                const options = this._getEntityOptions(entityName, parsedJDL.options);
 
                 const jsonContent = {
                     fields,
                     name: entityName,
-                    relationships,
-                    searchEngine: "no"
+                    pagination: options.pagination || 'no',
+                    searchEngine: options.searchEngine || 'no',
+                    relationships
                 };
 
                 const filePath = path.join(this.outputDir, `${entityName}.json`);
@@ -42,7 +44,6 @@ export class JDLConverter {
                 generatedFiles
             };
         } catch (error) {
-            console.error('Errore durante la conversione del JDL:', error);
             throw error;
         }
     }
@@ -119,7 +120,6 @@ export class JDLConverter {
                     relationshipType: relationType
                 };
 
-                // Rimuovi otherEntityRelationshipName solo se è una ManyToOne senza campo iniettato nell'altra entità
                 if (relationType === 'many-to-one' && !otherSide.injectedField) {
                     delete relationship.otherEntityRelationshipName;
                 }
@@ -144,5 +144,25 @@ export class JDLConverter {
             'ManyToMany': 'many-to-many'
         };
         return types[cardinality] || cardinality.toLowerCase();
+    }
+
+    _getEntityOptions(entityName, options) {
+        const entityOptions = {};
+
+        if (!options) return entityOptions;
+
+        if (options.pagination) {
+            if (options.pagination['infinite-scroll'].list.includes(entityName)) {
+                entityOptions.pagination = 'infinite-scroll';
+            } else if (options.pagination.pagination.list.includes(entityName)) {
+                entityOptions.pagination = 'pagination';
+            }
+        }
+
+        if (options.search?.elasticsearch?.list.includes(entityName)) {
+            entityOptions.searchEngine = 'elasticsearch';
+        }
+
+        return entityOptions;
     }
 }
