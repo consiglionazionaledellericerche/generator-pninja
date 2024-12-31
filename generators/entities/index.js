@@ -6,6 +6,7 @@ import colors from 'ansi-colors';
 import { JDLConverter } from './utils/jdl-converter.js';
 import { MigrationConverter } from './utils/migration-converter.js';
 import { ModelConverter } from './utils/model-converter.js';
+import { ControllerConverter } from './utils/controller-converter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -88,8 +89,13 @@ export default class EntityGenerator extends Generator {
       await modelConverter.convertToModel(result.generatedFiles[i]);
     }
     spinner.succeed(`Converted entities json files to Model files`);
+    spinner = ora(`Converting entities json files to Controller files`);
+    const controllerConverter = new ControllerConverter(this.destinationPath('server/app/Http/Controllers'));
+    for (let i = 0; i < result.generatedFiles.length; i++) {
+      await controllerConverter.convertToController(result.generatedFiles[i]);
+    }
+    spinner.succeed(`Converted entities json files to Controller files`);
 
-    // await utils.createEntityControllers(this);
     // await utils.createEntityRoutes(this);
   }
   end() { }
