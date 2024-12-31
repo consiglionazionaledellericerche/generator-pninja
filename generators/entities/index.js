@@ -3,10 +3,8 @@ import ora from 'ora';
 import fs from 'fs';
 import to from 'to-case';
 import colors from 'ansi-colors';
-import { convertJDLtoJSON } from './jdl-converter.js';
-import { JDLConverter } from './jdl-converter-2.js';
+import { JDLConverter } from './jdl-converter.js';
 import { MigrationConverter } from './migration-converter.js';
-import { createMigrationsForTables, createMigrationsForColumns, createMigrationsForRelations } from './utils.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -73,12 +71,11 @@ export default class EntityGenerator extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
     }
 
-    convSpinner = ora(`converting ${entitiesFilePath} to ${this.destinationPath(dotPrestoDir)}/application.json`).start();
+    convSpinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
     if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
     const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-    await convertJDLtoJSON(entitiesFilePath, `${this.destinationPath(dotPrestoDir)}/application.json`);
     const result = await converter.convertToJSON(entitiesFilePath);
-    convSpinner.succeed(`Converted ${entitiesFilePath} to ${this.destinationPath('.presto/application.json')}`);
+    convSpinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
     convMigSpinner = ora(`Converting entities json files to migration files`).start();
     console.log(result.generatedFiles)
     const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
@@ -86,12 +83,6 @@ export default class EntityGenerator extends Generator {
       await migrationConverter.convertToMigration(result.generatedFiles[i]);
     }
     convMigSpinner.succeed(`Converted entities json files to migration files`);
-
-    // await utils.writeEntitiesAndRelationsCSV(entitiesFilePath, this);
-
-    // await createMigrationsForTables(this);
-    // await createMigrationsForColumns(this);
-    // await createMigrationsForRelations(this);
 
     // await utils.createEntityModels(this);
     // await utils.createEntityControllers(this);
