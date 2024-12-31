@@ -26,7 +26,8 @@ export default class AuthGenerator extends Generator {
         message: `Which ${colors.yellow('*type*')} of authentication would you like to use?`,
         choices: [
           { name: 'Keycloak', value: 'keycloak' },
-          { name: 'Sanctum (Not implemented yet)', value: 'sanctum' }
+          { name: 'Sanctum (Not implemented yet)', value: 'sanctum' },
+          { name: 'No authentication (Not implemented yet)', value: 'none' }
         ]
       }]]
     }
@@ -41,6 +42,9 @@ export default class AuthGenerator extends Generator {
   }
 
   async writing() {
+    if (this.answers.authentication === 'none') {
+      return;
+    }
     if (this.answers.authentication === 'keycloak') {
       this.spawnCommandSync('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
