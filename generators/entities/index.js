@@ -57,9 +57,7 @@ export default class EntityGenerator extends Generator {
   }
 
   async writing() {
-    let convSpinner = undefined;
-    let convMigSpinner = undefined;
-    let convModSpinner = undefined;
+    let spinner = undefined;
     if (!this.answers.build && !this.answers.rebuild) {
       // Nothing to do
       return;
@@ -73,25 +71,24 @@ export default class EntityGenerator extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
     }
 
-    convSpinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
+    spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
     if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
     const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
     const result = await converter.convertToJSON(entitiesFilePath);
-    convSpinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
-    convMigSpinner = ora(`Converting entities json files to migration files`).start();
+    spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+    spinner = ora(`Converting entities json files to migration files`).start();
     const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
     for (let i = 0; i < result.generatedFiles.length; i++) {
       await migrationConverter.convertToMigration(result.generatedFiles[i]);
     }
-    convMigSpinner.succeed(`Converted entities json files to migration files`);
-    convModSpinner = ora(`Converting entities json files to Model files`);
+    spinner.succeed(`Converted entities json files to migration files`);
+    spinner = ora(`Converting entities json files to Model files`);
     const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
     for (let i = 0; i < result.generatedFiles.length; i++) {
       await modelConverter.convertToModel(result.generatedFiles[i]);
     }
-    convModSpinner.succeed(`Converted entities json files to Model files`);
+    spinner.succeed(`Converted entities json files to Model files`);
 
-    // await utils.createEntityModels(this);
     // await utils.createEntityControllers(this);
     // await utils.createEntityRoutes(this);
   }
