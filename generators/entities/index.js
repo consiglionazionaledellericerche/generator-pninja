@@ -5,6 +5,7 @@ import to from 'to-case';
 import colors from 'ansi-colors';
 import { JDLConverter } from './jdl-converter.js';
 import { MigrationConverter } from './migration-converter.js';
+import { ModelConverter } from './utils/model-converter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -58,6 +59,7 @@ export default class EntityGenerator extends Generator {
   async writing() {
     let convSpinner = undefined;
     let convMigSpinner = undefined;
+    let convModSpinner = undefined;
     if (!this.answers.build && !this.answers.rebuild) {
       // Nothing to do
       return;
@@ -77,12 +79,17 @@ export default class EntityGenerator extends Generator {
     const result = await converter.convertToJSON(entitiesFilePath);
     convSpinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
     convMigSpinner = ora(`Converting entities json files to migration files`).start();
-    console.log(result.generatedFiles)
     const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
     for (let i = 0; i < result.generatedFiles.length; i++) {
       await migrationConverter.convertToMigration(result.generatedFiles[i]);
     }
     convMigSpinner.succeed(`Converted entities json files to migration files`);
+    convModSpinner = ora(`Converting entities json files to Model files`);
+    const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
+    for (let i = 0; i < result.generatedFiles.length; i++) {
+      await modelConverter.convertToModel(result.generatedFiles[i]);
+    }
+    convModSpinner.succeed(`Converted entities json files to Model files`);
 
     // await utils.createEntityModels(this);
     // await utils.createEntityControllers(this);
