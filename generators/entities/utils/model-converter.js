@@ -44,7 +44,8 @@ class ${entity.name} extends Model
 
     protected $fillable = [${fillableFields}];
 
-${relationships}}`;
+${relationships}
+}`;
     }
 
     _getFillableFields(fields) {
