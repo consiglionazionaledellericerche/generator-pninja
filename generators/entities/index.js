@@ -59,6 +59,7 @@ export default class EntityGenerator extends Generator {
 
   async writing() {
     let spinner = undefined;
+    let generatedFiles = undefined;
     if (!this.answers.build && !this.answers.rebuild) {
       // Nothing to do
       return;
@@ -69,32 +70,56 @@ export default class EntityGenerator extends Generator {
       this.log(colors.red(`! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`));
       return;
     } else {
-      this.log(colors.green(`Entities configuration file found! Generating tables, models, controllers and routes from ${entitiesFilePath}`));
+      this.log(colors.green(`Entities configuration file found! Generating migrations, models, controllers and routes from ${entitiesFilePath}`));
     }
 
-    spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
-    if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
-    const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-    const result = await converter.convertToJSON(entitiesFilePath);
-    spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
-    spinner = ora(`Converting entities json files to migration files`).start();
-    const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
-    for (let i = 0; i < result.generatedFiles.length; i++) {
-      await migrationConverter.convertToMigration(result.generatedFiles[i]);
+    try {
+      spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
+      if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+      const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
+      generatedFiles = (await converter.convertToJSON(entitiesFilePath)).generatedFiles;
+      spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
     }
-    spinner.succeed(`Converted entities json files to migration files`);
-    spinner = ora(`Converting entities json files to Model files`);
-    const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
-    for (let i = 0; i < result.generatedFiles.length; i++) {
-      await modelConverter.convertToModel(result.generatedFiles[i]);
+    try {
+      spinner = ora(`Converting entities json files to migration files`).start();
+      const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
+      for (let i = 0; i < generatedFiles.length; i++) {
+        await migrationConverter.convertToMigration(generatedFiles[i]);
+      }
+      spinner.succeed(`Converted entities json files to migration files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
     }
-    spinner.succeed(`Converted entities json files to Model files`);
-    spinner = ora(`Converting entities json files to Controller files`);
-    const controllerConverter = new ControllerConverter(this.destinationPath('server/app/Http/Controllers'));
-    for (let i = 0; i < result.generatedFiles.length; i++) {
-      await controllerConverter.convertToController(result.generatedFiles[i]);
+    try {
+      spinner = ora(`Converting entities json files to Model files`);
+      const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
+      for (let i = 0; i < generatedFiles.length; i++) {
+        await modelConverter.convertToModel(generatedFiles[i]);
+      }
+      spinner.succeed(`Converted entities json files to Model files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
     }
-    spinner.succeed(`Converted entities json files to Controller files`);
+    try {
+      spinner = ora(`Converting entities json files to Controller files`);
+      const controllerConverter = new ControllerConverter(this.destinationPath('server/app/Http/Controllers'));
+      for (let i = 0; i < generatedFiles.length; i++) {
+        await controllerConverter.convertToController(generatedFiles[i]);
+      }
+      spinner.succeed(`Converted entities json files to Controller files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
 
     // await utils.createEntityRoutes(this);
   }
