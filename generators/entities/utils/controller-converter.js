@@ -35,7 +35,8 @@ namespace App\\Http\\Controllers;
 use App\\Models\\${entity.name};
 use Illuminate\\Http\\Request;
 use Illuminate\\Http\\JsonResponse;
-use Illuminate\\Support\\Facades\\Validator;
+use Illuminate\\Support\\Facades\\{DB, Validator};
+use Illuminate\\Validation\\ValidationException;
 
 class ${entity.name}Controller extends Controller
 {
@@ -53,17 +54,24 @@ class ${entity.name}Controller extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        try {
+            $validator = Validator::make($request->all(), [
 ${validationRules}
-        ]);
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
-        $${modelVar} = ${entity.name}::create($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+            return DB::transaction(function () use ($request) {
+                $${modelVar} = ${entity.name}::create($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+
 ${this._generateRelationSync(entity.relationships, modelVar)}
-        return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]), 201);
+                return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]), 201);
+            });
+        } catch (\\Exception $e) {
+            return response()->json(['message' => 'Error creating resource', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -71,8 +79,12 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
      */
     public function show(int $id): JsonResponse
     {
-        $${modelVar} = ${entity.name}::${withRelations}findOrFail($id);
-        return response()->json($${modelVar});
+        try {
+            $${modelVar} = ${entity.name}::${withRelations}findOrFail($id);
+            return response()->json($${modelVar});
+        } catch (\\Exception $e) {
+            return response()->json(['message' => 'Resource not found', 'error' => $e->getMessage()], 404);
+        }
     }
 
     /**
@@ -80,19 +92,25 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $${modelVar} = ${entity.name}::findOrFail($id);
-
-        $validator = Validator::make($request->all(), [
+        try {
+            $validator = Validator::make($request->all(), [
 ${validationRules}
-        ]);
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
-        $${modelVar}->update($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+            return DB::transaction(function () use ($request, $id) {
+                $${modelVar} = ${entity.name}::findOrFail($id);
+                $${modelVar}->update($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+
 ${this._generateRelationSync(entity.relationships, modelVar)}
-        return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]));
+                return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]));
+            });
+        } catch (\\Exception $e) {
+            return response()->json(['message' => 'Error updating resource', 'error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -100,9 +118,15 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
      */
     public function destroy(int $id): JsonResponse
     {
-        $${modelVar} = ${entity.name}::findOrFail($id);
-        $${modelVar}->delete();
-        return response()->json(null, 204);
+        try {
+            return DB::transaction(function () use ($id) {
+                $${modelVar} = ${entity.name}::findOrFail($id);
+                $${modelVar}->delete();
+                return response()->json(null, 204);
+            });
+        } catch (\\Exception $e) {
+            return response()->json(['message' => 'Error deleting resource', 'error' => $e->getMessage()], 500);
+        }
     }
 }`;
     }
@@ -154,7 +178,7 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
             return `            '${fieldName}' => ['${fieldRules.join("', '")}'],`;
         });
 
-        // Aggiungi regole per gli ID delle relazioni
+        // Regole per relazioni many-to-one e one-to-one
         const relationRules = relationships
             .filter(rel => rel.relationshipType === 'many-to-one' ||
                 (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right'))
@@ -163,7 +187,7 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
                 return `            '${fieldName}' => ['required', 'exists:${this._pluralize(rel.otherEntityName)},id'],`;
             });
 
-        // Aggiungi regole per gli array di ID nelle relazioni many-to-many
+        // Regole per array di ID nelle relazioni many-to-many
         const manyToManyRules = relationships
             .filter(rel => rel.relationshipType === 'many-to-many')
             .map(rel => {
@@ -172,19 +196,57 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
                     `            '${fieldName}.*' => ['exists:${this._pluralize(rel.otherEntityName)},id'],`;
             });
 
-        return [...rules, ...relationRules, ...manyToManyRules].join('\n');
+        // Regole per array di dati nelle relazioni one-to-many
+        const oneToManyRules = relationships
+            .filter(rel => rel.relationshipType === 'one-to-many')
+            .map(rel => {
+                const fieldName = `${rel.relationshipName}`;
+                return `            '${fieldName}' => ['array'],\n` +
+                    `            '${fieldName}.*.id' => ['sometimes', 'exists:${this._pluralize(rel.otherEntityName)},id'],`;
+            });
+
+        return [...rules, ...relationRules, ...manyToManyRules, ...oneToManyRules].join('\n');
     }
 
     _generateRelationSync(relationships, modelVar) {
-        return relationships
+        const syncs = [];
+
+        // Gestione many-to-many
+        const manyToManySyncs = relationships
             .filter(rel => rel.relationshipType === 'many-to-many')
             .map(rel => {
                 const relationName = rel.relationshipName;
-                return `        if ($request->has('${relationName}')) {
-            $${modelVar}->${relationName}()->sync($request->input('${relationName}'));
-        }`;
-            })
-            .join('\n');
+                return `                if ($request->has('${relationName}')) {
+                    $${modelVar}->${relationName}()->sync($request->input('${relationName}'));
+                }`;
+            });
+
+        // Gestione one-to-many
+        const oneToManySyncs = relationships
+            .filter(rel => rel.relationshipType === 'one-to-many')
+            .map(rel => {
+                const relationName = rel.relationshipName;
+                const entityName = rel.otherEntityName;
+                return `                if ($request->has('${relationName}')) {
+                    ${relationName}Data = collect($request->input('${relationName}'));
+                    
+                    // Aggiorna o crea nuovi record
+                    ${modelVar}->${relationName}()->upsert(
+                        ${relationName}Data->map(function ($item) use (${modelVar}) {
+                            return $item + ['${modelVar}_id' => ${modelVar}->id];
+                        })->toArray(),
+                        ['id'],
+                        array_keys(${relationName}Data->first())
+                    );
+
+                    // Elimina record non più presenti
+                    ${modelVar}->${relationName}()
+                        ->whereNotIn('id', ${relationName}Data->pluck('id')->filter())
+                        ->delete();
+                }`;
+            });
+
+        return [...manyToManySyncs, ...oneToManySyncs].join('\n\n');
     }
 
     _getRelationNames(relationships) {
