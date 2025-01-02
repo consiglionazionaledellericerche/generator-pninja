@@ -23,8 +23,10 @@ export class ControllerConverter {
     }
 
     _generateController(entity) {
-        const validationRules = this._generateValidationRules(entity.fields);
+        const validationRules = this._generateValidationRules(entity.fields, entity.relationships);
         const modelVar = this._lowerFirst(entity.name);
+        const relations = this._getRelationNames(entity.relationships);
+        const withRelations = relations.length > 0 ? `with([${relations.map(r => `'${r}'`).join(', ')}])` : '';
 
         return `<?php
 
@@ -42,7 +44,7 @@ class ${entity.name}Controller extends Controller
      */
     public function index(): JsonResponse
     {
-        $${modelVar}s = ${entity.name}::all();
+        $${modelVar}s = ${entity.name}::${withRelations}get();
         return response()->json($${modelVar}s);
     }
 
@@ -59,8 +61,9 @@ ${validationRules}
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $${modelVar} = ${entity.name}::create($request->all());
-        return response()->json($${modelVar}, 201);
+        $${modelVar} = ${entity.name}::create($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+${this._generateRelationSync(entity.relationships, modelVar)}
+        return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]), 201);
     }
 
     /**
@@ -68,7 +71,7 @@ ${validationRules}
      */
     public function show(int $id): JsonResponse
     {
-        $${modelVar} = ${entity.name}::findOrFail($id);
+        $${modelVar} = ${entity.name}::${withRelations}findOrFail($id);
         return response()->json($${modelVar});
     }
 
@@ -87,8 +90,9 @@ ${validationRules}
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $${modelVar}->update($request->all());
-        return response()->json($${modelVar});
+        $${modelVar}->update($request->except([${relations.map(r => `'${r}'`).join(', ')}]));
+${this._generateRelationSync(entity.relationships, modelVar)}
+        return response()->json($${modelVar}->load([${relations.map(r => `'${r}'`).join(', ')}]));
     }
 
     /**
@@ -103,53 +107,89 @@ ${validationRules}
 }`;
     }
 
-    _generateValidationRules(fields) {
-        return fields.map(field => {
-            const rules = [];
+    _generateValidationRules(fields, relationships) {
+        let rules = fields.map(field => {
+            const fieldRules = [];
             const fieldName = this._toSnakeCase(field.fieldName);
 
             if (field.fieldValidateRules) {
                 if (field.fieldValidateRules.includes('required')) {
-                    rules.push('required');
+                    fieldRules.push('required');
                 }
                 if (field.fieldValidateRules.includes('unique')) {
-                    rules.push('unique');
+                    fieldRules.push('unique');
                 }
                 if (field.fieldValidateRules.includes('min')) {
-                    rules.push(`min:${field.fieldValidateRulesMin}`);
+                    fieldRules.push(`min:${field.fieldValidateRulesMin}`);
                 }
                 if (field.fieldValidateRules.includes('max')) {
-                    rules.push(`max:${field.fieldValidateRulesMax}`);
+                    fieldRules.push(`max:${field.fieldValidateRulesMax}`);
                 }
             } else {
-                rules.push('nullable');
+                fieldRules.push('nullable');
             }
 
-            // Aggiungi regole basate sul tipo di campo
             switch (field.fieldType) {
                 case 'Integer':
                 case 'Long':
-                    rules.push('integer');
+                    fieldRules.push('integer');
                     break;
                 case 'BigDecimal':
                 case 'Float':
                 case 'Double':
-                    rules.push('numeric');
+                    fieldRules.push('numeric');
                     break;
                 case 'Boolean':
-                    rules.push('boolean');
+                    fieldRules.push('boolean');
                     break;
                 case 'LocalDate':
                 case 'ZonedDateTime':
                 case 'Instant':
-                    rules.push('date');
+                    fieldRules.push('date');
                     break;
                 default:
-                    rules.push('string');
+                    fieldRules.push('string');
             }
 
-            return `            '${fieldName}' => ['${rules.join("', '")}'],`;
-        }).join('\n');
+            return `            '${fieldName}' => ['${fieldRules.join("', '")}'],`;
+        });
+
+        // Aggiungi regole per gli ID delle relazioni
+        const relationRules = relationships
+            .filter(rel => rel.relationshipType === 'many-to-one' ||
+                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right'))
+            .map(rel => {
+                const fieldName = `${rel.relationshipName}_id`;
+                return `            '${fieldName}' => ['required', 'exists:${this._pluralize(rel.otherEntityName)},id'],`;
+            });
+
+        // Aggiungi regole per gli array di ID nelle relazioni many-to-many
+        const manyToManyRules = relationships
+            .filter(rel => rel.relationshipType === 'many-to-many')
+            .map(rel => {
+                const fieldName = `${rel.relationshipName}`;
+                return `            '${fieldName}' => ['array'],\n` +
+                    `            '${fieldName}.*' => ['exists:${this._pluralize(rel.otherEntityName)},id'],`;
+            });
+
+        return [...rules, ...relationRules, ...manyToManyRules].join('\n');
+    }
+
+    _generateRelationSync(relationships, modelVar) {
+        return relationships
+            .filter(rel => rel.relationshipType === 'many-to-many')
+            .map(rel => {
+                const relationName = rel.relationshipName;
+                return `        if ($request->has('${relationName}')) {
+            $${modelVar}->${relationName}()->sync($request->input('${relationName}'));
+        }`;
+            })
+            .join('\n');
+    }
+
+    _getRelationNames(relationships) {
+        if (!relationships) return [];
+        return relationships.map(rel => rel.relationshipName);
     }
 
     _toSnakeCase(str) {
@@ -158,5 +198,9 @@ ${validationRules}
 
     _lowerFirst(str) {
         return str.charAt(0).toLowerCase() + str.slice(1);
+    }
+
+    _pluralize(str) {
+        return str.toLowerCase() + 's'; // Semplificato, considera di usare una libreria di pluralizzazione
     }
 }
