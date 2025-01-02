@@ -7,6 +7,7 @@ import { JDLConverter } from './utils/jdl-converter.js';
 import { MigrationConverter } from './utils/migration-converter.js';
 import { ModelConverter } from './utils/model-converter.js';
 import { ControllerConverter } from './utils/controller-converter.js';
+import { RouteConverter } from './utils/route-converter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -77,7 +78,9 @@ export default class EntityGenerator extends Generator {
       spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
       if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
       const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-      generatedFiles = (await converter.convertToJSON(entitiesFilePath)).generatedFiles;
+      const result = await converter.convertToJSON(entitiesFilePath);
+      generatedFiles = result.generatedFiles;
+      console.log(result.entities);
       spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
     } catch (error) {
       spinner.fail();
@@ -120,8 +123,19 @@ export default class EntityGenerator extends Generator {
       console.error(error);
       throw error;
     }
-
-    // await utils.createEntityRoutes(this);
+    try {
+      spinner = ora(`Converting entities json files to routes files`);
+      const routeConverter = new RouteConverter(this.destinationPath('server/routes'));
+      for (let i = 0; i < generatedFiles.length; i++) {
+        await routeConverter.convertToRoutes(generatedFiles[i]);
+      }
+      await routeConverter.generateApiFile();
+      spinner.succeed(`Converted entities json files to routes files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
   }
   end() { }
 };
