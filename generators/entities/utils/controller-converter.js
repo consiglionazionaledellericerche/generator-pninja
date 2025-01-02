@@ -26,7 +26,7 @@ export class ControllerConverter {
         const validationRules = this._generateValidationRules(entity.fields, entity.relationships);
         const modelVar = this._lowerFirst(entity.name);
         const relations = this._getRelationNames(entity.relationships);
-        const withRelations = relations.length > 0 ? `with([${relations.map(r => `'${r}'`).join(', ')}])` : '';
+        const withRelations = relations.length > 0 ? `with([${relations.map(r => `'${r}'`).join(', ')}])->` : '';
 
         return `<?php
 
