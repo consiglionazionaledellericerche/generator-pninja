@@ -8,6 +8,8 @@ import { MigrationConverter } from './utils/migration-converter.js';
 import { ModelConverter } from './utils/model-converter.js';
 import { ControllerConverter } from './utils/controller-converter.js';
 import { RouteConverter } from './utils/route-converter.js';
+import { SeederConverter } from './utils/seeder-converter.js';
+import { DatabaseSeederConverter } from './utils/database-seeder-converter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -80,7 +82,7 @@ export default class EntityGenerator extends Generator {
       const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
       const result = await converter.convertToJSON(entitiesFilePath);
       generatedFiles = result.generatedFiles;
-      console.log(result.entities);
+      // console.log(result.entities);
       spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
     } catch (error) {
       spinner.fail();
@@ -131,6 +133,22 @@ export default class EntityGenerator extends Generator {
       }
       await routeConverter.generateApiFile();
       spinner.succeed(`Converted entities json files to routes files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
+    try {
+      spinner = ora(`Converting entities json files to seeders`);
+      const seederConverter = new SeederConverter('server/database/seeders');
+      const dbSeederConverter = new DatabaseSeederConverter('server/database/seeders');
+      seederConverter.setRecordsPerEntity(10);
+      for (let i = 0; i < generatedFiles.length; i++) {
+        await seederConverter.convertToSeeder(generatedFiles[i]);
+        await dbSeederConverter.addEntity(generatedFiles[i])
+      }
+      await dbSeederConverter.generateDatabaseSeeder();
+      spinner.succeed(`Converted entities json files to seeders`);
     } catch (error) {
       spinner.fail();
       console.error(error);
