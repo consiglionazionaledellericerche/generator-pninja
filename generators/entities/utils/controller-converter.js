@@ -226,22 +226,21 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
             .filter(rel => rel.relationshipType === 'one-to-many')
             .map(rel => {
                 const relationName = rel.relationshipName;
-                const entityName = rel.otherEntityName;
                 return `                if ($request->has('${relationName}')) {
-                    ${relationName}Data = collect($request->input('${relationName}'));
+                    $${relationName}Data = collect($request->input('${relationName}'));
                     
                     // Aggiorna o crea nuovi record
-                    ${modelVar}->${relationName}()->upsert(
-                        ${relationName}Data->map(function ($item) use (${modelVar}) {
-                            return $item + ['${modelVar}_id' => ${modelVar}->id];
+                    $${modelVar}->${relationName}()->upsert(
+                        $${relationName}Data->map(function ($item) use ($${modelVar}) {
+                            return $item + ['${modelVar}_id' => $${modelVar}->id];
                         })->toArray(),
                         ['id'],
-                        array_keys(${relationName}Data->first())
+                        array_keys($${relationName}Data->first())
                     );
 
                     // Elimina record non più presenti
-                    ${modelVar}->${relationName}()
-                        ->whereNotIn('id', ${relationName}Data->pluck('id')->filter())
+                    $${modelVar}->${relationName}()
+                        ->whereNotIn('id', $${relationName}Data->pluck('id')->filter())
                         ->delete();
                 }`;
             });

@@ -26,7 +26,7 @@ export class ModelConverter {
     _generateModel(entity) {
         const tableName = pluralize(entity.name.toLowerCase());
         const fillableFields = this._getFillableFields(entity.fields);
-        const relationships = this._generateRelationships(entity.relationships);
+        const relationships = this._generateRelationships(entity);
 
         return `<?php
 
@@ -44,8 +44,7 @@ class ${entity.name} extends Model
 
     protected $fillable = [${fillableFields}];
 
-${relationships}
-}`;
+${relationships}}`;
     }
 
     _getFillableFields(fields) {
@@ -54,10 +53,10 @@ ${relationships}
             .join(', ');
     }
 
-    _generateRelationships(relationships) {
-        if (!relationships || relationships.length === 0) return '';
+    _generateRelationships(entity) {
+        if (!entity.relationships || entity.relationships.length === 0) return '';
 
-        return relationships.map(rel => {
+        return entity.relationships.map(rel => {
             const methodName = rel.relationshipName;
             const targetModel = this._upperFirst(rel.otherEntityName);
 
@@ -73,7 +72,7 @@ ${relationships}
                 case 'one-to-many':
                     return this._generateHasMany(methodName, targetModel);
                 case 'many-to-many':
-                    return this._generateBelongsToMany(methodName, targetModel);
+                    return this._generateBelongsToMany(methodName, targetModel, entity.name);
                 default:
                     return '';
             }
@@ -101,8 +100,14 @@ ${relationships}
     }`;
     }
 
-    _generateBelongsToMany(methodName, targetModel) {
-        const pivotTable = [this._lowerFirst(targetModel), methodName].sort().join('_');
+    _generateBelongsToMany(methodName, targetModel, sourceModel) {
+        // Ordina alfabeticamente i nomi dei modelli per la tabella pivot
+        const pivotTableNames = [
+            this._toSnakeCase(sourceModel),
+            this._toSnakeCase(targetModel)
+        ].sort();
+        const pivotTable = pivotTableNames.join('_');
+
         return `    public function ${methodName}(): BelongsToMany
     {
         return $this->belongsToMany(${targetModel}::class, '${pivotTable}');
@@ -115,9 +120,5 @@ ${relationships}
 
     _upperFirst(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    _lowerFirst(str) {
-        return str.charAt(0).toLowerCase() + str.slice(1);
     }
 }
