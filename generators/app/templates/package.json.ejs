@@ -7,7 +7,8 @@
     "dependencies": {
     },
     "scripts": {
-        "migrate-cleanup": "cd server && php artisan migrate:fresh",
+        "migrate:fresh:seed": "cd server && php artisan migrate:fresh --seed",
+        "migrate:fresh": "cd server && php artisan migrate:fresh",
         "migrate": "cd server && php artisan migrate",
         "server": "cd server && php artisan serve",
         "dump-server": "cd server && php artisan dump-server",
