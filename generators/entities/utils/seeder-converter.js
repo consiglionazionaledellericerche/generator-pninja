@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import pluralize from 'pluralize';
 
 export class SeederConverter {
     constructor(outputDir = 'database/seeders') {
@@ -168,6 +169,6 @@ ${manyToManySeedEntities}
     }
 
     _pluralize(str) {
-        return str + 's'; // Semplificato, considera di usare una libreria di pluralizzazione
+        return pluralize(str);
     }
 }
