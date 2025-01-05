@@ -9,7 +9,7 @@ import { ModelConverter } from './utils/model-converter.js';
 import { ControllerConverter } from './utils/controller-converter.js';
 import { RouteConverter } from './utils/route-converter.js';
 import { SeederConverter } from './utils/seeder-converter.js';
-import { DatabaseSeederConverter } from './utils/database-seeder-converter.js';
+import { FactoryConverter } from './utils/factory-converter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -141,13 +141,11 @@ export default class EntityGenerator extends Generator {
     try {
       spinner = ora(`Converting entities json files to seeders`);
       const seederConverter = new SeederConverter('server/database/seeders');
-      const dbSeederConverter = new DatabaseSeederConverter('server/database/seeders');
-      seederConverter.setRecordsPerEntity(10);
+      const factoryConverter = new FactoryConverter('server/database/factories');
       for (let i = 0; i < generatedFiles.length; i++) {
-        await seederConverter.convertToSeeder(generatedFiles[i]);
-        await dbSeederConverter.addEntity(generatedFiles[i])
+        await factoryConverter.convertToFactory(generatedFiles[i]);
       }
-      await dbSeederConverter.generateDatabaseSeeder();
+      await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
       spinner.succeed(`Converted entities json files to seeders`);
     } catch (error) {
       spinner.fail();
