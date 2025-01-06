@@ -114,8 +114,8 @@ export class JDLConverter {
                         (otherSide.injectedField || entityName.toLowerCase()) :
                         (rel.from.injectedField || otherSide.name.toLowerCase()),
                     relationshipName: isSource ?
-                        rel.from.injectedField :
-                        rel.to.injectedField,
+                        (rel.from.injectedField || otherSide.name.toLowerCase()) :
+                        (rel.to.injectedField || entityName.toLowerCase()),
                     relationshipSide: isSource ? "left" : "right",
                     relationshipType: relationType
                 };
