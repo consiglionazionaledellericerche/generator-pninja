@@ -11,7 +11,7 @@ export class MigrationConverter {
         try {
             const jsonContent = JSON.parse(await fs.readFile(jsonFilePath, 'utf8'));
             const tableName = pluralize(jsonContent.name.toLowerCase());
-            const baseTimestamp = new Date().toISOString().replace(/\D/g, '').slice(0, 14);
+            const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
 
             // Creiamo prima la migrazione della tabella base (001)
             const tableMigration = this._generateTableMigration(jsonContent);
