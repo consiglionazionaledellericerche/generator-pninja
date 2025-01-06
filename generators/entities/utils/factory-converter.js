@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import _ from 'lodash';
 
 export class FactoryConverter {
     constructor(outputDir = 'database/factories') {
@@ -48,7 +49,10 @@ ${fakeData}${relationsString}        ];
 
     _generateImportsString(entity, relations) {
         if (!relations || relations.length === 0) return '';
-        return relations
+        return (_.uniq(relations).reduce((acc, curr) => {
+            if (curr.targetModel != entity.name) acc.push(curr);
+            return acc
+        }, []))
             .map(rel => `use App\\Models\\${rel.targetModel};`)
             .join('\n') + '\n';
     }
