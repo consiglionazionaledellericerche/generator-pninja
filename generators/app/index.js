@@ -132,6 +132,12 @@ export default class extends Generator {
     this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3', 'server']);
     this.spawnCommandSync('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
+    this.fs.copyTpl(this.templatePath("rename_queue_table.php.ejs"), this.destinationPath(`server/database/migrations/${new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17)}_rename_queue_table.php`));
+    let queueConfigFileContents = fs.readFileSync(`${this.destinationPath('server/config/queue.php')}`, { encoding: 'utf8', flag: 'r' });
+    queueConfigFileContents = queueConfigFileContents.replace(`'table' => env('DB_QUEUE_TABLE', 'jobs'),`, `'table' => env('DB_QUEUE_TABLE', 'queue__jobs'),`);
+    queueConfigFileContents = queueConfigFileContents.replace(`'table' => 'job_batches',`, `'table' => 'queue__job_batches',`);
+    queueConfigFileContents = queueConfigFileContents.replace(`'table' => 'failed_jobs',`, `'table' => 'queue__failed_jobs',`);
+    fs.writeFileSync(this.destinationPath(`${this.destinationPath('server/config/queue.php')}`), queueConfigFileContents, { encoding: 'utf8', flag: 'w' });
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);

@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::rename('jobs', 'queue__jobs');
+        Schema::rename('job_batches', 'queue__job_batches');
+        Schema::rename('failed_jobs', 'queue__failed_jobs');
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::rename('queue__jobs', 'jobs');
+        Schema::rename('queue__job_batches', 'job_batches');
+        Schema::rename('queue__failed_jobs', 'failed_jobs');
+    }
+};
