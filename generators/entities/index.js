@@ -47,7 +47,7 @@ export default class EntityGenerator extends Generator {
         type: "input",
         name: "entitiesFilePath",
         message: "Entities definition file path",
-        default: '.presto.jdl'
+        default: this.config.get('entitiesFilePath') || '.presto.jdl'
       }]);
       this.answers = { ...this.answers, ...answers };
     }
