@@ -10,6 +10,7 @@ export class FactoryConverter {
     async convertToFactory(jsonFilePath) {
         try {
             const jsonContent = JSON.parse(await fs.readFile(jsonFilePath, 'utf8'));
+            this.currentEntityName = jsonContent.name; // Salva il nome dell'entità corrente
             const factoryContent = this._generateFactory(jsonContent);
             const factoryFileName = `${jsonContent.name}Factory.php`;
 
@@ -72,7 +73,15 @@ ${fakeData}${relationsString}        ];
 
         const relationsString = relations.length > 0
             ? relations
-                .map(rel => `            '${rel.fieldName}' => ${rel.targetModel}::factory(),`)
+                .map(rel => {
+                    if (rel.targetModel === this.currentEntityName) {
+                        return `            '${rel.fieldName}' => function () {
+                $count = ${rel.targetModel}::count();
+                return $count > 0 ? ${rel.targetModel}::inRandomOrder()->first()->id : 1;
+            },`;
+                    }
+                    return `            '${rel.fieldName}' => ${rel.targetModel}::factory(),`;
+                })
                 .join('\n') + '\n'
             : '';
 
