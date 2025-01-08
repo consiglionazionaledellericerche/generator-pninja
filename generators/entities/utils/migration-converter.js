@@ -115,7 +115,7 @@ ${this._generateRelationFieldsDown(entity.relationships)}
 
         for (const rel of manyToManyRelations) {
             const table1 = entity.name.toLowerCase();
-            const table2 = rel.otherEntityName;
+            const table2 = rel.otherEntityName.toLowerCase();
             const pivotName = [table1, table2].sort().join('_');
 
             pivotMigrations[pivotName] = `<?php
@@ -187,8 +187,8 @@ return new class extends Migration
                     (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right');
             })
             .map(rel => {
-                const tableName = pluralize(rel.otherEntityName);
-                const fieldName = `${rel.relationshipName}_id`;
+                const tableName = pluralize(rel.otherEntityName.toLowerCase());
+                const fieldName = `${rel.relationshipName.toLowerCase()}_id`;
                 let definition = `            $table->foreignId('${fieldName}')`;
 
                 if (rel.relationshipType === 'one-to-one') {
@@ -210,8 +210,8 @@ return new class extends Migration
                     (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right');
             })
             .map(rel => {
-                const fieldName = `${rel.relationshipName}_id`;
-                const tableName = pluralize(rel.otherEntityName);
+                const fieldName = `${rel.relationshipName.toLowerCase()}_id`;
+                const tableName = pluralize(rel.otherEntityName.toLowerCase());
                 return `            $table->dropForeign(['${fieldName}']);\n` +
                     `            $table->dropColumn('${fieldName}');`;
             })

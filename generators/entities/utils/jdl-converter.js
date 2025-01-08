@@ -1,6 +1,7 @@
 import jhipsterCore from 'jhipster-core';
 import fs from 'fs/promises';
 import path from 'path';
+import to from 'to-case';
 
 const { parseFromFiles } = jhipsterCore;
 
@@ -108,24 +109,38 @@ export class JDLConverter {
                     relationType = this._convertRelationshipType(rel.cardinality);
                 }
 
+                const rx = /^(.*)\(([^)]*)\)$/;
+
+                const relationshipName = isSource ?
+                    (rel.from.injectedField || to.camel(otherSide.name)) :
+                    (rel.to.injectedField || to.camel(entityName));
+                const otherEntityRelationshipName = isSource ?
+                    (otherSide.injectedField || to.camel(entityName)) :
+                    (rel.from.injectedField || to.camel(otherSide.name));
+
                 const relationship = {
-                    otherEntityName: otherSide.name.toLowerCase(),
-                    otherEntityRelationshipName: isSource ?
-                        (otherSide.injectedField || entityName.toLowerCase()) :
-                        (rel.from.injectedField || otherSide.name.toLowerCase()),
-                    relationshipName: isSource ?
-                        (rel.from.injectedField || otherSide.name.toLowerCase()) :
-                        (rel.to.injectedField || entityName.toLowerCase()),
+                    otherEntityField: rx.test(relationshipName) ? relationshipName.replace(rx, "$2") : 'id',
+                    otherEntityName: to.camel(otherSide.name),
+                    otherEntityRelationshipName: otherEntityRelationshipName.replace(rx, "$1"),
+                    relationshipName: relationshipName.replace(rx, "$1"),
                     relationshipSide: isSource ? "left" : "right",
                     relationshipType: relationType
                 };
 
+                if (relationship.otherEntityField === 'id') {
+                    delete relationship.otherEntityField;
+                }
                 if (relationType === 'many-to-one' && !otherSide.injectedField) {
                     delete relationship.otherEntityRelationshipName;
                 }
 
                 return relationship;
-            });
+            })
+            .reduce((rels, rel) => {
+                // Escludo le relazioni right/one-to-one come fa jhipster
+                if (!(rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right')) rels.push(rel);
+                return rels;
+            }, []);
 
         return relevantRelationships.sort((a, b) => {
             const typeOrder = {
