@@ -135,12 +135,12 @@ export class JDLConverter {
                 }
 
                 return relationship;
-            })
-            .reduce((rels, rel) => {
-                // Escludo le relazioni right/one-to-one come fa jhipster
-                if (!(rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right')) rels.push(rel);
-                return rels;
-            }, []);
+            });
+        // .reduce((rels, rel) => {
+        //     // Escludo le relazioni right/one-to-one come fa jhipster
+        //     if (!(rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right')) rels.push(rel);
+        //     return rels;
+        // }, []);
 
         return relevantRelationships.sort((a, b) => {
             const typeOrder = {
