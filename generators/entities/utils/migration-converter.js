@@ -81,6 +81,12 @@ ${fields}
     _generateRelationshipMigration(entity) {
         const tableName = pluralize(entity.name.toLowerCase());
         const relationFields = this._convertRelationFields(entity.relationships);
+        if (entity.name === 'Badge' || entity.name === 'Dipendente') {
+            console.log(`\n\n\nentity.name: ${entity.name}`)
+            console.log(`tableName: ${tableName}`)
+            console.log(`entity.relationships: ${JSON.stringify(entity.relationships, null, 2)}`)
+            console.log(`relationFields:\n${relationFields}`)
+        }
 
         return `<?php
 
@@ -184,7 +190,7 @@ return new class extends Migration
         return relationships
             .filter(rel => {
                 return (rel.relationshipType === 'many-to-one') ||
-                    (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right');
+                    (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'left');
             })
             .map(rel => {
                 const tableName = pluralize(rel.otherEntityName.toLowerCase());

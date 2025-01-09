@@ -65,7 +65,7 @@ ${relationships}}`;
 
             switch (rel.relationshipType) {
                 case 'one-to-one':
-                    if (rel.relationshipSide === 'right') {
+                    if (rel.relationshipSide === 'left') {
                         return this._generateBelongsTo(methodName, targetModel);
                     } else {
                         return this._generateHasOne(methodName, targetModel);

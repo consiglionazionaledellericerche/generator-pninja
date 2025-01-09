@@ -64,7 +64,7 @@ ${fakeData}${relationsString}        ];
         const relations = relationships
             .filter(rel =>
                 rel.relationshipType === 'many-to-one' ||
-                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right')
+                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'left')
             )
             .map(rel => ({
                 fieldName: `${rel.relationshipName}_id`,

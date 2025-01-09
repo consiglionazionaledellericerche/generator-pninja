@@ -181,7 +181,7 @@ ${this._generateRelationSync(entity.relationships, modelVar)}
         // Regole per relazioni many-to-one e one-to-one
         const relationRules = relationships
             .filter(rel => rel.relationshipType === 'many-to-one' ||
-                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right'))
+                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'left'))
             .map(rel => {
                 const fieldName = `${rel.relationshipName}_id`;
                 return `            '${fieldName}' => ['required', 'exists:${this._pluralize(rel.otherEntityName)},id'],`;
