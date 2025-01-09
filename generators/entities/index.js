@@ -10,6 +10,7 @@ import { ControllerConverter } from './utils/controller-converter.js';
 import { RouteConverter } from './utils/route-converter.js';
 import { SeederConverter } from './utils/seeder-converter.js';
 import { FactoryConverter } from './utils/factory-converter.js';
+import { FileDeleter } from './utils/fileDeleter.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -37,7 +38,7 @@ export default class EntityGenerator extends Generator {
         type: "confirm",
         name: "rebuild",
         message: "Rebuild all entities?",
-        default: false
+        default: true
       }]]
     }
     this.answers = await this.prompt(prompts);
@@ -91,6 +92,24 @@ export default class EntityGenerator extends Generator {
     }
     try {
       spinner = ora(`Converting entities json files to migration files`).start();
+      const logResult = (result) => {
+        console.log('\nRisultato operazione:');
+        console.log(`File processati: ${result.totalProcessed}`);
+        console.log(`File eliminati: ${result.deletedFiles.length}`);
+        if (result.deletedFiles.length > 0) {
+          console.log('Lista file eliminati:', result.deletedFiles);
+        }
+        if (result.errors.length > 0) {
+          console.log('Errori riscontrati:', result.errors);
+        }
+      };
+      try {
+        const deleter = new FileDeleter(this.destinationPath('server/database/migrations'), { verbose: true });
+        const result = await deleter.deleteByPattern(/^\d{4}_\d{2}_\d{2}_\d{6}_presto_entity.*\.php$/);
+        logResult(result);
+      } catch (err) {
+        console.error('Errore:', err.message);
+      }
       const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
       for (let i = 0; i < generatedFiles.length; i++) {
         await migrationConverter.convertToMigration(generatedFiles[i]);
