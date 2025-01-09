@@ -91,20 +91,26 @@ export class JDLConverter {
     _convertRelationships(entityName, relationships) {
         if (!Array.isArray(relationships)) return [];
 
+        const relationsFilter = (rel) => {
+            if (rel.cardinality === 'ManyToOne') {
+                return rel.from.name === entityName
+                    || (rel.to.name === entityName && rel.to.injectedField)
+                    || (rel.to.name === entityName && !rel.to.injectedField && !rel.from.injectedField);
+            }
+            return rel.from.name === entityName || rel.to.name === entityName;
+        }
+
         const relevantRelationships = relationships
-            .filter(rel => {
-                if (rel.cardinality === 'ManyToOne') {
-                    return rel.from.name === entityName;
-                }
-                return rel.from.name === entityName || rel.to.name === entityName;
-            })
+            .filter(relationsFilter)
             .map(rel => {
                 const isSource = rel.from.name === entityName;
                 const otherSide = isSource ? rel.to : rel.from;
 
-                let relationType;
+                let relationType = undefined;
                 if (rel.cardinality === 'OneToMany') {
                     relationType = isSource ? 'one-to-many' : 'many-to-one';
+                } else if (rel.cardinality === 'ManyToOne') {
+                    relationType = isSource ? 'many-to-one' : 'one-to-many';
                 } else {
                     relationType = this._convertRelationshipType(rel.cardinality);
                 }
@@ -113,15 +119,15 @@ export class JDLConverter {
 
                 const relationshipName = isSource ?
                     (rel.from.injectedField || to.camel(otherSide.name)) :
-                    (rel.to.injectedField || to.camel(entityName));
+                    (rel.to.injectedField || to.camel(otherSide.name));
                 const otherEntityRelationshipName = isSource ?
                     (otherSide.injectedField || to.camel(entityName)) :
-                    (rel.from.injectedField || to.camel(otherSide.name));
+                    (rel.from.injectedField || to.camel(entityName));
 
                 const relationship = {
                     otherEntityField: rx.test(relationshipName) ? relationshipName.replace(rx, "$2") : 'id',
                     otherEntityName: to.camel(otherSide.name),
-                    otherEntityRelationshipName: otherEntityRelationshipName.replace(rx, "$1"),
+                    otherEntityRelationshipName: otherEntityRelationshipName?.replace(rx, "$1"),
                     relationshipName: relationshipName.replace(rx, "$1"),
                     relationshipSide: isSource ? "left" : "right",
                     relationshipType: relationType
@@ -130,9 +136,25 @@ export class JDLConverter {
                 if (relationship.otherEntityField === 'id') {
                     delete relationship.otherEntityField;
                 }
-                if (relationType === 'many-to-one' && !otherSide.injectedField) {
+                if (relationship.otherEntityRelationshipName === relationship.otherEntityName) {
                     delete relationship.otherEntityRelationshipName;
                 }
+                // if (!relationship.otherEntityRelationshipName) {
+                //     delete relationship.otherEntityRelationshipName;
+                // }
+                // if (relationType === 'many-to-one' && !otherSide.injectedField) {
+                //     delete relationship.otherEntityRelationshipName;
+                // }
+
+                // console.log(`\n\n\nentityName: ${entityName}`)
+                // console.log(`rel: ${JSON.stringify(rel, null, 2)}`)
+                // console.log(`isSource: ${isSource}`)
+                // console.log(`rel.from.injectedField: ${rel.from.injectedField}`)
+                // console.log(`rel.to.injectedField: ${rel.to.injectedField}`)
+                // console.log(`otherSide.injectedField: ${otherSide.injectedField}`)
+                // console.log(`entityName: ${entityName}`)
+                // console.log(`otherSide.name: ${otherSide.name}`)
+                // console.log(`relationship: ${JSON.stringify(relationship, null, 2)}`)
 
                 return relationship;
             });
