@@ -2,7 +2,7 @@ import jhipsterCore from 'jhipster-core';
 import fs from 'fs/promises';
 import path from 'path';
 import to from 'to-case';
-
+import colors from 'ansi-colors';
 const { parseFromFiles } = jhipsterCore;
 
 export class JDLConverter {
@@ -92,7 +92,26 @@ export class JDLConverter {
         if (!Array.isArray(relationships)) return [];
 
         const relationsFilter = (rel) => {
+            if (rel.cardinality === 'OneToOne') {
+                if (rel.to.name === entityName && rel.to.injectedField && !rel.from.injectedField) {
+                    console.log(`\n${colors.redBright('ERROR!')} In the One-to-One relationship from ${rel.from.name} to ${rel.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`);
+                    throw new Error(`ERROR! In the One-to-One relationship from ${rel.from.name} to ${rel.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
+                }
+                return rel.from.name === entityName
+                    || (rel.to.name === entityName && rel.to.injectedField && rel.from.injectedField)
+                    || (rel.to.name === entityName && !rel.to.injectedField && !rel.from.injectedField);
+            }
+            if (rel.cardinality === 'OneToMany') {
+                return rel.from.name === entityName
+                    || (rel.to.name === entityName && rel.to.injectedField)
+                    || (rel.to.name === entityName && !rel.to.injectedField && !rel.from.injectedField);
+            }
             if (rel.cardinality === 'ManyToOne') {
+                return rel.from.name === entityName
+                    || (rel.to.name === entityName && rel.to.injectedField)
+                    || (rel.to.name === entityName && !rel.to.injectedField && !rel.from.injectedField);
+            }
+            if (rel.cardinality === 'ManyToMany') {
                 return rel.from.name === entityName
                     || (rel.to.name === entityName && rel.to.injectedField)
                     || (rel.to.name === entityName && !rel.to.injectedField && !rel.from.injectedField);
@@ -136,26 +155,27 @@ export class JDLConverter {
                 if (relationship.otherEntityField === 'id') {
                     delete relationship.otherEntityField;
                 }
+                if (
+                    relationship.otherEntityRelationshipName === to.camel(entityName)
+                    && relationship.relationshipSide === 'left'
+                    && !rel.to.injectedField
+                    && rel.from.injectedField
+                    && !(rel.from.injectedField && rel.to.injectedField)
+                ) {
+                    delete relationship.otherEntityRelationshipName;
+                }
+                if (
+                    relationship.otherEntityRelationshipName === to.camel(entityName)
+                    && relationship.relationshipSide === 'right'
+                    && rel.to.injectedField
+                    && !rel.from.injectedField
+                    && !(rel.from.injectedField && rel.to.injectedField)
+                ) {
+                    delete relationship.otherEntityRelationshipName;
+                }
                 if (relationship.otherEntityRelationshipName === relationship.otherEntityName) {
                     delete relationship.otherEntityRelationshipName;
                 }
-                // if (!relationship.otherEntityRelationshipName) {
-                //     delete relationship.otherEntityRelationshipName;
-                // }
-                // if (relationType === 'many-to-one' && !otherSide.injectedField) {
-                //     delete relationship.otherEntityRelationshipName;
-                // }
-
-                // console.log(`\n\n\nentityName: ${entityName}`)
-                // console.log(`rel: ${JSON.stringify(rel, null, 2)}`)
-                // console.log(`isSource: ${isSource}`)
-                // console.log(`rel.from.injectedField: ${rel.from.injectedField}`)
-                // console.log(`rel.to.injectedField: ${rel.to.injectedField}`)
-                // console.log(`otherSide.injectedField: ${otherSide.injectedField}`)
-                // console.log(`entityName: ${entityName}`)
-                // console.log(`otherSide.name: ${otherSide.name}`)
-                // console.log(`relationship: ${JSON.stringify(relationship, null, 2)}`)
-
                 return relationship;
             });
         // .reduce((rels, rel) => {
