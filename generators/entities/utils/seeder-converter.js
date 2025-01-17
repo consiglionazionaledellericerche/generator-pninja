@@ -48,7 +48,7 @@ export class SeederConverter {
                 entity.relationships.forEach(rel => {
                     if (availableEntities.has(rel.otherEntityName)) {
                         if (rel.relationshipType === 'many-to-one' ||
-                            (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'left')) {
+                            (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'right')) {
                             const node = graph.get(entity.name);
                             if (node) {
                                 node.dependencies.add(rel.otherEntityName);

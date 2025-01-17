@@ -1,4 +1,6 @@
 import Generator from 'yeoman-generator';
+import jclrz from 'json-colorz';
+import { hello } from '../utils/hello.js';
 import ora from 'ora';
 import fs from 'fs';
 import to from 'to-case';
@@ -11,6 +13,11 @@ import { RouteConverter } from './utils/route-converter.js';
 import { SeederConverter } from './utils/seeder-converter.js';
 import { FactoryConverter } from './utils/factory-converter.js';
 import { FileDeleter } from './utils/fileDeleter.js';
+import jhipsterCore from 'jhipster-core';
+const { parseFromFiles } = jhipsterCore;
+import { MigrationsGenerator } from './utils/migrations-generator.js';
+import { ModelsGenerator } from './utils/models-generator.js';
+// import { convertFields, createMigrations } from './utils/migration-utils.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -21,6 +28,7 @@ export default class EntityGenerator extends Generator {
       type: Boolean,
       default: false
     });
+    if (!this.options["fromMain"]) hello(this.log);
   }
 
   async prompting() {
@@ -77,100 +85,142 @@ export default class EntityGenerator extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating migrations, models, controllers and routes from ${entitiesFilePath}`));
     }
 
+    const parsedJDL = parseFromFiles([entitiesFilePath]);
+
+    this.fs.writeJSON(this.destinationPath(`.presto/Entities.json`), parsedJDL);
+
+    // console.log(`\n\n====== PARSED JDL ======`);
+    // jclrz(parsedJDL)
+    // console.log(`========================\n\n`);
+
+    // JDL > Migrations
     try {
-      spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
-      if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
-      const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-      const result = await converter.convertToJSON(entitiesFilePath);
-      generatedFiles = result.generatedFiles;
-      // console.log(result.entities);
-      spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+      spinner = ora(`Generating migration files`).start();
+      (new MigrationsGenerator(this, entitiesFilePath)).generateMigrations();
+      spinner.succeed(`Migration files generated`);
     } catch (error) {
       spinner.fail();
       console.error(error);
       throw error;
     }
+
+    // Generating models
     try {
-      spinner = ora(`Converting entities json files to migration files`).start();
-      const logResult = (result) => {
-        console.log('\nRisultato operazione:');
-        console.log(`File processati: ${result.totalProcessed}`);
-        console.log(`File eliminati: ${result.deletedFiles.length}`);
-        if (result.deletedFiles.length > 0) {
-          console.log('Lista file eliminati:', result.deletedFiles);
-        }
-        if (result.errors.length > 0) {
-          console.log('Errori riscontrati:', result.errors);
-        }
-      };
-      try {
-        const deleter = new FileDeleter(this.destinationPath('server/database/migrations'), { verbose: true });
-        const result = await deleter.deleteByPattern(/^\d{4}_\d{2}_\d{2}_\d{6}_presto_entity.*\.php$/);
-        logResult(result);
-      } catch (err) {
-        console.error('Errore:', err.message);
-      }
-      const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
-      for (let i = 0; i < generatedFiles.length; i++) {
-        await migrationConverter.convertToMigration(generatedFiles[i]);
-      }
-      spinner.succeed(`Converted entities json files to migration files`);
+      spinner = ora(`Generating Model files`);
+      (new ModelsGenerator(this, entitiesFilePath)).generateModels();
+      spinner.succeed(`Model files generated`);
     } catch (error) {
       spinner.fail();
       console.error(error);
       throw error;
     }
-    try {
-      spinner = ora(`Converting entities json files to Model files`);
-      const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
-      for (let i = 0; i < generatedFiles.length; i++) {
-        await modelConverter.convertToModel(generatedFiles[i]);
-      }
-      spinner.succeed(`Converted entities json files to Model files`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
-    try {
-      spinner = ora(`Converting entities json files to Controller files`);
-      const controllerConverter = new ControllerConverter(this.destinationPath('server/app/Http/Controllers'));
-      for (let i = 0; i < generatedFiles.length; i++) {
-        await controllerConverter.convertToController(generatedFiles[i]);
-      }
-      spinner.succeed(`Converted entities json files to Controller files`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
-    try {
-      spinner = ora(`Converting entities json files to routes files`);
-      const routeConverter = new RouteConverter(this.destinationPath('server/routes'));
-      for (let i = 0; i < generatedFiles.length; i++) {
-        await routeConverter.convertToRoutes(generatedFiles[i]);
-      }
-      await routeConverter.generateApiFile();
-      spinner.succeed(`Converted entities json files to routes files`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
-    try {
-      spinner = ora(`Converting entities json files to seeders`);
-      const seederConverter = new SeederConverter('server/database/seeders');
-      const factoryConverter = new FactoryConverter('server/database/factories');
-      for (let i = 0; i < generatedFiles.length; i++) {
-        await factoryConverter.convertToFactory(generatedFiles[i]);
-      }
-      await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
-      spinner.succeed(`Converted entities json files to seeders`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
+
+    // return;
+
+    // // Generating Entity.json files
+    // try {
+    //   spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
+    //   if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+    //   const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
+    //   const result = await converter.convertToJSON(entitiesFilePath);
+    //   generatedFiles = result.generatedFiles;
+    //   spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
+
+    // // Generating migrations
+    // try {
+    //   spinner = ora(`Converting entities json files to migration files`).start();
+    //   const logResult = (result) => {
+    //     console.log('\nRisultato operazione:');
+    //     console.log(`File processati: ${result.totalProcessed}`);
+    //     console.log(`File eliminati: ${result.deletedFiles.length}`);
+    //     if (result.deletedFiles.length > 0) {
+    //       console.log('Lista file eliminati:', result.deletedFiles);
+    //     }
+    //     if (result.errors.length > 0) {
+    //       console.log('Errori riscontrati:', result.errors);
+    //     }
+    //   };
+    //   try {
+    //     const deleter = new FileDeleter(this.destinationPath('server/database/migrations'), { verbose: true });
+    //     const result = await deleter.deleteByPattern(/^\d{4}_\d{2}_\d{2}_\d{6}_presto_entity.*\.php$/);
+    //     logResult(result);
+    //   } catch (err) {
+    //     console.error('Errore:', err.message);
+    //   }
+    //   const migrationConverter = new MigrationConverter(this.destinationPath('server/database/migrations'));
+    //   for (let i = 0; i < generatedFiles.length; i++) {
+    //     await migrationConverter.convertToMigration(generatedFiles[i]);
+    //   }
+    //   spinner.succeed(`Converted entities json files to migration files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
+
+    // // Generating models
+    // try {
+    //   spinner = ora(`Converting entities json files to Model files`);
+    //   const modelConverter = new ModelConverter(this.destinationPath('server/app/Models'));
+    //   for (let i = 0; i < generatedFiles.length; i++) {
+    //     await modelConverter.convertToModel(generatedFiles[i]);
+    //   }
+    //   spinner.succeed(`Converted entities json files to Model files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
+
+    // // Generating controllers
+    // try {
+    //   spinner = ora(`Converting entities json files to Controller files`);
+    //   const controllerConverter = new ControllerConverter(this.destinationPath('server/app/Http/Controllers'));
+    //   for (let i = 0; i < generatedFiles.length; i++) {
+    //     await controllerConverter.convertToController(generatedFiles[i]);
+    //   }
+    //   spinner.succeed(`Converted entities json files to Controller files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
+
+    // // Generating routes
+    // try {
+    //   spinner = ora(`Converting entities json files to routes files`);
+    //   const routeConverter = new RouteConverter(this.destinationPath('server/routes'));
+    //   for (let i = 0; i < generatedFiles.length; i++) {
+    //     await routeConverter.convertToRoutes(generatedFiles[i]);
+    //   }
+    //   await routeConverter.generateApiFile();
+    //   spinner.succeed(`Converted entities json files to routes files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
+
+    // // Generating seeders
+    // try {
+    //   spinner = ora(`Converting entities json files to seeders`);
+    //   const seederConverter = new SeederConverter('server/database/seeders');
+    //   const factoryConverter = new FactoryConverter('server/database/factories');
+    //   for (let i = 0; i < generatedFiles.length; i++) {
+    //     await factoryConverter.convertToFactory(generatedFiles[i]);
+    //   }
+    //   // await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
+    //   spinner.succeed(`Converted entities json files to seeders`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
   }
   end() { }
 };
