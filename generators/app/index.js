@@ -2,12 +2,11 @@ import Generator from 'yeoman-generator';
 import fs from 'fs';
 import to from 'to-case';
 import colors from 'ansi-colors';
-import Utils from './utils.js';
 import randomstring from 'randomstring';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { hello } from '../utils/hello.js';
 
-const utils = new Utils();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export default class extends Generator {
@@ -19,7 +18,7 @@ export default class extends Generator {
     });
   }
   async initializing() {
-    utils.hello(this.log);
+    hello(this.log);
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
 
     // sub generator Auth
