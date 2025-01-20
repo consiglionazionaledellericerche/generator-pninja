@@ -17,6 +17,9 @@ import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
 import { MigrationsGenerator } from './utils/migrations-generator.js';
 import { ModelsGenerator } from './utils/models-generator.js';
+import { ControllersGenerator } from './utils/controllers-generator.js';
+import { RoutersGenerator } from './utils/routers-generator.js';
+import { FactoriesGenerator } from './utils/factories-generator.js';
 // import { convertFields, createMigrations } from './utils/migration-utils.js';
 
 const dotPrestoDir = './.presto'
@@ -28,12 +31,17 @@ export default class EntityGenerator extends Generator {
       type: Boolean,
       default: false
     });
-    if (!this.options["fromMain"]) hello(this.log);
+    if (!this.options.fromMain) hello(this.log);
+    this.argument('entitiesFilePath', {
+      type: String,
+      required: !this.options.fromMain,
+      description: 'Entities file path'
+    });
   }
 
   async prompting() {
     let prompts = [];
-    if (this.options["fromMain"]) {
+    if (this.options.fromMain) {
       prompts = [...prompts, ...[{
         store: true,
         type: "confirm",
@@ -42,15 +50,15 @@ export default class EntityGenerator extends Generator {
         default: true
       }]]
     } else {
-      prompts = [...prompts, ...[{
-        type: "confirm",
-        name: "rebuild",
-        message: "Rebuild all entities?",
-        default: true
-      }]]
+      // prompts = [...prompts, ...[{
+      //   type: "confirm",
+      //   name: "rebuild",
+      //   message: "Rebuild all entities?",
+      //   default: true
+      // }]]
     }
     this.answers = await this.prompt(prompts);
-    if (this.answers.build || this.answers.rebuild) {
+    if (this.answers.build && this.options.fromMain) {
       const answers = await this.prompt([{
         store: true,
         type: "input",
@@ -72,11 +80,12 @@ export default class EntityGenerator extends Generator {
   async writing() {
     let spinner = undefined;
     let generatedFiles = undefined;
-    if (!this.answers.build && !this.answers.rebuild) {
+    if (this.options.fromMain && !this.answers.build) {
       // Nothing to do
       return;
     }
-    const entitiesFilePath = this.answers.entitiesFilePath[0] === '/' ? this.answers.entitiesFilePath : this.destinationPath(this.answers.entitiesFilePath);
+    let entitiesFilePath = this.options.fromMain ? this.answers.entitiesFilePath : this.options.entitiesFilePath;
+    entitiesFilePath = entitiesFilePath[0] === '/' ? entitiesFilePath : this.destinationPath(entitiesFilePath);
     if (!this.fs.exists(entitiesFilePath)) {
       // Entities definition file not found, nothing to do
       this.log(colors.red(`! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`));
@@ -115,21 +124,54 @@ export default class EntityGenerator extends Generator {
       throw error;
     }
 
+    // Generating Controllers
+    try {
+      spinner = ora(`Generating Controller files`);
+      (new ControllersGenerator(this, entitiesFilePath)).generateControllers();
+      spinner.succeed(`Controller files generated`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
+
+    // Generating Routers
+    try {
+      spinner = ora(`Generating Router files`);
+      (new RoutersGenerator(this, entitiesFilePath)).generateRouters();
+      spinner.succeed(`Router files generated`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
+
+    // Generating Factories
+    try {
+      spinner = ora(`Generating Factory files`);
+      (new FactoriesGenerator(this, entitiesFilePath)).generateFactories();
+      spinner.succeed(`Factory files generated`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
+
     // return;
 
-    // // Generating Entity.json files
-    // try {
-    //   spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
-    //   if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
-    //   const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-    //   const result = await converter.convertToJSON(entitiesFilePath);
-    //   generatedFiles = result.generatedFiles;
-    //   spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
+    // Generating Entity.json files
+    try {
+      spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
+      if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+      const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
+      const result = await converter.convertToJSON(entitiesFilePath);
+      generatedFiles = result.generatedFiles;
+      spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
 
     // // Generating migrations
     // try {
@@ -206,21 +248,21 @@ export default class EntityGenerator extends Generator {
     //   throw error;
     // }
 
-    // // Generating seeders
-    // try {
-    //   spinner = ora(`Converting entities json files to seeders`);
-    //   const seederConverter = new SeederConverter('server/database/seeders');
-    //   const factoryConverter = new FactoryConverter('server/database/factories');
-    //   for (let i = 0; i < generatedFiles.length; i++) {
-    //     await factoryConverter.convertToFactory(generatedFiles[i]);
-    //   }
-    //   // await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
-    //   spinner.succeed(`Converted entities json files to seeders`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
+    // Generating seeders
+    try {
+      spinner = ora(`Converting entities json files to seeders`);
+      const seederConverter = new SeederConverter('server/database/seeders');
+      const factoryConverter = new FactoryConverter('server/database/factories');
+      // for (let i = 0; i < generatedFiles.length; i++) {
+      //   await factoryConverter.convertToFactory(generatedFiles[i]);
+      // }
+      await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
+      spinner.succeed(`Converted entities json files to seeders`);
+    } catch (error) {
+      spinner.fail();
+      console.error(error);
+      throw error;
+    }
   }
   end() { }
 };
