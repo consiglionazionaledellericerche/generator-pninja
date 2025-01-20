@@ -1,0 +1,18 @@
+<?php
+
+namespace Database\Factories;
+
+<%- models %>
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class <%- entityName %>Factory extends Factory
+{
+    protected $model = <%- entityName %>::class;
+
+    public function definition(): array
+    {
+        return [
+<%- params %>
+        ];
+    }
+}
