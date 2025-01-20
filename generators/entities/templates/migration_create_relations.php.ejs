@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('<%- fromTabName %>', function (Blueprint $table) {
+        Schema::table('<%- entityTable %>', function (Blueprint $table) {
             <%- up %>
         });
     }
 
     public function down()
     {
-        Schema::table('<%- fromTabName %>', function (Blueprint $table) {
+        Schema::table('<%- entityTable %>', function (Blueprint $table) {
             <%- down %>
         });
     }

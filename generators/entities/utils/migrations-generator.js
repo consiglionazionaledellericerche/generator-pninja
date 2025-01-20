@@ -3,15 +3,15 @@ import pluralize from 'pluralize';
 import jhipsterCore from 'jhipster-core';
 // import jclrz from 'json-colorz';
 const { parseFromFiles } = jhipsterCore;
+const tab = (n) => (Array(n)).fill('    ').join('');
 
 export class MigrationsGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = undefined;
+        this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
         this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
     }
-    tab = (n) => (Array(n)).fill('    ').join('');
     convertFieldType(jhipsterType, enums) {
         const typeMap = {
             'String': 'string',
@@ -74,36 +74,48 @@ export class MigrationsGenerator {
             this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
                 {
                     tabName: tabName,
-                    columns: columns.join(`\n${this.tab(3)}`),
+                    columns: columns.join(`\n${tab(3)}`),
                 });
         }
-    }
-    createOneToOneRelation = (rel) => {
-        const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
-        let fromInjectedField = rel.from.injectedField;
-        let toInjectedField = rel.to.injectedField;
-        if (fromInjectedField === null && toInjectedField !== null) {
-            throw new Error(`ERROR! In the One-to-One relationship from ${rel.from.name} to ${rel.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
-        }
-        if (fromInjectedField === null && toInjectedField === null) {
-            fromInjectedField = to.snake(rel.to.name);
-            toInjectedField = to.snake(rel.from.name);
-        }
-        fromInjectedField = fromInjectedField || to.snake(rel.to.name);
-        const fromTabName = pluralize(to.snake(rel.from.name));
-        const toTabName = pluralize(to.snake(rel.to.name));
-        const foreignId = `${fromInjectedField}_id`;
-        this.that.fs.copyTpl(this.that.templatePath("migration_create_relation.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_${to.snake(rel.cardinality)}_relationship_${foreignId}_from_${fromTabName}_table_to_${toTabName}_table.php`),
-            {
-                fromTabName,
-                toTabName,
-                foreignId,
-                unique: true,
-            });
     }
     createRelations() {
         const { entities, relationships } = this.parsedJDL;
         if (!relationships || relationships.length === 0) return;
+        relationships.forEach(relation => {
+            if (relation.cardinality === 'OneToOne' && !relation.from.injectedField && !!relation.to.injectedField) {
+                throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
+            }
+        })
+
+        // OneToOne Relations
+        entities.forEach(entity => {
+            const up = [];
+            const down = [];
+            const entityTable = pluralize(to.snake(entity.name))
+            relationships
+                .filter(relation => relation.cardinality === 'OneToOne' && relation.to.name === entity.name)
+                .forEach(relation => {
+                    const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
+                    const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
+                    const fromTabName = pluralize(to.snake(relation.from.name));
+                    const toTabName = pluralize(to.snake(relation.to.name));
+                    const foreignId = `${toInjectedField}_id`;
+                    const unique = relation.cardinality === 'OneToOne';
+                    const nullable = !relation.from.required;
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${fromTabName}');`);
+                    down.push(`$table->dropForeign(['${foreignId}']);`);
+                });
+            this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
+                {
+                    entityTable: entityTable,
+                    up: up.join(`\n${tab(3)}`),
+                    down: down.join(`\n${tab(3)}`),
+                }
+            )
+        })
+
+
+        return;
         entities.map(entity => {
             return {
                 table: to.snake(pluralize(entity.tableName)),
@@ -119,10 +131,10 @@ export class MigrationsGenerator {
                     let foreignId = undefined;
                     let unique = undefined;
                     let nullable = undefined;
-                    if (relation.cardinality === 'OneToOne' && fromInjectedField === null && toInjectedField !== null) {
+                    if (relation.cardinality === 'OneToOne' && fromInjectedField === '' && toInjectedField !== '') {
                         throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
                     }
-                    if (fromInjectedField === null && toInjectedField === null) {
+                    if (fromInjectedField === '' && toInjectedField === '') {
                         toInjectedField = to.snake(relation.from.name);
                     }
                     if (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') {
@@ -134,7 +146,7 @@ export class MigrationsGenerator {
                         nullable = !relation.from.required;
                         return {
                             up: `$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${toTabName}');`,
-                            down: `$table->dropForeign(['${foreignId}']);\n${this.tab(3)}$table->dropColumn('${foreignId}');`,
+                            down: `$table->dropForeign(['${foreignId}']);\n${tab(3)}$table->dropColumn('${foreignId}');`,
                         }
                     }
                     if (relation.cardinality === 'OneToMany') {
@@ -146,7 +158,7 @@ export class MigrationsGenerator {
                         nullable = !relation.to.required;
                         return {
                             up: `$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${fromTabName}');`,
-                            down: `$table->dropForeign(['${foreignId}']);\n${this.tab(3)}$table->dropColumn('${foreignId}');`,
+                            down: `$table->dropForeign(['${foreignId}']);\n${tab(3)}$table->dropColumn('${foreignId}');`,
                         }
                     }
                 }),
@@ -154,8 +166,8 @@ export class MigrationsGenerator {
         }).map(migration => migration.relationships.length && this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${migration.table}_table.php`),
             {
                 fromTabName: migration.table,
-                up: migration.relationships.map(r => r.up).join(`\n${this.tab(3)}`),
-                down: migration.relationships.map(r => r.down).join(`\n${this.tab(3)}`),
+                up: migration.relationships.map(r => r.up).join(`\n${tab(3)}`),
+                down: migration.relationships.map(r => r.down).join(`\n${tab(3)}`),
             }
         ));
     }
@@ -188,7 +200,6 @@ export class MigrationsGenerator {
     }
 
     generateMigrations() {
-        this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
         this.createTables();
         this.createRelations();
         this.generatePivotMigrations();
