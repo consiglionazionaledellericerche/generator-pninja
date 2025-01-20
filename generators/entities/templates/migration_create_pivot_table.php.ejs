@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('<%-pivotName%>', function (Blueprint $table) {
-            $table->id();
+            $table->primary(['<%- fromForeignId %>_id', '<%- toForeignId %>_id']);
             $table->foreignId('<%- fromForeignId %>_id')->constrained('<%-toTabName%>');
             $table->foreignId('<%- toForeignId %>_id')->constrained('<%-fromTabName%>');
             $table->timestamps();
