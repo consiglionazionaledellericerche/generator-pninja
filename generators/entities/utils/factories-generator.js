@@ -13,7 +13,7 @@ export class FactoriesGenerator {
         this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
     }
 
-    generateFactories() {
+    generateFactories(n = 5) {
         const { enums, entities, relationships } = this.parsedJDL;
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
@@ -25,7 +25,7 @@ export class FactoriesGenerator {
                 models.push(`use App\\Models\\${relation.from.name};`)
                 params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
                     if (${relation.from.name}::count() === 0) {
-                        while(${relation.from.name}::count() < 5) { ${relation.from.name}::factory()->create(); }
+                        while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create();
                     }
                     return ${entity.name}::count() + 1;
                 },`);
@@ -37,7 +37,11 @@ export class FactoriesGenerator {
                     params: params.join("\n"),
                 });
         }
-        this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`), { entities });
+        this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
+            {
+                entities,
+                n,
+            });
     }
 
     _getFakerRule(field) {

@@ -13,9 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<% entities.forEach(function(entity) { %>
-        while(<%= entity.name %>::count() < 5) {<%= entity.name %>::factory()->create();};
-<% }); %>
+<% entities.forEach(function(entity) { %>        while(<%= entity.name %>::count() < <%= n %>) <%= entity.name %>::factory()->create();<%= "\n"%><% }); %>
         // Many-to-many
     }
 }
