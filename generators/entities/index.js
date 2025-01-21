@@ -160,18 +160,18 @@ export default class EntityGenerator extends Generator {
     // return;
 
     // Generating Entity.json files
-    try {
-      spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
-      if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
-      const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
-      const result = await converter.convertToJSON(entitiesFilePath);
-      generatedFiles = result.generatedFiles;
-      spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
+    // try {
+    //   spinner = ora(`converting ${entitiesFilePath} to entities json files`).start();
+    //   if (!fs.existsSync(this.destinationPath(dotPrestoDir))) fs.mkdirSync(this.destinationPath(dotPrestoDir));
+    //   const converter = new JDLConverter(this.destinationPath(dotPrestoDir));
+    //   const result = await converter.convertToJSON(entitiesFilePath);
+    //   generatedFiles = result.generatedFiles;
+    //   spinner.succeed(`Converted ${entitiesFilePath} to entities json files`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
 
     // // Generating migrations
     // try {
@@ -249,20 +249,20 @@ export default class EntityGenerator extends Generator {
     // }
 
     // Generating seeders
-    try {
-      spinner = ora(`Converting entities json files to seeders`);
-      const seederConverter = new SeederConverter('server/database/seeders');
-      const factoryConverter = new FactoryConverter('server/database/factories');
-      // for (let i = 0; i < generatedFiles.length; i++) {
-      //   await factoryConverter.convertToFactory(generatedFiles[i]);
-      // }
-      await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
-      spinner.succeed(`Converted entities json files to seeders`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
+    // try {
+    //   spinner = ora(`Converting entities json files to seeders`);
+    //   const seederConverter = new SeederConverter('server/database/seeders');
+    //   const factoryConverter = new FactoryConverter('server/database/factories');
+    //   // for (let i = 0; i < generatedFiles.length; i++) {
+    //   //   await factoryConverter.convertToFactory(generatedFiles[i]);
+    //   // }
+    //   await seederConverter.generateDatabaseSeeder(this.destinationPath(dotPrestoDir));
+    //   spinner.succeed(`Converted entities json files to seeders`);
+    // } catch (error) {
+    //   spinner.fail();
+    //   console.error(error);
+    //   throw error;
+    // }
   }
   end() { }
 };

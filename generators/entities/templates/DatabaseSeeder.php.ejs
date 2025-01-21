@@ -1,0 +1,21 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+<% entities.forEach(function(entity) { %>
+use App\Models\<%= entity.name %>;
+<% }); %>
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+<% entities.forEach(function(entity) { %>
+        while(<%= entity.name %>::count() < 5) {<%= entity.name %>::factory()->create();};
+<% }); %>
+        // Many-to-many
+    }
+}

@@ -23,7 +23,12 @@ export class FactoriesGenerator {
                 && relation.to.name === entity.name
             )).forEach(relation => {
                 models.push(`use App\\Models\\${relation.from.name};`)
-                params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => ${relation.from.name}::factory(),`);
+                params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
+                    if (${relation.from.name}::count() === 0) {
+                        while(${relation.from.name}::count() < 5) { ${relation.from.name}::factory()->create(); }
+                    }
+                    return ${entity.name}::count() + 1;
+                },`);
             });
             this.that.fs.copyTpl(this.that.templatePath("entity_factory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
@@ -32,6 +37,7 @@ export class FactoriesGenerator {
                     params: params.join("\n"),
                 });
         }
+        this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`), { entities });
     }
 
     _getFakerRule(field) {
