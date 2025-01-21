@@ -33,6 +33,15 @@ export class ControllersGenerator {
                 withs.push(`'${to.snake(relation.from.injectedField)}'`);
             });
 
+            // OneToOne reverse relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToOne' && relation.to.name === entity.name
+                && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+            )).forEach(relation => {
+                withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
+            });
+
+
             this.that.fs.copyTpl(this.that.templatePath("entity_controller.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,

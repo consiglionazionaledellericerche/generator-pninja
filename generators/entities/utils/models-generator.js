@@ -19,6 +19,7 @@ export class ModelsGenerator {
             const tableName = to.snake(pluralize(entity.tableName));
             // fillable from entity property
             const fillable = entity.body.map(prop => `'${to.snake(prop.name)}'`);
+            const relations = [];
             // fillable from entity OneToOne relations
             relationships.filter(relation => (
                 relation.cardinality === 'OneToOne'
@@ -27,7 +28,24 @@ export class ModelsGenerator {
                 fillable.push(`'${to.snake(relation.to.injectedField || relation.from.name)}_id'`);
             });
 
-            const relations = [];
+            // OneToOne direct relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToOne' && relation.from.name === entity.name
+            )).forEach(relation => {
+                // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
+                relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasOne { return $this->hasOne(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
+            });
+
+            // OneToOne reverse relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToOne' && relation.to.name === entity.name
+                && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+            )).forEach(relation => {
+                // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
+                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsTo { return $this->belongsTo(${relation.from.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
+            });
+
+
             // const reverseRelations = [];
 
             // relationships.map(relation => {
@@ -40,13 +58,6 @@ export class ModelsGenerator {
             //     return relation;
             // })
 
-            // OneToOne direct relationships
-            relationships.filter(relation => (
-                relation.cardinality === 'OneToOne' && relation.from.name === entity.name
-            )).forEach(relation => {
-                // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
-                relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasOne { return $this->hasOne(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
-            });
             // OneToOne reverse relationships
             // relationships.filter(relation => (
             //     relation.cardinality === 'OneToOne'
