@@ -27,10 +27,12 @@ export class FactoriesGenerator {
                     if (${relation.from.name}::count() === 0) {
                         while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create();
                     }
-                    return ${entity.name}::count() + 1;
+                    $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
+                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.to.injectedField || relation.from.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.to.injectedField || relation.from.name)}_id']))->toArray());
+                    return $this->getRandomUniqueValue($ids${relation.from.name}, $ids${entity.name});
                 },`);
             });
-            this.that.fs.copyTpl(this.that.templatePath("entity_factory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
+            this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,
                     models: models.join("\n"),
