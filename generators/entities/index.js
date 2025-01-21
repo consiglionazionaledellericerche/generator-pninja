@@ -2,17 +2,9 @@ import Generator from 'yeoman-generator';
 import jclrz from 'json-colorz';
 import { hello } from '../utils/hello.js';
 import ora from 'ora';
-import fs from 'fs';
-import to from 'to-case';
+// import to from 'to-case';
 import colors from 'ansi-colors';
-import { JDLConverter } from './utils/jdl-converter.js';
-import { MigrationConverter } from './utils/migration-converter.js';
-import { ModelConverter } from './utils/model-converter.js';
-import { ControllerConverter } from './utils/controller-converter.js';
-import { RouteConverter } from './utils/route-converter.js';
-import { SeederConverter } from './utils/seeder-converter.js';
-import { FactoryConverter } from './utils/factory-converter.js';
-import { FileDeleter } from './utils/fileDeleter.js';
+// import { FileDeleter } from './utils/fileDeleter.js';
 import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
 import { MigrationsGenerator } from './utils/migrations-generator.js';
@@ -49,13 +41,6 @@ export default class EntityGenerator extends Generator {
         message: "Build all entities from entities definition file?",
         default: true
       }]]
-    } else {
-      // prompts = [...prompts, ...[{
-      //   type: "confirm",
-      //   name: "rebuild",
-      //   message: "Rebuild all entities?",
-      //   default: true
-      // }]]
     }
     this.answers = await this.prompt(prompts);
     if (this.answers.build && this.options.fromMain) {
@@ -146,7 +131,7 @@ export default class EntityGenerator extends Generator {
       throw error;
     }
 
-    // Generating Factories
+    // Generating Factories and DatabaseSeeder
     try {
       spinner = ora(`Generating Factory files`);
       (new FactoriesGenerator(this, entitiesFilePath)).generateFactories(10);
