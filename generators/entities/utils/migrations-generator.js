@@ -81,11 +81,6 @@ export class MigrationsGenerator {
     createRelations() {
         const { entities, relationships } = this.parsedJDL;
         if (!relationships || relationships.length === 0) return;
-        // relationships.forEach(relation => {
-        //     if (relation.cardinality === 'OneToOne' && !relation.from.injectedField && !!relation.to.injectedField) {
-        //         throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
-        //     }
-        // })
 
         entities.forEach(entity => {
             const up = [];
@@ -124,8 +119,6 @@ export class MigrationsGenerator {
                     up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${toTabName}');`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
-            // console.log(`\n${entityTable}.UP:`); jclrz(up);
-            // console.log(`\n${entityTable}.DOWN:`); jclrz(down);
             this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
                 {
                     entityTable: entityTable,
@@ -134,62 +127,6 @@ export class MigrationsGenerator {
                 }
             )
         });
-
-        return;
-        entities.map(entity => {
-            return {
-                table: to.snake(pluralize(entity.tableName)),
-                relationships: relationships.filter(relation => (
-                    relation.cardinality === 'OneToOne' && relation.from.name === entity.name
-                    || relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
-                    || relation.cardinality === 'OneToMany' && relation.to.name === entity.name
-                )).map(relation => {
-                    let fromInjectedField = to.snake(relation.from.injectedField || '');
-                    let toInjectedField = to.snake(relation.to.injectedField || '');
-                    let fromTabName = undefined;
-                    let toTabName = undefined;
-                    let foreignId = undefined;
-                    let unique = undefined;
-                    let nullable = undefined;
-                    if (relation.cardinality === 'OneToOne' && fromInjectedField === '' && toInjectedField !== '') {
-                        throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
-                    }
-                    if (fromInjectedField === '' && toInjectedField === '') {
-                        toInjectedField = to.snake(relation.from.name);
-                    }
-                    if (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') {
-                        fromInjectedField = fromInjectedField || to.snake(relation.to.name);
-                        fromTabName = pluralize(to.snake(relation.from.name));
-                        toTabName = pluralize(to.snake(relation.to.name));
-                        foreignId = `${fromInjectedField}_id`;
-                        unique = relation.cardinality === 'OneToOne';
-                        nullable = !relation.from.required;
-                        return {
-                            up: `$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${toTabName}');`,
-                            down: `$table->dropForeign(['${foreignId}']);\n${tab(3)}$table->dropColumn('${foreignId}');`,
-                        }
-                    }
-                    if (relation.cardinality === 'OneToMany') {
-                        toInjectedField = toInjectedField || to.snake(relation.from.name);
-                        fromTabName = pluralize(to.snake(relation.from.name));
-                        toTabName = pluralize(to.snake(relation.to.name));
-                        foreignId = `${toInjectedField}_id`;
-                        unique = false;
-                        nullable = !relation.to.required;
-                        return {
-                            up: `$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${fromTabName}');`,
-                            down: `$table->dropForeign(['${foreignId}']);\n${tab(3)}$table->dropColumn('${foreignId}');`,
-                        }
-                    }
-                }),
-            }
-        }).map(migration => migration.relationships.length && this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${migration.table}_table.php`),
-            {
-                fromTabName: migration.table,
-                up: migration.relationships.map(r => r.up).join(`\n${tab(3)}`),
-                down: migration.relationships.map(r => r.down).join(`\n${tab(3)}`),
-            }
-        ));
     }
 
     generatePivotMigrations() {
