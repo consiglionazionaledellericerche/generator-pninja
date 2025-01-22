@@ -82,14 +82,17 @@ export class FactoriesGenerator {
             case 'String':
                 if (field.name.toLowerCase().includes('email')) {
                     return 'fake()->unique()->safeEmail()';
+                } else if (to.snake(field.name).includes('first_name')) {
+                    return hasUnique ? 'fake()->unique()->firstNameMale()' : 'fake()->firstNameMale()';
+                } else if (to.snake(field.name).includes('last_name')) {
+                    return hasUnique ? 'fake()->unique()->lastName()' : 'fake()->lastName()';
                 } else if (field.name.toLowerCase().includes('name')) {
                     return hasUnique ? 'fake()->unique()->name()' : 'fake()->name()';
                 } else if (field.name.toLowerCase().includes('phone')) {
                     return hasUnique ? 'fake()->unique()->phoneNumber()' : 'fake()->phoneNumber()';
                 } else if (field.name.toLowerCase().includes('address')) {
                     return 'fake()->address()';
-                } else if (field.name.toLowerCase().includes('code') ||
-                    field.name.toLowerCase().includes('codice')) {
+                } else if (field.name.toLowerCase().includes('code')) {
                     return hasUnique ? 'fake()->unique()->bothify("??##??##")' : 'fake()->bothify("??##??##")';
                 } else {
                     return hasUnique ? 'fake()->unique()->word()' : 'fake()->word()';
