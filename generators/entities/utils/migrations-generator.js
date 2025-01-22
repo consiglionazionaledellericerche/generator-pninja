@@ -81,11 +81,11 @@ export class MigrationsGenerator {
     createRelations() {
         const { entities, relationships } = this.parsedJDL;
         if (!relationships || relationships.length === 0) return;
-        relationships.forEach(relation => {
-            if (relation.cardinality === 'OneToOne' && !relation.from.injectedField && !!relation.to.injectedField) {
-                throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
-            }
-        })
+        // relationships.forEach(relation => {
+        //     if (relation.cardinality === 'OneToOne' && !relation.from.injectedField && !!relation.to.injectedField) {
+        //         throw new Error(`ERROR! In the One-to-One relationship from ${relation.from.name} to ${relation.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`)
+        //     }
+        // })
 
         entities.forEach(entity => {
             const up = [];
