@@ -21,7 +21,10 @@ export class RoutersGenerator {
                     className,
                     rootPath,
                 });
-            this.that.fs.append(this.that.destinationPath(`server/routes/api.php`), `\nrequire __DIR__ . '/${rootPath}.php';`);
+            let apiPhpContent = this.that.fs.read(this.that.destinationPath(`server/routes/api.php`));
+            apiPhpContent = apiPhpContent.replace(`\nrequire __DIR__ . '/${rootPath}.php';`, '');
+            apiPhpContent = apiPhpContent + `\nrequire __DIR__ . '/${rootPath}.php';`;
+            this.that.fs.write(this.that.destinationPath(`server/routes/api.php`), apiPhpContent);
         });
     }
 }
