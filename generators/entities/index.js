@@ -1,10 +1,7 @@
 import Generator from 'yeoman-generator';
-import jclrz from 'json-colorz';
 import { hello } from '../utils/hello.js';
 import ora from 'ora';
-// import to from 'to-case';
 import colors from 'ansi-colors';
-// import { FileDeleter } from './utils/fileDeleter.js';
 import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
 import { MigrationsGenerator } from './utils/migrations-generator.js';
@@ -12,7 +9,6 @@ import { ModelsGenerator } from './utils/models-generator.js';
 import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
-// import { convertFields, createMigrations } from './utils/migration-utils.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
@@ -82,10 +78,6 @@ export default class EntityGenerator extends Generator {
     const parsedJDL = parseFromFiles([entitiesFilePath]);
 
     this.fs.writeJSON(this.destinationPath(`.presto/Entities.json`), parsedJDL);
-
-    // console.log(`\n\n====== PARSED JDL ======`);
-    // jclrz(parsedJDL)
-    // console.log(`========================\n\n`);
 
     // JDL > Migrations
     try {
