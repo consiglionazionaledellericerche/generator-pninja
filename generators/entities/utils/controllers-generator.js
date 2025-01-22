@@ -17,30 +17,27 @@ export class ControllersGenerator {
         for (const entity of entities) {
             const withs = [];
             relationships.forEach(relation => {
-                if (relation.cardinality === 'OneToOne') {
-                    if (!relation.from.injectedField && !relation.to.injectedField) {
-                        relation.to.injectedField = relation.from.name;
-                    }
-                    relation.from.injectedField = relation.from.injectedField || relation.to.name;
+                if (!relation.from.injectedField && !relation.to.injectedField) {
+                    relation.to.injectedField = relation.from.name;
                 }
+                relation.from.injectedField = relation.from.injectedField || relation.to.name;
                 return relation;
             })
 
-            // OneToOne direct relationships
+            // OneToOne/OneToMany direct relationships
             relationships.filter(relation => (
-                relation.cardinality === 'OneToOne' && relation.from.name === entity.name
+                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany') && relation.from.name === entity.name
             )).forEach(relation => {
                 withs.push(`'${to.snake(relation.from.injectedField)}'`);
             });
 
-            // OneToOne reverse relationships
+            // OneToOne/OneToMany reverse relationships
             relationships.filter(relation => (
-                relation.cardinality === 'OneToOne' && relation.to.name === entity.name
+                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany') && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
             });
-
 
             this.that.fs.copyTpl(this.that.templatePath("entity_controller.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {

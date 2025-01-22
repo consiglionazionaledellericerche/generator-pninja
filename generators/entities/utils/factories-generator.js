@@ -18,6 +18,7 @@ export class FactoriesGenerator {
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
             const params = entity.body.map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
+            // Relationships OneToOne
             relationships.filter(relation => (
                 relation.cardinality === 'OneToOne'
                 && relation.to.name === entity.name
@@ -30,6 +31,20 @@ export class FactoriesGenerator {
                     $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
                     $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.to.injectedField || relation.from.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.to.injectedField || relation.from.name)}_id']))->toArray());
                     return $this->getRandomUniqueValue($ids${relation.from.name}, $ids${entity.name});
+                },`);
+            });
+            // Relationships OneToMany
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToMany'
+                && relation.to.name === entity.name
+            )).forEach(relation => {
+                models.push(`use App\\Models\\${relation.from.name};`)
+                params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
+                    if (${relation.from.name}::count() === 0) {
+                        while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create();
+                    }
+                    $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
+                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.from.name}))[0];
                 },`);
             });
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),

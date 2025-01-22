@@ -45,6 +45,22 @@ export class ModelsGenerator {
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsTo { return $this->belongsTo(${relation.from.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
             });
 
+            // OneToMany direct relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToMany' && relation.from.name === entity.name
+            )).forEach(relation => {
+                // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
+                relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasMany { return $this->hasMany(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
+            });
+
+            // OneToMany reverse relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'OneToMany' && relation.to.name === entity.name
+                && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+            )).forEach(relation => {
+                // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
+                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsTo { return $this->belongsTo(${relation.from.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
+            });
 
             // const reverseRelations = [];
 

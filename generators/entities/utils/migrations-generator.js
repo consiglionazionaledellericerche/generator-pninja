@@ -87,13 +87,16 @@ export class MigrationsGenerator {
             }
         })
 
-        // OneToOne Relations
+        // OneToOne/OneToMany Relations
         entities.forEach(entity => {
             const up = [];
             const down = [];
             const entityTable = pluralize(to.snake(entity.name))
             relationships
-                .filter(relation => relation.cardinality === 'OneToOne' && relation.to.name === entity.name)
+                .filter(relation =>
+                    (relation.cardinality === 'OneToOne' && relation.to.name === entity.name)
+                    || (relation.cardinality === 'OneToMany' && relation.to.name === entity.name)
+                )
                 .forEach(relation => {
                     const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
                     const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
