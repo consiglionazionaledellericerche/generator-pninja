@@ -47,6 +47,20 @@ export class FactoriesGenerator {
                     return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.from.name}))[0];
                 },`);
             });
+            // Relationships ManyToOne
+            relationships.filter(relation => (
+                relation.cardinality === 'ManyToOne'
+                && relation.from.name === entity.name
+            )).forEach(relation => {
+                models.push(`use App\\Models\\${relation.to.name};`)
+                params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
+                    if (${relation.to.name}::count() === 0) {
+                        while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create();
+                    }
+                    $ids${relation.to.name} = array_map(function($e) { return $e['id']; }, (${relation.to.name}::all(['id']))->toArray());
+                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.to.name}))[0];
+                },`);
+            });
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,

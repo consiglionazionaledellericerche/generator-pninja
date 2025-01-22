@@ -39,6 +39,21 @@ export class ControllersGenerator {
                 withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
             });
 
+            // ManyToOne direct relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+            )).forEach(relation => {
+                withs.push(`'${to.snake(relation.from.injectedField)}'`);
+            });
+
+            // ManyToOne reverse relationships
+            relationships.filter(relation => (
+                relation.cardinality === 'ManyToOne' && relation.to.name === entity.name
+                && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+            )).forEach(relation => {
+                withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
+            });
+
             this.that.fs.copyTpl(this.that.templatePath("entity_controller.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,

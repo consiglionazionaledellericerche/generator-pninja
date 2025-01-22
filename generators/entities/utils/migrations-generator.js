@@ -1,7 +1,7 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import jhipsterCore from 'jhipster-core';
-// import jclrz from 'json-colorz';
+import jclrz from 'json-colorz';
 const { parseFromFiles } = jhipsterCore;
 const tab = (n) => (Array(n)).fill('    ').join('');
 
@@ -87,11 +87,11 @@ export class MigrationsGenerator {
             }
         })
 
-        // OneToOne/OneToMany Relations
         entities.forEach(entity => {
             const up = [];
             const down = [];
             const entityTable = pluralize(to.snake(entity.name))
+            // OneToOne/OneToMany Relations
             relationships
                 .filter(relation =>
                     (relation.cardinality === 'OneToOne' && relation.to.name === entity.name)
@@ -108,6 +108,24 @@ export class MigrationsGenerator {
                     up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${fromTabName}');`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
+            // ManyToOne Relations
+            relationships
+                .filter(relation =>
+                    relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+                )
+                .forEach(relation => {
+                    const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
+                    const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
+                    const fromTabName = pluralize(to.snake(relation.from.name));
+                    const toTabName = pluralize(to.snake(relation.to.name));
+                    const foreignId = `${fromInjectedField}_id`;
+                    const unique = false;
+                    const nullable = !relation.from.required;
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${toTabName}');`);
+                    down.push(`$table->dropForeign(['${foreignId}']);`);
+                });
+            // console.log(`\n${entityTable}.UP:`); jclrz(up);
+            // console.log(`\n${entityTable}.DOWN:`); jclrz(down);
             this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
                 {
                     entityTable: entityTable,
@@ -115,8 +133,7 @@ export class MigrationsGenerator {
                     down: down.join(`\n${tab(3)}`),
                 }
             )
-        })
-
+        });
 
         return;
         entities.map(entity => {
