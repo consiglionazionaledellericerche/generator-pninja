@@ -24,17 +24,17 @@ export class ControllersGenerator {
                 return relation;
             })
 
-            // OneToOne/OneToMany direct relationships
+            // OneToOne/OneToMany/ManyToMany direct relationships
             relationships.filter(relation => (
-                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany') && relation.from.name === entity.name
+                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
                 && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 withs.push(`'${to.snake(relation.from.injectedField || relation.to.name)}'`);
             });
 
-            // OneToOne/OneToMany reverse relationships
+            // OneToOne/OneToMany/ManyToMany reverse relationships
             relationships.filter(relation => (
-                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany') && relation.to.name === entity.name
+                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);

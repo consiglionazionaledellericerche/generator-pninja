@@ -137,7 +137,7 @@ export class MigrationsGenerator {
                 const toForeignId = to.snake(relation.to.injectedField || relation.from.name);
                 const fromTabName = pluralize(to.snake(relation.from.name));
                 const toTabName = pluralize(to.snake(relation.to.name));
-                const pivotName = [fromTabName, toTabName].sort().join('_');
+                const pivotName = [to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_');
                 return {
                     fromForeignId,
                     toForeignId,
