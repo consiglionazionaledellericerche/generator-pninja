@@ -19,16 +19,17 @@ export class ControllersGenerator {
             relationships.forEach(relation => {
                 if (!relation.from.injectedField && !relation.to.injectedField) {
                     relation.to.injectedField = relation.from.name;
+                    relation.from.injectedField = relation.to.name;
                 }
-                relation.from.injectedField = relation.from.injectedField || relation.to.name;
                 return relation;
             })
 
             // OneToOne/OneToMany direct relationships
             relationships.filter(relation => (
                 (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany') && relation.from.name === entity.name
+                && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
-                withs.push(`'${to.snake(relation.from.injectedField)}'`);
+                withs.push(`'${to.snake(relation.from.injectedField || relation.to.name)}'`);
             });
 
             // OneToOne/OneToMany reverse relationships
@@ -42,6 +43,7 @@ export class ControllersGenerator {
             // ManyToOne direct relationships
             relationships.filter(relation => (
                 relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+                && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 withs.push(`'${to.snake(relation.from.injectedField)}'`);
             });

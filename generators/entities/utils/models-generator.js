@@ -31,6 +31,7 @@ export class ModelsGenerator {
             // OneToOne direct relationships
             relationships.filter(relation => (
                 relation.cardinality === 'OneToOne' && relation.from.name === entity.name
+                && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasOne { return $this->hasOne(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
@@ -48,6 +49,7 @@ export class ModelsGenerator {
             // OneToMany direct relationships
             relationships.filter(relation => (
                 relation.cardinality === 'OneToMany' && relation.from.name === entity.name
+                && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasMany { return $this->hasMany(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
@@ -65,9 +67,10 @@ export class ModelsGenerator {
             // ManyToOne direct relationships
             relationships.filter(relation => (
                 relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+                && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
-                relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): BelongsTo { return $this->belongsTo(${relation.to.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); /* ManyToOne */ }`);
+                relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): BelongsTo { return $this->belongsTo(${relation.to.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
             // ManyToOne reverse relationships
@@ -76,7 +79,7 @@ export class ModelsGenerator {
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 // fillable.push(`'${to.snake(relation.from.injectedField)}_id'`);
-                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): HasMany { return $this->hasMany(${relation.from.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); /* ManyToOne reverse */ }`);
+                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): HasMany { return $this->hasMany(${relation.from.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
             // const reverseRelations = [];
