@@ -24,6 +24,7 @@ export class FactoriesGenerator {
                 relation.cardinality === 'OneToOne'
                 && relation.to.name === entity.name
             )).forEach(relation => {
+                if (relation.from.model === relation.to.model) return;
                 models.push(`use App\\Models\\${relation.from.name};`)
                 params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
                     if (${relation.from.name}::count() === 0) {
@@ -39,6 +40,7 @@ export class FactoriesGenerator {
                 relation.cardinality === 'OneToMany'
                 && relation.to.name === entity.name
             )).forEach(relation => {
+                if (relation.from.model === relation.to.model) return;
                 models.push(`use App\\Models\\${relation.from.name};`)
                 params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
                     if (${relation.from.name}::count() === 0) {
@@ -53,6 +55,7 @@ export class FactoriesGenerator {
                 relation.cardinality === 'ManyToOne'
                 && relation.from.name === entity.name
             )).forEach(relation => {
+                if (relation.from.model === relation.to.model) return;
                 models.push(`use App\\Models\\${relation.to.name};`)
                 params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
                     if (${relation.to.name}::count() === 0) {
@@ -65,7 +68,7 @@ export class FactoriesGenerator {
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,
-                    models: models.join("\n"),
+                    models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
                     params: params.join("\n"),
                 });
             // Relationships ManyToMany
@@ -73,6 +76,7 @@ export class FactoriesGenerator {
                 relation.cardinality === 'ManyToMany'
                 && relation.from.name === entity.name
             )).forEach(relation => {
+                if (relation.from.model === relation.to.model) return;
                 manyToMany.push({
                     fromEntity: relation.from.name,
                     toEntity: relation.to.name,
