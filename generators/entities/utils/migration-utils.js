@@ -73,29 +73,6 @@ export function createTables() {
     }
 }
 
-const _convertRelationFields = (relationships) => {
-    if (!relationships || relationships.length === 0) return '';
-
-    return relationships
-        .filter(rel => {
-            return (rel.relationshipType === 'many-to-one') ||
-                (rel.relationshipType === 'one-to-one' && rel.relationshipSide === 'left');
-        })
-        .map(rel => {
-            const tableName = pluralize(rel.otherEntityName.toLowerCase());
-            const fieldName = `${rel.relationshipName.toLowerCase()}_id`;
-            let definition = `            $table->foreignId('${fieldName}')`;
-
-            if (rel.relationshipType === 'one-to-one') {
-                definition += '->unique()';
-            }
-
-            definition += `->constrained('${tableName}');`;
-            return definition;
-        })
-        .join('\n');
-}
-
 const createOneToOneRelation = (rel) => {
     const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
     let fromInjectedField = rel.from.injectedField;
