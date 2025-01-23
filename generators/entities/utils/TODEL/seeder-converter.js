@@ -96,10 +96,7 @@ export class SeederConverter {
     _generateSeeder(entities) {
         const imports = entities
             .map(entity => `use App\\Models\\${entity.name};`)
-            .join('\n');
-
-        const variables = entities
-            .map(entity => `        $${this._pluralize(this._lowerFirst(entity.name))} = `)
+            .reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []) // unique
             .join('\n');
 
         const seedEntities = entities
