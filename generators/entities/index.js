@@ -77,6 +77,12 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = parseFromFiles([entitiesFilePath]);
 
+    parsedJDL.relationships.forEach(relation => {
+      if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
+        throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
+      }
+    });
+
     this.fs.writeJSON(this.destinationPath(`.presto/Entities.json`), parsedJDL);
 
     // JDL > Migrations
