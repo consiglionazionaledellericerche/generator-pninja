@@ -15,5 +15,10 @@ class DatabaseSeeder extends Seeder
     {
 <% entities.forEach(function(entity) { %>        while(<%= entity.name %>::count() < <%= n %>) <%= entity.name %>::factory()->create();<%= "\n"%><% }); %>
         // Many-to-many
+<% manyToMany.forEach(function(rel) { %>        <%= rel.fromEntity %>::all()->each(function ($entity) {
+            $entity-><%= rel.relPropery %>()->attach(
+                <%= rel.toEntity %>::all()->random(<%= Math.round(n/2) %>)->pluck('id')->toArray()
+            );
+        });<% }); %>
     }
 }

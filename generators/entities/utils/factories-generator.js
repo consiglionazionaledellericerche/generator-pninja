@@ -15,6 +15,7 @@ export class FactoriesGenerator {
 
     generateFactories(n = 5) {
         const { enums, entities, relationships } = this.parsedJDL;
+        let manyToMany = [];
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
             const params = entity.body.map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
@@ -67,10 +68,22 @@ export class FactoriesGenerator {
                     models: models.join("\n"),
                     params: params.join("\n"),
                 });
+            // Relationships ManyToMany
+            relationships.filter(relation => (
+                relation.cardinality === 'ManyToMany'
+                && relation.from.name === entity.name
+            )).forEach(relation => {
+                manyToMany.push({
+                    fromEntity: relation.from.name,
+                    toEntity: relation.to.name,
+                    relPropery: to.snake(relation.from.injectedField || relation.to.name)
+                });
+            });
         }
         this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
                 entities,
+                manyToMany,
                 n,
             });
     }
@@ -129,61 +142,3 @@ export class FactoriesGenerator {
         }
     }
 }
-
-
-
-// export const createEntityModels = async (that) => {
-//     const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
-//         .columns(["name", "class", "table", "variable", "path"])
-//         .rows();
-//     for (let index = 0; index < entities.length; index++) {
-//         const entity = entities[index];
-//         const props = await withCSV(that.destinationPath(`.presto-properties.csv`))
-//             .columns(["entity", "column", "type"])
-//             .filter(row => row.entity === entity.name)
-//             .rows();
-//         const relations = await withCSV(that.destinationPath(`.presto-relations.csv`))
-//             .columns(["type", "from", "to", "fromProp", "toProp", "fromLabel", "toLabel"])
-//             .filter(row => row.from === entity.name)
-//             .rows();
-//         const inverseRelations = await withCSV(that.destinationPath(`.presto-relations.csv`))
-//             .columns(["type", "from", "to", "fromProp", "toProp", "fromLabel", "toLabel"])
-//             .filter(row => row.to === entity.name)
-//             .rows();
-//         that.fs.copyTpl(that.templatePath("entity_model.php.ejs"), that.destinationPath(`server/app/Models/${entity.class}.php`),
-//             {
-//                 className: entity.class,
-//                 fillable: props.map(p => `'${p.column}'`).join(',                    '),
-//                 relations: [...relations.map(r => getRelationForModel(r)), ...inverseRelations.map(r => getInverseRelationForModel(r))].join("\n\n\t")
-//             });
-//     }
-// }
-
-
-// const getRelationForModel = (relation) => {
-//     if (!relation.fromProp) return;
-//     switch (relation.type) {
-//         case 'many-to-one':
-//             return `public function ${toCase.snake(relation.fromProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.to)}::class, '${getVariableNameFromEntityName(relation.to)}_id'); }`;
-//         case 'one-to-many':
-//             return `public function ${toCase.snake(relation.fromProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.to)}::class); }`;
-//         case 'one-to-one':
-//             return `public function ${toCase.snake(relation.fromProp)}(): HasOne { return $this->hasOne(${getClassNameFromEntityName(relation.to)}::class); }`;
-//         case 'many-to-many':
-//             return `public function ${toCase.snake(relation.fromProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.to)}::class); }`;
-//     }
-// }
-
-// const getInverseRelationForModel = (relation) => {
-//     if (!relation.toProp) return null;
-//     switch (relation.type) {
-//         case 'many-to-one':
-//             return `public function ${toCase.snake(relation.toProp)}(): HasMany { return $this->hasMany(${getClassNameFromEntityName(relation.from)}::class); }`;
-//         case 'one-to-many':
-//             return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
-//         case 'one-to-one':
-//             return `public function ${toCase.snake(relation.toProp)}(): BelongsTo { return $this->belongsTo(${getClassNameFromEntityName(relation.from)}::class, '${getVariableNameFromEntityName(relation.from)}_id'); }`;
-//         case 'many-to-many':
-//             return `public function ${toCase.snake(relation.toProp)}(): BelongsToMany { return $this->belongsToMany(${getClassNameFromEntityName(relation.from)}::class); }`;
-//     }
-// }
