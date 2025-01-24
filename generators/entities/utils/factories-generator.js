@@ -93,6 +93,7 @@ export class FactoriesGenerator {
     }
 
     _getFakerRule(field) {
+        const { enums } = this.parsedJDL;
         const hasUnique = field.fieldValidateRules && field.fieldValidateRules.includes('unique');
 
         switch (field.type) {
@@ -142,6 +143,9 @@ export class FactoriesGenerator {
             case 'Blob':
                 return 'fake()->text()';
             default:
+                if (enums.filter(e => field.type === e.name).map(e => e.name).pop()) {
+                    return `((\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())[array_rand(\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())])->value`
+                }
                 return 'fake()->word()';
         }
     }

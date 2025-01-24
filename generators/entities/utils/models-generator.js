@@ -92,13 +92,26 @@ export class ModelsGenerator {
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsToMany { return $this->belongsToMany(${relation.from.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}'); }`);
             });
 
-            this.that.fs.copyTpl(this.that.templatePath("entity_model.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
+            this.that.fs.copyTpl(this.that.templatePath("Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
                 {
                     className,
                     tableName,
                     fillable: fillable.join(', '),
                     relations: relations.join(`\n${this.tab(1)}`), //[...relations, ...reverseRelations].join(`\n${this.tab(1)}`),
+                    enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
+                    casts: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {
+                        return {
+                            attrsName: entity.body.filter(f => f.type === e.name).map(f => to.snake(f.name)),
+                            className: e.name
+                        }
+                    }),
                 });
+        }
+        for (const enm of enums) {
+            this.that.fs.copyTpl(this.that.templatePath("Enum.php.ejs"), this.that.destinationPath(`server/app/Enums/${enm.name}.php`), {
+                name: enm.name,
+                values: enm.values,
+            })
         }
     }
 }

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
+<% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
+<% }); %>
 class <%- className %> extends Model
 {
     use HasFactory;
@@ -26,6 +27,15 @@ class <%- className %> extends Model
      * @var array
      */
     protected $fillable = [<%- fillable %>];
+
+    /**
+     * Cast for enums
+     *
+     * @var array
+     */
+    protected $casts = [
+<% casts.forEach(function(cast) { %><% cast.attrsName.forEach(function(attrName) { %>        '<%- attrName %>' => <%- cast.className %>::class,
+<% }); %><% }); %>    ];
 
     <% if (relations) { %><%- relations %><% } %>
 }
