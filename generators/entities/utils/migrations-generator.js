@@ -35,7 +35,7 @@ export class MigrationsGenerator {
 
         const enm = enums.reduce((res, e) => {
             if (e.name === jhipsterType) {
-                return e.values.map(v => v.key)
+                return e.values.map(v => v.value || v.key)
             }
             return res;
         }, undefined);
