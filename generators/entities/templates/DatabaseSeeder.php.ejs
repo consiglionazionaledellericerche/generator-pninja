@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 <% entities.forEach(function(entity) { %>
-use App\Models\<%= entity.name %>;
-<% }); %>
+use App\Models\<%= entity.name %>;<% }); %>
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -19,6 +18,6 @@ class DatabaseSeeder extends Seeder
             $entity-><%= rel.relPropery %>()->attach(
                 <%= rel.toEntity %>::all()->random(<%= Math.round(n/2) %>)->pluck('id')->toArray()
             );
-        });<% }); %>
-    }
+        });
+<% }); %>    }
 }
