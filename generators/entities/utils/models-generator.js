@@ -22,10 +22,15 @@ export class ModelsGenerator {
             const relations = [];
             // fillable from entity OneToOne relations
             relationships.filter(relation => (
-                relation.cardinality === 'OneToOne'
+                (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany')
                 && relation.to.name === entity.name
             )).forEach(relation => {
                 fillable.push(`'${to.snake(relation.to.injectedField || relation.from.name)}_id'`);
+            });
+            relationships.filter(relation => (
+                relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+            )).forEach(relation => {
+                fillable.push(`'${to.snake(relation.from.injectedField || relation.to.name)}_id'`);
             });
 
             // OneToOne direct relationships
