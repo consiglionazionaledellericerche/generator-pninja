@@ -97,7 +97,7 @@ export class ModelsGenerator {
                     className,
                     tableName,
                     fillable: fillable.join(', '),
-                    relations: relations.join(`\n${this.tab(1)}`), //[...relations, ...reverseRelations].join(`\n${this.tab(1)}`),
+                    relations: relations.join(`\n${this.tab(1)}`),
                     enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
                     casts: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {
                         return {
