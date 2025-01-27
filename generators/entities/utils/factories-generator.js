@@ -23,12 +23,13 @@ export class FactoriesGenerator {
             relationships.filter(relation => (
                 relation.cardinality === 'OneToOne'
                 && relation.to.name === entity.name
-                && relation.from.name !== relation.to.name
             )).forEach(relation => {
-                models.push(`use App\\Models\\${relation.from.name};`)
+                if (relation.from.name !== relation.to.name) {
+                    models.push(`use App\\Models\\${relation.from.name};`)
+                }
                 params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
                     if (${relation.from.name}::count() === 0) {
-                        while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create();
+                        ${relation.from.name !== relation.to.name ? `while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create()` : `return null`};
                     }
                     $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
                     $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.to.injectedField || relation.from.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.to.injectedField || relation.from.name)}_id']))->toArray());
@@ -41,10 +42,12 @@ export class FactoriesGenerator {
                 && relation.to.name === entity.name
                 && relation.from.name !== relation.to.name
             )).forEach(relation => {
-                models.push(`use App\\Models\\${relation.from.name};`)
+                if (relation.from.name !== relation.to.name) {
+                    models.push(`use App\\Models\\${relation.from.name};`)
+                }
                 params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
                     if (${relation.from.name}::count() === 0) {
-                        while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create();
+                        ${relation.from.name !== relation.to.name ? `while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create()` : `return null`};
                     }
                     $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
                     return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.from.name}))[0];
@@ -54,12 +57,13 @@ export class FactoriesGenerator {
             relationships.filter(relation => (
                 relation.cardinality === 'ManyToOne'
                 && relation.from.name === entity.name
-                && relation.from.name !== relation.to.name
             )).forEach(relation => {
-                models.push(`use App\\Models\\${relation.to.name};`)
+                if (relation.from.name !== relation.to.name) {
+                    models.push(`use App\\Models\\${relation.to.name};`)
+                }
                 params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
                     if (${relation.to.name}::count() === 0) {
-                        while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create();
+                        ${relation.from.name !== relation.to.name ? `while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create()` : `return null`};
                     }
                     $ids${relation.to.name} = array_map(function($e) { return $e['id']; }, (${relation.to.name}::all(['id']))->toArray());
                     return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.to.name}))[0];
@@ -75,7 +79,6 @@ export class FactoriesGenerator {
             relationships.filter(relation => (
                 relation.cardinality === 'ManyToMany'
                 && relation.from.name === entity.name
-                && relation.from.name !== relation.to.name
             )).forEach(relation => {
                 manyToMany.push({
                     fromEntity: relation.from.name,
