@@ -100,7 +100,7 @@ export class MigrationsGenerator {
                     const foreignId = `${toInjectedField}_id`;
                     const unique = relation.cardinality === 'OneToOne';
                     const nullable = !relation.from.required;
-                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${fromTabName}');`);
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? `->nullable()` : ``}->constrained('${fromTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
             // ManyToOne Relations
@@ -116,7 +116,7 @@ export class MigrationsGenerator {
                     const foreignId = `${fromInjectedField}_id`;
                     const unique = false;
                     const nullable = !relation.from.required;
-                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? '->nullable()' : ''}->constrained('${toTabName}');`);
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? `->nullable()` : ``}->constrained('${toTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
             this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
@@ -138,12 +138,14 @@ export class MigrationsGenerator {
                 const fromTabName = pluralize(to.snake(relation.from.name));
                 const toTabName = pluralize(to.snake(relation.to.name));
                 const pivotName = [to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_');
+                const nullable = !relation.from.required;
                 return {
                     fromForeignId,
                     toForeignId,
                     fromTabName,
                     toTabName,
                     pivotName,
+                    nullable
                 }
             }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_create_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_003_create_${migration.pivotName}_table.php`),
                 {
@@ -152,6 +154,7 @@ export class MigrationsGenerator {
                     fromTabName: migration.fromTabName,
                     toTabName: migration.toTabName,
                     pivotName: migration.pivotName,
+                    nullable: migration.nullable
                 }
             ));
     }
