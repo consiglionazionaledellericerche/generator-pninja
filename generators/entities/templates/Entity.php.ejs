@@ -28,14 +28,14 @@ class <%- className %> extends Model
      */
     protected $fillable = [<%- fillable %>];
 
-    /**
+    <% if(casts && casts.length) {%>/**
      * Cast for enums
      *
      * @var array
      */
     protected $casts = [
 <% casts.forEach(function(cast) { %><% cast.attrsName.forEach(function(attrName) { %>        '<%- attrName %>' => <%- cast.className %>::class,
-<% }); %><% }); %>    ];
+<% }); %><% }); %>    ];<%}%>
 
     <% if (relations) { %><%- relations %><% } %>
 }
