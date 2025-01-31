@@ -78,7 +78,50 @@ export class ControllersGenerator {
                 (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
-                withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
+                const toField = to.snake(relation.to.injectedField || relation.from.name);
+                const fromEntity = relation.from.name;
+                withs.push(`'${toField}'`);
+                if (relation.cardinality === 'OneToOne') {
+                    createRelated.push(`
+        if(array_key_exists("${toField}", $request->all()) && $request->all()["${toField}"]) {
+            $request_${toField} = $request->all()["${toField}"];
+            if (is_numeric($request_${toField})) {
+                $${toField} = \\App\\Models\\${fromEntity}::findOrFail($request_${toField});
+            } elseif (array_key_exists("id", $request_${toField})) {
+                $${toField} = \\App\\Models\\${fromEntity}::findOrFail($request_${toField}["id"]);
+            } else {
+                $${toField} = \\App\\Models\\${fromEntity}::create($request_${toField});
+            }
+            $${to.camel(entity.name)}->${toField}()->associate($${toField});
+            $${to.camel(entity.name)}->save();
+        };`);
+                }
+                if (relation.cardinality === 'OneToMany') {
+                    createRelated.push(`
+        if(array_key_exists("${toField}", $request->all()) && $request->all()["${toField}"]) {
+            $request_${toField} = $request->all()["${toField}"];
+            if (is_numeric($request_${toField})) {
+                $${toField} = \\App\\Models\\${fromEntity}::findOrFail($request_${toField});
+            } elseif (array_key_exists("id", $request_${toField})) {
+                $${toField} = \\App\\Models\\${fromEntity}::findOrFail($request_${toField}["id"]);
+            } else {
+                $${toField} = \\App\\Models\\${fromEntity}::create($request_${toField});
+            }
+            $${to.camel(entity.name)}->${toField}()->associate($${toField});
+            $${to.camel(entity.name)}->save();
+        }`);
+                }
+                if (relation.cardinality === 'ManyToMany') {
+                    createRelated.push(`
+        if(array_key_exists("${toField}", $request->all()) && $request->all()["${toField}"]) {
+            $related = array_map(function($o) {
+                if(is_numeric($o)) return \\App\\Models\\${fromEntity}::findOrFail($o);
+                if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
+                return new \\App\\Models\\${fromEntity}($o);
+            }, $request->all()["${toField}"]);
+            $${to.camel(entity.name)}->${toField}()->saveMany($related);
+        };`);
+                }
             });
 
             // ManyToOne direct relationships
@@ -91,13 +134,13 @@ export class ControllersGenerator {
                 withs.push(`'${fromField}'`);
                 createRelated.push(`
 		if(array_key_exists("${fromField}", $request->all()) && $request->all()["${fromField}"]) {
-            $request_country = $request->all()["${fromField}"];
-            if (is_numeric($request_country)) {
-                $${fromField} = \\App\\Models\\${toEntity}::findOrFail($request_country);
-            } elseif (array_key_exists("id", $request_country)) {
-                $${fromField} = \\App\\Models\\${toEntity}::findOrFail($request_country["id"]);
+            $request_${fromField} = $request->all()["${fromField}"];
+            if (is_numeric($request_${fromField})) {
+                $${fromField} = \\App\\Models\\${toEntity}::findOrFail($request_${fromField});
+            } elseif (array_key_exists("id", $request_${fromField})) {
+                $${fromField} = \\App\\Models\\${toEntity}::findOrFail($request_${fromField}["id"]);
             } else {
-                $${fromField} = \\App\\Models\\${toEntity}::create($request_country);
+                $${fromField} = \\App\\Models\\${toEntity}::create($request_${fromField});
             }
             $${to.camel(entity.name)}->${fromField}()->associate($${fromField});
             $${to.camel(entity.name)}->save();
@@ -109,7 +152,18 @@ export class ControllersGenerator {
                 relation.cardinality === 'ManyToOne' && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
-                withs.push(`'${to.snake(relation.to.injectedField || relation.from.name)}'`);
+                const toField = to.snake(relation.to.injectedField || relation.from.name);
+                const fromEntity = relation.from.name;
+                withs.push(`'${toField}'`);
+                createRelated.push(`
+        if(array_key_exists("${toField}", $request->all()) && $request->all()["${toField}"]) {
+            $related = array_map(function($o) {
+                if(is_numeric($o)) return \\App\\Models\\${fromEntity}::findOrFail($o);
+                if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
+                return new \\App\\Models\\${fromEntity}($o);
+            }, $request->all()["${toField}"]);
+            $${to.camel(entity.name)}->${toField}()->saveMany($related);
+        };`);
             });
 
             this.that.fs.copyTpl(this.that.templatePath("entity_controller.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
@@ -117,7 +171,7 @@ export class ControllersGenerator {
                     className: entity.name,
                     entityName: to.camel(entity.name),
                     withs: withs.length ? `[${withs.join(', ')}]` : null, // (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-                    createRelated: _.compact(createRelated).join("\n\n\t\t")
+                    createRelated: createRelated.join("\n\n\t\t")
                     // createRelated: [], //_.compact([...createRelated, ...createInverseRelated]).join("\n\n\t\t")
                 });
         }
