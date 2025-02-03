@@ -1,10 +1,11 @@
 import Generator from 'yeoman-generator';
-import fs from 'fs';
-import to from 'to-case';
 import colors from 'ansi-colors';
 import { createVueClient } from './vue.inc.js';
+import { createReactClient } from './react.inc.js';
 import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
+import jclrz from 'json-colorz';
+
 const tab = '    ';
 export default class AuthGenerator extends Generator {
     static namespace = 'presto:client';
@@ -18,15 +19,16 @@ export default class AuthGenerator extends Generator {
     }
     async prompting() {
         let prompts = [];
-        if (this.options["fromMain"]) {
+        if (this.options["fromMain"] || true) {
             prompts = [...prompts, ...[{
                 store: true,
                 type: "list",
                 name: "clientType",
                 message: `Which ${colors.yellow('*Framework*')} would you like to use for the client?`,
+                default: this.config.get('clientType') || 'vue',
                 choices: [
-                    { name: 'Vue', value: 'vue' },
-                    { name: 'React (Not implemented yet)', value: 'react' },
+                    { name: 'React', value: 'react' },
+                    { name: 'Vue (Not implemented yet)', value: 'vue' },
                     { name: 'Angular (Not implemented yet)', value: 'angular' },
                     { name: 'No client', value: false }
                 ]
@@ -45,7 +47,8 @@ export default class AuthGenerator extends Generator {
     async writing() {
         const parsedJDL = parseFromFiles([this.config.get('entitiesFilePath')]);
         if (this.config.get('clientType') === false) return;
-        if (this.config.get('clientType') === 'vue') return await createVueClient(this, parsedJDL);
+        if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
+        // if (this.config.get('clientType') === 'vue') return await createVueClient(this, parsedJDL);
         console.log(`\n\n${colors.redBright('N.I.Y.')}\n\n`);
     }
 };

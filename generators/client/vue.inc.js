@@ -1,6 +1,7 @@
-const { withCSV } = require('with-csv');
-const to = require('to-case')
-const pluralize = require('pluralize')
+import to from 'to-case';
+import pluralize from 'pluralize';
+import jclrz from 'json-colorz';
+
 const dbmms = {
     "sqlite": {
         name: "SQLite",
@@ -28,17 +29,14 @@ const dbmms = {
         url: "https://www.microsoft.com/sql-server/"
     }
 }
-const createVueClient = async (that) => {
-    const properties = await withCSV(that.destinationPath(`.presto-properties.csv`))
-        .columns(["entity", "column", "type"])
-        .rows();
-    const entities = await withCSV(that.destinationPath(`.presto-entities.csv`))
-        .columns(["name", "class", "table", "variable", "path"])
-        .map(entity => {
-            entity._presto__properties = properties.filter((property) => property.entity === entity.name);
-            return entity
-        })
-        .rows();
+export async function createVueClient(that, parsedJDL) {
+
+    console.log(`\n\n\nparsedJDL`); jclrz(parsedJDL);
+
+    const { entities } = parsedJDL;
+
+    console.log(`\n\n\nentities`); jclrz(entities);
+
     that.fs.copyTpl(that.templatePath("vue/package.json.ejs"), that.destinationPath("client/package.json"));
     that.fs.copyTpl(that.templatePath("vue/package-lock.json.ejs"), that.destinationPath("client/package-lock.json"));
     that.fs.copyTpl(that.templatePath("vue/vite.config.ts.ejs"), that.destinationPath("client/vite.config.ts"));
@@ -76,8 +74,9 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/components/ToastAlert.vue.ejs"), that.destinationPath("client/src/components/ToastAlert.vue"), { entities, pluralize });
 
     // ENTITIES COMPONENTS
-    for (let index = 0; index < entities.length; index++) {
-        const entity = entities[index];
+    entities.forEach(entity => {
+        entity.variable = to.snake(entity.name);
+
         that.fs.copyTpl(
             that.templatePath("vue/src/services/entities/entity.service.ts.ejs"),
             that.destinationPath(`client/src/services/entities/${entity.variable}.service.ts`),
@@ -120,7 +119,7 @@ const createVueClient = async (that) => {
                 pluralize
             }
         );
-    }
+    });
 
     that.fs.copyTpl(that.templatePath("vue/src/models/toastError.model.ts.ejs"), that.destinationPath("client/src/models/toastError.model.ts"));
 
@@ -156,4 +155,3 @@ const createVueClient = async (that) => {
     that.fs.copyTpl(that.templatePath("vue/src/locales/en-EN.json.ejs"), that.destinationPath("client/src/locales/en-EN.json"), { appName: that.config.get('name'), entities, pluralize, to });
     that.fs.copyTpl(that.templatePath("vue/src/locales/it-IT.json.ejs"), that.destinationPath("client/src/locales/it-IT.json"), { appName: that.config.get('name'), entities, pluralize, to });
 }
-module.exports = { createVueClient }
