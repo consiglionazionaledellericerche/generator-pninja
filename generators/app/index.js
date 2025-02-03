@@ -49,7 +49,18 @@ export default class extends Generator {
       namespace: 'presto:entities'
     });
 
-    // this.composeWith(require.resolve("../client"), { fromMain: true });
+    // sub generator Client
+    const clientGeneratorPath = path.resolve(__dirname, '../client/index.js');
+    const { default: ClientGenerator } = await import(clientGeneratorPath);
+    await this.composeWith({
+      Generator: ClientGenerator,
+      path: path.dirname(clientGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: clientGeneratorPath,
+      namespace: 'presto:client'
+    });
 
     // sub generator Final
     const finalGeneratorPath = path.resolve(__dirname, '../final/index.js');

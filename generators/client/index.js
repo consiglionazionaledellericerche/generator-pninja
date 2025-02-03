@@ -1,13 +1,20 @@
-'use strict';
-var Generator = require('yeoman-generator');
-const fs = require('fs');
-const to = require('to-case');
-const colors = require('ansi-colors');
+import Generator from 'yeoman-generator';
+import fs from 'fs';
+import to from 'to-case';
+import colors from 'ansi-colors';
+import { createVueClient } from './vue.inc.js';
+import jhipsterCore from 'jhipster-core';
+const { parseFromFiles } = jhipsterCore;
 const tab = '    ';
-const { createVueClient } = require('./vue.inc');
-module.exports = class extends Generator {
+export default class AuthGenerator extends Generator {
+    static namespace = 'presto:client';
+
     constructor(args, opts) {
         super(args, opts);
+        this.option('fromMain', {
+            type: Boolean,
+            default: false
+        });
     }
     async prompting() {
         let prompts = [];
@@ -36,6 +43,9 @@ module.exports = class extends Generator {
     }
 
     async writing() {
-        if (this.config.get('clientType') === 'vue') await createVueClient(this);
+        const parsedJDL = parseFromFiles([this.config.get('entitiesFilePath')]);
+        if (this.config.get('clientType') === false) return;
+        if (this.config.get('clientType') === 'vue') return await createVueClient(this, parsedJDL);
+        console.log(`\n\n${colors.redBright('N.I.Y.')}\n\n`);
     }
 };
