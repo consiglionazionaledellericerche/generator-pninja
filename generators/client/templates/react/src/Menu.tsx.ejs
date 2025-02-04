@@ -1,0 +1,28 @@
+import appLogo from './assets/logo.svg';
+export default function Menu() {
+  return (
+    <nav className="md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-gray-800 text-gray-300">
+      <a href="/" data-discover="true">
+        <img className="h-8 w-auto" src={appLogo} alt="" />
+      </a>
+      <span className="text-xl"><%= appName %></span>
+      <span className="grow"></span>
+      <a
+        className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white hover:ring-4"
+        href="/"
+        data-discover="true"
+      >
+        Dashboard
+      </a>
+      <% entities.forEach((entity, index) => {%>
+      <a
+        className="block rounded-md px-3 py-2 text-sm font-medium bg-black text-white hover:ring-4"
+        href="/<%- to.slug(pluralize(entity.name)) %>"
+        data-discover="true"
+      >
+        <%- to.capital(pluralize(entity.name))%>
+      </a>      
+      <% }); %>
+    </nav>
+  );
+}

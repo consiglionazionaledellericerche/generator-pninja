@@ -4,7 +4,6 @@ import { createVueClient } from './vue.inc.js';
 import { createReactClient } from './react.inc.js';
 import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
-import jclrz from 'json-colorz';
 
 const tab = '    ';
 export default class AuthGenerator extends Generator {
@@ -45,10 +44,11 @@ export default class AuthGenerator extends Generator {
     }
 
     async writing() {
+        // console.log(this.config.getAll());
         const parsedJDL = parseFromFiles([this.config.get('entitiesFilePath')]);
         if (this.config.get('clientType') === false) return;
         if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
         // if (this.config.get('clientType') === 'vue') return await createVueClient(this, parsedJDL);
-        console.log(`\n\n${colors.redBright('N.I.Y.')}\n\n`);
+        console.log(`\n\n${colors.redBright('Not implemented yet')}\n\n`);
     }
 };

@@ -3,16 +3,56 @@ import pluralize from 'pluralize';
 import jclrz from 'json-colorz';
 
 export async function createReactClient(that, parsedJDL) {
+    const { entities } = parsedJDL;
+    const appName = that.config.get('name');
     that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
+    // that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
+    // that.spawnCommandSync('npm', ['install', 'dotenv'], { cwd: 'client' });
+    // that.spawnCommandSync('npm', ['install', '-D', 'prettier', 'tailwindcss@3', 'postcss', 'autoprefixer'], { cwd: 'client' });
+    // that.spawnCommandSync('npm', ['install', '@headlessui/react'], { cwd: 'client' });
+    // that.spawnCommandSync('npx', ['tailwindcss', 'init', '-p'], { cwd: 'client' });
+    // that.fs.copyTpl(that.templatePath("react/.env"), that.destinationPath(`client/.env`));
+
+    that.fs.copyTpl(that.templatePath('react/.env'), that.destinationPath('client/.env'), {});
+    that.fs.copyTpl(that.templatePath('react/.gitignore'), that.destinationPath('client/.gitignore'), {});
+
+    that.fs.copyTpl(that.templatePath('react/eslint.config.js'), that.destinationPath('client/eslint.config.js'), {});
+    that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html.ejs'), { appName });
+    that.fs.copyTpl(that.templatePath('react/package.json'), that.destinationPath('client/package.json'), {});
+    that.fs.copyTpl(that.templatePath('react/package-lock.json'), that.destinationPath('client/package-lock.json'), {});
+    that.fs.copyTpl(that.templatePath('react/postcss.config.js'), that.destinationPath('client/postcss.config.js'), {});
+    that.fs.copyTpl(that.templatePath('react/tailwind.config.js'), that.destinationPath('client/tailwind.config.js'), {});
+    that.fs.copyTpl(that.templatePath('react/tsconfig.app.json'), that.destinationPath('client/tsconfig.app.json'), {});
+    that.fs.copyTpl(that.templatePath('react/tsconfig.json'), that.destinationPath('client/tsconfig.json'), {});
+    that.fs.copyTpl(that.templatePath('react/tsconfig.node.json'), that.destinationPath('client/tsconfig.node.json'), {});
+    that.fs.copyTpl(that.templatePath('react/vite.config.ts'), that.destinationPath('client/vite.config.ts'), {});
+
+    that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
+    that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
+    that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
+    that.fs.copyTpl(that.templatePath("react/src/App.tsx"), that.destinationPath(`client/src/App.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/Dropdown.tsx"), that.destinationPath(`client/src/Dropdown.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/index.css"), that.destinationPath(`client/src/index.css`), {});
+    that.fs.copyTpl(that.templatePath("react/src/keycloak.tsx"), that.destinationPath(`client/src/keycloak.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/Menu.tsx.ejs"), that.destinationPath(`client/src/Menu.tsx`), { appName, entities, to, pluralize });
+    that.fs.copyTpl(that.templatePath("react/src/vite-env.d.ts"), that.destinationPath(`client/src/vite-env.d.ts`), {});
+
+    that.fs.copyTpl(that.templatePath("react/src/assets/disegno.svg"), that.destinationPath(`client/src/assets/disegno.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/presto.svg"), that.destinationPath(`client/src/assets/presto.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
+
+    that.fs.copyTpl(that.templatePath("react/src/pages/Err401.tsx"), that.destinationPath(`client/src/pages/Err401.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/Err403.tsx"), that.destinationPath(`client/src/pages/Err403.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
+    that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx"), that.destinationPath(`client/src/pages/Login.tsx`), {});
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
-    that.spawnCommandSync('npm', ['install', '-D', 'prettier'], { cwd: 'client' });
-    that.spawnCommandSync('npm', ['install', '-D', 'tailwindcss@3', 'postcss', 'autoprefixer'], { cwd: 'client' });
-    that.spawnCommandSync('npm', ['install', '@headlessui/react'], { cwd: 'client' });
-    that.spawnCommandSync('npx', ['tailwindcss', 'init', '-p'], { cwd: 'client' });
-    that.fs.copyTpl(that.templatePath("react/postcss.config.js"), that.destinationPath(`client/postcss.config.js`));
-    that.fs.copyTpl(that.templatePath("react/tailwind.config.js"), that.destinationPath(`client/tailwind.config.js`));
-    that.fs.copyTpl(that.templatePath("react/tsconfig.json"), that.destinationPath(`client/tsconfig.json`));
-    that.fs.copyTpl(that.templatePath("react/tsconfig.app.json"), that.destinationPath(`client/tsconfig.app.json`));
-    that.fs.copyTpl(that.templatePath("react/tsconfig.node.json"), that.destinationPath(`client/tsconfig.node.json`));
-    that.fs.copyTpl(that.templatePath("react/vite.config.ts"), that.destinationPath(`client/vite.config.ts`));
 }
