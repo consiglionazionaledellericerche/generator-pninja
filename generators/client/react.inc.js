@@ -17,7 +17,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath('react/.gitignore'), that.destinationPath('client/.gitignore'), {});
 
     that.fs.copyTpl(that.templatePath('react/eslint.config.js'), that.destinationPath('client/eslint.config.js'), {});
-    that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html.ejs'), { appName });
+    that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
     that.fs.copyTpl(that.templatePath('react/package.json'), that.destinationPath('client/package.json'), {});
     that.fs.copyTpl(that.templatePath('react/package-lock.json'), that.destinationPath('client/package-lock.json'), {});
     that.fs.copyTpl(that.templatePath('react/postcss.config.js'), that.destinationPath('client/postcss.config.js'), {});
@@ -29,9 +29,13 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
     that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
+    that.fs.copyTpl(that.templatePath("react/public/locales/en/translation.json.ejs"), that.destinationPath(`client/public/locales/en/translation.json`), { appName });
+    that.fs.copyTpl(that.templatePath("react/public/locales/it/translation.json.ejs"), that.destinationPath(`client/public/locales/it/translation.json`), { appName });
+
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx"), that.destinationPath(`client/src/App.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/Dropdown.tsx"), that.destinationPath(`client/src/Dropdown.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/i18n.js"), that.destinationPath(`client/src/i18n.js`), {});
     that.fs.copyTpl(that.templatePath("react/src/index.css"), that.destinationPath(`client/src/index.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/keycloak.tsx"), that.destinationPath(`client/src/keycloak.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
