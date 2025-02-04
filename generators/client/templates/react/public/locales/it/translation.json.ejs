@@ -1,5 +1,15 @@
 {
   "appName": "<%= appName %>",
+    "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    <%- entities.map(entity => `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`).join(`,\n    `) %>
+  },
   "description": {
     "part1": "Per iniziare, modifica <1>src/App.js</1> e salva per ricaricare.",
     "part2": "cambia lingua con il pulsante ,,."

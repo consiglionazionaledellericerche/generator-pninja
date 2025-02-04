@@ -29,8 +29,8 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
     that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
-    that.fs.copyTpl(that.templatePath("react/public/locales/en/translation.json.ejs"), that.destinationPath(`client/public/locales/en/translation.json`), { appName });
-    that.fs.copyTpl(that.templatePath("react/public/locales/it/translation.json.ejs"), that.destinationPath(`client/public/locales/it/translation.json`), { appName });
+    that.fs.copyTpl(that.templatePath("react/public/locales/en/translation.json.ejs"), that.destinationPath(`client/public/locales/en/translation.json`), { appName, entities, to, pluralize });
+    that.fs.copyTpl(that.templatePath("react/public/locales/it/translation.json.ejs"), that.destinationPath(`client/public/locales/it/translation.json`), { appName, entities, to, pluralize });
 
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx"), that.destinationPath(`client/src/App.tsx`), {});
