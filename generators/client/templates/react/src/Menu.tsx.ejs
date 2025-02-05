@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LangSelect } from './LangSelect';
 import appLogo from './assets/logo.svg';
 export default function Menu() {
   const { t } = useTranslation();
@@ -30,6 +31,7 @@ export default function Menu() {
         {t('entities.<%- to.capital(pluralize(entity.name))%>')}
       </Link>      
       <% }); %>
+      <LangSelect />
     </nav>
   );
 }

@@ -38,6 +38,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/i18n.js"), that.destinationPath(`client/src/i18n.js`), {});
     that.fs.copyTpl(that.templatePath("react/src/index.css"), that.destinationPath(`client/src/index.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/keycloak.tsx"), that.destinationPath(`client/src/keycloak.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/LangSelect.tsx.ejs"), that.destinationPath(`client/src/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/Menu.tsx.ejs"), that.destinationPath(`client/src/Menu.tsx`), { appName, entities, to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/vite-env.d.ts"), that.destinationPath(`client/src/vite-env.d.ts`), {});
