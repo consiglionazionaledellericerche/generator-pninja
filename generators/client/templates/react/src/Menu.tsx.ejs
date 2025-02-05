@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import appLogo from './assets/logo.svg';
 export default function Menu() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const isActive = (path: string) => {
+    return location.pathname === path ? 'bg-gray-700' : 'bg-gray-900';
+  };
   return (
     <nav className="md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-gray-800 text-gray-300">
       <Link to="/" data-discover="true">
@@ -11,7 +15,7 @@ export default function Menu() {
       <span className="text-xl">{t('appName')}</span>
       <span className="grow"></span>
       <Link
-        className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white hover:ring-4"
+        className={`block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 ${isActive('/')}`}
         to="/"
         data-discover="true"
       >
@@ -19,7 +23,7 @@ export default function Menu() {
       </Link>
       <% entities.forEach((entity, index) => {%>
       <Link
-        className="block rounded-md px-3 py-2 text-sm font-medium bg-black text-white hover:ring-4"
+        className={`block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 ${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`}
         to="/entities/<%- to.slug(pluralize(entity.name)) %>"
         data-discover="true"
       >
