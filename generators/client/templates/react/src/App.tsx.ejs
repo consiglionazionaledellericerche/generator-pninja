@@ -14,7 +14,12 @@ import <%=entity.name%> from './pages/entities/<%=entity.name%>';
 function App() {
   const { keycloak, initialized } = useKeycloak();
   if (!initialized) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Menu />
+        <div className="m-4">Loading...</div>
+      </>
+    );
   }
 
   // if (!keycloak.authenticated) {
@@ -27,7 +32,7 @@ function App() {
     <>
       <Menu />
       <Routes>
-        <Route path="/" element={keycloak.authenticated ? <Home /> : <Login />} />
+        <Route path="/" element={<Home />} />
         <% for (const entity of entities) {%>
         <Route
           path="/entities/<%=to.slug(pluralize(entity.name))%>"
