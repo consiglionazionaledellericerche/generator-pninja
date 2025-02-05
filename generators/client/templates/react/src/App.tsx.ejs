@@ -4,8 +4,12 @@ import './App.css';
 import Menu from './Menu';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Err401 from './pages/Err401';
-import Err403 from './pages/Err403';
+import Err401 from './pages/errors/Err401';
+import Err403 from './pages/errors/Err403';
+import Err404 from './pages/errors/Err404';
+<% for (const entity of entities) {%>
+import <%=entity.name%> from './pages/entities/<%=entity.name%>';
+<%}%>
 // import keycloak from './keycloak';
 function App() {
   const { keycloak, initialized } = useKeycloak();
@@ -24,10 +28,17 @@ function App() {
       <Menu />
       <Routes>
         <Route path="/" element={keycloak.authenticated ? <Home /> : <Login />} />
+        <% for (const entity of entities) {%>
+        <Route
+          path="/entities/<%=to.slug(pluralize(entity.name))%>"
+          element={keycloak.authenticated ? <<%=entity.name%> /> : <Login />}
+        />
+        <%}%>
         <Route
           path="/admin"
           element={keycloak.authenticated ? isAdmin ? <Home /> : <Err403 /> : <Err401 />}
         />
+        <Route path="*" element={<Err404 />} />
       </Routes>
       {keycloak.authenticated && (
         <pre className="whitespace-pre bg-slate-800 text-lime-300 p-4 rounded-md m-4">

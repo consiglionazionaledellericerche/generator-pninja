@@ -19,7 +19,7 @@ export default function Menu() {
       <% entities.forEach((entity, index) => {%>
       <a
         className="block rounded-md px-3 py-2 text-sm font-medium bg-black text-white hover:ring-4"
-        href="/<%- to.slug(pluralize(entity.name)) %>"
+        href="/entities/<%- to.slug(pluralize(entity.name)) %>"
         data-discover="true"
       >
         {t('entities.<%- to.capital(pluralize(entity.name))%>')}
