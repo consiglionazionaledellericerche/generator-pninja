@@ -1,10 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LangSelect } from './LangSelect';
-import { LoginButton } from './components/LoginButton';
-import { LogoutButton } from './components/LogoutButton';
+import { LoginButton } from './LoginButton';
+import { LogoutButton } from './LogoutButton';
 import { useKeycloak } from '@react-keycloak/web';
-import appLogo from './assets/logo.svg';
+import appLogo from '../assets/logo.svg';
 export default function Menu() {
   const { keycloak, initialized } = useKeycloak();
   const { t } = useTranslation();
@@ -14,13 +14,13 @@ export default function Menu() {
   };
   return (
     <nav className="md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-gray-800 text-gray-300">
-      <Link to="/" data-discover="true">
+      <Link to="/" data-discover="true" className="rounded-md hover:ring-4 focus:outline-none focus-visible:ring-4">
         <img className="h-8 w-auto" src={appLogo} alt="" />
       </Link>
       <span className="text-xl">{t('appName')}</span>
       <span className="grow"></span>
       <Link
-        className={`block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 ${isActive('/')}`}
+        className={`block rounded-md px-3 py-2 text-sm font-medium text-white ${isActive('/')} hover:ring-4 focus:outline-none focus-visible:ring-4`}
         to="/"
         data-discover="true"
       >
@@ -28,7 +28,7 @@ export default function Menu() {
       </Link>
       <% entities.forEach((entity, index) => {%>
       <Link
-        className={`block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 ${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`}
+        className={`block rounded-md px-3 py-2 text-sm font-medium text-white ${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')} hover:ring-4 focus:outline-none focus-visible:ring-4`}
         to="/entities/<%- to.slug(pluralize(entity.name)) %>"
         data-discover="true"
       >
