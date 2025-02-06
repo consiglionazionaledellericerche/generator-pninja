@@ -55,6 +55,9 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
+    that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
+
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err401.tsx"), that.destinationPath(`client/src/pages/errors/Err401.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});

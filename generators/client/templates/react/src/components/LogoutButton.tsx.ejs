@@ -1,0 +1,20 @@
+import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
+import { LogOut } from 'lucide-react';
+export function LogoutButton() {
+  const { keycloak } = useKeycloak();
+  const { t } = useTranslation();
+  return (
+    <button
+      onClick={() => {
+        keycloak.logout({
+          redirectUri: window.location.origin,
+        });
+      }}
+      className={`inline-flex items-center gap-1 block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 bg-gray-900`}
+    >
+      <LogOut size={16} />
+      {t('account.logout')}
+    </button>
+  );
+}

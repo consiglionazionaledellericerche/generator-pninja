@@ -1,0 +1,16 @@
+import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
+import { LogIn } from 'lucide-react';
+export function LoginButton() {
+  const { keycloak } = useKeycloak();
+  const { t } = useTranslation();
+  return (
+    <button
+      onClick={() => keycloak.login()}
+      className={`inline-flex items-center gap-1 block rounded-md px-3 py-2 text-sm font-medium text-white hover:ring-4 bg-gray-900`}
+    >
+      <LogIn size={16} />
+      {t('account.login')}
+    </button>
+  );
+}

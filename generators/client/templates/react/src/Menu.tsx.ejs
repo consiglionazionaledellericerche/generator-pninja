@@ -1,8 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LangSelect } from './LangSelect';
+import { LoginButton } from './components/LoginButton';
+import { LogoutButton } from './components/LogoutButton';
+import { useKeycloak } from '@react-keycloak/web';
 import appLogo from './assets/logo.svg';
 export default function Menu() {
+  const { keycloak, initialized } = useKeycloak();
   const { t } = useTranslation();
   const location = useLocation();
   const isActive = (path: string) => {
@@ -32,6 +36,8 @@ export default function Menu() {
       </Link>      
       <% }); %>
       <LangSelect />
+      {!keycloak.authenticated && <LoginButton />}
+      {keycloak.authenticated && <LogoutButton />}
     </nav>
   );
 }
