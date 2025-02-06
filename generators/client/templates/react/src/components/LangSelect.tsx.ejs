@@ -2,7 +2,9 @@ import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/r
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Languages, ChevronDown } from 'lucide-react';
-<% const languages = ['it', 'en']; %>
+
+const languages = ['en', 'de', 'fr', 'it'];
+
 export function LangSelect() {
   const { i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
@@ -27,17 +29,17 @@ export function LangSelect() {
         >
           <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-black shadow-lg ring-1 ring-black/5 focus:outline-none">
             <div className="px-1 py-1">
-            <%for (const language of languages) {%>
-              <MenuItem>
-                <button
-                  className="group flex w-full items-center rounded-md px-2 py-2 text-sm hover:ring-4"
-                  type="button"
-                  onClick={() => changeLanguage('<%=language%>')}
-                >
-                  <%=to.upper(language)%>
-                </button>
-              </MenuItem>
-            <%}%>
+              {languages.map((language) => (
+                <MenuItem>
+                  <button
+                    className="group flex w-full items-center rounded-md px-2 py-2 text-sm hover:ring-4 data-[focus]:ring-4"
+                    type="button"
+                    onClick={() => changeLanguage(language)}
+                  >
+                    {language.toUpperCase()}
+                  </button>
+                </MenuItem>
+              ))}
             </div>
           </MenuItems>
         </Transition>
