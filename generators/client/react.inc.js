@@ -65,7 +65,9 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
-    that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx"), that.destinationPath(`client/src/pages/Login.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`), {});
+
+    that.fs.copyTpl(that.templatePath("react/src/shared/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/shared/userAutenticatedHelper.tsx`), {});
 
     for (const entity of entities) {
         that.fs.copyTpl(that.templatePath("react/src/pages/entities/Entity.tsx.ejs"), that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`), { entity, to, pluralize });

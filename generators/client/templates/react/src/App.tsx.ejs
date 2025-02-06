@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
-import { useKeycloak } from '@react-keycloak/web';
 import './App.css';
+import { useUserAutenticatedHelper } from './shared/userAutenticatedHelper';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -10,10 +10,10 @@ import Err404 from './pages/errors/Err404';
 <% for (const entity of entities) {%>
 import <%=entity.name%> from './pages/entities/<%=entity.name%>';
 <%}%>
-// import keycloak from './keycloak';
 function App() {
-  const { keycloak, initialized } = useKeycloak();
-  if (!initialized) {
+  const { isAdmin, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
+
+  if (!isInitialized()) {
     return (
       <>
         <Menu />
@@ -22,38 +22,33 @@ function App() {
     );
   }
 
-  // if (!keycloak.authenticated) {
-  //   keycloak.login();
-  //   return <div>Redirecting to login...</div>;
-  // }
-
-  const isAdmin = keycloak.hasResourceRole('axdmin');
   return (
     <>
       <Menu />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <% for (const entity of entities) {%>
         <Route
           path="/entities/<%=to.slug(pluralize(entity.name))%>"
-          element={keycloak.authenticated ? <<%=entity.name%> /> : <Login />}
+          element={isAutenticated() ? <<%=entity.name%> /> : <Login />}
         />
         <%}%>
         <Route
           path="/admin"
-          element={keycloak.authenticated ? isAdmin ? <Home /> : <Err403 /> : <Err401 />}
+          element={isAutenticated() ? isAdmin() ? <div className="m-4">ADMIN</div> : <Err403 /> : <Err401 />}
         />
         <Route path="*" element={<Err404 />} />
       </Routes>
-      {keycloak.authenticated && (
+      {isAutenticated() && (
         <pre className="whitespace-pre bg-slate-800 text-lime-300 p-4 rounded-md m-4">
-          email = {keycloak.tokenParsed?.email}
+          email = {getTokenParsed()?.email}
           <br />
-          login = {keycloak.tokenParsed?.preferred_username}
+          login = {getTokenParsed()?.preferred_username}
           <br />
-          name = {keycloak.tokenParsed?.name}
+          name = {getTokenParsed()?.name}
           <br />
-          isAdmin = {isAdmin ? 'T' : 'F'}
+          isAdmin = {isAdmin() ? 'T' : 'F'}
         </pre>
       )}
     </>

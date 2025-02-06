@@ -1,0 +1,13 @@
+import { useKeycloak } from '@react-keycloak/web';
+
+export function useUserAutenticatedHelper() {
+  const { keycloak, initialized } = useKeycloak();
+  const getTokenParsed = () => keycloak.tokenParsed;
+  const hasRole = (role: string) => keycloak.hasResourceRole(role);
+  const isAutenticated = () => keycloak.authenticated;
+  const isInitialized = () => initialized;
+  const isAdmin = () => keycloak.hasResourceRole('admin');
+  const login = (args?: object) => keycloak.login(args);
+  const logout = (args?: object) => keycloak.logout(args);
+  return { getTokenParsed, hasRole, isAdmin, isAutenticated, isInitialized, login, logout };
+}

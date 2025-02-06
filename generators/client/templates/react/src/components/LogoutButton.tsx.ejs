@@ -1,16 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { useKeycloak } from '@react-keycloak/web';
+import { useUserAutenticatedHelper } from '../shared/userAutenticatedHelper';
 import { LogOut } from 'lucide-react';
 export function LogoutButton() {
-  const { keycloak } = useKeycloak();
+  const { logout } = useUserAutenticatedHelper();
   const { t } = useTranslation();
   return (
     <button
-      onClick={() => {
-        keycloak.logout({
+      onClick={() => logout({
           redirectUri: window.location.origin,
-        });
-      }}
+        })}
       className={`inline-flex items-center gap-1 block rounded-md px-3 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4`}
     >
       <LogOut size={16} />

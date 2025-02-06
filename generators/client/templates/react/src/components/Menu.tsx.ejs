@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { LangSelect } from './LangSelect';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
-import { useKeycloak } from '@react-keycloak/web';
+import { useUserAutenticatedHelper } from '../shared/userAutenticatedHelper';
 import appLogo from '../assets/logo.svg';
 export default function Menu() {
-  const { keycloak, initialized } = useKeycloak();
+  const { isAutenticated } = useUserAutenticatedHelper();
   const { t } = useTranslation();
   const location = useLocation();
   const isActive = (path: string) => {
@@ -36,8 +36,8 @@ export default function Menu() {
       </Link>      
       <% }); %>
       <LangSelect />
-      {!keycloak.authenticated && <LoginButton />}
-      {keycloak.authenticated && <LogoutButton />}
+      {!isAutenticated() && <LoginButton />}
+      {isAutenticated() && <LogoutButton />}
     </nav>
   );
 }
