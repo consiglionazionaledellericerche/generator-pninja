@@ -44,12 +44,12 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/vite-env.d.ts"), that.destinationPath(`client/src/vite-env.d.ts`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/assets/disegno.svg"), that.destinationPath(`client/src/assets/disegno.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/pninja-logo.svg"), that.destinationPath(`client/src/assets/pninja-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/presto.svg"), that.destinationPath(`client/src/assets/presto.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));

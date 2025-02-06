@@ -39,13 +39,13 @@ function App() {
         <Route path="*" element={<Err404 />} />
       </Routes>
       {isAutenticated() && (
-        <pre className="whitespace-pre bg-slate-800 text-lime-300 p-4 rounded-md m-4">
+        <pre className="whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md m-4">
           email = {getTokenParsed()?.email}
-          <br />
+          {'\n'}
           login = {getTokenParsed()?.preferred_username}
-          <br />
+          {'\n'}
           name = {getTokenParsed()?.name}
-          <br />
+          {'\n'}
           hasRole 'admin' = {hasRole('admin') ? 'T' : 'F'}
         </pre>
       )}

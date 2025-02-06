@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import prestoLogo from '../assets/disegno.svg';
+import pninjaLogo from '../assets/pninja-logo.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
 import <%= dbms %>Logo from '../assets/<%= dbms %>-logo.svg';
 import reactLogo from '../assets/react.svg';
@@ -9,15 +9,15 @@ export default function Home() {
   const { t } = useTranslation();
   return (
     <div className="flex space-x-2 items-center text-3xl justify-center p-8">
-      <img className="h-16" src={laravelLogo} alt="Laravel" title="Laravel" />
+      <img className="h-24" src={laravelLogo} alt="Laravel" title="Laravel" />
       <span>+</span>
-      <img className="h-16" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
+      <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
       <span>+</span>
-      <img className="h-16" src={reactLogo} alt="React" title="React" />
+      <img className="h-24" src={reactLogo} alt="React" title="React" />
       <span>+</span>
-      <img className="h-16" src={viteLogo} alt="Vite" title="Vite" />
+      <img className="h-24" src={viteLogo} alt="Vite" title="Vite" />
       <span>=</span>
-      <img className="h-16" src={prestoLogo} alt="Presto" title="Presto" />
+      <img className="h-24" src={pninjaLogo} alt="PNinja" title="PNinja" />
     </div>
   );
 }
