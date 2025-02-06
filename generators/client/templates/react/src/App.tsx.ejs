@@ -11,7 +11,7 @@ import Err404 from './pages/errors/Err404';
 import <%=entity.name%> from './pages/entities/<%=entity.name%>';
 <%}%>
 function App() {
-  const { isAdmin, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
+  const { hasRole, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
 
   if (!isInitialized()) {
     return (
@@ -28,15 +28,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <% for (const entity of entities) {%>
-        <Route
+        <% for (const entity of entities) {%><Route
           path="/entities/<%=to.slug(pluralize(entity.name))%>"
           element={isAutenticated() ? <<%=entity.name%> /> : <Login />}
         />
-        <%}%>
-        <Route
+        <%}%><Route
           path="/admin"
-          element={isAutenticated() ? isAdmin() ? <div className="m-4">ADMIN</div> : <Err403 /> : <Err401 />}
+          element={isAutenticated() ? hasRole('admin') ? <div className="m-4">ADMIN</div> : <Err403 /> : <Err401 />}
         />
         <Route path="*" element={<Err404 />} />
       </Routes>
@@ -48,7 +46,7 @@ function App() {
           <br />
           name = {getTokenParsed()?.name}
           <br />
-          isAdmin = {isAdmin() ? 'T' : 'F'}
+          hasRole 'admin' = {hasRole('admin') ? 'T' : 'F'}
         </pre>
       )}
     </>

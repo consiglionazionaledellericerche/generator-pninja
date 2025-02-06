@@ -15,9 +15,18 @@
     <%- entities.map(entity => `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`).join(`,\n    `) %>
   },
   "errors": {
-    "401": "Fehler 401",
-    "403": "Fehler 403",
-    "404": "Fehler 404: Seite nicht gefunden"
+    "401": {
+      "title": "Fehler 401 – Unbefugter Zugriff",
+      "message": "Sie müssen sich anmelden, um diese Seite zu sehen. Überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut."
+    },
+    "403": {
+      "title": "Hoppla! Fehler 403 – Tut mir leid, {{username}}",
+      "message": "Hey <1>{{username}}</1>, wir erkennen dich, aber du hast nicht die nötigen Rechte, um auf diese Seite zuzugreifen. Falls das ein Irrtum ist, melde dich bei uns!"
+    },
+    "404": {
+      "title": "Hoppla! Fehler 404 – Seite nicht gefunden",
+      "message": "Sieht so aus, als ob die Seite, nach der du suchst, nicht mehr existiert. Sie wurde vielleicht verschoben oder gelöscht. Überprüfe die URL oder gehe zurück zur Startseite!"
+    }
   },
   "pages": {
     "Home": "Startseite"

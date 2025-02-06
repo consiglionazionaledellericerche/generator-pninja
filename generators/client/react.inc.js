@@ -61,11 +61,12 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err401.tsx"), that.destinationPath(`client/src/pages/errors/Err401.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
     that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`), {});
+
+    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err401.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err401.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/shared/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/shared/userAutenticatedHelper.tsx`), {});
 

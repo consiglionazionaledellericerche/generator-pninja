@@ -15,9 +15,18 @@
     <%- entities.map(entity => `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`).join(`,\n    `) %>
   },
   "errors": {
-    "401": "Error 401",
-    "403": "Error 403",
-    "404": "Error 404: Page not found"
+    "401": {
+      "title": "Error 401 – Unauthorized",
+      "message": "You need to log in to access this page. Please check your credentials and try again."
+    },
+    "403": {
+      "title": "Oops! Error 403 – Sorry, {{username}}",
+      "message": "Hey <1>{{username}}</1>, we recognize you, but you don’t have the right permissions to access this page. If you think this is a mistake, reach out to us!"
+    },
+    "404": {
+      "title": "Oops! Error 404 – Page Not Found",
+      "message": "Looks like the page you're looking for doesn’t exist anymore. It might have been moved or deleted. Check the URL or head back to the homepage!"
+    }
   },
   "pages": {
     "Home": "Dashboard"

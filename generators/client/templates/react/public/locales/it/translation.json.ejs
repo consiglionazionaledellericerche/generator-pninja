@@ -15,9 +15,18 @@
     <%- entities.map(entity => `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`).join(`,\n    `) %>
   },
   "errors": {
-    "401": "Errore 401",
-    "403": "Errore 403",
-    "404": "Errore 404: Pagina non trovata"
+    "401": {
+      "title": "Errore 401 – Accesso non autorizzato",
+      "message": "Devi accedere per visualizzare questa pagina. Controlla le tue credenziali e riprova."
+    },
+    "403": {
+      "title": "Ops! Errore 403 – Mi dispiace, {{username}}",
+      "message": "Ciao <1>{{username}}</1>, ti abbiamo riconosciuto, ma non hai i permessi necessari per accedere a questa pagina. Se c’è un errore, contattaci!"
+    },
+    "404": {
+      "title": "Ops! Errore 404 – Pagina non trovata",
+      "message": "Sembra che la pagina che stai cercando non esista più. Potrebbe essere stata spostata o eliminata. Controlla l'URL o torna alla homepage!"
+    }
   },
   "pages": {
     "Home": "Home"

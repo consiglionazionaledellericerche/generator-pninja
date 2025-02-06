@@ -1,0 +1,18 @@
+import { useTranslation, Trans } from 'react-i18next';
+import { useUserAutenticatedHelper } from '../../shared/userAutenticatedHelper';
+export default function Err403() {
+  const { t } = useTranslation();
+  const { getUsername } = useUserAutenticatedHelper();
+  return (
+    <div className="m-4">
+      <h1 className="text-2xl mb-4">{t('errors.403.title', { username: getUsername() })}</h1>
+      <p>
+        <Trans
+          i18nKey="errors.403.message"
+          values={{ username: getUsername() }}
+          components={{ 1: <strong /> }}
+        />
+      </p>
+    </div>
+  );
+}
