@@ -1,0 +1,60 @@
+// Interface for Entity <%= entity.name %><%
+const convertFieldType = ({type}, enums) => {
+    const typeMap = {
+        'String': 'string',
+        'Integer': 'number',
+        'Long': 'number',
+        'BigDecimal': 'number',
+        'Float': 'number',
+        'Double': 'number',
+        'Boolean': 'Boolean',
+        'LocalDate': 'dayjs.Dayjs',
+        'ZonedDateTime': 'dayjs.Dayjs',
+        'Instant': 'dayjs.Dayjs',
+        'TextBlob': 'string',
+        'Blob': 'Blob',
+        'ImageBlob': 'ImageBlob'
+    };
+
+    const enm = enums.reduce((res, e) => {
+        if (e.name === type) {
+            return 'keyof typeof ' + type;
+        }
+        return res;
+    }, undefined);
+
+    return typeMap[type] || enm || 'string';
+}
+const isRequired = (prop) => {
+    for (validation of prop.validations) {
+        if (validation.key === "required") return true;
+    }
+    return false;
+}
+%>
+<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>import dayjs from 'dayjs';<%}%>
+<% for (prop of entity.body) {
+    if ((enums.map(e => e.name)).includes(prop.type)) {%>import { <%= prop.type %> } from './enumerations/<%= to.slug(prop.type); %>.model';<%}
+}%>
+<% relationships.filter(relation => (
+    (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
+    && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+)).map(relation => relation.to.name).forEach(e => {%>
+import { I<%=e%> } from './<%= to.slug(e) %>.model';
+<%});%>
+export interface I<%= entity.name %> {
+    id?: number;<% for (prop of entity.body) {%>
+    <%= prop.name %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null' : '' %>;<%}%><% if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {%>
+    <%= prop.name %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;<%}%>
+    <%
+    relationships.filter(relation => (
+        (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
+        && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+    )).forEach(relation => {
+        const fromField = to.snake(relation.from.injectedField || relation.to.name);
+        const toEntity = relation.to.name;
+    %><%= fromField %>?: I<%= toEntity %><%= relation.cardinality !== 'OneToOne' ? '[]' : '' %><%= !relation.from.required ? ' | null' : '' %>;
+    <%});%>
+}
+
+export const defaultValue: Readonly<I<%= entity.name %>> = {};

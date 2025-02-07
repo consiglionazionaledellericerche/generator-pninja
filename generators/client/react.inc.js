@@ -1,9 +1,11 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import jclrz from 'json-colorz';
+import prettier from 'prettier';
+import ejs from 'ejs';
 
 export async function createReactClient(that, parsedJDL) {
-    const { entities } = parsedJDL;
+    const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
     that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
     // that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
@@ -69,6 +71,14 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/shared/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/shared/userAutenticatedHelper.tsx`), {});
+
+    for (const entity of entities) {
+        that.fs.copyTpl(that.templatePath("react/src/shared/model/entity.model.ts.ejs"), that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`), { entity, enums, relationships, to });
+    }
+
+    for (const enumeration of enums) {
+        that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
+    }
 
     for (const entity of entities) {
         that.fs.copyTpl(that.templatePath("react/src/pages/entities/Entity.tsx.ejs"), that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`), { entity, to, pluralize });
