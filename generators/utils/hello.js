@@ -30,30 +30,5 @@ export function hello(log) {
   ----------------  
     ------------    
 `));
-  // log(` ${colors.gray(`//`)}${colors.whiteBright(`pninja.tech`)}`)
-  //     log(colors.blue(`
-  //   ┏━┳━┳┳┓       
-  //   ┃┃┃┃┃┣╋━┳┳┳━┓ 
-  //   ┃┏┫┃┃┃┃┃┃┣┫┃┗┓
-  //   ┗┛┗┻━┻┻┻┳┛┣━━┛
-  //           ┗━┛   
-  //       `));
-  // log(colors.redBright(`█▀█ █▄ █ █ █▄ █   █ ▄▀█`));
-  // log(colors.redBright(`█▀▀ █ ▀█ █ █ ▀█ █▄█ █▀█`));
-  // log(``);
-  // log(colors.redBright(`██████╗ ███╗   ██╗██╗███╗   ██╗     ██╗ █████╗ `));
-  // log(colors.redBright(`██╔══██╗████╗  ██║██║████╗  ██║     ██║██╔══██╗`));
-  // log(colors.redBright(`██████╔╝██╔██╗ ██║██║██╔██╗ ██║     ██║███████║`));
-  // log(colors.redBright(`██╔═══╝ ██║╚██╗██║██║██║╚██╗██║██   ██║██╔══██║`));
-  // log(colors.redBright(`██║     ██║ ╚████║██║██║ ╚████║╚█████╔╝██║  ██║`));
-  // log(colors.redBright(`╚═╝     ╚═╝  ╚═══╝╚═╝╚═╝  ╚═══╝ ╚════╝ ╚═╝  ╚═╝`));
-  // log(colors.magenta('████████████ ████████████ ████             ████████ ████████████ ████████████'));
-  // log(colors.magenta('████████████ ████████████ ████             ████████ ████████████ ████████████'));
-  // log(colors.magenta('████    ████ ████         ████████         ████         ████     ████    ████'));
-  // log(colors.magenta('████    ████ ████         ████████         ████         ████     ████    ████'));
-  // log(colors.magenta('    ████████ ████             ████████ ████████         ████     ████████████'));
-  // log(colors.magenta('    ████████ ████             ████████ ████████         ████     ████████████'));
-  // log(colors.magenta('████                                                                         '));
-  // log(colors.magenta('████                                                                         '));
   log(`\n${colors.bold.whiteBright(`PNinja`)} ${colors.yellow(`v.0.2.0`)} | Yeoman generator for ${colors.whiteBright(`PHP`)}, ${colors.whiteBright(`SQL`)}, ${colors.whiteBright(`JavaScript`)} modern web applications`);
 }
