@@ -12,7 +12,7 @@ import { FactoriesGenerator } from './utils/factories-generator.js';
 
 const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
-  static namespace = 'presto:entities';  // Aggiungi questa riga
+  static namespace = 'presto:entities';
   constructor(args, opts) {
     super(args, opts);
     this.option('fromMain', {
