@@ -1,8 +1,9 @@
 import Generator from 'yeoman-generator';
+import jhipsterCore from 'jhipster-core';
 import colors from 'ansi-colors';
 import { createVueClient } from './vue.inc.js';
 import { createReactClient } from './react.inc.js';
-import jhipsterCore from 'jhipster-core';
+import { hello } from '../utils/hello.js';
 const { parseFromFiles } = jhipsterCore;
 
 const tab = '    ';
@@ -15,6 +16,7 @@ export default class AuthGenerator extends Generator {
             type: Boolean,
             default: false
         });
+        if (!this.options.fromMain) hello(this.log);
     }
     async prompting() {
         let prompts = [];
