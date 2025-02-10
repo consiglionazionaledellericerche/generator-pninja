@@ -1,4 +1,4 @@
-// Interface for Entity <%= entity.name %><%
+<%
 const convertFieldType = ({type}, enums) => {
     const typeMap = {
         'String': 'string',
@@ -31,30 +31,30 @@ const isRequired = (prop) => {
     }
     return false;
 }
-%>
-<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>import dayjs from 'dayjs';<%}%>
+-%>
+<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>import dayjs from 'dayjs';
+<%}-%>
+<%relatedEntities
+    .map(r => r.related)
+    .filter(r => r !== entity.name)
+    .reduce((acc, current) => acc.includes(current) ? acc : [...acc, current], [])
+    .forEach(e => {%>import { I<%=e%> } from './<%= to.slug(e) %>.model';
+<%});-%>
 <% for (prop of entity.body) {
-    if ((enums.map(e => e.name)).includes(prop.type)) {%>import { <%= prop.type %> } from './enumerations/<%= to.slug(prop.type); %>.model';<%}
-}%>
-<% relationships.filter(relation => (
-    (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
-    && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
-)).map(relation => relation.to.name).forEach(e => {%>
-import { I<%=e%> } from './<%= to.slug(e) %>.model';
-<%});%>
+    if ((enums.map(e => e.name)).includes(prop.type)) {%>import { <%= prop.type %> } from './enumerations/<%= to.slug(prop.type); %>.model';
+<%}}-%>
+
 export interface I<%= entity.name %> {
-    id?: number;<% for (prop of entity.body) {%>
-    <%= prop.name %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null' : '' %>;<%}%><% if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {%>
-    <%= prop.name %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;<%}%>
-    <%
-    relationships.filter(relation => (
-        (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
-        && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
-    )).forEach(relation => {
-        const fromField = to.snake(relation.from.injectedField || relation.to.name);
-        const toEntity = relation.to.name;
-    %><%= fromField %>?: I<%= toEntity %><%= relation.cardinality !== 'OneToOne' ? '[]' : '' %><%= !relation.from.required ? ' | null' : '' %>;
-    <%});%>
+    id?: number;<% -%>
+    <%_ for (prop of entity.body) {%>
+    <%= to.snake(prop.name) %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'-%>
+    <%_ if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {%>
+    <%= to.snake(prop.name) %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;<%}-%>
+    <%_}-%>
+    <%_ foreignIds.forEach(({foreignId, nullable}) => {%>
+    <%= foreignId %>?: number<%= nullable ? ' | null' : '' %>;<%})-%>
+    <%_ relatedEntities.forEach(({field, related, isArray}) => {%>
+    <%= field %>?: I<%= related %><%= isArray ? '[]' : '' %> | null;<%})%>
 }
 
 export const defaultValue: Readonly<I<%= entity.name %>> = {};

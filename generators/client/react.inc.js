@@ -3,10 +3,13 @@ import pluralize from 'pluralize';
 import jclrz from 'json-colorz';
 import prettier from 'prettier';
 import ejs from 'ejs';
+import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
+import { getModelForeignIds } from './utils/getModelForeignIds.js';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
+
     that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
     // that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
     // that.spawnCommandSync('npm', ['install', 'dotenv'], { cwd: 'client' });
@@ -73,7 +76,17 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/shared/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/shared/userAutenticatedHelper.tsx`), {});
 
     for (const entity of entities) {
-        that.fs.copyTpl(that.templatePath("react/src/shared/model/entity.model.ts.ejs"), that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`), { entity, enums, relationships, to });
+        that.fs.copyTpl(
+            that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
+            that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
+            {
+                entity,
+                enums,
+                relationships,
+                to,
+                foreignIds: getModelForeignIds(entity, relationships),
+                relatedEntities: getModelRelatedEntities(entity, relationships)
+            });
     }
 
     for (const enumeration of enums) {
