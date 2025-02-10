@@ -1,5 +1,30 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-export default function Err401() {
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+
+export default function <%= entity.name %>() {
   const { t } = useTranslation();
-  return <div className="m-4">{t('entities.<%- to.capital(pluralize(entity.name))%>')}</div>;
+  const authenticatedFetch = useAuthenticatedFetch();
+  const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState([]);
+
+  const handleSearch = () => {
+    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
+      .then((response) => response.json())
+      .then((data) => {
+        <%=to.camel(pluralize(`set${entity.name}`))%>(data);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        // alert('ERR');
+      });
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, []);
+
+  return <div className="m-4">
+    {t('entities.<%- to.capital(pluralize(entity.name))%>')}
+    <pre><%=to.camel(pluralize(entity.name))%>: {JSON.stringify(<%=to.camel(pluralize(entity.name))%>, null, 2)}</pre>
+  </div>;
 }

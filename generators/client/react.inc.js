@@ -73,7 +73,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/shared/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/shared/userAutenticatedHelper.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthenticatedFetch.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthenticatedFetch.ts`), {});
+    that.fs.copyTpl(that.templatePath("react/src/hooks/userAutenticatedHelper.tsx.ejs"), that.destinationPath(`client/src/hooks/userAutenticatedHelper.tsx`), {});
 
     for (const entity of entities) {
         that.fs.copyTpl(

@@ -1,0 +1,47 @@
+import { useCallback } from 'react';
+import { useKeycloak } from '@react-keycloak/web';
+
+export const useAuthenticatedFetch = () => {
+    const { keycloak } = useKeycloak();
+
+    const authenticatedFetch = useCallback(async (url, options = {}) => {
+        try {
+            // Aggiorna il token se necessario
+            try {
+                await keycloak.updateToken(30);
+            } catch (error) {
+                // Se il refresh fallisce, redirect al login
+                keycloak.login();
+                throw new Error('Session expired');
+            }
+
+            // Merge degli headers personalizzati con l'Authorization
+            const headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${keycloak.token}`,
+                'Content-Type': 'application/json',
+            };
+
+            const response = await fetch(url, {
+                ...options,
+                headers,
+            });
+
+            if (!response.ok) {
+                // Gestione errori HTTP
+                if (response.status === 401) {
+                    keycloak.login();
+                    throw new Error('Unauthorized');
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return response;
+        } catch (error) {
+            console.error('Fetch error:', error);
+            throw error;
+        }
+    }, [keycloak]);
+
+    return authenticatedFetch;
+};
