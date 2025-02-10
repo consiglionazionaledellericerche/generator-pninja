@@ -1,5 +1,5 @@
 import { useTranslation, Trans } from 'react-i18next';
-import { useUserAutenticatedHelper } from '../../shared/userAutenticatedHelper';
+import { useUserAutenticatedHelper } from '../../hooks/userAutenticatedHelper';
 export default function Err403() {
   const { t } = useTranslation();
   const { getUsername } = useUserAutenticatedHelper();

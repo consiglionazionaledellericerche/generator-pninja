@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { LangSelect } from './LangSelect';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
-import { useUserAutenticatedHelper } from '../shared/userAutenticatedHelper';
+import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
 import appLogo from '../assets/logo.svg';
 export default function Menu() {
   const { isAutenticated } = useUserAutenticatedHelper();
