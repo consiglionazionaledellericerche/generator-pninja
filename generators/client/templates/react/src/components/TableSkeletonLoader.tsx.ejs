@@ -1,0 +1,49 @@
+function createTd(key: number) {
+  return (
+    <td key={key} className="px-6 py-4">
+      <div className="col-span-2 h-2 rounded bg-gray-200"></div>
+    </td>
+  );
+}
+
+function createTh(key: number) {
+  return (
+    <th key={key} scope="col" className="px-6 py-3">
+      <div className="col-span-2 h-2 rounded bg-gray-400"></div>
+    </th>
+  );
+}
+
+function createRow(cols = 5, key: number) {
+  return (
+    <tr key={key} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+      {Array(cols).fill('').map((_, i) => createTd(i))}
+    </tr>
+  );
+}
+
+interface TableSkeletonLoaderProps {
+  loading?: boolean;
+  rows?: number;
+  cols?: number;
+}
+
+export function TableSkeletonLoader({ loading = false, rows = 5, cols = 5 }: TableSkeletonLoaderProps) {
+  if (!loading) return null;
+  
+  return (
+    <div role="status" className="animate-pulse">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            {Array(cols).fill('').map((_, i) => createTh(i))}
+          </tr>
+        </thead>
+        <tbody>
+          {Array(rows).fill('').map((_, i) => createRow(cols, i))}
+        </tbody>
+      </table>
+      <p className="sr-only">Loading...</p>
+    </div>
+  );
+}

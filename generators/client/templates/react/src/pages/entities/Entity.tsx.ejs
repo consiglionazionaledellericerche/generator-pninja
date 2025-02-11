@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 
 export default function <%= entity.name %>() {
   const { t } = useTranslation();
   const authenticatedFetch = useAuthenticatedFetch();
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = () => {
+    setLoading(true);
     authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
       .then((response) => response.json())
       .then((data) => {
         <%=to.camel(pluralize(`set${entity.name}`))%>(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('ERR:', error);
+        setLoading(false);
         // alert('ERR');
       });
   };
@@ -24,7 +29,8 @@ export default function <%= entity.name %>() {
   }, []);
 
   return <div className="m-4">
-    {t('entities.<%- to.capital(pluralize(entity.name))%>')}
-    <pre><%=to.camel(pluralize(entity.name))%>: {JSON.stringify(<%=to.camel(pluralize(entity.name))%>, null, 2)}</pre>
+    <h1 className="text-2xl mb-4">{t('entities.<%- to.capital(pluralize(entity.name))%>')}</h1>
+    <TableSkeletonLoader loading={loading} rows={7} cols={5} />
+    {<%=to.camel(pluralize(entity.name))%> && <%=to.camel(pluralize(entity.name))%>.length > 0 && <pre><%=to.camel(pluralize(entity.name))%>: {JSON.stringify(<%=to.camel(pluralize(entity.name))%>, null, 2)}</pre>}
   </div>;
 }
