@@ -4,6 +4,7 @@ import jclrz from 'json-colorz';
 import ejs from 'ejs';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
+import { getEntityFillableProperties } from './utils/getEntityFillableProperties.js';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
@@ -98,7 +99,15 @@ export async function createReactClient(that, parsedJDL) {
     }
 
     for (const entity of entities) {
-        that.fs.copyTpl(that.templatePath("react/src/pages/entities/Entity.tsx.ejs"), that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`), { entity, to, pluralize });
+        that.fs.copyTpl(
+            that.templatePath("react/src/pages/entities/Entity.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`),
+            {
+                entity,
+                to,
+                pluralize,
+                fillableProperties: getEntityFillableProperties(entity, relationships),
+            });
     }
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
 }
