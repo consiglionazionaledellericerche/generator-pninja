@@ -2,18 +2,19 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
+import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 
 export default function <%= entity.name %>() {
   const { t } = useTranslation();
   const authenticatedFetch = useAuthenticatedFetch();
-  const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState([]);
+  const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSearch = () => {
     setLoading(true);
     authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
       .then((response) => response.json())
-      .then((data) => {
+      .then((data: I<%= entity.name %>[]) => {
         <%=to.camel(pluralize(`set${entity.name}`))%>(data);
         setLoading(false);
       })
