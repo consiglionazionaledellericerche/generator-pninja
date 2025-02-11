@@ -1,0 +1,17 @@
+import { useState } from 'react';
+import { Moon, Sun } from 'lucide-react';
+export function DarkModeToggle() {
+  const [dark, setDark] = useState(!!JSON.parse(localStorage.getItem('dark-mode') || ''));
+  const darkModeHandler = () => {
+    localStorage.setItem('dark-mode', JSON.stringify(!dark));
+    setDark(!dark);
+    document.documentElement.classList.toggle("dark");
+  }
+  return (
+    <button
+      className={`inline-flex items-center gap-1 block rounded-md px-3 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4`}
+      onClick={()=> darkModeHandler()}>
+      { dark ? <Sun /> : <Moon /> }
+    </button>
+  );
+}

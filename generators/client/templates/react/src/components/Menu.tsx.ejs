@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { DarkModeToggle } from './DarkModeToggle';
 import { LangSelect } from './LangSelect';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
@@ -36,6 +37,7 @@ export default function Menu() {
       </Link>      
       <% }); %>
       <LangSelect />
+      <DarkModeToggle />
       {!isAutenticated() && <LoginButton />}
       {isAutenticated() && <LogoutButton />}
     </nav>
