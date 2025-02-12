@@ -13,6 +13,7 @@
   },
   "entities": {
     <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${to.capital(entity.name)}": "${to.capital(entity.name)}"`,
       `\n      "${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`,
       `"id": "ID"`,
       ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),

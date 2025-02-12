@@ -39,6 +39,7 @@ export default function <%= entity.name %>View() {
 
   return (
     <div className="m-4">
+      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID {id}</h1>
       <SimpleLoader loading={loading} />
       {!loading && <JsonPrint data={<%=to.camel(entity.name)%>} />}
     </div>
