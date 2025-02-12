@@ -15,7 +15,7 @@ export default function Menu() {
   };
   return (
     <nav className="md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-gray-800 text-gray-300">
-      <Link to="/" data-discover="true" className="rounded-md hover:ring-4 focus:outline-none focus-visible:ring-4">
+      <Link to="/" data-discover="true" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
         <img className="h-8 w-auto" src={appLogo} alt="" />
       </Link>
       <span className="text-xl">{t('appName')}</span>
