@@ -45,6 +45,11 @@ export default function <%= entity.name %>() {
               {t('entities.<%-to.snake(entity.name)%>.<%-prop%>')}
             </th>
             <%}%>
+            <% for(e of relatedEntities) {%>
+            <th scope="col" className="px-6 py-3">
+              {t('entities.<%-to.snake(entity.name)%>.<%-e.field%>')}
+            </th>
+            <%}%>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +58,9 @@ export default function <%= entity.name %>() {
               <td className="px-6 py-4">{row.id}</td>
               <% for(prop of fillableProperties) {%>
               <td className="px-6 py-4">{row.<%= prop%>}</td>
+              <%}%>
+              <% for(e of relatedEntities) {%>
+              <td className="px-6 py-4">{<% if (e.isArray) {%>row.<%= e.field%>?.map(r => r.id).join(', ')<%} else {%>row.<%= e.field%>?.id<%}%>}</td>
               <%}%>
             </tr>
           ))}
