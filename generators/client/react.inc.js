@@ -61,6 +61,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
+    that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
@@ -101,6 +102,16 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(
             that.templatePath("react/src/pages/entities/Entity.tsx.ejs"),
             that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`),
+            {
+                entity,
+                to,
+                pluralize,
+                columns: entity.body.map(c => to.snake(c.name)),
+                foreignIds: getModelForeignIds(entity, relationships),
+            });
+        that.fs.copyTpl(
+            that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}View.tsx`),
             {
                 entity,
                 to,

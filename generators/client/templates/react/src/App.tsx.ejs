@@ -9,6 +9,7 @@ import Err403 from './pages/errors/Err403';
 import Err404 from './pages/errors/Err404';
 <% for (const entity of entities) {%>
 import <%=entity.name%> from './pages/entities/<%=entity.name%>';
+import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
 <%}%>
 function App() {
   const { hasRole, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
@@ -22,17 +23,20 @@ function App() {
     );
   }
 
+  const AuthRoute = ({ element }: { element: JSX.Element }) => {
+    return isAutenticated() ? element : <Login />;
+  };
+
   return (
     <>
       <Menu />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <% for (const entity of entities) {%><Route
-          path="/entities/<%=to.slug(pluralize(entity.name))%>"
-          element={isAutenticated() ? <<%=entity.name%> /> : <Login />}
-        />
-        <%}%><Route
+        <Route path="/login" element={<Login />} /><% -%>
+        <% for (const entity of entities) {%>
+        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<AuthRoute element={<<%=entity.name%> />} />} />
+        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<AuthRoute element={<<%=entity.name%>View />} />} /><%}%>
+        <Route
           path="/admin"
           element={isAutenticated() ? hasRole('admin') ? <div className="m-4">ADMIN</div> : <Err403 /> : <Err401 />}
         />

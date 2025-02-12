@@ -1,0 +1,46 @@
+import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { JsonPrint } from '../../components/JsonPrint';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+
+interface <%= entity.name %>ViewParams {
+  id: string;
+}
+
+export default function <%= entity.name %>View() {
+  const { t } = useTranslation();
+  const id = parseInt(useParams<<%= entity.name %>ViewParams>().id, 10);
+
+  const authenticatedFetch = useAuthenticatedFetch();
+  const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = () => {
+    setLoading(true);
+    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+      .then((response) => response.json())
+      .then((data: I<%= entity.name %>) => {
+        <%=to.camel(`set${entity.name}`)%>(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        // alert('ERR');
+      });
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, []);
+
+  return (
+    <div className="m-4">
+      <SimpleLoader loading={loading} />
+      {!loading && <JsonPrint data={<%=to.camel(entity.name)%>} />}
+    </div>
+  );
+}

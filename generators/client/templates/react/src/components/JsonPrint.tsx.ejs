@@ -1,0 +1,24 @@
+interface JsonPrintProps {
+  data: unknown;
+  className?: string;
+}
+
+export function JsonPrint({ data, className = '' }: JsonPrintProps) {
+  try {
+    const jsonString = JSON.stringify(data, null, 2);
+
+    return (
+      <pre
+        className={`whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md overflow-auto ${className}`}
+      >
+        {jsonString}
+      </pre>
+    );
+  } catch (error) {
+    return (
+      <pre className="whitespace-pre bg-red-800 text-xs text-white p-4 rounded-md">
+        Error formatting JSON: {error instanceof Error ? error.message : 'Unknown error'}
+      </pre>
+    );
+  }
+}
