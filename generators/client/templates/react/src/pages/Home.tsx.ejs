@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
 import pninjaLogo from '../assets/pninja-logo.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
 import <%= dbms %>Logo from '../assets/<%= dbms %>-logo.svg';
@@ -7,7 +8,9 @@ import viteLogo from '../assets/vite.svg';
 
 export default function Home() {
   const { t } = useTranslation();
+  const { hasRole, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
   return (
+    <>
     <div className="flex space-x-2 items-center text-3xl justify-center p-8">
       <img className="h-24" src={laravelLogo} alt="Laravel" title="Laravel" />
       <span>+</span>
@@ -19,5 +22,17 @@ export default function Home() {
       <span>=</span>
       <img className="h-24" src={pninjaLogo} alt="PNinja" title="PNinja" />
     </div>
+    {isAutenticated() && (
+    <pre className="whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md m-4">
+      email = {getTokenParsed()?.email}
+      {'\n'}
+      login = {getTokenParsed()?.preferred_username}
+      {'\n'}
+      name = {getTokenParsed()?.name}
+      {'\n'}
+      hasRole 'admin' = {hasRole('admin') ? 'T' : 'F'}
+    </pre>
+    )}
+    </>
   );
 }
