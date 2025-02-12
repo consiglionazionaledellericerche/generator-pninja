@@ -30,16 +30,19 @@ export default function <%= entity.name %>() {
   }, []);
 
   return <div className="m-4">
-    <h1 className="text-2xl mb-4">{t('entities.<%- to.capital(pluralize(entity.name))%>')}</h1>
+    <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}</h1>
     <TableSkeletonLoader loading={loading} rows={10} cols={<%=fillableProperties.length%>} />
     {!loading && <%=to.camel(pluralize(entity.name))%> && <%=to.camel(pluralize(entity.name))%>.length > 0 && (
       <div className="relative overflow-x-auto">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead className="text-xs uppercase text-gray-700 bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
           <tr>
+            <th scope="col" className="px-6 py-3">
+              {t('entities.<%-to.snake(entity.name)%>.id')}
+            </th>
             <% for(prop of fillableProperties) {%>
             <th scope="col" className="px-6 py-3">
-              <%= to.capital(prop)%>
+              {t('entities.<%-to.snake(entity.name)%>.<%-prop%>')}
             </th>
             <%}%>
           </tr>
@@ -47,6 +50,7 @@ export default function <%= entity.name %>() {
         <tbody>
           {<%=to.camel(pluralize(entity.name))%>.map((row, key) => (
             <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+              <td className="px-6 py-4">{row.id}</td>
               <% for(prop of fillableProperties) {%>
               <td className="px-6 py-4">{row.<%= prop%>}</td>
               <%}%>

@@ -12,7 +12,13 @@
     "sqlsrv": "SQL Server"
   },
   "entities": {
-    <%- entities.map(entity => `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`).join(`,\n    `) %>
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
   "errors": {
     "401": {

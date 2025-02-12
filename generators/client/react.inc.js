@@ -35,10 +35,9 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
     that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
 
-    that.fs.copyTpl(that.templatePath("react/public/locales/en/translation.json.ejs"), that.destinationPath(`client/public/locales/en/translation.json`), { appName, entities, to, pluralize });
-    that.fs.copyTpl(that.templatePath("react/public/locales/de/translation.json.ejs"), that.destinationPath(`client/public/locales/de/translation.json`), { appName, entities, to, pluralize });
-    that.fs.copyTpl(that.templatePath("react/public/locales/fr/translation.json.ejs"), that.destinationPath(`client/public/locales/fr/translation.json`), { appName, entities, to, pluralize });
-    that.fs.copyTpl(that.templatePath("react/public/locales/it/translation.json.ejs"), that.destinationPath(`client/public/locales/it/translation.json`), { appName, entities, to, pluralize });
+    ['en', 'it', 'fr', 'de'].forEach(lang => {
+        that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}/translation.json.ejs`), that.destinationPath(`client/public/locales/${lang}/translation.json`), { appName, entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
+    });
 
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });

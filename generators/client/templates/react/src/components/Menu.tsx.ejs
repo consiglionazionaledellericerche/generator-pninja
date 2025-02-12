@@ -33,7 +33,7 @@ export default function Menu() {
         to="/entities/<%- to.slug(pluralize(entity.name)) %>"
         data-discover="true"
       >
-        {t('entities.<%- to.capital(pluralize(entity.name))%>')}
+        {t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}
       </Link>      
       <% }); %>
       <LangSelect />
