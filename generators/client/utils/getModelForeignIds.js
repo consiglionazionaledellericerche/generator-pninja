@@ -12,7 +12,8 @@ export function getModelForeignIds(entity, relationships) {
             const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
             const foreignId = `${toInjectedField}_id`;
             const nullable = !relation.from.required;
-            foreignIds.push({ foreignId, nullable })
+            const related = relation.from.name;
+            foreignIds.push({ foreignId, nullable, related })
         });
 
     relationships
@@ -23,7 +24,8 @@ export function getModelForeignIds(entity, relationships) {
             const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
             const foreignId = `${fromInjectedField}_id`;
             const nullable = !relation.from.required;
-            foreignIds.push({ foreignId, nullable })
+            const related = relation.to.name;
+            foreignIds.push({ foreignId, nullable, related })
         });
 
     return foreignIds;

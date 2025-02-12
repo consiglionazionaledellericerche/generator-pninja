@@ -105,8 +105,8 @@ export async function createReactClient(that, parsedJDL) {
                 entity,
                 to,
                 pluralize,
-                fillableProperties: getEntityFillableProperties(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
+                columns: entity.body.map(c => to.snake(c.name)),
+                foreignIds: getModelForeignIds(entity, relationships),
             });
     }
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
