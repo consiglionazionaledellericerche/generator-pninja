@@ -9,6 +9,9 @@
   .text-link {
     @apply text-sky-600 dark:text-sky-400 hover:underline decoration-2;
   }
+  .text-muted {
+    @apply text-slate-400 dark:text-slate-500;
+  }
   .data-table {
     @apply w-full table-auto text-sm text-left rtl:text-right;
     thead {
@@ -36,7 +39,7 @@
     }
     tbody {
       th {
-        @apply px-6 py-4 text-right text-nowrap w-0;
+        @apply px-6 py-4 text-right text-nowrap uppercase w-0;
       }
       td {
         @apply px-6 py-4;

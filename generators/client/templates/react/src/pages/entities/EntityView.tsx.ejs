@@ -6,9 +6,15 @@ import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { JsonPrint } from '../../components/JsonPrint';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+<%relatedEntities
+    .map(r => r.related)
+    .filter(r => r !== entity.name)
+    .reduce((acc, current) => acc.includes(current) ? acc : [...acc, current], [])
+    .forEach(e => {%>import { <%=e%>DataView } from './<%= e %>View';
+<%});-%>
 
 interface <%= entity.name %>DataViewParams {
-  data: I<%= entity.name %>;
+  data: I<%= entity.name %> | undefined | null;
 }
 
 interface <%= entity.name %>ViewParams {
@@ -17,9 +23,14 @@ interface <%= entity.name %>ViewParams {
 
 export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
+  if(!data) return '';
   return (
     <table className="details-table">
       <tbody>
+        <tr>
+          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.id')}</th>
+          <td>{data?.id}</td>
+        </tr>
         <% for(column of columns) {%>
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
@@ -35,6 +46,18 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
             </Link>
           </td>
           </tr>
+        <%}%>
+        <% for(r of relatedEntities) {%>
+        <tr>
+          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}<%- r.isArray ? '[&nbsp;]' : '' %></th>
+          <td>
+            <% if(r.isArray) {%>
+            {data?.<%-r.field%>?.map(item => <><<%=r.related%>DataView data={item} /><hr /></>)}
+            <%} else {%>
+            {data?.<%-r.field%> ? <<%=r.related%>DataView data={data?.<%-r.field%>} /> : <span className="text-muted">NO DATA</span>}
+            <%}%>
+          </td>
+        </tr>
         <%}%>
       </tbody>
     </table>
