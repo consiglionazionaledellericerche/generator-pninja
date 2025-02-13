@@ -6,8 +6,28 @@ import { JsonPrint } from '../../components/JsonPrint';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 
+interface <%= entity.name %>DataViewParams {
+  data: I<%= entity.name %>;
+}
+
 interface <%= entity.name %>ViewParams {
   id: string;
+}
+
+export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewParams) {
+  const { t } = useTranslation();
+  return (
+    <table>
+      <tbody>
+        <% for(column of columns) {%>
+        <tr key="<%-column%>">
+          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
+          <td>{data?.<%= column%>}</td>
+        </tr>
+        <%}%>
+      </tbody>
+    </table>
+  )
 }
 
 export default function <%= entity.name %>View() {
@@ -41,6 +61,7 @@ export default function <%= entity.name %>View() {
     <div className="m-4">
       <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID {id}</h1>
       <SimpleLoader loading={loading} />
+      {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
       {!loading && <JsonPrint data={<%=to.camel(entity.name)%>} />}
     </div>
   );
