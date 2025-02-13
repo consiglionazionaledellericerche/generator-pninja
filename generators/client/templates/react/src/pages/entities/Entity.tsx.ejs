@@ -46,7 +46,7 @@ export default function <%= entity.name %>() {
               {t('entities.<%-to.snake(entity.name)%>.<%-column%>')}
             </th>
             <%}%>
-            <% for(f of foreignIds) {%>
+            <% if (false) for(f of foreignIds) {%>
             <th scope="col">
               {t('entities.<%-to.snake(entity.name)%>.<%-f.foreignId%>')}
             </th>
@@ -64,7 +64,7 @@ export default function <%= entity.name %>() {
               <% for(column of columns) {%>
               <td>{row.<%= column%>}</td>
               <%}%>
-              <% for(f of foreignIds) {%>
+              <% if (false) for(f of foreignIds) {%>
               <td>
                 <Link className="text-link" to={`/entities/<%=to.slug(pluralize(f.related))%>/view/${row.<%= f.foreignId%>}`}>
                   {row.<%= f.foreignId%>}
