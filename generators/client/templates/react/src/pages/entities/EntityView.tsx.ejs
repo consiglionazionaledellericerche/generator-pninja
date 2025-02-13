@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,13 +18,23 @@ interface <%= entity.name %>ViewParams {
 export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
   return (
-    <table>
+    <table className="details-table">
       <tbody>
         <% for(column of columns) {%>
-        <tr key="<%-column%>">
+        <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
           <td>{data?.<%= column%>}</td>
         </tr>
+        <%}%>
+        <% for(f of foreignIds) {%>
+        <tr>
+          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-f.foreignId%>')}</th>
+          <td>
+            <Link className="text-link" to={`/entities/<%=to.slug(pluralize(f.related))%>/view/${data?.<%= f.foreignId%>}`}>
+              {data?.<%= f.foreignId%>}
+            </Link>
+          </td>
+          </tr>
         <%}%>
       </tbody>
     </table>
@@ -55,7 +66,7 @@ export default function <%= entity.name %>View() {
 
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [id]);
 
   return (
     <div className="m-4">
