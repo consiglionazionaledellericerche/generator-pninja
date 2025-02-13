@@ -41,7 +41,6 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
-    that.fs.copyTpl(that.templatePath("react/src/Dropdown.tsx"), that.destinationPath(`client/src/Dropdown.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/i18n.js"), that.destinationPath(`client/src/i18n.js`), {});
     that.fs.copyTpl(that.templatePath("react/src/index.css"), that.destinationPath(`client/src/index.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/keycloak.tsx"), that.destinationPath(`client/src/keycloak.tsx`), {});
