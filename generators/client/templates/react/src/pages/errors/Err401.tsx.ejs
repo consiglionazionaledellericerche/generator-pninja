@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoginButton } from '../../components/LoginButton.tsx';
 export default function Err401() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  useEffect(() => {
+    document.title = t('errors.401.title');
+  }, [t, i18n.language]);
   return (
     <div className="m-4">
       <h1 className="text-2xl mb-4">{t('errors.401.title')}</h1>

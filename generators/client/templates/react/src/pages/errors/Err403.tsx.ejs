@@ -1,8 +1,12 @@
+import { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUserAutenticatedHelper } from '../../hooks/userAutenticatedHelper';
 export default function Err403() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { getUsername } = useUserAutenticatedHelper();
+  useEffect(() => {
+    document.title = t('errors.403.title', { username: getUsername() });
+  }, [t, i18n.language, getUsername]);
   return (
     <div className="m-4">
       <h1 className="text-2xl mb-4">{t('errors.403.title', { username: getUsername() })}</h1>

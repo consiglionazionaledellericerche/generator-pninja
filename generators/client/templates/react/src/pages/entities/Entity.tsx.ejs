@@ -6,7 +6,7 @@ import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 
 export default function <%= entity.name %>() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const authenticatedFetch = useAuthenticatedFetch();
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,6 +29,10 @@ export default function <%= entity.name %>() {
   useEffect(() => {
     handleSearch();
   }, []);
+
+  useEffect(() => {
+    document.title = t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>');
+  }, [i18n.language, t]);
 
   return <div className="m-4">
     <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}</h1>

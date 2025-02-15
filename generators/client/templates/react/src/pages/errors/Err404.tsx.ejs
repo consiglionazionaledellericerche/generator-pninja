@@ -1,6 +1,10 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 export default function Err404() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  useEffect(() => {
+    document.title = t('errors.404.title');
+  }, [t, i18n.language]);
   return (
     <div className="m-4">
       <h1 className="text-2xl mb-4">{t('errors.404.title')}</h1>

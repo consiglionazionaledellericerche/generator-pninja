@@ -69,7 +69,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 }
 
 export default function <%= entity.name %>View() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const id = parseInt(useParams<<%= entity.name %>ViewParams>().id, 10);
 
   const authenticatedFetch = useAuthenticatedFetch();
@@ -94,6 +94,10 @@ export default function <%= entity.name %>View() {
   useEffect(() => {
     handleSearch();
   }, [id]);
+
+  useEffect(() => {
+    document.title = `${t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID ${id}`;
+  }, [id, i18n.language, t]);
 
   return (
     <div className="m-4">
