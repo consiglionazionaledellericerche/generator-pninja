@@ -35,13 +35,13 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
             </Link>
           </td>
         </tr>
-        <% for(column of columns) {%>
+<%      for(column of columns) { -%>
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
           <td>{data?.<%= column%>}</td>
         </tr>
-        <%}%>
-        <% if(false) for(f of foreignIds) {%>
+<%      } -%>
+<%      if(false) for(f of foreignIds) { -%>
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-f.foreignId%>')}</th>
           <td>
@@ -49,20 +49,20 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
               {data?.<%= f.foreignId%>}
             </Link>
           </td>
-          </tr>
-        <%}%>
-        <% for(r of relatedEntities) {%>
-        {<tr>
+        </tr>
+<%      } -%>
+<%      for(r of relatedEntities) { -%>
+        <tr>
           <th scope="row" className="align-top">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
           <td className='flex flex-col gap-y-4'>
-            <% if(r.isArray) {%>
+<%             if(r.isArray) { -%>
             {data?.<%-r.field%> && data?.<%-r.field%>?.map((item, index) => <div key={index} className='rounded-md border dark:border-gray-700 border-gray-200 p-4'><<%=r.related%>DataView data={item} /></div>)}
-            <%} else {%>
+<%             } else { -%>
             {data?.<%-r.field%> && <div className='rounded-md border dark:border-gray-700 border-gray-200 p-4'><<%=r.related%>DataView data={data?.<%-r.field%>} /></div>}
-            <%}%>
+<%             } -%>
           </td>
-        </tr>}
-        <%}%>
+        </tr>
+<%      } -%>
       </tbody>
     </table>
   )

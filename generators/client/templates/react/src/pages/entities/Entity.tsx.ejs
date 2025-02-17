@@ -39,19 +39,13 @@ export default function <%= entity.name %>() {
       <table className="data-table">
         <thead>
           <tr>
-            <th scope="col" className="w-0">
-              {t('entities.<%-to.snake(entity.name)%>.id')}
-            </th>
-            <% for(column of columns) {%>
-            <th scope="col">
-              {t('entities.<%-to.snake(entity.name)%>.<%-column%>')}
-            </th>
-            <%}%>
-            <% for(r of relatedEntities) {%>
-            <th scope="col">
-              {t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}
-            </th>
-            <%}%>
+            <th scope="col" className="w-0">{t('entities.<%-to.snake(entity.name)%>.id')}</th>
+<%          for(column of columns) { -%>
+            <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
+<%          } -%>
+<%          for(r of relatedEntities) { -%>
+            <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
+<%          } -%>
           </tr>
         </thead>
         <tbody>
@@ -62,18 +56,20 @@ export default function <%= entity.name %>() {
                   {row.id}
                 </Link>
               </td>
-              <% for(column of columns) {%>
-              <td>{row.<%= column%>}</td>
-              <%}%>
-              <% for(r of relatedEntities) {%>
+<%            for(column of columns) { -%>
               <td>
-              <% if(r.isArray) {%>
-              {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.id}</Link></Fragment>))}
-              <%} else {%>
-              {row?.<%-r.field%>?.id && <Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.<%-r.field%>?.id}`}>{row?.<%-r.field%>?.id}</Link>}
-              <%}%>
+                {row.<%= column%>}
               </td>
-              <%}%>
+<%            } -%>
+<%            for(r of relatedEntities) { -%>
+              <td>
+<%            if(r.isArray) { -%>
+                {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.id}</Link></Fragment>))}
+<%              } else { -%>
+                {row?.<%-r.field%>?.id && <Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.<%-r.field%>?.id}`}>{row?.<%-r.field%>?.id}</Link>}
+<%              } -%>
+              </td>
+<%            } -%>
             </tr>
           ))}
         </tbody>
