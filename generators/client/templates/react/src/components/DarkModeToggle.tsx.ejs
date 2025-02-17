@@ -13,7 +13,7 @@ export function DarkModeToggle() {
     <button
       aria-label={t(dark ? 'ui.darkmode.light' : 'ui.darkmode.dark')}
       title={t(dark ? 'ui.darkmode.light' : 'ui.darkmode.dark')}
-      className={`inline-flex items-center gap-1 block rounded-md px-3 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4`}
+      className={`inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4`}
       onClick={()=> darkModeHandler()}>
       { dark ? <Sun size={20} /> : <Moon size={20} /> }
     </button>

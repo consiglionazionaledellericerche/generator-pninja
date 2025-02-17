@@ -1,15 +1,19 @@
 import { useCallback } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 
+interface FetchOptions extends RequestInit {
+  headers?: Record<string, string>;
+}
+
 export const useAuthenticatedFetch = () => {
     const { keycloak } = useKeycloak();
 
-    const authenticatedFetch = useCallback(async (url, options = {}) => {
+    const authenticatedFetch = useCallback(async (url: string, options: FetchOptions = {}): Promise<Response> => {
         try {
             // Aggiorna il token se necessario
             try {
                 await keycloak.updateToken(30);
-            } catch (error) {
+            } catch {
                 // Se il refresh fallisce, redirect al login
                 keycloak.login();
                 throw new Error('Session expired');

@@ -11,7 +11,7 @@ export default function <%= entity.name %>() {
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
+  useEffect(() => {
     setLoading(true);
     authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
       .then((response) => response.json())
@@ -23,12 +23,7 @@ export default function <%= entity.name %>() {
         console.error('ERR:', error);
         setLoading(false);
         // alert('ERR');
-      });
-  };
-
-  useEffect(() => {
-    handleSearch();
-  }, []);
+      });  }, [authenticatedFetch]);
 
   useEffect(() => {
     document.title = t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>');
@@ -36,9 +31,11 @@ export default function <%= entity.name %>() {
 
   return <div className="m-4">
     <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}</h1>
-    <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length + foreignIds.length%>} />
+    <Fragment>
+      <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length + foreignIds.length%>} />
+    </Fragment>
     {!loading && <%=to.camel(pluralize(entity.name))%> && <%=to.camel(pluralize(entity.name))%>.length > 0 && (
-      <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto">
       <table className="data-table">
         <thead>
           <tr>

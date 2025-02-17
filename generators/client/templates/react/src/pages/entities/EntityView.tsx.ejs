@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { JsonPrint } from '../../components/JsonPrint';
@@ -17,7 +17,7 @@ interface <%= entity.name %>DataViewParams {
   data: I<%= entity.name %> | undefined | null;
 }
 
-interface <%= entity.name %>ViewParams {
+interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
 }
 
@@ -70,15 +70,16 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 
 export default function <%= entity.name %>View() {
   const { t, i18n } = useTranslation();
-  const id = parseInt(useParams<<%= entity.name %>ViewParams>().id, 10);
+  const { id } = useParams<<%= entity.name %>ViewParams>();
 
   const authenticatedFetch = useAuthenticatedFetch();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    if (!id) return;
     setLoading(true);
-    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${parseInt(id, 10)}`)
       .then((response) => response.json())
       .then((data: I<%= entity.name %>) => {
         <%=to.camel(`set${entity.name}`)%>(data);
@@ -89,11 +90,7 @@ export default function <%= entity.name %>View() {
         setLoading(false);
         // alert('ERR');
       });
-  };
-
-  useEffect(() => {
-    handleSearch();
-  }, [id]);
+  }, [authenticatedFetch, id]);
 
   useEffect(() => {
     document.title = `${t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID ${id}`;
