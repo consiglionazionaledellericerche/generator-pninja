@@ -52,6 +52,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
         </tr>
 <%      } -%>
 <%      for(r of relatedEntities) { -%>
+        {Object.prototype.hasOwnProperty.call(data, '<%-r.field%>') && (
         <tr>
           <th scope="row" className="align-top">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
           <td className='flex flex-col gap-y-4'>
@@ -62,6 +63,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 <%             } -%>
           </td>
         </tr>
+        )}
 <%      } -%>
       </tbody>
     </table>
