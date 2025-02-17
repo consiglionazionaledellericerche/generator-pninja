@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
@@ -71,7 +71,7 @@ export default function <%= entity.name %>() {
               <% for(r of relatedEntities) {%>
               <td>
               <% if(r.isArray) {%>
-              {row?.<%-r.field%>?.map((row, index) => (<>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.id}</Link></>))}
+              {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.id}</Link></Fragment>))}
               <%} else {%>
               {row?.<%-r.field%>?.id && <Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.<%-r.field%>?.id}`}>{row?.<%-r.field%>?.id}</Link>}
               <%}%>
