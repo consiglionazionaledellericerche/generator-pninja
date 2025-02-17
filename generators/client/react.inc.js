@@ -107,6 +107,7 @@ export async function createReactClient(that, parsedJDL) {
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
+                relatedEntities: getModelRelatedEntities(entity, relationships)
             });
         that.fs.copyTpl(
             that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
