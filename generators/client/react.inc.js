@@ -1,22 +1,13 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jclrz from 'json-colorz';
-import ejs from 'ejs';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
-import { getEntityFillableProperties } from './utils/getEntityFillableProperties.js';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
 
     that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
-    // that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
-    // that.spawnCommandSync('npm', ['install', 'dotenv'], { cwd: 'client' });
-    // that.spawnCommandSync('npm', ['install', '-D', 'prettier', 'tailwindcss@3', 'postcss', 'autoprefixer'], { cwd: 'client' });
-    // that.spawnCommandSync('npm', ['install', '@headlessui/react'], { cwd: 'client' });
-    // that.spawnCommandSync('npx', ['tailwindcss', 'init', '-p'], { cwd: 'client' });
-    // that.fs.copyTpl(that.templatePath("react/.env"), that.destinationPath(`client/.env`));
 
     that.fs.copyTpl(that.templatePath('react/.env'), that.destinationPath('client/.env'), {});
     that.fs.copyTpl(that.templatePath('react/.gitignore'), that.destinationPath('client/.gitignore'), {});
@@ -35,9 +26,9 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
     that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
 
-    ['en', 'it', 'fr', 'de'].forEach(lang => {
+    for (const lang of ['en', 'it', 'fr', 'de']) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}/translation.json.ejs`), that.destinationPath(`client/public/locales/${lang}/translation.json`), { appName, entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
-    });
+    };
 
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
