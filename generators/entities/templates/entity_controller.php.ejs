@@ -58,6 +58,6 @@ class <%- className %>Controller extends Controller
     public function destroy($id)
     {
         <%- className %>::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return response(null, 200);
     }
 }
