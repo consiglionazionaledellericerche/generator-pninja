@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect, Fragment } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
@@ -11,7 +11,7 @@ export default function <%= entity.name %>() {
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const loadRecords = useCallback(() => {
     setLoading(true);
     authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
       .then((response) => response.json())
@@ -22,8 +22,25 @@ export default function <%= entity.name %>() {
       .catch((error) => {
         console.error('ERR:', error);
         setLoading(false);
-        // alert('ERR');
-      });  }, [authenticatedFetch]);
+        alert(error.message);
+      });
+  }, [authenticatedFetch]);
+
+  const delete<%= entity.name %> = (id: number | undefined) => {
+    if (!id) return;
+    setLoading(true);
+    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
+      method: 'DELETE',
+    })
+      .then(() => loadRecords())
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        alert(error.message);
+      });
+  };
+
+  useEffect(() => loadRecords(), [loadRecords]);
 
   useEffect(() => {
     document.title = t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>');
@@ -75,7 +92,12 @@ export default function <%= entity.name %>() {
                 <div className="flex space-x-2">
                   <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">View</Link>
                   <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">Edit</Link>
-                  <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/delete/${row.id}`} className="text-link">Delete</Link>
+                  <button
+                    onClick={() => delete<%= entity.name %>(row.id)}
+                    className="text-link cursor-pointer uppercase"
+                  >
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>
