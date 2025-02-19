@@ -1,0 +1,198 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
+class DatabaseErrorHandler
+{
+    public static function handleError(QueryException $e, string $context, array $additionalData = []): JsonResponse
+    {
+        $sqlState = $e->getCode();
+        $logContext = array_merge([
+            'code' => $sqlState,
+            'message' => $e->getMessage(),
+            'context' => $context
+        ], $additionalData);
+
+        // Referential Integrity and Constraint Errors
+        if (self::isIntegrityError($sqlState)) {
+            return self::createResponse(
+                'constraint_violation',
+                'Operation not allowed due to data integrity constraints',
+                409,
+                $logContext
+            );
+        }
+
+        // Lock/Deadlock Errors
+        if (self::isDeadlockError($sqlState)) {
+            return self::createResponse(
+                'deadlock',
+                'Database access conflict detected, please retry the operation',
+                409,
+                $logContext
+            );
+        }
+
+        // Schema Errors
+        if (self::isSchemaError($sqlState)) {
+            return self::createResponse(
+                'schema_error',
+                'Database configuration error',
+                500,
+                $logContext,
+                true
+            );
+        }
+
+        // Connection Errors
+        if (self::isConnectionError($sqlState)) {
+            return self::createResponse(
+                'connection_error',
+                'Database connection error',
+                503,
+                $logContext,
+                true
+            );
+        }
+
+        // Timeout Errors
+        if (self::isTimeoutError($sqlState)) {
+            return self::createResponse(
+                'timeout',
+                'Operation interrupted due to timeout or connection issues',
+                503,
+                $logContext
+            );
+        }
+
+        // Permission Errors
+        if (self::isPermissionError($sqlState)) {
+            return self::createResponse(
+                'permission_error',
+                'Database permission error',
+                403,
+                $logContext,
+                true
+            );
+        }
+
+        // Resource Errors
+        if (self::isResourceError($sqlState)) {
+            return self::createResponse(
+                'resource_error',
+                'Database resource error',
+                503,
+                $logContext,
+                true
+            );
+        }
+
+        // Generic database error
+        return self::createResponse(
+            'database_error',
+            'An error occurred during the database operation',
+            500,
+            $logContext,
+            true
+        );
+    }
+
+    private static function createResponse(
+        string $error,
+        string $message,
+        int $statusCode,
+        array $logContext,
+        bool $shouldLog = false
+    ): JsonResponse {
+        if ($shouldLog) {
+            Log::error($message, $logContext);
+        }
+
+        return response()->json([
+            'error' => $error,
+            'message' => $message
+        ], $statusCode);
+    }
+
+    private static function isIntegrityError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '23000', // MySQL, MariaDB, SQLite
+            '23503', // PostgreSQL: Foreign key
+            '23505', // PostgreSQL: Unique
+            '23506', // PostgreSQL: Check
+            '23514'  // PostgreSQL: Check
+        ]);
+    }
+
+    private static function isDeadlockError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '40001', // MySQL, PostgreSQL
+            '40P01', // PostgreSQL
+            '1205',  // MySQL specific
+            'HY000'  // MariaDB/MySQL generic
+        ]);
+    }
+
+    private static function isSchemaError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '42P01', // PostgreSQL: Undefined table
+            '42S02', // MySQL, MariaDB: Table not found
+            '42703', // PostgreSQL: Undefined column
+            '42S22', // MySQL, MariaDB: Column not found
+            '42000'  // SQLite: Generic syntax/schema error
+        ]);
+    }
+
+    private static function isConnectionError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '08000', // Generic connection error
+            '08003', // Connection not open
+            '08004', // Connection rejected
+            '08006', // Connection failure
+            '08S01', // Communication link failure
+            'HY000'  // MySQL/MariaDB generic
+        ]);
+    }
+
+    private static function isTimeoutError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '57014', // PostgreSQL: Query canceled
+            '57P01', // PostgreSQL: Admin shutdown
+            '57P02', // PostgreSQL: Crash shutdown
+            '57P03', // PostgreSQL: Cannot connect now
+            'HY000', // MySQL/MariaDB generic
+            '2013',  // MySQL: Lost connection
+            '2006'   // MySQL: Server gone away
+        ]);
+    }
+
+    private static function isPermissionError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '42501', // PostgreSQL: Insufficient privilege
+            '42000', // MySQL: Syntax error or access violation
+            '28000', // PostgreSQL, MySQL: Invalid authorization
+            '28P01'  // PostgreSQL: Wrong password
+        ]);
+    }
+
+    private static function isResourceError(string $sqlState): bool
+    {
+        return in_array($sqlState, [
+            '53000', // PostgreSQL: Insufficient resources
+            '53100', // PostgreSQL: Disk full
+            '53200', // PostgreSQL: Out of memory
+            '53300', // PostgreSQL: Too many connections
+            '08004'  // MySQL: Too many connections
+        ]);
+    }
+}

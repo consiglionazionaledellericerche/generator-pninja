@@ -2,10 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\<%- className %>;
+use App\Traits\HandlesDatabaseErrors;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class <%- className %>Controller extends Controller
 {
+    use HandlesDatabaseErrors;
 
     public function index()
     {
@@ -57,7 +61,16 @@ class <%- className %>Controller extends Controller
 
     public function destroy($id)
     {
-        <%- className %>::findOrFail($id)->delete();
-        return response(null, 200);
+        try {
+            <%- className %>::findOrFail($id)->delete();
+            return response(null, 200);
+        } catch (QueryException $e) {
+            return $this->handleDatabaseError($e, 'record.delete', ['record_id' => $id]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'not_found',
+                'message' => '<%- className %> not found'
+            ], 404);
+        }
     }
 }

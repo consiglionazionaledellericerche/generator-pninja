@@ -15,6 +15,10 @@ export class ControllersGenerator {
 
     generateControllers() {
         const { enums, entities, relationships } = this.parsedJDL;
+
+        this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("HandlesDatabaseErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesDatabaseErrors.php`), {});
+
         for (const entity of entities) {
             const withs = [];
             const createRelated = [];

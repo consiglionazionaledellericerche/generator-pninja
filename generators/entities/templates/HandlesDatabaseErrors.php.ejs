@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Traits;
+
+use App\Exceptions\DatabaseErrorHandler;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
+
+trait HandlesDatabaseErrors
+{
+    protected function handleDatabaseError(
+        QueryException $e,
+        string $context,
+        array $additionalData = []
+    ): JsonResponse {
+        return DatabaseErrorHandler::handleError($e, $context, $additionalData);
+    }
+}
