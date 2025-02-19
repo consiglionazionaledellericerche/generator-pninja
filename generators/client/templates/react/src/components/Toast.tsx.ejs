@@ -1,7 +1,7 @@
 // src/components/Toast.tsx
 import { X } from 'lucide-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 export function Toast({ notification }: { notification: INotification }) {
     const { removeNotification, pauseNotification, resumeNotification, getRemainingTime } = useNotifications();
@@ -9,19 +9,16 @@ export function Toast({ notification }: { notification: INotification }) {
     const [remainingTime, setRemainingTime] = useState(duration);
     const [isPaused, setIsPaused] = useState(false);
 
-    const bgColorClass = {
-        success: 'bg-green-500',
-        error: 'bg-red-500',
-        warning: 'bg-yellow-500',
-        info: 'bg-blue-500'
-    }[notification.type];
-
-    const progressBgColorClass = {
-        success: 'bg-green-400',
-        error: 'bg-red-400',
-        warning: 'bg-yellow-400',
-        info: 'bg-blue-400'
-    }[notification.type];
+    const colors = useMemo(
+        () =>
+            ({
+                success: { bg: 'bg-green-500', progress: 'bg-green-400' },
+                error: { bg: 'bg-red-500', progress: 'bg-red-400' },
+                warning: { bg: 'bg-yellow-500', progress: 'bg-yellow-400' },
+                info: { bg: 'bg-blue-500', progress: 'bg-blue-400' },
+            })[notification.type],
+        [notification.type]
+    );
 
     useEffect(() => {
         if (isPaused) return;
@@ -29,7 +26,7 @@ export function Toast({ notification }: { notification: INotification }) {
         const timer = setInterval(() => {
             const remaining = getRemainingTime(notification.id);
             setRemainingTime(remaining);
-        }, 10);
+        }, 100);
 
         return () => clearInterval(timer);
     }, [isPaused, notification.id, getRemainingTime]);
@@ -44,21 +41,26 @@ export function Toast({ notification }: { notification: INotification }) {
         resumeNotification(notification.id);
     }, [notification.id, resumeNotification]);
 
-    const progressPercentage = (remainingTime / duration) * 100;
+    const progressStyle = useMemo(
+        () => ({
+            width: `${(remainingTime / duration) * 100}%`,
+            transition: isPaused ? 'none' : 'width linear 100ms',
+        }),
+        [remainingTime, duration, isPaused]
+    );
+
     const secondsRemaining = Math.ceil(remainingTime / 1000);
 
     return (
         <div
-            className={`${bgColorClass} text-white rounded-lg shadow-lg min-w-[300px] max-w-[50vw] overflow-hidden`}
+            className={`${colors.bg} text-white rounded-lg shadow-lg min-w-[300px] max-w-[50vw] overflow-hidden`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div className="p-4 flex justify-between items-center">
                 <div>
                     <div>{notification.message}</div>
-                    {notification.details && (
-                        <div className="text-sm opacity-65">{notification.details}</div>
-                    )}
+                    {notification.details && <div className="text-sm opacity-65">({notification.details})</div>}
                 </div>
                 <div className="flex items-center ml-2 gap-2">
                     <span className="text-sm opacity-75">({secondsRemaining}s)</span>
@@ -70,12 +72,8 @@ export function Toast({ notification }: { notification: INotification }) {
                     </button>
                 </div>
             </div>
-            
             <div className="h-1 w-full">
-                <div 
-                    className={`h-full ${progressBgColorClass} transition-all duration-100 ease-linear`}
-                    style={{ width: `${progressPercentage}%` }}
-                />
+                <div className={`h-full ${colors.progress}`} style={progressStyle} />
             </div>
         </div>
     );
