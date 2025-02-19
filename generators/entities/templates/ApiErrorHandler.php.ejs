@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+
+class ApiErrorHandler
+{
+    /**
+     * Routes the exception to the appropriate handler
+     */
+    public static function handle(\Exception $e, string $context, array $additionalData = []): JsonResponse
+    {
+        if ($e instanceof QueryException) {
+            return DatabaseErrorHandler::handle($e, $context, $additionalData);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return NotFoundErrorHandler::handle($e, $context, $additionalData);
+        }
+
+        // Log unexpected exceptions
+        Log::error('Unhandled exception', [
+            'exception' => get_class($e),
+            'message' => $e->getMessage(),
+            'context' => $context,
+            'data' => $additionalData
+        ]);
+
+        return response()->json([
+            'error' => 'internal_error',
+            'message' => 'An unexpected error occurred'
+        ], 500);
+    }
+}

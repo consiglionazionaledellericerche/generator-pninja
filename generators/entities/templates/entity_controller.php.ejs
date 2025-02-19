@@ -2,14 +2,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\<%- className %>;
-use App\Traits\HandlesDatabaseErrors;
+use App\Traits\HandlesApiErrors;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class <%- className %>Controller extends Controller
 {
-    use HandlesDatabaseErrors;
+    use HandlesApiErrors;
 
     public function index()
     {

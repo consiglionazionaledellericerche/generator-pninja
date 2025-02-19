@@ -16,8 +16,11 @@ export class ControllersGenerator {
     generateControllers() {
         const { enums, entities, relationships } = this.parsedJDL;
 
+        this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesDatabaseErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesDatabaseErrors.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
 
         for (const entity of entities) {
             const withs = [];

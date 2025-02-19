@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
+class NotFoundErrorHandler
+{
+    /**
+     * Handle model not found exceptions and return appropriate JSON response
+     *
+     * @param ModelNotFoundException $e The model not found exception
+     * @param string $context The operation context (e.g. 'employee.delete')
+     * @param array $additionalData Additional data to include in error logs
+     * @return JsonResponse
+     */
+    public static function handle(
+        ModelNotFoundException $e, 
+        string $context, 
+        array $additionalData = []
+    ): JsonResponse {
+        // Get the model name from the exception
+        $model = self::getModelName($e->getModel());
+        
+        // Create log context
+        $logContext = array_merge([
+            'model' => $e->getModel(),
+            'ids' => $e->getIds(),
+            'context' => $context
+        ], $additionalData);
+
+        // Log the not found error
+        Log::info('Resource not found', $logContext);
+
+        return response()->json([
+            'error' => 'not_found',
+            'message' => self::formatErrorMessage($model, $e->getIds()),
+            'context' => $context
+        ], 404);
+    }
+
+    /**
+     * Get a human-readable model name from the full class name
+     *
+     * @param string $modelClass Full class name of the model
+     * @return string
+     */
+    private static function getModelName(string $modelClass): string
+    {
+        // Get the class name without namespace
+        $className = class_basename($modelClass);
+        
+        // Convert CamelCase to space-separated words
+        // e.g., "EmployeeJob" becomes "Employee Job"
+        return Str::title(Str::snake($className, ' '));
+    }
+
+    /**
+     * Format the error message based on the model name and IDs
+     *
+     * @param string $model The human-readable model name
+     * @param array $ids The IDs that were searched for
+     * @return string
+     */
+    private static function formatErrorMessage(string $model, array $ids): string
+    {
+        if (empty($ids)) {
+            return "The requested {$model} was not found";
+        }
+
+        $idsString = implode(', ', $ids);
+        
+        if (count($ids) === 1) {
+            return "The requested {$model} with ID {$idsString} was not found";
+        }
+
+        return "The requested {$model} with IDs {$idsString} were not found";
+    }
+}
