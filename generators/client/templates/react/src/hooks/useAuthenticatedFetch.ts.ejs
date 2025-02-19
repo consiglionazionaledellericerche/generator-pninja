@@ -5,6 +5,18 @@ interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
+export class HttpError extends Error {
+    status: number;
+    data: unknown;
+
+    constructor(status: number, message: string, data?: unknown) {
+        super(message);
+        this.status = status;
+        this.data = data;
+        this.name = 'HttpError';
+    }
+}
+
 export const useAuthenticatedFetch = () => {
     const { keycloak } = useKeycloak();
 
@@ -37,7 +49,14 @@ export const useAuthenticatedFetch = () => {
                     keycloak.login();
                     throw new Error('Unauthorized');
                 }
-                throw new Error(`HTTP error! status: ${response.status}`);
+
+                // Prova a leggere il corpo della risposta di errore
+                const errorData = await response.json().catch(() => null);
+                throw new HttpError(
+                    response.status,
+                    errorData?.message || `HTTP error! status: ${response.status}`,
+                    errorData
+                );
             }
 
             return response;
