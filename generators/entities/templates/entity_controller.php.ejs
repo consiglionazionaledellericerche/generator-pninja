@@ -65,7 +65,7 @@ class <%- className %>Controller extends Controller
             <%- className %>::findOrFail($id)->delete();
             return response(null, 200);
         } catch (QueryException $e) {
-            return $this->handleDeleteError($e, '<%- className %>', $id);
+            return $this->handleDeleteError($e);
         }
     }
 }

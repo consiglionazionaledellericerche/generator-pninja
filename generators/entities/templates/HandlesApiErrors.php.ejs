@@ -7,112 +7,33 @@ use Illuminate\Http\JsonResponse;
 
 trait HandlesApiErrors
 {
-    /**
-     * Handle any API error and return appropriate JSON response
-     *
-     * @param \Exception $e The caught exception
-     * @param string $context The operation context (e.g. 'employee.delete')
-     * @param array $additionalData Additional data to include in error logs
-     * @return JsonResponse
-     */
-    protected function handleApiError(
-        \Exception $e,
-        string $context,
-        array $additionalData = []
-    ): JsonResponse {
-        return ApiErrorHandler::handle($e, $context, $additionalData);
+    protected function handleApiError(\Exception $e): JsonResponse 
+    {
+        return ApiErrorHandler::handle($e);
     }
 
-    /**
-     * Handle errors during resource creation
-     *
-     * @param \Exception $e The caught exception
-     * @param string $resourceName The name of the resource being created (e.g. 'employee')
-     * @param array $data The data that was being used to create the resource
-     * @return JsonResponse
-     */
-    protected function handleCreateError(
-        \Exception $e, 
-        string $resourceName, 
-        array $data = []
-    ): JsonResponse {
-        return $this->handleApiError($e, "$resourceName.create", [
-            'request_data' => $data
-        ]);
+    protected function handleCreateError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
     }
 
-    /**
-     * Handle errors during resource update
-     *
-     * @param \Exception $e The caught exception
-     * @param string $resourceName The name of the resource being updated (e.g. 'employee')
-     * @param mixed $id The ID of the resource being updated
-     * @param array $data The data that was being used to update the resource
-     * @return JsonResponse
-     */
-    protected function handleUpdateError(
-        \Exception $e, 
-        string $resourceName, 
-        $id, 
-        array $data = []
-    ): JsonResponse {
-        return $this->handleApiError($e, "$resourceName.update", [
-            'id' => $id,
-            'request_data' => $data
-        ]);
+    protected function handleUpdateError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
     }
 
-    /**
-     * Handle errors during resource deletion
-     *
-     * @param \Exception $e The caught exception
-     * @param string $resourceName The name of the resource being deleted (e.g. 'employee')
-     * @param mixed $id The ID of the resource being deleted
-     * @return JsonResponse
-     */
-    protected function handleDeleteError(
-        \Exception $e, 
-        string $resourceName, 
-        $id
-    ): JsonResponse {
-        return $this->handleApiError($e, "$resourceName.delete", [
-            'id' => $id
-        ]);
+    protected function handleDeleteError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
     }
 
-    /**
-     * Handle errors during resource retrieval
-     *
-     * @param \Exception $e The caught exception
-     * @param string $resourceName The name of the resource being retrieved (e.g. 'employee')
-     * @param mixed $id The ID of the resource being retrieved
-     * @return JsonResponse
-     */
-    protected function handleShowError(
-        \Exception $e, 
-        string $resourceName, 
-        $id
-    ): JsonResponse {
-        return $this->handleApiError($e, "$resourceName.show", [
-            'id' => $id
-        ]);
+    protected function handleShowError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
     }
 
-    /**
-     * Handle errors during resource listing
-     *
-     * @param \Exception $e The caught exception
-     * @param string $resourceName The name of the resource being listed (e.g. 'employee')
-     * @param array $filters Any filters that were being applied to the list
-     * @return JsonResponse
-     */
-    protected function handleIndexError(
-        \Exception $e, 
-        string $resourceName, 
-        array $filters = []
-    ): JsonResponse {
-        return $this->handleApiError($e, "$resourceName.index", [
-            'filters' => $filters
-        ]);
+    protected function handleIndexError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
     }
 }
