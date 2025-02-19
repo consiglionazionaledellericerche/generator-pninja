@@ -65,12 +65,7 @@ class <%- className %>Controller extends Controller
             <%- className %>::findOrFail($id)->delete();
             return response(null, 200);
         } catch (QueryException $e) {
-            return $this->handleDatabaseError($e, 'record.delete', ['record_id' => $id]);
-        } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'not_found',
-                'message' => '<%- className %> not found'
-            ], 404);
+            return $this->handleDeleteError($e, '<%- className %>', $id);
         }
     }
 }

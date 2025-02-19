@@ -28,14 +28,12 @@ export default function <%= entity.name %>() {
 
   const delete<%= entity.name %> = (id: number | undefined) => {
     if (!id) return;
-    setLoading(true);
     authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
       method: 'DELETE',
     })
       .then(() => loadRecords())
       .catch((error) => {
         console.error('ERR:', error);
-        setLoading(false);
         alert(error.message);
       });
   };

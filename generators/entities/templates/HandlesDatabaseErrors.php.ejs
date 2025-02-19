@@ -15,4 +15,22 @@ trait HandlesDatabaseErrors
     ): JsonResponse {
         return DatabaseErrorHandler::handleError($e, $context, $additionalData);
     }
+
+    protected function handleCreateError(QueryException $e, string $resourceName, array $data = []): JsonResponse 
+    {
+        return $this->handleDatabaseError($e, "$resourceName.create", ['request_data' => $data]);
+    }
+
+    protected function handleUpdateError(QueryException $e, string $resourceName, $id, array $data = []): JsonResponse 
+    {
+        return $this->handleDatabaseError($e, "$resourceName.update", [
+            'id' => $id,
+            'request_data' => $data
+        ]);
+    }
+
+    protected function handleDeleteError(QueryException $e, string $resourceName, $id): JsonResponse 
+    {
+        return $this->handleDatabaseError($e, "$resourceName.delete", ['id' => $id]);
+    }
 }
