@@ -90,7 +90,7 @@ export default function <%= entity.name %>View() {
       .catch((error) => {
         console.error('ERR:', error);
         setLoading(false);
-        // alert('ERR');
+        alert(error.message);
       });
   }, [authenticatedFetch, id]);
 

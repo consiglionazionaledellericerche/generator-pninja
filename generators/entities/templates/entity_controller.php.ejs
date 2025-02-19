@@ -22,11 +22,15 @@ class <%- className %>Controller extends Controller
 
     public function show($id)
     {
-        <% if (withs) { %>
-        return response()->json(<%- className %>::with(<%- withs %>)->find($id));
-        <% } else { %>
-        return response()->json(<%- className %>::find($id));
-        <% } %>
+        try {
+            <% if (withs) { %>
+            return response()->json(<%- className %>::with(<%- withs %>)->findOrFail($id));
+            <% } else { %>
+            return response()->json(<%- className %>::findOrFail($id));
+            <% } %>
+        } catch (\Exception $e) {
+            return $this->handleDeleteError($e);
+        }
     }
 
     public function store(Request $request)
@@ -64,7 +68,7 @@ class <%- className %>Controller extends Controller
         try {
             <%- className %>::findOrFail($id)->delete();
             return response(null, 200);
-        } catch (QueryException $e) {
+        } catch (\Exception $e) {
             return $this->handleDeleteError($e);
         }
     }
