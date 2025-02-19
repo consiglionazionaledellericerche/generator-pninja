@@ -1,0 +1,25 @@
+import { X } from 'lucide-react';
+import { INotification, useNotifications } from '../contexts/NotificationContext';
+
+export function Toast({ notification }: { notification: INotification }) {
+    const { removeNotification } = useNotifications();
+
+    const bgColorClass = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        warning: 'bg-yellow-500',
+        info: 'bg-blue-500'
+    }[notification.type];
+
+    return (
+        <div className={`${bgColorClass} text-white p-4 rounded-lg shadow-lg flex justify-between items-center min-w-[300px]`}>
+            <span>{notification.message}</span>
+            <button
+                onClick={() => removeNotification(notification.id)}
+                className="ml-4 text-white hover:text-gray-200"
+            >
+                <X size={18} />
+            </button>
+        </div>
+    );
+}

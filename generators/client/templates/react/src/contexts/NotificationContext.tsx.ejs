@@ -1,0 +1,55 @@
+import React, { createContext, useContext, useState, useCallback } from 'react';
+
+export type NotificationType = 'success' | 'error' | 'warning' | 'info';
+
+export interface INotification {
+    id: string;
+    type: NotificationType;
+    message: string;
+    duration?: number;
+}
+
+interface NotificationContextType {
+    notifications: INotification[];
+    addNotification: (notification: Omit<INotification, 'id'>) => void;
+    removeNotification: (id: string) => void;
+}
+
+const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
+
+export function NotificationProvider({ children }: { children: React.ReactNode }) {
+    const [notifications, setNotifications] = useState<INotification[]>([]);
+
+    const addNotification = useCallback((notification: Omit<INotification, 'id'>) => {
+        const id = Math.random().toString(36).substr(2, 9);
+        const newNotification = { ...notification, id };
+
+        setNotifications((currentNotifications) => [...currentNotifications, newNotification]);
+
+        if (notification.duration !== 0) {
+            setTimeout(() => {
+                removeNotification(id);
+            }, notification.duration || 5000);
+        }
+    }, []);
+
+    const removeNotification = useCallback((id: string) => {
+        setNotifications((currentNotifications) =>
+            currentNotifications.filter((notification) => notification.id !== id)
+        );
+    }, []);
+
+    return (
+        <NotificationContext.Provider value={{ notifications, addNotification, removeNotification }}>
+            {children}
+        </NotificationContext.Provider>
+    );
+}
+
+export function useNotifications() {
+    const context = useContext(NotificationContext);
+    if (context === undefined) {
+        throw new Error('useNotifications must be used within a NotificationProvider');
+    }
+    return context;
+}
