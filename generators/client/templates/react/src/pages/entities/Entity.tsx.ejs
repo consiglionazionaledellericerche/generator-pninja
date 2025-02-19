@@ -45,6 +45,7 @@ export default function <%= entity.name %>() {
         addNotification({
             type: 'error',
             message: error.message || `Error deleting <%= entity.name %> ID ${id}`,
+            details: error?.details,
             duration: 5000
         });
       });

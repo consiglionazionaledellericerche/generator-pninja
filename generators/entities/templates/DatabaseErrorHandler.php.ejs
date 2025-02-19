@@ -14,55 +14,63 @@ class DatabaseErrorHandler
         if (self::isIntegrityError($sqlState)) {
             return response()->json([
                 'error' => 'constraint_violation',
-                'message' => 'Operation not allowed due to data integrity constraints'
+                'message' => 'Operation not allowed due to data integrity constraints',
+                'details' => $e->getMessage()
             ], 409);
         }
 
         if (self::isDeadlockError($sqlState)) {
             return response()->json([
                 'error' => 'deadlock',
-                'message' => 'Database access conflict detected, please retry the operation'
+                'message' => 'Database access conflict detected, please retry the operation',
+                'details' => $e->getMessage()
             ], 409);
         }
 
         if (self::isSchemaError($sqlState)) {
             return response()->json([
                 'error' => 'schema_error',
-                'message' => 'Database configuration error'
+                'message' => 'Database configuration error',
+                'details' => $e->getMessage()
             ], 500);
         }
 
         if (self::isConnectionError($sqlState)) {
             return response()->json([
                 'error' => 'connection_error',
-                'message' => 'Database connection error'
+                'message' => 'Database connection error',
+                'details' => $e->getMessage()
             ], 503);
         }
 
         if (self::isTimeoutError($sqlState)) {
             return response()->json([
                 'error' => 'timeout',
-                'message' => 'Operation interrupted due to timeout or connection issues'
+                'message' => 'Operation interrupted due to timeout or connection issues',
+                'details' => $e->getMessage()
             ], 503);
         }
 
         if (self::isPermissionError($sqlState)) {
             return response()->json([
                 'error' => 'permission_error',
-                'message' => 'Database permission error'
+                'message' => 'Database permission error',
+                'details' => $e->getMessage()
             ], 403);
         }
 
         if (self::isResourceError($sqlState)) {
             return response()->json([
                 'error' => 'resource_error',
-                'message' => 'Database resource error'
+                'message' => 'Database resource error',
+                'details' => $e->getMessage()
             ], 503);
         }
 
         return response()->json([
             'error' => 'database_error',
-            'message' => 'An error occurred during the database operation'
+            'message' => 'An error occurred during the database operation',
+            'details' => $e->getMessage()
         ], 500);
     }
 

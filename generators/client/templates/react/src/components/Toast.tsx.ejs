@@ -49,12 +49,17 @@ export function Toast({ notification }: { notification: INotification }) {
 
     return (
         <div
-            className={`${bgColorClass} text-white rounded-lg shadow-lg min-w-[300px] overflow-hidden`}
+            className={`${bgColorClass} text-white rounded-lg shadow-lg min-w-[300px] max-w-[50vw] overflow-hidden`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div className="p-4 flex justify-between items-center">
-                <span>{notification.message}</span>
+                <div>
+                    <div>{notification.message}</div>
+                    {notification.details && (
+                        <div className="text-sm opacity-65">{notification.details}</div>
+                    )}
+                </div>
                 <div className="flex items-center ml-2 gap-2">
                     <span className="text-sm opacity-75">({secondsRemaining}s)</span>
                     <button
