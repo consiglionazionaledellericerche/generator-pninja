@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+// src/contexts/NotificationContext.tsx
+import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
@@ -7,40 +8,98 @@ export interface INotification {
     type: NotificationType;
     message: string;
     duration?: number;
+    timeoutId?: NodeJS.Timeout;
 }
 
 interface NotificationContextType {
     notifications: INotification[];
-    addNotification: (notification: Omit<INotification, 'id'>) => void;
+    addNotification: (notification: Omit<INotification, 'id' | 'timeoutId'>) => void;
     removeNotification: (id: string) => void;
+    pauseNotification: (id: string) => void;
+    resumeNotification: (id: string) => void;
+    getRemainingTime: (id: string) => number;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
     const [notifications, setNotifications] = useState<INotification[]>([]);
-
-    const addNotification = useCallback((notification: Omit<INotification, 'id'>) => {
-        const id = Math.random().toString(36).substr(2, 9);
-        const newNotification = { ...notification, id };
-
-        setNotifications((currentNotifications) => [...currentNotifications, newNotification]);
-
-        if (notification.duration !== 0) {
-            setTimeout(() => {
-                removeNotification(id);
-            }, notification.duration || 5000);
-        }
-    }, []);
+    const timeoutsRef = useRef<{ [key: string]: { 
+        timeoutId: NodeJS.Timeout; 
+        startTime: number; 
+        remainingTime: number;
+        isPaused: boolean;
+    } }>({});
 
     const removeNotification = useCallback((id: string) => {
-        setNotifications((currentNotifications) =>
-            currentNotifications.filter((notification) => notification.id !== id)
-        );
+        if (timeoutsRef.current[id]) {
+            clearTimeout(timeoutsRef.current[id].timeoutId);
+            delete timeoutsRef.current[id];
+        }
+        setNotifications(curr => curr.filter(n => n.id !== id));
     }, []);
 
+    const getRemainingTime = useCallback((id: string) => {
+        const timeoutInfo = timeoutsRef.current[id];
+        if (!timeoutInfo) return 0;
+
+        if (timeoutInfo.isPaused) {
+            return timeoutInfo.remainingTime;
+        }
+
+        const elapsed = Date.now() - timeoutInfo.startTime;
+        return Math.max(0, timeoutInfo.remainingTime - elapsed);
+    }, []);
+
+    const addNotification = useCallback((notification: Omit<INotification, 'id' | 'timeoutId'>) => {
+        const id = Math.random().toString(36).substr(2, 9);
+        const duration = notification.duration || 5000;
+
+        if (duration !== 0) {
+            const timeoutId = setTimeout(() => {
+                removeNotification(id);
+            }, duration);
+
+            timeoutsRef.current[id] = {
+                timeoutId,
+                startTime: Date.now(),
+                remainingTime: duration,
+                isPaused: false
+            };
+        }
+
+        setNotifications(curr => [...curr, { ...notification, id }]);
+    }, [removeNotification]);
+
+    const pauseNotification = useCallback((id: string) => {
+        const timeoutInfo = timeoutsRef.current[id];
+        if (timeoutInfo && !timeoutInfo.isPaused) {
+            clearTimeout(timeoutInfo.timeoutId);
+            timeoutInfo.remainingTime = getRemainingTime(id);
+            timeoutInfo.isPaused = true;
+        }
+    }, [getRemainingTime]);
+
+    const resumeNotification = useCallback((id: string) => {
+        const timeoutInfo = timeoutsRef.current[id];
+        if (timeoutInfo && timeoutInfo.isPaused) {
+            timeoutInfo.startTime = Date.now();
+            timeoutInfo.timeoutId = setTimeout(() => {
+                removeNotification(id);
+            }, timeoutInfo.remainingTime);
+            timeoutInfo.isPaused = false;
+        }
+    }, [removeNotification]);
+
     return (
-        <NotificationContext.Provider value={{ notifications, addNotification, removeNotification }}>
+        <NotificationContext.Provider value={{
+            notifications,
+            addNotification,
+            removeNotification,
+            pauseNotification,
+            resumeNotification,
+            getRemainingTime
+        }}>
             {children}
         </NotificationContext.Provider>
     );
