@@ -2,7 +2,6 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import { useUserAutenticatedHelper } from './hooks/userAutenticatedHelper';
 import { NotificationProvider } from './contexts/NotificationContext';
-import { ToastContainer } from './components/ToastContainer';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -30,21 +29,18 @@ function App() {
   };
 
   return (
-    <NotificationProvider>
+    <NotificationProvider position="bottom-right">
       <Menu />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} /><% -%>
-        <% for (const entity of entities) {%>
+        <Route path="/login" element={<Login />} />
+<%      for (const entity of entities) {-%>
         <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<AuthRoute element={<<%=entity.name%> />} />} />
-        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<AuthRoute element={<<%=entity.name%>View />} />} /><%}%>
-        <Route
-          path="/admin"
-          element={isAutenticated() ? hasRole('admin') ? <div className="m-4">ADMIN</div> : <Err403 /> : <Err401 />}
-        />
+        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<AuthRoute element={<<%=entity.name%>View />} />} />
+<%      }-%>
+        <Route path="/admin" element={isAutenticated() ? (hasRole('admin') ? <div className="m-4">ADMIN</div> : <Err403 />) : <Err401 />} />
         <Route path="*" element={<Err404 />} />
       </Routes>
-      <ToastContainer />
     </NotificationProvider>
   );
 }

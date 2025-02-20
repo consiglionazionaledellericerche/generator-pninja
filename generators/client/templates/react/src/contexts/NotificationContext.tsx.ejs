@@ -1,126 +1,182 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { Toast } from '../components/Toast';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
+export type ToastPosition =
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top-center'
+  | 'bottom-center';
 
 export interface INotification {
-    id: string;
-    type: NotificationType;
-    message: string;
-    details?: string;
-
-    duration?: number | null;
+  id: string;
+  type: NotificationType;
+  message: string;
+  details?: string;
+  duration?: number | null;
 }
 
 interface NotificationContextType {
-    notifications: INotification[];
-    addNotification: (notification: Omit<INotification, 'id'>) => void;
-    removeNotification: (id: string) => void;
-    pauseNotification: (id: string) => void;
-    resumeNotification: (id: string) => void;
-    getRemainingTime: (id: string) => number;
-    hasAutoClose: (id: string) => boolean;
-}
-
-interface TimeoutInfo {
-    timeoutId: NodeJS.Timeout;
-    startTime: number;
-    remainingTime: number;
-    isPaused: boolean;
+  notifications: INotification[];
+  addNotification: (notification: Omit<INotification, 'id'>) => void;
+  removeNotification: (id: string) => void;
+  pauseNotification: (id: string) => void;
+  resumeNotification: (id: string) => void;
+  getRemainingTime: (id: string) => number;
+  hasAutoClose: (id: string) => boolean;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 const DEFAULT_DURATION = 5000;
 
-export function NotificationProvider({ children }: { children: React.ReactNode }) {
-    const [notifications, setNotifications] = useState<INotification[]>([]);
-    const timeoutsRef = useRef<{ [key: string]: TimeoutInfo }>({});
+function ToastContainer({ position = 'bottom-right' }: { position: ToastPosition }) {
+  const { notifications } = useNotifications();
 
-    const removeNotification = useCallback((id: string) => {
-        const timeoutInfo = timeoutsRef.current[id];
-        if (timeoutInfo) {
-            clearTimeout(timeoutInfo.timeoutId);
-            delete timeoutsRef.current[id];
-        }
-        setNotifications(curr => curr.filter(n => n.id !== id));
-    }, []);
+  const positionClasses: Record<ToastPosition, string> = {
+    'top-right': 'top-4 right-4',
+    'top-left': 'top-4 left-4',
+    'bottom-right': 'bottom-4 right-4',
+    'bottom-left': 'bottom-4 left-4',
+    'top-center': 'top-4 left-1/2 -translate-x-1/2',
+    'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2',
+  };
 
-    const getRemainingTime = useCallback((id: string) => {
-        const timeoutInfo = timeoutsRef.current[id];
-        if (!timeoutInfo) return 0;
+  const getFlexDirection = (pos: ToastPosition) => {
+    if (pos.startsWith('bottom')) {
+      return 'flex-col-reverse';
+    }
+    return 'flex-col';
+  };
 
-        if (timeoutInfo.isPaused) {
-            return timeoutInfo.remainingTime;
-        }
+  return (
+    <div
+      className={`fixed z-50 flex gap-2 ${positionClasses[position]} ${getFlexDirection(position)}`}
+    >
+      {notifications.map((notification) => (
+        <Toast key={notification.id} notification={notification} />
+      ))}
+    </div>
+  );
+}
 
-        const elapsed = Date.now() - timeoutInfo.startTime;
-        return Math.max(0, timeoutInfo.remainingTime - elapsed);
-    }, []);
+interface NotificationProviderProps {
+  children: React.ReactNode;
+  position?: ToastPosition;
+}
 
-    const hasAutoClose = useCallback((id: string) => {
-        return id in timeoutsRef.current;
-    }, []);
+export function NotificationProvider({
+  children,
+  position = 'bottom-right',
+}: NotificationProviderProps) {
+  const [notifications, setNotifications] = useState<INotification[]>([]);
+  const timeoutsRef = useRef<{
+    [key: string]: {
+      timeoutId: NodeJS.Timeout;
+      startTime: number;
+      remainingTime: number;
+      isPaused: boolean;
+    };
+  }>({});
 
-    const addNotification = useCallback((notification: Omit<INotification, 'id'>) => {
-        const id = Math.random().toString(36).substr(2, 9);
+  const removeNotification = useCallback((id: string) => {
+    const timeoutInfo = timeoutsRef.current[id];
+    if (timeoutInfo) {
+      clearTimeout(timeoutInfo.timeoutId);
+      delete timeoutsRef.current[id];
+    }
+    setNotifications((curr) => curr.filter((n) => n.id !== id));
+  }, []);
 
-        // Se duration è esplicitamente 0, non impostare il timer
-        if (notification.duration !== 0) {
-            const duration = notification.duration || DEFAULT_DURATION;
-            const timeoutId = setTimeout(() => {
-                removeNotification(id);
-            }, duration);
+  const getRemainingTime = useCallback((id: string) => {
+    const timeoutInfo = timeoutsRef.current[id];
+    if (!timeoutInfo) return 0;
 
-            timeoutsRef.current[id] = {
-                timeoutId,
-                startTime: Date.now(),
-                remainingTime: duration,
-                isPaused: false
-            };
-        }
+    if (timeoutInfo.isPaused) {
+      return timeoutInfo.remainingTime;
+    }
 
-        setNotifications(curr => [...curr, { ...notification, id }]);
-    }, [removeNotification]);
+    const elapsed = Date.now() - timeoutInfo.startTime;
+    return Math.max(0, timeoutInfo.remainingTime - elapsed);
+  }, []);
 
-    const pauseNotification = useCallback((id: string) => {
-        const timeoutInfo = timeoutsRef.current[id];
-        if (timeoutInfo && !timeoutInfo.isPaused) {
-            clearTimeout(timeoutInfo.timeoutId);
-            timeoutInfo.remainingTime = getRemainingTime(id);
-            timeoutInfo.isPaused = true;
-        }
-    }, [getRemainingTime]);
+  const hasAutoClose = useCallback((id: string) => {
+    return id in timeoutsRef.current;
+  }, []);
 
-    const resumeNotification = useCallback((id: string) => {
-        const timeoutInfo = timeoutsRef.current[id];
-        if (timeoutInfo && timeoutInfo.isPaused) {
-            timeoutInfo.startTime = Date.now();
-            timeoutInfo.timeoutId = setTimeout(() => {
-                removeNotification(id);
-            }, timeoutInfo.remainingTime);
-            timeoutInfo.isPaused = false;
-        }
-    }, [removeNotification]);
+  const addNotification = useCallback(
+    (notification: Omit<INotification, 'id'>) => {
+      const id = Math.random().toString(36).substr(2, 9);
 
-    return (
-        <NotificationContext.Provider value={{
-            notifications,
-            addNotification,
-            removeNotification,
-            pauseNotification,
-            resumeNotification,
-            getRemainingTime,
-            hasAutoClose
-        }}>
-            {children}
-        </NotificationContext.Provider>
-    );
+      if (notification.duration !== 0) {
+        const duration = notification.duration || DEFAULT_DURATION;
+        const timeoutId = setTimeout(() => {
+          removeNotification(id);
+        }, duration);
+
+        timeoutsRef.current[id] = {
+          timeoutId,
+          startTime: Date.now(),
+          remainingTime: duration,
+          isPaused: false,
+        };
+      }
+
+      setNotifications((curr) => [...curr, { ...notification, id }]);
+    },
+    [removeNotification]
+  );
+
+  const pauseNotification = useCallback(
+    (id: string) => {
+      const timeoutInfo = timeoutsRef.current[id];
+      if (timeoutInfo && !timeoutInfo.isPaused) {
+        clearTimeout(timeoutInfo.timeoutId);
+        timeoutInfo.remainingTime = getRemainingTime(id);
+        timeoutInfo.isPaused = true;
+      }
+    },
+    [getRemainingTime]
+  );
+
+  const resumeNotification = useCallback(
+    (id: string) => {
+      const timeoutInfo = timeoutsRef.current[id];
+      if (timeoutInfo && timeoutInfo.isPaused) {
+        timeoutInfo.startTime = Date.now();
+        timeoutInfo.timeoutId = setTimeout(() => {
+          removeNotification(id);
+        }, timeoutInfo.remainingTime);
+        timeoutInfo.isPaused = false;
+      }
+    },
+    [removeNotification]
+  );
+
+  return (
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        addNotification,
+        removeNotification,
+        pauseNotification,
+        resumeNotification,
+        getRemainingTime,
+        hasAutoClose,
+      }}
+    >
+      {children}
+      <ToastContainer position={position} />
+    </NotificationContext.Provider>
+  );
 }
 
 export function useNotifications() {
-    const context = useContext(NotificationContext);
-    if (context === undefined) {
-        throw new Error('useNotifications must be used within a NotificationProvider');
-    }
-    return context;
+  const context = useContext(NotificationContext);
+  if (context === undefined) {
+    throw new Error('useNotifications must be used within a NotificationProvider');
+  }
+  return context;
 }
