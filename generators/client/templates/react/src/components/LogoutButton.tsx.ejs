@@ -6,10 +6,12 @@ export function LogoutButton() {
   const { t } = useTranslation();
   return (
     <button
-      onClick={() => logout({
+      onClick={() =>
+        logout({
           redirectUri: window.location.origin,
-        })}
-      className={`inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4`}
+        })
+      }
+      className={`inline-flex items-center gap-1 nav-bar-link`}
     >
       <LogOut size={16} />
       {t('ui.account.logout')}

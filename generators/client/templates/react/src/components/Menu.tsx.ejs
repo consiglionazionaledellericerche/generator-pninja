@@ -10,32 +10,24 @@ export default function Menu() {
   const { isAutenticated } = useUserAutenticatedHelper();
   const { t } = useTranslation();
   const location = useLocation();
-  const isActive = (path: string) => {
-    return location.pathname === path ? 'bg-gray-700' : 'bg-gray-900';
-  };
+  const isActive = (path: string) => location.pathname === path ? ' active' : '';
   return (
-    <nav className="md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-gray-800 text-gray-300">
-      <Link to="/" data-discover="true" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
+    <nav className="nav-bar">
+      <Link to="/" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
         <img className="h-8 w-auto" src={appLogo} alt="" />
       </Link>
-      <span className="text-xl">{t('appName')}</span>
+      <Link to="/" className="hover:text-sky-600 hover:dark:text-sky-400 text-xl">
+        {t('appName')}
+      </Link>
       <span className="grow"></span>
-      <Link
-        className={`block rounded-md px-3 py-2 text-sm font-medium text-white ${isActive('/')} hover:ring-4 focus:outline-none focus-visible:ring-4`}
-        to="/"
-        data-discover="true"
-      >
+      <Link className={`nav-bar-link${isActive('/')}`} to="/">
         {t('pages.Home')}
       </Link>
-      <% entities.forEach((entity, index) => {%>
-      <Link
-        className={`block rounded-md px-3 py-2 text-sm font-medium text-white ${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')} hover:ring-4 focus:outline-none focus-visible:ring-4`}
-        to="/entities/<%- to.slug(pluralize(entity.name)) %>"
-        data-discover="true"
-      >
+<%     entities.forEach((entity, index) => {-%>
+      <Link className={`nav-bar-link${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`} to="/entities/<%- to.slug(pluralize(entity.name)) %>">
         {t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}
-      </Link>      
-      <% }); %>
+      </Link>
+<%    });-%>
       <LangSelect />
       <DarkModeToggle />
       {!isAutenticated() && <LoginButton />}

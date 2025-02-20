@@ -16,7 +16,7 @@ export function LangSelect() {
   }, [i18n.language]);
   return (
     <Menu as="div" className="relative z-50 inline-block text-left">
-      <MenuButton className="inline-flex items-center gap-1 w-full justify-center rounded-md px-4 py-2 text-sm font-medium text-white bg-gray-900 hover:ring-4 focus:outline-none focus-visible:ring-4">
+      <MenuButton className="inline-flex items-center gap-1 w-full justify-center nav-bar-link">
         <Languages size={16} />
         {i18n.language.toUpperCase()}
         <ChevronDown size={16} />
@@ -30,7 +30,7 @@ export function LangSelect() {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-black shadow-lg ring-1 ring-black/5 focus:outline-none">
+        <MenuItems className="absolute right-0 mt-2 w-20 origin-top-right divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none bg-slate-100 text-slate-900 dark:bg-gray-700 dark:text-gray-300">
           <div className="px-1 py-1">
             {languages.map((language) => (
               <MenuItem key={language}>
