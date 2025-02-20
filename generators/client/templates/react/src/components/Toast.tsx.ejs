@@ -4,77 +4,89 @@ import { INotification, useNotifications } from '../contexts/NotificationContext
 import { useEffect, useState, useCallback, useMemo } from 'react';
 
 export function Toast({ notification }: { notification: INotification }) {
-    const { removeNotification, pauseNotification, resumeNotification, getRemainingTime } = useNotifications();
-    const duration = notification.duration || 5000;
-    const [remainingTime, setRemainingTime] = useState(duration);
-    const [isPaused, setIsPaused] = useState(false);
+  const {
+    removeNotification,
+    pauseNotification,
+    resumeNotification,
+    getRemainingTime,
+    hasAutoClose,
+  } = useNotifications();
 
-    const colors = useMemo(
-        () =>
-            ({
-                success: { bg: 'bg-green-500', progress: 'bg-green-400' },
-                error: { bg: 'bg-red-500', progress: 'bg-red-400' },
-                warning: { bg: 'bg-yellow-500', progress: 'bg-yellow-400' },
-                info: { bg: 'bg-blue-500', progress: 'bg-blue-400' },
-            })[notification.type],
-        [notification.type]
-    );
+  const duration = notification.duration || 5000;
+  const [remainingTime, setRemainingTime] = useState(duration);
+  const [isPaused, setIsPaused] = useState(false);
+  const hasTimer = hasAutoClose(notification.id);
 
-    useEffect(() => {
-        if (isPaused) return;
+  const colors = useMemo(
+    () =>
+      ({
+        success: { bg: 'bg-green-500', progress: 'bg-green-400' },
+        error: { bg: 'bg-red-500', progress: 'bg-red-400' },
+        warning: { bg: 'bg-yellow-500', progress: 'bg-yellow-400' },
+        info: { bg: 'bg-blue-500', progress: 'bg-blue-400' },
+      })[notification.type],
+    [notification.type]
+  );
 
-        const timer = setInterval(() => {
-            const remaining = getRemainingTime(notification.id);
-            setRemainingTime(remaining);
-        }, 100);
+  useEffect(() => {
+    if (!hasTimer || isPaused) return;
 
-        return () => clearInterval(timer);
-    }, [isPaused, notification.id, getRemainingTime]);
+    const timer = setInterval(() => {
+      const remaining = getRemainingTime(notification.id);
+      setRemainingTime(remaining);
+    }, 100);
 
-    const handleMouseEnter = useCallback(() => {
-        setIsPaused(true);
-        pauseNotification(notification.id);
-    }, [notification.id, pauseNotification]);
+    return () => clearInterval(timer);
+  }, [isPaused, notification.id, getRemainingTime, hasTimer]);
 
-    const handleMouseLeave = useCallback(() => {
-        setIsPaused(false);
-        resumeNotification(notification.id);
-    }, [notification.id, resumeNotification]);
+  const handleMouseEnter = useCallback(() => {
+    if (!hasTimer) return;
+    setIsPaused(true);
+    pauseNotification(notification.id);
+  }, [notification.id, pauseNotification, hasTimer]);
 
-    const progressStyle = useMemo(
-        () => ({
-            width: `${(remainingTime / duration) * 100}%`,
-            transition: isPaused ? 'none' : 'width linear 100ms',
-        }),
-        [remainingTime, duration, isPaused]
-    );
+  const handleMouseLeave = useCallback(() => {
+    if (!hasTimer) return;
+    setIsPaused(false);
+    resumeNotification(notification.id);
+  }, [notification.id, resumeNotification, hasTimer]);
 
-    const secondsRemaining = Math.ceil(remainingTime / 1000);
+  const progressStyle = useMemo(
+    () => ({
+      width: hasTimer ? `${(remainingTime / duration) * 100}%` : '100%',
+      transition: isPaused ? 'none' : 'width linear 100ms',
+    }),
+    [remainingTime, duration, isPaused, hasTimer]
+  );
 
-    return (
-        <div
-            className={`${colors.bg} text-white rounded-lg shadow-lg min-w-[300px] max-w-[50vw] overflow-hidden`}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
-            <div className="p-4 flex justify-between items-center">
-                <div>
-                    <div>{notification.message}</div>
-                    {notification.details && <div className="text-sm opacity-65">({notification.details})</div>}
-                </div>
-                <div className="flex items-center ml-2 gap-2">
-                    <span className="text-sm opacity-75">({secondsRemaining}s)</span>
-                    <button
-                        onClick={() => removeNotification(notification.id)}
-                        className="text-white hover:text-gray-200"
-                    >
-                        <X size={18} />
-                    </button>
-                </div>
-            </div>
-            <div className="h-1 w-full">
-                <div className={`h-full ${colors.progress}`} style={progressStyle} />
-            </div>
+  return (
+    <div
+      className={`${colors.bg} text-white rounded-lg shadow-lg min-w-[300px] max-w-[50vw] overflow-hidden`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="p-4 flex justify-between items-center">
+        <div>
+          <div>{notification.message}</div>
+          {notification.details && (
+            <div className="text-sm opacity-65">({notification.details})</div>
+          )}
         </div>
-    );
+        <div className="flex items-center ml-2 gap-2">
+          {hasTimer && (
+            <span className="text-sm opacity-75">({Math.ceil(remainingTime / 1000)}s)</span>
+          )}
+          <button
+            onClick={() => removeNotification(notification.id)}
+            className="text-white hover:text-gray-200"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      </div>
+      <div className="h-1 w-full">
+        <div className={`h-full ${colors.progress}`} style={progressStyle} />
+      </div>
+    </div>
+  );
 }
