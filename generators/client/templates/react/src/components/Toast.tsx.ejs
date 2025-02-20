@@ -1,5 +1,5 @@
 // src/components/Toast.tsx
-import { X } from 'lucide-react';
+import { X, Info } from 'lucide-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
 import { useEffect, useState, useCallback, useMemo } from 'react';
 
@@ -15,6 +15,7 @@ export function Toast({ notification }: { notification: INotification }) {
   const duration = notification.duration || 5000;
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const hasTimer = hasAutoClose(notification.id);
 
   const colors = useMemo(
@@ -65,14 +66,27 @@ export function Toast({ notification }: { notification: INotification }) {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="p-4 flex justify-between items-center">
-        <div>
-          <div>{notification.message}</div>
-          {notification.details && (
-            <div className="text-sm opacity-65">({notification.details})</div>
+      <div className="p-4 flex justify-between items-start">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <div>{notification.message}</div>
+            {notification.details && (
+              <button
+                onClick={() => setShowDetails(!showDetails)}
+                className="hover:text-gray-200 focus:outline-none"
+                title={showDetails ? 'Hide details' : 'Show details'}
+              >
+                <Info size={16} className={showDetails ? 'opacity-100' : 'opacity-75'} />
+              </button>
+            )}
+          </div>
+          {showDetails && notification.details && (
+            <div className="mt-2 text-sm opacity-75 bg-black/10 p-2 rounded">
+              {notification.details}
+            </div>
           )}
         </div>
-        <div className="flex items-center ml-2 gap-2">
+        <div className="flex items-center ml-2 gap-2 shrink-0">
           {hasTimer && (
             <span className="text-sm opacity-75">({Math.ceil(remainingTime / 1000)}s)</span>
           )}
