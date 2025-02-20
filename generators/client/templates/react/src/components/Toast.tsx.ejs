@@ -69,16 +69,21 @@ export function Toast({ notification }: { notification: INotification }) {
       <div className="p-4 flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <div>{notification.message}</div>
-            {notification.details && (
-              <button
-                onClick={() => setShowDetails(!showDetails)}
-                className="hover:text-gray-200 focus:outline-none"
-                title={showDetails ? 'Hide details' : 'Show details'}
-              >
-                <Info size={16} className={showDetails ? 'opacity-100' : 'opacity-75'} />
-              </button>
-            )}
+            <div>
+              {notification.message}
+              <span className="inline-flex items-center">
+                &nbsp;
+                {notification.details && (
+                  <button
+                    onClick={() => setShowDetails(!showDetails)}
+                    className="hover:text-gray-200 focus:outline-none"
+                    title={showDetails ? 'Hide details' : 'Show details'}
+                  >
+                    <Info size={16} className={showDetails ? 'opacity-100' : 'opacity-75'} />
+                  </button>
+                )}
+              </span>
+            </div>
           </div>
           {showDetails && notification.details && (
             <div className="mt-2 text-sm opacity-75 bg-black/10 p-2 rounded">
@@ -87,6 +92,7 @@ export function Toast({ notification }: { notification: INotification }) {
           )}
         </div>
         <div className="flex items-center ml-2 gap-2 shrink-0">
+          &nbsp;
           {hasTimer && (
             <span className="text-sm opacity-75">({Math.ceil(remainingTime / 1000)}s)</span>
           )}
