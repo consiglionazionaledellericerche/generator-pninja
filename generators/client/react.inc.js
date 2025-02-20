@@ -44,6 +44,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/pninja-logo.svg"), that.destinationPath(`client/src/assets/pninja-logo.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/pninja-logo-dark.svg"), that.destinationPath(`client/src/assets/pninja-logo-dark.svg`));
+    that.fs.copyTpl(that.templatePath("react/src/assets/pninja-logo-light.svg"), that.destinationPath(`client/src/assets/pninja-logo-light.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/presto.svg"), that.destinationPath(`client/src/assets/presto.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
     that.fs.copyTpl(that.templatePath("react/src/assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
