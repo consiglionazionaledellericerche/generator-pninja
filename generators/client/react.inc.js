@@ -2,7 +2,6 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
-import { generateInterface } from './utils/generateInterface.js';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
@@ -133,15 +132,11 @@ export async function createReactClient(that, parsedJDL) {
             that.destinationPath(`client/src/pages/entities/${entity.name}Form.tsx`),
             {
                 entity,
-                to,
-                interface: generateInterface({
-                    entity,
-                    enums,
-                    relationships,
-                    to,
-                    foreignIds: getModelForeignIds(entity, relationships),
-                    relatedEntities: getModelRelatedEntities(entity, relationships)
-                })
+                enums,
+                relationships,
+                foreignIds: getModelForeignIds(entity, relationships),
+                relatedEntities: getModelRelatedEntities(entity, relationships),
+                to
             }
         );
     }

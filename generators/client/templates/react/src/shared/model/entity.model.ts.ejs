@@ -32,7 +32,8 @@ const isRequired = (prop) => {
     return false;
 }
 -%>
-<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>import dayjs from 'dayjs';
+<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>
+import dayjs from 'dayjs';
 <%}-%>
 <%relatedEntities
     .map(r => r.related)
@@ -45,7 +46,7 @@ const isRequired = (prop) => {
 <%}}-%>
 
 export interface I<%= entity.name %> {
-    id?: number;<% -%>
+    id?: number;
 <%  for (prop of entity.body) {-%>
     <%= to.snake(prop.name) %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
