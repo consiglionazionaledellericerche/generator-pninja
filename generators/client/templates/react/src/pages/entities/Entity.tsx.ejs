@@ -1,10 +1,25 @@
 import { Link } from 'react-router-dom';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowDownAZ, ArrowDownZA } from 'lucide-react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { useNotifications } from '../../contexts/NotificationContext';
+
+type SortDirection = 'asc' | 'desc';
+type SortableField = keyof Pick<
+  I<%= entity.name %>,
+  | 'id'
+<%for(column of columns) { -%>
+  | '<%=column%>'
+<%}-%>
+>;
+
+interface SortConfig {
+  field: SortableField;
+  direction: SortDirection;
+}
 
 export default function <%= entity.name %>() {
   const { t, i18n } = useTranslation();
@@ -12,6 +27,14 @@ export default function <%= entity.name %>() {
   const authenticatedFetch = useAuthenticatedFetch();
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'id', direction: 'asc' });
+
+  const sortableColumns: SortableField[] = [
+    'id',
+<%for(column of columns) { -%>
+    '<%=column%>',
+<%}-%>
+  ];
 
   const loadRecords = useCallback(() => {
     setLoading(true);
@@ -24,9 +47,58 @@ export default function <%= entity.name %>() {
       .catch((error) => {
         console.error('ERR:', error);
         setLoading(false);
-        alert(error.message);
+        addNotification({
+          type: 'error',
+          message: error.message,
+          duration: 5000,
+        });
       });
-  }, [authenticatedFetch]);
+  }, [authenticatedFetch, addNotification]);
+
+  const handleSort = (field: SortableField) => {
+    setSortConfig((currentConfig) => ({
+      field,
+      direction:
+        currentConfig.field === field && currentConfig.direction === 'asc' ? 'desc' : 'asc',
+    }));
+  };
+
+  const <%=to.camel(pluralize(`sorted${entity.name}`))%> = useMemo(() => {
+    const sorted = [...<%=to.camel(pluralize(entity.name))%>];
+    sorted.sort((a, b) => {
+      const aValue = a[sortConfig.field];
+      const bValue = b[sortConfig.field];
+
+      if (aValue === null || aValue === undefined) return sortConfig.direction === 'asc' ? 1 : -1;
+      if (bValue === null || bValue === undefined) return sortConfig.direction === 'asc' ? -1 : 1;
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }, [<%=to.camel(pluralize(entity.name))%>, sortConfig]);
+
+  const renderSortHeader = (field: SortableField, label: string) => {
+    const isSorted = sortConfig.field === field;
+    return (
+      <th
+        scope="col"
+        className={`${sortableColumns.includes(field) ? 'cursor-pointer select-none' : ''} ${field === 'id' ? 'w-0' : ''}`}
+        onClick={() => sortableColumns.includes(field) && handleSort(field)}
+      >
+        <div className="flex items-center gap-1">
+          {label}
+          {isSorted &&
+            (sortConfig.direction === 'asc' ? (
+              <ArrowDownAZ size={16} />
+            ) : (
+              <ArrowDownZA size={16} />
+            ))}
+        </div>
+      </th>
+    );
+  };
 
   const delete<%= entity.name %> = (id: number | undefined) => {
     if (!id) return;
@@ -59,6 +131,9 @@ export default function <%= entity.name %>() {
 
   return <div className="m-4">
     <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}</h1>
+    <Link to="/entities/<%=to.slug(pluralize(entity.name))%>/new" className="text-link">
+      {t('actions.crud.create.entities.<%=to.snake(entity.name)%>.<%=to.capital(entity.name)%>')}
+    </Link>
     <Fragment>
       <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length + foreignIds.length%>} />
     </Fragment>
@@ -67,9 +142,9 @@ export default function <%= entity.name %>() {
       <table className="data-table">
         <thead>
           <tr>
-            <th scope="col" className="w-0">{t('entities.<%-to.snake(entity.name)%>.id')}</th>
+            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
 <%          for(column of columns) { -%>
-            <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
+            {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
 <%          } -%>
 <%          for(r of relatedEntities) { -%>
             <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
@@ -78,7 +153,7 @@ export default function <%= entity.name %>() {
           </tr>
         </thead>
         <tbody>
-          {<%=to.camel(pluralize(entity.name))%>.map((row, key) => (
+          {<%=to.camel(pluralize(`sorted${entity.name}`))%>.map((row, key) => (
             <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
               <td className="w-0">
                 <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`}>
