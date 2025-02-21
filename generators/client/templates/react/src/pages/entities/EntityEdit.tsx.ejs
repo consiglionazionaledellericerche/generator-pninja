@@ -1,0 +1,99 @@
+import { Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { JsonPrint } from '../../components/JsonPrint';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+import { <%= entity.name %>Form } from './<%= entity.name %>Form';
+
+interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
+  id: string;
+}
+
+export default function <%= entity.name %>Edit() {
+  const { t, i18n } = useTranslation();
+  const { id } = useParams<<%= entity.name %>ViewParams>();
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+  const authenticatedFetch = useAuthenticatedFetch();
+  const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+        .then((response) => response.json())
+        .then((data: I<%= entity.name %>) => {
+          set<%= entity.name %>(data);
+        })
+        .catch((error) => {
+          addNotification({
+            type: 'error',
+            message: t('messages.entities.load.error.<%= entity.name %>'),
+            details: error.message,
+          });
+          navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [id, authenticatedFetch, addNotification, navigate]);
+
+  const handleSubmit = async (data: I<%= entity.name %>) => {
+    console.log('data', data);
+    console.log('id', id);
+    try {
+      const response = await authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
+        method: id ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || t('messages.entities.save.error.<%= entity.name %>'));
+      }
+
+      addNotification({
+        type: 'success',
+        message: `<%= entity.name %> ${id ? 'updated' : 'created'} successfully`,
+      });
+      navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        message: t(`messages.entities.${id ? 'update' : 'create'}.error.<%= entity.name %>`),
+        details: error instanceof Error ? error.message : t('error.unknown'),
+      });
+    }
+  };
+
+  useEffect(() => {
+    document.title = `${t(`actions.crud.${id ? 'edit' : 'create'}`)} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`;
+  }, [id, i18n.language, t]);
+
+  return (
+    <div className="m-4">
+      <h1 className="text-2xl mb-4">
+        {t(`actions.crud.${id ? 'edit' : 'create'}`)} {t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}
+        {id ? ` ID ${id}` : ''}
+      </h1>
+      <SimpleLoader loading={loading} />
+      {!loading && (
+        <<%= entity.name %>Form
+          <%-to.camel(entity.name)%>={<%-to.camel(entity.name)%>}
+          onSubmit={handleSubmit}
+          onCancel={() => navigate('/entities/<%=to.slug(pluralize(entity.name))%>')}
+        />
+      )}
+      {!loading && <JsonPrint data={<%-to.camel(entity.name)%>} className="mt-4" />}
+    </div>
+  );
+}

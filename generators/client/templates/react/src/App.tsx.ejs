@@ -11,6 +11,7 @@ import Err404 from './pages/errors/Err404';
 <% for (const entity of entities) {%>
 import <%=entity.name%> from './pages/entities/<%=entity.name%>';
 import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
+import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
 <%}%>
 function App() {
   const { hasRole, isAutenticated, isInitialized, getTokenParsed } = useUserAutenticatedHelper();
@@ -37,6 +38,8 @@ function App() {
 <%      for (const entity of entities) {-%>
         <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<AuthRoute element={<<%=entity.name%> />} />} />
         <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<AuthRoute element={<<%=entity.name%>View />} />} />
+        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<AuthRoute element={<<%=entity.name%>Edit />} />} />
+        <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<AuthRoute element={<<%=entity.name%>Edit />} />} />
 <%      }-%>
         <Route path="/admin" element={isAutenticated() ? (hasRole('admin') ? <div className="m-4">ADMIN</div> : <Err403 />) : <Err401 />} />
         <Route path="*" element={<Err404 />} />

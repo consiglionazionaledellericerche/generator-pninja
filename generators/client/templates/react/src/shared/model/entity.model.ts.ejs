@@ -46,15 +46,31 @@ const isRequired = (prop) => {
 
 export interface I<%= entity.name %> {
     id?: number;<% -%>
-    <%_ for (prop of entity.body) {%>
-    <%= to.snake(prop.name) %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'-%>
-    <%_ if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {%>
-    <%= to.snake(prop.name) %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;<%}-%>
-    <%_}-%>
-    <%_ foreignIds.forEach(({foreignId, nullable}) => {%>
-    <%= foreignId %>?: number<%= nullable ? ' | null' : '' %>;<%})-%>
-    <%_ relatedEntities.forEach(({field, related, isArray}) => {%>
-    <%= field %>?: I<%= related %><%= isArray ? '[]' : '' %> | null;<%})%>
+<%  for (prop of entity.body) {-%>
+    <%= to.snake(prop.name) %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
+<%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+    <%= to.snake(prop.name) %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;
+<%    }-%>
+<%  }-%>
+<%  foreignIds.forEach(({foreignId, nullable}) => {-%>
+    <%= foreignId %>?: number<%= nullable ? ' | null' : '' %>;
+<%  })-%>
+<%  relatedEntities.forEach(({field, related, isArray}) => {-%>
+    <%= field %>?: I<%= related %><%= isArray ? '[]' : '' %> | null;
+<%  })-%>
 }
 
-export const defaultValue: Readonly<I<%= entity.name %>> = {};
+export const defaultValue: Readonly<I<%= entity.name %>> = {
+<%  for (prop of entity.body) {-%>
+    <%= to.snake(prop.name) %>: null,
+<%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+    <%= to.snake(prop.name) %>ContentType: null,
+<%    }-%>
+<%  }-%>
+<%  foreignIds.forEach(({foreignId, nullable}) => {-%>
+    <%= foreignId %>: null,
+<%  })-%>
+<%  relatedEntities.forEach(({field, related, isArray}) => {-%>
+    <%= field %>: null,
+<%  })-%>
+};

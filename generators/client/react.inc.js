@@ -2,6 +2,7 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
+import { generateInterface } from './utils/generateInterface.js';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
@@ -116,6 +117,33 @@ export async function createReactClient(that, parsedJDL) {
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
+        that.fs.copyTpl(
+            that.templatePath("react/src/pages/entities/EntityEdit.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}Edit.tsx`),
+            {
+                entity,
+                to,
+                pluralize,
+                columns: entity.body.map(c => to.snake(c.name)),
+                foreignIds: getModelForeignIds(entity, relationships),
+                relatedEntities: getModelRelatedEntities(entity, relationships)
+            });
+        that.fs.copyTpl(
+            that.templatePath("react/src/pages/entities/EntityForm.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}Form.tsx`),
+            {
+                entity,
+                to,
+                interface: generateInterface({
+                    entity,
+                    enums,
+                    relationships,
+                    to,
+                    foreignIds: getModelForeignIds(entity, relationships),
+                    relatedEntities: getModelRelatedEntities(entity, relationships)
+                })
+            }
+        );
     }
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
 }

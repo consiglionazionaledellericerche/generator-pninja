@@ -81,7 +81,7 @@ export default function <%= entity.name %>View() {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${parseInt(id, 10)}`)
+    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
       .then((response) => response.json())
       .then((data: I<%= entity.name %>) => {
         <%=to.camel(`set${entity.name}`)%>(data);
