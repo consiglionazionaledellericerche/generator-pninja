@@ -1,7 +1,6 @@
 import Generator from 'yeoman-generator';
 import jhipsterCore from 'jhipster-core';
 import colors from 'ansi-colors';
-import { createVueClient } from './vue.inc.js';
 import { createReactClient } from './react.inc.js';
 import { hello } from '../utils/hello.js';
 const { parseFromFiles } = jhipsterCore;
@@ -46,11 +45,9 @@ export default class AuthGenerator extends Generator {
     }
 
     async writing() {
-        // console.log(this.config.getAll());
         const parsedJDL = parseFromFiles([this.config.get('entitiesFilePath')]);
         if (this.config.get('clientType') === false) return;
         if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
-        // if (this.config.get('clientType') === 'vue') return await createVueClient(this, parsedJDL);
         console.log(`\n\n${colors.redBright('Not implemented yet')}\n\n`);
     }
 };
