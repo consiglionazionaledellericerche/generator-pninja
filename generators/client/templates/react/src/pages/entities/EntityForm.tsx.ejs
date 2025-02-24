@@ -51,9 +51,12 @@ import * as z from 'zod';
 import { I<%= entity.name %>, defaultValue } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
-<% for({name, type, validations} of entity.body) { -%>
+<% for({name, type, validations} of entity.body) {-%>
   <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email('errors.validation.mail_format')` : '' %><%= isNullable(validations) ? '.nullable()' : '.nonempty()' %>,
 <% } -%>
+<% for({field, related, isArray} of relatedEntities) {-%>
+  <%= to.snake(field) %>: <%= isArray ? `z.array(z.string()).nullable()` : `z.number().nullable()`%>,
+<% }-%>
 });
 
 type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Schema>;
@@ -73,11 +76,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     reset,
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
-    defaultValues: <%= to.camel(entity.name)%> || defaultValue,
+    defaultValues: {
+<% for({name, type, validations} of entity.body) {-%>
+      <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %>,
+<% } -%>
+<% for({field, related, isArray} of relatedEntities) {-%>
+      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.<%- isArray ? 'map(item => String(item.id))' : 'id' %>,
+<% }-%>
+    },
   });
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
-    console.log('handleFormSubmit');
     try {
       await onSubmit(data);
       reset(); // Reset form after successful submission
@@ -87,8 +96,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   };
 
   useEffect(() => {
-    if (<%= to.camel(entity.name)%>) {
-      reset(<%= to.camel(entity.name)%>);
+    if (<%= to.camel(entity.name)-%>) {
+      reset({
+<% for({name, type, validations} of entity.body) {-%>
+        <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %>,
+<% } -%>
+<% for({field, related, isArray} of relatedEntities) {-%>
+        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.<%- isArray ? 'map(item => String(item.id))' : 'id' %>,
+<% }-%>
+    });
     }
   }, [<%= to.camel(entity.name)%>, reset]);
 
@@ -98,14 +114,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-<%    for({name, type, validations} of entity.body) { -%>
+<%    for({name, type, validations} of entity.body) {-%>
         <div>
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
           </label>
           <input
             type="<%= fieldTypeInputType(type)%>"
-<%          if (fieldTypeInputType(type) === 'datetime-local') {%>
+<%          if (fieldTypeInputType(type) === 'datetime-local') {-%>
             step="1"
 <%          }-%>
             id="<%= to.snake(name) %>"
@@ -115,6 +131,32 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           {errors.<%= to.snake(name) %> && (
             <p className="mt-1 text-sm text-red-600">{t(errors.<%= to.snake(name) %>.message)}</p>
           )}
+        </div>
+<%    }-%>
+<%    for({field, related, isArray} of relatedEntities) {-%>
+        <div>
+          <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium">
+            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
+          </label>
+          <select
+<%          if (isArray) {-%>
+            multiple
+            size={10}
+<%          }-%>
+            id="<%= to.snake(field) %>"
+            {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
+            className={inputClassName}>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
         </div>
 <%    }-%>
       </div>

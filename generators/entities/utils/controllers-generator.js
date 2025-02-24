@@ -63,6 +63,7 @@ export class ControllersGenerator {
                 if(array_key_exists("id", $o)) return \\App\\Models\\${toEntity}::findOrFail($o["id"]);
                 return new \\App\\Models\\${toEntity}($o);
             }, $request->all()["${fromField}"]);
+            $${to.camel(entity.name)}->${fromField}()->delete();
             $${to.camel(entity.name)}->${fromField}()->saveMany($related);
         };`);
                 }
@@ -125,6 +126,7 @@ export class ControllersGenerator {
                 if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
                 return new \\App\\Models\\${fromEntity}($o);
             }, $request->all()["${toField}"]);
+            $${to.camel(entity.name)}->${toField}()->delete();
             $${to.camel(entity.name)}->${toField}()->saveMany($related);
         };`);
                 }
@@ -168,6 +170,7 @@ export class ControllersGenerator {
                 if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
                 return new \\App\\Models\\${fromEntity}($o);
             }, $request->all()["${toField}"]);
+            $${to.camel(entity.name)}->${toField}()->delete();
             $${to.camel(entity.name)}->${toField}()->saveMany($related);
         };`);
             });
