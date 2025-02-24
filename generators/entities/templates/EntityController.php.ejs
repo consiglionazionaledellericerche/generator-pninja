@@ -41,15 +41,12 @@ class <%- className %>Controller extends Controller
     {
         try {
             $<%- entityName %> = <%- className %>::create($request->all());
-
 <%          if (createRelated) { %>
 <%- createRelated %>
 <%          } %>
-
 <%          if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
 <%          } -%>
-
             return response()->json($<%- entityName %>, 201);
         } catch (\Exception $e) {
             return $this->handleCreateError($e);
@@ -64,13 +61,10 @@ class <%- className %>Controller extends Controller
 <%          } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%          } -%>
-
             $<%- entityName %>->update($request->all());
-
 <%          if (createRelated) { -%>
 <%- createRelated %>
 <%          } -%>
-
             return response()->json($<%- entityName %>, 200);
         } catch (\Exception $e) {
             return $this->handleUpdateError($e);
