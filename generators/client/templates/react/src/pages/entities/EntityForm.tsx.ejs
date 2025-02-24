@@ -1,6 +1,8 @@
 <%
 const isNullable = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
 
+const isEmail = (name) => name.toLowerCase().includes('email');
+
 const fieldTypeToSchema = (type) => {
     const typeMap = {
         'String': 'string',
@@ -30,9 +32,9 @@ const fieldTypeInputType = (type) => {
         'Float': 'number',
         'Double': 'number',
         'Boolean': 'boolean',
-        'LocalDate': 'string',
-        'ZonedDateTime': 'string',
-        'Instant': 'string',
+        'LocalDate': 'date',
+        'ZonedDateTime': 'datetime-local',
+        'Instant': 'datetime-local',
         'TextBlob': 'string',
         'Blob': 'string',
         'ImageBlob': 'string'
@@ -50,7 +52,7 @@ import { I<%= entity.name %>, defaultValue } from '../../shared/model/<%= to.slu
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <% for({name, type, validations} of entity.body) { -%>
-  <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%= isNullable(validations) ? '.nullable()' : '.nonempty()' %>,
+  <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email('errors.validation.mail_format')` : '' %><%= isNullable(validations) ? '.nullable()' : '.nonempty()' %>,
 <% } -%>
 });
 
@@ -91,7 +93,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }, [<%= to.camel(entity.name)%>, reset]);
 
   const inputClassName =
-    'mt-3 block w-full rounded-lg border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 py-1.5 px-3 text-sm/6 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:dark:outline-white/25';
+    'mt-3 block w-full rounded-lg border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 py-1.5 px-3 text-sm/6 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:dark:outline-white/25 scheme-light dark:scheme-dark';
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
@@ -103,12 +105,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           </label>
           <input
             type="<%= fieldTypeInputType(type)%>"
+<%          if (fieldTypeInputType(type) === 'datetime-local') {%>
+            step="1"
+<%          }-%>
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(fieldTypeInputType(type) === 'number') {%>, { valueAsNumber: true }<%}%>)}
             className={inputClassName}
           />
           {errors.<%= to.snake(name) %> && (
-            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
+            <p className="mt-1 text-sm text-red-600">{t(errors.<%= to.snake(name) %>.message)}</p>
           )}
         </div>
 <%    }-%>
