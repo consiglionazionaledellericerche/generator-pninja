@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { JsonPrint } from '../../components/JsonPrint';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -30,11 +30,11 @@ export default function <%= entity.name %>Edit() {
         .then((data: I<%= entity.name %>) => {
           set<%= entity.name %>(data);
         })
-        .catch((error) => {
+        .catch((error: HttpError) => {
           addNotification({
             type: 'error',
             message: t('messages.entities.load.error.<%= entity.name %>'),
-            details: error.message,
+            details: `${error.message}${error.details ? `: ${error.details}` : ''}`,
           });
           navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
         })
@@ -67,10 +67,17 @@ export default function <%= entity.name %>Edit() {
       });
       navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
     } catch (error) {
+      let details = undefined;
+      if (error instanceof Error) {
+        details = error.message;
+      }
+      if (error instanceof HttpError) {
+        details = `${error.message}${error.details ? `: ${error.details}` : ''}`;
+      }
       addNotification({
         type: 'error',
         message: t(`messages.entities.${id ? 'update' : 'create'}.error.<%= entity.name %>`),
-        details: error instanceof Error ? error.message : t('error.unknown'),
+        details,
       });
     }
   };

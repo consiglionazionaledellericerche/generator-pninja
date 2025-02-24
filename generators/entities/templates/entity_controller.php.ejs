@@ -13,54 +13,68 @@ class <%- className %>Controller extends Controller
 
     public function index()
     {
-        <% if (withs) { %>
-        return response()->json(<%- className %>::with(<%- withs %>)->get());
-        <% } else { %>
-        return response()->json(<%- className %>::all());
-        <% } %>
+        try {
+<%          if (withs) { -%>
+            return response()->json(<%- className %>::with(<%- withs %>)->get());
+<%          } else { -%>
+            return response()->json(<%- className %>::all());
+<%          } -%>
+        } catch (\Exception $e) {
+            return $this->handleIndexError($e);
+        }
     }
 
     public function show($id)
     {
         try {
-            <% if (withs) { %>
+<%          if (withs) { -%>
             return response()->json(<%- className %>::with(<%- withs %>)->findOrFail($id));
-            <% } else { %>
+<%          } else { -%>
             return response()->json(<%- className %>::findOrFail($id));
-            <% } %>
+<%          } -%>
         } catch (\Exception $e) {
-            return $this->handleDeleteError($e);
+            return $this->handleShowError($e);
         }
     }
 
     public function store(Request $request)
     {
-        dump($request->all());
+        try {
+            $<%- entityName %> = <%- className %>::create($request->all());
 
-        $<%- entityName %> = <%- className %>::create($request->all());
+<%          if (createRelated) { %>
+<%- createRelated %>
+<%          } %>
 
-        <% if (createRelated) { %><%- createRelated %><% } %>
+<%          if (withs) { -%>
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
+<%          } -%>
 
-        <% if (withs) { %>$<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);<% } %>
-        
-        return response()->json($<%- entityName %>, 201);
+            return response()->json($<%- entityName %>, 201);
+        } catch (\Exception $e) {
+            return $this->handleCreateError($e);
+        }     
     }
 
     public function update($id, Request $request)
     {
-        dump($request->all());
+        try {
+<%          if (withs) { -%>
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
+<%          } else { -%>
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+<%          } -%>
 
-        <% if (withs) { %>
-        $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
-        <% } else { %>
-        $<%- entityName %> = <%- className %>::findOrFail($id);
-        <% } %>
+            $<%- entityName %>->update($request->all());
 
-        $<%- entityName %>->update($request->all());
+<%          if (createRelated) { -%>
+<%- createRelated %>
+<%          } -%>
 
-        <% if (createRelated) { %><%- createRelated %><% } %>
-
-        return response()->json($<%- entityName %>, 200);
+            return response()->json($<%- entityName %>, 200);
+        } catch (\Exception $e) {
+            return $this->handleUpdateError($e);
+        }     
     }
 
     public function destroy($id)
