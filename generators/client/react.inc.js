@@ -16,8 +16,6 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
     that.fs.copyTpl(that.templatePath('react/package.json'), that.destinationPath('client/package.json'), { name: to.slug(appName) });
     that.fs.copyTpl(that.templatePath('react/package-lock.json'), that.destinationPath('client/package-lock.json'), { name: to.slug(appName) });
-    that.fs.copyTpl(that.templatePath('react/postcss.config.js'), that.destinationPath('client/postcss.config.js'), {});
-    that.fs.copyTpl(that.templatePath('react/tailwind.config.js'), that.destinationPath('client/tailwind.config.js'), {});
     that.fs.copyTpl(that.templatePath('react/tsconfig.app.json'), that.destinationPath('client/tsconfig.app.json'), {});
     that.fs.copyTpl(that.templatePath('react/tsconfig.json'), that.destinationPath('client/tsconfig.json'), {});
     that.fs.copyTpl(that.templatePath('react/tsconfig.node.json'), that.destinationPath('client/tsconfig.node.json'), {});

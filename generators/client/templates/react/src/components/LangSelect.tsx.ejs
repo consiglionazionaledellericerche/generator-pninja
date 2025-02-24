@@ -35,7 +35,7 @@ export function LangSelect() {
             {languages.map((language) => (
               <MenuItem key={language}>
                 <button
-                  className="group flex w-full items-center rounded-md px-2 py-2 text-sm hover:ring-4 data-[focus]:ring-4"
+                  className="group flex w-full items-center rounded-md px-2 py-2 text-sm hover:ring-4 data-[focus]:ring-4 cursor-pointer"
                   type="button"
                   onClick={() => changeLanguage(language)}
                 >

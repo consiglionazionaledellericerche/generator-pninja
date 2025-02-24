@@ -1,13 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --default-ring-width: 3px;
+  --default-ring-color: var(--color-blue-500);
+}
 @layer base {
+  * {
+    @apply dark:scheme-dark;
+  }
   body {
     @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white;
   }
   .text-link {
-    @apply text-sky-600 dark:text-sky-400 hover:underline decoration-2;
+    @apply text-sky-600 dark:text-sky-400 hover:underline decoration-2 cursor-pointer;
   }
   .text-muted {
     @apply text-slate-400 dark:text-slate-500;
@@ -15,7 +20,7 @@
   .nav-bar {
     @apply md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300;
     .nav-bar-link {
-      @apply rounded-md px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 hover:ring-4 focus:outline-none focus-visible:ring-4;
+      @apply rounded-md px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 hover:ring-4 focus:outline-none focus-visible:ring-4 cursor-pointer;
     }
     .nav-bar-link.active {
       @apply bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300;
