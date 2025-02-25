@@ -21,7 +21,6 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath('react/tsconfig.node.json'), that.destinationPath('client/tsconfig.node.json'), {});
     that.fs.copyTpl(that.templatePath('react/vite.config.ts'), that.destinationPath('client/vite.config.ts'), {});
 
-    that.fs.copyTpl(that.templatePath("react/public/logo.svg"), that.destinationPath(`client/public/logo.svg`), {});
     that.fs.copyTpl(that.templatePath("react/public/keycloak.json"), that.destinationPath(`client/public/keycloak.json`), {});
 
     for (const lang of ['en', 'it', 'fr', 'de']) {
@@ -36,17 +35,20 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/vite-env.d.ts"), that.destinationPath(`client/src/vite-env.d.ts`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/pninja-logo.svg"), that.destinationPath(`client/src/assets/pninja-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/presto.svg"), that.destinationPath(`client/src/assets/presto.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
-    that.fs.copyTpl(that.templatePath("react/src/assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
+    that.fs.copyTpl(that.templatePath("assets/icon.ico"), that.destinationPath(`client/public/icon.ico`), {});
+    that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`), {});
+    that.fs.copyTpl(that.templatePath("assets/icon.svg"), that.destinationPath(`client/public/icon.svg`), {});
+    that.fs.copyTpl(that.templatePath("assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/pninja-logo.svg"), that.destinationPath(`client/src/assets/pninja-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/presto.svg"), that.destinationPath(`client/src/assets/presto.svg`));
+    that.fs.copyTpl(that.templatePath("assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
+    that.fs.copyTpl(that.templatePath("assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
+    that.fs.copyTpl(that.templatePath("assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
