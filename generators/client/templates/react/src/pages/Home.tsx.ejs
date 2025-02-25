@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
 import pninjaLogo from '../assets/pninja-logo.svg';
-import pninjaLogoLight from '../assets/pninja-logo-light.svg';
-import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
 import <%= dbms %>Logo from '../assets/<%= dbms %>-logo.svg';
 import reactLogo from '../assets/react.svg';
@@ -26,8 +24,7 @@ export default function Home() {
       <span>+</span>
       <img className="h-24" src={viteLogo} alt="Vite" title="Vite" />
       <span>=</span>
-      <img className="h-24 block dark:hidden" src={pninjaLogoLight} alt="PNinja" title="PNinja" />
-      <img className="h-24 hidden dark:block" src={pninjaLogoDark} alt="PNinja" title="PNinja" />
+      <img className="h-24" src={pninjaLogo} alt="PNinja" title="PNinja" />
     </div>
     {isAutenticated() && (
     <pre className="whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md m-4">
