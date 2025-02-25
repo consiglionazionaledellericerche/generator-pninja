@@ -134,7 +134,8 @@ export async function createReactClient(that, parsedJDL) {
                 relationships,
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships),
-                to
+                to,
+                pluralize,
             }
         );
     }

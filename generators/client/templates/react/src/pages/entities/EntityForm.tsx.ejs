@@ -43,12 +43,14 @@ const fieldTypeInputType = (type) => {
     return typeMap[type] || 'string';
 }
 -%>
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import * as z from 'zod';
 import { I<%= entity.name %>, defaultValue } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <% for({name, type, validations} of entity.body) {-%>
@@ -67,8 +69,21 @@ interface <%= entity.name %>FormProps {
   onCancel: () => void;
 }
 
+interface SelectOption {
+  id: number;
+  name: string;
+}
+
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
+  const { addNotification } = useNotifications();
+  const authenticatedFetch = useAuthenticatedFetch();
+
+<% for(related of [...new Set(relatedEntities.map(({related}) => related))]) {-%>
+  const [<%= to.camel(pluralize(related)) %>, <%= to.camel(`set_${pluralize(related)}`) %>] = useState<SelectOption[]>([]);
+<% }-%>
+  const [loadingOptions, setLoadingOptions] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -94,6 +109,33 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       console.error('Form submission error:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      setLoadingOptions(true);
+      try {
+<% for(related of [...new Set(relatedEntities.map(({related}) => related))]) {-%>
+        const <%= to.camel(pluralize(related)) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
+        const <%= to.camel(pluralize(`set_${related}`)) %>Data = await <%= to.camel(pluralize(related)) %>Response.json();
+        <%= to.camel(`set_${pluralize(related)}`) %>(<%= to.camel(pluralize(`set_${related}`)) %>Data.map((item: any) => ({
+          id: item.id,
+          name: `ID: ${item.id}`
+        })));
+<% }-%>
+      } catch (error) {
+        console.error('Error fetching options:', error);
+        addNotification({
+          type: 'error',
+          message: t('errors.options.load'),
+          details: error instanceof Error ? error.message : undefined
+        });
+      } finally {
+        setLoadingOptions(false);
+      }
+    };
+
+    fetchOptions();
+  }, [authenticatedFetch, addNotification, t]);
 
   useEffect(() => {
     if (<%= to.camel(entity.name)-%>) {
@@ -176,6 +218,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           {isSubmitting ? 'Saving...' : 'Save'}
         </button>
       </div>
+<% for(related of [...new Set(relatedEntities.map(({related}) => related))]) {-%>
+<pre>
+  {JSON.stringify(<%= to.camel(pluralize(related)) %>, null, 2)};
+</pre>
+<% }-%>
     </form>
   )
 }
