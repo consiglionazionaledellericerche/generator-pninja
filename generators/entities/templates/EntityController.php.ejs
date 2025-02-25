@@ -41,9 +41,9 @@ class <%- className %>Controller extends Controller
     {
         try {
             $<%- entityName %> = <%- className %>::create($request->all());
-<%          if (createRelated) { %>
+<%          if (createRelated) { -%>
 <%- createRelated %>
-<%          } %>
+<%          } -%>
 <%          if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
 <%          } -%>

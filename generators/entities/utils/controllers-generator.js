@@ -177,7 +177,7 @@ export class ControllersGenerator {
                     className: entity.name,
                     entityName: to.camel(entity.name),
                     withs: withs.length ? `[${withs.join(', ')}]` : null, // (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-                    createRelated: createRelated.join("\n\n\t\t")
+                    createRelated: createRelated.join('')
                     // createRelated: [], //_.compact([...createRelated, ...createInverseRelated]).join("\n\n\t\t")
                 });
         }
