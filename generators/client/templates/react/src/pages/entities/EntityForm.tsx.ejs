@@ -116,8 +116,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   useEffect(() => {
     const fetchOptions = async () => {
       setLoadingOptions(true);
-      try {
 <% for({field, related, labelField} of relatedEntities) {-%>
+      try {
         const <%= to.camel(field) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
         const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
@@ -128,17 +128,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
         }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
-<% }-%>
       } catch (error) {
         console.error('Error fetching options:', error);
         addNotification({
           type: 'error',
-          message: t('errors.options.load'),
-          details: error instanceof Error ? error.message : undefined
+          message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}`,
+          details: error instanceof Error ? error.message : undefined,
+          duration: 10000
         });
-      } finally {
-        setLoadingOptions(false);
       }
+<% }-%>
+      setLoadingOptions(false);
     };
 
     fetchOptions();
@@ -213,14 +213,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-gray-300 bg-white dark:bg-transparent py-2 px-4 text-sm font-medium shadow-sm hover:bg-gray-50 hover:dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="cursor-pointer rounded-md border border-gray-300 bg-white dark:bg-transparent py-2 px-4 text-sm font-medium shadow-sm hover:bg-gray-50 hover:dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+          className="cursor-pointer rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
         >
           {isSubmitting ? 'Saving...' : 'Save'}
         </button>
