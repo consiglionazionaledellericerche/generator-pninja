@@ -84,8 +84,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const { addNotification } = useNotifications();
   const authenticatedFetch = useAuthenticatedFetch();
 
-<% for(related of [...new Set(relatedEntities.map(({related}) => related))]) {-%>
-  const [<%= to.camel(pluralize(related)) %>DataOptions, <%= to.camel(`set_${pluralize(related)}_data_options`) %>] = useState<SelectOption[]>([]);
+<% for({field} of relatedEntities) {-%>
+  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<SelectOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
 
@@ -117,12 +117,16 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     const fetchOptions = async () => {
       setLoadingOptions(true);
       try {
-<% for(related of [...new Set(relatedEntities.map(({related}) => related))]) {-%>
-        const <%= to.camel(pluralize(related)) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
-        const <%= to.camel(pluralize(related)) %>Data = await <%= to.camel(pluralize(related)) %>Response.json();
-        <%= to.camel(`set_${pluralize(related)}_data_options`) %>((<%= to.camel(pluralize(related)) %>Data.map((item: I<%-related%>) => ({
+<% for({field, related, labelField} of relatedEntities) {-%>
+        const <%= to.camel(field) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
+        const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
+        <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
-          label: `ID: ${item.id}`
+<%        if (labelField === 'id') {%>
+          label: item.id
+<%        } else {-%>
+          label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
+<%        }-%>
         }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
 <% }-%>
       } catch (error) {
@@ -186,20 +190,20 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <select
 <%          if (isArray) {-%>
             multiple
-            size={Math.min(10, <%= to.camel(pluralize(related)) %>DataOptions.length)}
+            size={Math.min(10, <%= to.camel(field) %>DataOptions.length)}
 <%          }-%>
             id="<%= to.snake(field) %>"
             {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
             className={inputClassName}>
 <%          if (!isArray) {-%>
-            {!loadingOptions && <%= to.camel(pluralize(related)) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
+            {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
 <%          }-%>
             {loadingOptions ? (
               <option>{t('common.select.loading')}</option>
             ) : (
-              <%= to.camel(pluralize(related)) %>DataOptions.length === 0
+              <%= to.camel(field) %>DataOptions.length === 0
               ? <option>{t('common.select.noOptions')}</option>
-              : <%= to.camel(pluralize(related)) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
+              : <%= to.camel(field) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
             )}
           </select>
         </div>
