@@ -67,7 +67,5 @@ export function getModelRelatedEntities(entity, relationships) {
       });
     });
 
-  console.log('relatedEntities', relatedEntities);
-
   return relatedEntities;
 }
