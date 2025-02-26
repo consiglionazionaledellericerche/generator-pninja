@@ -192,12 +192,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
             className={inputClassName}>
 <%          if (!isArray) {-%>
-            <option value="">{t('common.select.placeholder')}</option>
+            {!loadingOptions && <%= to.camel(pluralize(related)) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
 <%          }-%>
             {loadingOptions ? (
-              <option>{t('common.loading')}</option>
+              <option>{t('common.select.loading')}</option>
             ) : (
-              <%= to.camel(pluralize(related)) %>DataOptions.map(op => <option value={op.id}>{op.label}</option>)
+              <%= to.camel(pluralize(related)) %>DataOptions.length === 0
+              ? <option>{t('common.select.noOptions')}</option>
+              : <%= to.camel(pluralize(related)) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
             )}
           </select>
         </div>

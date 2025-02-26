@@ -1,5 +1,20 @@
 {
   "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "create": "Créer",
+      "read": "Lire",
+      "update": "Mettre à jour",
+      "delete": "Supprimer"
+    }
+  },
+  "common": {
+    "select": {
+      "placeholder": "Sélectionnez une option",
+      "noOptions": "Aucune option",
+      "loading": "Chargement des options..."
+    }
+  },
   "dbms": {
     "sqlite": "SQLite",
     "mysql": "MySQL",
@@ -9,8 +24,8 @@
   },
   "entities": {
     <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
-      `\n      "${to.capital(entity.name)}": "${to.capital(entity.name)}"`,
-      `"${to.capital(pluralize(entity.name))}": "${to.capital(pluralize(entity.name))}"`,
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
       `"id": "ID"`,
       ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
       ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),

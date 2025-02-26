@@ -25,7 +25,7 @@ export default function Menu() {
       </Link>
 <%     entities.forEach((entity, index) => {-%>
       <Link className={`nav-bar-link${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`} to="/entities/<%- to.slug(pluralize(entity.name)) %>">
-        {t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}
+        {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
       </Link>
 <%    });-%>
       <LangSelect />

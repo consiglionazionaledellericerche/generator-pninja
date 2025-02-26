@@ -126,13 +126,13 @@ export default function <%= entity.name %>() {
   useEffect(() => loadRecords(), [loadRecords]);
 
   useEffect(() => {
-    document.title = t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>');
+    document.title = t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
   return <div className="m-4">
-    <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(pluralize(entity.name))%>')}</h1>
+    <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
     <Link to="/entities/<%=to.slug(pluralize(entity.name))%>/new" className="text-link">
-      {t('actions.crud.create.entities.<%=to.snake(entity.name)%>.<%=to.capital(entity.name)%>')}
+      {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
     </Link>
     <Fragment>
       <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length + foreignIds.length%>} />
