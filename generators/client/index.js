@@ -1,10 +1,8 @@
 import Generator from 'yeoman-generator';
-import jhipsterCore from 'jhipster-core';
 import colors from 'ansi-colors';
 import { createReactClient } from './react.inc.js';
 import { hello } from '../utils/hello.js';
-const { parseFromFiles } = jhipsterCore;
-
+import { parseJDL } from '../utils/jdlParser.js';
 const tab = '    ';
 export default class AuthGenerator extends Generator {
     static namespace = 'presto:client';
@@ -45,7 +43,7 @@ export default class AuthGenerator extends Generator {
     }
 
     async writing() {
-        const parsedJDL = parseFromFiles([this.config.get('entitiesFilePath')]);
+        const parsedJDL = parseJDL(this.config.get('entitiesFilePath'));
         if (this.config.get('clientType') === false) return;
         if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
         console.log(`\n\n${colors.redBright('Not implemented yet')}\n\n`);

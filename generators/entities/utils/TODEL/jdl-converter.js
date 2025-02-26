@@ -1,9 +1,8 @@
-import jhipsterCore from 'jhipster-core';
 import fs from 'fs/promises';
 import path from 'path';
 import to from 'to-case';
 import colors from 'ansi-colors';
-const { parseFromFiles } = jhipsterCore;
+import { parseJDL } from '../../../utils/jdlParser.js';
 
 export class JDLConverter {
     constructor(outputDir = '.presto') {
@@ -12,7 +11,7 @@ export class JDLConverter {
 
     async convertToJSON(jdlFilePath) {
         try {
-            const parsedJDL = parseFromFiles([jdlFilePath]);
+            const parsedJDL = parseJDL(jdlFilePath);
             await fs.mkdir(this.outputDir, { recursive: true });
             const generatedFiles = [];
 

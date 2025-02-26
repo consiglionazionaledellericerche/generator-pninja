@@ -1,9 +1,8 @@
 // import ansiColors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jhipsterCore from 'jhipster-core';
 import ansiColors from 'ansi-colors';
-const { parseFromFiles } = jhipsterCore;
+import { parseJDL } from '../../utils/jdlParser.js';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
 
@@ -109,7 +108,7 @@ export function createRelations() {
 
 
 export function createMigrations(jdlFile) {
-    this.parsedJDL = parseFromFiles([jdlFile]);
+    this.parsedJDL = parseJDL(jdlFile);
     createTables();
     createRelations();
 }

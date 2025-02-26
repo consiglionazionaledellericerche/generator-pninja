@@ -1,15 +1,14 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jhipsterCore from 'jhipster-core';
 import jclrz from 'json-colorz';
-const { parseFromFiles } = jhipsterCore;
+import { parseJDL } from '../../utils/jdlParser.js';
 import _ from 'lodash';
 
 export class ControllersGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
+        this.parsedJDL = parseJDL(this.entitiesFilePath);
     }
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 

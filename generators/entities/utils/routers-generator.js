@@ -1,13 +1,12 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jhipsterCore from 'jhipster-core';
-const { parseFromFiles } = jhipsterCore;
+import { parseJDL } from '../../utils/jdlParser.js';
 
 export class RoutersGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
+        this.parsedJDL = parseJDL(this.entitiesFilePath);
     }
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 

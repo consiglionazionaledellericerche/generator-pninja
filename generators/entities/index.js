@@ -2,8 +2,7 @@ import Generator from 'yeoman-generator';
 import { hello } from '../utils/hello.js';
 import ora from 'ora';
 import colors from 'ansi-colors';
-import jhipsterCore from 'jhipster-core';
-const { parseFromFiles } = jhipsterCore;
+import { parseJDL } from '../utils/jdlParser.js';
 import { MigrationsGenerator } from './utils/migrations-generator.js';
 import { ModelsGenerator } from './utils/models-generator.js';
 import { ControllersGenerator } from './utils/controllers-generator.js';
@@ -75,7 +74,7 @@ export default class EntityGenerator extends Generator {
       this.log(colors.green(`Entities configuration file found! Generating migrations, models, controllers and routes from ${entitiesFilePath}`));
     }
 
-    const parsedJDL = parseFromFiles([entitiesFilePath]);
+    const parsedJDL = parseJDL(entitiesFilePath);
 
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {

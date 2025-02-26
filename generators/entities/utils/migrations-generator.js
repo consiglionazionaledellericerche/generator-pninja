@@ -1,15 +1,14 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jhipsterCore from 'jhipster-core';
+import { parseJDL } from '../../utils/jdlParser.js';
 import jclrz from 'json-colorz';
-const { parseFromFiles } = jhipsterCore;
 const tab = (n) => (Array(n)).fill('    ').join('');
 
 export class MigrationsGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseFromFiles([this.entitiesFilePath]);
+        this.parsedJDL = parseJDL(this.entitiesFilePath);
         this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
     }
     convertFieldType(jhipsterType, enums) {
