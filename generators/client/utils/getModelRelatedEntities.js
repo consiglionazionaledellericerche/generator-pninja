@@ -14,6 +14,7 @@ export function getModelRelatedEntities(entity, relationships) {
     .forEach((relation) => {
       relatedEntities.push({
         field: to.snake(relation.from.injectedField || relation.to.name),
+        labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
         isArray: relation.cardinality !== 'OneToOne',
       });
@@ -30,6 +31,7 @@ export function getModelRelatedEntities(entity, relationships) {
     .forEach((relation) => {
       relatedEntities.push({
         field: to.snake(relation.to.injectedField || relation.from.name),
+        labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
         isArray: relation.cardinality === 'ManyToMany',
       });
@@ -44,6 +46,7 @@ export function getModelRelatedEntities(entity, relationships) {
     .forEach(relation => {
       relatedEntities.push({
         field: to.snake(relation.from.injectedField || relation.to.name),
+        labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
         isArray: false,
       });
@@ -58,10 +61,13 @@ export function getModelRelatedEntities(entity, relationships) {
     .forEach(relation => {
       relatedEntities.push({
         field: to.snake(relation.to.injectedField || relation.from.name),
+        labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
         isArray: true,
       });
     });
+
+  console.log('relatedEntities', relatedEntities);
 
   return relatedEntities;
 }
