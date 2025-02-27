@@ -33,7 +33,7 @@ export default function <%= entity.name %>Edit() {
         .catch((error: HttpError) => {
           addNotification({
             type: 'error',
-            message: t('messages.entities.load.error.<%= entity.name %>'),
+            message: `${t('errors.entities.read')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
             details: `${error.message}${error.details ? `: ${error.details}` : ''}`,
           });
           navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
@@ -45,8 +45,6 @@ export default function <%= entity.name %>Edit() {
   }, [id, authenticatedFetch, addNotification, navigate]);
 
   const handleSubmit = async (data: I<%= entity.name %>) => {
-    console.log('data', data);
-    console.log('id', id);
     try {
       const response = await authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
         method: id ? 'PUT' : 'POST',
@@ -55,11 +53,6 @@ export default function <%= entity.name %>Edit() {
         },
         body: JSON.stringify(data),
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || t('messages.entities.save.error.<%= entity.name %>'));
-      }
 
       addNotification({
         type: 'success',
@@ -76,7 +69,7 @@ export default function <%= entity.name %>Edit() {
       }
       addNotification({
         type: 'error',
-        message: t(`messages.entities.${id ? 'update' : 'create'}.error.<%= entity.name %>`),
+        message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
         details,
       });
     }
