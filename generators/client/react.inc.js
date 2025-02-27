@@ -32,7 +32,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/i18n.js"), that.destinationPath(`client/src/i18n.js`), {});
     that.fs.copyTpl(that.templatePath("react/src/index.css"), that.destinationPath(`client/src/index.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/keycloak.tsx"), that.destinationPath(`client/src/keycloak.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/main.tsx"), that.destinationPath(`client/src/main.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/vite-env.d.ts"), that.destinationPath(`client/src/vite-env.d.ts`), {});
 
     that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`), {});
@@ -56,7 +56,6 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize });
-    that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`), {});
