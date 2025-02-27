@@ -123,7 +123,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
 <%        if (labelField === 'id') {%>
-          label: item.id
+          label: `${item.id}`
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
