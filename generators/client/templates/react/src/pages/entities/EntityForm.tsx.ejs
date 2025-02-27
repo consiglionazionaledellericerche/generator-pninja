@@ -59,7 +59,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <% for({name, type, validations} of entity.body) {-%>
-  <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email('errors.validation.mail_format')` : '' %><%= isNullable(validations) ? '.nullable()' : '.nonempty()' %>,
+  <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email()` : '' %><%= isNullable(validations) ? '.nullable()' : '.nonempty()' %>,
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
   <%= to.snake(field) %>: <%= isArray ? `z.array(z.string()).nullable()` : `z.number().nullable()`%>,
@@ -178,7 +178,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             className={inputClassName}
           />
           {errors?.<%= to.snake(name) %>?.message && (
-            <p className="mt-1 text-sm text-red-600">{t(errors.<%= to.snake(name) %>.message)}</p>
+            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
           )}
         </div>
 <%    }-%>
