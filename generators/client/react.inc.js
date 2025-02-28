@@ -99,6 +99,12 @@ export async function createReactClient(that, parsedJDL) {
                 to,
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
+                numericColums: entity.body.reduce((acc, col) => {
+                    if (['Integer', 'Long', 'BigDecimal', 'Float', 'Double', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(col.type)) {
+                        acc.push(`'${to.snake(col.name)}'`)
+                    }
+                    return acc;
+                }, [`'id'`]),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });

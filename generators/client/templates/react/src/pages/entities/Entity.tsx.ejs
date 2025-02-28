@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowDownAZ, ArrowDownZA, Plus } from 'lucide-react';
+import { ArrowDown01, ArrowDown10, ArrowDownAZ, ArrowDownZA, Plus } from 'lucide-react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -80,6 +80,7 @@ export default function <%= entity.name %>() {
   }, [<%=to.camel(pluralize(entity.name))%>, sortConfig]);
 
   const renderSortHeader = (field: SortableField, label: string) => {
+    const isNum = [<%- numericColums.join(', ') %>].includes(field);
     const isSorted = sortConfig.field === field;
     return (
       <th
@@ -91,9 +92,9 @@ export default function <%= entity.name %>() {
           {label}
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ArrowDownAZ size={16} />
+              isNum ? <ArrowDown01 size={16} /> : <ArrowDownAZ size={16} />
             ) : (
-              <ArrowDownZA size={16} />
+              isNum ? <ArrowDown10 size={16} /> : <ArrowDownZA size={16} />
             ))}
         </div>
       </th>
@@ -148,7 +149,7 @@ export default function <%= entity.name %>() {
       <table className="data-table">
         <thead>
           <tr>
-            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
+            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'), true)}
 <%          for(column of columns) { -%>
             {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
 <%          } -%>
