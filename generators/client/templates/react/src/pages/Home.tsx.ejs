@@ -1,3 +1,23 @@
+<%
+let dbmsLink = undefined;
+switch (dbms) {
+  case "sqlite":
+    dbmsLink = "https://www.sqlite.org/"
+    break;
+  case "mysql":
+    dbmsLink = "https://www.mysql.com/"
+    break;
+  case "mariadb":
+    dbmsLink = "https://mariadb.org/"
+    break;
+  case "pgsql":
+    dbmsLink = "https://www.postgresql.org/"
+    break;
+  case "sqlsrv":
+    dbmsLink = "https://www.microsoft.com/sql-server/"
+    break;
+}
+-%>
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
@@ -17,18 +37,26 @@ export default function Home() {
   return (
     <>
     <div className="flex space-x-2 items-center text-3xl justify-center p-8">
-      <img className="h-24" src={laravelLogo} alt="Laravel" title="Laravel" />
+      <a target="_blank" href="https://laravel.com/">
+        <img className="h-24" src={laravelLogo} alt="Laravel" title="Laravel" />
+      </a>
       <span>+</span>
-      <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
+      <a target="_blank" href="<%-dbmsLink%>">
+        <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
+      </a>
       <span>+</span>
-      <img className="h-24" src={reactLogo} alt="React" title="React" />
+      <a target="_blank" href="https://react.dev/">
+        <img className="h-24" src={reactLogo} alt="React" title="React" />
+      </a>
       <span>+</span>
-      <img className="h-24" src={viteLogo} alt="Vite" title="Vite" />
+      <a target="_blank" href="https://vite.dev/">
+        <img className="h-24" src={viteLogo} alt="Vite" title="Vite" />
+      </a>
       <span>=</span>
-      <span>
+      <a target="_blank" href="https://pninja.tech">
         <img className="h-24 hidden dark:block" src={pninjaLogoDark} alt="PNinja" title="PNinja" />
         <img className="h-24 block dark:hidden" src={pninjaLogoLight} alt="PNinja" title="PNinja" />
-      </span>
+      </a>
     </div>
     {isAutenticated() && (
     <pre className="whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md m-4">
