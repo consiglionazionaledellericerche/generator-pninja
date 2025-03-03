@@ -17,6 +17,7 @@ export function getModelRelatedEntities(entity, relationships) {
         labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
         isArray: relation.cardinality !== 'OneToOne',
+        cardinality: relation.cardinality,
       });
     });
 
@@ -24,7 +25,7 @@ export function getModelRelatedEntities(entity, relationships) {
   relationships
     .filter(
       (relation) =>
-        (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') &&
+        (relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') &&
         relation.to.name === entity.name &&
         (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
     )
@@ -34,6 +35,7 @@ export function getModelRelatedEntities(entity, relationships) {
         labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
         isArray: relation.cardinality === 'ManyToMany',
+        cardinality: relation.cardinality,
       });
     });
 
@@ -49,6 +51,7 @@ export function getModelRelatedEntities(entity, relationships) {
         labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
         isArray: false,
+        cardinality: relation.cardinality,
       });
     });
 
@@ -64,6 +67,7 @@ export function getModelRelatedEntities(entity, relationships) {
         labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
         isArray: true,
+        cardinality: relation.cardinality,
       });
     });
 

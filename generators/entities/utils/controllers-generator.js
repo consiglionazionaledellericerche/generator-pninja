@@ -124,7 +124,7 @@ export class ControllersGenerator {
                     if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
                     return new \\App\\Models\\${fromEntity}($o);
                 }, $request->all()["${toField}"]);
-                $${to.camel(entity.name)}->${toField}()->saveMany($related);
+                $${to.camel(entity.name)}->${toField}()->sync($related);
             };`);
                 }
             });

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowDown01, ArrowUp10, ArrowDownAZ, ArrowUpZA, Plus } from 'lucide-react';
+import { ArrowDown01, ArrowDownAZ, ArrowDownUp, ArrowUp10, ArrowUpZA, Plus } from 'lucide-react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -96,6 +96,7 @@ export default function <%= entity.name %>() {
             ) : (
               isNum ? <ArrowUp10 size={16} /> : <ArrowUpZA size={16} />
             ))}
+          {!isSorted && <ArrowDownUp size={16} />}
         </div>
       </th>
     );

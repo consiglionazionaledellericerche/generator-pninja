@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
-import { JsonPrint } from '../../components/JsonPrint';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%relatedEntities
@@ -103,7 +102,6 @@ export default function <%= entity.name %>View() {
       <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID {id}</h1>
       <SimpleLoader loading={loading} />
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
-      {!loading && <JsonPrint data={<%=to.camel(entity.name)%>} />}
     </div>
   );
 }

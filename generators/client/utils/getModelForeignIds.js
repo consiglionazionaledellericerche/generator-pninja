@@ -13,7 +13,9 @@ export function getModelForeignIds(entity, relationships) {
             const foreignId = `${toInjectedField}_id`;
             const nullable = !relation.from.required;
             const related = relation.from.name;
-            foreignIds.push({ foreignId, nullable, related })
+            const labelField = relation.to.injectedFieldLabel;
+            const cardinality = relation.cardinality;
+            foreignIds.push({ foreignId, labelField, nullable, related, cardinality })
         });
 
     relationships
@@ -25,7 +27,9 @@ export function getModelForeignIds(entity, relationships) {
             const foreignId = `${fromInjectedField}_id`;
             const nullable = !relation.from.required;
             const related = relation.to.name;
-            foreignIds.push({ foreignId, nullable, related })
+            const labelField = relation.from.injectedFieldLabel;
+            const cardinality = relation.cardinality;
+            foreignIds.push({ foreignId, labelField, nullable, related, cardinality })
         });
 
     return foreignIds;

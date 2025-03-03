@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { JsonPrint } from '../../components/JsonPrint';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { <%= entity.name %>Form } from './<%= entity.name %>Form';
@@ -92,7 +91,6 @@ export default function <%= entity.name %>Edit() {
           onCancel={() => navigate('/entities/<%=to.slug(pluralize(entity.name))%>')}
         />
       )}
-      {!loading && <JsonPrint data={<%-to.camel(entity.name)%>} className="mt-4" />}
     </div>
   );
 }
