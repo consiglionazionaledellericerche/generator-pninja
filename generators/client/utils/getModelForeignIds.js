@@ -9,13 +9,13 @@ export function getModelForeignIds(entity, relationships) {
             || (relation.cardinality === 'OneToMany' && relation.to.name === entity.name)
         )
         .forEach(relation => {
-            const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
-            const foreignId = `${toInjectedField}_id`;
+            const injectedField = to.snake(relation.to.injectedField || relation.from.name);
+            const foreignId = `${injectedField}_id`;
             const nullable = !relation.from.required;
             const related = relation.from.name;
             const labelField = relation.to.injectedFieldLabel;
             const cardinality = relation.cardinality;
-            foreignIds.push({ foreignId, labelField, nullable, related, cardinality })
+            foreignIds.push({ foreignId, injectedField, labelField, nullable, related, cardinality })
         });
 
     relationships
@@ -23,13 +23,13 @@ export function getModelForeignIds(entity, relationships) {
             relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
         )
         .forEach(relation => {
-            const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
-            const foreignId = `${fromInjectedField}_id`;
+            const injectedField = to.snake(relation.from.injectedField || relation.to.name);
+            const foreignId = `${injectedField}_id`;
             const nullable = !relation.from.required;
             const related = relation.to.name;
             const labelField = relation.from.injectedFieldLabel;
             const cardinality = relation.cardinality;
-            foreignIds.push({ foreignId, labelField, nullable, related, cardinality })
+            foreignIds.push({ foreignId, injectedField, labelField, nullable, related, cardinality })
         });
 
     return foreignIds;
