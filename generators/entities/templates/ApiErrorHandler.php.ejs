@@ -20,7 +20,7 @@ class ApiErrorHandler
 
         return response()->json([
             'error' => 'internal_error',
-            'message' => 'An unexpected error occurred'
+            'message' => `An unexpected error occurred: ${$e->getMessage()}`
         ], 500);
     }
 }
