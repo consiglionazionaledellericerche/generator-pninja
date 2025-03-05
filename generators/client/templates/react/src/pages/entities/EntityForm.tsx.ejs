@@ -56,6 +56,7 @@ import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model
 <%}-%>
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
+import { ChevronDown } from 'lucide-react';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <% for({name, type, validations} of entity.body) {-%>
@@ -190,9 +191,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     }
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
-  const inputClassName =
-    'mt-3 block w-full rounded-lg border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 py-1.5 px-3 text-sm/6 focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:dark:outline-white/25 scheme-light dark:scheme-dark';
-
+  const inputClassName = 'scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3';
+  const selectClassName = 'scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 pr-8 pl-3 text-base appearance-none col-start-1 row-start-1';
+  const selectChevronClassName = 'mt-3 pointer-events-none col-start-1 row-start-1 mr-2 self-center justify-self-end text-gray-500 sm:size-4';
+  const selectContainerClassName = 'grid grid-cols-1';
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className="max-w-5xl mx-auto space-y-4">
@@ -220,25 +222,28 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
           </label>
-          <select
-<%          if (isArray) {-%>
-            multiple
-            size={Math.min(10, <%= to.camel(field) %>DataOptions.length)}
-<%          }-%>
-            id="<%= to.snake(field) %>"
-            {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
-            className={inputClassName}>
-<%          if (!isArray) {-%>
-            {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
-<%          }-%>
-            {loadingOptions ? (
-              <option>{t('common.select.loading')}</option>
-            ) : (
-              <%= to.camel(field) %>DataOptions.length === 0
-              ? <option>{t('common.select.noOptions')}</option>
-              : <%= to.camel(field) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
-            )}
-          </select>
+          <div className={selectContainerClassName}>
+            <select
+<%            if (isArray) {-%>
+              multiple
+              size={Math.min(10, <%= to.camel(field) %>DataOptions.length)}
+<%            }-%>
+              id="<%= to.snake(field) %>"
+              {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
+              className={selectClassName}>
+<%            if (!isArray) {-%>
+              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
+<%            }-%>
+              {loadingOptions ? (
+                <option>{t('common.select.loading')}</option>
+              ) : (
+                <%= to.camel(field) %>DataOptions.length === 0
+                ? <option>{t('common.select.noOptions')}</option>
+                : <%= to.camel(field) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
+              )}
+            </select>
+            <ChevronDown className={selectChevronClassName} />
+          </div>
         </div>
 <%    }-%>
 <%    for({foreignId, related} of foreignIds) {-%>
