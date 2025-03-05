@@ -131,7 +131,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
-<%        if (labelField === 'id') {%>
+<%        if (labelField === 'id') {-%>
           label: `${item.id}`
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
@@ -143,7 +143,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           type: 'error',
           message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}`,
           details: error instanceof Error ? error.message : undefined,
-          duration: 10000
+          duration: 0,
         });
       }
 <% }-%>
@@ -165,7 +165,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           type: 'error',
           message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}`,
           details: error instanceof Error ? error.message : undefined,
-          duration: 10000
+          duration: 0,
         });
       }
 <% }-%>
@@ -242,7 +242,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 : <%= to.camel(field) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
+<%            if (!isArray) {-%>
             <ChevronDown aria-hidden="true" className={selectChevronClassName} />
+<%            }-%>
           </div>
         </div>
 <%    }-%>
@@ -251,19 +253,24 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
           </label>
-          <select
-            id="<%= to.snake(foreignId) %>"
-            {...register('<%= to.snake(foreignId) %>', { valueAsNumber: true })}
-            className={inputClassName}>
-            {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
-            {loadingOptions ? (
-              <option>{t('common.select.loading')}</option>
-            ) : (
-              <%= to.camel(foreignId) %>DataOptions.length === 0
-              ? <option>{t('common.select.noOptions')}</option>
-              : <%= to.camel(foreignId) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
-            )}
-          </select>
+          <div className={selectContainerClassName}>
+            <select
+              id="<%= to.snake(foreignId) %>"
+              {...register('<%= to.snake(foreignId) %>', { valueAsNumber: true })}
+              className={selectClassName}>
+              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
+              {loadingOptions ? (
+                <option>{t('common.select.loading')}</option>
+              ) : (
+                <%= to.camel(foreignId) %>DataOptions.length === 0
+                ? <option>{t('common.select.noOptions')}</option>
+                : <%= to.camel(foreignId) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
+              )}
+            </select>
+<%            if (!isArray) {-%>
+            <ChevronDown aria-hidden="true" className={selectChevronClassName} />
+<%            }-%>
+          </div>
         </div>
 <%    }-%>
       </div>
