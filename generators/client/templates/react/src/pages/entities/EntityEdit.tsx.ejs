@@ -33,6 +33,7 @@ export default function <%= entity.name %>Edit() {
             type: 'error',
             message: `${t('errors.entities.read')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
             details: `${error.message}${error.details ? `: ${error.details}` : ''}`,
+            duration: 0,
           });
           navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
         })
@@ -69,6 +70,7 @@ export default function <%= entity.name %>Edit() {
         type: 'error',
         message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
         details,
+        duration: 0,
       });
     }
   };
