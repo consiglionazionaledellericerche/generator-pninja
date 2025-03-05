@@ -18,7 +18,7 @@ class <%- className %>Controller extends Controller
 <%          if (withs) { -%>
             $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>
-            $result = $query->all();
+            $result = $query->get();
 <%          } -%>
             return response()->json($result);
         } catch (\Exception $e) {

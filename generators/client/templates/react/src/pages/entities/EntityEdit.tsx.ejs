@@ -41,7 +41,7 @@ export default function <%= entity.name %>Edit() {
           setLoading(false);
         });
     }
-  }, [id, authenticatedFetch, addNotification, navigate]);
+  }, [id, authenticatedFetch, addNotification, navigate, t]);
 
   const handleSubmit = async (data: I<%= entity.name %>) => {
     try {
