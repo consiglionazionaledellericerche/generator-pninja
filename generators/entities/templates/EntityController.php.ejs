@@ -11,14 +11,16 @@ class <%- className %>Controller extends Controller
 {
     use HandlesApiErrors;
 
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $query = <%- className %>::query();
 <%          if (withs) { -%>
-            return response()->json(<%- className %>::with(<%- withs %>)->get());
+            $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>
-            return response()->json(<%- className %>::all());
+            $result = $query->all();
 <%          } -%>
+            return response()->json($result);
         } catch (\Exception $e) {
             return $this->handleIndexError($e);
         }
