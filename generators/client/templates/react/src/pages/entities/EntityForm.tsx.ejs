@@ -193,7 +193,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const inputClassName = 'scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3';
   const selectClassName = 'scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-500 rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 pr-8 pl-3 text-base appearance-none col-start-1 row-start-1';
-  const selectChevronClassName = 'mt-3 pointer-events-none col-start-1 row-start-1 mr-2 self-center justify-self-end text-gray-500 sm:size-4';
+  const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
   const selectContainerClassName = 'grid grid-cols-1';
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -242,7 +242,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 : <%= to.camel(field) %>DataOptions.map(op => <option key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
-            <ChevronDown className={selectChevronClassName} />
+            <ChevronDown aria-hidden="true" className={selectChevronClassName} />
           </div>
         </div>
 <%    }-%>
