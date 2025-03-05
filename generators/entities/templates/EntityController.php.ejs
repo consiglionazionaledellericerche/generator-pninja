@@ -50,7 +50,7 @@ class <%- className %>Controller extends Controller
             return response()->json($<%- entityName %>, 201);
         } catch (\Exception $e) {
             return $this->handleCreateError($e);
-        }     
+        }
     }
 
     public function update($id, Request $request)
@@ -68,7 +68,7 @@ class <%- className %>Controller extends Controller
             return response()->json($<%- entityName %>, 200);
         } catch (\Exception $e) {
             return $this->handleUpdateError($e);
-        }     
+        }
     }
 
     public function destroy($id)
