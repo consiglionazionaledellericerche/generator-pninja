@@ -150,7 +150,7 @@ export default function <%= entity.name %>() {
       <table className="data-table">
         <thead>
           <tr>
-            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'), true)}
+            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
 <%          for(column of columns) { -%>
             {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
 <%          } -%>
