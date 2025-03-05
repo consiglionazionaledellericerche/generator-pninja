@@ -106,8 +106,6 @@ export class FactoriesGenerator {
                     return hasUnique ? 'fake()->unique()->firstNameMale()' : 'fake()->firstNameMale()';
                 } else if (to.snake(field.name).includes('last_name')) {
                     return hasUnique ? 'fake()->unique()->lastName()' : 'fake()->lastName()';
-                } else if (field.name.toLowerCase().includes('name')) {
-                    return hasUnique ? 'fake()->unique()->name()' : 'fake()->name()';
                 } else if (field.name.toLowerCase().includes('phone')) {
                     return hasUnique ? 'fake()->unique()->phoneNumber()' : 'fake()->phoneNumber()';
                 } else if (field.name.toLowerCase().includes('address')) {
@@ -115,7 +113,7 @@ export class FactoriesGenerator {
                 } else if (field.name.toLowerCase().includes('code')) {
                     return hasUnique ? 'fake()->unique()->bothify("??##??##")' : 'fake()->bothify("??##??##")';
                 } else {
-                    return hasUnique ? 'fake()->unique()->word()' : 'fake()->word()';
+                    return hasUnique ? `fake()->unique()->regexify('[A-Z][a-z]{7}')` : `fake()->regexify('[A-Z][a-z]{7}')`;
                 }
             case 'Integer':
                 if (field.fieldValidateRules) {
@@ -148,7 +146,7 @@ export class FactoriesGenerator {
                 if (enums.filter(e => field.type === e.name).map(e => e.name).pop()) {
                     return `((\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())[array_rand(\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())])->value`
                 }
-                return 'fake()->word()';
+                return `fake()->regexify('[A-Z][a-z]{7}')`;
         }
     }
 }
