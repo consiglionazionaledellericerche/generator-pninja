@@ -248,7 +248,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           </div>
         </div>
 <%    }-%>
-<%    for({foreignId, related} of foreignIds) {-%>
+<%    for({foreignId, related, isArray} of foreignIds) {-%>
         <div>
           <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
