@@ -89,14 +89,14 @@ export default function <%= entity.name %>() {
         onClick={() => sortableColumns.includes(field) && handleSort(field)}
       >
         <div className="flex items-center gap-1">
-          {label}
+          <div className="flex-1">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              isNum ? <ArrowDown01 size={16} /> : <ArrowDownAZ size={16} />
+              isNum ? <ArrowDown01 className="pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ArrowDownAZ className="pointer-events-none size-5 text-gray-500 sm:size-4" />
             ) : (
-              isNum ? <ArrowUp10 size={16} /> : <ArrowUpZA size={16} />
+              isNum ? <ArrowUp10 className="pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ArrowUpZA className="pointer-events-none size-5 text-gray-500 sm:size-4" />
             ))}
-          {!isSorted && <ArrowDownUp size={16} />}
+          {!isSorted && <ArrowDownUp className="pointer-events-none size-5 text-gray-500 sm:size-4" />}
         </div>
       </th>
     );
