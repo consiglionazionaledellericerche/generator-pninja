@@ -32,7 +32,8 @@ export default function <%= entity.name %>Edit() {
           addNotification({
             type: 'error',
             message: `${t('errors.entities.read')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
-            details: `${error.message}${error.details ? `: ${error.details}` : ''}`,
+            details: error?.message,
+            techDetails: error?.details,
             duration: 0,
           });
           navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
@@ -60,16 +61,19 @@ export default function <%= entity.name %>Edit() {
       navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
     } catch (error) {
       let details = undefined;
+      let techDetails = undefined;
       if (error instanceof Error) {
         details = error.message;
       }
       if (error instanceof HttpError) {
-        details = `${error.message}${error.details ? `: ${error.details}` : ''}`;
+        details = error?.message;
+        techDetails = error?.details;
       }
       addNotification({
         type: 'error',
         message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
         details,
+        techDetails,
         duration: 0,
       });
     }

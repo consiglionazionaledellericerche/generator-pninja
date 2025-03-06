@@ -1,9 +1,10 @@
-// src/components/Toast.tsx
-import { X, Info } from 'lucide-react';
+import { X, ChevronDown, ChevronUp } from 'lucide-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function Toast({ notification }: { notification: INotification }) {
+  const { t } = useTranslation();
   const {
     removeNotification,
     pauseNotification,
@@ -15,7 +16,7 @@ export function Toast({ notification }: { notification: INotification }) {
   const duration = notification.duration || 5000;
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
+  const [showTechDetails, setShowTechDetails] = useState(false);
   const hasTimer = hasAutoClose(notification.id);
 
   const colors = useMemo(
@@ -69,25 +70,48 @@ export function Toast({ notification }: { notification: INotification }) {
       <div className="p-4 flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <div>
-              {notification.message}
-              <span className="inline-flex items-center">
-                &nbsp;
-                {notification.details && (
-                  <button
-                    onClick={() => setShowDetails(!showDetails)}
-                    className="hover:text-gray-200 focus:outline-none"
-                    title={showDetails ? 'Hide details' : 'Show details'}
-                  >
-                    <Info size={16} className={showDetails ? 'opacity-100' : 'opacity-75'} />
-                  </button>
-                )}
-              </span>
-            </div>
+            <div>{notification.message}</div>
           </div>
-          {showDetails && notification.details && (
+          {notification.details && (
             <div className="mt-2 text-sm opacity-75 bg-black/10 p-2 rounded">
-              {notification.details}
+              <div>
+                {notification.details}
+                {notification.techDetails && !showTechDetails && (
+                  <span className="text-xs">
+                    {' '}
+                    (
+                    <a
+                      href="#"
+                      onClick={() => setShowTechDetails(!showTechDetails)}
+                      className="hover:text-gray-200"
+                    >
+                      {t('common.show.more')} ...
+                    </a>
+                    )
+                  </span>
+                )}
+              </div>
+              {showTechDetails && notification.techDetails && (
+                <>
+                  <pre className="mt-2 text-xs text-wrap text-white/80">
+                    {notification.techDetails}
+                  </pre>
+                  {notification.techDetails && showTechDetails && (
+                    <span className="text-xs">
+                      {' '}
+                      (
+                      <a
+                        href="#"
+                        onClick={() => setShowTechDetails(!showTechDetails)}
+                        className="hover:text-gray-200"
+                      >
+                        {t('common.show.less')}
+                      </a>
+                      )
+                    </span>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>
