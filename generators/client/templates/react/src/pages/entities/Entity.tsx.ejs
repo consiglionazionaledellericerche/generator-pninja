@@ -136,7 +136,7 @@ export default function <%= entity.name %>() {
     <div className="flex justify-end gap-4 mb-4">
       <Link
         to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
-        className="inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+        className="primary-button"
       >
         <Plus size={16} />
         {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}

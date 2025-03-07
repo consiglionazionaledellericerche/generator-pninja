@@ -287,47 +287,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <button
           type="button"
           onClick={onCancel}
-          className="
-          cursor-pointer
-          rounded-md
-          border
-          border-gray-300
-          bg-white
-          dark:bg-transparent
-          py-2
-          px-4
-          text-sm
-          font-medium
-          shadow-sm
-          hover:bg-gray-50
-          hover:dark:bg-gray-800
-
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
-
-          disabled:opacity-50"
+          className="cancel-button"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isSubmitting}
-          className="
-          cursor-pointer
-          rounded-md
-          border
-          border-transparent
-          bg-blue-600
-          hover:bg-blue-700
-          py-2
-          px-4
-          text-sm
-          font-medium
-          text-white
-          shadow-sm
-
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
-
-          disabled:opacity-50"
+          className="primary-button"
         >
           {isSubmitting ? 'Saving...' : 'Save'}
         </button>
