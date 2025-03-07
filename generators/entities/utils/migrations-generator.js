@@ -1,7 +1,6 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { parseJDL } from '../../utils/jdlParser.js';
-import jclrz from 'json-colorz';
 const tab = (n) => (Array(n)).fill('    ').join('');
 
 export class MigrationsGenerator {

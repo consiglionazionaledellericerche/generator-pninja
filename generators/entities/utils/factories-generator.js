@@ -1,6 +1,4 @@
 import to from 'to-case';
-import pluralize from 'pluralize';
-import jclrz from 'json-colorz';
 import { parseJDL } from '../../utils/jdlParser.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 

@@ -1,6 +1,5 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import jclrz from 'json-colorz';
 import { parseJDL } from '../../utils/jdlParser.js';
 export class ModelsGenerator {
     constructor(that, entitiesFilePath) {
