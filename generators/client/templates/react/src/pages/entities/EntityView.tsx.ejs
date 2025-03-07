@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeft } from 'lucide-react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -102,6 +103,17 @@ export default function <%= entity.name %>View() {
       <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID {id}</h1>
       <SimpleLoader loading={loading} />
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
+      {!loading && (
+      <div className="flex justify-center gap-4 mt-4">
+        <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>`} className="cancel-button">
+          <ArrowLeft size={16} />
+          {t('actions.crud.back')}
+        </Link>
+        <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
+          {t('actions.crud.edit')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
+        </Link>
+      </div>
+      )}
     </div>
   );
 }
