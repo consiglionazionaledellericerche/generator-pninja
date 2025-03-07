@@ -1,6 +1,4 @@
 import to from 'to-case';
-import pluralize from 'pluralize';
-import jclrz from 'json-colorz';
 import { parseJDL } from '../../utils/jdlParser.js';
 import _ from 'lodash';
 
@@ -42,6 +40,7 @@ export class ControllersGenerator {
                 if (relation.cardinality === 'OneToOne') {
                     createRelated.push(`
             if(array_key_exists("${fromField}", $request->all()) && $request->all()["${fromField}"]) {
+                \\App\\Models\\${relation.to.name}::where('${to.snake(relation.to.injectedField || relation.from.name)}_id', $id)->update(['${to.snake(relation.to.injectedField || relation.from.name)}_id' => null]); // only-update
                 $request_${fromField} = $request->all()["${fromField}"];
                 if (is_numeric($request_${fromField})) {
                     $${fromField} = \\App\\Models\\${toEntity}::findOrFail($request_${fromField});
@@ -171,13 +170,19 @@ export class ControllersGenerator {
             };`);
             });
 
+            const relatedEntitiesForFilters = relationships.filter(relation =>
+                relation.cardinality === 'OneToOne'
+                && relation.to.name === entity.name
+            ).map(rel => rel.to.injectedField || rel.from.name);
+
             this.that.fs.copyTpl(this.that.templatePath("EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),
-                    withs: withs.length ? `[${withs.join(', ')}]` : null, // (_.compact([...withs, ...inverseWiths]).length) ? `['${_.compact([...withs, ...inverseWiths]).join(`','`)}']` : null,
-                    createRelated: createRelated.join('')
-                    // createRelated: [], //_.compact([...createRelated, ...createInverseRelated]).join("\n\n\t\t")
+                    withs: withs.length ? `[${withs.join(', ')}]` : null,
+                    createRelated: createRelated.join(''),
+                    relatedEntitiesForFilters,
+                    to,
                 });
         }
     }

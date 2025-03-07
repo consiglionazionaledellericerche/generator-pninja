@@ -2,7 +2,6 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
-import jsonColorz from 'json-colorz';
 
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
@@ -140,6 +139,10 @@ export async function createReactClient(that, parsedJDL) {
                 relationships,
                 foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['OneToMany', 'ManyToOne'].includes(fi.cardinality)),
                 relatedEntities: getModelRelatedEntities(entity, relationships).filter(re => ['OneToOne', 'ManyToMany'].includes(re.cardinality)),
+                relatedEntitiesForFilters: relationships.filter(relation =>
+                    relation.cardinality === 'OneToOne'
+                    && relation.from.name === entity.name
+                ).map(rel => to.snake(rel.from.injectedField || rel.to.name)),
                 to,
                 pluralize,
             }

@@ -1,3 +1,7 @@
+<%
+console.log(`${className} relatedEntitiesForFilters`);
+console.log(JSON.stringify(relatedEntitiesForFilters, null, 2));
+-%>
 <?php
 namespace App\Http\Controllers;
 
@@ -15,6 +19,11 @@ class <%- className %>Controller extends Controller
     {
         try {
             $query = <%- className %>::query();
+<%          for (rel of relatedEntitiesForFilters) { -%>
+            if ($request->has('filter') && $request->filter === '<%- to.slug(rel)%>-is-null') {
+                $query->whereNull('<%- to.snake(rel)%>_id');
+            }
+<%          } -%>
 <%          if (withs) { -%>
             $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>
@@ -44,7 +53,7 @@ class <%- className %>Controller extends Controller
         try {
             $<%- entityName %> = <%- className %>::create($request->all());
 <%          if (createRelated) { -%>
-<%- createRelated %>
+<%- createRelated.split("\n").filter(line => !line.endsWith("// only-update")).join("\n") %>
 <%          } -%>
 <%          if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
@@ -54,7 +63,6 @@ class <%- className %>Controller extends Controller
             return $this->handleCreateError($e);
         }
     }
-
     public function update($id, Request $request)
     {
         try {
@@ -65,7 +73,7 @@ class <%- className %>Controller extends Controller
 <%          } -%>
             $<%- entityName %>->update($request->all());
 <%          if (createRelated) { -%>
-<%- createRelated %>
+<%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>
             return response()->json($<%- entityName %>, 200);
         } catch (\Exception $e) {
