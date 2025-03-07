@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowDown01, ArrowDownAZ, ArrowDownUp, ArrowUp10, ArrowUpZA, Plus } from 'lucide-react';
+import { ChevronsUpDown, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -89,14 +89,14 @@ export default function <%= entity.name %>() {
         onClick={() => sortableColumns.includes(field) && handleSort(field)}
       >
         <div className="flex items-center gap-1">
-          <div className="flex-1">{label}</div>
+          <div>{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              isNum ? <ArrowDown01 className="pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ArrowDownAZ className="pointer-events-none size-5 text-gray-500 sm:size-4" />
+              isNum ? <ChevronDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ChevronDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
             ) : (
-              isNum ? <ArrowUp10 className="pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ArrowUpZA className="pointer-events-none size-5 text-gray-500 sm:size-4" />
+              isNum ? <ChevronUp className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ChevronUp className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
             ))}
-          {!isSorted && <ArrowDownUp className="pointer-events-none size-5 text-gray-500 sm:size-4" />}
+          {!isSorted && <ChevronsUpDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />}
         </div>
       </th>
     );
