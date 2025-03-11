@@ -2,6 +2,15 @@ import jhipsterCore from 'jhipster-core';
 const { parseFromFiles } = jhipsterCore;
 
 export function parseJDL(entitiesFilePath) {
+    if (!entitiesFilePath) return {
+        "applications": [],
+        "deployments": [],
+        "constants": {},
+        "entities": [],
+        "relationships": [],
+        "enums": [],
+        "options": {}
+    };
     const r = /^([^(]+)(?:\(([^)]+)\))?$/
     let parsedJDL = parseFromFiles([entitiesFilePath]);
     parsedJDL.relationships = (parsedJDL.relationships || []).map(relation => {
