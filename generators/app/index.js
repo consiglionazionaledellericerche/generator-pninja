@@ -32,7 +32,7 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: authGeneratorPath,
-      namespace: 'presto:auth'
+      namespace: 'pninja:auth'
     });
 
     // sub generator Entities
@@ -46,7 +46,7 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: entitiesGeneratorPath,
-      namespace: 'presto:entities'
+      namespace: 'pninja:entities'
     });
 
     // sub generator Client
@@ -59,7 +59,7 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: clientGeneratorPath,
-      namespace: 'presto:client'
+      namespace: 'pninja:client'
     });
 
     // sub generator Final
@@ -73,7 +73,7 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: finalGeneratorPath,
-      namespace: 'presto:final'
+      namespace: 'pninja:final'
     });
   }
   async prompting() {

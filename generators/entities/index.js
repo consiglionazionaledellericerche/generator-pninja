@@ -8,10 +8,8 @@ import { ModelsGenerator } from './utils/models-generator.js';
 import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
-
-const dotPrestoDir = './.presto'
 export default class EntityGenerator extends Generator {
-  static namespace = 'presto:entities';
+  static namespace = 'pninja:entities';
   constructor(args, opts) {
     super(args, opts);
     this.option('fromMain', {
@@ -44,7 +42,7 @@ export default class EntityGenerator extends Generator {
         type: "input",
         name: "entitiesFilePath",
         message: "Entities definition file path",
-        default: this.config.get('entitiesFilePath') || '.presto.jdl'
+        default: this.config.get('entitiesFilePath') || 'entities.jdl'
       }]);
       this.answers = { ...this.answers, ...answers };
     }
@@ -82,7 +80,7 @@ export default class EntityGenerator extends Generator {
       }
     });
 
-    this.fs.writeJSON(this.destinationPath(`.presto/Entities.json`), parsedJDL);
+    this.fs.writeJSON(this.destinationPath(`.pninja/Entities.json`), parsedJDL);
 
     // JDL > Migrations
     try {

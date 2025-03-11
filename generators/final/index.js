@@ -2,7 +2,7 @@ import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 
 export default class FinalGenerator extends Generator {
-  static namespace = 'presto:final';
+  static namespace = 'pninja:final';
 
   constructor(args, opts) {
     super(args, opts);

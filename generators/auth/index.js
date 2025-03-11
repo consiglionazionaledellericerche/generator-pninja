@@ -6,7 +6,7 @@ import colors from 'ansi-colors';
 const tab = '    ';
 
 export default class AuthGenerator extends Generator {
-  static namespace = 'presto:auth';
+  static namespace = 'pninja:auth';
 
   constructor(args, opts) {
     super(args, opts);

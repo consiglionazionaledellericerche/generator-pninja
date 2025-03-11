@@ -1,5 +1,5 @@
 {
-  "name": "generator-presto",
+  "name": "generator-pninja",
   "version": "0.2.0",
   "description": "Generator for PHP/Vue applications",
   "type": "module",

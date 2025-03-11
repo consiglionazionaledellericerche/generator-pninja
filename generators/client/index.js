@@ -5,7 +5,7 @@ import { hello } from '../utils/hello.js';
 import { parseJDL } from '../utils/jdlParser.js';
 const tab = '    ';
 export default class AuthGenerator extends Generator {
-    static namespace = 'presto:client';
+    static namespace = 'pninja:client';
 
     constructor(args, opts) {
         super(args, opts);

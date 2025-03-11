@@ -8,7 +8,7 @@ export class MigrationsGenerator {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
         this.parsedJDL = parseJDL(this.entitiesFilePath);
-        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
+        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     }
     convertFieldType(jhipsterType, enums) {
         const typeMap = {
@@ -65,7 +65,7 @@ export class MigrationsGenerator {
     }
     createTables() {
         const { enums, entities } = this.parsedJDL;
-        const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
+        const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
         for (const entity of entities) {
             const tabName = to.snake(pluralize(entity.tableName));
             const columns = this.convertFields(entity.body, enums);

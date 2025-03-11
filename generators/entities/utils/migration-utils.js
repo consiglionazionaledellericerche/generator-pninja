@@ -59,7 +59,7 @@ export function convertFields(fields, enums) {
 
 export function createTables() {
     const { enums, entities } = this.parsedJDL;
-    const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
+    const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     for (const entity of entities) {
         const tabName = to.snake(pluralize(entity.tableName));
         const columns = convertFields(entity.body, enums);
@@ -73,7 +73,7 @@ export function createTables() {
 }
 
 const createOneToOneRelation = (rel) => {
-    const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_presto_entity';
+    const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     let fromInjectedField = rel.from.injectedField;
     let toInjectedField = rel.to.injectedField;
     if (fromInjectedField === null && toInjectedField !== null) {
