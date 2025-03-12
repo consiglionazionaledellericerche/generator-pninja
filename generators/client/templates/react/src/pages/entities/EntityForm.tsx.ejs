@@ -59,11 +59,21 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { ChevronDown } from 'lucide-react';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
-<% for({name, type, validations} of entity.body) {-%>
+<%  for({name, type, validations} of entity.body) {-%>
+<%    if(fieldTypeToSchema(type) === 'string') {-%>
+  <%= to.snake(name) %>: z
+    .string()<%- isEmail(name) ? `.email()` : '' %>
+    .transform((val) => val || undefined)
+    .pipe(z.string().<%= isNullable(validations) ? 'nullable()' : 'nonempty()' %>),
+<%    } else {-%>
   <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email()` : '' %><%= isNullable(validations) ? '.nullable()' : (fieldTypeToSchema(type) === 'number' ? '.min(1)' : '.nonempty()') %>,
-<% } -%>
+<%    } -%>
+<%  } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
-  <%= to.snake(field) %>: <%= isArray ? `z.array(z.string()).nullable()` : `z.number().min(1)`%>,
+  <%= to.snake(field) %>: <%- isArray ? `z.array(z.string()).nullable()` : `z
+    .string()
+    .transform((val) => val || undefined)
+    .pipe(z.string().nonempty())`%>,
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
   <%= to.snake(foreignId) %>: z.number().nullable(),
@@ -105,7 +115,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     defaultValues: {
       ...defaultValue,
 <% for({field, related, isArray} of relatedEntities) {-%>
-      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.<%- isArray ? 'map(item => String(item.id))' : 'id' %>,
+<%  if (isArray) {-%>
+      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
+<%  } else {-%>
+      <%= to.snake(field) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.id || ''),
+<%  }-%>
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
       <%= to.snake(foreignId) %>: <%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>,
@@ -185,7 +199,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %>,
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
-        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.<%- isArray ? 'map(item => String(item.id))' : 'id' %>,
+<%  if (isArray) {-%>
+      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
+<%  } else {-%>
+      <%= to.snake(field) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.id || ''),
+<%  }-%>
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
         <%= to.snake(foreignId) %>: <%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>,
@@ -232,7 +250,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               size={Math.min(10, <%= to.camel(field) %>DataOptions.length)}
 <%            }-%>
               id="<%= to.snake(field) %>"
-              {...register('<%= to.snake(field) %>'<% if(!isArray) {%>, { valueAsNumber: true }<%}%>)}
+              {...register('<%= to.snake(field) %>')}
               className={selectClassName}>
 <%            if (!isArray) {-%>
               {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
