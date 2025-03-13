@@ -56,7 +56,7 @@ import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model
 <%}-%>
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { ChevronDown } from 'lucide-react';
+import { ChevronsUpDown } from 'lucide-react';
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
@@ -71,7 +71,7 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%    } -%>
 <%  } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
-  <%= to.snake(field) %>: <%- isArray ? `z.array(z.string()).nullable()` : `z
+  <%= to.snake(field) %>: <%- isArray ? `z.array(z.string()).nonempty()` : `z
     .string()
     .transform((val) => val || undefined)
     .pipe(z.string().nonempty())`%>,
@@ -204,7 +204,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
 <%  if (isArray) {-%>
-      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
+        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
 <%  } else {-%>
       <%= to.snake(field) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.id || ''),
 <%  }-%>
@@ -217,10 +217,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
   const inputClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-lg block w-full mt-3 border-none ${hasErrors ? 'bg-red-500/50' : 'bg-slate-200'} text-slate-900 ${hasErrors ? 'dark:bg-red-500/50' : 'dark:bg-gray-800'} dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
   const selectClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-lg block w-full mt-3 border-none ${hasErrors ? 'bg-red-500/50' : 'bg-slate-200'} text-slate-900 ${hasErrors ? 'dark:bg-red-500/50' : 'dark:bg-gray-800'} dark:text-gray-300 text-sm/6 py-1.5 pr-8 pl-3 text-base appearance-none col-start-1 row-start-1`;
-  const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;  const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
+  const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;
+  const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
   const selectContainerClassName = 'grid grid-cols-1';
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -270,7 +271,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               )}
             </select>
 <%            if (!isArray) {-%>
-            <ChevronDown aria-hidden="true" className={selectChevronClassName} />
+            <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
           {errors?.<%= to.snake(field) %>?.message && (
@@ -298,7 +299,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               )}
             </select>
 <%            if (!isArray) {-%>
-            <ChevronDown aria-hidden="true" className={selectChevronClassName} />
+            <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
           {errors?.<%= to.snake(foreignId) %>?.message && (
