@@ -62,7 +62,8 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
 <%    if(fieldTypeToSchema(type) === 'string') {-%>
   <%= to.snake(name) %>: z
-    .string()<%- isEmail(name) ? `.email()` : '' %>
+    .string()
+<%- isEmail(name) ? `    .email()\n` : '' -%>
     .transform((val) => val || undefined)
     .pipe(z.string().<%= isNullable(validations) ? 'nullable()' : 'nonempty()' %>),
 <%    } else {-%>
@@ -75,8 +76,11 @@ const <%= to.camel(entity.name)%>Schema = z.object({
     .transform((val) => val || undefined)
     .pipe(z.string().nonempty())`%>,
 <% }-%>
-<% for({foreignId, related} of foreignIds) {-%>
-  <%= to.snake(foreignId) %>: z.number().nullable(),
+<% for({foreignId, related, isArray} of foreignIds) {-%>
+  <%= to.snake(foreignId) %>: z
+    .string()
+    .transform((val) => val || undefined)
+    .pipe(z.string().nonempty()),
 <% }-%>
 });
 
@@ -122,7 +126,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  }-%>
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
-      <%= to.snake(foreignId) %>: <%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>,
+      <%= to.snake(foreignId) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %> || ''),
 <% }-%>
     },
   });
@@ -206,7 +210,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  }-%>
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
-        <%= to.snake(foreignId) %>: <%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>,
+        <%= to.snake(foreignId) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %> || ''),
 <% }-%>
     });
     }
@@ -280,7 +284,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(foreignId) %>"
-              {...register('<%= to.snake(foreignId) %>', { valueAsNumber: true })}
+              {...register('<%= to.snake(foreignId) %>')}
               className={selectClassName}>
               {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option value="">{t('common.select.placeholder')}</option>}
               {loadingOptions ? (
