@@ -17,6 +17,7 @@ export function getModelRelatedEntities(entity, relationships) {
         labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
         relatedField: to.snake(relation.to.injectedField || relation.from.name),
+        nullable: !relation.from.required,
         isArray: relation.cardinality !== 'OneToOne',
         cardinality: relation.cardinality,
       });
@@ -35,6 +36,7 @@ export function getModelRelatedEntities(entity, relationships) {
         field: to.snake(relation.to.injectedField || relation.from.name),
         labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
+        nullable: !relation.from.required,
         isArray: relation.cardinality === 'ManyToMany',
         cardinality: relation.cardinality,
       });

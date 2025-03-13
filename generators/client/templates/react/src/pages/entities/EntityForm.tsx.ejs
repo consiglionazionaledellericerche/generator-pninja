@@ -65,23 +65,29 @@ const <%= to.camel(entity.name)%>Schema = z.object({
     .string()
 <%- isEmail(name) ? `    .email()\n` : '' -%>
     .transform((val) => val || undefined)
-    .pipe(z.string().<%= isNullable(validations) ? 'nullable()' : 'nonempty()' %>),
-<%    } else {-%>
-  <%= to.snake(name) %>: z.<%= fieldTypeToSchema(type) %>()<%- isEmail(name) ? `.email()` : '' %><%= isNullable(validations) ? '.nullable()' : (fieldTypeToSchema(type) === 'number' ? '.min(1)' : '.nonempty()') %>,
+    .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
+<%    } if(fieldTypeToSchema(type) === 'number') {-%>
+  <%= to.snake(name) %>: z.number()<%= isNullable(validations) ? '.nullable()' : '.min(1)' %>,
 <%    } -%>
 <%  } -%>
-<% for({field, related, isArray} of relatedEntities) {-%>
-  <%= to.snake(field) %>: <%- isArray ? `z.array(z.string()).nonempty()` : `z
-    .string()
+<%  for({field, related, nullable, isArray} of relatedEntities) {-%>
+<%    if(isArray) {-%>
+    <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>, //3
+<%    } else {-%>
+    <%= to.snake(field) %>: z.string()<%- nullable ? ', //3' : ''%>
+<%      if (!nullable) {-%>
     .transform((val) => val || undefined)
-    .pipe(z.string().nonempty())`%>,
-<% }-%>
-<% for({foreignId, related, isArray} of foreignIds) {-%>
-  <%= to.snake(foreignId) %>: z
-    .string()
+    .pipe(z.string().nonempty()), //3
+<%      }-%>
+<%    }-%>
+<%  }-%>
+<%  for({foreignId, related, nullable} of foreignIds) {-%>
+  <%= to.snake(foreignId) %>: z.string()<%- nullable ? ',' : ''%>
+<%    if (!nullable) {-%>
     .transform((val) => val || undefined)
-    .pipe(z.string().nonempty()),
-<% }-%>
+    .pipe(z.string().nonempty()), //4
+<%    }-%>
+<%  }-%>
 });
 
 type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Schema>;
