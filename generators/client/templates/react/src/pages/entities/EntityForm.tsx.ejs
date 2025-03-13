@@ -1,8 +1,8 @@
 <%
+const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
+const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const isNullable = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
-
 const isEmail = (name) => name.toLowerCase().includes('email');
-
 const fieldTypeToSchema = (type) => {
     const typeMap = {
         'String': 'string',
@@ -19,10 +19,8 @@ const fieldTypeToSchema = (type) => {
         'Blob': 'string',
         'ImageBlob': 'string'
     };
-
     return typeMap[type] || 'string';
 }
-
 const fieldTypeInputType = (type) => {
     const typeMap = {
         'String': 'text',
@@ -39,7 +37,6 @@ const fieldTypeInputType = (type) => {
         'Blob': 'string',
         'ImageBlob': 'string'
     };
-
     return typeMap[type] || 'string';
 }
 -%>
@@ -56,7 +53,9 @@ import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model
 <%}-%>
 import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
+<% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
+<% } -%>
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
@@ -72,12 +71,12 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
 <%    if(isArray) {-%>
-    <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>, //3
+    <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>,
 <%    } else {-%>
-    <%= to.snake(field) %>: z.string()<%- nullable ? ', //3' : ''%>
+    <%= to.snake(field) %>: z.string()<%- nullable ? ',' : ''%>
 <%      if (!nullable) {-%>
     .transform((val) => val || undefined)
-    .pipe(z.string().nonempty()), //3
+    .pipe(z.string().nonempty()),
 <%      }-%>
 <%    }-%>
 <%  }-%>
@@ -85,7 +84,7 @@ const <%= to.camel(entity.name)%>Schema = z.object({
   <%= to.snake(foreignId) %>: z.string()<%- nullable ? ',' : ''%>
 <%    if (!nullable) {-%>
     .transform((val) => val || undefined)
-    .pipe(z.string().nonempty()), //4
+    .pipe(z.string().nonempty()),
 <%    }-%>
 <%  }-%>
 });
@@ -98,10 +97,12 @@ interface <%= entity.name %>FormProps {
   onCancel: () => void;
 }
 
+<% if (hasSelect) {-%>
 interface SelectOption {
   id: number;
   label: string;
 }
+<% } -%>
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
@@ -140,7 +141,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
     try {
       await onSubmit(data);
-      reset(); // Reset form after successful submission
     } catch (error) {
       console.error('Form submission error:', error);
     }
@@ -224,11 +224,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+<% if (hasSelect) {-%>
+  const selectContainerClassName = 'grid grid-cols-1';
   const selectClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
   const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;
+<% } -%>
+  <% if (hasSelectNotMultiple) {-%>
   const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
-  const selectContainerClassName = 'grid grid-cols-1';
+  <% } -%>
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className="max-w-5xl mx-auto space-y-4">
