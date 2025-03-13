@@ -270,13 +270,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               {...register('<%= to.snake(field) %>')}
               className={selectClassName(!!errors?.<%= to.snake(field) %>?.message)}>
 <%            if (!isArray) {-%>
-              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value="">{t('common.select.placeholder')}</option>}
+              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
 <%            }-%>
               {loadingOptions ? (
-                <option className={selectOptionClassName}>{t('common.select.loading')}</option>
+                <option className={selectOptionClassName} disabled>{t('common.select.loading')}</option>
               ) : (
                 <%= to.camel(field) %>DataOptions.length === 0
-                ? <option className={selectOptionClassName}>{t('common.select.noOptions')}</option>
+                ? <option className={selectOptionClassName} disabled>{t('common.select.noOptions')}</option>
                 : <%= to.camel(field) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
@@ -299,12 +299,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               id="<%= to.snake(foreignId) %>"
               {...register('<%= to.snake(foreignId) %>')}
               className={selectClassName(!!errors?.<%= to.snake(foreignId) %>?.message)}>
-              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value="">{t('common.select.placeholder')}</option>}
+              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
               {loadingOptions ? (
-                <option className={selectOptionClassName}>{t('common.select.loading')}</option>
+                <option className={selectOptionClassName} disabled>{t('common.select.loading')}</option>
               ) : (
                 <%= to.camel(foreignId) %>DataOptions.length === 0
-                ? <option className={selectOptionClassName}>{t('common.select.noOptions')}</option>
+                ? <option className={selectOptionClassName} disabled>{t('common.select.noOptions')}</option>
                 : <%= to.camel(foreignId) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
