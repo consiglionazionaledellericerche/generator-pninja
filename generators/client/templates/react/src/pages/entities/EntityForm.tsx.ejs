@@ -220,7 +220,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     `scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-lg block w-full mt-3 border-none ${hasErrors ? 'bg-red-500/50' : 'bg-slate-200'} text-slate-900 ${hasErrors ? 'dark:bg-red-500/50' : 'dark:bg-gray-800'} dark:text-gray-300 text-sm/6 py-1.5 px-3`;
   const selectClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-lg block w-full mt-3 border-none ${hasErrors ? 'bg-red-500/50' : 'bg-slate-200'} text-slate-900 ${hasErrors ? 'dark:bg-red-500/50' : 'dark:bg-gray-800'} dark:text-gray-300 text-sm/6 py-1.5 pr-8 pl-3 text-base appearance-none col-start-1 row-start-1`;
-  const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
+  const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;  const selectChevronClassName = 'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
   const selectContainerClassName = 'grid grid-cols-1';
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -259,14 +259,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               {...register('<%= to.snake(field) %>')}
               className={selectClassName(!!errors?.<%= to.snake(field) %>?.message)}>
 <%            if (!isArray) {-%>
-              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectClassName(false)} value="">{t('common.select.placeholder')}</option>}
+              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value="">{t('common.select.placeholder')}</option>}
 <%            }-%>
               {loadingOptions ? (
-                <option className={selectClassName(false)}>{t('common.select.loading')}</option>
+                <option className={selectOptionClassName}>{t('common.select.loading')}</option>
               ) : (
                 <%= to.camel(field) %>DataOptions.length === 0
-                ? <option className={selectClassName(false)}>{t('common.select.noOptions')}</option>
-                : <%= to.camel(field) %>DataOptions.map(op => <option className={selectClassName(false)} key={op.id} value={op.id}>{op.label}</option>)
+                ? <option className={selectOptionClassName}>{t('common.select.noOptions')}</option>
+                : <%= to.camel(field) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
 <%            if (!isArray) {-%>
@@ -288,13 +288,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               id="<%= to.snake(foreignId) %>"
               {...register('<%= to.snake(foreignId) %>')}
               className={selectClassName(!!errors?.<%= to.snake(foreignId) %>?.message)}>
-              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectClassName(false)} value="">{t('common.select.placeholder')}</option>}
+              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value="">{t('common.select.placeholder')}</option>}
               {loadingOptions ? (
-                <option className={selectClassName(false)}>{t('common.select.loading')}</option>
+                <option className={selectOptionClassName}>{t('common.select.loading')}</option>
               ) : (
                 <%= to.camel(foreignId) %>DataOptions.length === 0
-                ? <option className={selectClassName(false)}>{t('common.select.noOptions')}</option>
-                : <%= to.camel(foreignId) %>DataOptions.map(op => <option className={selectClassName(false)} key={op.id} value={op.id}>{op.label}</option>)
+                ? <option className={selectOptionClassName}>{t('common.select.noOptions')}</option>
+                : <%= to.camel(foreignId) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
               )}
             </select>
 <%            if (!isArray) {-%>
