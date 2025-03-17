@@ -14,28 +14,21 @@ class <%- className %> extends Model
 {
     use HasFactory;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = '<%- tableName %>';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [<%- fillable %>];
+<%  if(casts && casts.length) {-%>
 
-    <% if(casts && casts.length) {%>/**
-     * Cast for enums
-     *
-     * @var array
-     */
     protected $casts = [
-<% casts.forEach(function(cast) { %><% cast.attrsName.forEach(function(attrName) { %>        '<%- attrName %>' => <%- cast.className %>::class,
-<% }); %><% }); %>    ];<%}%>
+<%      casts.forEach(function(cast) { -%>
+<%          cast.attrsName.forEach(function(attrName) { -%>
+        '<%- attrName %>' => <%- cast.className %>::class,
+<%          }); -%>
+<%      }); -%>
+    ];
+<%  }-%>
+<%  if (relations) { -%>
 
-    <% if (relations) { %><%- relations %><% } %>
+    <%- relations -%>
+<%  } %>
 }

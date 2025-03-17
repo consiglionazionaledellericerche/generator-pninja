@@ -100,7 +100,7 @@ export default function <%= entity.name %>View() {
 
   return (
     <div className="m-4">
-      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID {id}</h1>
+      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}</h1>
       <SimpleLoader loading={loading} />
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
       {!loading && (

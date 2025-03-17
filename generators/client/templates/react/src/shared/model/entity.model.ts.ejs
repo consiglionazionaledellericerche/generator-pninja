@@ -63,15 +63,15 @@ export interface I<%= entity.name %> {
 
 export const defaultValue: Readonly<I<%= entity.name %>> = {
 <%  for (prop of entity.body) {-%>
-    <%= to.snake(prop.name) %>: null,
+    <%= to.snake(prop.name) %>: undefined,
 <%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
-    <%= to.snake(prop.name) %>ContentType: null,
+    <%= to.snake(prop.name) %>ContentType: undefined,
 <%    }-%>
 <%  }-%>
 <%  foreignIds.forEach(({foreignId, nullable}) => {-%>
-    <%= foreignId %>: null,
+    <%= foreignId %>: undefined,
 <%  })-%>
 <%  relatedEntities.forEach(({field, related, isArray}) => {-%>
-    <%= field %>: null,
+    <%= field %>: undefined,
 <%  })-%>
 };

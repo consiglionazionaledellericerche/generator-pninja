@@ -4,10 +4,7 @@ export function getModelForeignIds(entity, relationships) {
     const foreignIds = [];
 
     relationships
-        .filter(relation =>
-            (relation.cardinality === 'OneToOne' && relation.to.name === entity.name)
-            || (relation.cardinality === 'OneToMany' && relation.to.name === entity.name)
-        )
+        .filter(relation => (relation.cardinality === 'OneToMany' && relation.to.name === entity.name))
         .forEach(relation => {
             const injectedField = to.snake(relation.to.injectedField || relation.from.name);
             const foreignId = `${injectedField}_id`;
@@ -20,7 +17,7 @@ export function getModelForeignIds(entity, relationships) {
 
     relationships
         .filter(relation =>
-            relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+            (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.from.name === entity.name
         )
         .forEach(relation => {
             const injectedField = to.snake(relation.from.injectedField || relation.to.name);

@@ -3,11 +3,11 @@ import to from 'to-case';
 export function getModelRelatedEntities(entity, relationships) {
   const relatedEntities = [];
 
-  // OneToOne/OneToMany/ManyToMany direct relationships
+  // OneToMany/ManyToMany direct relationships
   relationships
     .filter(
       (relation) =>
-        (relation.cardinality === 'OneToOne' || relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') &&
+        (relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') &&
         relation.from.name === entity.name &&
         (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
     )
@@ -23,7 +23,7 @@ export function getModelRelatedEntities(entity, relationships) {
       });
     });
 
-  // OneToOne/OneToMany/ManyToMany reverse relationships
+  // OneToMany/ManyToMany reverse relationships
   relationships
     .filter(
       (relation) =>
@@ -42,10 +42,10 @@ export function getModelRelatedEntities(entity, relationships) {
       });
     });
 
-  // ManyToOne direct relationships
+  // OneToOne/ManyToOne direct relationships
   relationships
     .filter(relation => (
-      relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
+      (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.from.name === entity.name
       && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
     ))
     .forEach(relation => {

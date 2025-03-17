@@ -15,11 +15,6 @@ class <%- className %>Controller extends Controller
     {
         try {
             $query = <%- className %>::query();
-<%          for (rel of relatedEntitiesForFilters) { -%>
-            if ($request->has('filter') && $request->filter === '<%- to.slug(rel)%>-is-null') {
-                $query->whereNull('<%- to.snake(rel)%>_id');
-            }
-<%          } -%>
 <%          if (withs) { -%>
             $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>

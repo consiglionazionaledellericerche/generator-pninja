@@ -84,8 +84,8 @@ export default function <%= entity.name %>Edit() {
   }, [id, i18n.language, t]);
 
   return (
-    <div className="m-4">
-      <h1 className="text-2xl mb-4">
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-2xl my-8">
         {t(`actions.crud.${id ? 'update' : 'create'}`)} {t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')}
         {id ? ` ID ${id}` : ''}
       </h1>

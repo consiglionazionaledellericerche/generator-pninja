@@ -1,4 +1,10 @@
 <%
+const enumsToImport = [];
+for({type} of entity.body) {
+  if ((enums.filter(enm => enm.name === type)).length === 1) {
+    enumsToImport.push(type);
+  }
+}
 const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const isNullable = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
@@ -39,23 +45,71 @@ const fieldTypeInputType = (type) => {
     };
     return typeMap[type] || 'string';
 }
+
+const getField = (type, name) => {
+    if ((enums.filter(enm => enm.name === type)).length === 1) {
+%>
+<div className={selectContainerClassName}>
+    <select
+      id="<%= to.snake(name) %>"
+      {...register('<%= to.snake(name) %>')}
+      className={selectClassName(!!errors?.<%= to.snake(name) %>?.message)}
+    >
+      <option className={selectOptionClassName} value={''}></option>
+      {Object.values(<%= type %>).map((<%= to.snake(name) %>) => (
+        <option className={selectOptionClassName} key={<%= to.snake(name) %>} value={<%= to.snake(name) %>}>
+          {<%= to.snake(name) %>}
+        </option>
+      ))}
+    </select>
+        <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
+  </div>
+<%    } else {
+    const typeMap = {
+        'String': 'text',
+        'Integer': 'number',
+        'Long': 'number',
+        'BigDecimal': 'number',
+        'Float': 'number',
+        'Double': 'number',
+        'Boolean': 'boolean',
+        'LocalDate': 'date',
+        'ZonedDateTime': 'datetime-local',
+        'Instant': 'datetime-local',
+        'TextBlob': 'string',
+        'Blob': 'string',
+        'ImageBlob': 'string'
+    };
+    const T = typeMap[type] || 'string';
+%>
+            <input
+            type="<%- T %>"
+<%          if (T === 'datetime-local') {-%>
+            step="1"
+<%          }-%>
+            id="<%= to.snake(name) %>"
+            {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
+            className={inputClassName(!!errors?.<%= to.snake(name) %>?.message)}
+          />
+<%}}
 -%>
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import * as z from 'zod';
-import { I<%= entity.name %>, defaultValue } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
 <%  if (related !== entity.name) {-%>
 import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model';
 <%  }-%>
 <%}-%>
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
 import { useNotifications } from '../../contexts/NotificationContext';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
+<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") %>
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
@@ -71,9 +125,9 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
 <%    if(isArray) {-%>
-    <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>,
+  <%= to.snake(field) %>: z.array(z.string())<% if (!nullable && false) {-%>.nonempty()<%}-%>,
 <%    } else {-%>
-    <%= to.snake(field) %>: z.string()<%- nullable ? ',' : ''%>
+  <%= to.snake(field) %>_id: z.string()<%- nullable ? ',' : ''%>
 <%      if (!nullable) {-%>
     .transform((val) => val || undefined)
     .pipe(z.string().nonempty()),
@@ -123,19 +177,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     reset,
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
-    defaultValues: {
-      ...defaultValue,
-<% for({field, related, isArray} of relatedEntities) {-%>
-<%  if (isArray) {-%>
-      <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
-<%  } else {-%>
-      <%= to.snake(field) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.id || ''),
-<%  }-%>
-<% }-%>
-<% for({foreignId, related} of foreignIds) {-%>
-      <%= to.snake(foreignId) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %> || ''),
-<% }-%>
-    },
   });
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
@@ -151,11 +192,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       setLoadingOptions(true);
 <% for({field, related, relatedField, labelField} of relatedEntities) {-%>
       try {
-        const <%= to.camel(field) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%><% if (relatedEntitiesForFilters.includes(field)) {%>?filter=<%- to.slug(relatedField)%>-is-null<%}%>');
+        const <%= to.camel(field) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
         const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
-<%      if (relatedEntitiesForFilters.includes(field)) {%>
-        if (<%- to.camel(entity.name)%>?.<%= to.snake(field) %>) <%= to.camel(field) %>Data.push(<%- to.camel(entity.name)%>.<%= to.snake(field) %>);
-<%      }%>
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
 <%        if (labelField === 'id') {-%>
@@ -164,13 +202,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
         }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
           type: 'error',
           message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}`,
           details: error instanceof Error ? error.message : undefined,
-          duration: 0,
+          techDetails: error instanceof HttpError ? error.details : undefined,
+          duration: 10000,
         });
       }
 <% }-%>
@@ -186,13 +225,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
         }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
           type: 'error',
           message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}`,
           details: error instanceof Error ? error.message : undefined,
-          duration: 0,
+          techDetails: error instanceof HttpError ? error.details : undefined,
+          duration: 10000,
         });
       }
 <% }-%>
@@ -212,7 +252,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  if (isArray) {-%>
         <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
 <%  } else {-%>
-      <%= to.snake(field) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.id || ''),
+        <%= to.snake(field) %>_id: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id || ''),
 <%  }-%>
 <% }-%>
 <% for({foreignId, related} of foreignIds) {-%>
@@ -241,15 +281,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
           </label>
-          <input
-            type="<%= fieldTypeInputType(type)%>"
-<%          if (fieldTypeInputType(type) === 'datetime-local') {-%>
-            step="1"
-<%          }-%>
-            id="<%= to.snake(name) %>"
-            {...register('<%= to.snake(name) %>'<% if(fieldTypeInputType(type) === 'number') {%>, { valueAsNumber: true }<%}%>)}
-            className={inputClassName(!!errors?.<%= to.snake(name) %>?.message)}
-          />
+          <%= getField(type, name) %>
           {errors?.<%= to.snake(name) %>?.message && (
             <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
           )}
@@ -264,11 +296,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <select
 <%            if (isArray) {-%>
               multiple
-              size={Math.min(10, <%= to.camel(field) %>DataOptions.length)}
+              size={Math.min(10, Math.max(5, <%= to.camel(field) %>DataOptions.length)) + 1}
 <%            }-%>
               id="<%= to.snake(field) %>"
-              {...register('<%= to.snake(field) %>')}
-              className={selectClassName(!!errors?.<%= to.snake(field) %>?.message)}>
+              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>')}
+              className={selectClassName(!!errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message)}>
 <%            if (!isArray) {-%>
               {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
 <%            }-%>
@@ -284,8 +316,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          {errors?.<%= to.snake(field) %>?.message && (
-            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(field) %>.message}</p>
+          {errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message && (
+            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>.message}</p>
           )}
         </div>
 <%    }-%>

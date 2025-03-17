@@ -19,18 +19,18 @@ export class FactoriesGenerator {
             // Relationships OneToOne
             relationships.filter(relation => (
                 relation.cardinality === 'OneToOne'
-                && relation.to.name === entity.name
+                && relation.from.name === entity.name
             )).forEach(relation => {
                 if (relation.from.name !== relation.to.name) {
-                    models.push(`use App\\Models\\${relation.from.name};`)
+                    models.push(`use App\\Models\\${relation.to.name};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
-                    if (${relation.from.name}::count() === 0) {
-                        ${relation.from.name !== relation.to.name ? `while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create()` : `return null`};
+                params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
+                    if (${relation.to.name}::count() === 0) {
+                        ${relation.from.name !== relation.to.name ? `while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create()` : `return null`};
                     }
-                    $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
-                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.to.injectedField || relation.from.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.to.injectedField || relation.from.name)}_id']))->toArray());
-                    return $this->getRandomUniqueValue($ids${relation.from.name}, $ids${entity.name});
+                    $ids${relation.to.name} = array_map(function($e) { return $e['id']; }, (${relation.to.name}::all(['id']))->toArray());
+                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.from.injectedField || relation.to.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.from.injectedField || relation.to.name)}_id']))->toArray());
+                    return $this->getRandomUniqueValue($ids${relation.to.name}, $ids${entity.name});
                 },`);
             });
             // Relationships OneToMany
