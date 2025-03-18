@@ -190,7 +190,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   useEffect(() => {
     const fetchOptions = async () => {
       setLoadingOptions(true);
-<% console.log(`${entity.name} relatedEntities`, JSON.stringify(relatedEntities, null, 2)); for({field, related, labelField, cardinality} of relatedEntities) {
+<%  for({field, related, labelField, cardinality} of relatedEntities) {
   let filter = '';
   if (cardinality === "OneToOne") {
     filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id}`;
@@ -217,8 +217,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           duration: 10000,
         });
       }
-<% }-%>
-<% console.log(`${entity.name} foreignIds`, JSON.stringify(foreignIds, null, 2)); for({foreignId, related, labelField} of foreignIds) {-%>
+<%  }-%>
+<%  for({foreignId, related, labelField} of foreignIds) {-%>
       try {
         const <%= to.camel(foreignId) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
         const <%= to.camel(foreignId) %>Data = await <%= to.camel(foreignId) %>Response.json();
@@ -240,7 +240,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           duration: 10000,
         });
       }
-<% }-%>
+<%  }-%>
       setLoadingOptions(false);
     };
 
