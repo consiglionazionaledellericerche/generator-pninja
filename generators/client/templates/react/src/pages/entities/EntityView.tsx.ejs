@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%relatedEntities
@@ -74,6 +75,8 @@ export default function <%= entity.name %>View() {
   const { t, i18n } = useTranslation();
   const { id } = useParams<<%= entity.name %>ViewParams>();
 
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
   const authenticatedFetch = useAuthenticatedFetch();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
   const [loading, setLoading] = useState(false);
@@ -87,12 +90,17 @@ export default function <%= entity.name %>View() {
         <%=to.camel(`set${entity.name}`)%>(data);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error('ERR:', error);
-        setLoading(false);
-        alert(error.message);
+      .catch((error: HttpError) => {
+        addNotification({
+          type: 'error',
+          message: `${t('errors.entities.read')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
+          details: error?.message,
+          techDetails: error?.details,
+          duration: 10000,
+        });
+        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       });
-  }, [authenticatedFetch, id]);
+  }, [authenticatedFetch, id, navigate, t]);
 
   useEffect(() => {
     document.title = `${t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID ${id}`;
