@@ -70,10 +70,15 @@ export class ControllersGenerator {
                 }
             });
 
-            if (createRelated.length) {
-                console.log("createRelated", entity.name);
-                jsonColorz(createRelated);
-            }
+            const relatedEntitiesForFilters = relationships.filter(relation =>
+                relation.cardinality === 'OneToOne'
+                && relation.to.name === entity.name
+            ).map(rel => {
+                return {
+                    name: rel.from.name,
+                    injectedField: rel.from.injectedField || rel.to.name,
+                };
+            });
 
             this.that.fs.copyTpl(this.that.templatePath("EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
@@ -81,6 +86,7 @@ export class ControllersGenerator {
                     entityName: to.camel(entity.name),
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
+                    relatedEntitiesForFilters,
                     to,
                 });
         }

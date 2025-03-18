@@ -1,7 +1,15 @@
+<%
+console.log(`${className} relatedEntitiesForFilters`, JSON.stringify(relatedEntitiesForFilters, null, 2))
+-%>
 <?php
 namespace App\Http\Controllers;
 
 use App\Models\<%- className %>;
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+<%      relatedEntitiesForFilters.map(({name}) => {-%>
+use App\Models\<%- name %>;
+<%      })-%>
+<%  }-%> 
 use App\Traits\HandlesApiErrors;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
@@ -15,6 +23,19 @@ class <%- className %>Controller extends Controller
     {
         try {
             $query = <%- className %>::query();
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+<%      relatedEntitiesForFilters.map(({name, injectedField}) =>{-%>
+            if ($request->has('available_for_<%-to.snake(name)%>')) {
+                $<%-to.camel(name)%>Id = $request->query('available_for_<%-to.snake(name)%>');
+                $associatedIds = <%-name%>::whereNotNull('<%-to.snake(injectedField)%>_id')
+                    ->when($<%-to.camel(name)%>Id, function($query) use ($<%-to.camel(name)%>Id) {
+                        return $query->where('id', '!=', $<%-to.camel(name)%>Id);
+                    })
+                    ->pluck('<%-to.snake(injectedField)%>_id');
+                $query->whereNotIn('id', $associatedIds);
+            }
+<%      })-%>
+<%  }-%> 
 <%          if (withs) { -%>
             $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>
