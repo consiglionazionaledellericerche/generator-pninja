@@ -193,7 +193,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% console.log(`${entity.name} relatedEntities`, JSON.stringify(relatedEntities, null, 2)); for({field, related, labelField, cardinality} of relatedEntities) {
   let filter = '';
   if (cardinality === "OneToOne") {
-    filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ? ${to.camel(entity.name)}?.id}`;
+    filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id}`;
   }
 -%>
       try {
