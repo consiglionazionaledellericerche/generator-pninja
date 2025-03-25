@@ -21,6 +21,7 @@ switch (dbms) {
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
+import { JsonPrint } from '../components/JsonPrint';
 import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import pninjaLogoLight from '../assets/pninja-logo-light.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
@@ -58,17 +59,12 @@ export default function Home() {
         <img className="h-24 block dark:hidden" src={pninjaLogoLight} alt="PNinja" title="PNinja" />
       </a>
     </div>
-    {isAutenticated() && (
-    <pre className="whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md m-4">
-      email = {getTokenParsed()?.email}
-      {'\n'}
-      login = {getTokenParsed()?.preferred_username}
-      {'\n'}
-      name = {getTokenParsed()?.name}
-      {'\n'}
-      hasRole 'admin' = {hasRole('admin') ? 'T' : 'F'}
-    </pre>
-    )}
+    {isAutenticated() && (<JsonPrint data={{
+      email: getTokenParsed()?.email,
+      login: getTokenParsed()?.preferred_username,
+      name: getTokenParsed()?.name,
+      hasRoleAadmin: hasRole('admin') ? 'T' : 'F',
+    }} className="m-4"/>)}
     </>
   );
 }
