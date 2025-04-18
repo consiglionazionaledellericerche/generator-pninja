@@ -238,11 +238,8 @@ export const useAuth = () => {
   // Inizia il flusso di login usando il flusso Authorization Code (SSO)
   const login = useCallback(async () => {
     try {
-      setAuthState((prev) => ({ ...prev, loading: true, error: null }));
-
-      // Richiedi l'URL di autorizzazione al backend
       const response = await fetch('/api/auth/initiate-login', {
-        credentials: 'include', // Importante per i cookie di sessione
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -250,11 +247,8 @@ export const useAuth = () => {
       }
 
       const data = await response.json();
-
-      // Reindirizza l'utente all'URL di autorizzazione Keycloak
       window.location.href = data.authUrl;
 
-      // Non aggiorniamo lo stato qui perché la pagina verrà ricaricata
       return { success: true };
     } catch (error) {
       console.error("Errore nell'avvio del login:", error);
