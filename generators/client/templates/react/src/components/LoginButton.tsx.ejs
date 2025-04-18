@@ -1,42 +1,43 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuthState } from '../contexts/AuthContext';
 import { LogIn, Loader } from 'lucide-react';
 
 export function LoginButton() {
+  const { login, loading: authLoading } = useAuthState();
   const { t } = useTranslation();
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const handleLogin = async () => {
+    setLocalError(null);
+
     try {
-      setIsLoggingIn(true);
+      // Utilizza la funzione login() dall'hook di autenticazione
+      // Questa gestirà già lo stato di loading globale
+      const result = await login();
 
-      const response = await fetch('/api/auth/initiate-login', {
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Errore di risposta:', errorText);
-        throw new Error(`Errore nell'inizializzazione del login: ${response.status}`);
+      if (!result.success) {
+        setLocalError(result.error || 'Errore durante il login');
       }
-
-      const data = await response.json();
-
-      window.location.href = data.authUrl;
+      // Non serve gestire il redirect qui perché login() lo fa già
     } catch (error) {
       console.error('Errore durante il login:', error);
-      setIsLoggingIn(false);
+      setLocalError('Errore imprevisto durante il login');
     }
   };
 
   return (
-    <button
-      onClick={handleLogin}
-      disabled={isLoggingIn}
-      className={`inline-flex items-center gap-1 nav-bar-link ${isLoggingIn ? 'opacity-70 cursor-not-allowed' : ''}`}
-    >
-      {isLoggingIn ? <Loader size={16} className="animate-spin" /> : <LogIn size={16} />}
-      {isLoggingIn ? t('ui.account.loggingIn') : t('ui.account.login')}
-    </button>
+    <div>
+      {localError && <div className="error-message">{localError}</div>}
+
+      <button
+        onClick={handleLogin}
+        disabled={authLoading}
+        className={`inline-flex items-center gap-1 nav-bar-link ${authLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+      >
+        {authLoading ? <Loader size={16} className="animate-spin" /> : <LogIn size={16} />}
+        {authLoading ? t('ui.account.loggingIn') : t('ui.account.login')}
+      </button>
+    </div>
   );
 }
