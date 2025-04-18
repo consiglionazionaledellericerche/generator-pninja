@@ -65,7 +65,7 @@ KEYCLOAK_TOKEN_INPUT_KEY=null`, { encoding: 'utf8', flag: 'w' });
       if (this.fs.exists(`${this.destinationPath('server')}/config/auth.php`)) {
         fs.unlinkSync(`${this.destinationPath('server')}/config/auth.php`);
       }
-      this.fs.copyTpl(this.templatePath("keycloack.auth.php.ejs"), `${this.destinationPath('server')}/config/auth.php`);
+      this.fs.copyTpl(this.templatePath("keycloak.auth.php.ejs"), `${this.destinationPath('server')}/config/auth.php`);
       let bootstrapAppFileContents = fs.readFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, { encoding: 'utf8', flag: 'r' });
       const regexprBootstrapAppUse = /(?=use Illuminate\\Foundation\\Application;)/gmis;
       const replaceBootstrapAppUse = `use Illuminate\\Http\\Request;\nuse KeycloakGuard\\Exceptions\\KeycloakGuardException;\nuse KeycloakGuard\\Exceptions\\TokenException;\n`;
