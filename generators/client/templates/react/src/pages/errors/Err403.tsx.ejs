@@ -1,19 +1,29 @@
 import { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useUserAutenticatedHelper } from '../../hooks/userAutenticatedHelper';
+import { useAuth } from '../../hooks/useAuth';
 export default function Err403() {
   const { t, i18n } = useTranslation();
-  const { getUsername } = useUserAutenticatedHelper();
+  const { user } = useAuth();
   useEffect(() => {
-    document.title = t('errors.403.title', { username: getUsername() });
-  }, [t, i18n.language, getUsername]);
+    document.title = t('errors.403.title', {
+      username: user?.name || user?.username || user?.preferred_username || user?.email || '???',
+    });
+  }, [t, i18n.language, user]);
   return (
     <div className="m-4">
-      <h1 className="text-2xl mb-4">{t('errors.403.title', { username: getUsername() })}</h1>
+      <h1 className="text-2xl mb-4">
+        {t('errors.403.title', {
+          username:
+            user?.name || user?.username || user?.preferred_username || user?.email || '???',
+        })}
+      </h1>
       <p>
         <Trans
           i18nKey="errors.403.message"
-          values={{ username: getUsername() }}
+          values={{
+            username:
+              user?.name || user?.username || user?.preferred_username || user?.email || '???',
+          }}
           components={{ 1: <strong /> }}
         />
       </p>

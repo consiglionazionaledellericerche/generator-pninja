@@ -1,0 +1,218 @@
+import { useCallback } from 'react';
+import { tokenStorage, isTokenExpiringSoon } from '../utils/tokenStore';
+import { useAuth } from './useAuth';
+
+export class HttpError extends Error {
+  status: number;
+  data: unknown;
+  details?: string | undefined | null;
+
+  constructor(
+    status: number,
+    message: string,
+    details?: string | null | undefined,
+    data?: unknown
+  ) {
+    super(message);
+    this.status = status;
+    this.data = data;
+    this.details = details;
+    this.name = 'HttpError';
+  }
+}
+
+interface FetchOptions extends RequestInit {
+  headers?: Record<string, string>;
+}
+
+export const useApi = () => {
+  const { refreshTokens, login } = useAuth();
+
+  // Funzione base per chiamate API autenticate
+  const authenticatedFetch = useCallback(
+    async (url: string, options: FetchOptions = {}): Promise<Response> => {
+      try {
+        let tokens = tokenStorage.getTokens();
+
+        if (!tokens?.access_token) {
+          console.error('Nessun token disponibile, reindirizzamento al login');
+          // Avvia il login automaticamente
+          login();
+          throw new Error('Non autenticato');
+        }
+
+        // Aggiorna il token solo se necessario
+        let shouldRefresh = false;
+        try {
+          shouldRefresh = isTokenExpiringSoon(tokens.access_token, 60); // 60 secondi buffer
+          if (shouldRefresh) {
+            console.log('Token in scadenza, tentativo di refresh automatico...');
+          }
+        } catch (decodeError) {
+          console.warn('Errore nella verifica della scadenza del token:', decodeError);
+          // In caso di errore, procedi comunque con il token attuale
+        }
+
+        // Aggiorna il token se necessario
+        if (shouldRefresh) {
+          try {
+            tokens = await refreshTokens();
+            console.log('Token aggiornato con successo');
+          } catch (refreshError) {
+            console.error('Refresh token fallito, uso del token attuale:', refreshError);
+            // Continuiamo con l'ultimo token disponibile invece di fallire immediatamente
+          }
+        }
+
+        // Merge degli headers personalizzati con l'Authorization
+        const headers = {
+          ...options.headers,
+          Authorization: `Bearer ${tokens.access_token}`,
+          'Content-Type': options.headers?.['Content-Type'] || 'application/json',
+        };
+
+        // Esegui la richiesta
+        const response = await fetch(url, {
+          ...options,
+          headers,
+          credentials: 'include',
+        });
+
+        // Gestione errori HTTP
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.log('Risposta 401, tentativo di refresh e retry...');
+            try {
+              // Tenta un refresh più aggressivo in caso di 401
+              const newTokens = await refreshTokens();
+
+              // Riprova la richiesta con il nuovo token
+              const retryResponse = await fetch(url, {
+                ...options,
+                headers: {
+                  ...options.headers,
+                  Authorization: `Bearer ${newTokens.access_token}`,
+                  'Content-Type': options.headers?.['Content-Type'] || 'application/json',
+                },
+                credentials: 'include',
+              });
+
+              if (retryResponse.ok) {
+                return retryResponse;
+              }
+
+              // Se anche il secondo tentativo fallisce, è molto probabile
+              // che il problema non sia legato al token
+              console.error('Anche il secondo tentativo di fetch è fallito');
+              throw new Error('Richiesta fallita anche dopo refresh del token');
+            } catch (refreshError) {
+              console.error('Refresh token fallito durante retry:', refreshError);
+              throw new Error('Sessione scaduta');
+            }
+          }
+
+          // Gestione degli altri errori HTTP
+          const errorData = await response.json().catch(() => null);
+          throw new HttpError(
+            response.status,
+            errorData?.message || `Errore HTTP! stato: ${response.status}`,
+            errorData?.details,
+            errorData
+          );
+        }
+
+        return response;
+      } catch (error) {
+        console.error('Errore nella richiesta authenticatedFetch:', error);
+        throw error;
+      }
+    },
+    [refreshTokens, login]
+  );
+
+  // Metodi di utility per le operazioni CRUD comuni
+
+  // GET
+  const get = useCallback(
+    async <T>(url: string, options: Omit<FetchOptions, 'method'> = {}): Promise<T> => {
+      const response = await authenticatedFetch(url, {
+        ...options,
+        method: 'GET',
+      });
+      return response.json();
+    },
+    [authenticatedFetch]
+  );
+
+  // POST
+  const post = useCallback(
+    async <T>(
+      url: string,
+      data: any,
+      options: Omit<FetchOptions, 'method' | 'body'> = {}
+    ): Promise<T> => {
+      const response = await authenticatedFetch(url, {
+        ...options,
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    },
+    [authenticatedFetch]
+  );
+
+  // PUT
+  const put = useCallback(
+    async <T>(
+      url: string,
+      data: any,
+      options: Omit<FetchOptions, 'method' | 'body'> = {}
+    ): Promise<T> => {
+      const response = await authenticatedFetch(url, {
+        ...options,
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    },
+    [authenticatedFetch]
+  );
+
+  // DELETE
+  const del = useCallback(
+    async <T>(url: string, options: Omit<FetchOptions, 'method'> = {}): Promise<T> => {
+      const response = await authenticatedFetch(url, {
+        ...options,
+        method: 'DELETE',
+      });
+      return response.json();
+    },
+    [authenticatedFetch]
+  );
+
+  // PATCH
+  const patch = useCallback(
+    async <T>(
+      url: string,
+      data: any,
+      options: Omit<FetchOptions, 'method' | 'body'> = {}
+    ): Promise<T> => {
+      const response = await authenticatedFetch(url, {
+        ...options,
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    },
+    [authenticatedFetch]
+  );
+
+  return {
+    fetch: authenticatedFetch,
+    get,
+    post,
+    put,
+    delete: del, // 'delete' è una parola riservata in JS
+    patch,
+  };
+};

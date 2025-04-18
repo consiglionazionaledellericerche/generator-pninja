@@ -1,20 +1,35 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
-import { LogOut } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import { LogOut, Loader } from 'lucide-react';
+
 export function LogoutButton() {
-  const { logout } = useUserAutenticatedHelper();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const { t } = useTranslation();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Errore durante il logout:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <button
-      onClick={() =>
-        logout({
-          redirectUri: window.location.origin,
-        })
-      }
-      className={`inline-flex items-center gap-1 nav-bar-link`}
+      onClick={handleLogout}
+      disabled={isLoggingOut}
+      className={`inline-flex items-center gap-1 nav-bar-link ${isLoggingOut ? 'opacity-70 cursor-not-allowed' : ''}`}
     >
-      <LogOut size={16} />
-      {t('ui.account.logout')}
+      {isLoggingOut ? <Loader size={16} className="animate-spin" /> : <LogOut size={16} />}
+      {isLoggingOut ? t('ui.account.loggingOut') : t('ui.account.logout')}
     </button>
   );
 }

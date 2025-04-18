@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronsUpDown, ChevronUp, ChevronDown, Plus } from 'lucide-react';
-import { useAuthenticatedFetch } from '../../hooks/useAuthenticatedFetch';
+import { useApi } from '../../hooks/useApi';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -24,7 +24,7 @@ interface SortConfig {
 export default function <%= entity.name %>() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
-  const authenticatedFetch = useAuthenticatedFetch();
+  const { fetch } = useApi();
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'id', direction: 'asc' });
@@ -38,7 +38,7 @@ export default function <%= entity.name %>() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
       .then((response) => response.json())
       .then((data: I<%= entity.name %>[]) => {
         <%=to.camel(pluralize(`set${entity.name}`))%>(data);
@@ -53,7 +53,7 @@ export default function <%= entity.name %>() {
           duration: 5000,
         });
       });
-  }, [authenticatedFetch, addNotification]);
+  }, [fetch, addNotification]);
 
   const handleSort = (field: SortableField) => {
     setSortConfig((currentConfig) => ({
@@ -104,7 +104,7 @@ export default function <%= entity.name %>() {
 
   const delete<%= entity.name %> = (id: number | undefined) => {
     if (!id) return;
-    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
       method: 'DELETE',
     })
       .then(() => {

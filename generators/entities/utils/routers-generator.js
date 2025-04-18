@@ -20,10 +20,11 @@ export class RoutersGenerator {
                     className,
                     rootPath,
                 });
-            let apiPhpContent = this.that.fs.read(this.that.destinationPath(`server/routes/api.php`));
-            apiPhpContent = apiPhpContent.replace(`\nrequire __DIR__ . '/${rootPath}.php';`, '');
-            apiPhpContent = apiPhpContent + `\nrequire __DIR__ . '/${rootPath}.php';`;
-            this.that.fs.write(this.that.destinationPath(`server/routes/api.php`), apiPhpContent);
         });
+        this.that.fs.copyTpl(
+            this.that.templatePath("api.php.ejs"),
+            this.that.destinationPath(`server/routes/api.php`),
+            { paths: entities.map(entity => to.slug(pluralize(entity.name))) },
+        );
     }
 }

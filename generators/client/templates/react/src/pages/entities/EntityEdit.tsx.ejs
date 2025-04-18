@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
+import { useApi } from '../../hooks/useApi';
+import { HttpError } from '../../hooks/useApi';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -16,14 +17,14 @@ export default function <%= entity.name %>Edit() {
   const { id } = useParams<<%= entity.name %>ViewParams>();
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const authenticatedFetch = useAuthenticatedFetch();
+  const { fetch } = useApi();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
-      authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+      fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
         .then((response) => response.json())
         .then((data: I<%= entity.name %>) => {
           set<%= entity.name %>(data);
@@ -42,11 +43,11 @@ export default function <%= entity.name %>Edit() {
           setLoading(false);
         });
     }
-  }, [id, authenticatedFetch, addNotification, navigate, t]);
+  }, [id, fetch, addNotification, navigate, t]);
 
   const handleSubmit = async (data: I<%= entity.name %>) => {
     try {
-      const response = await authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
+      const response = await fetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
         method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',

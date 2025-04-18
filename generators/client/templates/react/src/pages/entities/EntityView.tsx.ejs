@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
+import { useApi } from '../../hooks/useApi';
+import { HttpError } from '../../hooks/useApi';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%relatedEntities
@@ -24,7 +25,7 @@ interface <%= entity.name %>ViewParams extends Record<string, string | undefined
 
 export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
-  if(!data) return '';
+  if (!data) return '';
   return (
     <table className="details-table">
       <tbody>
@@ -77,14 +78,14 @@ export default function <%= entity.name %>View() {
 
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const authenticatedFetch = useAuthenticatedFetch();
+  const { fetch } = useApi();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    authenticatedFetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
       .then((response) => response.json())
       .then((data: I<%= entity.name %>) => {
         <%=to.camel(`set${entity.name}`)%>(data);
@@ -100,7 +101,7 @@ export default function <%= entity.name %>View() {
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       });
-  }, [authenticatedFetch, id, navigate, t]);
+  }, [fetch, id, navigate, t, addNotification]);
 
   useEffect(() => {
     document.title = `${t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID ${id}`;

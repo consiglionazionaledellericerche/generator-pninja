@@ -2,15 +2,16 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 import { LangSelect } from './LangSelect';
+import { useAuth } from '../hooks/useAuth';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
-import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
+import { Loader } from 'lucide-react';
 import appLogo from '../assets/logo.svg';
 export default function Menu() {
-  const { isAutenticated } = useUserAutenticatedHelper();
+  const { isAuthenticated, loading } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
-  const isActive = (path: string) => location.pathname === path ? ' active' : '';
+  const isActive = (path: string) => (location.pathname === path ? ' active' : '');
   return (
     <nav className="nav-bar">
       <Link to="/" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
@@ -30,8 +31,14 @@ export default function Menu() {
 <%    });-%>
       <LangSelect />
       <DarkModeToggle />
-      {!isAutenticated() && <LoginButton />}
-      {isAutenticated() && <LogoutButton />}
+      {loading && (
+        <button className={'inline-flex items-center gap-1 nav-bar-link animate-pulse'}>
+          <Loader size={16} className="animate-spin" />
+          <div className="w-12">&nbsp;</div>
+        </button>
+      )}
+      {!loading && !isAuthenticated && <LoginButton />}
+      {!loading && isAuthenticated && <LogoutButton />}
     </nav>
   );
 }

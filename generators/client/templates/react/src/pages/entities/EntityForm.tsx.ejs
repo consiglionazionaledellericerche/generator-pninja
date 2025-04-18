@@ -104,7 +104,8 @@ import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)
 import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model';
 <%  }-%>
 <%}-%>
-import { useAuthenticatedFetch, HttpError } from '../../hooks/useAuthenticatedFetch';
+import { useApi } from '../../hooks/useApi';
+import { HttpError } from '../../hooks/useApi';
 import { useNotifications } from '../../contexts/NotificationContext';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
@@ -161,7 +162,7 @@ interface SelectOption {
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
   const { addNotification } = useNotifications();
-  const authenticatedFetch = useAuthenticatedFetch();
+  const { fetch } = useApi();
 <% for({field} of relatedEntities) {-%>
   const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<SelectOption[]>([]);
 <% }-%>
@@ -197,7 +198,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }
 -%>
       try {
-        const <%= to.camel(field) %>Response = await authenticatedFetch(`/api/<%=to.slug(pluralize(related))%><%-filter%>`);
+        const <%= to.camel(field) %>Response = await fetch(`/api/<%=to.slug(pluralize(related))%><%-filter%>`);
         const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
@@ -220,7 +221,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  }-%>
 <%  for({foreignId, related, labelField} of foreignIds) {-%>
       try {
-        const <%= to.camel(foreignId) %>Response = await authenticatedFetch('/api/<%=to.slug(pluralize(related))%>');
+        const <%= to.camel(foreignId) %>Response = await fetch('/api/<%=to.slug(pluralize(related))%>');
         const <%= to.camel(foreignId) %>Data = await <%= to.camel(foreignId) %>Response.json();
         <%= to.camel(`set_${foreignId}_data_options`) %>((<%= to.camel(foreignId) %>Data.map((item: I<%-related%>) => ({
           id: item.id,
@@ -245,7 +246,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     };
 
     fetchOptions();
-  }, [authenticatedFetch, addNotification, t]);
+  }, [fetch, addNotification, t]);
 
   useEffect(() => {
     if (<%= to.camel(entity.name)-%>) {

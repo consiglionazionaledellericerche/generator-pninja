@@ -1,0 +1,22 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\KeycloakProxyController;
+
+<% paths.forEach(path => {-%>
+require __DIR__ . '/<%-path%>.php';
+<% }); -%>
+
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+})->middleware('web');
+
+Route::prefix('auth')->middleware(['web'])->group(function () {
+    Route::get('/initiate-login', [KeycloakProxyController::class, 'initiateLogin']);
+    Route::get('/callback', [KeycloakProxyController::class, 'handleCallback']);
+    Route::get('/check-session', [KeycloakProxyController::class, 'checkSession']);
+    Route::get('/verify', [KeycloakProxyController::class, 'verifyToken']);
+    Route::post('/refresh', [KeycloakProxyController::class, 'refreshToken']);
+    Route::post('/logout', [KeycloakProxyController::class, 'logout']);
+});

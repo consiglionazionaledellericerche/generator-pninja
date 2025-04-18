@@ -1,0 +1,25 @@
+export interface User {
+  [key: string]: unknown;
+}
+
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
+  token_type: string;
+}
+
+export interface UserRoles {
+  realmRoles: string[];
+  clientRoles: Record<string, string[]>;
+  allRoles: string[];
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  tokens: AuthTokens | null;
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+}

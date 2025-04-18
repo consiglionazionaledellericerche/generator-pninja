@@ -20,8 +20,10 @@ switch (dbms) {
 -%>
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useUserAutenticatedHelper } from '../hooks/userAutenticatedHelper';
 import { JsonPrint } from '../components/JsonPrint';
+import { useAuth } from '../hooks/useAuth';
+import { useRoles } from '../hooks/useRoles';
+import { SimpleLoader } from '../components/SimpleLoader';
 import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import pninjaLogoLight from '../assets/pninja-logo-light.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
@@ -31,7 +33,8 @@ import viteLogo from '../assets/vite.svg';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const { hasRole, isAutenticated, getTokenParsed } = useUserAutenticatedHelper();
+  const { user, loading } = useAuth();
+  const { getRoles } = useRoles();
   useEffect(() => {
     document.title = t('appName');
   }, [t, i18n.language]);
@@ -59,12 +62,17 @@ export default function Home() {
           <img className="h-24 block dark:hidden" src={pninjaLogoLight} alt="PNinja" title="PNinja" />
         </a>
       </div>
-      {isAutenticated() && (<JsonPrint data={{
-        email: getTokenParsed()?.email,
-        login: getTokenParsed()?.preferred_username,
-        name: getTokenParsed()?.name,
-        hasRoleAadmin: hasRole('admin') ? 'T' : 'F',
-      }} className="m-4"/>)}
+      {loading && <JsonPrint className="h-48 animate-pulse" data={undefined} />}
+      {!loading && (
+        <JsonPrint
+          data={{
+            'user.email': user?.email,
+            'user.name': user?.name,
+            getRoles: getRoles(),
+            user,
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,0 +1,136 @@
+import { AuthTokens, UserRoles } from '../types/auth'; // importa i tipi centralizzati
+
+// Interfaccia per il payload JWT decodificato
+export interface DecodedJwtPayload {
+  // Standard JWT claims
+  exp?: number; // Expiration time
+  iat?: number; // Issued at
+  sub?: string; // Subject
+  iss?: string; // Issuer
+  aud?: string | string[]; // Audience
+
+  // Keycloak specific claims
+  realm_access?: { roles: string[] };
+  resource_access?: Record<string, { roles: string[] }>;
+
+  // Per qualsiasi altra proprietà
+  [key: string]: unknown;
+}
+
+// Funzione per decodificare un token JWT
+export const decodeJwt = (token: string): DecodedJwtPayload | null => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('Errore nella decodifica del token JWT:', error);
+    return null;
+  }
+};
+
+// Funzione per estrarre i ruoli dal token JWT
+export const extractRolesFromToken = (token: string): UserRoles => {
+  const decodedToken = decodeJwt(token);
+  const defaultRoles: UserRoles = {
+    realmRoles: [],
+    clientRoles: {},
+    allRoles: [],
+  };
+
+  if (!decodedToken) return defaultRoles;
+
+  // Estrai i ruoli del realm
+  const realmRoles = decodedToken.realm_access?.roles || [];
+
+  // Estrai i ruoli dei client
+  const clientRoles: Record<string, string[]> = {};
+  if (decodedToken.resource_access) {
+    Object.keys(decodedToken.resource_access).forEach((clientId) => {
+      if (decodedToken.resource_access?.[clientId]?.roles) {
+        clientRoles[clientId] = decodedToken.resource_access[clientId].roles;
+      }
+    });
+  }
+
+  // Crea una lista unificata di tutti i ruoli
+  const allRoles = [...realmRoles, ...Object.values(clientRoles).flat()];
+
+  return {
+    realmRoles,
+    clientRoles,
+    allRoles,
+  };
+};
+
+// Verifica se un token è in scadenza
+export const isTokenExpiringSoon = (token: string, bufferSeconds = 60): boolean => {
+  try {
+    const decodedToken = decodeJwt(token);
+    if (decodedToken && decodedToken.exp) {
+      // exp è in secondi dall'epoch, mentre Date.now() è in millisecondi
+      const expTimestamp = (decodedToken.exp as number) * 1000;
+      // Refresha se il token scade entro il buffer di tempo
+      return expTimestamp - Date.now() < bufferSeconds * 1000;
+    }
+
+    // Se non possiamo determinare la scadenza, consideriamolo in scadenza
+    return true;
+  } catch (error) {
+    console.warn('Errore nel verificare la scadenza del token:', error);
+    return true;
+  }
+};
+
+// Gestore dello storage per i token
+export const tokenStorage = {
+  setTokens: (tokens: AuthTokens) => {
+    try {
+      // Salva i token
+      localStorage.setItem('auth_tokens', JSON.stringify(tokens));
+
+      // Salva il timestamp di ricezione
+      localStorage.setItem('token_received_time', Date.now().toString());
+
+      console.log('Token salvati con successo:', new Date().toISOString());
+    } catch (error) {
+      console.error('Errore nel salvare i token:', error);
+    }
+  },
+
+  getTokens: (): AuthTokens | null => {
+    try {
+      const tokens = localStorage.getItem('auth_tokens');
+      if (!tokens) return null;
+
+      return JSON.parse(tokens);
+    } catch (error) {
+      console.error('Errore nel recuperare i token:', error);
+      return null;
+    }
+  },
+
+  clearTokens: () => {
+    try {
+      localStorage.removeItem('auth_tokens');
+      localStorage.removeItem('token_received_time');
+    } catch (error) {
+      console.error('Errore nel cancellare i token:', error);
+    }
+  },
+
+  // Ottiene i ruoli dal token attualmente memorizzato
+  getRoles: (): UserRoles | null => {
+    const tokens = tokenStorage.getTokens();
+    if (!tokens?.access_token) return null;
+
+    return extractRolesFromToken(tokens.access_token);
+  },
+};
