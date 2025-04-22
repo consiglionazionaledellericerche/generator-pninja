@@ -67,7 +67,6 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useApi.ts.ejs"), that.destinationPath(`client/src/hooks/useApi.ts`), {});
-    that.fs.copyTpl(that.templatePath("react/src/hooks/useAuth.tsx.ejs"), that.destinationPath(`client/src/hooks/useAuth.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useRoles.ts.ejs"), that.destinationPath(`client/src/hooks/useRoles.ts`), {});
 
     for (const entity of entities) {

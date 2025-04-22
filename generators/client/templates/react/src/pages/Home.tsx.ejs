@@ -21,7 +21,7 @@ switch (dbms) {
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { JsonPrint } from '../components/JsonPrint';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthState } from '../contexts/AuthContext';
 import { useRoles } from '../hooks/useRoles';
 import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import pninjaLogoLight from '../assets/pninja-logo-light.svg';
@@ -32,7 +32,7 @@ import viteLogo from '../assets/vite.svg';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const { user, loading } = useAuth();
+  const { user, loading } = useAuthState();
   const { getRoles } = useRoles();
   useEffect(() => {
     document.title = t('appName');

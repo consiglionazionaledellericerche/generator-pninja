@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthState } from '../contexts/AuthContext';
 import { useRoles } from '../hooks/useRoles';
 import Err403 from '../pages/errors/Err403';
 
@@ -21,7 +21,7 @@ const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   requiredRoles = [],
   requireAll = false,
 }) => {
-  const { isAuthenticated, loading, login } = useAuth();
+  const { isAuthenticated, loading, login } = useAuthState();
   const { hasAllRoles, hasAnyRole } = useRoles();
   const location = useLocation();
 

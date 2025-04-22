@@ -2,13 +2,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 import { LangSelect } from './LangSelect';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthState } from '../contexts/AuthContext';
 import { LoginButton } from './LoginButton';
 import { LogoutButton } from './LogoutButton';
 import { Loader } from 'lucide-react';
 import appLogo from '../assets/logo.svg';
 export default function Menu() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading } = useAuthState();
   const { t } = useTranslation();
   const location = useLocation();
   const isActive = (path: string) => (location.pathname === path ? ' active' : '');

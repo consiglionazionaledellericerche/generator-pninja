@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthState } from '../../contexts/AuthContext';
 export default function Err403() {
   const { t, i18n } = useTranslation();
-  const { user } = useAuth();
+  const { user } = useAuthState();
   useEffect(() => {
     document.title = t('errors.403.title', {
       username: user?.name || user?.username || user?.preferred_username || user?.email || '???',

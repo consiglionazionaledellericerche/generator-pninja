@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthState } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Loader } from 'lucide-react';
 
 export function LogoutButton() {
-  const { logout } = useAuth();
+  const { logout } = useAuthState();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isLoggingOut, setIsLoggingOut] = useState(false);

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { tokenStorage, isTokenExpiringSoon } from '../utils/tokenStore';
-import { useAuth } from './useAuth';
+import { useAuthState } from '../contexts/AuthContext';
 
 export class HttpError extends Error {
   status: number;
@@ -26,7 +26,7 @@ interface FetchOptions extends RequestInit {
 }
 
 export const useApi = () => {
-  const { refreshTokens, login } = useAuth();
+  const { refreshTokens, login } = useAuthState();
 
   // Funzione base per chiamate API autenticate
   const authenticatedFetch = useCallback(
