@@ -1,30 +1,362 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { AuthTokens, User } from '../types/auth';
+// src/contexts/AuthContext.tsx
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { tokenStorage } from '../utils/tokenStore';
+import { User, AuthTokens } from '../types/auth'; // importa i tipi centralizzati
 
+// Interface for authentication state
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
+  tokens: AuthTokens | null;
   loading: boolean;
   error: string | null;
+}
+
+// Interface for the context including state and functions
+interface AuthContextType extends AuthState {
   login: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   refreshTokens: () => Promise<AuthTokens>;
 }
 
-const AuthContext = createContext<AuthState | undefined>(undefined);
+// Create context
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Context provider props
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const auth = useAuth();
+  // Initialize with tokens from localStorage
+  const initialTokens = tokenStorage.getTokens();
 
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
+  // Authentication state
+  const [authState, setAuthState] = useState<AuthState>({
+    isAuthenticated: !!initialTokens?.access_token,
+    tokens: initialTokens,
+    user: null,
+    loading: true, // Start with loading true to check session
+    error: null,
+  });
+
+  // Check session on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        // Check for auth_success parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const authSuccess = urlParams.get('auth_success');
+
+        if (authSuccess === 'true') {
+          // Remove the parameter without refreshing the page
+          const newUrl =
+            window.location.pathname +
+            (window.location.search
+              ? window.location.search.replace(/auth_success=true&?/, '')
+              : '') +
+            window.location.hash;
+          window.history.replaceState({}, document.title, newUrl);
+        }
+
+        // Check if there's already an authenticated session
+        const response = await fetch('/api/auth/check-session', {
+          credentials: 'include', // Important for session cookies
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          if (data.isAuthenticated && data.tokens) {
+            console.log('Session found, user already authenticated');
+
+            // Save tokens
+            tokenStorage.setTokens(data.tokens);
+
+            setAuthState({
+              isAuthenticated: true,
+              tokens: data.tokens,
+              user: data.user || null,
+              loading: false,
+              error: null,
+            });
+
+            return;
+          }
+        }
+
+        // Check if we have tokens in localStorage
+        const tokens = tokenStorage.getTokens();
+
+        if (tokens?.access_token) {
+          try {
+            // Verify the token
+            const userResponse = await fetch('/api/auth/verify', {
+              headers: {
+                Authorization: `Bearer ${tokens.access_token}`,
+              },
+              credentials: 'include',
+            });
+
+            if (userResponse.ok) {
+              const userData = await userResponse.json();
+
+              setAuthState({
+                isAuthenticated: true,
+                tokens,
+                user: userData,
+                loading: false,
+                error: null,
+              });
+
+              return;
+            }
+
+            // Invalid token, try to refresh
+            if (tokens.refresh_token) {
+              try {
+                const newTokens = await refreshTokens();
+                return;
+              } catch (refreshError) {
+                console.error('Refresh failed:', refreshError);
+                tokenStorage.clearTokens();
+              }
+            }
+          } catch (error) {
+            console.error('Token verification error:', error);
+            tokenStorage.clearTokens();
+          }
+        }
+
+        // If we get here, there's no valid session
+        setAuthState({
+          isAuthenticated: false,
+          tokens: null,
+          user: null,
+          loading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error('Session check error:', error);
+        setAuthState({
+          isAuthenticated: false,
+          tokens: null,
+          user: null,
+          loading: false,
+          error: 'Session check error',
+        });
+      }
+    };
+
+    checkSession();
+  }, []);
+
+  // Function to refresh tokens
+  const refreshTokens = async (): Promise<AuthTokens> => {
+    const tokens = tokenStorage.getTokens();
+
+    if (!tokens?.refresh_token) {
+      throw new Error('No refresh token available');
+    }
+
+    try {
+      console.log('Attempting token refresh...');
+
+      // Get CSRF token
+      let csrfToken = '';
+      try {
+        const csrfResponse = await fetch('/api/csrf-token', {
+          credentials: 'include',
+        });
+        if (csrfResponse.ok) {
+          const csrfData = await csrfResponse.json();
+          csrfToken = csrfData.csrf_token;
+        }
+      } catch (csrfError) {
+        console.warn('Error retrieving CSRF token:', csrfError);
+      }
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      if (csrfToken) {
+        headers['X-CSRF-TOKEN'] = csrfToken;
+      }
+
+      const response = await fetch('/api/auth/refresh', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          refresh_token: tokens.refresh_token,
+        }),
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const newTokens = await response.json();
+        console.log('Token refresh successful');
+
+        // Save tokens
+        tokenStorage.setTokens(newTokens);
+
+        // Update state
+        setAuthState((prev) => ({
+          ...prev,
+          isAuthenticated: true,
+          tokens: newTokens,
+          error: null,
+          loading: false,
+        }));
+
+        return newTokens;
+      } else {
+        const errorText = await response.text();
+        console.error('Token refresh failed:', response.status, errorText);
+
+        // For 401/403 (invalid token), clear everything
+        if (response.status === 401 || response.status === 403) {
+          tokenStorage.clearTokens();
+          setAuthState({
+            isAuthenticated: false,
+            tokens: null,
+            user: null,
+            loading: false,
+            error: 'Session expired',
+          });
+          throw new Error('Token refresh failed: invalid token');
+        }
+
+        throw new Error(`Token refresh failed: ${response.status} ${errorText}`);
+      }
+    } catch (error) {
+      console.error('Error during token refresh:', error);
+      throw error;
+    }
+  };
+
+  // Login function
+  const login = async (): Promise<{ success: boolean; error?: string }> => {
+    try {
+      // Request authorization URL from backend
+      const response = await fetch('/api/auth/initiate-login', {
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Login initialization error');
+      }
+
+      const data = await response.json();
+
+      // Redirect user to Keycloak authorization URL
+      // await new Promise((resolve) => setTimeout(resolve, 300));
+      window.location.href = data.authUrl;
+
+      // We don't update state here since the page will be reloaded
+      return { success: true };
+    } catch (error) {
+      console.error('Login start error:', error);
+
+      setAuthState((prev) => ({
+        ...prev,
+        loading: false,
+        error: 'Login start error',
+      }));
+
+      return {
+        success: false,
+        error: 'Login start error',
+      };
+    }
+  };
+
+  // Logout function
+  const logout = async (): Promise<void> => {
+    const tokens = tokenStorage.getTokens();
+
+    try {
+      console.log('Logging out...');
+
+      // Get CSRF token
+      let csrfToken = '';
+      try {
+        const csrfResponse = await fetch('/api/csrf-token', {
+          credentials: 'include',
+        });
+        if (csrfResponse.ok) {
+          const csrfData = await csrfResponse.json();
+          csrfToken = csrfData.csrf_token;
+        }
+      } catch (csrfError) {
+        console.warn('Error retrieving CSRF token:', csrfError);
+      }
+
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      if (csrfToken) {
+        headers['X-CSRF-TOKEN'] = csrfToken;
+      }
+
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          refresh_token: tokens?.refresh_token,
+        }),
+        credentials: 'include',
+      });
+
+      // Clear tokens
+      tokenStorage.clearTokens();
+
+      // Update state
+      setAuthState({
+        isAuthenticated: false,
+        tokens: null,
+        user: null,
+        loading: false,
+        error: null,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // If we have a logout URL for SSO, redirect
+        if (data.logoutUrl) {
+          window.location.href = data.logoutUrl;
+        }
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+
+      // Clear tokens and update state even on error
+      tokenStorage.clearTokens();
+      setAuthState({
+        isAuthenticated: false,
+        tokens: null,
+        user: null,
+        loading: false,
+        error: null,
+      });
+    }
+  };
+
+  // Combine all auth state and functions
+  const contextValue: AuthContextType = {
+    ...authState,
+    login,
+    logout,
+    refreshTokens,
+  };
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
-export const useAuthState = (): AuthState => {
+// Hook to use the auth context
+export const useAuthState = (): AuthContextType => {
   const context = useContext(AuthContext);
 
   if (context === undefined) {

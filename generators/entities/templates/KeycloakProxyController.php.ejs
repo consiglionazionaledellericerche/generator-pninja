@@ -17,32 +17,32 @@ class KeycloakProxyController extends Controller
 
     public function __construct()
     {
-        $this->keycloakBaseUrl = env('KEYCLOAK_BASE_URL', 'https://sso.cnr.it/auth');
-        $this->realm = env('KEYCLOAK_REALM', 'CNR');
+        $this->keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $this->realm = env('KEYCLOAK_REALM');
         $this->clientId = env('KEYCLOAK_CLIENT_ID');
         $this->clientSecret = env('KEYCLOAK_CLIENT_SECRET');
     }
 
     /**
-     * Inizia il flusso di login con Authorization Code
+     * Starts the login flow with Authorization Code
      */
     public function initiateLogin(Request $request)
     {
-        // Genera un PKCE code verifier e code challenge
+        // Generate PKCE data
         $codeVerifier = Str::random(64);
         $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
-
-        // Genera un state per prevenire CSRF
         $state = Str::random(32);
 
-        // Salva code verifier e state in sessione
+        // 1. Save in the session (primary system)
         $request->session()->put('code_verifier', $codeVerifier);
         $request->session()->put('auth_state', $state);
+        $request->session()->save(); // Attempt to save immediately
 
-        // URL di callback per il ritorno da Keycloak
+        // 2. Also save in the cache as backup/synchronization
+        Cache::put('auth_state_' . $state, $codeVerifier, 300); // 5 minutes
+
+        // Build the URL
         $redirectUri = URL::to('/api/auth/callback');
-
-        // Costruisci l'URL di autorizzazione di Keycloak
         $authUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/auth";
         $queryParams = http_build_query([
             'client_id' => $this->clientId,
@@ -54,36 +54,61 @@ class KeycloakProxyController extends Controller
             'code_challenge_method' => 'S256',
         ]);
 
-        // Restituisci l'URL di autorizzazione al frontend
         return response()->json([
             'authUrl' => "{$authUrl}?{$queryParams}"
         ]);
     }
 
-    /**
-     * Callback che riceve il codice da Keycloak e lo scambia con token
-     */
     public function handleCallback(Request $request)
     {
-        $code = $request->input('code');
         $state = $request->input('state');
+        $code = $request->input('code');
+
+        if (!$state || !$code) {
+            return response()->json(['message' => 'Missing required parameters'], 400);
+        }
+
+        // Strategy 1: First try to retrieve from the session (primary system)
         $sessionState = $request->session()->get('auth_state');
+        $codeVerifier = null;
 
-        // Verifica lo state per prevenire CSRF
-        if (!$state || $state !== $sessionState) {
-            return response()->json([
-                'message' => 'Invalid state parameter'
-            ], 400);
+        // If the state matches, use the code_verifier from the session
+        if ($sessionState === $state) {
+            $codeVerifier = $request->session()->get('code_verifier');
+            $source = 'session';
         }
 
-        $codeVerifier = $request->session()->get('code_verifier');
+        // Strategy 2: If not found in the session, try the cache
         if (!$codeVerifier) {
-            return response()->json([
-                'message' => 'Code verifier not found'
-            ], 400);
+            $codeVerifier = Cache::get('auth_state_' . $state);
+
+            if ($codeVerifier) {
+                $source = 'cache';
+
+                // Optional: also synchronize the session if desired
+                $request->session()->put('code_verifier', $codeVerifier);
+                $request->session()->put('auth_state', $state);
+            }
         }
 
-        // Scambia il codice con i token
+        // If we still haven't found a valid code_verifier, fail
+        if (!$codeVerifier) {
+            \Log::warning('Authentication data not found', [
+                'state' => $state,
+                'session_state' => $sessionState,
+                'session_id' => $request->session()->getId()
+            ]);
+
+            return response()->json(['message' => 'Invalid state parameter'], 400);
+        }
+
+        // Log for debugging
+        \Log::info('Auth data recovered', [
+            'source' => $source,
+            'state' => $state
+        ]);
+
+        // Exchange the code for tokens
         try {
             $redirectUri = URL::to('/api/auth/callback');
 
@@ -97,15 +122,13 @@ class KeycloakProxyController extends Controller
             ]);
 
             if ($response->successful()) {
-                // Pulisci i dati di sessione temporanei
+                // Cleanup
                 $request->session()->forget(['code_verifier', 'auth_state']);
+                Cache::forget('auth_state_' . $state);
 
                 $tokens = $response->json();
-
-                // Opzionale: salva i token in sessione lato server
                 $request->session()->put('auth_tokens', $tokens);
 
-                // Reindirizza al frontend con i token
                 return redirect(env('FRONTEND_URL', '/') . '?auth_success=true');
             }
 
@@ -122,17 +145,17 @@ class KeycloakProxyController extends Controller
     }
 
     /**
-     * Controlla se l'utente ha già una sessione attiva con Keycloak
-     * Questo endpoint può essere usato per il check di sessione senza riautenticazione
+     * Checks if the user already has an active session with Keycloak
+     * This endpoint can be used for session checks without re-authentication
      */
     public function checkSession(Request $request)
     {
         try {
-            // Ottieni i token dalla sessione server side se presenti
+            // Retrieve tokens from the server-side session if present
             $tokens = $request->session()->get('auth_tokens');
 
             if ($tokens && isset($tokens['access_token'])) {
-                // Verifica che il token sia valido
+                // Verify that the token is valid
                 $userInfoResponse = Http::withHeaders([
                     'Authorization' => "Bearer {$tokens['access_token']}"
                 ])->get("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/userinfo");
@@ -145,7 +168,7 @@ class KeycloakProxyController extends Controller
                     ]);
                 }
 
-                // Token non valido, prova a refreshare
+                // Invalid token, try refreshing it
                 if (isset($tokens['refresh_token'])) {
                     $refreshResponse = Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/token", [
                         'client_id' => $this->clientId,
@@ -166,7 +189,7 @@ class KeycloakProxyController extends Controller
                 }
             }
 
-            // Se arriviamo qui, non c'è una sessione valida
+            // If we reach here, there is no valid session
             return response()->json([
                 'isAuthenticated' => false
             ]);
@@ -179,14 +202,14 @@ class KeycloakProxyController extends Controller
     }
 
     /**
-     * Aggiorna il token usando il refresh token
+     * Refreshes the token using the refresh token
      */
     public function refreshToken(Request $request)
     {
         $refreshToken = $request->input('refresh_token');
 
         if (!$refreshToken) {
-            // Prova a prendere il refresh token dalla sessione
+            // Try to retrieve the refresh token from the session
             $tokens = $request->session()->get('auth_tokens');
             $refreshToken = $tokens['refresh_token'] ?? null;
 
@@ -205,7 +228,7 @@ class KeycloakProxyController extends Controller
 
             if ($response->successful()) {
                 $newTokens = $response->json();
-                // Aggiorna i token nella sessione
+                // Update tokens in the session
                 $request->session()->put('auth_tokens', $newTokens);
                 return response()->json($newTokens);
             }
@@ -223,14 +246,14 @@ class KeycloakProxyController extends Controller
     }
 
     /**
-     * Verifica il token
+     * Verifies the token
      */
     public function verifyToken(Request $request)
     {
         $token = $request->bearerToken();
 
         if (!$token) {
-            // Prova a prendere il token dalla sessione
+            // Try to retrieve the token from the session
             $tokens = $request->session()->get('auth_tokens');
             $token = $tokens['access_token'] ?? null;
 
@@ -265,12 +288,12 @@ class KeycloakProxyController extends Controller
         $refreshToken = $request->input('refresh_token');
 
         if (!$refreshToken) {
-            // Prova a prendere il refresh token dalla sessione
+            // Try to retrieve the refresh token from the session
             $tokens = $request->session()->get('auth_tokens');
             $refreshToken = $tokens['refresh_token'] ?? null;
         }
 
-        // Se c'è un refresh token, revocalo
+        // If there is a refresh token, revoke it
         if ($refreshToken) {
             try {
                 Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout", [
@@ -279,20 +302,20 @@ class KeycloakProxyController extends Controller
                     'refresh_token' => $refreshToken,
                 ]);
             } catch (\Exception $e) {
-                // Continua anche se il logout fallisce
+                // Continue even if logout fails
             }
         }
 
-        // Costruisci l'URL di logout per il SSO
+        // Build the logout URL for SSO
         $redirect = env('FRONTEND_URL', '/');
         $logoutUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout?redirect_uri=" . urlencode($redirect);
 
-        // Pulisci la sessione
+        // Clear the session
         $request->session()->forget('auth_tokens');
 
         return response()->json([
             'message' => 'Logged out successfully',
-            'logoutUrl' => $logoutUrl  // URL per il logout SSO
+            'logoutUrl' => $logoutUrl  // URL for SSO logout
         ]);
     }
 }
