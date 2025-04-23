@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthState } from '../contexts/AuthContext';
 import { LogIn, Loader } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export function LoginButton() {
   const { login, loading: authLoading } = useAuthState();
+  const location = useLocation();
   const { t } = useTranslation();
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -12,6 +14,7 @@ export function LoginButton() {
     setLocalError(null);
 
     try {
+      localStorage.setItem('authRedirectUrl', location.pathname);
       // Utilizza la funzione login() dall'hook di autenticazione
       // Questa gestirà già lo stato di loading globale
       const result = await login();
