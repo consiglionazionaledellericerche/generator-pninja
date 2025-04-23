@@ -1,25 +1,22 @@
-import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuthState } from '../contexts/AuthContext';
 import { SimpleLoader } from './SimpleLoader';
+import { LoginRedirector } from './LoginRedirector';
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, loading, login } = useAuthState();
+  const { isAuthenticated, loading } = useAuthState();
+  const location = useLocation(); // Ottieni l'URL corrente
 
-  // Avvia il flusso di autenticazione se l'utente non è autenticato
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      // Avvia il processo di login, che reindirizza a Keycloak
-      login();
-    }
-  }, [loading, isAuthenticated, login]);
-
-  // Mostra il loader durante il caricamento o durante il reindirizzamento
-  if (loading || !isAuthenticated) {
+  if (loading) {
     return <SimpleLoader />;
   }
 
-  // Renderizza il contenuto protetto se l'utente è autenticato
+  if (!isAuthenticated) {
+    // Passa l'URL corrente come redirectUrl, esattamente come in RoleProtectedRoute
+    return <LoginRedirector redirectUrl={location.pathname} />;
+  }
+
   return <Outlet />;
 };
 

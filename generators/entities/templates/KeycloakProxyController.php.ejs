@@ -14,6 +14,7 @@ class KeycloakProxyController extends Controller
     protected $realm;
     protected $clientId;
     protected $clientSecret;
+    protected $frontendUrl;
 
     public function __construct()
     {
@@ -21,28 +22,29 @@ class KeycloakProxyController extends Controller
         $this->realm = env('KEYCLOAK_REALM');
         $this->clientId = env('KEYCLOAK_CLIENT_ID');
         $this->clientSecret = env('KEYCLOAK_CLIENT_SECRET');
+        $this->frontendUrl = env('FRONTEND_URL');
     }
 
     /**
-     * Starts the login flow with Authorization Code
+     * Inizia il flusso di login con Authorization Code
      */
     public function initiateLogin(Request $request)
     {
-        // Generate PKCE data
+        // Genera un PKCE code verifier e code challenge
         $codeVerifier = Str::random(64);
         $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+
+        // Genera un state per prevenire CSRF
         $state = Str::random(32);
 
-        // 1. Save in the session (primary system)
+        // Salva code verifier e state in sessione
         $request->session()->put('code_verifier', $codeVerifier);
         $request->session()->put('auth_state', $state);
-        $request->session()->save(); // Attempt to save immediately
 
-        // 2. Also save in the cache as backup/synchronization
-        Cache::put('auth_state_' . $state, $codeVerifier, 300); // 5 minutes
+        // URL di callback per il ritorno da Keycloak
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
 
-        // Build the URL
-        $redirectUri = URL::to('/api/auth/callback');
+        // Costruisci l'URL di autorizzazione di Keycloak
         $authUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/auth";
         $queryParams = http_build_query([
             'client_id' => $this->clientId,
@@ -54,63 +56,38 @@ class KeycloakProxyController extends Controller
             'code_challenge_method' => 'S256',
         ]);
 
+        // Restituisci l'URL di autorizzazione al frontend
         return response()->json([
             'authUrl' => "{$authUrl}?{$queryParams}"
         ]);
     }
 
+    /**
+     * Callback che riceve il codice da Keycloak e lo scambia con token
+     */
     public function handleCallback(Request $request)
     {
-        $state = $request->input('state');
         $code = $request->input('code');
-
-        if (!$state || !$code) {
-            return response()->json(['message' => 'Missing required parameters'], 400);
-        }
-
-        // Strategy 1: First try to retrieve from the session (primary system)
+        $state = $request->input('state');
         $sessionState = $request->session()->get('auth_state');
-        $codeVerifier = null;
 
-        // If the state matches, use the code_verifier from the session
-        if ($sessionState === $state) {
-            $codeVerifier = $request->session()->get('code_verifier');
-            $source = 'session';
+        // Verifica lo state per prevenire CSRF
+        if (!$state || $state !== $sessionState) {
+            return response()->json([
+                'message' => 'Invalid state parameter'
+            ], 400);
         }
 
-        // Strategy 2: If not found in the session, try the cache
+        $codeVerifier = $request->session()->get('code_verifier');
         if (!$codeVerifier) {
-            $codeVerifier = Cache::get('auth_state_' . $state);
-
-            if ($codeVerifier) {
-                $source = 'cache';
-
-                // Optional: also synchronize the session if desired
-                $request->session()->put('code_verifier', $codeVerifier);
-                $request->session()->put('auth_state', $state);
-            }
+            return response()->json([
+                'message' => 'Code verifier not found'
+            ], 400);
         }
-
-        // If we still haven't found a valid code_verifier, fail
-        if (!$codeVerifier) {
-            \Log::warning('Authentication data not found', [
-                'state' => $state,
-                'session_state' => $sessionState,
-                'session_id' => $request->session()->getId()
-            ]);
-
-            return response()->json(['message' => 'Invalid state parameter'], 400);
-        }
-
-        // Log for debugging
-        \Log::info('Auth data recovered', [
-            'source' => $source,
-            'state' => $state
-        ]);
 
         // Exchange the code for tokens
         try {
-            $redirectUri = URL::to('/api/auth/callback');
+            $redirectUri = $this->frontendUrl . '/api/auth/callback';
 
             $response = Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/token", [
                 'client_id' => $this->clientId,
@@ -124,12 +101,12 @@ class KeycloakProxyController extends Controller
             if ($response->successful()) {
                 // Cleanup
                 $request->session()->forget(['code_verifier', 'auth_state']);
-                Cache::forget('auth_state_' . $state);
 
                 $tokens = $response->json();
+
                 $request->session()->put('auth_tokens', $tokens);
 
-                return redirect(env('FRONTEND_URL', '/') . '?auth_success=true');
+                return redirect($this->frontendUrl . '?auth_success=true');
             }
 
             return response()->json([
@@ -307,8 +284,7 @@ class KeycloakProxyController extends Controller
         }
 
         // Build the logout URL for SSO
-        $redirect = env('FRONTEND_URL', '/');
-        $logoutUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout?redirect_uri=" . urlencode($redirect);
+        $logoutUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout?redirect_uri=" . urlencode($this->frontendUrl);
 
         // Clear the session
         $request->session()->forget('auth_tokens');

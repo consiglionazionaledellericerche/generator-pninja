@@ -1,45 +1,36 @@
-import React, { useEffect } from 'react';
+// src/components/RoleProtectedRoute.tsx
+import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useAuthState } from '../contexts/AuthContext';
 import { useRoles } from '../hooks/useRoles';
 import Err403 from '../pages/errors/Err403';
+import { LoginRedirector } from './LoginRedirector';
 
 interface RoleProtectedRouteProps {
   requiredRoles?: string[];
-  requireAll?: boolean; // Se true, l'utente deve avere TUTTI i ruoli specificati
+  requireAll?: boolean;
 }
 
-// Componente loading spinner
 const LoadingSpinner: React.FC = () => (
   <div className="loading-spinner">Caricamento in corso...</div>
 );
-
-// Componente accesso negato
-const AccessDenied: React.FC = () => <Err403 />;
 
 const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   requiredRoles = [],
   requireAll = false,
 }) => {
-  const { isAuthenticated, loading, login } = useAuthState();
+  const { isAuthenticated, loading } = useAuthState();
   const { hasAllRoles, hasAnyRole } = useRoles();
   const location = useLocation();
 
-  // Avvia il flusso di autenticazione se l'utente non è autenticato
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      // Salva l'URL corrente per reindirizzare dopo il login
-      // Questa informazione potrebbe essere salvata in localStorage se necessario
-      localStorage.setItem('authRedirectUrl', location.pathname);
-
-      // Avvia il processo di login, che reindirizza a Keycloak
-      login();
-    }
-  }, [loading, isAuthenticated, login, location]);
-
   // Mostra il loader mentre verifichiamo l'autenticazione
-  if (loading || !isAuthenticated) {
+  if (loading) {
     return <LoadingSpinner />;
+  }
+
+  // Se non autenticato, reindirizza al login salvando l'URL corrente
+  if (!isAuthenticated) {
+    return <LoginRedirector redirectUrl={location.pathname} />;
   }
 
   // Se non ci sono ruoli richiesti, permetti l'accesso
@@ -48,9 +39,7 @@ const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   }
 
   // Verifica i ruoli richiesti
-  const hasRequiredRoles = requireAll
-    ? hasAllRoles(requiredRoles) // Deve avere TUTTI i ruoli
-    : hasAnyRole(requiredRoles); // Deve avere ALMENO UNO dei ruoli
+  const hasRequiredRoles = requireAll ? hasAllRoles(requiredRoles) : hasAnyRole(requiredRoles);
 
   // Se l'utente ha i ruoli richiesti, permetti l'accesso
   if (hasRequiredRoles) {
@@ -58,7 +47,7 @@ const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   }
 
   // Altrimenti mostra accesso negato
-  return <AccessDenied />;
+  return <Err403 />;
 };
 
 export default RoleProtectedRoute;

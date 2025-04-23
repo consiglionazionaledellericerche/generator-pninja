@@ -1,0 +1,27 @@
+import { useEffect, useRef } from 'react';
+import { useAuthState } from '../contexts/AuthContext';
+
+interface LoginRedirectorProps {
+  redirectUrl?: string;
+}
+
+export const LoginRedirector: React.FC<LoginRedirectorProps> = ({ redirectUrl }) => {
+  const { login } = useAuthState();
+  const hasRedirected = useRef(false);
+
+  useEffect(() => {
+    if (!hasRedirected.current) {
+      hasRedirected.current = true;
+
+      // Salva l'URL di reindirizzamento se fornito
+      if (redirectUrl) {
+        localStorage.setItem('authRedirectUrl', redirectUrl);
+      }
+
+      // Esegui il login in un contesto di esecuzione pulito
+      login();
+    }
+  }, [login, redirectUrl]);
+
+  return null;
+};

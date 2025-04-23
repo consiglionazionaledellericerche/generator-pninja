@@ -57,6 +57,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               : '') +
             window.location.hash;
           window.history.replaceState({}, document.title, newUrl);
+
+          // Controlla se esiste un URL di reindirizzamento salvato
+          const savedRedirectUrl = localStorage.getItem('authRedirectUrl');
+          if (savedRedirectUrl) {
+            // Rimuovi l'URL salvato per evitare reindirizzamenti futuri indesiderati
+            localStorage.removeItem('authRedirectUrl');
+
+            // Reindirizza l'utente alla pagina originale invece che alla home
+            window.location.href = savedRedirectUrl;
+            return; // Importante per evitare che il resto della funzione venga eseguito
+          }
         }
 
         // Check if there's already an authenticated session
@@ -250,7 +261,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const data = await response.json();
 
       // Redirect user to Keycloak authorization URL
-      // await new Promise((resolve) => setTimeout(resolve, 300));
       window.location.href = data.authUrl;
 
       // We don't update state here since the page will be reloaded
