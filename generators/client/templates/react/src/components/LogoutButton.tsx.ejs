@@ -4,7 +4,7 @@ import { useAuthState } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Loader } from 'lucide-react';
 
-export function LogoutButton() {
+const LogoutButton: React.FC = () => {
   const { logout } = useAuthState();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -16,7 +16,8 @@ export function LogoutButton() {
       await logout();
       navigate('/');
     } catch (error) {
-      console.error('Errore durante il logout:', error);
+      const message = error instanceof Error ? error.message : t('ui.account.unknownError');
+      alert(`${t('ui.account.logoutError')}: ${message}`);
     } finally {
       setIsLoggingOut(false);
     }
@@ -32,4 +33,6 @@ export function LogoutButton() {
       {isLoggingOut ? t('ui.account.loggingOut') : t('ui.account.logout')}
     </button>
   );
-}
+};
+
+export default LogoutButton;

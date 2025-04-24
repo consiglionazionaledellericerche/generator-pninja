@@ -1,6 +1,6 @@
-import { AuthTokens, UserRoles } from '../types/auth'; // importa i tipi centralizzati
+import { AuthTokens, UserRoles } from '../types/auth'; // import centralized types
 
-// Interfaccia per il payload JWT decodificato
+// Interface for the decoded JWT payload
 export interface DecodedJwtPayload {
   // Standard JWT claims
   exp?: number; // Expiration time
@@ -13,11 +13,11 @@ export interface DecodedJwtPayload {
   realm_access?: { roles: string[] };
   resource_access?: Record<string, { roles: string[] }>;
 
-  // Per qualsiasi altra proprietà
+  // For any other properties
   [key: string]: unknown;
 }
 
-// Funzione per decodificare un token JWT
+// Function to decode a JWT token
 export const decodeJwt = (token: string): DecodedJwtPayload | null => {
   try {
     const base64Url = token.split('.')[1];
@@ -31,12 +31,12 @@ export const decodeJwt = (token: string): DecodedJwtPayload | null => {
     );
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error('Errore nella decodifica del token JWT:', error);
+    console.error('Error decoding the JWT token:', error);
     return null;
   }
 };
 
-// Funzione per estrarre i ruoli dal token JWT
+// Function to extract roles from a JWT token
 export const extractRolesFromToken = (token: string): UserRoles => {
   const decodedToken = decodeJwt(token);
   const defaultRoles: UserRoles = {
@@ -47,10 +47,10 @@ export const extractRolesFromToken = (token: string): UserRoles => {
 
   if (!decodedToken) return defaultRoles;
 
-  // Estrai i ruoli del realm
+  // Extract realm roles
   const realmRoles = decodedToken.realm_access?.roles || [];
 
-  // Estrai i ruoli dei client
+  // Extract client roles
   const clientRoles: Record<string, string[]> = {};
   if (decodedToken.resource_access) {
     Object.keys(decodedToken.resource_access).forEach((clientId) => {
@@ -60,7 +60,7 @@ export const extractRolesFromToken = (token: string): UserRoles => {
     });
   }
 
-  // Crea una lista unificata di tutti i ruoli
+  // Create a unified list of all roles
   const allRoles = [...realmRoles, ...Object.values(clientRoles).flat()];
 
   return {
@@ -70,38 +70,38 @@ export const extractRolesFromToken = (token: string): UserRoles => {
   };
 };
 
-// Verifica se un token è in scadenza
+// Check if a token is about to expire
 export const isTokenExpiringSoon = (token: string, bufferSeconds = 60): boolean => {
   try {
     const decodedToken = decodeJwt(token);
     if (decodedToken && decodedToken.exp) {
-      // exp è in secondi dall'epoch, mentre Date.now() è in millisecondi
+      // exp is in seconds since epoch, while Date.now() is in milliseconds
       const expTimestamp = (decodedToken.exp as number) * 1000;
-      // Refresha se il token scade entro il buffer di tempo
+      // Refresh if the token expires within the buffer time
       return expTimestamp - Date.now() < bufferSeconds * 1000;
     }
 
-    // Se non possiamo determinare la scadenza, consideriamolo in scadenza
+    // If we can't determine the expiration, consider it expiring
     return true;
   } catch (error) {
-    console.warn('Errore nel verificare la scadenza del token:', error);
+    console.warn('Error checking token expiration:', error);
     return true;
   }
 };
 
-// Gestore dello storage per i token
+// Token storage handler
 export const tokenStorage = {
   setTokens: (tokens: AuthTokens) => {
     try {
-      // Salva i token
+      // Save the tokens
       localStorage.setItem('auth_tokens', JSON.stringify(tokens));
 
-      // Salva il timestamp di ricezione
+      // Save the timestamp of receipt
       localStorage.setItem('token_received_time', Date.now().toString());
 
-      console.log('Token salvati con successo:', new Date().toISOString());
+      console.info('Tokens successfully saved:', new Date().toISOString());
     } catch (error) {
-      console.error('Errore nel salvare i token:', error);
+      console.error('Error saving tokens:', error);
     }
   },
 
@@ -112,7 +112,7 @@ export const tokenStorage = {
 
       return JSON.parse(tokens);
     } catch (error) {
-      console.error('Errore nel recuperare i token:', error);
+      console.error('Error retrieving tokens:', error);
       return null;
     }
   },
@@ -122,11 +122,11 @@ export const tokenStorage = {
       localStorage.removeItem('auth_tokens');
       localStorage.removeItem('token_received_time');
     } catch (error) {
-      console.error('Errore nel cancellare i token:', error);
+      console.error('Error clearing tokens:', error);
     }
   },
 
-  // Ottiene i ruoli dal token attualmente memorizzato
+  // Get roles from the currently stored token
   getRoles: (): UserRoles | null => {
     const tokens = tokenStorage.getTokens();
     if (!tokens?.access_token) return null;

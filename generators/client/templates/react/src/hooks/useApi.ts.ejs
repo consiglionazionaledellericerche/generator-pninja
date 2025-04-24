@@ -28,65 +28,65 @@ interface FetchOptions extends RequestInit {
 export const useApi = () => {
   const { refreshTokens, login } = useAuthState();
 
-  // Funzione base per chiamate API autenticate
+  // Base function for authenticated API calls
   const authenticatedFetch = useCallback(
     async (url: string, options: FetchOptions = {}): Promise<Response> => {
       try {
         let tokens = tokenStorage.getTokens();
 
         if (!tokens?.access_token) {
-          console.error('Nessun token disponibile, reindirizzamento al login');
-          // Avvia il login automaticamente
+          console.error('No token available, redirecting to login');
+          // Automatically start the login process
           login();
-          throw new Error('Non autenticato');
+          throw new Error('Not authenticated');
         }
 
-        // Aggiorna il token solo se necessario
+        // Refresh the token only if necessary
         let shouldRefresh = false;
         try {
-          shouldRefresh = isTokenExpiringSoon(tokens.access_token, 60); // 60 secondi buffer
+          shouldRefresh = isTokenExpiringSoon(tokens.access_token, 60); // 60 seconds buffer
           if (shouldRefresh) {
-            console.log('Token in scadenza, tentativo di refresh automatico...');
+            console.info('Token is about to expire, attempting automatic refresh...');
           }
         } catch (decodeError) {
-          console.warn('Errore nella verifica della scadenza del token:', decodeError);
-          // In caso di errore, procedi comunque con il token attuale
+          console.warn('Error while checking token expiration:', decodeError);
+          // In case of error, proceed with the current token
         }
 
-        // Aggiorna il token se necessario
+        // Refresh the token if necessary
         if (shouldRefresh) {
           try {
             tokens = await refreshTokens();
-            console.log('Token aggiornato con successo');
+            console.info('Token successfully refreshed');
           } catch (refreshError) {
-            console.error('Refresh token fallito, uso del token attuale:', refreshError);
-            // Continuiamo con l'ultimo token disponibile invece di fallire immediatamente
+            console.error('Token refresh failed, using current token:', refreshError);
+            // Continue with the last available token instead of failing immediately
           }
         }
 
-        // Merge degli headers personalizzati con l'Authorization
+        // Merge custom headers with Authorization
         const headers = {
           ...options.headers,
           Authorization: `Bearer ${tokens.access_token}`,
           'Content-Type': options.headers?.['Content-Type'] || 'application/json',
         };
 
-        // Esegui la richiesta
+        // Execute the request
         const response = await fetch(url, {
           ...options,
           headers,
           credentials: 'include',
         });
 
-        // Gestione errori HTTP
+        // Handle HTTP errors
         if (!response.ok) {
           if (response.status === 401) {
-            console.log('Risposta 401, tentativo di refresh e retry...');
+            console.info('401 response, attempting refresh and retry...');
             try {
-              // Tenta un refresh più aggressivo in caso di 401
+              // Attempt a more aggressive refresh in case of 401
               const newTokens = await refreshTokens();
 
-              // Riprova la richiesta con il nuovo token
+              // Retry the request with the new token
               const retryResponse = await fetch(url, {
                 ...options,
                 headers: {
@@ -101,21 +101,21 @@ export const useApi = () => {
                 return retryResponse;
               }
 
-              // Se anche il secondo tentativo fallisce, è molto probabile
-              // che il problema non sia legato al token
-              console.error('Anche il secondo tentativo di fetch è fallito');
-              throw new Error('Richiesta fallita anche dopo refresh del token');
+              // If the second attempt also fails, it's likely
+              // that the issue is not related to the token
+              console.error('Second fetch attempt failed as well');
+              throw new Error('Request failed even after token refresh');
             } catch (refreshError) {
-              console.error('Refresh token fallito durante retry:', refreshError);
-              throw new Error('Sessione scaduta');
+              console.error('Token refresh failed during retry:', refreshError);
+              throw new Error('Session expired');
             }
           }
 
-          // Gestione degli altri errori HTTP
+          // Handle other HTTP errors
           const errorData = await response.json().catch(() => null);
           throw new HttpError(
             response.status,
-            errorData?.message || `Errore HTTP! stato: ${response.status}`,
+            errorData?.message || `HTTP Error! Status: ${response.status}`,
             errorData?.details,
             errorData
           );
@@ -123,14 +123,14 @@ export const useApi = () => {
 
         return response;
       } catch (error) {
-        console.error('Errore nella richiesta authenticatedFetch:', error);
+        console.error('Error in authenticatedFetch request:', error);
         throw error;
       }
     },
     [refreshTokens, login]
   );
 
-  // Metodi di utility per le operazioni CRUD comuni
+  // Utility methods for common CRUD operations
 
   // GET
   const get = useCallback(
@@ -212,7 +212,7 @@ export const useApi = () => {
     get,
     post,
     put,
-    delete: del, // 'delete' è una parola riservata in JS
+    delete: del,
     patch,
   };
 };

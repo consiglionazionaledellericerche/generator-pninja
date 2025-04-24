@@ -4,10 +4,10 @@ import { DarkModeToggle } from './DarkModeToggle';
 import { LangSelect } from './LangSelect';
 import { useAuthState } from '../contexts/AuthContext';
 import LoginButton from './LoginButton';
-import { LogoutButton } from './LogoutButton';
+import LogoutButton from './LogoutButton';
 import appLogo from '../assets/logo.svg';
-export default function Menu() {
-  const { isAuthenticated, loading } = useAuthState();
+const Menu: React.FC = () => {
+  const { isAuthenticated } = useAuthState();
   const { t } = useTranslation();
   const location = useLocation();
   const isActive = (path: string) => (location.pathname === path ? ' active' : '');
@@ -40,4 +40,6 @@ export default function Menu() {
       {isAuthenticated && <LogoutButton />}
     </nav>
   );
-}
+};
+
+export default Menu;
