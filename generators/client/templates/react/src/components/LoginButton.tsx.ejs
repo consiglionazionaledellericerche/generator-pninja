@@ -1,46 +1,28 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthState } from '../contexts/AuthContext';
 import { LogIn, Loader } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export function LoginButton() {
-  const { login, loading: authLoading } = useAuthState();
-  const location = useLocation();
+const LoginButton: React.FC = () => {
   const { t } = useTranslation();
-  const [localError, setLocalError] = useState<string | null>(null);
+  const { loading } = useAuthState();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setLocalError(null);
-
-    try {
-      localStorage.setItem('authRedirectUrl', location.pathname);
-      // Utilizza la funzione login() dall'hook di autenticazione
-      // Questa gestirà già lo stato di loading globale
-      const result = await login();
-
-      if (!result.success) {
-        setLocalError(result.error || 'Errore durante il login');
-      }
-      // Non serve gestire il redirect qui perché login() lo fa già
-    } catch (error) {
-      console.error('Errore durante il login:', error);
-      setLocalError('Errore imprevisto durante il login');
-    }
+    navigate('/login', { state: { from: location.pathname } });
   };
 
   return (
-    <div>
-      {localError && <div className="error-message">{localError}</div>}
-
-      <button
-        onClick={handleLogin}
-        disabled={authLoading}
-        className={`inline-flex items-center gap-1 nav-bar-link ${authLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-      >
-        {authLoading ? <Loader size={16} className="animate-spin" /> : <LogIn size={16} />}
-        {authLoading ? t('ui.account.loggingIn') : t('ui.account.login')}
-      </button>
-    </div>
+    <button
+      onClick={handleLogin}
+      disabled={loading}
+      className={`inline-flex items-center gap-1 nav-bar-link ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+    >
+      {loading ? <Loader size={16} className="animate-spin" /> : <LogIn size={16} />}
+      {loading ? t('ui.account.loggingIn') : t('ui.account.login')}
+    </button>
   );
-}
+};
+
+export default LoginButton;

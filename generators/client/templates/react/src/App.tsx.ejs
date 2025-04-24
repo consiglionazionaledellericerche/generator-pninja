@@ -1,45 +1,63 @@
 import { Routes, Route } from 'react-router-dom';
-import './App.css';
-import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleProtectedRoute from './components/RoleProtectedRoute';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Err404 from './pages/errors/Err404';
+import Login from './pages/Login';
 <% for (const entity of entities) {%>
 import <%=entity.name%> from './pages/entities/<%=entity.name%>';
 import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
 import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
-<%}%>
-function App() {
+<%}-%>
+
+import { SimpleLoader } from './components/SimpleLoader';
+import { useAuthState } from './contexts/AuthContext';
+
+import './App.css';
+
+const LoaderComponent: React.FC = () => {
   return (
+    <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-slate-200 dark:bg-gray-900">
+      <SimpleLoader />
+    </div>
+  );
+};
+
+function App() {
+  const { loading } = useAuthState();
+  return loading ? (
+    <LoaderComponent />
+  ) : (
     <NotificationProvider position="bottom-right">
-      <AuthProvider>
-        <Menu />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route element={<ProtectedRoute />}>
-<%        for (const entity of entities) {-%>
-            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%> />} />
-            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
-            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
-            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
-<%        }-%>
-          </Route>
-          <Route
-            element={
-              <RoleProtectedRoute
-                requiredRoles={['admin', 'superuser', 'master']}
-                requireAll={false}
-              />
-            }
-          >
-            <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
-          </Route>
-          <Route path="*" element={<Err404 />} />
-        </Routes>
-      </AuthProvider>
+      <Menu />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route element={<ProtectedRoute />}>
+<%      for (const entity of entities) {-%>
+          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%> />} />
+          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
+          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
+          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
+<%      }-%>
+        </Route>
+        <Route
+          element={
+            <RoleProtectedRoute
+              requiredRoles={['admin', 'superuser', 'master']}
+              requireAll={false}
+            />
+          }
+        >
+          <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
+        </Route>
+        <Route element={<RoleProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
+          <Route path="/apps-admin" element={<div className="m-4">APPS ADMIN EXAMPLE</div>} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Err404 />} />
+      </Routes>
     </NotificationProvider>
   );
 }

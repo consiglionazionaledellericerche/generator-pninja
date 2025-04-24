@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 import { LangSelect } from './LangSelect';
 import { useAuthState } from '../contexts/AuthContext';
-import { LoginButton } from './LoginButton';
+import LoginButton from './LoginButton';
 import { LogoutButton } from './LogoutButton';
-import { Loader } from 'lucide-react';
 import appLogo from '../assets/logo.svg';
 export default function Menu() {
   const { isAuthenticated, loading } = useAuthState();
@@ -24,6 +23,12 @@ export default function Menu() {
       <Link className={`nav-bar-link${isActive('/')}`} to="/">
         {t('pages.Home')}
       </Link>
+      <Link className={`nav-bar-link${isActive('/admin')}`} to="/admin">
+        Admin
+      </Link>
+      <Link className={`nav-bar-link${isActive('/apps-admin')}`} to="/apps-admin">
+        Apps admin
+      </Link>
 <%     entities.forEach((entity, index) => {-%>
       <Link className={`nav-bar-link${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`} to="/entities/<%- to.slug(pluralize(entity.name)) %>">
         {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
@@ -31,14 +36,8 @@ export default function Menu() {
 <%    });-%>
       <LangSelect />
       <DarkModeToggle />
-      {loading && (
-        <button className={'inline-flex items-center gap-1 nav-bar-link animate-pulse'}>
-          <Loader size={16} className="animate-spin" />
-          <div className="w-12">&nbsp;</div>
-        </button>
-      )}
-      {!loading && !isAuthenticated && <LoginButton />}
-      {!loading && isAuthenticated && <LogoutButton />}
+      {!isAuthenticated && <LoginButton />}
+      {isAuthenticated && <LogoutButton />}
     </nav>
   );
 }

@@ -1,0 +1,6 @@
+import { LoginRedirector } from '../components/LoginRedirector';
+import { useLocation } from 'react-router-dom';
+
+export default function Login() {
+  return <LoginRedirector redirectUrl={useLocation().state.from} />;
+}

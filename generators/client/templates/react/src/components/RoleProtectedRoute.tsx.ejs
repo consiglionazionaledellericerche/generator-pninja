@@ -1,52 +1,29 @@
-// src/components/RoleProtectedRoute.tsx
-import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import { useAuthState } from '../contexts/AuthContext';
 import { useRoles } from '../hooks/useRoles';
 import Err403 from '../pages/errors/Err403';
-import { LoginRedirector } from './LoginRedirector';
-
 interface RoleProtectedRouteProps {
   requiredRoles?: string[];
   requireAll?: boolean;
 }
 
-const LoadingSpinner: React.FC = () => (
-  <div className="loading-spinner">Caricamento in corso...</div>
-);
-
 const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
   requiredRoles = [],
   requireAll = false,
 }) => {
-  const { isAuthenticated, loading } = useAuthState();
+  const { isAuthenticated } = useAuthState();
   const { hasAllRoles, hasAnyRole } = useRoles();
   const location = useLocation();
-
-  // Mostra il loader mentre verifichiamo l'autenticazione
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  // Se non autenticato, reindirizza al login salvando l'URL corrente
-  if (!isAuthenticated) {
-    return <LoginRedirector redirectUrl={location.pathname} />;
-  }
-
-  // Se non ci sono ruoli richiesti, permetti l'accesso
-  if (requiredRoles.length === 0) {
-    return <Outlet />;
-  }
-
-  // Verifica i ruoli richiesti
   const hasRequiredRoles = requireAll ? hasAllRoles(requiredRoles) : hasAnyRole(requiredRoles);
 
-  // Se l'utente ha i ruoli richiesti, permetti l'accesso
-  if (hasRequiredRoles) {
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location.pathname }} />;
+  }
+
+  if (requiredRoles.length === 0 || hasRequiredRoles) {
     return <Outlet />;
   }
 
-  // Altrimenti mostra accesso negato
   return <Err403 />;
 };
 

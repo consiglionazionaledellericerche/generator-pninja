@@ -1,20 +1,12 @@
-import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import { useAuthState } from '../contexts/AuthContext';
-import { SimpleLoader } from './SimpleLoader';
-import { LoginRedirector } from './LoginRedirector';
 
 const ProtectedRoute: React.FC = () => {
-  const { isAuthenticated, loading } = useAuthState();
-  const location = useLocation(); // Ottieni l'URL corrente
-
-  if (loading) {
-    return <SimpleLoader />;
-  }
+  const { isAuthenticated } = useAuthState();
+  const location = useLocation();
 
   if (!isAuthenticated) {
-    // Passa l'URL corrente come redirectUrl, esattamente come in RoleProtectedRoute
-    return <LoginRedirector redirectUrl={location.pathname} />;
+    return <Navigate to="/login" state={{ from: location.pathname }} />;
   }
 
   return <Outlet />;
