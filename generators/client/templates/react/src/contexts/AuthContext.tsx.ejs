@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { tokenStorage } from '../utils/tokenStore';
-import { User, AuthTokens } from '../types/auth'; // importa i tipi centralizzati
+import { User, AuthTokens } from '../types/auth';
 
 // Interface for authentication state
 interface AuthState {
@@ -57,21 +57,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             window.location.hash;
           window.history.replaceState({}, document.title, newUrl);
 
-          // Controlla se esiste un URL di reindirizzamento salvato
+          // Check if a redirect URL was saved
           const savedRedirectUrl = localStorage.getItem('authRedirectUrl');
           if (savedRedirectUrl) {
-            // Rimuovi l'URL salvato per evitare reindirizzamenti futuri indesiderati
+            // Remove the saved URL to avoid future unwanted redirects
             localStorage.removeItem('authRedirectUrl');
 
-            // Reindirizza l'utente alla pagina originale invece che alla home
+            // Redirect the user to the original page instead of the home page
             window.location.href = savedRedirectUrl;
-            return; // Importante per evitare che il resto della funzione venga eseguito
+            return; // Stop further execution
           }
         }
 
         // Check if there's already an authenticated session
         const response = await fetch('/api/auth/check-session', {
-          credentials: 'include', // Important for session cookies
+          credentials: 'include', // Required for session cookies
         });
 
         if (response.ok) {
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         }
 
-        // Check if we have tokens in localStorage
+        // Check if tokens exist in localStorage
         const tokens = tokenStorage.getTokens();
 
         if (tokens?.access_token) {
@@ -125,7 +125,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             // Invalid token, try to refresh
             if (tokens.refresh_token) {
               try {
-                const newTokens = await refreshTokens();
+                await refreshTokens();
                 return;
               } catch (refreshError) {
                 console.error('Refresh failed:', refreshError);
@@ -138,7 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         }
 
-        // If we get here, there's no valid session
+        // If no valid session is found
         setAuthState({
           isAuthenticated: false,
           tokens: null,
@@ -262,7 +262,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Redirect user to Keycloak authorization URL
       window.location.href = data.authUrl;
 
-      // We don't update state here since the page will be reloaded
       return { success: true };
     } catch (error) {
       console.error('Login start error:', error);
