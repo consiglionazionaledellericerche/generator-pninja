@@ -23,3 +23,9 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
 }
+
+export interface AuthContextType extends AuthState {
+  login: () => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
+  refreshTokens: () => Promise<AuthTokens>;
+}

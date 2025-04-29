@@ -60,6 +60,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthContext.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/contexts/NotificationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/NotificationContext.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
@@ -69,6 +70,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useApi.ts.ejs"), that.destinationPath(`client/src/hooks/useApi.ts`), {});
+    that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useRoles.ts.ejs"), that.destinationPath(`client/src/hooks/useRoles.ts`), {});
 
     for (const entity of entities) {

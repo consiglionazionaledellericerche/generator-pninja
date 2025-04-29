@@ -1,5 +1,5 @@
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import { useAuthState } from '../contexts/AuthContext';
+import { useAuthState } from '../hooks/useAuthState';
 import { useRoles } from '../hooks/useRoles';
 import Err403 from '../pages/errors/Err403';
 interface RoleProtectedRouteProps {
