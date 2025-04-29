@@ -36,5 +36,5 @@ export function hello(log) {
 &&&       &&&   &&&& &&& &&&  &&&& &&&  &&&&&&
 //pninja.tech                    &&&&&        
 `));
-  log(`\n${colors.bold.whiteBright(`PNinja`)} ${colors.yellow(`v.0.2.0`)} | Yeoman generator for ${colors.whiteBright(`PHP`)}, ${colors.whiteBright(`SQL`)}, ${colors.whiteBright(`JavaScript`)} modern web applications`);
+  log(`\n${colors.bold.whiteBright(`PNinja`)} ${colors.yellow(`v.0.3.0`)} | Yeoman generator for ${colors.whiteBright(`PHP`)}, ${colors.whiteBright(`SQL`)}, ${colors.whiteBright(`JavaScript`)} modern web applications`);
 }
