@@ -90,47 +90,28 @@ export const isTokenExpiringSoon = (token: string, bufferSeconds = 60): boolean 
 };
 
 // Token storage handler
-export const tokenStorage = {
-  setTokens: (tokens: AuthTokens) => {
-    try {
-      // Save the tokens
-      localStorage.setItem('auth_tokens', JSON.stringify(tokens));
+class MemoryTokenStorage {
+  private tokens: AuthTokens | null = null;
 
-      // Save the timestamp of receipt
-      localStorage.setItem('token_received_time', Date.now().toString());
+  setTokens(tokens: AuthTokens): void {
+    this.tokens = tokens;
+    console.info('Tokens successfully saved in memory');
+  }
 
-      console.info('Tokens successfully saved:', new Date().toISOString());
-    } catch (error) {
-      console.error('Error saving tokens:', error);
-    }
-  },
+  getTokens(): AuthTokens | null {
+    return this.tokens;
+  }
 
-  getTokens: (): AuthTokens | null => {
-    try {
-      const tokens = localStorage.getItem('auth_tokens');
-      if (!tokens) return null;
-
-      return JSON.parse(tokens);
-    } catch (error) {
-      console.error('Error retrieving tokens:', error);
-      return null;
-    }
-  },
-
-  clearTokens: () => {
-    try {
-      localStorage.removeItem('auth_tokens');
-      localStorage.removeItem('token_received_time');
-    } catch (error) {
-      console.error('Error clearing tokens:', error);
-    }
-  },
+  clearTokens(): void {
+    this.tokens = null;
+    console.info('Tokens cleared from memory');
+  }
 
   // Get roles from the currently stored token
-  getRoles: (): UserRoles | null => {
-    const tokens = tokenStorage.getTokens();
-    if (!tokens?.access_token) return null;
+  getRoles(): UserRoles | null {
+    if (!this.tokens?.access_token) return null;
+    return extractRolesFromToken(this.tokens.access_token);
+  }
+}
 
-    return extractRolesFromToken(tokens.access_token);
-  },
-};
+export const tokenStorage = new MemoryTokenStorage();
