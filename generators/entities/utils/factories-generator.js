@@ -130,10 +130,10 @@ export class FactoriesGenerator {
                 return 'fake()->boolean()';
             case 'LocalDate':
             case 'Date':
-                return 'fake()->date()';
+                return 'fake()->dateTimeBetween("-1 year", "now")';
             case 'ZonedDateTime':
             case 'Instant':
-                return 'fake()->dateTime()';
+                return 'fake()->dateTimeBetween("-1 year", "now")';
             case 'Duration':
                 return 'fake()->numberBetween(1, 1000000)';
             case 'byte[]':
