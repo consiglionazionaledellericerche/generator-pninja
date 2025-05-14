@@ -27,7 +27,7 @@ const fieldTypeToSchema = (type) => {
     };
     return typeMap[type] || 'string';
 }
-const fieldTypeInputType = (type) => {
+const fieldTypeToInputType = (type) => {
     const typeMap = {
         'String': 'text',
         'Integer': 'number',
@@ -35,7 +35,7 @@ const fieldTypeInputType = (type) => {
         'BigDecimal': 'number',
         'Float': 'number',
         'Double': 'number',
-        'Boolean': 'boolean',
+        'Boolean': 'checkbox',
         'LocalDate': 'date',
         'ZonedDateTime': 'datetime-local',
         'Instant': 'datetime-local',
@@ -65,22 +65,7 @@ const getField = (type, name) => {
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
           </div>
 <%    } else {
-    const typeMap = {
-        'String': 'text',
-        'Integer': 'number',
-        'Long': 'number',
-        'BigDecimal': 'number',
-        'Float': 'number',
-        'Double': 'number',
-        'Boolean': 'boolean',
-        'LocalDate': 'date',
-        'ZonedDateTime': 'datetime-local',
-        'Instant': 'datetime-local',
-        'TextBlob': 'string',
-        'Blob': 'string',
-        'ImageBlob': 'string'
-    };
-    const T = typeMap[type] || 'string';
+    const T = fieldTypeToInputType(type);
 -%>
           <input
             type="<%- T %>"
@@ -122,6 +107,8 @@ const <%= to.camel(entity.name)%>Schema = z.object({
     .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
 <%    } if(fieldTypeToSchema(type) === 'number') {-%>
   <%= to.snake(name) %>: z.number()<%= isNullable(validations) ? '.nullable()' : '.min(1)' %>,
+<%    } if(fieldTypeToSchema(type) === 'boolean') {-%>
+  <%= to.snake(name) %>: z.boolean()<%= isNullable(validations) ? '.optional()' : '.default(false)' %>,
 <%    } -%>
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
