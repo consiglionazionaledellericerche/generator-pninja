@@ -80,7 +80,6 @@ export default function <%= entity.name %>() {
   }, [<%=to.camel(pluralize(entity.name))%>, sortConfig]);
 
   const renderSortHeader = (field: SortableField, label: string) => {
-    const isNum = [<%- numericColums.join(', ') %>].includes(field);
     const isSorted = sortConfig.field === field;
     return (
       <th
@@ -91,11 +90,11 @@ export default function <%= entity.name %>() {
         <div className="flex items-center gap-1">
           <div>{label}</div>
           {isSorted &&
-            (sortConfig.direction === 'asc' ? (
-              isNum ? <ChevronDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ChevronDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
-            ) : (
-              isNum ? <ChevronUp className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" /> : <ChevronUp className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
-            ))}
+            (sortConfig.direction === 'asc' ?
+              <ChevronDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
+            :
+              <ChevronUp className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />
+            )}
           {!isSorted && <ChevronsUpDown className="shrink-0 pointer-events-none size-5 text-gray-500 sm:size-4" />}
         </div>
       </th>
