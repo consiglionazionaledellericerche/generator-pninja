@@ -21,9 +21,11 @@ const fieldTypeToSchema = (type) => {
         'LocalDate': 'string',
         'ZonedDateTime': 'string',
         'Instant': 'string',
+        'Duration': 'number',
+        'UUID': 'uuid',
         'TextBlob': 'string',
         'Blob': 'string',
-        'ImageBlob': 'string'
+        'ImageBlob': 'string',
     };
     return typeMap[type] || 'string';
 }
@@ -39,11 +41,22 @@ const fieldTypeToInputType = (type) => {
         'LocalDate': 'date',
         'ZonedDateTime': 'datetime-local',
         'Instant': 'datetime-local',
+        'Duration': 'number',
         'TextBlob': 'string',
         'Blob': 'string',
         'ImageBlob': 'string'
     };
     return typeMap[type] || 'string';
+}
+const fieldTypeToInputStep = (type) => {
+    const stepMap = {
+        'BigDecimal': 'any',
+        'Float': 'any',
+        'Double': 'any',
+        'ZonedDateTime': 1,
+        'Instant': 1
+    };
+    return stepMap[type] || null;
 }
 
 const getField = (type, name) => {
@@ -66,11 +79,12 @@ const getField = (type, name) => {
           </div>
 <%    } else {
     const T = fieldTypeToInputType(type);
+    const STEP = fieldTypeToInputStep(type);
 -%>
           <input
             type="<%- T %>"
-<%          if (T === 'datetime-local') {-%>
-            step="1"
+<%          if (!!STEP) {-%>
+            step="<%- STEP %>"
 <%          }-%>
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
@@ -103,6 +117,12 @@ const <%= to.camel(entity.name)%>Schema = z.object({
   <%= to.snake(name) %>: z
     .string()
 <%- isEmail(name) ? `    .email()\n` : '' -%>
+    .transform((val) => val || undefined)
+    .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
+<%    } if(fieldTypeToSchema(type) === 'uuid') {-%>
+  <%= to.snake(name) %>: z
+    .string()
+    .uuid()
     .transform((val) => val || undefined)
     .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
 <%    } if(fieldTypeToSchema(type) === 'number') {-%>

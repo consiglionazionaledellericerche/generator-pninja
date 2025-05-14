@@ -22,8 +22,8 @@ export class MigrationsGenerator {
             'LocalDate': 'date',
             'ZonedDateTime': 'timestamp',
             'Instant': 'timestamp',
-            // 'Duration': TODO,
-            // 'UUID': TODO,
+            'Duration': 'bigInteger',
+            'UUID': 'uuid',
             'Blob': 'binary',
             // 'AnyBlob': 'binary', TODO
             // 'ImageBlob': 'binary', TODO
@@ -44,7 +44,17 @@ export class MigrationsGenerator {
         return fields.map(field => {
             const fieldName = to.snake(field.name);
             const fieldType = this.convertFieldType(field.type, enums);
-            let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}')` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
+            let fieldTypeParams = '';
+            if (fieldType === 'decimal') {
+                fieldTypeParams = ', 21, 2';
+            } else if (fieldType === 'float') {
+                fieldTypeParams = ', 6, 4';
+            } else if (fieldType === 'double') {
+                fieldTypeParams = ', 15, 8';
+            } else if (fieldType === 'timestamp') {
+                fieldTypeParams = ', 6';
+            }
+            let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
             if (field.validations.length === 0) {
                 fieldDefinition += '->nullable()';
             } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {

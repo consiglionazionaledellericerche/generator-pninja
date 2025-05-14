@@ -134,12 +134,16 @@ export class FactoriesGenerator {
             case 'ZonedDateTime':
             case 'Instant':
                 return 'fake()->dateTime()';
+            case 'Duration':
+                return 'fake()->numberBetween(1, 1000000)';
             case 'byte[]':
             case 'ByteBuffer':
                 return 'fake()->sha256()';
             case 'TextBlob':
             case 'Blob':
                 return 'fake()->text()';
+            case 'UUID':
+                return 'fake()->uuid()';
             default:
                 if (enums.filter(e => field.type === e.name).map(e => e.name).pop()) {
                     return `((\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())[array_rand(\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())])->value`

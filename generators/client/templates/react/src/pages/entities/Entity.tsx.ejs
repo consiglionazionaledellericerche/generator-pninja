@@ -169,7 +169,7 @@ export default function <%= entity.name %>() {
               </td>
 <%            for(column of columns) { -%>
               <td>
-                {row.<%= column%>}
+                {row.<%= column%>?.toString()}
               </td>
 <%            } -%>
 <%            for(r of relatedEntities) { -%>
