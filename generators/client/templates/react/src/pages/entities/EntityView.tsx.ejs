@@ -40,7 +40,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 <%      for(column of columns) { -%>
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
-          <td>{data?.<%= column%>}</td>
+          <td>{data?.<%= column%>.toString()}</td>
         </tr>
 <%      } -%>
 <%      if(false) for(f of foreignIds) { -%>
@@ -48,7 +48,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-f.foreignId%>')}</th>
           <td>
             <Link className="text-link" to={`/entities/<%=to.slug(pluralize(f.related))%>/view/${data?.<%= f.foreignId%>}`}>
-              {data?.<%= f.foreignId%>}
+              {data?.<%= f.foreignId%>.toString()}
             </Link>
           </td>
         </tr>
