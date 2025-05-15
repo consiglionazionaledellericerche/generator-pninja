@@ -96,7 +96,7 @@ const getField = (type, name) => {
           />
 <%      } else {-%>
           <textarea
-            rows="10"
+            rows={10}
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
             className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
@@ -134,10 +134,7 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%    } if(fieldTypeToSchema(type) === 'date') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().date()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'datetime') {-%>
-  <%= to.snake(name) %>: z.preprocess(
-    (val) => (val ? new Date(String(val)).toISOString() : undefined),
-    z.string().datetime()<%= isOptional(validations) ? '.or(z.string().length(0)).optional()' : '.nonempty()' %>
-  ),
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? new Date(String(val)).toISOString() : undefined), z.string().datetime()<%= isOptional(validations) ? '.or(z.string().length(0)).optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'time') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().time()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'integer') {-%>
