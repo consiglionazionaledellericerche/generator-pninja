@@ -134,6 +134,8 @@ export class FactoriesGenerator {
             case 'ZonedDateTime':
             case 'Instant':
                 return 'fake()->dateTimeBetween("-1 year", "now")';
+            case 'LocalTime':
+                return 'fake()->time()';
             case 'Duration':
                 return 'fake()->numberBetween(1, 1000000)';
             case 'byte[]':

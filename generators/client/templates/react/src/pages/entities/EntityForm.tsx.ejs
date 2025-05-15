@@ -7,21 +7,22 @@ for({type} of entity.body) {
 }
 const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
-const isNullable = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
+const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
 const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
     const typeMap = {
         'String': 'string',
-        'Integer': 'number',
-        'Long': 'number',
+        'Integer': 'integer',
+        'Long': 'integer',
         'BigDecimal': 'number',
         'Float': 'number',
         'Double': 'number',
         'Boolean': 'boolean',
-        'LocalDate': 'string',
-        'ZonedDateTime': 'string',
-        'Instant': 'string',
+        'LocalDate': 'date',
+        'ZonedDateTime': 'datetime',
+        'Instant': 'datetime',
         'Duration': 'number',
+        'LocalTime': 'time',
         'UUID': 'uuid',
         'TextBlob': 'string',
         'Blob': 'string',
@@ -41,12 +42,13 @@ const fieldTypeToInputType = (type) => {
         'LocalDate': 'date',
         'ZonedDateTime': 'datetime-local',
         'Instant': 'datetime-local',
+        'LocalTime': 'time',
         'Duration': 'number',
         'TextBlob': 'string',
         'Blob': 'string',
         'ImageBlob': 'string'
     };
-    return typeMap[type] || 'string';
+    return typeMap[type] || 'text';
 }
 const fieldTypeToInputStep = (type) => {
     const stepMap = {
@@ -54,6 +56,7 @@ const fieldTypeToInputStep = (type) => {
         'Float': 'any',
         'Double': 'any',
         'ZonedDateTime': 1,
+        'LocalTime': 1,
         'Instant': 1
     };
     return stepMap[type] || null;
@@ -88,7 +91,7 @@ const getField = (type, name) => {
 <%          }-%>
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
-            className={inputClassName(!!errors?.<%= to.snake(name) %>?.message)}
+            className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
           />
 <%}}
 -%>
@@ -104,7 +107,9 @@ import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model
 <%  }-%>
 <%}-%>
 import { useApi } from '../../hooks/useApi';
+<% if (hasSelect) {-%>
 import { HttpError } from '../../hooks/useApi';
+<% }-%>
 import { useNotifications } from '../../contexts/NotificationContext';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
@@ -114,21 +119,24 @@ import { ChevronsUpDown } from 'lucide-react';
 const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
 <%    if(fieldTypeToSchema(type) === 'string') {-%>
-  <%= to.snake(name) %>: z
-    .string()
-<%- isEmail(name) ? `    .email()\n` : '' -%>
-    .transform((val) => val || undefined)
-    .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<%- isEmail(name) ? '.email()' : '' -%><%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'uuid') {-%>
-  <%= to.snake(name) %>: z
-    .string()
-    .uuid()
-    .transform((val) => val || undefined)
-    .pipe(z.string().<%= isNullable(validations) ? 'nullable' : 'nonempty' %>()),
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().uuid()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
+<%    } if(fieldTypeToSchema(type) === 'date') {-%>
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().date()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
+<%    } if(fieldTypeToSchema(type) === 'datetime') {-%>
+  <%= to.snake(name) %>: z.preprocess(
+    (val) => (val ? new Date(String(val)).toISOString() : undefined),
+    z.string().datetime()<%= isOptional(validations) ? '.or(z.string().length(0)).optional()' : '.nonempty()' %>
+  ),
+<%    } if(fieldTypeToSchema(type) === 'time') {-%>
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().time()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
+<%    } if(fieldTypeToSchema(type) === 'integer') {-%>
+  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number().int()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'number') {-%>
-  <%= to.snake(name) %>: z.number()<%= isNullable(validations) ? '.nullable()' : '.min(1)' %>,
+  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'boolean') {-%>
-  <%= to.snake(name) %>: z.boolean()<%= isNullable(validations) ? '.optional()' : '.default(false)' %>,
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.boolean()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } -%>
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
@@ -259,7 +267,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     if (<%= to.camel(entity.name)-%>) {
       reset({
 <% for({name, type, validations} of entity.body) {-%>
-        <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %>,
+        <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %><%= isOptional(validations) ? ' ?? undefined' : '' %>,
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
 <%  if (isArray) {-%>
@@ -277,6 +285,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+  const checkBoxClassName = (hasErrors = false) =>
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
 <%  if (hasSelect) {-%>
   const selectContainerClassName = 'grid grid-cols-1';
   const selectClassName = (hasErrors = false) =>

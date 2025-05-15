@@ -22,6 +22,7 @@ export class MigrationsGenerator {
             'LocalDate': 'date',
             'ZonedDateTime': 'timestamp',
             'Instant': 'timestamp',
+            'LocalTime': 'time',
             'Duration': 'bigInteger',
             'UUID': 'uuid',
             'Blob': 'binary',
