@@ -44,7 +44,7 @@ const fieldTypeToInputType = (type) => {
         'Instant': 'datetime-local',
         'LocalTime': 'time',
         'Duration': 'number',
-        'TextBlob': 'string',
+        'TextBlob': 'textarea',
         'Blob': 'string',
         'ImageBlob': 'string'
     };
@@ -84,6 +84,7 @@ const getField = (type, name) => {
     const T = fieldTypeToInputType(type);
     const STEP = fieldTypeToInputStep(type);
 -%>
+<%      if (T !== 'textarea') {-%>
           <input
             type="<%- T %>"
 <%          if (!!STEP) {-%>
@@ -93,8 +94,16 @@ const getField = (type, name) => {
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
             className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
           />
-<%}}
--%>
+<%      } else {-%>
+          <textarea
+            rows="10"
+            id="<%= to.snake(name) %>"
+            {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
+            className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
+          />
+<%      }-%>
+<%    }-%>
+<%}-%>
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
