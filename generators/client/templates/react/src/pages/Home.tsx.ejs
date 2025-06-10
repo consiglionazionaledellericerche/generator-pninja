@@ -33,7 +33,7 @@ import viteLogo from '../assets/vite.svg';
 export default function Home() {
   const { t, i18n } = useTranslation();
   const { user, loading } = useAuthState();
-  const { getRoles } = useRoles();
+  const { getRoles, getRealmRoles } = useRoles();
   useEffect(() => {
     document.title = t('appName');
   }, [t, i18n.language]);
@@ -57,20 +57,32 @@ export default function Home() {
         </a>
         <span>=</span>
         <a target="_blank" href="https://pninja.tech">
-          <img className="h-24 hidden dark:block" src={pninjaLogoDark} alt="PNinja" title="PNinja" />
-          <img className="h-24 block dark:hidden" src={pninjaLogoLight} alt="PNinja" title="PNinja" />
+          <img
+            className="h-24 hidden dark:block"
+            src={pninjaLogoDark}
+            alt="PNinja"
+            title="PNinja"
+          />
+          <img
+            className="h-24 block dark:hidden"
+            src={pninjaLogoLight}
+            alt="PNinja"
+            title="PNinja"
+          />
         </a>
       </div>
       {loading && <JsonPrint className="h-48 animate-pulse" data={undefined} />}
       {!loading && (
-        <JsonPrint
-          data={{
-            'user.email': user?.email,
-            'user.name': user?.name,
-            getRoles: getRoles(),
-            user,
-          }}
-        />
+        <>
+          <JsonPrint data={user} className="max-h-64 overflow-y-auto" />
+          <JsonPrint
+            className="mt-4"
+            data={{
+              roles: getRoles(),
+              realmRoles: getRealmRoles(),
+            }}
+          />
+        </>
       )}
     </div>
   );

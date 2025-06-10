@@ -100,6 +100,7 @@ export async function createReactClient(that, parsedJDL) {
                 to,
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
+                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
@@ -111,6 +112,7 @@ export async function createReactClient(that, parsedJDL) {
                 to,
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
+                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
@@ -145,7 +147,6 @@ export async function createReactClient(that, parsedJDL) {
     }
 
     that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`), {});
-    that.fs.copyTpl(that.templatePath("react/src/utils/tokenStore.ts.ejs"), that.destinationPath(`client/src/utils/tokenStore.ts`), {});
 
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
 }

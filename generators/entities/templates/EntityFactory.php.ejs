@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 <%- models %>
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 class <%- entityName %>Factory extends Factory
 {
@@ -19,6 +20,10 @@ class <%- entityName %>Factory extends Factory
 
     public function definition(): array
     {
+<% files.forEach(file => {-%>
+        $fileId = uniqid();
+        Storage::disk('private')->copy('uploads/0000/00/00/<%-file%>', "uploads/0000/00/00/{$fileId}-<%-file%>");
+<%});-%>
         return [
 <%- params %>
         ];

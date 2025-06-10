@@ -6,11 +6,12 @@ use App\Models\<%- className %>;
 <%      relatedEntitiesForFilters.map(({name}) => {-%>
 use App\Models\<%- name %>;
 <%      })-%>
-<%  }-%> 
+<%  }-%>
 use App\Traits\HandlesApiErrors;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Storage;
 
 class <%- className %>Controller extends Controller
 {
@@ -32,7 +33,7 @@ class <%- className %>Controller extends Controller
                 $query->whereNotIn('id', $associatedIds);
             }
 <%      })-%>
-<%  }-%> 
+<%  }-%>
 <%          if (withs) { -%>
             $result = $query->with(<%- withs %>)->get();
 <%          } else { -%>
@@ -60,7 +61,25 @@ class <%- className %>Controller extends Controller
     public function store(Request $request)
     {
         try {
-            $<%- entityName %> = <%- className %>::create($request->all());
+            $data = $request->all();
+
+<%          fileFields.forEach((field) => {-%>
+            if($request->input('<%-to.snake(field)%>.data')) {
+                $fileData = base64_decode($request->input('<%-to.snake(field)%>.data'));
+                $mimeType = $request->input('<%-to.snake(field)%>.mimeType');
+                $originalName = $request->input('<%-to.snake(field)%>.originalName');
+                $filename = uniqid() . '-' . $originalName;
+                $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
+                $stored = Storage::disk('private')->put($path, $fileData);
+                if($stored) {
+                    $data['<%-to.snake(field)%>_path'] = $path;
+                    $data['<%-to.snake(field)%>_type'] = $mimeType;
+                    $data['<%-to.snake(field)%>_name'] = $originalName;
+                }
+            }
+<%    });-%>
+
+            $<%- entityName %> = <%- className %>::create($data);
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").filter(line => !line.endsWith("// only-update")).join("\n") %>
 <%          } -%>
@@ -80,7 +99,28 @@ class <%- className %>Controller extends Controller
 <%          } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%          } -%>
-            $<%- entityName %>->update($request->all());
+            $data = $request->all();
+
+<%          fileFields.forEach((field) => {-%>
+            if($request->input('<%-to.snake(field)%>.data')) {
+                if ($<%- entityName %>-><%-to.snake(field)%>_path) {
+                    Storage::disk('private')->delete($<%- entityName %>-><%-to.snake(field)%>_path);
+                }
+                $fileData = base64_decode($request->input('<%-to.snake(field)%>.data'));
+                $mimeType = $request->input('<%-to.snake(field)%>.mimeType');
+                $originalName = $request->input('<%-to.snake(field)%>.originalName');
+                $filename = uniqid() . '-' . $originalName;
+                $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
+                $stored = Storage::disk('private')->put($path, $fileData);
+                if($stored) {
+                    $data['<%-to.snake(field)%>_path'] = $path;
+                    $data['<%-to.snake(field)%>_type'] = $mimeType;
+                    $data['<%-to.snake(field)%>_name'] = $originalName;
+                }
+            }
+<%    });-%>
+
+            $<%- entityName %>->update($data);
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>

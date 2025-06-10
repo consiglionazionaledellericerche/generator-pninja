@@ -25,8 +25,8 @@ const fieldTypeToSchema = (type) => {
         'LocalTime': 'time',
         'UUID': 'uuid',
         'TextBlob': 'string',
-        'Blob': 'string',
-        'ImageBlob': 'string',
+        'Blob': 'FileList',
+        'ImageBlob': 'FileList',
     };
     return typeMap[type] || 'string';
 }
@@ -45,8 +45,8 @@ const fieldTypeToInputType = (type) => {
         'LocalTime': 'time',
         'Duration': 'number',
         'TextBlob': 'textarea',
-        'Blob': 'string',
-        'ImageBlob': 'string'
+        'Blob': 'file',
+        'ImageBlob': 'file'
     };
     return typeMap[type] || 'text';
 }
@@ -123,7 +123,25 @@ import { useNotifications } from '../../contexts/NotificationContext';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
-<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") %>
+<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result !== 'string') {
+        reject(new Error('Failed to read file as data URL'));
+        return;
+      }
+      // Rimuove "data:mime/type;base64," e mantiene solo il base64
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = () => reject(new Error('Error reading file'));
+    reader.readAsDataURL(file);
+  });
+}
 
 const <%= to.camel(entity.name)%>Schema = z.object({
 <%  for({name, type, validations} of entity.body) {-%>
@@ -143,6 +161,8 @@ const <%= to.camel(entity.name)%>Schema = z.object({
   <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'boolean') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.boolean()<%= isOptional(validations) ? '.optional()' : '' %>),
+<%    } if(fieldTypeToSchema(type) === 'FileList') {-%>
+  <%= to.snake(name) %>: z.instanceof(FileList)<%= isOptional(validations) ? '.optional()' : '' %>.transform((files) => (files && files.length > 0 ? files[0] : undefined)),
 <%    } -%>
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
@@ -165,15 +185,17 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%  }-%>
 });
 
-type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Schema>;
+type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Schema> & {
+  [key: string]: unknown;
+};
 
 interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>?: I<%= entity.name %>;
-  onSubmit: (data: <%= entity.name %>FormData) => void;
+  onSubmit: (data: MyEntityFormData) => void | Promise<void>;
   onCancel: () => void;
 }
-
 <% if (hasSelect) {-%>
+
 interface SelectOption {
   id: number;
   label: string;
@@ -203,6 +225,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value instanceof File) {
+          const fileData = await fileToBase64(value);
+          data[key] = {
+            data: fileData,
+            mimeType: value.type,
+            originalName: value.name,
+            size: value.size,
+          };
+        }
+      }
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
@@ -215,7 +248,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  for({field, related, labelField, cardinality} of relatedEntities) {
   let filter = '';
   if (cardinality === "OneToOne") {
-    filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id}`;
+    filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
   }
 -%>
       try {
@@ -273,7 +306,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     if (<%= to.camel(entity.name)-%>) {
       reset({
 <% for({name, type, validations} of entity.body) {-%>
+<%  if (type !== 'Blob' && type !== 'ImageBlob') {-%>
         <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %><%= isOptional(validations) ? ' ?? undefined' : '' %>,
+<%  } -%>
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
 <%  if (isArray) {-%>
@@ -389,5 +424,5 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         </button>
       </div>
     </form>
-  )
+  );
 }

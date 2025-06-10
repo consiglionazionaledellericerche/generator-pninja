@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import { tokenStorage, isTokenExpiringSoon } from '../utils/tokenStore';
-import { useAuthState } from '../hooks/useAuthState';
+import { useAuthState } from './useAuthState'; // CORRETTO: stesso folder hooks/
 
 export class HttpError extends Error {
   status: number;
@@ -26,89 +25,30 @@ interface FetchOptions extends RequestInit {
 }
 
 export const useApi = () => {
-  const { refreshTokens, login } = useAuthState();
+  const { login } = useAuthState(); // CORRETTO: usa useAuthState
 
-  // Base function for authenticated API calls
+  // Base function for authenticated API calls (MOLTO semplificato!)
   const authenticatedFetch = useCallback(
     async (url: string, options: FetchOptions = {}): Promise<Response> => {
       try {
-        let tokens = tokenStorage.getTokens();
-
-        if (!tokens?.access_token) {
-          console.error('No token available, redirecting to login');
-          // Automatically start the login process
-          login();
-          throw new Error('Not authenticated');
-        }
-
-        // Refresh the token only if necessary
-        let shouldRefresh = false;
-        try {
-          shouldRefresh = isTokenExpiringSoon(tokens.access_token, 60); // 60 seconds buffer
-          if (shouldRefresh) {
-            console.info('Token is about to expire, attempting automatic refresh...');
-          }
-        } catch (decodeError) {
-          console.warn('Error while checking token expiration:', decodeError);
-          // In case of error, proceed with the current token
-        }
-
-        // Refresh the token if necessary
-        if (shouldRefresh) {
-          try {
-            tokens = await refreshTokens();
-            console.info('Token successfully refreshed');
-          } catch (refreshError) {
-            console.error('Token refresh failed, using current token:', refreshError);
-            // Continue with the last available token instead of failing immediately
-          }
-        }
-
-        // Merge custom headers with Authorization
+        // Con le sessioni è semplicissimo!
         const headers = {
           ...options.headers,
-          Authorization: `Bearer ${tokens.access_token}`,
           'Content-Type': options.headers?.['Content-Type'] || 'application/json',
         };
 
-        // Execute the request
         const response = await fetch(url, {
           ...options,
           headers,
-          credentials: 'include',
+          credentials: 'include', // IMPORTANTE: include sempre i cookies di sessione
         });
 
         // Handle HTTP errors
         if (!response.ok) {
           if (response.status === 401) {
-            console.info('401 response, attempting refresh and retry...');
-            try {
-              // Attempt a more aggressive refresh in case of 401
-              const newTokens = await refreshTokens();
-
-              // Retry the request with the new token
-              const retryResponse = await fetch(url, {
-                ...options,
-                headers: {
-                  ...options.headers,
-                  Authorization: `Bearer ${newTokens.access_token}`,
-                  'Content-Type': options.headers?.['Content-Type'] || 'application/json',
-                },
-                credentials: 'include',
-              });
-
-              if (retryResponse.ok) {
-                return retryResponse;
-              }
-
-              // If the second attempt also fails, it's likely
-              // that the issue is not related to the token
-              console.error('Second fetch attempt failed as well');
-              throw new Error('Request failed even after token refresh');
-            } catch (refreshError) {
-              console.error('Token refresh failed during retry:', refreshError);
-              throw new Error('Session expired');
-            }
+            console.log('🔄 Session expired, redirecting to login...');
+            login(); // Avvia il flusso di login
+            throw new Error('Session expired');
           }
 
           // Handle other HTTP errors
@@ -123,14 +63,14 @@ export const useApi = () => {
 
         return response;
       } catch (error) {
-        console.error('Error in authenticatedFetch request:', error);
+        console.error('🚫 API request error:', error);
         throw error;
       }
     },
-    [refreshTokens, login]
+    [login]
   );
 
-  // Utility methods for common CRUD operations
+  // Utility methods for common CRUD operations (identici al tuo codice!)
 
   // GET
   const get = useCallback(
@@ -148,7 +88,7 @@ export const useApi = () => {
   const post = useCallback(
     async <T>(
       url: string,
-      data: any,
+      data: unknown,
       options: Omit<FetchOptions, 'method' | 'body'> = {}
     ): Promise<T> => {
       const response = await authenticatedFetch(url, {
@@ -165,7 +105,7 @@ export const useApi = () => {
   const put = useCallback(
     async <T>(
       url: string,
-      data: any,
+      data: unknown,
       options: Omit<FetchOptions, 'method' | 'body'> = {}
     ): Promise<T> => {
       const response = await authenticatedFetch(url, {
@@ -194,7 +134,7 @@ export const useApi = () => {
   const patch = useCallback(
     async <T>(
       url: string,
-      data: any,
+      data: unknown,
       options: Omit<FetchOptions, 'method' | 'body'> = {}
     ): Promise<T> => {
       const response = await authenticatedFetch(url, {

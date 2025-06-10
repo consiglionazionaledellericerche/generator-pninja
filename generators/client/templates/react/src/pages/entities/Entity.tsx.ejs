@@ -12,7 +12,9 @@ type SortableField = keyof Pick<
   I<%= entity.name %>,
   | 'id'
 <%for(column of columns) { -%>
+<%  if (!fileColumns.includes(column)) { -%>
   | '<%=column%>'
+<%  }-%>
 <%}-%>
 >;
 
@@ -32,7 +34,9 @@ export default function <%= entity.name %>() {
   const sortableColumns: SortableField[] = [
     'id',
 <%for(column of columns) { -%>
+<%  if (!fileColumns.includes(column)) { -%>
     '<%=column%>',
+<%  }-%>
 <%}-%>
   ];
 
@@ -142,7 +146,7 @@ export default function <%= entity.name %>() {
       </Link>
     </div>
     <Fragment>
-      <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length + relatedEntities.length%>} />
+      <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
     </Fragment>
     {!loading && <%=to.camel(pluralize(entity.name))%> && <%=to.camel(pluralize(entity.name))%>.length > 0 && (
     <div className="relative overflow-x-auto">
@@ -151,7 +155,9 @@ export default function <%= entity.name %>() {
           <tr>
             {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
 <%          for(column of columns) { -%>
+<%            if (!fileColumns.includes(column)) { -%>
             {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
+<%            } -%>
 <%          } -%>
 <%          for(r of relatedEntities) { -%>
             <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
@@ -168,9 +174,11 @@ export default function <%= entity.name %>() {
                 </Link>
               </td>
 <%            for(column of columns) { -%>
+<%              if (!fileColumns.includes(column)) { -%>
               <td>
                 {row.<%= column%>?.toString()}
               </td>
+<%              } -%>
 <%            } -%>
 <%            for(r of relatedEntities) { -%>
               <td>

@@ -15,7 +15,16 @@ export class ModelsGenerator {
             const className = entity.name;
             const tableName = to.snake(pluralize(entity.tableName));
             // fillable from entity property
-            const fillable = entity.body.map(prop => `'${to.snake(prop.name)}'`);
+            const fillable = entity.body.reduce((acc, prop) => {
+                if (prop.type !== 'Blob' && prop.type !== 'ImageBlob') {
+                    acc.push(`'${to.snake(prop.name)}'`);
+                } else {
+                    acc.push(`'${to.snake(prop.name)}_path'`);
+                    acc.push(`'${to.snake(prop.name)}_type'`);
+                    acc.push(`'${to.snake(prop.name)}_name'`);
+                }
+                return acc;
+            }, []);
             const relations = [];
             relationships.filter(relation => (
                 relation.cardinality === 'OneToMany' && relation.to.name === entity.name
@@ -96,7 +105,7 @@ export class ModelsGenerator {
                 {
                     className,
                     tableName,
-                    fillable: fillable.join(', '),
+                    fillable: fillable.join(",\n" + this.tab(2)),
                     relations: relations.join(`\n${this.tab(1)}`),
                     enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
                     casts: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {

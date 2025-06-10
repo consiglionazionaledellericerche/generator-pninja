@@ -12,6 +12,14 @@ export class RoutersGenerator {
 
     generateRouters() {
         const { entities } = this.parsedJDL;
+        const eRoutes = entities.map(entity => {
+            const className = entity.name;
+            const rootPath = to.slug(pluralize(entity.name));
+            return {
+                className,
+                rootPath,
+            };
+        });
         entities.forEach(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));
@@ -24,7 +32,7 @@ export class RoutersGenerator {
         this.that.fs.copyTpl(
             this.that.templatePath("api.php.ejs"),
             this.that.destinationPath(`server/routes/api.php`),
-            { paths: entities.map(entity => to.slug(pluralize(entity.name))) },
+            { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) },
         );
     }
 }

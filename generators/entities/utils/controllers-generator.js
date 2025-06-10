@@ -81,10 +81,13 @@ export class ControllersGenerator {
             });
 
             this.that.fs.copyTpl(this.that.templatePath("KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
+            this.that.fs.copyTpl(this.that.templatePath("FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
+            this.that.fs.copyTpl(this.that.templatePath("SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),
+                    fileFields: entity.body.filter(c => c.type === 'Blob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,

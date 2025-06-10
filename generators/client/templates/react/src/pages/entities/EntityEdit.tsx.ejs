@@ -47,7 +47,7 @@ export default function <%= entity.name %>Edit() {
 
   const handleSubmit = async (data: I<%= entity.name %>) => {
     try {
-      const response = await fetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
+      await fetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
         method: id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',

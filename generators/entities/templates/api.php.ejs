@@ -1,22 +1,27 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KeycloakProxyController;
-
-<% paths.forEach(path => {-%>
-require __DIR__ . '/<%-path%>.php';
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\SessionAuthController;
+<% eRoutes.forEach(({className}) => {-%>
+use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
-})->middleware('web');
+Route::prefix('auth')->group(function () {
+    Route::get('/check-session', [SessionAuthController::class, 'checkSession']);
+    Route::post('/initiate-login', [SessionAuthController::class, 'initiateLogin']);
+    Route::post('/logout', [SessionAuthController::class, 'logout']);
+    Route::get('/csrf-token', [SessionAuthController::class, 'getCsrfToken']);
+    Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
+});
 
-Route::prefix('auth')->middleware(['web'])->group(function () {
-    Route::get('/initiate-login', [KeycloakProxyController::class, 'initiateLogin']);
-    Route::get('/callback', [KeycloakProxyController::class, 'handleCallback']);
-    Route::get('/check-session', [KeycloakProxyController::class, 'checkSession']);
-    Route::get('/verify', [KeycloakProxyController::class, 'verifyToken']);
-    Route::post('/refresh', [KeycloakProxyController::class, 'refreshToken']);
-    Route::post('/logout', [KeycloakProxyController::class, 'logout']);
+// API protette: /api/my-entities, /api/files/*
+Route::middleware(['session.auth'])->group(function () {
+<% eRoutes.forEach(({className, rootPath}) => {-%>
+    Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
+<% }); -%>
+
+    Route::get('/files/{path}', [FileController::class, 'serveFile'])
+        ->where('path', '.*')
+        ->name('files.serve');
 });

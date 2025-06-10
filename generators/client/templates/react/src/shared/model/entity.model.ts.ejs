@@ -46,34 +46,39 @@ import dayjs from 'dayjs';
 <% for (prop of entity.body) {
     if ((enums.map(e => e.name)).includes(prop.type)) {%>import { <%= prop.type %> } from './enumerations/<%= to.slug(prop.type); %>.model';
 <%}}-%>
-
 export interface I<%= entity.name %> {
-    id?: number;
+  id?: number;
 <%  for (prop of entity.body) {-%>
-    <%= to.snake(prop.name) %>?: <%= (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) ? 'string' : convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
-<%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
-    <%= to.snake(prop.name) %>ContentType?: string<%= !isRequired(prop) ? ' | null' : '' %>;
+<%    if (!['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+  <%= to.snake(prop.name) %>?: <%= convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
+<%    } else {-%>
+  <%= to.snake(prop.name) %>_path?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
+  <%= to.snake(prop.name) %>_type?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
+  <%= to.snake(prop.name) %>_name?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    }-%>
 <%  }-%>
 <%  foreignIds.forEach(({foreignId, nullable}) => {-%>
-    <%= foreignId %>?: number<%= nullable ? ' | null' : '' %>;
+  <%= foreignId %>?: number<%= nullable ? ' | null' : '' %>;
 <%  })-%>
 <%  relatedEntities.forEach(({field, related, isArray}) => {-%>
-    <%= field %>?: I<%= related %><%= isArray ? '[]' : '' %> | null;
+  <%= field %>?: I<%= related %><%= isArray ? '[]' : '' %> | null;
 <%  })-%>
 }
 
 export const defaultValue: Readonly<I<%= entity.name %>> = {
 <%  for (prop of entity.body) {-%>
-    <%= to.snake(prop.name) %>: undefined,
-<%    if (['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
-    <%= to.snake(prop.name) %>ContentType: undefined,
+<%    if (!['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+  <%= to.snake(prop.name) %>: undefined,
+<%    } else {-%>
+  <%= to.snake(prop.name) %>_path: undefined,
+  <%= to.snake(prop.name) %>_type: undefined,
+  <%= to.snake(prop.name) %>_name: undefined,
 <%    }-%>
 <%  }-%>
 <%  foreignIds.forEach(({foreignId, nullable}) => {-%>
-    <%= foreignId %>: undefined,
+  <%= foreignId %>: undefined,
 <%  })-%>
 <%  relatedEntities.forEach(({field, related, isArray}) => {-%>
-    <%= field %>: undefined,
+  <%= field %>: undefined,
 <%  })-%>
 };

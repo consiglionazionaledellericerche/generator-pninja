@@ -23,7 +23,7 @@ interface <%= entity.name %>ViewParams extends Record<string, string | undefined
   id: string;
 }
 
-export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewParams) {
+export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
   if (!data) return '';
   return (
@@ -40,7 +40,39 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 <%      for(column of columns) { -%>
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
+<%        if (!fileColumns.includes(column)) { -%>
           <td>{data?.<%= column%>?.toString()}</td>
+<%        } else {-%>
+          <td>
+            {data?.<%= column%>_path && data?.<%= column%>_name && (
+              <div>
+                <p>{data.<%= column%>_name}</p>
+                {data.<%= column%>_type?.startsWith('image/') ? (
+                  <a
+                    href={`/api/files/${data.<%= column%>_path}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={`/api/files/${data.<%= column%>_path}`}
+                      alt={data.<%= column%>_name}
+                      className="max-w-xs mt-2"
+                    />
+                  </a>
+                ) : (
+                  <a
+                    href={`/api/files/${data.<%= column%>_path}`}
+                    className="text-blue-600 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visualizza/Scarica file
+                  </a>
+                )}
+              </div>
+            )}
+          </td>
+<%      } -%>
         </tr>
 <%      } -%>
 <%      if(false) for(f of foreignIds) { -%>
@@ -69,7 +101,7 @@ export function <%= entity.name %>DataView({data}: <%= entity.name %>DataViewPar
 <%      } -%>
       </tbody>
     </table>
-  )
+  );
 }
 
 export default function <%= entity.name %>View() {
@@ -109,7 +141,9 @@ export default function <%= entity.name %>View() {
 
   return (
     <div className="m-4">
-      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}</h1>
+      <h1 className="text-2xl mb-4">
+        {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}
+      </h1>
       <SimpleLoader loading={loading} />
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
       {!loading && (

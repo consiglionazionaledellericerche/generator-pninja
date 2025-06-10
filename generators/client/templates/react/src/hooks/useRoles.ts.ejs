@@ -1,10 +1,58 @@
 import { useCallback } from 'react';
-import { tokenStorage } from '../utils/tokenStore';
+import { UserRoles } from '../types/auth';
+
 const DEFAULT_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID || '';
+
+const getRolesFromSession = (): UserRoles | null => {
+  console.info('Retrieving roles from session');
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/api/auth/check-session', false);
+    xhr.withCredentials = true;
+    xhr.send();
+
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      if (response.isAuthenticated && response.user) {
+        const user = response.user;
+        const realmRoles = user.realm_access?.roles || [];
+        const clientRoles: Record<string, string[]> = {};
+
+        if (user.resource_access) {
+          Object.keys(user.resource_access).forEach((clientId) => {
+            if (user.resource_access[clientId]?.roles) {
+              clientRoles[clientId] = user.resource_access[clientId].roles;
+            }
+          });
+        }
+
+        if (user.contexts) {
+          Object.keys(user.contexts).forEach((contextId) => {
+            if (user.contexts[contextId]?.roles) {
+              if (!clientRoles[contextId]) {
+                clientRoles[contextId] = [];
+              }
+              clientRoles[contextId].push(...user.contexts[contextId].roles);
+            }
+          });
+        }
+
+        const allRoles = [...realmRoles, ...Object.values(clientRoles).flat()];
+
+        return { realmRoles, clientRoles, allRoles };
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error getting roles from session:', error);
+    return null;
+  }
+};
 
 export const useRoles = () => {
   const hasRole = useCallback((roleOrClientId: string, maybeRole?: string): boolean => {
-    const roles = tokenStorage.getRoles();
+    const roles = getRolesFromSession();
     if (!roles) return false;
 
     if (maybeRole !== undefined) {
@@ -21,7 +69,7 @@ export const useRoles = () => {
 
   const hasAnyRole = useCallback(
     (rolesOrClientId: string[] | string, maybeRoles?: string[]): boolean => {
-      const userRoles = tokenStorage.getRoles();
+      const userRoles = getRolesFromSession();
       if (!userRoles) return false;
 
       if (maybeRoles !== undefined) {
@@ -40,7 +88,7 @@ export const useRoles = () => {
 
   const hasAllRoles = useCallback(
     (rolesOrClientId: string[] | string, maybeRoles?: string[]): boolean => {
-      const userRoles = tokenStorage.getRoles();
+      const userRoles = getRolesFromSession();
       if (!userRoles) return false;
 
       if (maybeRoles !== undefined) {
@@ -58,7 +106,7 @@ export const useRoles = () => {
   );
 
   const getRoles = useCallback((clientId?: string): string[] => {
-    const userRoles = tokenStorage.getRoles();
+    const userRoles = getRolesFromSession();
     if (!userRoles) return [];
 
     const targetClientId = clientId || DEFAULT_CLIENT_ID;
@@ -67,25 +115,25 @@ export const useRoles = () => {
   }, []);
 
   const hasRealmRole = useCallback((role: string): boolean => {
-    const userRoles = tokenStorage.getRoles();
+    const userRoles = getRolesFromSession();
     if (!userRoles) return false;
     return userRoles.realmRoles.includes(role);
   }, []);
 
   const hasAnyRealmRole = useCallback((roles: string[]): boolean => {
-    const userRoles = tokenStorage.getRoles();
+    const userRoles = getRolesFromSession();
     if (!userRoles) return false;
     return roles.some((role) => userRoles.realmRoles.includes(role));
   }, []);
 
   const hasAllRealmRoles = useCallback((roles: string[]): boolean => {
-    const userRoles = tokenStorage.getRoles();
+    const userRoles = getRolesFromSession();
     if (!userRoles) return false;
     return roles.every((role) => userRoles.realmRoles.includes(role));
   }, []);
 
   const getRealmRoles = useCallback((): string[] => {
-    const userRoles = tokenStorage.getRoles();
+    const userRoles = getRolesFromSession();
     if (!userRoles) return [];
     return userRoles.realmRoles;
   }, []);
@@ -95,7 +143,6 @@ export const useRoles = () => {
     hasAnyRole,
     hasAllRoles,
     getRoles,
-
     hasRealmRole,
     hasAnyRealmRole,
     hasAllRealmRoles,

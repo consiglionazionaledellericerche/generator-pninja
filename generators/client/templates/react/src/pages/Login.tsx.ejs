@@ -1,6 +1,12 @@
 import { LoginRedirector } from '../components/LoginRedirector';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 
 export default function Login() {
-  return <LoginRedirector redirectUrl={useLocation().state.from} />;
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const authSuccess = queryParams.get('auth_success') === 'true';
+  if (authSuccess) {
+    return <Navigate to={localStorage.getItem('authRedirectUrl') ?? '/'} />;
+  }
+  return <LoginRedirector redirectUrl={location?.state?.from} />;
 }

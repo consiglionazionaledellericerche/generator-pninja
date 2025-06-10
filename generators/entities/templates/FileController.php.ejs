@@ -1,0 +1,91 @@
+<?php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class FileController extends Controller
+{
+    public function serveFile(Request $request, $path)
+    {
+        // Decode the file path
+        $decodedPath = urldecode($path);
+
+        // Prevent path traversal attacks
+        if (str_contains($decodedPath, '..') || str_contains($decodedPath, '\\')) {
+            return response()->json(['error' => 'Invalid path'], 400);
+        }
+
+        // Ensure the path is within the uploads directory
+        if (!str_starts_with($decodedPath, 'uploads/')) {
+            return response()->json(['error' => 'Path not allowed'], 400);
+        }
+
+        // Validate the path format
+        if (!preg_match('/^uploads\/\d{4}\/\d{2}\/\d{2}\/[^\/]+$/', $decodedPath)) {
+            return response()->json(['error' => 'Invalid path format'], 400);
+        }
+
+        // Check if the file exists
+        if (!Storage::disk('private')->exists($decodedPath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Check if the user has access to the file
+        if (!$this->userCanAccessFile($decodedPath, $request)) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        // Get file details
+        $mimeType = Storage::disk('private')->mimeType($decodedPath);
+        $filename = basename($decodedPath);
+        $fileSize = Storage::disk('private')->size($decodedPath);
+
+        // Set headers for the file response
+        $headers = [
+            'Content-Type' => $mimeType,
+            'Content-Length' => $fileSize,
+            'Cache-Control' => 'private, max-age=3600', // Cache for 1 hour
+            'Expires' => gmdate('D, d M Y H:i:s \G\M\T', time() + 3600),
+        ];
+
+        // Add Content-Disposition for download or inline view
+        if ($request->query('download') === 'true') {
+            $headers['Content-Disposition'] = 'attachment; filename="' . $filename . '"';
+        } else {
+            $headers['Content-Disposition'] = 'inline; filename="' . $filename . '"';
+        }
+
+        // Serve the file
+        return response()->file(
+            Storage::disk('private')->path($decodedPath),
+            $headers
+        );
+    }
+
+    // Check if the user has access to the file
+    private function userCanAccessFile($filePath, $request)
+    {
+        return true;
+
+        // $userInfo = Session::get('authenticated_user');
+        // if (!$userInfo) {
+        //     return false;
+        // }
+
+        // if ($this->userHasRole($userInfo, 'admin')) {
+        //     return true;
+        // }
+
+        // return false;
+    }
+
+    // Check if the user has a specific role
+    private function userHasRole($userInfo, $role)
+    {
+        $resourceAccess = $userInfo['resource_access'] ?? [];
+        $clientId = env('KEYCLOAK_CLIENT_ID') ?? '';
+        $roles = ($resourceAccess[$clientId] ?? [])['roles'];
+        return in_array($role, $roles);
+    }
+}

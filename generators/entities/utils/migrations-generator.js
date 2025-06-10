@@ -26,8 +26,8 @@ export class MigrationsGenerator {
             'Duration': 'bigInteger',
             'UUID': 'uuid',
             'Blob': 'binary',
-            // 'AnyBlob': 'binary', TODO
-            // 'ImageBlob': 'binary', TODO
+            'AnyBlob': 'binary',
+            'ImageBlob': 'binary',
             // 'byte[]': 'binary',
             'TextBlob': 'text',
         };
@@ -42,7 +42,7 @@ export class MigrationsGenerator {
         return typeMap[jhipsterType] || enm || 'string';
     }
     convertFields(fields, enums) {
-        return fields.map(field => {
+        return fields.reduce((res, field) => {
             const fieldName = to.snake(field.name);
             const fieldType = this.convertFieldType(field.type, enums);
             let fieldTypeParams = '';
@@ -55,24 +55,31 @@ export class MigrationsGenerator {
             } else if (fieldType === 'timestamp') {
                 fieldTypeParams = ', 6';
             }
-            let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
-            if (field.validations.length === 0) {
-                fieldDefinition += '->nullable()';
-            } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {
-                fieldDefinition += '->nullable()';
+            if (fieldType !== 'binary') {
+                let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
+                if (field.validations.length === 0) {
+                    fieldDefinition += '->nullable()';
+                } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {
+                    fieldDefinition += '->nullable()';
+                }
+                if (field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)) {
+                    fieldDefinition += '->unique()';
+                }
+                // for (const validation of field.validations) {
+                //     if (validation.key === 'unique') fieldDefinition += '->unique()';
+                //     if (validation.key === 'min') fieldDefinition += `->min(${validation.value})`;
+                //     if (validation.key === 'max') fieldDefinition += `->max(${validation.value})`;
+                //     if (validation.key === 'minlength') fieldDefinition += `->minlength(${validation.value})`;
+                //     if (validation.key === 'maxlength') fieldDefinition += `->maxlength(${validation.value})`;
+                // }
+                res.push(`${fieldDefinition};`);
+            } else {
+                res.push(`$table->string('${fieldName}_path', 255)->nullable();`);
+                res.push(`$table->string('${fieldName}_type', 50)->nullable();`);
+                res.push(`$table->string('${fieldName}_name', 255)->nullable();`);
             }
-            if (field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)) {
-                fieldDefinition += '->unique()';
-            }
-            // for (const validation of field.validations) {
-            //     if (validation.key === 'unique') fieldDefinition += '->unique()';
-            //     if (validation.key === 'min') fieldDefinition += `->min(${validation.value})`;
-            //     if (validation.key === 'max') fieldDefinition += `->max(${validation.value})`;
-            //     if (validation.key === 'minlength') fieldDefinition += `->minlength(${validation.value})`;
-            //     if (validation.key === 'maxlength') fieldDefinition += `->maxlength(${validation.value})`;
-            // }
-            return `${fieldDefinition};`;
-        });
+            return res;
+        }, []);
     }
     createTables() {
         const { enums, entities } = this.parsedJDL;
