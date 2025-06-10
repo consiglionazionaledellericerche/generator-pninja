@@ -25,16 +25,16 @@ export class FactoriesGenerator {
                 ...entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`),
                 ...[
                     entity.body.filter(c => c.type == 'Blob').map(prop => {
-                        files.push('dummy.pdf');
-                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$fileId}-dummy.pdf",`;
+                        files.push('pdf');
+                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$pdfFileId}-dummy.pdf",`;
                     }),
                     entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`),
                     entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'dummy.pdf',`),
                 ],
                 ...[
                     entity.body.filter(c => c.type == 'ImageBlob').map(prop => {
-                        files.push('image_placeholder.png');
-                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$fileId}-image_placeholder.png",`;
+                        files.push('image');
+                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$imageFileId}-image_placeholder.png",`;
                     }),
                     entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`),
                     entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'image_placeholder.png',`),
