@@ -133,7 +133,13 @@ class <%- className %>Controller extends Controller
     public function destroy($id)
     {
         try {
-            <%- className %>::findOrFail($id)->delete();
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+            $<%- entityName %>->delete();
+<%  fileFields.forEach((field) => {-%>
+            if ($<%- entityName %>-><%-to.snake(field)%>_path) {
+                Storage::disk('private')->delete($<%- entityName %>-><%-to.snake(field)%>_path);
+            }
+<%  });-%>
             return response(null, 200);
         } catch (\Exception $e) {
             return $this->handleDeleteError($e);
