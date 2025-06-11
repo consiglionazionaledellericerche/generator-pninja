@@ -191,7 +191,7 @@ type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Sche
 
 interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>?: I<%= entity.name %>;
-  onSubmit: (data: MyEntityFormData) => void | Promise<void>;
+  onSubmit: (data: <%= entity.name %>FormData) => void | Promise<void>;
   onCancel: () => void;
 }
 <% if (hasSelect) {-%>
