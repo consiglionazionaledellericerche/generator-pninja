@@ -16,19 +16,6 @@ export class FactoriesGenerator {
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
             const params = entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
-            // const params = [
-            //     ...entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`),
-            //     ...[
-            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_path' => 'uploads/0000/00/00/dummy.pdf',`),
-            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`),
-            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'dummy.pdf',`),
-            //     ],
-            //     ...[
-            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_path' => 'uploads/0000/00/00/image_placeholder.png',`),
-            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`),
-            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'image_placeholder.png',`),
-            //     ]
-            // ];
 
             // Relationships OneToOne
             relationships.filter(relation => (
