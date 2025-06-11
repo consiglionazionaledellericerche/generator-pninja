@@ -75,7 +75,7 @@ export class MigrationsGenerator {
                 res.push(`${fieldDefinition};`);
             } else {
                 res.push(`$table->string('${fieldName}_path', 255)->nullable();`);
-                res.push(`$table->string('${fieldName}_type', 50)->nullable();`);
+                res.push(`$table->string('${fieldName}_type', 255)->nullable();`);
                 res.push(`$table->string('${fieldName}_name', 255)->nullable();`);
             }
             return res;
