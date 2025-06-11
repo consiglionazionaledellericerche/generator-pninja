@@ -140,8 +140,8 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`), {});
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`), {});
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`), {});
-    this.fs.copyTpl(this.templatePath("dummy.pdf"), this.destinationPath(`server/storage/app/private/uploads/0000/00/00/dummy.pdf`), {});
-    this.fs.copyTpl(this.templatePath("image_placeholder.png"), this.destinationPath(`server/storage/app/private/uploads/0000/00/00/image_placeholder.png`), {});
+    // this.fs.copyTpl(this.templatePath("dummy.pdf"), this.destinationPath(`server/storage/app/private/uploads/0000/00/00/dummy.pdf`), {});
+    // this.fs.copyTpl(this.templatePath("image_placeholder.png"), this.destinationPath(`server/storage/app/private/uploads/0000/00/00/image_placeholder.png`), {});
   }
   end() { }
 };

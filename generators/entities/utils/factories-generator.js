@@ -2,11 +2,6 @@ import to from 'to-case';
 import { parseJDL } from '../../utils/jdlParser.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
-function uniqid(prefix = "", random = false) {
-    const sec = Date.now() * 1000 + Math.random() * 1000;
-    const id = sec.toString(16).replace(/\./g, "").padEnd(14, "0");
-    return `${prefix}${id}${random ? `.${Math.trunc(Math.random() * 100000000)}` : ""}`;
-};
 
 export class FactoriesGenerator {
     constructor(that, entitiesFilePath) {
@@ -20,26 +15,20 @@ export class FactoriesGenerator {
         let manyToMany = [];
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
-            const files = [];
-            const params = [
-                ...entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`),
-                ...[
-                    entity.body.filter(c => c.type == 'Blob').map(prop => {
-                        files.push('pdf');
-                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$pdfFileId}-dummy.pdf",`;
-                    }),
-                    entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`),
-                    entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'dummy.pdf',`),
-                ],
-                ...[
-                    entity.body.filter(c => c.type == 'ImageBlob').map(prop => {
-                        files.push('image');
-                        return `${tab(3)}'${to.snake(prop.name)}_path' => "uploads/0000/00/00/{$imageFileId}-image_placeholder.png",`;
-                    }),
-                    entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`),
-                    entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'image_placeholder.png',`),
-                ]
-            ];
+            const params = entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
+            // const params = [
+            //     ...entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`),
+            //     ...[
+            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_path' => 'uploads/0000/00/00/dummy.pdf',`),
+            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`),
+            //         entity.body.filter(c => c.type == 'Blob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'dummy.pdf',`),
+            //     ],
+            //     ...[
+            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_path' => 'uploads/0000/00/00/image_placeholder.png',`),
+            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`),
+            //         entity.body.filter(c => c.type == 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => 'image_placeholder.png',`),
+            //     ]
+            // ];
 
             // Relationships OneToOne
             relationships.filter(relation => (
@@ -96,7 +85,6 @@ export class FactoriesGenerator {
                     entityName: entity.name,
                     models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
                     params: params.join("\n"),
-                    files: files,
                 });
             // Relationships ManyToMany
             relationships.filter(relation => (

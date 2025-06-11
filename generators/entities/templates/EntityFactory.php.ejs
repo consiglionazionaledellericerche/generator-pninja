@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 <%- models %>
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Storage;
 
 class <%- entityName %>Factory extends Factory
 {
@@ -20,16 +19,6 @@ class <%- entityName %>Factory extends Factory
 
     public function definition(): array
     {
-<% files.forEach(file => {-%>
-<%  if(file==='pdf') {-%>
-        $pdfFileId = uniqid();
-        Storage::disk('private')->copy('uploads/0000/00/00/dummy.pdf', "uploads/0000/00/00/{$pdfFileId}-dummy.pdf");
-<%  };-%>
-<%  if(file==='image') {-%>
-        $imageFileId = uniqid();
-        Storage::disk('private')->copy('uploads/0000/00/00/image_placeholder.png', "uploads/0000/00/00/{$imageFileId}-image_placeholder.png");
-<%  };-%>
-<%});-%>
         return [
 <%- params %>
         ];
