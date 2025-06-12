@@ -127,6 +127,7 @@ import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob || hasImage) {-%>
+import { File as FileIcon, FileImage as FileImageIcon } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
@@ -363,6 +364,23 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
           </label>
+<%      if(type === 'Blob' || type === 'ImageBlob') {-%>
+        {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path && <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name && (
+          <div>
+            <a
+              href={`/api/files/${<%= to.camel(entity.name)%>.<%-to.snake(name)%>_path}`}
+              className="text-blue-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="flex">
+                {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type?.startsWith('image/') ? <FileImageIcon className="mr-1" /> : <FileIcon className="mr-1" />}
+                {t('actions.crud.viewOrDonwload')} {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name}
+              </span>
+            </a>
+          </div>
+        )}
+<%      }-%>
 <%= getField(type, name) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'ImageBlob') {-%>
