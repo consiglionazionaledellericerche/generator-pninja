@@ -5,8 +5,9 @@ for({type} of entity.body) {
     enumsToImport.push(type);
   }
 }
-const hasBlob = true;
-const hasImage = true;
+const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob', false);
+const hasImage = entity?.body.reduce((res, {type}) => res || type === 'ImageBlob', false);
+const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'ImageBlob')).map(({name}) => name);
 const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
@@ -127,13 +128,12 @@ import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob || hasImage) {-%>
-import { File as FileIcon, FileImage as FileImageIcon } from 'lucide-react';
+import { File as FileIcon, FileImage as FileImageIcon, Edit } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
   : 20 * 1024 * 1024; // 20MB default
 
-<% } -%>
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -151,8 +151,9 @@ function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+<% } -%>
 
-const <%= to.camel(entity.name)%>Schema = z.object({
+const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>) => z.object({
 <%  for({name, type, validations} of entity.body) {-%>
 <%    if(fieldTypeToSchema(type) === 'string') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<%- isEmail(name) ? '.email()' : '' -%><%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
@@ -172,11 +173,22 @@ const <%= to.camel(entity.name)%>Schema = z.object({
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.boolean()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'blob' || fieldTypeToSchema(type) === 'image') {-%>
   <%= to.snake(name) %>: z
-  .instanceof(FileList)
-<%       if(!isOptional(validations)){-%>
-  .refine((files) => files.length > 0, { message: 'errors.validations.required' })
-<%        } -%>
+  .union([z.instanceof(FileList), z.undefined()])
   .transform((files) => (files && files.length > 0 ? files[0] : undefined))
+<%       if(!isOptional(validations)){-%>
+  .superRefine((file, ctx) => {
+        // If there is no file in the input, check if one already exists
+        if (!file) {
+          const hasExisting = <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_path && <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_name;
+          if (!hasExisting) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: 'errors.validations.required',
+            });
+          }
+        }
+      })
+<%        } -%>
 <%       if(fieldTypeToSchema(type) === 'image'){-%>
   .refine((file) => file?.type === undefined || file?.type?.startsWith('image/'), { message: `errors.validations.file.typeImage` })
 <%        } -%>
@@ -203,7 +215,7 @@ const <%= to.camel(entity.name)%>Schema = z.object({
 <%  }-%>
 });
 
-type <%= entity.name %>FormData = z.infer<typeof <%= to.camel(entity.name)%>Schema> & {
+type <%= entity.name %>FormData = z.infer<ReturnType<typeof create<%= entity.name %>Schema>> & {
   [key: string]: unknown;
 };
 
@@ -231,6 +243,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<SelectOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
+<% if (hasBlob || hasImage) {-%>
+  const [showFileInputs, setShowFileInputs] = useState({
+<%blobFields.forEach(field => {-%>
+    <%-to.snake(field)%>: false,
+<%})-%>
+  });
+<% }-%>
+
+  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>);
 
   const {
     register,
@@ -259,6 +280,107 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       console.error('Form submission error:', error);
     }
   };
+<%if (hasBlob || hasImage) {-%>
+
+  const toggleFileInput = (fieldName: keyof typeof showFileInputs) => {
+    setShowFileInputs((prev) => ({
+      ...prev,
+      [fieldName]: !prev[fieldName],
+    }));
+  };
+
+  const hasExistingFile = (
+    pathField?: string | null | undefined,
+    nameField?: string | null | undefined
+  ) => {
+    return !!(pathField && nameField);
+  };
+
+  const renderFileField = (
+    fieldName: keyof typeof showFileInputs,
+    pathField: string | null | undefined,
+    nameField: string | null | undefined,
+    typeField: string | null | undefined,
+    label: string,
+    accept?: string
+  ) => {
+    const hasFile = hasExistingFile(pathField, nameField);
+    const shouldShowInput = !hasFile || showFileInputs[fieldName];
+
+    return (
+      <div>
+        <label htmlFor={fieldName} className="block text-sm font-medium">
+          {label}
+        </label>
+
+        {hasFile && !showFileInputs[fieldName] && (
+          <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="flex items-center justify-between">
+              <a
+                href={`/api/files/${pathField}`}
+                className="text-blue-600 hover:underline flex items-center"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {typeField?.startsWith('image/') ? (
+                  <FileImageIcon className="mr-2 h-4 w-4" />
+                ) : (
+                  <FileIcon className="mr-2 h-4 w-4" />
+                )}
+                {t('actions.crud.viewOrDonwload')} {nameField}
+              </a>
+              <button
+                type="button"
+                onClick={() => toggleFileInput(fieldName)}
+                className="ml-4 flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                <Edit className="mr-1 h-4 w-4" />
+                {t('actions.edit', 'Modifica')}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {shouldShowInput && (
+          <div className="mt-3">
+            {hasFile && showFileInputs[fieldName] && (
+              <div className="mb-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-200">
+                {t(
+                  'file.replaceWarning',
+                  'Selezionando un nuovo file sostituirai quello esistente'
+                )}
+              </div>
+            )}
+            <input
+              type="file"
+              id={fieldName}
+              accept={accept}
+              {...register(fieldName)}
+              className={inputClassName(!!errors?.[fieldName]?.message)}
+            />
+            {hasFile && showFileInputs[fieldName] && (
+              <button
+                type="button"
+                onClick={() => toggleFileInput(fieldName)}
+                className="mt-2 text-sm text-gray-600 hover:text-gray-800 underline"
+              >
+                {t('actions.cancel', 'Annulla')}
+              </button>
+            )}
+          </div>
+        )}
+
+        {errors?.[fieldName]?.message && (
+          <p className="mt-1 text-sm text-red-600">
+            {t(errors[fieldName].message as string, {
+              maxSize: `${MAX_FILE_SIZE / 1024 / 1024}MB`,
+            })}
+          </p>
+        )}
+      </div>
+    );
+  };
+<%}-%>
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -340,6 +462,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% }-%>
       });
     }
+<%if (hasBlob || hasImage) {-%>
+
+    setShowFileInputs({
+<%blobFields.forEach(field => {-%>
+    <%-to.snake(field)%>: !hasExistingFile(<%= to.camel(entity.name)-%>?.<%-to.snake(field)%>_path, myEntity?.<%-to.snake(field)%>_name),
+<%})-%>
+    });
+<%}-%>
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
   const inputClassName = (hasErrors = false) =>
@@ -360,27 +490,20 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className="max-w-5xl mx-auto space-y-4">
 <%    for({name, type, validations} of entity.body) {-%>
+<%      if(type === 'Blob' || type === 'ImageBlob') {-%>
+        {renderFileField(
+          '<%-to.snake(name)%>',
+          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
+          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name,
+          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type,
+          t('entities.my_entity.<%-to.snake(name)%>')<%if(type === 'ImageBlob') {-%>,
+          'image/*'<%}-%>
+        )}
+<%      } else {-%>
         <div>
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
           </label>
-<%      if(type === 'Blob' || type === 'ImageBlob') {-%>
-        {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path && <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name && (
-          <div>
-            <a
-              href={`/api/files/${<%= to.camel(entity.name)%>.<%-to.snake(name)%>_path}`}
-              className="text-blue-600 hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="flex">
-                {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type?.startsWith('image/') ? <FileImageIcon className="mr-1" /> : <FileIcon className="mr-1" />}
-                {t('actions.crud.viewOrDonwload')} {<%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name}
-              </span>
-            </a>
-          </div>
-        )}
-<%      }-%>
 <%= getField(type, name) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'ImageBlob') {-%>
@@ -391,6 +514,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      }-%>
           )}
         </div>
+<%      }-%>
 <%    }-%>
 <%    for({field, related, isArray} of relatedEntities) {-%>
         <div>
