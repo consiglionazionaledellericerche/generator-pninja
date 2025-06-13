@@ -258,6 +258,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    setValue,
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
   });
@@ -287,6 +288,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       ...prev,
       [fieldName]: !prev[fieldName],
     }));
+
+    if (showFileInputs[fieldName]) {
+      setValue(fieldName, undefined);
+    }
   };
 
   const hasExistingFile = (
