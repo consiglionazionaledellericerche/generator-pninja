@@ -5,8 +5,7 @@ for({type} of entity.body) {
     enumsToImport.push(type);
   }
 }
-const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob', false);
-const hasImage = entity?.body.reduce((res, {type}) => res || type === 'ImageBlob', false);
+const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'ImageBlob', false);
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'ImageBlob')).map(({name}) => name);
 const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
@@ -127,8 +126,8 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
-<% if (hasBlob || hasImage) {-%>
-import { File as FileIcon, FileImage as FileImageIcon, Edit } from 'lucide-react';
+<% if (hasBlob) {-%>
+import { File as FileIcon, FileImage as FileImageIcon, Edit, Trash2 } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
@@ -152,8 +151,11 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 <% } -%>
-
+<%if (hasBlob) {-%>
+const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>, filesToDelete?: Set<string>) => z.object({
+<%} else {-%>
 const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>) => z.object({
+<%}-%>
 <%  for({name, type, validations} of entity.body) {-%>
 <%    if(fieldTypeToSchema(type) === 'string') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<%- isEmail(name) ? '.email()' : '' -%><%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
@@ -180,7 +182,8 @@ const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entit
         // If there is no file in the input, check if one already exists
         if (!file) {
           const hasExisting = <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_path && <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_name;
-          if (!hasExisting) {
+          const isMarkedForDeletion = filesToDelete?.has('<%= to.snake(name) %>');
+          if (!hasExisting || isMarkedForDeletion) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: 'errors.validations.required',
@@ -243,15 +246,19 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<SelectOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
-<% if (hasBlob || hasImage) {-%>
+<% if (hasBlob) {-%>
+  const [filesToDelete, setFilesToDelete] = useState<Set<string>>(new Set());
   const [showFileInputs, setShowFileInputs] = useState({
 <%blobFields.forEach(field => {-%>
     <%-to.snake(field)%>: false,
 <%})-%>
   });
 <% }-%>
-
+<%if (hasBlob) {-%>
+  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>, filesToDelete);
+<%} else {-%>
   const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>);
+<%}-%>
 
   const {
     register,
@@ -265,6 +272,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
     try {
+<%if (hasBlob) {-%>
+      data = {...data, filesToDelete: Array.from(filesToDelete)};
+<%}-%>
       for (const [key, value] of Object.entries(data)) {
         if (value instanceof File) {
           const fileData = await fileToBase64(value);
@@ -281,7 +291,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       console.error('Form submission error:', error);
     }
   };
-<%if (hasBlob || hasImage) {-%>
+<%if (hasBlob) {-%>
 
   const toggleFileInput = (fieldName: keyof typeof showFileInputs) => {
     setShowFileInputs((prev) => ({
@@ -292,6 +302,19 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     if (showFileInputs[fieldName]) {
       setValue(fieldName, undefined);
     }
+  };
+
+  const markFileForDeletion = (fieldName: string) => {
+    setFilesToDelete((prev) => new Set(prev).add(fieldName));
+
+  };
+
+  const unmarkFileForDeletion = (fieldName: string) => {
+    setFilesToDelete((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(fieldName);
+      return newSet;
+    });
   };
 
   const hasExistingFile = (
@@ -311,6 +334,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   ) => {
     const hasFile = hasExistingFile(pathField, nameField);
     const shouldShowInput = !hasFile || showFileInputs[fieldName];
+    const isMarkedForDeletion = filesToDelete.has(fieldName);
 
     return (
       <div>
@@ -318,7 +342,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           {label}
         </label>
 
-        {hasFile && !showFileInputs[fieldName] && (
+        {hasFile && !showFileInputs[fieldName] && !isMarkedForDeletion && (
           <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-lg">
             <div className="flex items-center justify-between">
               <a
@@ -334,19 +358,49 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 )}
                 {t('actions.crud.file.viewOrDownload')} {nameField}
               </a>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleFileInput(fieldName)}
+                  className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-blue-600"
+                >
+                  <Edit className="mr-1 h-4 w-4" />
+                  {t('actions.crud.edit')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => markFileForDeletion(fieldName)}
+                  className="flex items-center text-sm text-red-600 cursor-pointer font-medium hover:text-red-800"
+                >
+                  <Trash2 className="mr-1 h-4 w-4" />
+                  {t('actions.crud.delete')}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isMarkedForDeletion && (
+          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-red-800 dark:text-red-200">
+                <Trash2 className="mr-2 h-4 w-4" />
+                <span className="text-sm font-medium">
+                  {t('actions.crud.file.markedForDeletion')}
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => toggleFileInput(fieldName)}
-                className="ml-4 flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium"
+                onClick={() => unmarkFileForDeletion(fieldName)}
+                className="text-sm text-red-600 hover:text-red-800 cursor-pointer underline"
               >
-                <Edit className="mr-1 h-4 w-4" />
-                {t('actions.crud.edit')}
+                {t('common.undo')}
               </button>
             </div>
           </div>
         )}
 
-        {shouldShowInput && (
+        {shouldShowInput && !isMarkedForDeletion && (
           <div className="mt-3">
             {hasFile && showFileInputs[fieldName] && (
               <div className="mb-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-200">
@@ -464,11 +518,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% }-%>
       });
     }
-<%if (hasBlob || hasImage) {-%>
+<%if (hasBlob) {-%>
 
     setShowFileInputs({
 <%blobFields.forEach(field => {-%>
-    <%-to.snake(field)%>: !hasExistingFile(<%= to.camel(entity.name)-%>?.<%-to.snake(field)%>_path, myEntity?.<%-to.snake(field)%>_name),
+    <%-to.snake(field)%>: !hasExistingFile(<%= to.camel(entity.name)-%>?.<%-to.snake(field)%>_path, <%= to.camel(entity.name)%>?.<%-to.snake(field)%>_name),
 <%})-%>
     });
 <%}-%>
@@ -498,7 +552,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type,
-          t('entities.my_entity.<%-to.snake(name)%>')<%if(type === 'ImageBlob') {-%>,
+          t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')<%if(type === 'ImageBlob') {-%>,
           'image/*'<%}-%>
         )}
 <%      } else {-%>

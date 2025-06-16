@@ -101,6 +101,14 @@ class <%- className %>Controller extends Controller
 <%          } -%>
             $data = $request->all();
 
+            $filesToDelete = $request->input('filesToDelete', []);
+            $filesToDeletePaths = array_map(fn($field): string => $<%- entityName %>[$field . '_path'] ?? null, $filesToDelete);
+            foreach ($filesToDelete as $field) {
+                $<%- entityName %>[$field . '_path'] = null;
+                $<%- entityName %>[$field . '_type'] = null;
+                $<%- entityName %>[$field . '_name'] = null;
+            }
+
 <%          fileFields.forEach((field) => {-%>
             if($request->input('<%-to.snake(field)%>.data')) {
                 if ($<%- entityName %>-><%-to.snake(field)%>_path) {
@@ -121,6 +129,13 @@ class <%- className %>Controller extends Controller
 <%    });-%>
 
             $<%- entityName %>->update($data);
+
+            foreach ($filesToDeletePaths as $filePath) {
+                if ($filePath && Storage::disk('private')->exists($filePath)) {
+                    Storage::disk('private')->delete($filePath);
+                }
+            }
+
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>
