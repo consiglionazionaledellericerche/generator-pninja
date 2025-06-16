@@ -319,11 +319,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         </label>
 
         {hasFile && !showFileInputs[fieldName] && (
-          <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-lg">
             <div className="flex items-center justify-between">
               <a
                 href={`/api/files/${pathField}`}
-                className="text-blue-600 hover:underline flex items-center"
+                className="text-slate-900 dark:text-gray-300 hover:underline flex items-center"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -332,15 +332,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 ) : (
                   <FileIcon className="mr-2 h-4 w-4" />
                 )}
-                {t('actions.crud.viewOrDonwload')} {nameField}
+                {t('actions.crud.file.viewOrDownload')} {nameField}
               </a>
               <button
                 type="button"
                 onClick={() => toggleFileInput(fieldName)}
-                className="ml-4 flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="ml-4 flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium"
               >
                 <Edit className="mr-1 h-4 w-4" />
-                {t('actions.edit', 'Modifica')}
+                {t('actions.crud.edit')}
               </button>
             </div>
           </div>
@@ -350,10 +350,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div className="mt-3">
             {hasFile && showFileInputs[fieldName] && (
               <div className="mb-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-200">
-                {t(
-                  'file.replaceWarning',
-                  'Selezionando un nuovo file sostituirai quello esistente'
-                )}
+                {t('actions.crud.file.replaceWarning')}
               </div>
             )}
             <input
@@ -367,9 +364,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               <button
                 type="button"
                 onClick={() => toggleFileInput(fieldName)}
-                className="mt-2 text-sm text-gray-600 hover:text-gray-800 underline"
+                className="mt-2 text-sm text-gray-600 hover:text-gray-800 cursor-pointer underline"
               >
-                {t('actions.cancel', 'Annulla')}
+                {t('common.cancel')}
               </button>
             )}
           </div>
@@ -586,10 +583,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       </div>
       <div className="flex justify-center gap-4 my-8">
         <button type="button" onClick={onCancel} className="cancel-button">
-          Cancel
+          {t('actions.crud.cancel')}
         </button>
         <button type="submit" disabled={isSubmitting} className="primary-button">
-          {isSubmitting ? 'Saving...' : 'Save'}
+          {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
         </button>
       </div>
     </form>
