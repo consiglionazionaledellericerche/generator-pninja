@@ -151,6 +151,7 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 <% } -%>
+
 <%if (hasBlob) {-%>
 const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>, filesToDelete?: Set<string>) => z.object({
 <%} else {-%>
@@ -254,6 +255,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%})-%>
   });
 <% }-%>
+
 <%if (hasBlob) {-%>
   const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>, filesToDelete);
 <%} else {-%>
