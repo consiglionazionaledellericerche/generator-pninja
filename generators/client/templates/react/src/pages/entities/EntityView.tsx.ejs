@@ -136,7 +136,7 @@ export default function <%= entity.name %>View() {
   }, [fetch, id, navigate, t, addNotification]);
 
   useEffect(() => {
-    document.title = `${t('entities.<%-to.snake(entity.name)%>.<%- to.capital(entity.name)%>')} ID ${id}`;
+    document.title = `${t('entities.<%-to.snake(entity.name)%>.<%-entity.name%>')} ID ${id}`;
   }, [id, i18n.language, t]);
 
   return (
