@@ -1,11 +1,16 @@
 <?php
 namespace App\Http\Controllers;
 
+// use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
+    // use HandlesUserRoles;
+
+    // private $viewerRole = 'viewer';
+
     public function serveFile(Request $request, $path)
     {
         // Decode the file path
@@ -31,10 +36,7 @@ class FileController extends Controller
             return response()->json(['error' => 'File not found'], 404);
         }
 
-        // Check if the user has access to the file
-        if (!$this->userCanAccessFile($decodedPath, $request)) {
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
+        // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
 
         // Get file details
         $mimeType = Storage::disk('private')->mimeType($decodedPath);
@@ -61,31 +63,5 @@ class FileController extends Controller
             Storage::disk('private')->path($decodedPath),
             $headers
         );
-    }
-
-    // Check if the user has access to the file
-    private function userCanAccessFile($filePath, $request)
-    {
-        return true;
-
-        // $userInfo = Session::get('authenticated_user');
-        // if (!$userInfo) {
-        //     return false;
-        // }
-
-        // if ($this->userHasRole($userInfo, 'admin')) {
-        //     return true;
-        // }
-
-        // return false;
-    }
-
-    // Check if the user has a specific role
-    private function userHasRole($userInfo, $role)
-    {
-        $resourceAccess = $userInfo['resource_access'] ?? [];
-        $clientId = env('KEYCLOAK_CLIENT_ID') ?? '';
-        $roles = ($resourceAccess[$clientId] ?? [])['roles'];
-        return in_array($role, $roles);
     }
 }
