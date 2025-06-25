@@ -33,7 +33,7 @@ import viteLogo from '../assets/vite.svg';
 export default function Home() {
   const { t, i18n } = useTranslation();
   const { user, loading } = useAuthState();
-  const { getRoles, getRealmRoles } = useRoles();
+  const { getRoles } = useRoles();
   useEffect(() => {
     document.title = t('appName');
   }, [t, i18n.language]);
@@ -79,7 +79,6 @@ export default function Home() {
             className="mt-4"
             data={{
               roles: getRoles(),
-              realmRoles: getRealmRoles(),
             }}
           />
         </>
