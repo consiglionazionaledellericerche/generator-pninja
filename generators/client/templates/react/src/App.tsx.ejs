@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { NotificationProvider } from './contexts/NotificationContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import RoleProtectedRoute from './components/RoleProtectedRoute';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Err404 from './pages/errors/Err404';
@@ -45,7 +44,7 @@ function App() {
         </Route>
         <Route
           element={
-            <RoleProtectedRoute
+            <ProtectedRoute
               requiredRoles={['admin', 'superuser', 'master']}
               requireAll={false}
             />
@@ -53,7 +52,7 @@ function App() {
         >
           <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
         </Route>
-        <Route element={<RoleProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
+        <Route element={<ProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
           <Route path="/apps-admin" element={<div className="m-4">APPS ADMIN EXAMPLE</div>} />
         </Route>
         <Route path="/login" element={<Login />} />

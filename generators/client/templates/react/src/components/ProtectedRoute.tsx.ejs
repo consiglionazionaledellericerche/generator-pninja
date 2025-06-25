@@ -1,15 +1,35 @@
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import { useAuthState } from '../hooks/useAuthState';
+import { useRoles } from '../hooks/useRoles';
+import Err403 from '../pages/errors/Err403';
+interface ProtectedRouteProps {
+  requiredRoles?: string[];
+  requireAll?: boolean;
+}
 
-const ProtectedRoute: React.FC = () => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  requiredRoles = undefined,
+  requireAll = false,
+}) => {
   const { isAuthenticated } = useAuthState();
+  const { hasAllRoles, hasAnyRole } = useRoles();
   const location = useLocation();
+
+  console.info(requiredRoles, requireAll);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location.pathname }} />;
   }
 
-  return <Outlet />;
+  if (!requiredRoles) {
+    return <Outlet />;
+  }
+
+  if (requireAll ? hasAllRoles(requiredRoles) : hasAnyRole(requiredRoles)) {
+    return <Outlet />;
+  }
+
+  return <Err403 />;
 };
 
 export default ProtectedRoute;
