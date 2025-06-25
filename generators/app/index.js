@@ -139,7 +139,7 @@ export default class extends Generator {
   }
 
   writing() {
-    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.0.3', 'server']);
+    this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.6.1', 'server']);
     this.spawnCommandSync('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
     this.fs.copyTpl(this.templatePath("rename_queue_table.php.ejs"), this.destinationPath(`server/database/migrations/${new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17)}_rename_queue_table.php`));
