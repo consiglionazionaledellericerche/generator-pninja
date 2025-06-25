@@ -20,7 +20,7 @@ const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location.pathname }} />;
   }
 
-  if (requiredRoles.length === 0 || hasRequiredRoles) {
+  if (hasRequiredRoles) {
     return <Outlet />;
   }
 

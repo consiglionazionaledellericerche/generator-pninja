@@ -8,6 +8,7 @@ use App\Models\<%- name %>;
 <%      })-%>
 <%  }-%>
 use App\Traits\HandlesApiErrors;
+// use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,10 +17,14 @@ use Illuminate\Support\Facades\Storage;
 class <%- className %>Controller extends Controller
 {
     use HandlesApiErrors;
+    // use HandlesUserRoles;
+
+    // private $viewerRole = 'viewer';
 
     public function index(Request $request)
     {
         try {
+            // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
             $query = <%- className %>::query();
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
 <%      relatedEntitiesForFilters.map(({name, injectedField}) =>{-%>

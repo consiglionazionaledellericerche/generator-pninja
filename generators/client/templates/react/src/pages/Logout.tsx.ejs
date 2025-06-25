@@ -1,0 +1,29 @@
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuthState } from '../hooks/useAuthState';
+import { useNavigate } from 'react-router-dom';
+
+const Logout: React.FC = () => {
+  const { logout } = useAuthState();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    // Automatically trigger logout when this component mounts
+    handleLogout();
+  });
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : t('ui.account.unknownError');
+      alert(`${t('ui.account.logoutError')}: ${message}`);
+    }
+  };
+
+  return null;
+};
+
+export default Logout;

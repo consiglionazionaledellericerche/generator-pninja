@@ -51,85 +51,12 @@ const getRolesFromSession = (): UserRoles | null => {
 };
 
 export const useRoles = () => {
-  const hasRole = useCallback((roleOrClientId: string, maybeRole?: string): boolean => {
-    const roles = getRolesFromSession();
-    if (!roles) return false;
-
-    if (maybeRole !== undefined) {
-      const clientId = roleOrClientId;
-      const role = maybeRole;
-      if (!roles.clientRoles[clientId]) return false;
-      return roles.clientRoles[clientId].includes(role);
-    }
-
-    const role = roleOrClientId;
-    if (!DEFAULT_CLIENT_ID || !roles.clientRoles[DEFAULT_CLIENT_ID]) return false;
-    return roles.clientRoles[DEFAULT_CLIENT_ID].includes(role);
-  }, []);
-
-  const hasAnyRole = useCallback(
-    (rolesOrClientId: string[] | string, maybeRoles?: string[]): boolean => {
-      const userRoles = getRolesFromSession();
-      if (!userRoles) return false;
-
-      if (maybeRoles !== undefined) {
-        const clientId = rolesOrClientId as string;
-        const roles = maybeRoles;
-        if (!userRoles.clientRoles[clientId]) return false;
-        return roles.some((role) => userRoles.clientRoles[clientId].includes(role));
-      }
-
-      const roles = rolesOrClientId as string[];
-      if (!DEFAULT_CLIENT_ID || !userRoles.clientRoles[DEFAULT_CLIENT_ID]) return false;
-      return roles.some((role) => userRoles.clientRoles[DEFAULT_CLIENT_ID].includes(role));
-    },
-    []
-  );
-
-  const hasAllRoles = useCallback(
-    (rolesOrClientId: string[] | string, maybeRoles?: string[]): boolean => {
-      const userRoles = getRolesFromSession();
-      if (!userRoles) return false;
-
-      if (maybeRoles !== undefined) {
-        const clientId = rolesOrClientId as string;
-        const roles = maybeRoles;
-        if (!userRoles.clientRoles[clientId]) return false;
-        return roles.every((role) => userRoles.clientRoles[clientId].includes(role));
-      }
-
-      const roles = rolesOrClientId as string[];
-      if (!DEFAULT_CLIENT_ID || !userRoles.clientRoles[DEFAULT_CLIENT_ID]) return false;
-      return roles.every((role) => userRoles.clientRoles[DEFAULT_CLIENT_ID].includes(role));
-    },
-    []
-  );
-
   const getRoles = useCallback((clientId?: string): string[] => {
     const userRoles = getRolesFromSession();
     if (!userRoles) return [];
-
     const targetClientId = clientId || DEFAULT_CLIENT_ID;
     if (!targetClientId || !userRoles.clientRoles[targetClientId]) return [];
     return userRoles.clientRoles[targetClientId];
-  }, []);
-
-  const hasRealmRole = useCallback((role: string): boolean => {
-    const userRoles = getRolesFromSession();
-    if (!userRoles) return false;
-    return userRoles.realmRoles.includes(role);
-  }, []);
-
-  const hasAnyRealmRole = useCallback((roles: string[]): boolean => {
-    const userRoles = getRolesFromSession();
-    if (!userRoles) return false;
-    return roles.some((role) => userRoles.realmRoles.includes(role));
-  }, []);
-
-  const hasAllRealmRoles = useCallback((roles: string[]): boolean => {
-    const userRoles = getRolesFromSession();
-    if (!userRoles) return false;
-    return roles.every((role) => userRoles.realmRoles.includes(role));
   }, []);
 
   const getRealmRoles = useCallback((): string[] => {
@@ -138,14 +65,32 @@ export const useRoles = () => {
     return userRoles.realmRoles;
   }, []);
 
+  const hasAnyRole = useCallback(
+    (testRoles: string[]): boolean => testRoles.some((role) => getRoles().includes(role)),
+    [getRoles]
+  );
+
+  const hasAllRoles = useCallback(
+    (testRoles: string[]): boolean => testRoles.every((role) => getRoles().includes(role)),
+    [getRoles]
+  );
+
+  const hasAnyRealmRole = useCallback(
+    (testRoles: string[]): boolean => testRoles.some((role) => getRealmRoles().includes(role)),
+    [getRealmRoles]
+  );
+
+  const hasAllRealmRoles = useCallback(
+    (testRoles: string[]): boolean => testRoles.every((role) => getRealmRoles().includes(role)),
+    [getRealmRoles]
+  );
+
   return {
-    hasRole,
+    getRoles,
+    getRealmRoles,
     hasAnyRole,
     hasAllRoles,
-    getRoles,
-    hasRealmRole,
     hasAnyRealmRole,
     hasAllRealmRoles,
-    getRealmRoles,
   };
 };

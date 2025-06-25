@@ -31,10 +31,14 @@ export const useApi = () => {
   const authenticatedFetch = useCallback(
     async (url: string, options: FetchOptions = {}): Promise<Response> => {
       try {
-        // Con le sessioni è semplicissimo!
         const headers = {
           ...options.headers,
           'Content-Type': options.headers?.['Content-Type'] || 'application/json',
+          Accept: options.headers?.['Accept'] || 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+          Expires: '0',
         };
 
         const response = await fetch(url, {

@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Traits;
+
+use Illuminate\Support\Facades\Session;
+
+trait HandlesUserRoles
+{
+    /**
+     * Verifica se l'utente autenticato ha il ruolo specificato
+     *
+     * @param string $role Il ruolo da verificare
+     * @return bool True se l'utente ha il ruolo, false altrimenti
+     * @throws \Exception Se il Client ID non è configurato
+     */
+    protected function userHasRole($role)
+    {
+        $userInfo = Session::get('authenticated_user');
+        if (!$userInfo) return false;
+
+        if (!array_key_exists('resource_access', $userInfo)) return false;
+
+        $resourceAccess = $userInfo['resource_access'] ?? [];
+        if (empty($resourceAccess)) return false;
+
+        $clientId = env('KEYCLOAK_CLIENT_ID') ?? '';
+
+        // Lancia un errore se non trova il clientId
+        if (empty($clientId)) {
+            throw new \Exception('Client ID not configured in environment variables');
+        }
+
+        if (!array_key_exists($clientId, $resourceAccess)) return false;
+
+        if (!array_key_exists('roles', $resourceAccess[$clientId])) return false;
+
+        $roles = ($resourceAccess[$clientId] ?? [])['roles'];
+        if (empty($roles)) return false;
+
+        return in_array($role, $roles);
+    }
+
+    /**
+     * Verifica se l'utente ha uno qualsiasi dei ruoli specificati
+     *
+     * @param array $roles Array di ruoli da verificare
+     * @return bool True se l'utente ha almeno uno dei ruoli
+     */
+    protected function userHasAnyRole(array $roles)
+    {
+        foreach ($roles as $role) {
+            if ($this->userHasRole($role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica se l'utente ha tutti i ruoli specificati
+     *
+     * @param array $roles Array di ruoli da verificare
+     * @return bool True se l'utente ha tutti i ruoli
+     */
+    protected function userHasAllRoles(array $roles)
+    {
+        foreach ($roles as $role) {
+            if (!$this->userHasRole($role)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}

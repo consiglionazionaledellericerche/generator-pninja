@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 
 class SessionAuthController extends Controller
 {
+    protected $frontendUrl;
+
+    public function __construct()
+    {
+        $this->frontendUrl = env('FRONTEND_URL') ? env('FRONTEND_URL') : URL::to('/');
+    }
     public function checkSession(Request $request)
     {
         if (Session::has('authenticated_user') && Session::has('session_security')) {
@@ -52,7 +59,7 @@ class SessionAuthController extends Controller
         $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
         $realm = env('KEYCLOAK_REALM', 'CNR');
         $clientId = env('KEYCLOAK_CLIENT_ID');
-        $redirectUri = env('FRONTEND_URL') . '/api/auth/callback';
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
 
         $params = [
             'client_id' => $clientId,
@@ -83,13 +90,11 @@ class SessionAuthController extends Controller
 
         // Verifica state per sicurezza CSRF
         if (!$state || $state !== $storedState) {
-            $frontendUrl = env('FRONTEND_URL');
-            return redirect($frontendUrl . '/?error=invalid_state');
+            return redirect($this->frontendUrl . '/?error=invalid_state');
         }
 
         if (!$code) {
-            $frontendUrl = env('FRONTEND_URL');
-            return redirect($frontendUrl . '/?error=no_code');
+            return redirect($this->frontendUrl . '/?error=invalid_state');
         }
 
         try {
@@ -107,12 +112,12 @@ class SessionAuthController extends Controller
             Session::forget(['oauth_state', 'code_verifier']);
 
             // Redirect al FRONTEND invece che al backend
-            $frontendUrl = env('FRONTEND_URL');
-            $redirectUrl = Session::pull('auth_redirect_url', $frontendUrl);
+            $redirectUrl = Session::pull('auth_redirect_url', $this->frontendUrl);
 
             \Log::info("message", [
                 'redirect_url' => $redirectUrl,
                 'auth_success' => true,
+                'URL::to(\'/\' )' => URL::to('/' )
             ]);
             return redirect($redirectUrl . '?auth_success=true');
 
@@ -123,8 +128,7 @@ class SessionAuthController extends Controller
                 'state' => $state,
             ]);
 
-            $frontendUrl = env('FRONTEND_URL');
-            return redirect($frontendUrl . '/?error=auth_failed&message=' . urlencode($e->getMessage()));
+            return redirect($this->frontendUrl . '/?error=auth_failed&message=' . urlencode($e->getMessage()));
         }
     }
 
@@ -149,10 +153,9 @@ class SessionAuthController extends Controller
         // Costruisci URL di logout Keycloak
         $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
         $realm = env('KEYCLOAK_REALM', 'CNR');
-        $frontendUrl = env('FRONTEND_URL');
 
         $logoutUrl = "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/logout?" .
-                     http_build_query(['post_logout_redirect_uri' => $frontendUrl]);
+                     http_build_query(['post_logout_redirect_uri' => $this->frontendUrl]);
 
         return response()->json([
             'success' => true,
@@ -179,7 +182,7 @@ class SessionAuthController extends Controller
         $realm = env('KEYCLOAK_REALM', 'CNR');
         $clientId = env('KEYCLOAK_CLIENT_ID');
         $clientSecret = env('KEYCLOAK_CLIENT_SECRET');
-        $redirectUri = env('FRONTEND_URL') . '/api/auth/callback';
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
 
         $codeVerifier = Session::get('code_verifier');
 

@@ -1,36 +1,19 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuthState } from '../hooks/useAuthState';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Loader } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 
 const LogoutButton: React.FC = () => {
-  const { logout } = useAuthState();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    try {
-      setIsLoggingOut(true);
-      await logout();
-      navigate('/');
-    } catch (error) {
-      const message = error instanceof Error ? error.message : t('ui.account.unknownError');
-      alert(`${t('ui.account.logoutError')}: ${message}`);
-    } finally {
-      setIsLoggingOut(false);
-    }
+    navigate('/logout', { state: { from: location.pathname } });
   };
 
   return (
-    <button
-      onClick={handleLogout}
-      disabled={isLoggingOut}
-      className={`inline-flex items-center gap-1 nav-bar-link ${isLoggingOut ? 'opacity-70 cursor-not-allowed' : ''}`}
-    >
-      {isLoggingOut ? <Loader size={16} className="animate-spin" /> : <LogOut size={16} />}
-      {isLoggingOut ? t('ui.account.loggingOut') : t('ui.account.logout')}
+    <button onClick={handleLogout} className={`inline-flex items-center gap-1 nav-bar-link`}>
+      <LogOut size={16} />
+      {t('ui.account.logout')}
     </button>
   );
 };

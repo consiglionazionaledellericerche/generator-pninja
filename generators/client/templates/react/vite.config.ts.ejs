@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
@@ -10,14 +12,14 @@ dotenv.config();
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    port: parseInt(process.env.VITE_PORT || '5173'),
+    port: parseInt(process.env.VITE_PORT || '5173', 10),
     proxy: {
       '/api': {
         target: `${process.env.PROTOCOL || 'http'}://${process.env.HOST || 'localhost'}:${process.env.PORT || '8000'}`,
         changeOrigin: true,
         secure: false,
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', function (proxyReq, req, _res, _options) {
+        configure: (proxy) => {
+          proxy.on('proxyReq', function (proxyReq, req) {
             if (req.headers.cookie) {
               proxyReq.setHeader('Cookie', req.headers.cookie);
             }

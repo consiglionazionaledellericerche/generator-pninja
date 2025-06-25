@@ -20,15 +20,6 @@ export class RoutersGenerator {
                 rootPath,
             };
         });
-        entities.forEach(entity => {
-            const className = entity.name;
-            const rootPath = to.slug(pluralize(entity.name));
-            this.that.fs.copyTpl(this.that.templatePath("entity_router.php.ejs"), this.that.destinationPath(`server/routes/${rootPath}.php`),
-                {
-                    className,
-                    rootPath,
-                });
-        });
         this.that.fs.copyTpl(
             this.that.templatePath("api.php.ejs"),
             this.that.destinationPath(`server/routes/api.php`),

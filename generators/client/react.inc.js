@@ -24,6 +24,9 @@ export async function createReactClient(that, parsedJDL) {
     for (const lang of ['en', 'it', 'fr', 'de']) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}/translation.json.ejs`), that.destinationPath(`client/public/locales/${lang}/translation.json`), { appName, entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
     };
+    that.fs.copyTpl(that.templatePath("react/public/fonts/IBMPlexMono-Regular.ttf"), that.destinationPath(`client/public/fonts/IBMPlexMono-Regular.ttf`));
+    that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
+    that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
 
     that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
@@ -65,6 +68,7 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
     that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/Logout.tsx.ejs"), that.destinationPath(`client/src/pages/Logout.tsx`));
 
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});

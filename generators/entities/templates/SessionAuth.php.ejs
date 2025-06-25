@@ -40,7 +40,7 @@ class SessionAuth
         }
 
         // Per richieste non-JSON (come file), redirect al login
-        return redirect(env('FRONTEND_URL') . '/login');
+        return redirect((env('FRONTEND_URL') ? env('FRONTEND_URL') : URL::to('/')) . '/login');
     }
 
     /**
