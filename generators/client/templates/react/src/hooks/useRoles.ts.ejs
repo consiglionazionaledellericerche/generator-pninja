@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
-import { UserRoles } from '../types/auth';
 
-const DEFAULT_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID || '';
+const KEYCLOAK_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID || '';
 
-const getRolesFromSession = (): UserRoles | null => {
+const getRolesFromSession = (): string[] => {
   console.info('Retrieving roles from session');
   try {
     const xhr = new XMLHttpRequest();
@@ -13,56 +12,21 @@ const getRolesFromSession = (): UserRoles | null => {
 
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      if (response.isAuthenticated && response.user) {
-        const user = response.user;
-        const realmRoles = user.realm_access?.roles || [];
-        const clientRoles: Record<string, string[]> = {};
-
-        if (user.resource_access) {
-          Object.keys(user.resource_access).forEach((clientId) => {
-            if (user.resource_access[clientId]?.roles) {
-              clientRoles[clientId] = user.resource_access[clientId].roles;
-            }
-          });
-        }
-
-        if (user.contexts) {
-          Object.keys(user.contexts).forEach((contextId) => {
-            if (user.contexts[contextId]?.roles) {
-              if (!clientRoles[contextId]) {
-                clientRoles[contextId] = [];
-              }
-              clientRoles[contextId].push(...user.contexts[contextId].roles);
-            }
-          });
-        }
-
-        const allRoles = [...realmRoles, ...Object.values(clientRoles).flat()];
-
-        return { realmRoles, clientRoles, allRoles };
-      }
+      return response?.user?.resource_access[KEYCLOAK_CLIENT_ID]?.roles || [];
     }
 
-    return null;
+    return [];
   } catch (error) {
     console.error('Error getting roles from session:', error);
-    return null;
+    return [];
   }
 };
 
 export const useRoles = () => {
-  const getRoles = useCallback((clientId?: string): string[] => {
+  const getRoles = useCallback((): string[] => {
     const userRoles = getRolesFromSession();
     if (!userRoles) return [];
-    const targetClientId = clientId || DEFAULT_CLIENT_ID;
-    if (!targetClientId || !userRoles.clientRoles[targetClientId]) return [];
-    return userRoles.clientRoles[targetClientId];
-  }, []);
-
-  const getRealmRoles = useCallback((): string[] => {
-    const userRoles = getRolesFromSession();
-    if (!userRoles) return [];
-    return userRoles.realmRoles;
+    return userRoles;
   }, []);
 
   const hasAnyRole = useCallback(
@@ -75,22 +39,9 @@ export const useRoles = () => {
     [getRoles]
   );
 
-  const hasAnyRealmRole = useCallback(
-    (testRoles: string[]): boolean => testRoles.some((role) => getRealmRoles().includes(role)),
-    [getRealmRoles]
-  );
-
-  const hasAllRealmRoles = useCallback(
-    (testRoles: string[]): boolean => testRoles.every((role) => getRealmRoles().includes(role)),
-    [getRealmRoles]
-  );
-
   return {
     getRoles,
-    getRealmRoles,
     hasAnyRole,
     hasAllRoles,
-    hasAnyRealmRole,
-    hasAllRealmRoles,
   };
 };
