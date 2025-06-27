@@ -32,33 +32,35 @@ function App() {
   ) : (
     <NotificationProvider position="bottom-right">
       <Menu />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route element={<ProtectedRoute />}>
-<%      for (const entity of entities) {-%>
-          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%> />} />
-          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
-          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
-          <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
-<%      }-%>
-        </Route>
-        <Route
-          element={
-            <ProtectedRoute
-              requiredRoles={['admin', 'superuser', 'master']}
-              requireAll={false}
-            />
-          }
-        >
-          <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
-        </Route>
-        <Route element={<ProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
-          <Route path="/apps-admin" element={<div className="m-4">APPS ADMIN EXAMPLE</div>} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="*" element={<Err404 />} />
-      </Routes>
+      <div className="p-4 max-w-7xl mx-auto">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route element={<ProtectedRoute />}>
+<%  for (const entity of entities) {-%>
+            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%> />} />
+            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
+            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
+            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
+<%  }-%>
+          </Route>
+          <Route
+            element={
+              <ProtectedRoute
+                requiredRoles={['admin', 'superuser', 'master']}
+                requireAll={false}
+              />
+            }
+          >
+            <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
+          </Route>
+          <Route element={<ProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
+            <Route path="/apps-admin" element={<div className="m-4">APPS ADMIN EXAMPLE</div>} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="*" element={<Err404 />} />
+        </Routes>
+      </div>
     </NotificationProvider>
   );
 }

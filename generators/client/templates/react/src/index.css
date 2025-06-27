@@ -34,11 +34,14 @@
   body {
     @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen;
   }
+  .kdb-shortcut {
+    @apply text-xs font-mono capitalize border py-0.5 px-1 rounded-sm hidden lg:inline;
+  }
   .primary-button {
-    @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-2 px-4 text-sm font-medium text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
+    @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-1.5 px-4 text-sm font-medium text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
   }
   .cancel-button {
-    @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-white dark:bg-transparent py-2 px-4 text-sm font-medium shadow-sm hover:bg-gray-50 hover:dark:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
+    @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-white dark:bg-transparent py-1.5 px-4 text-sm font-medium shadow-sm hover:bg-gray-50 hover:dark:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
   }
   .text-link {
     @apply rounded-md text-sky-600 dark:text-sky-400 hover:underline decoration-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600;
@@ -47,7 +50,7 @@
     @apply text-slate-400 dark:text-slate-500;
   }
   .nav-bar {
-    @apply relative z-9999 md:flex md:h-16 md:space-x-4 md:px-4 items-center bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300;
+    @apply relative z-9999 flex flex-wrap items-center justify-between gap-4 h-16 px-4 bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300;
     .nav-bar-link {
       @apply rounded-md px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 hover:ring-4 focus:outline-none focus-visible:ring-4 cursor-pointer;
     }
