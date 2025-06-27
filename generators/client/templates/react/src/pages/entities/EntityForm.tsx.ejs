@@ -122,6 +122,7 @@ import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 <% }-%>
 import { useNotifications } from '../../contexts/NotificationContext';
+import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
 <% } -%>
@@ -239,6 +240,7 @@ interface SelectOption {
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
   const { addNotification } = useNotifications();
+  useAutoShortcuts();
   const { fetch } = useApi();
 <% for({field} of relatedEntities) {-%>
   const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<SelectOption[]>([]);
@@ -642,7 +644,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <button type="button" onClick={onCancel} className="cancel-button">
           {t('actions.crud.cancel')}
         </button>
-        <button type="submit" disabled={isSubmitting} className="primary-button">
+        <button
+          data-shortcut="ctrl+enter"
+          type="submit"
+          disabled={isSubmitting}
+          className="primary-button"
+        >
           {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
         </button>
       </div>

@@ -1,0 +1,86 @@
+import { useEffect } from 'react';
+
+// Hook che gestisce automaticamente le scorciatoie basate sull'attributo shortcut
+const useAutoShortcuts = () => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ignora se l'utente sta digitando in un campo di input, ma solo per tasti singoli o solo con Shift
+      const hasSystemModifiers = event.ctrlKey || event.metaKey || event.altKey;
+
+      if (!hasSystemModifiers) {
+        const activeElement = document.activeElement as HTMLElement;
+        const isTyping =
+          activeElement &&
+          (['input', 'textarea', 'select'].includes(activeElement.tagName?.toLowerCase()) ||
+            activeElement.hasAttribute('contenteditable'));
+
+        if (isTyping) return;
+      }
+
+      // Trova tutti gli elementi con attributo data-shortcut
+      const elements = document.querySelectorAll('[data-shortcut]');
+
+      elements.forEach((element) => {
+        const shortcut = element?.getAttribute('data-shortcut')?.toLowerCase();
+        const keys = shortcut?.split('+').map((k) => k.trim());
+
+        // Controlla i modificatori
+        const ctrlPressed = event.ctrlKey || event.metaKey;
+        const shiftPressed = event.shiftKey;
+        const altPressed = event.altKey;
+
+        // Controlla se tutti i modificatori richiesti sono premuti
+        const requiredCtrl = keys?.includes('ctrl') || keys?.includes('cmd');
+        const requiredShift = keys?.includes('shift');
+        const requiredAlt = keys?.includes('alt');
+
+        // Trova il tasto principale
+        const mainKey = keys?.find((key) => !['ctrl', 'cmd', 'shift', 'alt'].includes(key));
+
+        // Normalizza il tasto premuto per confronto
+        const pressedKey = event.key.toLowerCase();
+
+        // Verifica la combinazione
+        const isMatch =
+          requiredCtrl === ctrlPressed &&
+          requiredShift === shiftPressed &&
+          requiredAlt === altPressed &&
+          pressedKey === mainKey;
+
+        if (isMatch) {
+          event.preventDefault();
+
+          // Cast dell'elemento per TypeScript
+          const el = element as HTMLElement;
+
+          // Distingui tra elementi per il focus e elementi per l'attivazione
+          const tagName = el.tagName.toLowerCase();
+          const isFormElement = ['input', 'textarea', 'select'].includes(tagName);
+          const isActionElement = tagName === 'button' || tagName === 'a';
+
+          if (isFormElement) {
+            // Elementi di form: dai il focus
+            el.focus();
+          } else if (isActionElement) {
+            // Elementi di azione: attiva (click)
+            el.click();
+          } else {
+            // Altri elementi: prova il focus, se non funziona fai click
+            try {
+              el.focus();
+            } catch {
+              if ('click' in el && typeof el.click === 'function') {
+                el.click();
+              }
+            }
+          }
+        }
+      });
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+};
+
+export default useAutoShortcuts;
