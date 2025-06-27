@@ -35,7 +35,7 @@
     @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen;
   }
   .kdb-shortcut {
-    @apply text-xs font-mono capitalize border py-0.5 px-1 rounded-sm hidden lg:inline;
+    @apply text-xs font-mono capitalize border py-0.5 px-1 rounded-sm hidden xl:inline;
   }
   .primary-button {
     @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-1.5 px-4 text-sm font-medium text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
