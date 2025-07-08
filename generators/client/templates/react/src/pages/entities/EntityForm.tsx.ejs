@@ -5,10 +5,24 @@ for({type} of entity.body) {
     enumsToImport.push(type);
   }
 }
+const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);;
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'ImageBlob', false);
+const hasRequiredBlob = entity?.body
+  .filter(({ type }) => type === 'Blob' || type === 'ImageBlob')
+  .map(({ validations }) => validations)
+  .reduce(
+    (required, validation) =>
+      required ||
+      validation.reduce(
+        (required, validation) => required || validation.key === 'required',
+        false
+      ),
+    false
+  );
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'ImageBlob')).map(({name}) => name);
 const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
+const hasRelated = (relatedEntities.length + foreignIds.length) > 0;
 const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
 const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
@@ -87,6 +101,9 @@ const getField = (type, name) => {
     const STEP = fieldTypeToInputStep(type);
 -%>
 <%      if (T !== 'textarea') {-%>
+<%        if (type === 'UUID') {-%>
+          <div className="grid grid-cols-1">
+<%        }-%>
           <input
             type="<%- T %>"
 <%          if (!!STEP) {-%>
@@ -94,8 +111,19 @@ const getField = (type, name) => {
 <%          }-%>
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
-            className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
+            className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)<% if (type === 'UUID') {%> + ' col-start-1 row-start-1'<%}%>}
           />
+<%        if (type === 'UUID') {-%>
+            <button
+              type="button"
+              onClick={() => setValue('<%= to.snake(name) %>', uuidv4())}
+              className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+              title={t('actions.crud.generateUUID')}
+            >
+              <RefreshCw className="h-full" />
+            </button>
+          </div>
+<%        }-%>
 <%      } else {-%>
           <textarea
             rows={10}
@@ -110,6 +138,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
+<% if (hasUUID) {-%>
+import { v4 as uuidv4 } from 'uuid';
+<% }-%>
 import * as z from 'zod';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
@@ -118,13 +149,16 @@ import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model
 <%  }-%>
 <%}-%>
 import { useApi } from '../../hooks/useApi';
-<% if (hasSelect) {-%>
+<% if (hasRelated) {-%>
 import { HttpError } from '../../hooks/useApi';
 <% }-%>
 import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <% if (hasSelectNotMultiple) {-%>
 import { ChevronsUpDown } from 'lucide-react';
+<% } -%>
+<% if (hasUUID) {-%>
+import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob) {-%>
@@ -153,10 +187,10 @@ function fileToBase64(file: File): Promise<string> {
 }
 <% } -%>
 
-<%if (hasBlob) {-%>
+<%if (hasRequiredBlob) {-%>
 const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>, filesToDelete?: Set<string>) => z.object({
 <%} else {-%>
-const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>) => z.object({
+const create<%= entity.name %>Schema = () => z.object({
 <%}-%>
 <%  for({name, type, validations} of entity.body) {-%>
 <%    if(fieldTypeToSchema(type) === 'string') {-%>
@@ -229,7 +263,7 @@ interface <%= entity.name %>FormProps {
   onSubmit: (data: <%= entity.name %>FormData) => void | Promise<void>;
   onCancel: () => void;
 }
-<% if (hasSelect) {-%>
+<% if (hasRelated) {-%>
 
 interface SelectOption {
   id: number;
@@ -258,10 +292,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   });
 <% }-%>
 
-<%if (hasBlob) {-%>
+<%if (hasRequiredBlob) {-%>
   const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>, filesToDelete);
 <%} else {-%>
-  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>);
+  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema();
 <%}-%>
 
   const {
@@ -269,7 +303,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+<%  if (hasBlob || hasUUID) {-%>
     setValue,
+<%  }-%>
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
   });
@@ -278,7 +314,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     try {
 <%if (hasBlob) {-%>
       data = {...data, filesToDelete: Array.from(filesToDelete)};
-<%}-%>
       for (const [key, value] of Object.entries(data)) {
         if (value instanceof File) {
           const fileData = await fileToBase64(value);
@@ -290,6 +325,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           };
         }
       }
+<%}-%>
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);

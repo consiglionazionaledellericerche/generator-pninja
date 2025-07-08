@@ -90,16 +90,16 @@ export class ControllersGenerator {
                     className: entity.name,
                     entityName: to.camel(entity.name),
                     validationsStore: entity.body
-                        .filter(field => !(['ImageBlob', 'Blob', 'TextBlob', 'AnyBlob', 'byte[]'].includes(field.type)))
+                        .filter(field => !(['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type)))
                         .map(field => {
                             const { validations } = field;
+                            if (field.type === 'UUID') field.validations.unshift({ key: 'pattern', value: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' });
                             if (!validations.reduce((itsRequired, validation) => { return itsRequired || validation.key === 'required' }, false)) {
                                 field.validations.unshift({ key: 'nullable', value: '' });
                             }
                             if (['String', 'UUID'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'string' });
                             if (['BigDecimal', 'Double', 'Float', 'Integer', 'Long'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'numeric' });
                             if (field.type === 'Boolean') field.validations.unshift({ key: 'fieldType', value: 'boolean' });
-                            if (field.type === 'UUID') field.validations.push({ key: 'pattern', value: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' });
                             return field;
                         })
                         .reduce((acc, field) => {
@@ -130,7 +130,7 @@ export class ControllersGenerator {
                             return acc;
                         }, {}),
                     validationsUpdate: entity.body
-                        .filter(field => !(['ImageBlob', 'Blob', 'TextBlob', 'AnyBlob', 'byte[]'].includes(field.type)))
+                        .filter(field => !(['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type)))
                         .map(field => {
                             const { validations } = field;
                             if (field.type === 'UUID') field.validations.unshift({ key: 'pattern', value: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' });
