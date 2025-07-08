@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class ApiErrorHandler
 {
@@ -16,6 +17,10 @@ class ApiErrorHandler
 
         if ($e instanceof ModelNotFoundException) {
             return NotFoundErrorHandler::handle($e);
+        }
+
+        if ($e instanceof ValidationException) {
+            return ValidationErrorHandler::handle($e);
         }
 
         return response()->json([

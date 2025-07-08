@@ -57,11 +57,12 @@ export class MigrationsGenerator {
             }
             if (fieldType !== 'binary') {
                 let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
-                if (field.validations.length === 0) {
-                    fieldDefinition += '->nullable()';
-                } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {
-                    fieldDefinition += '->nullable()';
-                }
+                // if (field.validations.length === 0) {
+                //     fieldDefinition += '->nullable()';
+                // } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {
+                //     fieldDefinition += '->nullable()';
+                // }
+                fieldDefinition += '->nullable()'; // required will be handled by the controller
                 if (field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)) {
                     fieldDefinition += '->unique()';
                 }

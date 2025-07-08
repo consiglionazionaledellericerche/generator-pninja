@@ -1,7 +1,7 @@
 import to from 'to-case';
+import pluralize from 'pluralize';
 import { parseJDL } from '../../utils/jdlParser.js';
 import { getWits } from '../../utils/getWiths.js';
-import jsonColorz from 'json-colorz';
 
 export class ControllersGenerator {
     constructor(that, entitiesFilePath) {
@@ -15,6 +15,7 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), {});
 
@@ -88,7 +89,87 @@ export class ControllersGenerator {
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),
-                    fileFields: entity.body.filter(c => c.type === 'Blob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                    validationsStore: entity.body
+                        .filter(field => !(['ImageBlob', 'Blob', 'TextBlob', 'AnyBlob', 'byte[]'].includes(field.type)))
+                        .map(field => {
+                            const { validations } = field;
+                            if (!validations.reduce((itsRequired, validation) => { return itsRequired || validation.key === 'required' }, false)) {
+                                field.validations.unshift({ key: 'nullable', value: '' });
+                            }
+                            if (['String', 'UUID'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'string' });
+                            if (['BigDecimal', 'Double', 'Float', 'Integer', 'Long'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'numeric' });
+                            if (field.type === 'Boolean') field.validations.unshift({ key: 'fieldType', value: 'boolean' });
+                            if (field.type === 'UUID') field.validations.push({ key: 'pattern', value: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' });
+                            return field;
+                        })
+                        .reduce((acc, field) => {
+                            const { name, validations } = field;
+                            acc[to.snake(name)] = validations.map(({ key, value }) => {
+                                if (key === 'required') {
+                                    return `'required'`;
+                                }
+                                if (key === 'nullable') {
+                                    return `'nullable'`;
+                                }
+                                if (key === 'unique') {
+                                    return `'unique:${to.snake(pluralize(entity.tableName))},${to.snake(name)}'`;
+                                }
+                                if (key === 'fieldType') {
+                                    return `'${value}'`;
+                                }
+                                if (key === 'minlength' || key === 'min') {
+                                    return `'min:${value}'`;
+                                }
+                                if (key === 'maxlength' || key === 'max') {
+                                    return `'max:${value}'`;
+                                }
+                                if (key === 'pattern') {
+                                    return `'regex:\/${value}\/'`;
+                                }
+                            });
+                            return acc;
+                        }, {}),
+                    validationsUpdate: entity.body
+                        .filter(field => !(['ImageBlob', 'Blob', 'TextBlob', 'AnyBlob', 'byte[]'].includes(field.type)))
+                        .map(field => {
+                            const { validations } = field;
+                            if (field.type === 'UUID') field.validations.unshift({ key: 'pattern', value: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' });
+                            if (!validations.reduce((itsRequired, validation) => { return itsRequired || validation.key === 'required' }, false)) {
+                                field.validations.unshift({ key: 'nullable', value: '' });
+                            }
+                            if (['String', 'UUID'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'string' });
+                            if (['BigDecimal', 'Double', 'Float', 'Integer', 'Long'].includes(field.type)) field.validations.unshift({ key: 'fieldType', value: 'numeric' });
+                            if (field.type === 'Boolean') field.validations.unshift({ key: 'fieldType', value: 'boolean' });
+                            return field;
+                        })
+                        .reduce((acc, field) => {
+                            const { name, validations } = field;
+                            acc[to.snake(name)] = validations.map(({ key, value }) => {
+                                if (key === 'required') {
+                                    return `'required'`;
+                                }
+                                if (key === 'nullable') {
+                                    return `'nullable'`;
+                                }
+                                if (key === 'unique') {
+                                    return `Rule::unique('${to.snake(pluralize(entity.tableName))}', '${to.snake(name)}')->ignore($exampleEntity->id)`;
+                                }
+                                if (key === 'fieldType') {
+                                    return `'${value}'`;
+                                }
+                                if (key === 'minlength' || key === 'min') {
+                                    return `'min:${value}'`;
+                                }
+                                if (key === 'maxlength' || key === 'max') {
+                                    return `'max:${value}'`;
+                                }
+                                if (key === 'pattern') {
+                                    return `'regex:\/${value}\/'`;
+                                }
+                            });
+                            return acc;
+                        }, {}),
+                    fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,

@@ -1,4 +1,12 @@
 <?php
+<%
+function isEmpty(obj) {
+  for (let key in obj) {
+    return false;
+  }
+  return true;
+}
+-%>
 namespace App\Http\Controllers;
 
 use App\Models\<%- className %>;
@@ -11,6 +19,7 @@ use App\Traits\HandlesApiErrors;
 // use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class <%- className %>Controller extends Controller
 {
@@ -64,8 +73,20 @@ class <%- className %>Controller extends Controller
     public function store(Request $request)
     {
         try {
+<%  if(isEmpty(validationsStore)) {-%>
             $data = $request->all();
-
+<%  } else {-%>
+            $validated = $request->validate([
+<%      for (field in validationsStore) {-%>
+                '<%- field %>' => [
+<%          validationsStore[field].forEach(validation => {-%>
+                    <%- validation -%>,
+<%          })-%>
+                ],
+<%      }-%>
+            ]);
+            $data = $validated;
+<%  }-%>
 <%          fileFields.forEach((field) => {-%>
             if($request->input('<%-to.snake(field)%>.data')) {
                 $fileData = base64_decode($request->input('<%-to.snake(field)%>.data'));
@@ -102,8 +123,20 @@ class <%- className %>Controller extends Controller
 <%          } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%          } -%>
+<%  if(isEmpty(validationsUpdate)) {-%>
             $data = $request->all();
-
+<%  } else {-%>
+            $validated = $request->validate([
+<%      for (field in validationsUpdate) {-%>
+                '<%- field %>' => [
+<%          validationsUpdate[field].forEach(validation => {-%>
+                    <%- validation -%>,
+<%          })-%>
+                ],
+<%      }-%>
+            ]);
+            $data = $validated;
+<%  }-%>
             $filesToDelete = $request->input('filesToDelete', []);
             $filesToDeletePaths = array_map(fn($field): string => $<%- entityName %>[$field . '_path'] ?? null, $filesToDelete);
             foreach ($filesToDelete as $field) {
