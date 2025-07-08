@@ -7,8 +7,8 @@ for({type} of entity.body) {
 }
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'ImageBlob', false);
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'ImageBlob')).map(({name}) => name);
-const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
-const hasSelectNotMultiple = (relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
+const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
+const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
 const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
