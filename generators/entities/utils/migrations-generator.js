@@ -28,7 +28,6 @@ export class MigrationsGenerator {
             'Blob': 'binary',
             'AnyBlob': 'binary',
             'ImageBlob': 'binary',
-            // 'byte[]': 'binary',
             'TextBlob': 'text',
         };
 

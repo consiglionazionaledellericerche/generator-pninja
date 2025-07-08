@@ -139,9 +139,6 @@ export class FactoriesGenerator {
                 return 'fake()->time()';
             case 'Duration':
                 return 'fake()->numberBetween(1, 1000000)';
-            // case 'byte[]':
-            // case 'ByteBuffer':
-            //     return 'fake()->sha256()';
             case 'TextBlob':
                 return 'fake()->text()';
             case 'UUID':
