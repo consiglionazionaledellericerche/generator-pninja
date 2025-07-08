@@ -169,7 +169,7 @@ export class ControllersGenerator {
                             });
                             return acc;
                         }, {}),
-                    fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                    fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,

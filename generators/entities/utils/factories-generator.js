@@ -15,7 +15,7 @@ export class FactoriesGenerator {
         let manyToMany = [];
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
-            const params = entity.body.filter(c => c.type !== 'Blob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
+            const params = entity.body.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
 
             // Relationships OneToOne
             relationships.filter(relation => (

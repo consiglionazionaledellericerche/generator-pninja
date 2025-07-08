@@ -15,6 +15,7 @@ const convertFieldType = ({type}, enums) => {
         'Duration': 'number',
         'TextBlob': 'string',
         'Blob': 'Blob',
+        'AnyBlob': 'Blob',
         'ImageBlob': 'ImageBlob'
     };
 
@@ -49,7 +50,7 @@ import dayjs from 'dayjs';
 export interface I<%= entity.name %> {
   id?: number;
 <%  for (prop of entity.body) {-%>
-<%    if (!['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+<%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>?: <%= convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    } else {-%>
   <%= to.snake(prop.name) %>_path?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
@@ -67,7 +68,7 @@ export interface I<%= entity.name %> {
 
 export const defaultValue: Readonly<I<%= entity.name %>> = {
 <%  for (prop of entity.body) {-%>
-<%    if (!['Blob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
+<%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>: undefined,
 <%    } else {-%>
   <%= to.snake(prop.name) %>_path: undefined,

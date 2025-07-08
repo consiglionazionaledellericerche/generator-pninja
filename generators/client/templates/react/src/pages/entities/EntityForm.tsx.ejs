@@ -6,9 +6,9 @@ for({type} of entity.body) {
   }
 }
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);;
-const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'ImageBlob', false);
+const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
 const hasRequiredBlob = entity?.body
-  .filter(({ type }) => type === 'Blob' || type === 'ImageBlob')
+  .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
   .map(({ validations }) => validations)
   .reduce(
     (required, validation) =>
@@ -19,7 +19,7 @@ const hasRequiredBlob = entity?.body
       ),
     false
   );
-const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'ImageBlob')).map(({name}) => name);
+const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
 const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const hasRelated = (relatedEntities.length + foreignIds.length) > 0;
@@ -42,6 +42,7 @@ const fieldTypeToSchema = (type) => {
         'UUID': 'uuid',
         'TextBlob': 'string',
         'Blob': 'blob',
+        'AnyBlob': 'blob',
         'ImageBlob': 'image',
     };
     return typeMap[type] || 'string';
@@ -62,6 +63,7 @@ const fieldTypeToInputType = (type) => {
         'Duration': 'number',
         'TextBlob': 'textarea',
         'Blob': 'file',
+        'AnyBlob': 'file',
         'ImageBlob': 'file'
     };
     return typeMap[type] || 'text';
@@ -543,7 +545,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     if (<%= to.camel(entity.name)-%>) {
       reset({
 <% for({name, type, validations} of entity.body) {-%>
-<%  if (type !== 'Blob' && type !== 'ImageBlob') {-%>
+<%  if (type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
         <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %><%= isOptional(validations) ? ' ?? undefined' : '' %>,
 <%  } -%>
 <% } -%>
@@ -587,7 +589,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className="max-w-5xl mx-auto space-y-4">
 <%    for({name, type, validations} of entity.body) {-%>
-<%      if(type === 'Blob' || type === 'ImageBlob') {-%>
+<%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
         {renderFileField(
           '<%-to.snake(name)%>',
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
@@ -603,10 +605,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           </label>
 <%= getField(type, name) -%>
           {errors?.<%= to.snake(name) %>?.message && (
-<%      if(type !== 'Blob' && type !== 'ImageBlob') {-%>
+<%      if(type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
             <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
 <%      }-%>
-<%      if(type === 'Blob' || type === 'ImageBlob') {-%>
+<%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
             <p className="mt-1 text-sm text-red-600">{t(errors.<%= to.snake(name) %>.message, { maxSize: `${MAX_FILE_SIZE / 1024 / 1024}MB` })}</p>
 <%      }-%>
           )}

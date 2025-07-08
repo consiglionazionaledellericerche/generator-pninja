@@ -16,7 +16,7 @@ export class ModelsGenerator {
             const tableName = to.snake(pluralize(entity.tableName));
             // fillable from entity property
             const fillable = entity.body.reduce((acc, prop) => {
-                if (prop.type !== 'Blob' && prop.type !== 'ImageBlob') {
+                if (prop.type !== 'Blob' && prop.type !== 'AnyBlob' && prop.type !== 'ImageBlob') {
                     acc.push(`'${to.snake(prop.name)}'`);
                 } else {
                     acc.push(`'${to.snake(prop.name)}_path'`);
