@@ -3,7 +3,8 @@ import pluralize from 'pluralize';
 import { parseJDL } from '../../utils/jdlParser.js';
 import { getWits } from '../../utils/getWiths.js';
 
-const getValidations = (entity, relationships, op) => {
+const getValidations = (e, relationships, op) => {
+    const entity = structuredClone(e);
     return {
         ...entity.body
             .filter(field => !(['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type)))
