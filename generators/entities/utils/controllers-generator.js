@@ -113,7 +113,7 @@ const getValidations = (e, relationships, op) => {
                 const toTabName = pluralize(to.snake(relation.to.name));
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
-                const nullable = !relation.from.required;
+                const nullable = !relation.to.required;
                 acc[fromTabName] = [`'array'`];
                 if (nullable) acc[fromTabName].push(`'sometimes'`);
                 if (!nullable) acc[fromTabName].push(`'required'`);
@@ -130,7 +130,7 @@ const getValidations = (e, relationships, op) => {
                 const toTabName = pluralize(to.snake(relation.to.name));
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = false;
-                const nullable = !relation.to.required;
+                const nullable = !relation.from.required;
                 acc[toTabName] = [`'array'`];
                 if (nullable) acc[toTabName].push(`'sometimes'`);
                 if (!nullable) acc[toTabName].push(`'required'`);
