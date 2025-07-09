@@ -103,6 +103,40 @@ const getValidations = (entity, relationships, op) => {
                 if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
+        ...relationships
+            .filter(relation => (relation.cardinality === 'ManyToMany' && relation.to.name === entity.name)) // ManyToMany Relations [<---]
+            .reduce((acc, relation) => {
+                const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
+                const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
+                const fromTabName = pluralize(to.snake(relation.from.name));
+                const toTabName = pluralize(to.snake(relation.to.name));
+                const foreignId = `${toInjectedField}_id`;
+                const unique = false;
+                const nullable = !relation.from.required;
+                acc[fromTabName] = [`'array'`];
+                if (nullable) acc[fromTabName].push(`'sometimes'`);
+                if (!nullable) acc[fromTabName].push(`'required'`);
+                if (!nullable) acc[fromTabName].push(`'min:1'`);
+                acc[`${fromTabName}.*`] = [`'integer'`, `'exists:${fromTabName},id'`];
+                return acc;
+            }, {}),
+        ...relationships
+            .filter(relation => (relation.cardinality === 'ManyToMany' && relation.from.name === entity.name)) // ManyToMany Relations [--->]
+            .reduce((acc, relation) => {
+                const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
+                const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
+                const fromTabName = pluralize(to.snake(relation.from.name));
+                const toTabName = pluralize(to.snake(relation.to.name));
+                const foreignId = `${fromInjectedField}_id`;
+                const unique = false;
+                const nullable = !relation.to.required;
+                acc[toTabName] = [`'array'`];
+                if (nullable) acc[toTabName].push(`'sometimes'`);
+                if (!nullable) acc[toTabName].push(`'required'`);
+                if (!nullable) acc[toTabName].push(`'min:1'`);
+                acc[`${toTabName}.*`] = [`'integer'`, `'exists:${toTabName},id'`];
+                return acc;
+            }, {}),
     };
 }
 
@@ -142,15 +176,9 @@ export class ControllersGenerator {
                 const fromField = to.snake(relation.from.injectedField || relation.to.name);
                 const toEntity = relation.to.name;
                 if (relation.cardinality === 'ManyToMany') {
-                    createRelated.push(`
-            if(array_key_exists("${fromField}", $request->all())) {
-                $ids = array_map(function($o) {
-                    if(is_numeric($o)) return $o;
-                    if(array_key_exists("id", $o)) return (\\App\\Models\\${toEntity}::findOrFail($o["id"]))->id;
-                    return (\\App\\Models\\${toEntity}::create($o))->id;
-                }, $request->all()["${fromField}"]);
-                $${to.camel(entity.name)}->${fromField}()->sync($ids ?? []);
-            };`);
+                    createRelated.push(`\n            if(array_key_exists("${fromField}", $validated)) {
+                $${to.camel(entity.name)}->${fromField}()->sync($validated['${fromField}']);
+            }\n`);
                 }
             });
 
@@ -163,15 +191,9 @@ export class ControllersGenerator {
                 const toField = to.snake(relation.to.injectedField || relation.from.name);
                 const fromEntity = relation.from.name;
                 if (relation.cardinality === 'ManyToMany') {
-                    createRelated.push(`
-            if(array_key_exists("${toField}", $request->all())) {
-                $related = array_map(function($o) {
-                    if(is_numeric($o)) return \\App\\Models\\${fromEntity}::findOrFail($o);
-                    if(array_key_exists("id", $o)) return \\App\\Models\\${fromEntity}::findOrFail($o["id"]);
-                    return new \\App\\Models\\${fromEntity}($o);
-                }, $request->all()["${toField}"]);
-                $${to.camel(entity.name)}->${toField}()->sync($related ?? []);
-            };`);
+                    createRelated.push(`\n            if(array_key_exists("${toField}", $validated)) {
+                $${to.camel(entity.name)}->${toField}()->sync($validated['${toField}']);
+            }\n`);
                 }
             });
 
