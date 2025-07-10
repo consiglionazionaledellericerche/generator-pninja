@@ -25,6 +25,11 @@ const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.le
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const hasRelated = (relatedEntities.length + foreignIds.length) > 0;
 const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
+const getMin = (validations) => validations.reduce((min, validation) => validation.key === 'min' ? validation.value : min, undefined);
+const getMax = (validations) => validations.reduce((max, validation) => validation.key === 'max' ? validation.value : max, undefined);
+const getMinlength = (validations) => validations.reduce((minlength, validation) => validation.key === 'minlength' ? validation.value : minlength, undefined);
+const getMaxlength = (validations) => validations.reduce((maxlength, validation) => validation.key === 'maxlength' ? validation.value : maxlength, undefined);
+const getPattern = (validations) => validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined);
 const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
     const typeMap = {
@@ -199,8 +204,13 @@ const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entit
 const create<%= entity.name %>Schema = () => z.object({
 <%}-%>
 <%  for({name, type, validations} of entity.body) {-%>
-<%    if(fieldTypeToSchema(type) === 'string') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<%- isEmail(name) ? '.email()' : '' -%><%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
+<%    if(fieldTypeToSchema(type) === 'string') {console.log("\n");console.log(validations);console.log("\n");-%>
+  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<% -%>
+<%- isEmail(name) ? '.email()' : '' -%>
+<%- getMinlength(validations) ? `.min(${getMinlength(validations)})` : '' -%>
+<%- getMaxlength(validations) ? `.max(${getMaxlength(validations)})` : '' -%>
+<%- getPattern(validations) ? `.regex(/${getPattern(validations)}/)` : '' -%>
+<%= isOptional(validations) ? '.optional()' : '.nonempty()' -%>),
 <%    } if(fieldTypeToSchema(type) === 'uuid') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().uuid()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'date') {-%>
@@ -210,9 +220,15 @@ const create<%= entity.name %>Schema = () => z.object({
 <%    } if(fieldTypeToSchema(type) === 'time') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().time()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
 <%    } if(fieldTypeToSchema(type) === 'integer') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number().int()<%= isOptional(validations) ? '.optional()' : '' %>),
+  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number().int()<% -%>
+<%- getMin(validations) ? `.min(${getMin(validations)})` : '' -%>
+<%- getMax(validations) ? `.max(${getMax(validations)})` : '' -%>
+<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'number') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number()<%= isOptional(validations) ? '.optional()' : '' %>),
+  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number()<% -%>
+<%- getMin(validations) ? `.min(${getMin(validations)})` : '' -%>
+<%- getMax(validations) ? `.max(${getMax(validations)})` : '' -%>
+<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'boolean') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.boolean()<%= isOptional(validations) ? '.optional()' : '' %>),
 <%    } if(fieldTypeToSchema(type) === 'blob' || fieldTypeToSchema(type) === 'image') {-%>
