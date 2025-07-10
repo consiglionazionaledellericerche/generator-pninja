@@ -20,6 +20,7 @@ const hasRequiredBlob = entity?.body
     false
   );
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
+const hasCheckbox = entity?.body.filter(({type}) => type === 'Boolean').length > 0;
 const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const hasRelated = (relatedEntities.length + foreignIds.length) > 0;
@@ -573,8 +574,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+<%  if (hasCheckbox) {-%>
   const checkBoxClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
+<%  } -%>
 <%  if (hasSelect) {-%>
   const selectContainerClassName = 'grid grid-cols-1';
   const selectClassName = (hasErrors = false) =>
