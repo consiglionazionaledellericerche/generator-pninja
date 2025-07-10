@@ -78,9 +78,10 @@ const fieldTypeToInputType = (type) => {
 }
 const fieldTypeToInputStep = (type) => {
     const stepMap = {
-        'BigDecimal': 'any',
-        'Float': 'any',
-        'Double': 'any',
+        'BigDecimal': `'any'`,
+        'Float': `'any'`,
+        'Double': `'any'`,
+        'Integer': 1,
         'ZonedDateTime': 1,
         'LocalTime': 1,
         'Instant': 1
@@ -88,7 +89,7 @@ const fieldTypeToInputStep = (type) => {
     return stepMap[type] || null;
 }
 
-const getField = (type, name) => {
+const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
           <div className={selectContainerClassName}>
@@ -116,9 +117,9 @@ const getField = (type, name) => {
 <%        }-%>
           <input
             type="<%- T %>"
-<%          if (!!STEP) {-%>
-            step="<%- STEP %>"
-<%          }-%>
+<%        if (!!STEP) {-%>
+            step={<%- STEP %>}
+<%        }-%>
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
             className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)<% if (type === 'UUID') {%> + ' col-start-1 row-start-1'<%}%>}
@@ -615,7 +616,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
 <%  } -%>
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
       <div className="max-w-5xl mx-auto space-y-4">
 <%    for({name, type, validations} of entity.body) {-%>
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
@@ -630,9 +631,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      } else {-%>
         <div>
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
-            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}<% if(!isOptional(validations)) {%> *<%}-%>
           </label>
-<%= getField(type, name) -%>
+<%= getField(type, name, validations) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
             <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
