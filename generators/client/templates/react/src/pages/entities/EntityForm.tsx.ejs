@@ -119,7 +119,10 @@ const getField = (type, name) => {
 <%        if (type === 'UUID') {-%>
             <button
               type="button"
-              onClick={() => setValue('<%= to.snake(name) %>', uuidv4())}
+              onClick={() => {
+                setValue('<%= to.snake(name) %>', uuidv4());
+                trigger('<%= to.snake(name) %>');  // Re-validate the field
+              }}
               className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 size-5 self-center justify-self-end text-gray-500 sm:size-4"
               title={t('actions.crud.generateUUID')}
             >
@@ -308,6 +311,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     reset,
 <%  if (hasBlob || hasUUID) {-%>
     setValue,
+    trigger
 <%  }-%>
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
@@ -358,6 +362,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       newSet.delete(fieldName);
       return newSet;
     });
+    setTimeout(() => {
+      trigger(fieldName); // Re-validate the field
+    }, 0);
   };
 
   const hasExistingFile = (
