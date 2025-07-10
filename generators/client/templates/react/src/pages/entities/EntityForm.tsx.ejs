@@ -29,6 +29,8 @@ const getMin = (validations) => validations.reduce((min, validation) => validati
 const getMax = (validations) => validations.reduce((max, validation) => validation.key === 'max' ? validation.value : max, undefined);
 const getMinlength = (validations) => validations.reduce((minlength, validation) => validation.key === 'minlength' ? validation.value : minlength, undefined);
 const getMaxlength = (validations) => validations.reduce((maxlength, validation) => validation.key === 'maxlength' ? validation.value : maxlength, undefined);
+const getMinbytes = (validations) => validations.reduce((minbytes, validation) => validation.key === 'minbytes' ? validation.value : minbytes, undefined);
+const getMaxbytes = (validations) => validations.reduce((maxbytes, validation) => validation.key === 'maxbytes' ? validation.value : maxbytes, undefined);
 const getPattern = (validations) => validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined);
 const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
@@ -204,7 +206,7 @@ const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entit
 const create<%= entity.name %>Schema = () => z.object({
 <%}-%>
 <%  for({name, type, validations} of entity.body) {-%>
-<%    if(fieldTypeToSchema(type) === 'string') {console.log("\n");console.log(validations);console.log("\n");-%>
+<%    if(fieldTypeToSchema(type) === 'string') {-%>
   <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<% -%>
 <%- isEmail(name) ? '.email()' : '' -%>
 <%- getMinlength(validations) ? `.min(${getMinlength(validations)})` : '' -%>
@@ -253,7 +255,8 @@ const create<%= entity.name %>Schema = () => z.object({
 <%       if(fieldTypeToSchema(type) === 'image'){-%>
   .refine((file) => file?.type === undefined || file?.type?.startsWith('image/'), { message: `errors.validations.file.typeImage` })
 <%        } -%>
-  .refine((file) => (file?.size ?? 0) <= MAX_FILE_SIZE, { message: `errors.validations.file.size` }),
+<%- getMinbytes(validations) ? `  .refine((file) => (file?.size ?? 0) >= ${getMinbytes(validations)} || (file?.size ?? 0) === 0, { message: 'error.validations.file.minSize' })\n` : '' -%>
+  .refine((file) => (file?.size ?? 0) <= <%- getMaxbytes(validations) ? getMaxbytes(validations) : 'MAX_FILE_SIZE' %>, { message: 'errors.validations.file.maxSize' }),
 <%    } -%>
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
