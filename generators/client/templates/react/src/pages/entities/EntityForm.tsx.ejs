@@ -89,7 +89,7 @@ const fieldTypeToInputStep = (type) => {
     return stepMap[type] || null;
 }
 
-const getField = (type, name, validations) => {
+const getField = (type, name) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
           <div className={selectContainerClassName}>
@@ -176,11 +176,12 @@ import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob) {-%>
+import prettyBytes from 'pretty-bytes';
 import { File as FileIcon, FileImage as FileImageIcon, Edit, Trash2, Undo2 } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
-  : 20 * 1024 * 1024; // 20MB default
+  : 20000000; // 20MB default
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -256,7 +257,7 @@ const create<%= entity.name %>Schema = () => z.object({
 <%       if(fieldTypeToSchema(type) === 'image'){-%>
   .refine((file) => file?.type === undefined || file?.type?.startsWith('image/'), { message: `errors.validations.file.typeImage` })
 <%        } -%>
-<%- getMinbytes(validations) ? `  .refine((file) => (file?.size ?? 0) >= ${getMinbytes(validations)} || (file?.size ?? 0) === 0, { message: 'error.validations.file.minSize' })\n` : '' -%>
+<%- getMinbytes(validations) ? `  .refine((file) => (file?.size ?? 0) >= ${getMinbytes(validations)} || (file?.size ?? 0) === 0, { message: 'errors.validations.file.minSize' })\n` : '' -%>
   .refine((file) => (file?.size ?? 0) <= <%- getMaxbytes(validations) ? getMaxbytes(validations) : 'MAX_FILE_SIZE' %>, { message: 'errors.validations.file.maxSize' }),
 <%    } -%>
 <%  } -%>
@@ -400,7 +401,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     nameField: string | null | undefined,
     typeField: string | null | undefined,
     label: string,
-    accept?: string
+    accept: string | null | undefined,
+    minSize: number | null | undefined,
+    maxSize: number | null | undefined,
   ) => {
     const hasFile = hasExistingFile(pathField, nameField);
     const shouldShowInput = !hasFile || showFileInputs[fieldName];
@@ -481,7 +484,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <input
               type="file"
               id={fieldName}
-              accept={accept}
+              accept={accept ?? '*/*'}
               {...register(fieldName)}
               className={inputClassName(!!errors?.[fieldName]?.message)}
             />
@@ -500,7 +503,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         {errors?.[fieldName]?.message && (
           <p className="mt-1 text-sm text-red-600">
             {t(errors[fieldName].message as string, {
-              maxSize: `${MAX_FILE_SIZE / 1024 / 1024}MB`,
+              minSize: prettyBytes(minSize ?? 0), 
+              maxSize: prettyBytes(maxSize ?? MAX_FILE_SIZE),
+              actualSize: prettyBytes(
+                (document.getElementById(fieldName) as HTMLInputElement).files?.[0]?.size ?? 0
+              ),
             })}
           </p>
         )}
@@ -625,15 +632,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type,
-          t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')<%if(type === 'ImageBlob') {-%>,
-          'image/*'<%}-%>
+          t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>'),
+          <%- type === 'ImageBlob' ? `'image/*'` : `undefined` %>,
+          <%- getMinbytes(validations) ?? `undefined` %>,
+          <%- getMaxbytes(validations) ?? `undefined` %>
         )}
 <%      } else {-%>
         <div>
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}<% if(!isOptional(validations)) {%> *<%}-%>
           </label>
-<%= getField(type, name, validations) -%>
+<%= getField(type, name) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
             <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>

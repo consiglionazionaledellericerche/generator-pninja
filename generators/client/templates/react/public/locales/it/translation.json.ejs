@@ -74,7 +74,8 @@
     "validations": {
       "required": "Obbligatorio",
       "file": {
-        "size": "Il file è troppo grande. La dimensione massima consentita è {{maxSize}}.",
+        "minSize": "Il file deve essere di almeno {{minSize}}. Dimensione attuale: {{actualSize}}",
+        "maxSize": "Il file non può superare {{maxSize}}. Dimensione attuale: {{actualSize}}",
         "type": "Il tipo di file non è supportato",
         "typeImage": "Il file deve essere un'immagine"
       }

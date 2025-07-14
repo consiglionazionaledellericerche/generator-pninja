@@ -75,7 +75,8 @@
       "required": "Required",
       "file": {
         "required": "The file is required",
-        "size": "The file is too large. The maximum allowed size is {{maxSize}}.",
+        "minSize": "The file must be at least {{minSize}}. Current size: {{actualSize}}",
+        "maxSize": "The file cannot exceed {{maxSize}}. Current size: {{actualSize}}",
         "type": "The file type is not supported",
         "typeImage": "The file must be an image"
       }
