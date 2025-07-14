@@ -332,8 +332,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     reset,
 <%  if (hasBlob || hasUUID) {-%>
     setValue,
-    trigger
 <%  }-%>
+    trigger
   } = useForm<<%= entity.name %>FormData>({
     resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
   });
