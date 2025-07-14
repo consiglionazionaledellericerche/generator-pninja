@@ -175,9 +175,9 @@ import { ChevronsUpDown } from 'lucide-react';
 import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
-<% if (hasBlob) {-%>
+<% if (hasBlob) {%>
 import prettyBytes from 'pretty-bytes';
-import { File as FileIcon, FileImage as FileImageIcon, Edit, Trash2, Undo2 } from 'lucide-react';
+import { File as FileIcon, FileImage as FileImageIcon, EditIcon, Trash2Icon, Undo2Icon } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
@@ -299,7 +299,7 @@ interface SelectOption {
 <% } -%>
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const { addNotification } = useNotifications();
   useAutoShortcuts();
   const { fetch } = useApi();
@@ -437,7 +437,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                   onClick={() => toggleFileInput(fieldName)}
                   className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                 >
-                  <Edit className="mr-1 h-4 w-4" />
+                  <EditIcon className="mr-1 h-4 w-4" />
                   {t('actions.crud.edit')}
                 </button>
                 <button
@@ -445,7 +445,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                   onClick={() => markFileForDeletion(fieldName)}
                   className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                 >
-                  <Trash2 className="mr-1 h-4 w-4" />
+                  <Trash2Icon className="mr-1 h-4 w-4" />
                   {t('actions.crud.delete')}
                 </button>
               </div>
@@ -457,7 +457,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-red-800 dark:text-red-200">
-                <Trash2 className="mr-2 h-4 w-4" />
+                <Trash2Icon className="mr-2 h-4 w-4" />
                 <span className="text-sm font-medium">
                   {t('actions.crud.file.markedForDeletion')}
                 </span>
@@ -467,7 +467,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 onClick={() => unmarkFileForDeletion(fieldName)}
                 className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
               >
-                <Undo2 className="mr-2 h-4 w-4" />
+                <Undo2Icon className="mr-2 h-4 w-4" />
                 {t('common.undo')}
               </button>
             </div>
@@ -605,6 +605,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     });
 <%}-%>
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
+
+  useEffect(() => {
+    Object.keys(errors).forEach((fieldName) => {
+      trigger(fieldName as string);
+    });
+  }, [i18n.language]);
 
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
