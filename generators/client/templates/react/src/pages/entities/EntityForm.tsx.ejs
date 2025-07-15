@@ -192,7 +192,7 @@ function fileToBase64(file: File): Promise<string> {
         reject(new Error('Failed to read file as data URL'));
         return;
       }
-      // Rimuove "data:mime/type;base64," e mantiene solo il base64
+      // Removes "data:mime/type;base64," and keeps only the base64
       const base64 = result.split(',')[1];
       resolve(base64);
     };
