@@ -263,7 +263,7 @@ const create<%= entity.name %>Schema = () => z.object({
 <%  } -%>
 <%  for({field, related, nullable, isArray} of relatedEntities) {-%>
 <%    if(isArray) {-%>
-  <%= to.snake(field) %>: z.array(z.string())<% if (!nullable && false) {-%>.nonempty()<%}-%>,
+  <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>,
 <%    } else {-%>
   <%= to.snake(field) %>_id: z.string()<%- nullable ? ',' : ''%>
 <%      if (!nullable) {-%>
