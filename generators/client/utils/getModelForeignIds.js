@@ -8,7 +8,7 @@ export function getModelForeignIds(entity, relationships) {
         .forEach(relation => {
             const injectedField = to.snake(relation.to.injectedField || relation.from.name);
             const foreignId = `${injectedField}_id`;
-            const nullable = !relation.from.required;
+            const nullable = !relation.to.required;
             const related = relation.from.name;
             const labelField = relation.to.injectedFieldLabel;
             const cardinality = relation.cardinality;

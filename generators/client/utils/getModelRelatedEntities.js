@@ -36,7 +36,7 @@ export function getModelRelatedEntities(entity, relationships) {
         field: to.snake(relation.to.injectedField || relation.from.name),
         labelField: relation.to.injectedFieldLabel,
         related: relation.from.name,
-        nullable: !relation.from.required,
+        nullable: !relation.to.required,
         isArray: relation.cardinality === 'ManyToMany',
         cardinality: relation.cardinality,
       });
@@ -45,7 +45,8 @@ export function getModelRelatedEntities(entity, relationships) {
   // OneToOne/ManyToOne direct relationships
   relationships
     .filter(relation => (
-      (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.from.name === entity.name
+      (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne')
+      && relation.from.name === entity.name
       && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
     ))
     .forEach(relation => {
@@ -53,6 +54,7 @@ export function getModelRelatedEntities(entity, relationships) {
         field: to.snake(relation.from.injectedField || relation.to.name),
         labelField: relation.from.injectedFieldLabel,
         related: relation.to.name,
+        nullable: !relation.from.required,
         isArray: false,
         cardinality: relation.cardinality,
       });
@@ -73,6 +75,6 @@ export function getModelRelatedEntities(entity, relationships) {
         cardinality: relation.cardinality,
       });
     });
-
+  if (entity.name === 'Employee') console.log(`>>> relatedEntities ${entity.name}`, relatedEntities);
   return relatedEntities;
 }
