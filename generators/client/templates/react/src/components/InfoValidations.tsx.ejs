@@ -1,0 +1,105 @@
+import { useTranslation } from 'react-i18next';
+import { Button, OverlayArrow, Tooltip, TooltipTrigger } from 'react-aria-components';
+import { AsteriskIcon, InfoIcon } from 'lucide-react';
+import prettyBytes from 'pretty-bytes';
+
+interface InfoValidationsProps {
+  validations: IInfoValidations;
+}
+interface IInfoValidations {
+  min?: string;
+  minbytes?: string;
+  minlength?: string;
+  max?: string;
+  maxbytes?: string;
+  maxlength?: string;
+  pattern?: string;
+  required?: string;
+  unique?: string;
+}
+
+const InfoRequired: React.FC = () => {
+  const { t } = useTranslation();
+  return (
+    <TooltipTrigger delay={0}>
+      <Button>
+        <AsteriskIcon className="size-5 sm:size-4" />
+      </Button>
+      <Tooltip>
+        <OverlayArrow>
+          <svg width={8} height={8} viewBox="0 0 8 8" className="fill-slate-300 dark:fill-gray-600">
+            <path d="M0 0 L4 4 L8 0" />
+          </svg>
+        </OverlayArrow>
+        <div className="bg-slate-300 text-slate-700 dark:bg-gray-600 dark:text-gray-100 text-sm p-2 rounded-lg">
+          {t('info.validations.required')}
+        </div>
+      </Tooltip>
+    </TooltipTrigger>
+  );
+};
+
+const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
+  const { t } = useTranslation();
+  console.log('InfoValidations', validations);
+  return (
+    <>
+      {validations.hasOwnProperty('required') && <InfoRequired />}
+      {Object.keys(validations).some((validation) =>
+        ['min', 'max', 'minbytes', 'maxbytes', 'minlength', 'maxlength', 'unique'].includes(
+          validation
+        )
+      ) && (
+        <TooltipTrigger delay={0}>
+          <Button>
+            <InfoIcon className="size-5 sm:size-4" />
+          </Button>
+          <Tooltip>
+            <OverlayArrow>
+              <svg
+                width={8}
+                height={8}
+                viewBox="0 0 8 8"
+                className="fill-slate-300 dark:fill-gray-600"
+              >
+                <path d="M0 0 L4 4 L8 0" />
+              </svg>
+            </OverlayArrow>
+            <div className="bg-slate-300 text-slate-700 dark:bg-gray-600 dark:text-gray-100 text-sm p-2 rounded-lg">
+              {validations.hasOwnProperty('min') && (
+                <div>{t(`info.validations.min`, { min: validations?.min })}</div>
+              )}
+              {validations.hasOwnProperty('max') && (
+                <div>{t(`info.validations.max`, { max: validations?.max })}</div>
+              )}
+              {validations.hasOwnProperty('minbytes') && (
+                <div>
+                  {t(`info.validations.minbytes`, {
+                    min: prettyBytes(Number(validations?.minbytes)),
+                  })}
+                </div>
+              )}
+              {validations.hasOwnProperty('maxbytes') && (
+                <div>
+                  {t(`info.validations.maxbytes`, {
+                    max: prettyBytes(Number(validations?.maxbytes)),
+                  })}
+                </div>
+              )}
+              {validations.hasOwnProperty('minlength') && (
+                <div>{t(`info.validations.minlength`, { min: validations?.minlength })}</div>
+              )}
+              {validations.hasOwnProperty('maxlength') && (
+                <div>{t(`info.validations.maxlength`, { max: validations?.maxlength })}</div>
+              )}
+              {validations.hasOwnProperty('unique') && <div>{t(`info.validations.unique`)}</div>}
+            </div>
+          </Tooltip>
+        </TooltipTrigger>
+      )}
+    </>
+  );
+};
+
+export { InfoValidations };
+export type { IInfoValidations };

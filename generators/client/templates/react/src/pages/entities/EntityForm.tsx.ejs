@@ -131,7 +131,7 @@ const getField = (type, name) => {
                 setValue('<%= to.snake(name) %>', uuidv4());
                 trigger('<%= to.snake(name) %>');  // Re-validate the field
               }}
-              className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+              className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
               title={t('actions.generateUUID')}
             >
               <RefreshCw className="h-full" />
@@ -177,7 +177,8 @@ import { RefreshCw } from 'lucide-react';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob) {%>
 import prettyBytes from 'pretty-bytes';
-import { File as FileIcon, FileImage as FileImageIcon, EditIcon, Trash2Icon, Undo2Icon } from 'lucide-react';
+import { InfoValidations, IInfoValidations } from '../../components/InfoValidations';
+import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
   ? parseInt(import.meta.env.VITE_MAX_FILE_SIZE)
@@ -397,6 +398,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const renderFileField = (
     fieldName: keyof typeof showFileInputs,
+    validations: IInfoValidations,
     pathField: string | null | undefined,
     nameField: string | null | undefined,
     typeField: string | null | undefined,
@@ -411,12 +413,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
     return (
       <div>
-        <label htmlFor={fieldName} className="block text-sm font-medium">
+        <label htmlFor={fieldName} className="block text-sm font-medium flex items-center gap-1">
           {label}
+          <InfoValidations validations={validations} />
         </label>
 
         {hasFile && !showFileInputs[fieldName] && !isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-lg">
+          <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
             <div className="flex items-center justify-between">
               <a
                 href={`/api/files/${pathField}`}
@@ -454,7 +457,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         )}
 
         {isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-red-800 dark:text-red-200">
                 <Trash2Icon className="mr-2 h-4 w-4" />
@@ -613,15 +616,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }, [i18n.language]);
 
   const inputClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 <%  if (hasCheckbox) {-%>
   const checkBoxClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
 <%  } -%>
 <%  if (hasSelect) {-%>
   const selectContainerClassName = 'grid grid-cols-1';
   const selectClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-lg block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
+    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
   const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;
 <%  } -%>
 <%  if (hasSelectNotMultiple) {-%>
@@ -635,6 +638,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
         {renderFileField(
           '<%-to.snake(name)%>',
+          <%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name,
           <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type,
@@ -645,8 +649,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         )}
 <%      } else {-%>
         <div>
-          <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium">
-            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}<% if(!isOptional(validations)) {%> *<%}-%>
+          <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium flex items-center gap-1">
+            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+            <InfoValidations validations={<%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>} />
           </label>
 <%= getField(type, name) -%>
           {errors?.<%= to.snake(name) %>?.message && (
@@ -662,8 +667,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%    }-%>
 <%    for({field, related, isArray} of relatedEntities) {-%>
         <div>
-          <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium">
+          <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium flex items-center gap-1">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
+            *******
           </label>
           <div className={selectContainerClassName}>
             <select
@@ -696,8 +702,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%    }-%>
 <%    for({foreignId, related, isArray} of foreignIds) {-%>
         <div>
-          <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium">
+          <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium flex items-center gap-1">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
+            xxxxxx
           </label>
           <div className={selectContainerClassName}>
             <select
