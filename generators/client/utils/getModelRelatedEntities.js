@@ -75,6 +75,5 @@ export function getModelRelatedEntities(entity, relationships) {
         cardinality: relation.cardinality,
       });
     });
-  if (entity.name === 'Employee') console.log(`>>> relatedEntities ${entity.name}`, relatedEntities);
   return relatedEntities;
 }
