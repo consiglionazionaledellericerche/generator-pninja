@@ -79,7 +79,7 @@ const getValidations = (e, relationships, op) => {
                 const toTabName = pluralize(to.snake(relation.to.name));
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
-                const nullable = !relation.from.required;
+                const nullable = !relation.to.required;
                 acc[foreignId] = [`Rule::exists('${fromTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
