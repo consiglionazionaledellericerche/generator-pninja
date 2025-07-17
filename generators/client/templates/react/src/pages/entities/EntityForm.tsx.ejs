@@ -156,6 +156,7 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 <% }-%>
 import * as z from 'zod';
+import { InfoValidations, IInfoValidations } from '../../components/InfoValidations';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
 <%  if (related !== entity.name) {-%>
@@ -177,7 +178,6 @@ import { RefreshCw } from 'lucide-react';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob) {%>
 import prettyBytes from 'pretty-bytes';
-import { InfoValidations, IInfoValidations } from '../../components/InfoValidations';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon } from 'lucide-react';
 
 const MAX_FILE_SIZE = import.meta.env.VITE_MAX_FILE_SIZE
@@ -665,11 +665,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         </div>
 <%      }-%>
 <%    }-%>
-<%    for({field, related, isArray} of relatedEntities) {-%>
+<%    for({field, related, isArray, nullable} of relatedEntities) {-%>
         <div>
           <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium flex items-center gap-1">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
-            *******
+<%          if(!nullable) {-%>
+            <InfoValidations validations={{"required":""}} />
+<%          }-%>
           </label>
           <div className={selectContainerClassName}>
             <select
@@ -700,11 +702,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           )}
         </div>
 <%    }-%>
-<%    for({foreignId, related, isArray} of foreignIds) {-%>
+<%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
         <div>
           <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium flex items-center gap-1">
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
-            xxxxxx
+<%          if(!nullable) {-%>
+            <InfoValidations validations={{"required":""}} />
+<%          }-%>
           </label>
           <div className={selectContainerClassName}>
             <select
