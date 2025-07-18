@@ -41,7 +41,6 @@ const InfoRequired: React.FC = () => {
 
 const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
   const { t } = useTranslation();
-  console.log('InfoValidations', validations);
   return (
     <>
       {validations.hasOwnProperty('required') && <InfoRequired />}
