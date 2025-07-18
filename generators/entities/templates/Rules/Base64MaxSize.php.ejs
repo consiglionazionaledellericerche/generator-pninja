@@ -36,7 +36,7 @@ class Base64MaxSize implements Rule
         $actualFormatted = $this->formatBytes($this->actualSizeBytes);
         $maxFormatted = $this->formatBytes($this->maxSizeBytes);
 
-        return "File is too large: {$this->actualSizeBytes} bytes ({$actualFormatted}). " .
+        return "The :attribute field file is too large: {$this->actualSizeBytes} bytes ({$actualFormatted}). " .
                "Maximum allowed size is {$this->maxSizeBytes} bytes ({$maxFormatted}).";
     }
 

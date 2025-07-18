@@ -36,7 +36,7 @@ class Base64MinSize implements Rule
         $actualFormatted = $this->formatBytes($this->actualSizeBytes);
         $minFormatted = $this->formatBytes($this->minSizeBytes);
 
-        return "File is too small: {$this->actualSizeBytes} bytes ({$actualFormatted}). " .
+        return "The :attribute field file is too small: {$this->actualSizeBytes} bytes ({$actualFormatted}). " .
                "Minimum allowed size is {$this->minSizeBytes} bytes ({$minFormatted}).";
     }
 
