@@ -16,6 +16,9 @@ use App\Models\<%- name %>;
 <%      })-%>
 <%  }-%>
 use App\Traits\HandlesApiErrors;
+// use App\Traits\HandlesUserRoles;
+use App\Rules\Base64MaxSize;
+use App\Rules\Base64MinSize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;

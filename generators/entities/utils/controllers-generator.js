@@ -7,7 +7,6 @@ const getValidations = (e, relationships, op) => {
     const entity = structuredClone(e);
     return {
         ...entity.body
-            .filter(field => !(['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type)))
             .map(field => {
                 const { validations } = field;
                 if (field.type === 'UUID') field.validations.unshift({ key: 'pattern', value: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' });
@@ -21,9 +20,9 @@ const getValidations = (e, relationships, op) => {
             })
             .reduce((acc, field) => {
                 const { name, validations } = field;
-                acc[to.snake(name)] = validations.map(({ key, value }) => {
+                acc[`${to.snake(name)}${['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type) ? '.data' : ''}`] = validations.map(({ key, value }) => {
                     if (key === 'required') {
-                        return `'required'`;
+                        return (['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type) && op === 'update') ? `'nullable'` : `'required'`;
                     }
                     if (key === 'nullable') {
                         return `'nullable'`;
@@ -42,6 +41,12 @@ const getValidations = (e, relationships, op) => {
                     }
                     if (key === 'maxlength' || key === 'max') {
                         return `'max:${value}'`;
+                    }
+                    if (key === 'minbytes') {
+                        return `new Base64MinSize(${value})`;
+                    }
+                    if (key === 'maxbytes') {
+                        return `new Base64MaxSize(${value})`;
                     }
                     if (key === 'pattern') {
                         return `'regex:\/${value}\/'`;
@@ -154,6 +159,11 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
+
+        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
+
+
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), {});
 
@@ -223,6 +233,10 @@ export class ControllersGenerator {
                     relatedEntitiesForFilters,
                     to,
                 });
+            console.log({
+                validationsStore: getValidations(entity, relationships, 'store'),
+                validationsUpdate: getValidations(entity, relationships, 'update')
+            });
         }
     }
 }
