@@ -43,10 +43,10 @@ const getValidations = (e, relationships, op) => {
                         return `'max:${value}'`;
                     }
                     if (key === 'minbytes') {
-                        return `new Base64MinSize(${value})`;
+                        return `'base64_min_size:${value}'`;
                     }
                     if (key === 'maxbytes') {
-                        return `new Base64MaxSize(${value})`;
+                        return `'base64_max_size:${value}'`;
                     }
                     if (key === 'pattern') {
                         return `'regex:\/${value}\/'`;
@@ -159,11 +159,9 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
-
+        this.that.fs.copyTpl(this.that.templatePath("Providers/AppServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
-
-
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), {});
 

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+use App\Rules\Base64MaxSize;
+use App\Rules\Base64MinSize;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot()
+    {
+        Validator::extend('base64_max_size', function ($attribute, $value, $parameters) {
+            return (new Base64MaxSize($parameters[0] ?? 0))->passes($attribute, $value);
+        });
+
+        Validator::replacer('base64_max_size', function ($message, $attribute, $rule, $parameters, $validator) {
+            $rule = new Base64MaxSize($parameters[0] ?? 0);
+            $rule->passes($attribute, data_get($validator->getData(), $attribute));
+            return str_replace(':attribute', str_replace(['.', '_'], ' ', $attribute), $rule->message());
+        });
+
+        Validator::extend('base64_min_size', function ($attribute, $value, $parameters) {
+            return (new Base64MinSize($parameters[0] ?? 0))->passes($attribute, $value);
+        });
+
+        Validator::replacer('base64_min_size', function ($message, $attribute, $rule, $parameters, $validator) {
+            $rule = new Base64MinSize($parameters[0] ?? 0);
+            $rule->passes($attribute, data_get($validator->getData(), $attribute));
+            return str_replace(':attribute', str_replace(['.', '_'], ' ', $attribute), $rule->message());
+        });
+    }
+}
