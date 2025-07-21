@@ -78,15 +78,19 @@ class <%- className %>Controller extends Controller
 <%  } else {-%>
             $validated = $request->validate([
 <%      for (field in validationsStore) {-%>
+<%          if(!fileFields.includes(field)) { -%>
                 '<%- field %>' => [
 <%          validationsStore[field].forEach(validation => {-%>
-<%  if (validation !== "'required-blob'") { -%>
                     <%- validation %>,
-<%  } else {-%>
-                    'required',
-<%  } -%>
 <%          })-%>
                 ],
+<%          } else {-%>
+                '<%- field %>.data' => [
+<%          validationsStore[field].forEach(validation => {-%>
+                    <%- validation %>,
+<%          })-%>
+                ],
+<%          } -%>
 <%      }-%>
             ]);
             $data = $validated;
@@ -141,15 +145,23 @@ class <%- className %>Controller extends Controller
 <%  } else {-%>
             $validated = $request->validate([
 <%      for (field in validationsUpdate) {-%>
+<%          if(!fileFields.includes(field)) { -%>
                 '<%- field %>' => [
 <%          validationsUpdate[field].forEach(validation => {-%>
-<%  if (validation !== "'required-blob'") { -%>
+                    <%- validation %>,
+<%          })-%>
+                ],
+<%          } else {-%>
+                '<%- field %>.data' => [
+<%          validationsUpdate[field].forEach(validation => {-%>
+<%  if (validation !== "'required'") { -%>
                     <%- validation %>,
 <%  } else {-%>
-                    $<%- entityName %>['<%- field.replace(/\.data$/,'') %>_path'] ? 'nullable' : 'required',
+                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
 <%  } -%>
 <%          })-%>
                 ],
+<%          } -%>
 <%      }-%>
             ]);
             $data = $validated;
