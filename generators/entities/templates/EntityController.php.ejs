@@ -100,11 +100,15 @@ class <%- className %>Controller extends Controller
                 '<%- field %>.originalName' => [
                     'required',
                 ],
-<%              } -%>
-<%              if (imageFields.includes(field) && !validationsStore[field].includes("'required'")) { -%>
+<%              } else {-%>
+<%                  if (imageFields.includes(field)) { -%>
                 '<%- field %>.mimeType' => [
                     'nullable',
                     'image_mimetype',
+                ],
+<%                  } -%>
+                '<%- field %>.originalName' => [
+                    'nullable',
                 ],
 <%              } -%>
 <%          } -%>
@@ -188,11 +192,15 @@ class <%- className %>Controller extends Controller
                 '<%- field %>.originalName' => [
                     $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
                 ],
-<%              } -%>
-<%              if (imageFields.includes(field) && !validationsUpdate[field].includes("'required'")) { -%>
+<%              } else {-%>
+<%                  if (imageFields.includes(field)) { -%>
                 '<%- field %>.mimeType' => [
                     'nullable',
                     'image_mimetype',
+                ],
+<%                  } -%>
+                '<%- field %>.originalName' => [
+                    'nullable',
                 ],
 <%              } -%>
 <%          } -%>
