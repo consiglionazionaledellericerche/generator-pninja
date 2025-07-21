@@ -98,6 +98,11 @@ class <%- className %>Controller extends Controller
                     'required',
                 ],
 <%              } -%>
+<%              if (imageFields.includes(field) && !validationsStore[field].includes("'required'")) { -%>
+                '<%- field %>.mimeType' => [
+                    'regex:/^image\/.*$/',
+                ],
+<%              } -%>
 <%          } -%>
 <%      }-%>
             ]);
@@ -175,6 +180,11 @@ class <%- className %>Controller extends Controller
                 ],
                 '<%- field %>.originalName' => [
                     $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+                ],
+<%              } -%>
+<%              if (imageFields.includes(field) && !validationsStore[field].includes("'required'")) { -%>
+                '<%- field %>.mimeType' => [
+                    'regex:/^image\/.*$/',
                 ],
 <%              } -%>
 <%          } -%>

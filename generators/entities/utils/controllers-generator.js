@@ -226,6 +226,7 @@ export class ControllersGenerator {
                     validationsStore: getValidations(entity, relationships, 'store'),
                     validationsUpdate: getValidations(entity, relationships, 'update'),
                     fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                    imageFields: entity.body.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,
