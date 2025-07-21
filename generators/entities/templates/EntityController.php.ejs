@@ -90,6 +90,14 @@ class <%- className %>Controller extends Controller
                     <%- validation %>,
 <%          })-%>
                 ],
+<%              if (validationsStore[field].includes("'required'")) { -%>
+                '<%- field %>.mimeType' => [
+                    'required',
+                ],
+                '<%- field %>.originalName' => [
+                    'required',
+                ],
+<%              } -%>
 <%          } -%>
 <%      }-%>
             ]);
@@ -161,6 +169,14 @@ class <%- className %>Controller extends Controller
 <%  } -%>
 <%          })-%>
                 ],
+<%              if (validationsStore[field].includes("'required'")) { -%>
+                '<%- field %>.mimeType' => [
+                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+                ],
+                '<%- field %>.originalName' => [
+                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+                ],
+<%              } -%>
 <%          } -%>
 <%      }-%>
             ]);
