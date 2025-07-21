@@ -22,6 +22,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Validator::extend('image_mimetype', function ($attribute, $value, $parameters) {
+            \Log::debug('Validating image_mimetype for attribute: ' . $attribute, ['value' => $value]);
+            return preg_match('/^image\/.*$/', $value) === 1;
+        });
+
+        Validator::replacer('image_mimetype', function ($message, $attribute, $rule, $parameters, $validator) {
+            return "The " . str_replace(['_'], ' ', $attribute) . " field must be a valid image MIME type.";
+        });
+
         Validator::extend('base64_max_size', function ($attribute, $value, $parameters) {
             return (new Base64MaxSize($parameters[0] ?? 0))->passes($attribute, $value);
         });
@@ -29,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('base64_max_size', function ($message, $attribute, $rule, $parameters, $validator) {
             $rule = new Base64MaxSize($parameters[0] ?? 0);
             $rule->passes($attribute, data_get($validator->getData(), $attribute));
-            return str_replace(':attribute', str_replace(['.', '_'], ' ', $attribute), $rule->message());
+            return str_replace(':attribute', str_replace(['_'], ' ', $attribute), $rule->message());
         });
 
         Validator::extend('base64_min_size', function ($attribute, $value, $parameters) {
@@ -39,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('base64_min_size', function ($message, $attribute, $rule, $parameters, $validator) {
             $rule = new Base64MinSize($parameters[0] ?? 0);
             $rule->passes($attribute, data_get($validator->getData(), $attribute));
-            return str_replace(':attribute', str_replace(['.', '_'], ' ', $attribute), $rule->message());
+            return str_replace(':attribute', str_replace(['_'], ' ', $attribute), $rule->message());
         });
     }
 }

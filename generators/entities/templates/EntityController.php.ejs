@@ -93,6 +93,9 @@ class <%- className %>Controller extends Controller
 <%              if (validationsStore[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
                     'required',
+<%                  if (imageFields.includes(field)) { -%>
+                    'image_mimetype',
+<%                  } -%>
                 ],
                 '<%- field %>.originalName' => [
                     'required',
@@ -100,7 +103,8 @@ class <%- className %>Controller extends Controller
 <%              } -%>
 <%              if (imageFields.includes(field) && !validationsStore[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
-                    'regex:/^image\/.*$/',
+                    'nullable',
+                    'image_mimetype',
                 ],
 <%              } -%>
 <%          } -%>
@@ -174,17 +178,21 @@ class <%- className %>Controller extends Controller
 <%  } -%>
 <%          })-%>
                 ],
-<%              if (validationsStore[field].includes("'required'")) { -%>
+<%              if (validationsUpdate[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
                     $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+<%                  if (imageFields.includes(field)) { -%>
+                    'image_mimetype',
+<%                  } -%>
                 ],
                 '<%- field %>.originalName' => [
                     $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
                 ],
 <%              } -%>
-<%              if (imageFields.includes(field) && !validationsStore[field].includes("'required'")) { -%>
+<%              if (imageFields.includes(field) && !validationsUpdate[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
-                    'regex:/^image\/.*$/',
+                    'nullable',
+                    'image_mimetype',
                 ],
 <%              } -%>
 <%          } -%>
