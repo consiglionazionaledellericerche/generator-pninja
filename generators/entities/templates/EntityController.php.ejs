@@ -80,7 +80,11 @@ class <%- className %>Controller extends Controller
 <%      for (field in validationsStore) {-%>
                 '<%- field %>' => [
 <%          validationsStore[field].forEach(validation => {-%>
-                    <%- validation -%>,
+<%  if (validation !== "'required-blob'") { -%>
+                    <%- validation %>,
+<%  } else {-%>
+                    'required',
+<%  } -%>
 <%          })-%>
                 ],
 <%      }-%>
@@ -118,25 +122,11 @@ class <%- className %>Controller extends Controller
     public function update($id, Request $request)
     {
         try {
-<%          if (withs) { -%>
+<%  if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
-<%          } else { -%>
+<%  } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
-<%          } -%>
-<%  if(isEmpty(validationsUpdate)) {-%>
-            $data = $request->all();
-<%  } else {-%>
-            $validated = $request->validate([
-<%      for (field in validationsUpdate) {-%>
-                '<%- field %>' => [
-<%          validationsUpdate[field].forEach(validation => {-%>
-                    <%- validation -%>,
-<%          })-%>
-                ],
-<%      }-%>
-            ]);
-            $data = $validated;
-<%  }-%>
+<%  } -%>
 <%  if(!isEmpty(fileFields)) {-%>
             $filesToDelete = $request->input('filesToDelete', []);
             $filesToDeletePaths = array_map(fn($field): string => $<%- entityName %>[$field . '_path'] ?? null, $filesToDelete);
@@ -145,6 +135,26 @@ class <%- className %>Controller extends Controller
                 $<%- entityName %>[$field . '_type'] = null;
                 $<%- entityName %>[$field . '_name'] = null;
             }
+<%  } -%>
+<%  if(isEmpty(validationsUpdate)) {-%>
+            $data = $request->all();
+<%  } else {-%>
+            $validated = $request->validate([
+<%      for (field in validationsUpdate) {-%>
+                '<%- field %>' => [
+<%          validationsUpdate[field].forEach(validation => {-%>
+<%  if (validation !== "'required-blob'") { -%>
+                    <%- validation %>,
+<%  } else {-%>
+                    $<%- entityName %>['<%- field.replace(/\.data$/,'') %>_path'] ? 'nullable' : 'required',
+<%  } -%>
+<%          })-%>
+                ],
+<%      }-%>
+            ]);
+            $data = $validated;
+<%  }-%>
+<%  if(!isEmpty(fileFields)) {-%>
 <%      fileFields.forEach((field) => {-%>
             if($request->input('<%-to.snake(field)%>.data')) {
                 if ($<%- entityName %>-><%-to.snake(field)%>_path) {

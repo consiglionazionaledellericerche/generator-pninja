@@ -22,7 +22,7 @@ const getValidations = (e, relationships, op) => {
                 const { name, validations } = field;
                 acc[`${to.snake(name)}${['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type) ? '.data' : ''}`] = validations.map(({ key, value }) => {
                     if (key === 'required') {
-                        return (['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type) && op === 'update') ? `'nullable'` : `'required'`;
+                        return (['ImageBlob', 'Blob', 'AnyBlob'].includes(field.type)) ? `'required-blob'` : `'required'`;
                     }
                     if (key === 'nullable') {
                         return `'nullable'`;
