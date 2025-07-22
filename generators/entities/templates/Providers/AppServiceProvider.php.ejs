@@ -23,7 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('image_mimetype', function ($attribute, $value, $parameters) {
-            \Log::debug('Validating image_mimetype for attribute: ' . $attribute, ['value' => $value]);
             return preg_match('/^image\/.*$/', $value) === 1;
         });
 
