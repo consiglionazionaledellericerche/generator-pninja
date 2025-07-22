@@ -74,11 +74,11 @@
     },
     "validations": {
       "file": {
-        "required": "The file is required",
         "minSize": "The file must be at least {{minSize}}. Current size: {{actualSize}}",
         "maxSize": "The file cannot exceed {{maxSize}}. Current size: {{actualSize}}",
-        "type": "The file type is not supported",
-        "typeImage": "The file must be an image"
+        "invalidType": "The file type must be {{acceptedType}}. Current type: {{actualType}}",
+        "typeImage": "The file must be an image",
+        "required": "The file is required"
       },
       "min": "Number must be greater than or equal to {{min}}",
       "minlength": "String must contain at least {{min}} character(s)",

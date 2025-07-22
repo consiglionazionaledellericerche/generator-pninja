@@ -304,13 +304,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%if (hasBlob) {-%>
       data = { ...data, filesToDelete: Array.from(filesToDelete) };
       for (const [key, value] of Object.entries(data)) {
-        if (value instanceof File) {
-          const fileData = await fileToBase64(value);
+        if (value instanceof FileList && value.length > 0) {
+          const [file] = value;
+          const fileData = await fileToBase64(file);
           data[key] = {
             data: fileData,
-            mimeType: value.type,
-            originalName: value.name,
-            size: value.size,
+            mimeType: file.type,
+            originalName: file.name,
+            size: file.size,
           };
         }
       }
@@ -437,7 +438,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           </div>
         )}
 
-        {shouldShowInput && !isMarkedForDeletion && (
+        <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
           <div className="mt-3">
             {hasFile && showFileInputs[fieldName] && (
               <div className="mb-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-200">
@@ -448,7 +449,49 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               type="file"
               id={fieldName}
               accept={accept ?? '*/*'}
-              {...register(fieldName)}
+              {...register(fieldName, {
+                validate: (value: unknown | undefined) => {
+                  const [file] = value as FileList;
+                  const required = validations.required !== undefined;
+                  const { minbytes, maxbytes } = validations;
+                  if (file && accept) {
+                    const acceptedType = accept.replace(/\/\*$/, '');
+                    if (!file.type.startsWith(acceptedType)) {
+                      return t('errors.validations.file.invalidType', {
+                        actualType: file.type,
+                        acceptedType: accept,
+                      });
+                    }
+                  }
+                  if (file && minbytes && file.size < parseInt(minbytes)) {
+                    return t('errors.validations.file.minSize', {
+                      actualSize: prettyBytes(file.size),
+                      minSize: prettyBytes(parseInt(minbytes)),
+                    });
+                  }
+                  if (file && maxbytes && file.size > parseInt(maxbytes)) {
+                    return t('errors.validations.file.maxSize', {
+                      actualSize: prettyBytes(file.size),
+                      maxSize: prettyBytes(parseInt(maxbytes)),
+                    });
+                  }
+                  if (required && filesToDelete.has(fieldName)) {
+                    // File is required but marked for deletion
+                    return 'errors.validations.file.required';
+                  }
+                  if (required && (file || myEntity?.document_file_path)) {
+                    // File is required and either a new file is provided or an existing file is present
+                    return true;
+                  }
+                  if (required && !file) {
+                    return 'errors.validations.file.required';
+                  }
+                  if (!required) {
+                    return true;
+                  }
+                  return '????';
+                },
+              })}
               className={inputClassName(!!errors?.[fieldName]?.message)}
             />
             {hasFile && showFileInputs[fieldName] && (
@@ -461,7 +504,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               </button>
             )}
           </div>
-        )}
+        </div>
 
         {errors?.[fieldName]?.message && (
           <p className="mt-1 text-sm text-red-600">
