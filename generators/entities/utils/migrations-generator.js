@@ -55,7 +55,8 @@ export class MigrationsGenerator {
                 fieldTypeParams = ', 6';
             }
             if (fieldType !== 'binary') {
-                let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
+                let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->string('${fieldName}', 255)`;
+                // let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->enum('${fieldName}', ${JSON.stringify(fieldType)})`;
                 // if (field.validations.length === 0) {
                 //     fieldDefinition += '->nullable()';
                 // } else if (!field.validations.reduce((required, validation) => required || validation.key === 'required', false)) {
