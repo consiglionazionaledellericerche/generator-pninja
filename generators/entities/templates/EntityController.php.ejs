@@ -51,6 +51,14 @@ class <%- className %>Controller extends Controller
 <%          } else { -%>
             $result = $query->get();
 <%          } -%>
+<%          if(isSqlite && booleanFields.length >= 0) {-%>
+            $result = $result->map(function($entity) {
+<%              booleanFields.forEach(field => {-%>
+                $entity['<%-field%>'] = boolval($entity['<%-field%>']);
+<%              }); -%>
+                return $entity;
+            });
+<%          } -%>
             return response()->json($result);
         } catch (\Exception $e) {
             return $this->handleIndexError($e);
@@ -61,10 +69,16 @@ class <%- className %>Controller extends Controller
     {
         try {
 <%          if (withs) { -%>
-            return response()->json(<%- className %>::with(<%- withs %>)->findOrFail($id));
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
 <%          } else { -%>
-            return response()->json(<%- className %>::findOrFail($id));
+            $<%- entityName %> = <%- className %>::findOrFail($id);
 <%          } -%>
+<%          if(isSqlite && booleanFields.length >= 0) {-%>
+<%              booleanFields.forEach(field => {-%>
+            $<%- entityName %>['<%-field%>'] = boolval($<%- entityName %>['<%-field%>']);
+<%              }); -%>
+<%          } -%>
+            return response()->json($<%- entityName %>);
         } catch (\Exception $e) {
             return $this->handleShowError($e);
         }
