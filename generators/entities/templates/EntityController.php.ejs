@@ -184,13 +184,13 @@ class <%- className %>Controller extends Controller
                 ],
 <%              if (validationsUpdate[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
-                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+                    $<%- entityName %>['<%- field %>_type'] ? 'nullable' : 'required',
 <%                  if (imageFields.includes(field)) { -%>
                     'image_mimetype',
 <%                  } -%>
                 ],
                 '<%- field %>.originalName' => [
-                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
+                    $<%- entityName %>['<%- field %>_name'] ? 'nullable' : 'required',
                 ],
 <%              } else {-%>
 <%                  if (imageFields.includes(field)) { -%>
