@@ -89,13 +89,17 @@ const fieldTypeToInputStep = (type) => {
     return stepMap[type] || null;
 }
 
-const getField = (type, name) => {
+const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(name) %>"
-              {...register('<%= to.snake(name) %>')}
+              {...register('<%= to.snake(name) %>', {
+<%    if (!isOptional(validations)) { -%>
+                required: t('errors.validations.required'),
+<%    } -%>
+              })}
               className={selectClassName(!!errors?.<%= to.snake(name) %>?.message)}
             >
               <option className={selectOptionClassName} value={''}></option>
@@ -121,7 +125,56 @@ const getField = (type, name) => {
             step={<%- STEP %>}
 <%        }-%>
             id="<%= to.snake(name) %>"
-            {...register('<%= to.snake(name) %>'<% if(T === 'number') {%>, { valueAsNumber: true }<%}%>)}
+            {...register('<%= to.snake(name) %>', {
+<%        if (!isOptional(validations)) { -%>
+              required: t('errors.validations.required'),
+<%        } -%>
+<%        if (getMin(validations) !== undefined) { -%>
+                min: {
+                  value: <%-getMin(validations)%>,
+                  message: t('errors.validations.min', { min: <%-getMin(validations)%> }),
+                },
+<%        } -%>
+<%        if (getMax(validations) !== undefined) { -%>
+                max: {
+                  value: <%-getMax(validations)%>,
+                  message: t('errors.validations.max', { max: <%-getMax(validations)%> }),
+                },
+<%        } -%>
+<%        if (getMinlength(validations) !== undefined) { -%>
+                minLength: {
+                  value: <%-getMinlength(validations)%>,
+                  message: t('errors.validations.minlength', { min: <%-getMinlength(validations)%> }),
+                },
+<%        } -%>
+<%        if (getMaxlength(validations) !== undefined) { -%>
+                maxLength: {
+                  value: <%-getMaxlength(validations)%>,
+                  message: t('errors.validations.maxlength', { max: <%-getMaxlength(validations)%> }),
+                },
+<%        } -%>
+<%        if (getPattern(validations) !== undefined) { -%>
+                pattern: {
+                  value: /<%-getPattern(validations)%>/,
+                  message: t('errors.validations.pattern'),
+                },
+<%        } -%>
+<%        if (type === 'UUID' && getPattern(validations) === undefined) {-%>
+                pattern: {
+                  value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+                  message: t('errors.validations.pattern'),
+                },
+<%        }-%>
+<%        if (isEmail(name) && getPattern(validations) === undefined) {-%>
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: t('errors.validations.pattern'),
+                },
+<%        }-%>
+<%        if(T === 'number') {-%>
+              valueAsNumber: true,
+<%        }-%>
+            })}
             className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)<% if (type === 'UUID') {%> + ' col-start-1 row-start-1'<%}%>}
           />
 <%        if (type === 'UUID') {-%>
@@ -150,12 +203,10 @@ const getField = (type, name) => {
 <%}-%>
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 <% if (hasUUID) {-%>
 import { v4 as uuidv4 } from 'uuid';
 <% }-%>
-import * as z from 'zod';
 import { InfoValidations, IInfoValidations } from '../../components/InfoValidations';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
@@ -199,86 +250,7 @@ function fileToBase64(file: File): Promise<string> {
 }
 <% } -%>
 
-<%if (hasRequiredBlob) {-%>
-const create<%= entity.name %>Schema = (<%= to.camel(entity.name)%>?: I<%= entity.name %>, filesToDelete?: Set<string>) => z.object({
-<%} else {-%>
-const create<%= entity.name %>Schema = () => z.object({
-<%}-%>
-<%  for({name, type, validations} of entity.body) {-%>
-<%    if(fieldTypeToSchema(type) === 'string') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string()<% -%>
-<%- isEmail(name) ? '.email()' : '' -%>
-<%- getMinlength(validations) ? `.min(${getMinlength(validations)})` : '' -%>
-<%- getMaxlength(validations) ? `.max(${getMaxlength(validations)})` : '' -%>
-<%- getPattern(validations) ? `.regex(/${getPattern(validations)}/)` : '' -%>
-<%= isOptional(validations) ? '.optional()' : '.nonempty()' -%>),
-<%    } if(fieldTypeToSchema(type) === 'uuid') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().uuid()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
-<%    } if(fieldTypeToSchema(type) === 'date') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().date()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
-<%    } if(fieldTypeToSchema(type) === 'datetime') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? new Date(String(val)).toISOString() : undefined), z.string().datetime()<%= isOptional(validations) ? '.or(z.string().length(0)).optional()' : '.nonempty()' %>),
-<%    } if(fieldTypeToSchema(type) === 'time') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.string().time()<%= isOptional(validations) ? '.optional()' : '.nonempty()' %>),
-<%    } if(fieldTypeToSchema(type) === 'integer') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number().int()<% -%>
-<%- getMin(validations) ? `.min(${getMin(validations)})` : '' -%>
-<%- getMax(validations) ? `.max(${getMax(validations)})` : '' -%>
-<%= isOptional(validations) ? '.optional()' : '' %>),
-<%    } if(fieldTypeToSchema(type) === 'number') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (isNaN(Number(val)) ? undefined : val), z.number()<% -%>
-<%- getMin(validations) ? `.min(${getMin(validations)})` : '' -%>
-<%- getMax(validations) ? `.max(${getMax(validations)})` : '' -%>
-<%= isOptional(validations) ? '.optional()' : '' %>),
-<%    } if(fieldTypeToSchema(type) === 'boolean') {-%>
-  <%= to.snake(name) %>: z.preprocess((val) => (val ? val : undefined), z.boolean()<%= isOptional(validations) ? '.optional()' : '' %>),
-<%    } if(fieldTypeToSchema(type) === 'blob' || fieldTypeToSchema(type) === 'image') {-%>
-  <%= to.snake(name) %>: z
-  .union([z.instanceof(FileList), z.undefined()])
-  .transform((files) => (files && files.length > 0 ? files[0] : undefined))
-<%       if(!isOptional(validations)){-%>
-  .superRefine((file, ctx) => {
-        // If there is no file in the input, check if one already exists
-        if (!file) {
-          const hasExisting = <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_path && <%= to.camel(entity.name)%>?.<%= to.snake(name) %>_name;
-          const isMarkedForDeletion = filesToDelete?.has('<%= to.snake(name) %>');
-          if (!hasExisting || isMarkedForDeletion) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'errors.validations.required',
-            });
-          }
-        }
-      })
-<%        } -%>
-<%       if(fieldTypeToSchema(type) === 'image'){-%>
-  .refine((file) => file?.type === undefined || file?.type?.startsWith('image/'), { message: `errors.validations.file.typeImage` })
-<%        } -%>
-<%- getMinbytes(validations) ? `  .refine((file) => (file?.size ?? 0) >= ${getMinbytes(validations)} || (file?.size ?? 0) === 0, { message: 'errors.validations.file.minSize' })\n` : '' -%>
-<%- getMaxbytes(validations) ? `  .refine((file) => (file?.size ?? 0) <= ${getMaxbytes(validations)} || (file?.size ?? 0) === 0, { message: 'errors.validations.file.maxSize' })\n` : '' -%>,
-<%    } -%>
-<%  } -%>
-<%  for({field, related, nullable, isArray} of relatedEntities) {-%>
-<%    if(isArray) {-%>
-  <%= to.snake(field) %>: z.array(z.string())<% if (!nullable) {-%>.nonempty()<%}-%>,
-<%    } else {-%>
-  <%= to.snake(field) %>_id: z.string()<%- nullable ? ',' : ''%>
-<%      if (!nullable) {-%>
-    .transform((val) => val || undefined)
-    .pipe(z.string().nonempty()),
-<%      }-%>
-<%    }-%>
-<%  }-%>
-<%  for({foreignId, related, nullable} of foreignIds) {-%>
-  <%= to.snake(foreignId) %>: z.string()<%- nullable ? ',' : ''%>
-<%    if (!nullable) {-%>
-    .transform((val) => val || undefined)
-    .pipe(z.string().nonempty()),
-<%    }-%>
-<%  }-%>
-});
-
-type <%= entity.name %>FormData = z.infer<ReturnType<typeof create<%= entity.name %>Schema>> & {
+type <%= entity.name %>FormData = {
   [key: string]: unknown;
 };
 
@@ -316,12 +288,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   });
 <% }-%>
 
-<%if (hasRequiredBlob) {-%>
-  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema(<%= to.camel(entity.name)%>, filesToDelete);
-<%} else {-%>
-  const <%= to.camel(entity.name)%>Schema = create<%= entity.name %>Schema();
-<%}-%>
-
   const {
     register,
     handleSubmit,
@@ -331,14 +297,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     setValue,
 <%  }-%>
     trigger
-  } = useForm<<%= entity.name %>FormData>({
-    resolver: zodResolver(<%= to.camel(entity.name)%>Schema),
-  });
+  } = useForm<<%= entity.name %>FormData>();
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
     try {
 <%if (hasBlob) {-%>
-      data = {...data, filesToDelete: Array.from(filesToDelete)};
+      data = { ...data, filesToDelete: Array.from(filesToDelete) };
       for (const [key, value] of Object.entries(data)) {
         if (value instanceof File) {
           const fileData = await fileToBase64(value);
@@ -649,7 +613,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
             <InfoValidations validations={<%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>} />
           </label>
-<%= getField(type, name) -%>
+<%= getField(type, name, validations) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
             <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
