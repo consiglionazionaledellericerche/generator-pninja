@@ -107,21 +107,6 @@ export class FactoriesGenerator {
         const isEmail = name.toLowerCase().includes('email');
         const isUnique = field?.validations?.includes('unique');
         const isRequired = validations.reduce((required, validation) => required || validation.key === 'required', false);
-        console.log(`\n`);
-        console.log(`field ${name}`, {
-            validations,
-            min,
-            max,
-            minlength,
-            maxlength,
-            minbytes,
-            maxbytes,
-            pattern,
-            isEmail,
-            isUnique,
-            isRequired
-        });
-        console.log(`\n`);
 
         switch (field.type) {
             case 'String':
