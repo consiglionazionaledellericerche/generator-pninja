@@ -93,47 +93,30 @@ const InputFile: React.FC<InputFileProps> = ({
     }, 0);
   };
 
-  // Registra il campo con validazioni sui dati trasformati
   const registerProps = register(fieldName, {
     validate: (value: unknown | undefined) => {
-      const file = currentFile;
+      const fileData = value as TransformedFileData | null;
 
-      if (!required && !value) {
-        // if the file is NOT required and the value is empty, skip validation
-        return true;
-      }
-      if (required) {
-        // if the file is required
-        if (isMarkedForDeletion) {
-          // File marked for deletion BUT is required
-          return t('errors.validations.file.required');
-        }
-        if (!file && !entity?.[`${fieldName}_path`]) {
-          // File is required BUT no file is selected AND there is no existing file
-          return t('errors.validations.file.required');
-        }
-      }
-
-      if (file && accept && !file.type.startsWith(accept.replace(/\/\*$/, ''))) {
-        // File is selected BUT its type does not match the accepted types
+      if (fileData?.mimeType && !fileData.mimeType.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
         return t('errors.validations.file.invalidType', {
-          actualType: file.type,
+          actualType: fileData.mimeType,
           acceptedType: accept,
         });
       }
-      if (file && minbytes && file.size < minbytes) {
-        // File is selected BUT its size is less than the minimum required size
+      if (typeof fileData?.size === 'number' && minbytes && fileData?.size < minbytes) {
         return t('errors.validations.file.minSize', {
-          actualSize: prettyBytes(file.size),
+          actualSize: prettyBytes(fileData?.size),
           minSize: prettyBytes(minbytes),
         });
       }
-      if (file && maxbytes && file.size > maxbytes) {
-        // File is selected BUT its size exceeds the maximum allowed size
+      if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
         return t('errors.validations.file.maxSize', {
-          actualSize: prettyBytes(file.size),
+          actualSize: prettyBytes(fileData?.size),
           maxSize: prettyBytes(maxbytes),
         });
+      }
+      if (required && (fileData?.delete || (!fileData && !entity?.[`${fieldName}_path`]))) {
+        return t('errors.validations.file.required');
       }
       return true;
     },
