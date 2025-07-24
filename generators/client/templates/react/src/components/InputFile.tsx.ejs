@@ -2,12 +2,20 @@ import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
 import { IInfoValidations, InfoValidations } from './InfoValidations';
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 
 import { UseFormRegister, FieldErrors, UseFormTrigger, UseFormSetValue } from 'react-hook-form';
 
 type ObjData = {
   [key: string]: unknown | ObjData;
+};
+
+type TransformedFileData = {
+  data: string;
+  mimeType: string;
+  originalName: string;
+  size: number;
+  delete: boolean;
 };
 
 const inputClassName = (hasErrors = false) =>
@@ -65,6 +73,7 @@ const InputFile: React.FC<InputFileProps> = ({
   const [currentFile, setCurrentFile] = useState<File | null>(null);
   const infoValidations: IInfoValidations = {};
   const { required, minbytes, maxbytes } = validations || {};
+  const inputRef = useRef<HTMLInputElement>(null);
 
   if (required) {
     infoValidations.required = '';
@@ -84,59 +93,53 @@ const InputFile: React.FC<InputFileProps> = ({
     }, 0);
   };
 
-  useEffect(() => {
-    register(fieldName, {
-      validate: (value: unknown | undefined) => {
-        const file = currentFile;
-        if (file && accept) {
-          const acceptedType = accept.replace(/\/\*$/, '');
-          if (!file.type.startsWith(acceptedType)) {
-            return t('errors.validations.file.invalidType', {
-              actualType: file.type,
-              acceptedType: accept,
-            });
-          }
-        }
-        if (file && minbytes && file.size < minbytes) {
-          return t('errors.validations.file.minSize', {
-            actualSize: prettyBytes(file.size),
-            minSize: prettyBytes(minbytes),
-          });
-        }
-        if (file && maxbytes && file.size > maxbytes) {
-          return t('errors.validations.file.maxSize', {
-            actualSize: prettyBytes(file.size),
-            maxSize: prettyBytes(maxbytes),
-          });
-        }
-        if (required && isMarkedForDeletion) {
-          return t('errors.validations.file.required');
-        }
-        if (required && (value || entity?.[`${fieldName}_path`])) {
-          return true;
-        }
-        if (required && !value) {
-          return t('errors.validations.file.required');
-        }
-        if (!required) {
-          return true;
-        }
-        return true;
-      },
-    });
-  }, [
-    accept,
-    currentFile,
-    entity,
-    fieldName,
-    isMarkedForDeletion,
-    register,
-    maxbytes,
-    minbytes,
-    required,
-    t,
-  ]);
+  // Registra il campo con validazioni sui dati trasformati
+  const registerProps = register(fieldName, {
+    validate: (value: unknown | undefined) => {
+      const file = currentFile;
 
+      if (!required && !value) {
+        // if the file is NOT required and the value is empty, skip validation
+        return true;
+      }
+      if (required) {
+        // if the file is required
+        if (isMarkedForDeletion) {
+          // File marked for deletion BUT is required
+          return t('errors.validations.file.required');
+        }
+        if (!file && !entity?.[`${fieldName}_path`]) {
+          // File is required BUT no file is selected AND there is no existing file
+          return t('errors.validations.file.required');
+        }
+      }
+
+      if (file && accept && !file.type.startsWith(accept.replace(/\/\*$/, ''))) {
+        // File is selected BUT its type does not match the accepted types
+        return t('errors.validations.file.invalidType', {
+          actualType: file.type,
+          acceptedType: accept,
+        });
+      }
+      if (file && minbytes && file.size < minbytes) {
+        // File is selected BUT its size is less than the minimum required size
+        return t('errors.validations.file.minSize', {
+          actualSize: prettyBytes(file.size),
+          minSize: prettyBytes(minbytes),
+        });
+      }
+      if (file && maxbytes && file.size > maxbytes) {
+        // File is selected BUT its size exceeds the maximum allowed size
+        return t('errors.validations.file.maxSize', {
+          actualSize: prettyBytes(file.size),
+          maxSize: prettyBytes(maxbytes),
+        });
+      }
+      return true;
+    },
+  });
+
+  // Handler personalizzato per trasformare e salvare
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setCurrentFile(file);
@@ -151,20 +154,25 @@ const InputFile: React.FC<InputFileProps> = ({
 
     try {
       const fileData = await fileToBase64(file);
-      setValue(fieldName, {
+      const transformedValue: TransformedFileData = {
         data: fileData,
         mimeType: file.type,
         originalName: file.name,
         size: file.size,
         delete: isMarkedForDeletion,
-      });
+      };
+
+      setValue(fieldName, transformedValue);
+      setTimeout(() => {
+        trigger(fieldName);
+      }, 0);
     } catch (error) {
       console.error('Error converting file to base64:', error);
       setValue(fieldName, null);
+      setTimeout(() => {
+        trigger(fieldName);
+      }, 0);
     }
-    setTimeout(() => {
-      trigger(fieldName);
-    }, 0);
   };
 
   const undoEdit = () => {
@@ -270,7 +278,9 @@ const InputFile: React.FC<InputFileProps> = ({
             type="file"
             id={fieldName}
             accept={accept ?? '*/*'}
+            {...registerProps}
             onChange={handleFileChange}
+            ref={inputRef}
             className={inputClassName(!!errors?.[fieldName]?.message)}
           />
         </div>
