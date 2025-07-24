@@ -70,7 +70,6 @@ const InputFile: React.FC<InputFileProps> = ({
   const hasFile = entity?.[`${fieldName}_path`] || false;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
-  const [currentFile, setCurrentFile] = useState<File | null>(null);
   const infoValidations: IInfoValidations = {};
   const { required, minbytes, maxbytes } = validations || {};
   const inputRef = useRef<HTMLInputElement>(null);
@@ -125,7 +124,6 @@ const InputFile: React.FC<InputFileProps> = ({
   // Handler personalizzato per trasformare e salvare
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setCurrentFile(file);
 
     if (!file) {
       setValue(fieldName, null);
@@ -160,7 +158,6 @@ const InputFile: React.FC<InputFileProps> = ({
 
   const undoEdit = () => {
     setShouldShowInput(false);
-    setCurrentFile(null);
     setValue(fieldName, null);
     // Reset the input value
     const input = document.getElementById(fieldName) as HTMLInputElement;
