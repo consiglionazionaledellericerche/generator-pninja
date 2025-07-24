@@ -167,7 +167,12 @@ class <%- className %>Controller extends Controller
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%  } -%>
 <%  if(!isEmpty(fileFields)) {-%>
-            $filesToDelete = $request->input('filesToDelete', []);
+            $filesToDelete = [];
+            foreach ($request->all() as $key => $value) {
+                if (is_array($value) && isset($value['delete']) && $value['delete'] === true) {
+                    $filesToDelete[] = $key;
+                }
+            }
             $filesToDeletePaths = array_map(fn($field): string => $<%- entityName %>[$field . '_path'] ?? null, $filesToDelete);
             foreach ($filesToDelete as $field) {
                 $<%- entityName %>[$field . '_path'] = null;

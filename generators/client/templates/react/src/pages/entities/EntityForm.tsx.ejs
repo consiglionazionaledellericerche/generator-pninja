@@ -207,7 +207,7 @@ import { useTranslation } from 'react-i18next';
 <% if (hasUUID) {-%>
 import { v4 as uuidv4 } from 'uuid';
 <% }-%>
-import { InfoValidations, IInfoValidations } from '../../components/InfoValidations';
+import { InfoValidations } from '../../components/InfoValidations';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
 <%  if (related !== entity.name) {-%>
@@ -228,27 +228,12 @@ import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 <% if (hasBlob) {%>
-import prettyBytes from 'pretty-bytes';
-import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon } from 'lucide-react';
-
-function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      if (typeof result !== 'string') {
-        reject(new Error('Failed to read file as data URL'));
-        return;
-      }
-      // Removes "data:mime/type;base64," and keeps only the base64
-      const base64 = result.split(',')[1];
-      resolve(base64);
-    };
-    reader.onerror = () => reject(new Error('Error reading file'));
-    reader.readAsDataURL(file);
-  });
-}
+import { InputFile } from '../../components/InputFile';
 <% } -%>
+
+type ObjData = {
+  [key: string]: unknown | ObjData;
+};
 
 type <%= entity.name %>FormData = {
   [key: string]: unknown;
@@ -279,14 +264,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<SelectOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
-<% if (hasBlob) {-%>
-  const [filesToDelete, setFilesToDelete] = useState<Set<string>>(new Set());
-  const [showFileInputs, setShowFileInputs] = useState({
-<%blobFields.forEach(field => {-%>
-    <%-to.snake(field)%>: false,
-<%})-%>
-  });
-<% }-%>
 
   const {
     register,
@@ -301,226 +278,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
     try {
-<%if (hasBlob) {-%>
-      data = { ...data, filesToDelete: Array.from(filesToDelete) };
-      for (const [key, value] of Object.entries(data)) {
-        if (value instanceof FileList && value.length > 0) {
-          const [file] = value;
-          const fileData = await fileToBase64(file);
-          data[key] = {
-            data: fileData,
-            mimeType: file.type,
-            originalName: file.name,
-            size: file.size,
-          };
-        }
-      }
-<%}-%>
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
     }
   };
-<%if (hasBlob) {-%>
-
-  const toggleFileInput = (fieldName: keyof typeof showFileInputs) => {
-    setShowFileInputs((prev) => ({
-      ...prev,
-      [fieldName]: !prev[fieldName],
-    }));
-
-    if (showFileInputs[fieldName]) {
-      setValue(fieldName, undefined);
-    }
-  };
-
-  const markFileForDeletion = (fieldName: string) => {
-    setFilesToDelete((prev) => new Set(prev).add(fieldName));
-
-  };
-
-  const unmarkFileForDeletion = (fieldName: string) => {
-    setFilesToDelete((prev) => {
-      const newSet = new Set(prev);
-      newSet.delete(fieldName);
-      return newSet;
-    });
-    setTimeout(() => {
-      trigger(fieldName); // Re-validate the field
-    }, 0);
-  };
-
-  const hasExistingFile = (
-    pathField?: string | null | undefined,
-    nameField?: string | null | undefined
-  ) => {
-    return !!(pathField && nameField);
-  };
-
-  const renderFileField = (
-    fieldName: keyof typeof showFileInputs,
-    validations: IInfoValidations,
-    pathField: string | null | undefined,
-    nameField: string | null | undefined,
-    typeField: string | null | undefined,
-    label: string,
-    accept: string | null | undefined,
-    minSize: number | null | undefined,
-    maxSize: number | null | undefined,
-  ) => {
-    const hasFile = hasExistingFile(pathField, nameField);
-    const shouldShowInput = !hasFile || showFileInputs[fieldName];
-    const isMarkedForDeletion = filesToDelete.has(fieldName);
-
-    return (
-      <div>
-        <label htmlFor={fieldName} className="block text-sm font-medium flex items-center gap-1">
-          {label}
-          <InfoValidations validations={validations} />
-        </label>
-
-        {hasFile && !showFileInputs[fieldName] && !isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
-            <div className="flex items-center justify-between">
-              <a
-                href={`/api/files/${pathField}`}
-                className="text-slate-900 dark:text-gray-300 hover:underline flex items-center"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {typeField?.startsWith('image/') ? (
-                  <FileImageIcon className="mr-2 h-4 w-4" />
-                ) : (
-                  <FileIcon className="mr-2 h-4 w-4" />
-                )}
-                {t('actions.crud.file.viewOrDownload')} {nameField}
-              </a>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => toggleFileInput(fieldName)}
-                  className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
-                >
-                  <EditIcon className="mr-1 h-4 w-4" />
-                  {t('actions.crud.edit')}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => markFileForDeletion(fieldName)}
-                  className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
-                >
-                  <Trash2Icon className="mr-1 h-4 w-4" />
-                  {t('actions.crud.delete')}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center text-red-800 dark:text-red-200">
-                <Trash2Icon className="mr-2 h-4 w-4" />
-                <span className="text-sm font-medium">
-                  {t('actions.crud.file.markedForDeletion')}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => unmarkFileForDeletion(fieldName)}
-                className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
-              >
-                <Undo2Icon className="mr-2 h-4 w-4" />
-                {t('common.undo')}
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
-          <div className="mt-3">
-            {hasFile && showFileInputs[fieldName] && (
-              <div className="mb-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded text-sm text-yellow-800 dark:text-yellow-200">
-                {t('actions.crud.file.replaceWarning')}
-              </div>
-            )}
-            <input
-              type="file"
-              id={fieldName}
-              accept={accept ?? '*/*'}
-              {...register(fieldName, {
-                validate: (value: unknown | undefined) => {
-                  const [file] = value as FileList;
-                  const required = validations.required !== undefined;
-                  const { minbytes, maxbytes } = validations;
-                  if (file && accept) {
-                    const acceptedType = accept.replace(/\/\*$/, '');
-                    if (!file.type.startsWith(acceptedType)) {
-                      return t('errors.validations.file.invalidType', {
-                        actualType: file.type,
-                        acceptedType: accept,
-                      });
-                    }
-                  }
-                  if (file && minbytes && file.size < parseInt(minbytes)) {
-                    return t('errors.validations.file.minSize', {
-                      actualSize: prettyBytes(file.size),
-                      minSize: prettyBytes(parseInt(minbytes)),
-                    });
-                  }
-                  if (file && maxbytes && file.size > parseInt(maxbytes)) {
-                    return t('errors.validations.file.maxSize', {
-                      actualSize: prettyBytes(file.size),
-                      maxSize: prettyBytes(parseInt(maxbytes)),
-                    });
-                  }
-                  if (required && filesToDelete.has(fieldName)) {
-                    // File is required but marked for deletion
-                    return 'errors.validations.file.required';
-                  }
-                  if (required && (file || myEntity?.document_file_path)) {
-                    // File is required and either a new file is provided or an existing file is present
-                    return true;
-                  }
-                  if (required && !file) {
-                    return 'errors.validations.file.required';
-                  }
-                  if (!required) {
-                    return true;
-                  }
-                  return '????';
-                },
-              })}
-              className={inputClassName(!!errors?.[fieldName]?.message)}
-            />
-            {hasFile && showFileInputs[fieldName] && (
-              <button
-                type="button"
-                onClick={() => toggleFileInput(fieldName)}
-                className="mt-2 text-sm text-gray-600 hover:text-gray-800 cursor-pointer underline"
-              >
-                {t('common.cancel')}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {errors?.[fieldName]?.message && (
-          <p className="mt-1 text-sm text-red-600">
-            {t(errors[fieldName].message as string, {
-              minSize: prettyBytes(minSize ?? 0), 
-              maxSize: prettyBytes(maxSize ?? 0),
-              actualSize: prettyBytes(
-                (document.getElementById(fieldName) as HTMLInputElement)?.files?.[0]?.size ?? 0
-              ),
-            })}
-          </p>
-        )}
-      </div>
-    );
-  };
-<%}-%>
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -602,14 +364,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% }-%>
       });
     }
-<%if (hasBlob) {-%>
-
-    setShowFileInputs({
-<%blobFields.forEach(field => {-%>
-    <%-to.snake(field)%>: !hasExistingFile(<%= to.camel(entity.name)-%>?.<%-to.snake(field)%>_path, <%= to.camel(entity.name)%>?.<%-to.snake(field)%>_name),
-<%})-%>
-    });
-<%}-%>
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
   useEffect(() => {
@@ -639,17 +393,29 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       <div className="max-w-5xl mx-auto space-y-4">
 <%    for({name, type, validations} of entity.body) {-%>
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
-        {renderFileField(
-          '<%-to.snake(name)%>',
-          <%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>,
-          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_path,
-          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_name,
-          <%= to.camel(entity.name)%>?.<%-to.snake(name)%>_type,
-          t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>'),
-          <%- type === 'ImageBlob' ? `'image/*'` : `undefined` %>,
-          <%- getMinbytes(validations) ?? `undefined` %>,
-          <%- getMaxbytes(validations) ?? `undefined` %>
-        )}
+        <InputFile
+<%      if(type === 'ImageBlob') { -%>
+          accept="image/*"
+<%      } -%>
+          entity={<%= to.camel(entity.name)%> as ObjData}
+          errors={errors}
+          fieldName="<%-to.snake(name)%>"
+          label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+          register={register}
+          trigger={trigger}
+          setValue={setValue}
+          validations={{
+<%        if (!isOptional(validations)) { -%>
+            required: true,
+<%        } -%>
+<%        if (getMinbytes(validations)) { -%>
+            minbytes: <%- parseInt(getMinbytes(validations)) %>,
+<%        } -%>
+<%        if (getMaxbytes(validations)) { -%>
+            maxbytes: <%- parseInt(getMaxbytes(validations)) %>,
+<%        } -%>
+          }}
+        />
 <%      } else {-%>
         <div>
           <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium flex items-center gap-1">
