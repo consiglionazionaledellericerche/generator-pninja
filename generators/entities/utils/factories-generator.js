@@ -95,40 +95,61 @@ export class FactoriesGenerator {
 
     _getFakerRule(field) {
         const { enums } = this.parsedJDL;
-        const hasUnique = field.fieldValidateRules && field.fieldValidateRules.includes('unique');
+        const { validations, name } = field;
+
+        const min = Number(validations.reduce((min, validation) => validation.key === 'min' ? validation.value : min, undefined));
+        const max = Number(validations.reduce((max, validation) => validation.key === 'max' ? validation.value : max, undefined));
+        const minlength = Number(validations.reduce((minlength, validation) => validation.key === 'minlength' ? validation.value : minlength, undefined));
+        const maxlength = Number(validations.reduce((maxlength, validation) => validation.key === 'maxlength' ? validation.value : maxlength, undefined));
+        const minbytes = Number(validations.reduce((minbytes, validation) => validation.key === 'minbytes' ? validation.value : minbytes, undefined));
+        const maxbytes = Number(validations.reduce((maxbytes, validation) => validation.key === 'maxbytes' ? validation.value : maxbytes, undefined));
+        const pattern = Number(validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined));
+        const isEmail = name.toLowerCase().includes('email');
+        const isUnique = field?.validations?.includes('unique');
+        const isRequired = validations.reduce((required, validation) => required || validation.key === 'required', false);
+        console.log(`\n`);
+        console.log(`field ${name}`, {
+            validations,
+            min,
+            max,
+            minlength,
+            maxlength,
+            minbytes,
+            maxbytes,
+            pattern,
+            isEmail,
+            isUnique,
+            isRequired
+        });
+        console.log(`\n`);
 
         switch (field.type) {
             case 'String':
-                if (field.name.toLowerCase().includes('email')) {
-                    return 'fake()->unique()->safeEmail()';
+                if (isEmail) {
+                    return `substr(str_pad(fake()->unique()->safeEmail(), ${minlength || 0}, 'x', STR_PAD_LEFT), 0, ${maxlength || 255})`;
                 } else if (to.snake(field.name).includes('first_name')) {
-                    return hasUnique ? 'fake()->unique()->firstNameMale()' : 'fake()->firstNameMale()';
+                    return `substr(str_pad(fake()->unique()->firstNameMale(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (to.snake(field.name).includes('last_name')) {
-                    return hasUnique ? 'fake()->unique()->lastName()' : 'fake()->lastName()';
+                    return `substr(str_pad(fake()->unique()->lastName(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (field.name.toLowerCase().includes('phone')) {
-                    return hasUnique ? 'fake()->unique()->phoneNumber()' : 'fake()->phoneNumber()';
+                    return `substr(str_pad(fake()->unique()->phoneNumber(), ${minlength || 0}, '0', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (field.name.toLowerCase().includes('address')) {
-                    return 'fake()->address()';
+                    return `substr(str_pad(fake()->unique()->address(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (field.name.toLowerCase().includes('code')) {
-                    return hasUnique ? 'fake()->unique()->bothify("??##??##")' : 'fake()->bothify("??##??##")';
+                    return `substr(str_pad(fake()->unique()->bothify("??##??##"), ${minlength || 0}, '??##', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else {
-                    return hasUnique ? `fake()->unique()->regexify('[A-Z][a-z]{7}')` : `fake()->regexify('[A-Z][a-z]{7}')`;
+                    return `substr(fake()->unique()->regexify('[A-Z][a-z]{${(minlength || 7) >= 7 ? minlength || 7 : 7}}'), 0, ${maxlength || 255})`;
                 }
             case 'Integer':
-                if (field.fieldValidateRules) {
-                    const min = field.fieldValidateRules.includes('min') ? field.fieldValidateRulesMin : 1;
-                    const max = field.fieldValidateRules.includes('max') ? field.fieldValidateRulesMax : 100;
-                    return `fake()->numberBetween(${min}, ${max})`;
-                }
-                return 'fake()->numberBetween(1, 100)';
+                return `fake()->numberBetween(${min || 1}, ${max || 100})`;
             case 'Long':
-                return 'fake()->numberBetween(1, 1000000)';
+                return `fake()->numberBetween(${min || 1}, ${max || 1000000})`;
             case 'Float':
             case 'Double':
             case 'BigDecimal':
-                return 'fake()->randomFloat(2, 0, 10000)';
+                return `fake()->randomFloat(2, ${min || 0}, ${max || 10000})`;
             case 'Boolean':
-                return 'fake()->boolean()';
+                return `${isRequired ? 'true' : 'fake()->boolean()'}`;
             case 'LocalDate':
             case 'Date':
                 return 'fake()->dateTimeBetween("-1 year", "now")';
@@ -138,7 +159,7 @@ export class FactoriesGenerator {
             case 'LocalTime':
                 return 'fake()->time()';
             case 'Duration':
-                return 'fake()->numberBetween(1, 1000000)';
+                return `fake()->numberBetween(${min || 1}, ${max || 1000000})`;
             case 'TextBlob':
                 return 'fake()->text()';
             case 'UUID':
