@@ -89,6 +89,19 @@ const fieldTypeToInputStep = (type) => {
     return stepMap[type] || null;
 }
 
+getValidationsFromValidations = (validations) => {
+  v = {};
+  if (!isOptional(validations)) v = {...v, required: true};
+  if (getMin(validations)) v = {...v, min: Number(getMin(validations))};
+  if (getMax(validations)) v = {...v, max: Number(getMax(validations))};
+  if (getMinlength(validations)) v = {...v, minlength: Number(getMinlength(validations))};
+  if (getMaxlength(validations)) v = {...v, maxlength: Number(getMaxlength(validations))};
+  if (getMinbytes(validations)) v = {...v, minbytes: Number(getMinbytes(validations))};
+  if (getMaxbytes(validations)) v = {...v, maxbytes: Number(getMaxbytes(validations))};
+  if (getPattern(validations)) v = {...v, pattern: getPattern(validations)};
+  return JSON.stringify(v) !== '{}' ? JSON.stringify(v) : null;
+}
+
 const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
@@ -393,6 +406,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       <div className="max-w-5xl mx-auto space-y-4">
 <%    for({name, type, validations} of entity.body) {-%>
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
+        <FormLabel
+          htmlFor="<%= to.snake(name) %>"
+          label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%        if(getValidationsFromValidations(validations)) {-%>
+          validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+        />  
         <InputFile
 <%      if(type === 'ImageBlob') { -%>
           accept="image/*"
@@ -400,32 +420,20 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           entity={<%= to.camel(entity.name)%> as ObjData}
           errors={errors}
           fieldName="<%-to.snake(name)%>"
-          label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
           register={register}
           trigger={trigger}
           setValue={setValue}
-          validations={{
-<%        if (!isOptional(validations)) { -%>
-            required: true,
-<%        } -%>
-<%        if (getMinbytes(validations)) { -%>
-            minbytes: <%- parseInt(getMinbytes(validations)) %>,
-<%        } -%>
-<%        if (getMaxbytes(validations)) { -%>
-            maxbytes: <%- parseInt(getMaxbytes(validations)) %>,
-<%        } -%>
-          }}
+<%      if(getValidationsFromValidations(validations)) {-%>
+          validations={<%- getValidationsFromValidations(validations) %>}
+<%      } -%>
         />
 <%      } else {-%>
         <div>
           <FormLabel
             htmlFor="<%= to.snake(name) %>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-<%
-            const validationsParameter = JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}));
-            if (validationsParameter !== '{}') {
--%>
-            validations={<%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>}
+<%          if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
           />        
 <%= getField(type, name, validations) -%>

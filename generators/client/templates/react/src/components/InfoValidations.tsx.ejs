@@ -7,15 +7,15 @@ interface InfoValidationsProps {
   validations: IInfoValidations;
 }
 interface IInfoValidations {
-  min?: string;
-  minbytes?: string;
-  minlength?: string;
-  max?: string;
-  maxbytes?: string;
-  maxlength?: string;
+  min?: number;
+  minbytes?: number;
+  minlength?: number;
+  max?: number;
+  maxbytes?: number;
+  maxlength?: number;
   pattern?: string;
-  required?: string;
-  unique?: string;
+  required?: boolean;
+  unique?: boolean;
 }
 
 const InfoRequired: React.FC = () => {
@@ -43,7 +43,7 @@ const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
   const { t } = useTranslation();
   return (
     <>
-      {validations.hasOwnProperty('required') && <InfoRequired />}
+      {validations.required && <InfoRequired />}
       {Object.keys(validations).some((validation) =>
         ['min', 'max', 'minbytes', 'maxbytes', 'minlength', 'maxlength', 'unique'].includes(
           validation
@@ -65,33 +65,33 @@ const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
               </svg>
             </OverlayArrow>
             <div className="bg-slate-300 text-slate-700 dark:bg-gray-600 dark:text-gray-100 text-sm p-2 rounded-lg">
-              {validations.hasOwnProperty('min') && (
+              {typeof validations.min === 'number' && (
                 <div>{t(`info.validations.min`, { min: validations?.min })}</div>
               )}
-              {validations.hasOwnProperty('max') && (
+              {typeof validations.max === 'number' && (
                 <div>{t(`info.validations.max`, { max: validations?.max })}</div>
               )}
-              {validations.hasOwnProperty('minbytes') && (
+              {typeof validations.minbytes === 'number' && (
                 <div>
                   {t(`info.validations.minbytes`, {
                     min: prettyBytes(Number(validations?.minbytes)),
                   })}
                 </div>
               )}
-              {validations.hasOwnProperty('maxbytes') && (
+              {typeof validations.maxbytes === 'number' && (
                 <div>
                   {t(`info.validations.maxbytes`, {
                     max: prettyBytes(Number(validations?.maxbytes)),
                   })}
                 </div>
               )}
-              {validations.hasOwnProperty('minlength') && (
+              {typeof validations.minlength === 'number' && (
                 <div>{t(`info.validations.minlength`, { min: validations?.minlength })}</div>
               )}
-              {validations.hasOwnProperty('maxlength') && (
+              {typeof validations.maxlength === 'number' && (
                 <div>{t(`info.validations.maxlength`, { max: validations?.maxlength })}</div>
               )}
-              {validations.hasOwnProperty('unique') && <div>{t(`info.validations.unique`)}</div>}
+              {validations.unique && <div>{t(`info.validations.unique`)}</div>}
             </div>
           </Tooltip>
         </TooltipTrigger>

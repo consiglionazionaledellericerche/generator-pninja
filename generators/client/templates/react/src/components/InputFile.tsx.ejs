@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
-import { IInfoValidations, InfoValidations } from './InfoValidations';
 import { useState, useRef } from 'react';
 
 import { UseFormRegister, FieldErrors, UseFormTrigger, UseFormSetValue } from 'react-hook-form';
@@ -26,7 +25,6 @@ interface InputFileProps {
   entity: ObjData;
   errors?: FieldErrors<ObjData>;
   fieldName: string;
-  label: string;
   register: UseFormRegister<ObjData>;
   setValue: UseFormSetValue<ObjData>;
   trigger: UseFormTrigger<ObjData>;
@@ -60,7 +58,6 @@ const InputFile: React.FC<InputFileProps> = ({
   entity,
   errors,
   fieldName,
-  label,
   register,
   setValue,
   trigger,
@@ -70,19 +67,8 @@ const InputFile: React.FC<InputFileProps> = ({
   const hasFile = entity?.[`${fieldName}_path`] || false;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
-  const infoValidations: IInfoValidations = {};
   const { required, minbytes, maxbytes } = validations || {};
   const inputRef = useRef<HTMLInputElement>(null);
-
-  if (required) {
-    infoValidations.required = '';
-  }
-  if (minbytes) {
-    infoValidations.minbytes = `${minbytes}`;
-  }
-  if (maxbytes) {
-    infoValidations.maxbytes = `${maxbytes}`;
-  }
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
@@ -169,10 +155,6 @@ const InputFile: React.FC<InputFileProps> = ({
 
   return (
     <div>
-      <label htmlFor={fieldName} className="block text-sm font-medium flex items-center gap-1">
-        {label}
-        <InfoValidations validations={infoValidations} />
-      </label>
       {hasFile && !shouldShowInput && !isMarkedForDeletion && (
         <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
           <div className="flex items-center justify-between">
