@@ -207,7 +207,6 @@ import { useTranslation } from 'react-i18next';
 <% if (hasUUID) {-%>
 import { v4 as uuidv4 } from 'uuid';
 <% }-%>
-import { InfoValidations } from '../../components/InfoValidations';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 <%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
 <%  if (related !== entity.name) {-%>
@@ -227,6 +226,7 @@ import { ChevronsUpDown } from 'lucide-react';
 import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
+import { FormLabel } from '../../components/FormLabel';
 <% if (hasBlob) {%>
 import { InputFile } from '../../components/InputFile';
 <% } -%>
@@ -418,10 +418,16 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         />
 <%      } else {-%>
         <div>
-          <label htmlFor="<%= to.snake(name) %>" className="block text-sm font-medium flex items-center gap-1">
-            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            <InfoValidations validations={<%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>} />
-          </label>
+          <FormLabel
+            htmlFor="<%= to.snake(name) %>"
+            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%
+            const validationsParameter = JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}));
+            if (validationsParameter !== '{}') {
+-%>
+            validations={<%-JSON.stringify(validations.reduce((acc, { key, value }) => { return { ...acc, [key]: value};}, {}))%>}
+<%          } -%>
+          />        
 <%= getField(type, name, validations) -%>
           {errors?.<%= to.snake(name) %>?.message && (
 <%      if(type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
@@ -436,12 +442,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%    }-%>
 <%    for({field, related, isArray, nullable} of relatedEntities) {-%>
         <div>
-          <label htmlFor="<%= to.snake(field) %>" className="block text-sm font-medium flex items-center gap-1">
-            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
+          <FormLabel
+            htmlFor="<%= to.snake(field) %>"
+            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
 <%          if(!nullable) {-%>
-            <InfoValidations validations={{"required":""}} />
+            validations={{ required: '' }}
 <%          }-%>
-          </label>
+          />
           <div className={selectContainerClassName}>
             <select
 <%            if (isArray) {-%>
@@ -473,12 +480,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%    }-%>
 <%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
         <div>
-          <label htmlFor="<%= to.snake(foreignId) %>" className="block text-sm font-medium flex items-center gap-1">
-            {t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
+          <FormLabel
+            htmlFor="<%= to.snake(foreignId) %>"
+            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
 <%          if(!nullable) {-%>
-            <InfoValidations validations={{"required":""}} />
+            validations={{ required: '' }}
 <%          }-%>
-          </label>
+          />
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(foreignId) %>"

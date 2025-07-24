@@ -1,0 +1,18 @@
+import { IInfoValidations, InfoValidations } from './InfoValidations';
+
+interface FormLabelProps {
+  htmlFor: string;
+  label: string;
+  validations?: IInfoValidations;
+}
+
+const FormLabel: React.FC<FormLabelProps> = ({ htmlFor, label, validations }) => {
+  return (
+    <label htmlFor={htmlFor} className="block text-sm font-medium flex items-center gap-1">
+      {label}
+      <InfoValidations validations={validations ?? {}} />
+    </label>
+  );
+};
+
+export { FormLabel };
