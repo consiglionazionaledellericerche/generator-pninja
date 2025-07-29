@@ -7,7 +7,7 @@
     "dependencies": {
     },
     "scripts": {
-        "client": "cd client && npm i && npm run dev",
+        "client": "cd client && npm i --loglevel=error && npm run dev",
         "dump-server": "cd server && php artisan dump-server",
         "migrate": "cd server && php artisan migrate",
         "migrate:fresh": "cd server && php artisan migrate:fresh",
