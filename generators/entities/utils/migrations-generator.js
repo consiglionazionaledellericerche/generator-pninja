@@ -114,7 +114,7 @@ export class MigrationsGenerator {
                     const foreignId = `${fromInjectedField}_id`;
                     const unique = true;
                     const nullable = !relation.from.required;
-                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? `->nullable()` : ``}->constrained('${toTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
             // OneToMany Relations
@@ -128,7 +128,7 @@ export class MigrationsGenerator {
                     const foreignId = `${toInjectedField}_id`;
                     const unique = false;
                     const nullable = !relation.from.required;
-                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? `->nullable()` : ``}->constrained('${fromTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
             // ManyToOne Relations
@@ -142,7 +142,7 @@ export class MigrationsGenerator {
                     const foreignId = `${fromInjectedField}_id`;
                     const unique = false;
                     const nullable = !relation.from.required;
-                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}${nullable ? `->nullable()` : ``}->constrained('${toTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
+                    up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')${nullable ? `->nullOnDelete()` : `->restrictOnDelete()`};`);
                     down.push(`$table->dropForeign(['${foreignId}']);`);
                 });
             this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),

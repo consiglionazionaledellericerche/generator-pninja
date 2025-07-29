@@ -119,11 +119,11 @@ const getValidations = (e, relationships, op) => {
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
                 const nullable = !relation.to.required;
-                acc[fromTabName] = [`'array'`];
-                if (nullable) acc[fromTabName].push(`'sometimes'`);
-                if (!nullable) acc[fromTabName].push(`'required'`);
-                if (!nullable) acc[fromTabName].push(`'min:1'`);
-                acc[`${fromTabName}.*`] = [`'integer'`, `'exists:${fromTabName},id'`];
+                acc[toInjectedField] = [`'array'`];
+                if (nullable) acc[toInjectedField].push(`'sometimes'`);
+                if (!nullable) acc[toInjectedField].push(`'required'`);
+                if (!nullable) acc[toInjectedField].push(`'min:1'`);
+                acc[`${toInjectedField}.*`] = [`'integer'`, `'exists:${fromTabName},id'`];
                 return acc;
             }, {}),
         ...relationships
@@ -136,11 +136,11 @@ const getValidations = (e, relationships, op) => {
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = false;
                 const nullable = !relation.from.required;
-                acc[toTabName] = [`'array'`];
-                if (nullable) acc[toTabName].push(`'sometimes'`);
-                if (!nullable) acc[toTabName].push(`'required'`);
-                if (!nullable) acc[toTabName].push(`'min:1'`);
-                acc[`${toTabName}.*`] = [`'integer'`, `'exists:${toTabName},id'`];
+                acc[fromInjectedField] = [`'array'`];
+                if (nullable) acc[fromInjectedField].push(`'sometimes'`);
+                if (!nullable) acc[fromInjectedField].push(`'required'`);
+                if (!nullable) acc[fromInjectedField].push(`'min:1'`);
+                acc[`${fromInjectedField}.*`] = [`'integer'`, `'exists:${toTabName},id'`];
                 return acc;
             }, {}),
     };
