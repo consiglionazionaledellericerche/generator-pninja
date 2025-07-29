@@ -60,6 +60,21 @@ export function getModelRelatedEntities(entity, relationships) {
       });
     });
 
+  // OneToOne reverse relationships
+  relationships
+    .filter(relation => (
+      relation.cardinality === 'OneToOne' && relation.to.name === entity.name && !!relation.to.injectedField
+    ))
+    .forEach(relation => {
+      relatedEntities.push({
+        field: to.snake(relation.to.injectedField || relation.from.name),
+        labelField: relation.to.injectedFieldLabel,
+        related: relation.from.name,
+        isArray: false,
+        cardinality: relation.cardinality,
+      });
+    });
+
   // ManyToOne reverse relationships
   relationships
     .filter(relation => (
