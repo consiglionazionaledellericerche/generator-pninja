@@ -148,7 +148,7 @@ export class FactoriesGenerator {
             case 'TextBlob':
                 return 'fake()->text()';
             case 'UUID':
-                return 'uuid4()';
+                return '\\Illuminate\\Support\\Str::uuid()->toString()';
             default:
                 if (enums.filter(e => field.type === e.name).map(e => e.name).pop()) {
                     return `((\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())[array_rand(\\App\\Enums\\${enums.filter(e => field.type === e.name).map(e => e.name).pop()}::cases())])->value`
