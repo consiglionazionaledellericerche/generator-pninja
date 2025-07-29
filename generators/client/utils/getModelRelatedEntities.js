@@ -20,6 +20,7 @@ export function getModelRelatedEntities(entity, relationships) {
         nullable: !relation.from.required,
         isArray: relation.cardinality !== 'OneToOne',
         cardinality: relation.cardinality,
+        reverse: false,
       });
     });
 
@@ -39,6 +40,7 @@ export function getModelRelatedEntities(entity, relationships) {
         nullable: !relation.to.required,
         isArray: relation.cardinality === 'ManyToMany',
         cardinality: relation.cardinality,
+        reverse: true,
       });
     });
 
@@ -57,6 +59,7 @@ export function getModelRelatedEntities(entity, relationships) {
         nullable: !relation.from.required,
         isArray: false,
         cardinality: relation.cardinality,
+        reverse: false,
       });
     });
 
@@ -72,6 +75,7 @@ export function getModelRelatedEntities(entity, relationships) {
         related: relation.from.name,
         isArray: false,
         cardinality: relation.cardinality,
+        reverse: true,
       });
     });
 
@@ -88,6 +92,7 @@ export function getModelRelatedEntities(entity, relationships) {
         related: relation.from.name,
         isArray: true,
         cardinality: relation.cardinality,
+        reverse: true,
       });
     });
   return relatedEntities;

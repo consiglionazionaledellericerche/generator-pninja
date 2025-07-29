@@ -142,7 +142,9 @@ export async function createReactClient(that, parsedJDL) {
                 enums,
                 relationships,
                 foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['OneToMany', 'ManyToOne'].includes(fi.cardinality)),
-                relatedEntities: getModelRelatedEntities(entity, relationships).filter(re => ['OneToOne', 'ManyToMany'].includes(re.cardinality)),
+                relatedEntities: getModelRelatedEntities(entity, relationships)
+                    .filter(re => ['OneToOne', 'ManyToMany'].includes(re.cardinality))
+                    .filter(re => !(re.cardinality === 'OneToOne' && re.reverse === true)),
                 relatedEntitiesForFilters: relationships.filter(relation =>
                     relation.cardinality === 'OneToOne'
                     && relation.from.name === entity.name
