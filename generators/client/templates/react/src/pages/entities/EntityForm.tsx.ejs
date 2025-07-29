@@ -449,7 +449,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             htmlFor="<%= to.snake(field) %>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
 <%          if(!nullable) {-%>
-            validations={{ required: '' }}
+            validations={{ required: true }}
 <%          }-%>
           />
           <div className={selectContainerClassName}>
@@ -459,7 +459,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               size={Math.min(10, Math.max(5, <%= to.camel(field) %>DataOptions.length)) + 1}
 <%            }-%>
               id="<%= to.snake(field) %>"
-              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>')}
+              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>',{
+<%            if(!nullable) {-%>
+                required: t('errors.validations.required'),
+<%            } -%>
+              })}
               className={selectClassName(!!errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message)}>
 <%            if (!isArray) {-%>
               {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
@@ -487,13 +491,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             htmlFor="<%= to.snake(foreignId) %>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
 <%          if(!nullable) {-%>
-            validations={{ required: '' }}
+            validations={{ required: true }}
 <%          }-%>
           />
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(foreignId) %>"
-              {...register('<%= to.snake(foreignId) %>')}
+              {...register('<%= to.snake(foreignId) %>',{
+<%            if(!nullable) {-%>
+                required: t('errors.validations.required'),
+<%            } -%>
+              })}
               className={selectClassName(!!errors?.<%= to.snake(foreignId) %>?.message)}>
               {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
               {loadingOptions ? (
