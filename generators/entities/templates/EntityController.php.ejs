@@ -157,20 +157,7 @@ class <%- className %>Controller extends Controller
 <%  } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%  } -%>
-<%  if(!isEmpty(fileFields)) {-%>
-            $filesToDelete = [];
-            foreach ($request->all() as $key => $value) {
-                if (is_array($value) && isset($value['delete']) && $value['delete'] === true) {
-                    $filesToDelete[] = $key;
-                }
-            }
-            $filesToDeletePaths = array_map(fn($field): string => $<%- entityName %>[$field . '_path'] ?? null, $filesToDelete);
-            foreach ($filesToDelete as $field) {
-                $<%- entityName %>[$field . '_path'] = null;
-                $<%- entityName %>[$field . '_type'] = null;
-                $<%- entityName %>[$field . '_name'] = null;
-            }
-<%  } -%>
+
 <%  if(isEmpty(validationsUpdate)) {-%>
             $data = $request->all();
 <%  } else {-%>
@@ -210,6 +197,9 @@ class <%- className %>Controller extends Controller
             $data = $validated;
 <%  }-%>
 <%  if(!isEmpty(fileFields)) {-%>
+
+            $filesToDeletePaths = [];
+
 <%      fileFields.forEach((field) => {-%>
             if(isset($data['<%-to.snake(field)%>']['data'])) {
                 if ($<%- entityName %>-><%-to.snake(field)%>_path) {
@@ -227,9 +217,15 @@ class <%- className %>Controller extends Controller
                     $data['<%-to.snake(field)%>_name'] = $originalName;
                 }
             }
+            if (isset($data['<%-to.snake(field)%>']['delete']) && $data['<%-to.snake(field)%>']['delete'] && $<%- entityName %>-><%-to.snake(field)%>_path) {
+                $filesToDeletePaths[] = $<%- entityName %>-><%-to.snake(field)%>_path;
+                $<%- entityName %>-><%-to.snake(field)%>_path = null;
+                $<%- entityName %>-><%-to.snake(field)%>_type = null;
+                $<%- entityName %>-><%-to.snake(field)%>_name = null;
+            }
+
 <%      });-%>
 <%  }-%>
-
             $<%- entityName %>->update($data);
 <%  if(!isEmpty(fileFields)) {-%>
 
@@ -238,6 +234,7 @@ class <%- className %>Controller extends Controller
                     Storage::disk('private')->delete($filePath);
                 }
             }
+
 <%  }-%>
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
