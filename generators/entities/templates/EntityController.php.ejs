@@ -104,37 +104,28 @@ class <%- className %>Controller extends Controller
                     <%- validation %>,
 <%          })-%>
                 ],
-<%              if (validationsStore[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
-                    'required',
+                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
 <%                  if (imageFields.includes(field)) { -%>
                     'image_mimetype',
 <%                  } -%>
                 ],
                 '<%- field %>.originalName' => [
-                    'required',
+                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
                 ],
-<%              } else {-%>
-<%                  if (imageFields.includes(field)) { -%>
-                '<%- field %>.mimeType' => [
-                    'nullable',
-                    'image_mimetype',
+                '<%- field %>.delete' => [
+                    'boolean',
                 ],
-<%                  } -%>
-                '<%- field %>.originalName' => [
-                    'nullable',
-                ],
-<%              } -%>
 <%          } -%>
 <%      }-%>
             ]);
             $data = $validated;
 <%  }-%>
 <%          fileFields.forEach((field) => {-%>
-            if($request->input('<%-to.snake(field)%>.data')) {
-                $fileData = base64_decode($request->input('<%-to.snake(field)%>.data'));
-                $mimeType = $request->input('<%-to.snake(field)%>.mimeType');
-                $originalName = $request->input('<%-to.snake(field)%>.originalName');
+            if(isset($data['<%-to.snake(field)%>']['data'])) {
+                $fileData = base64_decode($data['<%-to.snake(field)%>']['data']);
+                $mimeType = $data['<%-to.snake(field)%>']['mimeType'];
+                $originalName = $data['<%-to.snake(field)%>']['originalName'];
                 $filename = uniqid() . '-' . $originalName;
                 $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
                 $stored = Storage::disk('private')->put($path, $fileData);
@@ -193,35 +184,26 @@ class <%- className %>Controller extends Controller
                 ],
 <%          } else {-%>
                 '<%- field %>.data' => [
-<%          validationsUpdate[field].forEach(validation => {-%>
-<%  if (validation !== "'required'") { -%>
+<%          validationsStore[field].forEach(validation => {-%>
+<%              if (validation === `'required'`) { -%>
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_path'] ? 'nullable' : 'required'` : `'nullable'` %>,
+<%              } else {-%>
                     <%- validation %>,
-<%  } else {-%>
-                    $<%- entityName %>['<%- field %>_path'] ? 'nullable' : 'required',
-<%  } -%>
+<%              } -%>
 <%          })-%>
                 ],
-<%              if (validationsUpdate[field].includes("'required'")) { -%>
                 '<%- field %>.mimeType' => [
-                    $<%- entityName %>['<%- field %>_type'] ? 'nullable' : 'required',
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_type'] ? 'nullable' : 'required'` : `'nullable'` %>,
 <%                  if (imageFields.includes(field)) { -%>
                     'image_mimetype',
 <%                  } -%>
                 ],
                 '<%- field %>.originalName' => [
-                    $<%- entityName %>['<%- field %>_name'] ? 'nullable' : 'required',
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
                 ],
-<%              } else {-%>
-<%                  if (imageFields.includes(field)) { -%>
-                '<%- field %>.mimeType' => [
-                    'nullable',
-                    'image_mimetype',
+                '<%- field %>.delete' => [
+                    'boolean',
                 ],
-<%                  } -%>
-                '<%- field %>.originalName' => [
-                    'nullable',
-                ],
-<%              } -%>
 <%          } -%>
 <%      }-%>
             ]);
@@ -229,13 +211,13 @@ class <%- className %>Controller extends Controller
 <%  }-%>
 <%  if(!isEmpty(fileFields)) {-%>
 <%      fileFields.forEach((field) => {-%>
-            if($request->input('<%-to.snake(field)%>.data')) {
+            if(isset($data['<%-to.snake(field)%>']['data'])) {
                 if ($<%- entityName %>-><%-to.snake(field)%>_path) {
                     Storage::disk('private')->delete($<%- entityName %>-><%-to.snake(field)%>_path);
                 }
-                $fileData = base64_decode($request->input('<%-to.snake(field)%>.data'));
-                $mimeType = $request->input('<%-to.snake(field)%>.mimeType');
-                $originalName = $request->input('<%-to.snake(field)%>.originalName');
+                $fileData = base64_decode($data['<%-to.snake(field)%>']['data']);
+                $mimeType = $data['<%-to.snake(field)%>']['mimeType'];
+                $originalName = $data['<%-to.snake(field)%>']['originalName'];
                 $filename = uniqid() . '-' . $originalName;
                 $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
                 $stored = Storage::disk('private')->put($path, $fileData);
