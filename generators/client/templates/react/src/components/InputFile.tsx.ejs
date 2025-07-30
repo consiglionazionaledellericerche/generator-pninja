@@ -5,10 +5,6 @@ import { useState, useRef } from 'react';
 
 import { UseFormRegister, FieldErrors, UseFormTrigger, UseFormSetValue } from 'react-hook-form';
 
-type ObjData = {
-  [key: string]: unknown | ObjData;
-};
-
 type TransformedFileData = {
   data: string;
   mimeType: string;
@@ -22,12 +18,12 @@ const inputClassName = (hasErrors = false) =>
 
 interface InputFileProps {
   accept?: string;
-  entity: ObjData;
-  errors?: FieldErrors<ObjData>;
+  entity?: unknown;
+  errors?: FieldErrors<Record<string, unknown>>;
   fieldName: string;
-  register: UseFormRegister<ObjData>;
-  setValue: UseFormSetValue<ObjData>;
-  trigger: UseFormTrigger<ObjData>;
+  register: UseFormRegister<Record<string, unknown>>;
+  setValue: UseFormSetValue<Record<string, unknown>>;
+  trigger: UseFormTrigger<Record<string, unknown>>;
   validations?: {
     required?: boolean;
     minbytes?: number;
@@ -64,7 +60,8 @@ const InputFile: React.FC<InputFileProps> = ({
   validations,
 }) => {
   const { t } = useTranslation();
-  const hasFile = entity?.[`${fieldName}_path`] || false;
+  const entityData = entity as Record<string, unknown>;
+  const hasFile = entityData?.[`${fieldName}_path`] || false;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
   const { required, minbytes, maxbytes } = validations || {};
@@ -100,7 +97,7 @@ const InputFile: React.FC<InputFileProps> = ({
           max: prettyBytes(maxbytes),
         });
       }
-      if (required && (fileData?.delete || (!fileData && !entity?.[`${fieldName}_path`]))) {
+      if (required && (fileData?.delete || (!fileData && !entityData?.[`${fieldName}_path`]))) {
         return t('errors.validations.file.required');
       }
       return true;
@@ -159,17 +156,17 @@ const InputFile: React.FC<InputFileProps> = ({
         <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
           <div className="flex items-center justify-between">
             <a
-              href={`/api/files/${entity?.[`${fieldName}_path`]}`}
+              href={`/api/files/${entityData?.[`${fieldName}_path`]}`}
               className="text-slate-900 dark:text-gray-300 hover:underline flex items-center"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {(entity?.[`${fieldName}_type`] as string).startsWith('image/') ? (
+              {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
                 <FileImageIcon className="mr-2 h-4 w-4" />
               ) : (
                 <FileIcon className="mr-2 h-4 w-4" />
               )}
-              {t('actions.crud.file.viewOrDownload')} {entity?.[`${fieldName}_name`] as string}
+              {t('actions.crud.file.viewOrDownload')} {entityData?.[`${fieldName}_name`] as string}
             </a>
             <div className="flex items-center gap-2">
               <button

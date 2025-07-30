@@ -235,23 +235,19 @@ import { ChevronsUpDown } from 'lucide-react';
 import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
+
 import { FormLabel } from '../../components/FormLabel';
-<% if (hasBlob) {%>
+<% if (hasBlob) {-%>
 import { InputFile } from '../../components/InputFile';
 <% } -%>
 import { detect } from 'detect-browser';
+
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
-type ObjData = {
-  [key: string]: unknown | ObjData;
-};
-
-type <%= entity.name %>FormData = {
-  [key: string]: unknown;
-};
+type <%= entity.name %>FormData = Record<string, unknown>;
 
 interface <%= entity.name %>FormProps {
-  <%= to.camel(entity.name)%>?: I<%= entity.name %>;
+  <%= to.camel(entity.name)%>: I<%= entity.name %>;
   onSubmit: (data: <%= entity.name %>FormData) => void | Promise<void>;
   onCancel: () => void;
 }
@@ -284,7 +280,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  if (hasBlob || hasUUID) {-%>
     setValue,
 <%  }-%>
-    trigger
+    trigger,
   } = useForm<<%= entity.name %>FormData>();
 
   const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
@@ -415,7 +411,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      if(type === 'ImageBlob') { -%>
           accept="image/*"
 <%      } -%>
-          entity={<%= to.camel(entity.name)%> as ObjData}
+          entity={<%= to.camel(entity.name)%>}
           errors={errors}
           fieldName="<%-to.snake(name)%>"
           register={register}
