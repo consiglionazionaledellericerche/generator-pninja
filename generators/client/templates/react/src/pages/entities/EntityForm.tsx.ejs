@@ -244,11 +244,11 @@ import { detect } from 'detect-browser';
 
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
-type <%= entity.name %>FormData = Record<string, unknown>;
+type FormData = Record<string, unknown>;
 
 interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>: I<%= entity.name %>;
-  onSubmit: (data: <%= entity.name %>FormData) => void | Promise<void>;
+  onSubmit: (data: FormData) => void | Promise<void>;
   onCancel: () => void;
 }
 <% if (hasRelated) {-%>
@@ -281,9 +281,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     setValue,
 <%  }-%>
     trigger,
-  } = useForm<<%= entity.name %>FormData>();
+  } = useForm<FormData>();
 
-  const handleFormSubmit = async (data: <%= entity.name %>FormData) => {
+  const handleFormSubmit = async (data: FormData) => {
     try {
       await onSubmit(data);
     } catch (error) {
