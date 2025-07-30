@@ -6,6 +6,9 @@ import { useApi } from '../../hooks/useApi';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { useNotifications } from '../../contexts/NotificationContext';
+import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+import { detect } from 'detect-browser';
+const isMac = detect()?.os?.toLowerCase().includes('mac');
 
 type SortDirection = 'asc' | 'desc';
 type SortableField = keyof Pick<
@@ -30,7 +33,7 @@ export default function <%= entity.name %>() {
   const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'id', direction: 'asc' });
-
+  useAutoShortcuts();
   const sortableColumns: SortableField[] = [
     'id',
 <%for(column of columns) { -%>
@@ -140,9 +143,11 @@ export default function <%= entity.name %>() {
       <Link
         to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
         className="primary-button"
+        data-shortcut="ctrl+enter"
       >
         <Plus size={16} />
         {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
+        <kbd className="kdb-shortcut ml-1">{isMac ? '⌘' : 'Ctrl'}+↵</kbd>
       </Link>
     </div>
     <Fragment>

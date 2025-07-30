@@ -239,6 +239,8 @@ import { FormLabel } from '../../components/FormLabel';
 <% if (hasBlob) {%>
 import { InputFile } from '../../components/InputFile';
 <% } -%>
+import { detect } from 'detect-browser';
+const isMac = detect()?.os?.toLowerCase().includes('mac');
 
 type ObjData = {
   [key: string]: unknown | ObjData;
@@ -521,6 +523,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           className="primary-button"
         >
           {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
+          <kbd className="kdb-shortcut ml-1">{isMac ? '⌘' : 'Ctrl'}+↵</kbd>
         </button>
       </div>
     </form>
