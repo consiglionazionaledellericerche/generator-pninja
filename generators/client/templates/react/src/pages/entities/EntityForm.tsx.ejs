@@ -261,7 +261,7 @@ interface SelectOption {
 <% } -%>
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const { addNotification } = useNotifications();
   useAutoShortcuts();
   const { fetch } = useApi();
@@ -350,7 +350,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     };
 
     fetchOptions();
-  }, [fetch, addNotification, t]);
+  }, [<%= to.camel(entity.name)-%>, fetch, addNotification, t]);
 
   useEffect(() => {
     if (<%= to.camel(entity.name)-%>) {
