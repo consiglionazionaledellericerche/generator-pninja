@@ -245,11 +245,9 @@ import { detect } from 'detect-browser';
 
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
-type FormData = Record<string, unknown>;
-
 interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>: I<%= entity.name %>;
-  onSubmit: (data: FormData) => void | Promise<void>;
+  onSubmit: (data: I<%= entity.name %>) => void | Promise<void>;
   onCancel: () => void;
 }
 <% if (hasRelated) {-%>
@@ -282,9 +280,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     setValue,
     trigger,
 <%  }-%>
-  } = useForm<FormData>();
+  } = useForm();
 
-  const handleFormSubmit = async (data: FormData) => {
+  const handleFormSubmit = async (data: I<%= entity.name %>) => {
     try {
       await onSubmit(data);
     } catch (error) {
@@ -362,7 +360,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <% } -%>
 <% for({field, related, isArray} of relatedEntities) {-%>
 <%  if (isArray) {-%>
-        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map(item => String(item.id)),
+        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => String(item.id)),
 <%  } else {-%>
         <%= to.snake(field) %>_id: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id || ''),
 <%  }-%>
