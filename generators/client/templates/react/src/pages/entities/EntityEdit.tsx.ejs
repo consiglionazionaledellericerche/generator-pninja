@@ -18,7 +18,7 @@ export default function <%= entity.name %>Edit() {
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
   const { fetch } = useApi();
-  const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
+  const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>({} as I<%= entity.name %>);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
