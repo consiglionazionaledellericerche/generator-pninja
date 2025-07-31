@@ -147,7 +147,8 @@ export default function <%= entity.name %>() {
       >
         <Plus size={16} />
         {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
-        <kbd className="kdb-shortcut ml-1">{isMac ? '⌘' : 'Ctrl'}+↵</kbd>
+        <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+        <kbd className="kdb-shortcut">↵</kbd>
       </Link>
     </div>
     <Fragment>

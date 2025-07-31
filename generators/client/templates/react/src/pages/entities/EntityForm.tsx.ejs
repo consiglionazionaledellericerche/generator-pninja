@@ -519,7 +519,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           className="primary-button"
         >
           {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
-          <kbd className="kdb-shortcut ml-1">{isMac ? '⌘' : 'Ctrl'}+↵</kbd>
+          <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+          <kbd className="kdb-shortcut">↵</kbd>
         </button>
       </div>
     </form>

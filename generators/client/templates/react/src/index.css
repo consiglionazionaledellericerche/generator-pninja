@@ -35,7 +35,10 @@
     @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen;
   }
   .kdb-shortcut {
-    @apply text-xs font-mono capitalize border py-0 px-0.5 rounded-sm hidden xl:inline;
+    @apply font-sans text-xs h-5 min-w-5 items-center justify-center rounded border px-1 hidden xl:inline-flex;
+  }
+  .kdb-shortcut + .kdb-shortcut {
+    @apply -ml-0.5;
   }
   .primary-button {
     @apply inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-1.5 px-4 text-sm font-medium text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
@@ -52,7 +55,7 @@
   .nav-bar {
     @apply relative z-9999 flex flex-wrap items-center justify-between gap-4 h-16 px-4 bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300;
     .nav-bar-link {
-      @apply rounded-md px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 hover:ring-4 focus:outline-none focus-visible:ring-4 cursor-pointer;
+      @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-2 text-sm font-medium bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 hover:ring-4 focus:outline-none focus-visible:ring-4 cursor-pointer;
     }
     .nav-bar-link.active {
       @apply bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300;
