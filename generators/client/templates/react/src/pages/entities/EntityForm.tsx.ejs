@@ -280,8 +280,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     reset,
 <%  if (hasBlob || hasUUID) {-%>
     setValue,
-<%  }-%>
     trigger,
+<%  }-%>
   } = useForm<FormData>();
 
   const handleFormSubmit = async (data: FormData) => {
