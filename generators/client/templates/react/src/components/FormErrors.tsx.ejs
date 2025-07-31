@@ -1,0 +1,21 @@
+import { FieldErrors } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+interface FormErrorsProps {
+  fieldName: string;
+  errors: FieldErrors<Record<string, unknown>>;
+  validations?: Record<string, unknown>;
+}
+
+const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors, validations }) => {
+  const { t } = useTranslation();
+  return (
+    errors?.[fieldName]?.message && (
+      <p className="mt-1 text-sm text-red-600">
+        {errors?.[fieldName]?.message}
+      </p>
+    )
+  );
+};
+
+export { FormErrors };

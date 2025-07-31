@@ -236,6 +236,7 @@ import { RefreshCw } from 'lucide-react';
 <% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
+import { FormErrors } from '../../components/FormErrors';
 import { FormLabel } from '../../components/FormLabel';
 <% if (hasBlob) {-%>
 import { InputFile } from '../../components/InputFile';
@@ -374,10 +375,11 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
   useEffect(() => {
-    Object.keys(errors).forEach((fieldName) => {
-      trigger(fieldName as string);
-    });
-  }, [i18n.language]);
+    // If a language change is detected, the form is revalidated to have localized error messages
+    if (Object.keys(errors ?? {}).length > 0) {
+      trigger();
+    }
+  }, [errors, i18n.language, trigger]);
 
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
@@ -421,6 +423,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           validations={<%- getValidationsFromValidations(validations) %>}
 <%      } -%>
         />
+        <FormErrors errors={errors} fieldName="<%-to.snake(name)%>" />
 <%      } else {-%>
         <div>
           <FormLabel
@@ -431,9 +434,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
           />        
 <%= getField(type, name, validations) -%>
-          {errors?.<%= to.snake(name) %>?.message && (
-            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(name) %>.message}</p>
-          )}
+          <FormErrors errors={errors} fieldName="<%= to.snake(name) %>" />
         </div>
 <%      }-%>
 <%    }-%>
@@ -470,9 +471,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          {errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message && (
-            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>.message}</p>
-          )}
+          <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>" />
         </div>
 <%    }-%>
 <%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
@@ -502,9 +501,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          {errors?.<%= to.snake(foreignId) %>?.message && (
-            <p className="mt-1 text-sm text-red-600">{errors.<%= to.snake(foreignId) %>.message}</p>
-          )}
+          <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" />
         </div>
 <%    }-%>
       </div>
