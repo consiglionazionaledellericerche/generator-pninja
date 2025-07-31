@@ -1,5 +1,6 @@
 import { FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import prettyBytes from 'pretty-bytes';
 
 interface FormErrorsProps {
   fieldName: string;
@@ -9,10 +10,15 @@ interface FormErrorsProps {
 
 const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors, validations }) => {
   const { t } = useTranslation();
+  validations = validations || {};
+  const { min, max, minbytes, maxbytes, minlength, maxlength } = validations;
   return (
     errors?.[fieldName]?.message && (
       <p className="mt-1 text-sm text-red-600">
-        {errors?.[fieldName]?.message}
+        {t(errors?.[fieldName]?.message, {
+          min: min ?? minlength ?? prettyBytes(Number(minbytes || 0)),
+          max: max ?? maxlength ?? prettyBytes(Number(maxbytes || 0)),
+        })}
       </p>
     )
   );

@@ -108,7 +108,7 @@ const getField = (type, name, validations) => {
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(name) %>"
-              {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { %>, { required: t('errors.validations.required') }<% } %>)}
+              {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { %>, { required: 'errors.validations.required' }<% } %>)}
               className={selectClassName(!!errors?.<%= to.snake(name) %>?.message)}
             >
               <option className={selectOptionClassName} value={''}></option>
@@ -136,48 +136,48 @@ const getField = (type, name, validations) => {
             id="<%= to.snake(name) %>"
             {...register('<%= to.snake(name) %>'<% if (validations.length > 0) { %>, {<%- "\n"%><% } -%>
 <%        if (!isOptional(validations)) { -%>
-              required: t('errors.validations.required'),
+              required: 'errors.validations.required',
 <%        } -%>
 <%        if (getMin(validations) !== undefined) { -%>
               min: {
                 value: <%-getMin(validations)%>,
-                message: t('errors.validations.min', { min: <%-getMin(validations)%> }),
+                message: 'errors.validations.min',
               },
 <%        } -%>
 <%        if (getMax(validations) !== undefined) { -%>
               max: {
                 value: <%-getMax(validations)%>,
-                message: t('errors.validations.max', { max: <%-getMax(validations)%> }),
+                message: 'errors.validations.max',
               },
 <%        } -%>
 <%        if (getMinlength(validations) !== undefined) { -%>
               minLength: {
                 value: <%-getMinlength(validations)%>,
-                message: t('errors.validations.minlength', { min: <%-getMinlength(validations)%> }),
+                message: 'errors.validations.minlength',
               },
 <%        } -%>
 <%        if (getMaxlength(validations) !== undefined) { -%>
               maxLength: {
                 value: <%-getMaxlength(validations)%>,
-                message: t('errors.validations.maxlength', { max: <%-getMaxlength(validations)%> }),
+                message: 'errors.validations.maxlength',
               },
 <%        } -%>
 <%        if (getPattern(validations) !== undefined) { -%>
               pattern: {
                 value: /<%-getPattern(validations)%>/,
-                message: t('errors.validations.pattern'),
+                message: 'errors.validations.pattern',
               },
 <%        } -%>
 <%        if (type === 'UUID' && getPattern(validations) === undefined) {-%>
               pattern: {
                 value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-                message: t('errors.validations.pattern'),
+                message: 'errors.validations.pattern',
               },
 <%        }-%>
 <%        if (isEmail(name) && getPattern(validations) === undefined) {-%>
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: t('errors.validations.pattern'),
+                message: 'errors.validations.pattern',
               },
 <%        }-%>
 <%        if(T === 'number') {-%>
@@ -204,7 +204,7 @@ const getField = (type, name, validations) => {
           <textarea
             rows={10}
             id="<%= to.snake(name) %>"
-            {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { -%>, { required: t('errors.validations.required') }<% } -%>)}
+            {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { -%>, { required: 'errors.validations.required' }<% } -%>)}
             className={inputClassName(!!errors?.<%= to.snake(name) %>?.message)}
           />
 <%      }-%>
@@ -423,7 +423,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           validations={<%- getValidationsFromValidations(validations) %>}
 <%      } -%>
         />
-        <FormErrors errors={errors} fieldName="<%-to.snake(name)%>" />
+        <FormErrors errors={errors} fieldName="<%-to.snake(name)%>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
 <%      } else {-%>
         <div>
           <FormLabel
@@ -434,7 +434,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
           />        
 <%= getField(type, name, validations) -%>
-          <FormErrors errors={errors} fieldName="<%= to.snake(name) %>" />
+          <FormErrors errors={errors} fieldName="<%= to.snake(name) %>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
         </div>
 <%      }-%>
 <%    }-%>
@@ -454,7 +454,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               size={Math.min(10, Math.max(5, <%= to.camel(field) %>DataOptions.length)) + 1}
 <%            }-%>
               id="<%= to.snake(field) %>"
-              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>'<% if(!nullable) { %>,{ required: t('errors.validations.required') }<% } %>)}
+              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>'<% if(!nullable) { %>,{ required: 'errors.validations.required' }<% } %>)}
               className={selectClassName(!!errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message)}>
 <%            if (!isArray) {-%>
               {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
@@ -471,7 +471,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>" />
+          <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
         </div>
 <%    }-%>
 <%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
@@ -486,7 +486,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div className={selectContainerClassName}>
             <select
               id="<%= to.snake(foreignId) %>"
-              {...register('<%= to.snake(foreignId) %>'<% if(!nullable) { %>,{ required: t('errors.validations.required') }<% } %>)}
+              {...register('<%= to.snake(foreignId) %>'<% if(!nullable) { %>,{ required: 'errors.validations.required' }<% } %>)}
               className={selectClassName(!!errors?.<%= to.snake(foreignId) %>?.message)}>
               {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
               {loadingOptions ? (
@@ -501,7 +501,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" />
+          <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" validations={<%- getValidationsFromValidations(validations) %>} />
         </div>
 <%    }-%>
       </div>
