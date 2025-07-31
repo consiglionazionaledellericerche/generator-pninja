@@ -141,25 +141,25 @@ const getField = (type, name, validations) => {
 <%        if (getMin(validations) !== undefined) { -%>
               min: {
                 value: <%-getMin(validations)%>,
-                message: 'errors.validations.min',
+                message: 'errors.validations.min:<%-getMin(validations)%>',
               },
 <%        } -%>
 <%        if (getMax(validations) !== undefined) { -%>
               max: {
                 value: <%-getMax(validations)%>,
-                message: 'errors.validations.max',
+                message: 'errors.validations.max:<%-getMax(validations)%>',
               },
 <%        } -%>
 <%        if (getMinlength(validations) !== undefined) { -%>
               minLength: {
                 value: <%-getMinlength(validations)%>,
-                message: 'errors.validations.minlength',
+                message: 'errors.validations.minlength:<%-getMinlength(validations)%>',
               },
 <%        } -%>
 <%        if (getMaxlength(validations) !== undefined) { -%>
               maxLength: {
                 value: <%-getMaxlength(validations)%>,
-                message: 'errors.validations.maxlength',
+                message: 'errors.validations.maxlength:<%-getMaxlength(validations)%>',
               },
 <%        } -%>
 <%        if (getPattern(validations) !== undefined) { -%>
@@ -374,13 +374,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     }
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
-  useEffect(() => {
-    // If a language change is detected, the form is revalidated to have localized error messages
-    if (Object.keys(errors ?? {}).length > 0) {
-      trigger();
-    }
-  }, [errors, i18n.language, trigger]);
-
   const inputClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 <%  if (hasCheckbox) {-%>
@@ -423,7 +416,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           validations={<%- getValidationsFromValidations(validations) %>}
 <%      } -%>
         />
-        <FormErrors errors={errors} fieldName="<%-to.snake(name)%>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
+        <FormErrors errors={errors} fieldName="<%-to.snake(name)%>" />
 <%      } else {-%>
         <div>
           <FormLabel
@@ -434,7 +427,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
           />        
 <%= getField(type, name, validations) -%>
-          <FormErrors errors={errors} fieldName="<%= to.snake(name) %>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
+          <FormErrors errors={errors} fieldName="<%= to.snake(name) %>" />
         </div>
 <%      }-%>
 <%    }-%>
@@ -471,7 +464,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"<% if (getValidationsFromValidations(validations)) { %> validations={<%- getValidationsFromValidations(validations) %>}<% } %> />
+          <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>" />
         </div>
 <%    }-%>
 <%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
@@ -501,7 +494,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
 <%            }-%>
           </div>
-          <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" validations={<%- getValidationsFromValidations(validations) %>} />
+          <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" />
         </div>
 <%    }-%>
       </div>

@@ -80,25 +80,16 @@ const InputFile: React.FC<InputFileProps> = ({
       const fileData = value as TransformedFileData | null;
 
       if (fileData?.mimeType && !fileData.mimeType.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
-        return t('errors.validations.file.invalidType', {
-          actual: fileData.mimeType,
-          accepted: accept,
-        });
+        return `errors.validations.file.invalidType:${accept}:${fileData.mimeType}`;
       }
       if (typeof fileData?.size === 'number' && minbytes && fileData?.size < minbytes) {
-        return t('errors.validations.file.minSize', {
-          actual: prettyBytes(fileData?.size),
-          min: prettyBytes(minbytes),
-        });
+        return `errors.validations.file.minSize:${prettyBytes(minbytes)}:${prettyBytes(fileData?.size)}`;
       }
       if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
-        return t('errors.validations.file.maxSize', {
-          actual: prettyBytes(fileData?.size),
-          max: prettyBytes(maxbytes),
-        });
+        return `errors.validations.file.maxSize:${prettyBytes(maxbytes)}:${prettyBytes(fileData?.size)}`;
       }
       if (required && (fileData?.delete || (!fileData && !entityData?.[`${fieldName}_path`]))) {
-        return t('errors.validations.file.required');
+        return 'errors.validations.file.required';
       }
       return true;
     },

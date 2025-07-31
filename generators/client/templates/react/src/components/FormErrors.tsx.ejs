@@ -1,23 +1,22 @@
 import { FieldErrors } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import prettyBytes from 'pretty-bytes';
 
 interface FormErrorsProps {
   fieldName: string;
   errors: FieldErrors<Record<string, unknown>>;
-  validations?: Record<string, unknown>;
 }
 
-const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors, validations }) => {
+const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors }) => {
   const { t } = useTranslation();
-  validations = validations || {};
-  const { min, max, minbytes, maxbytes, minlength, maxlength } = validations;
+  const [message, accepted, actual] = errors?.[fieldName]?.message?.split(':') || [];
   return (
     errors?.[fieldName]?.message && (
       <p className="mt-1 text-sm text-red-600">
-        {t(errors?.[fieldName]?.message, {
-          min: min ?? minlength ?? prettyBytes(Number(minbytes || 0)),
-          max: max ?? maxlength ?? prettyBytes(Number(maxbytes || 0)),
+        {t(message, {
+          min: accepted,
+          max: accepted,
+          accepted,
+          actual: actual,
         })}
       </p>
     )
