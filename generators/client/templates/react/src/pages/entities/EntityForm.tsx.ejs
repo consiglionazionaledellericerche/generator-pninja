@@ -105,21 +105,15 @@ getValidationsFromValidations = (validations) => {
 const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
-          <div className={selectContainerClassName}>
-            <select
-              id="<%= to.snake(name) %>"
-              {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { %>, { required: 'errors.validations.required' }<% } %>)}
-              className={selectClassName(!!errors?.<%= to.snake(name) %>?.message)}
-            >
-              <option className={selectOptionClassName} value={''}></option>
-              {Object.values(<%= type %>).map((<%= to.snake(name) %>) => (
-                <option className={selectOptionClassName} key={<%= to.snake(name) %>} value={<%= to.snake(name) %>}>
-                  {<%= to.snake(name) %>}
-                </option>
-              ))}
-            </select>
-            <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
-          </div>
+          <InputSelect
+            fieldName="<%= to.snake(name) %>"
+            formMethods={formMethods}
+            loadingOptions={false}
+            options={Object.values(<%= type %>).map((v) => ({
+              value: String(v),
+              label: String(v),
+            }))}
+          />
 <%    } else {
     const T = fieldTypeToInputType(type);
     const STEP = fieldTypeToInputStep(type);
@@ -202,15 +196,15 @@ import { HttpError } from '../../hooks/useApi';
 <% }-%>
 import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
-<% if (hasSelectNotMultiple) {-%>
-import { ChevronsUpDown } from 'lucide-react';
-<% } -%>
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
 import { FormErrors } from '../../components/FormErrors';
 import { FormLabel } from '../../components/FormLabel';
 <% if (hasBlob) {-%>
 import { InputFile } from '../../components/InputFile';
+<% } -%>
+<% if (hasSelect) {-%>
+import { InputSelect<% if (hasRelated) {-%>, ISelectOption<% }-%> } from '../../components/InputSelect';
 <% } -%>
 <% if (hasUUID) {-%>
 import { InputUuid } from '../../components/InputUuid';
@@ -224,13 +218,6 @@ interface <%= entity.name %>FormProps {
   onSubmit: (data: I<%= entity.name %>) => void | Promise<void>;
   onCancel: () => void;
 }
-<% if (hasRelated) {-%>
-
-interface SelectOption {
-  id: number;
-  label: string;
-}
-<% } -%>
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
@@ -238,10 +225,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   useAutoShortcuts();
   const { fetch } = useApi();
 <% for({field} of relatedEntities) {-%>
-  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<SelectOption[]>([]);
+  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<ISelectOption[]>([]);
 <% }-%>
 <% for({foreignId} of foreignIds) {-%>
-  const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<SelectOption[]>([]);
+  const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<ISelectOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
 
@@ -274,13 +261,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         const <%= to.camel(field) %>Response = await fetch(`/api/<%=to.slug(pluralize(related))%><%-filter%>`);
         const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
         <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
-          id: item.id,
+          value: item.id,
 <%        if (labelField === 'id') {-%>
           label: `${item.id}`
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
-        }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
+        }))).sort((a: ISelectOption, b: ISelectOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
@@ -297,13 +284,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         const <%= to.camel(foreignId) %>Response = await fetch('/api/<%=to.slug(pluralize(related))%>');
         const <%= to.camel(foreignId) %>Data = await <%= to.camel(foreignId) %>Response.json();
         <%= to.camel(`set_${foreignId}_data_options`) %>((<%= to.camel(foreignId) %>Data.map((item: I<%-related%>) => ({
-          id: item.id,
+          value: item.id,
 <%        if (labelField === 'id') {%>
           label: `${item.id}`
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
-        }))).sort((a: SelectOption, b: SelectOption) => a.label.localeCompare(b.label, undefined, { numeric: true })));
+        }))).sort((a: ISelectOption, b: ISelectOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
@@ -348,16 +335,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%  if (hasCheckbox) {-%>
   const checkBoxClassName = (hasErrors = false) =>
     `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
-<%  } -%>
-<%  if (hasSelect) {-%>
-  const selectContainerClassName = 'grid grid-cols-1';
-  const selectClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
-  const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;
-<%  } -%>
-<%  if (hasSelectNotMultiple) {-%>
-  const selectChevronClassName =
-    'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
 <%  } -%>
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
@@ -406,30 +383,18 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <div className={selectContainerClassName}>
-            <select
-<%            if (isArray) {-%>
-              multiple
-              size={Math.min(10, Math.max(5, <%= to.camel(field) %>DataOptions.length)) + 1}
-<%            }-%>
-              id="<%= to.snake(field) %>"
-              {...register('<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>'<% if(!nullable) { %>,{ required: 'errors.validations.required' }<% } %>)}
-              className={selectClassName(!!errors?.<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>?.message)}>
-<%            if (!isArray) {-%>
-              {!loadingOptions && <%= to.camel(field) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
-<%            }-%>
-              {loadingOptions ? (
-                <option className={selectOptionClassName} disabled>{t('common.select.loading')}</option>
-              ) : (
-                <%= to.camel(field) %>DataOptions.length === 0
-                ? <option className={selectOptionClassName} disabled>{t('common.select.noOptions')}</option>
-                : <%= to.camel(field) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
-              )}
-            </select>
-<%            if (!isArray) {-%>
-            <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
-<%            }-%>
-          </div>
+          <InputSelect
+            fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
+<%          if (isArray) {-%>
+            multiple={true}
+<%          }-%>
+            formMethods={formMethods}
+            loadingOptions={loadingOptions}
+            options={<%= to.camel(field) %>DataOptions}
+<%          if(!nullable) { %>
+            validations={{ required: true }}
+<%          }-%>
+          />
           <FormErrors errors={errors} fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>" />
         </div>
 <%    }-%>
@@ -442,24 +407,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <div className={selectContainerClassName}>
-            <select
-              id="<%= to.snake(foreignId) %>"
-              {...register('<%= to.snake(foreignId) %>'<% if(!nullable) { %>,{ required: 'errors.validations.required' }<% } %>)}
-              className={selectClassName(!!errors?.<%= to.snake(foreignId) %>?.message)}>
-              {!loadingOptions && <%= to.camel(foreignId) %>DataOptions.length > 0 && <option className={selectOptionClassName} value={''}></option>}
-              {loadingOptions ? (
-                <option className={selectOptionClassName} disabled>{t('common.select.loading')}</option>
-              ) : (
-                <%= to.camel(foreignId) %>DataOptions.length === 0
-                ? <option className={selectOptionClassName} disabled>{t('common.select.noOptions')}</option>
-                : <%= to.camel(foreignId) %>DataOptions.map(op => <option className={selectOptionClassName} key={op.id} value={op.id}>{op.label}</option>)
-              )}
-            </select>
-<%            if (!isArray) {-%>
-            <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />
-<%            }-%>
-          </div>
+          <InputSelect
+            fieldName="<%= to.snake(foreignId) %>"
+            formMethods={formMethods}
+            loadingOptions={loadingOptions}
+            options={<%= to.camel(foreignId) %>DataOptions}
+<%          if(!nullable) { %>
+            validations={{ required: true }}
+<%          }-%>
+          />
           <FormErrors errors={errors} fieldName="<%= to.snake(foreignId) %>" />
         </div>
 <%    }-%>

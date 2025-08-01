@@ -1,0 +1,79 @@
+import { useTranslation } from 'react-i18next';
+import { ChevronsUpDown } from 'lucide-react';
+
+import { UseFormReturn } from 'react-hook-form';
+
+const selectContainerClassName = 'grid grid-cols-1';
+const selectClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
+const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:outline-2 hover:-outline-offset-2 hover:outline-blue-600 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 rounded-md mt-1 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3 text-base appearance-none checked:bg-slate-300 checked:text-black dark:checked:bg-gray-700 dark:checked:text-white`;
+const selectChevronClassName =
+  'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
+
+interface ISelectOption {
+  label: number | string | React.ReactNode;
+  value: number | string;
+}
+
+interface InputSelectProps {
+  fieldName: string;
+  formMethods: UseFormReturn;
+  loadingOptions?: boolean;
+  multiple?: boolean;
+  options: ISelectOption[];
+  validations?: {
+    required?: boolean;
+  };
+}
+
+const InputSelect: React.FC<InputSelectProps> = ({
+  fieldName,
+  formMethods,
+  loadingOptions,
+  multiple = false,
+  options,
+  validations,
+}) => {
+  const { t } = useTranslation();
+  const { required } = validations || {};
+  const {
+    register,
+    formState: { errors },
+  } = formMethods;
+
+  return (
+    <div className={selectContainerClassName}>
+      <select
+        multiple={multiple}
+        id={fieldName}
+        size={multiple ? Math.min(10, Math.max(5, options.length)) + 1 : undefined}
+        {...register(fieldName, { required: required ? 'errors.validations.required' : false })}
+        className={selectClassName(!!errors?.[fieldName]?.message)}
+      >
+        {!multiple && !loadingOptions && options.length > 0 && (
+          <option className={selectOptionClassName} value={''}></option>
+        )}
+        {loadingOptions ? (
+          <option className={selectOptionClassName} disabled>
+            {t('common.select.loading')}
+          </option>
+        ) : options.length === 0 ? (
+          <option className={selectOptionClassName} disabled>
+            {t('common.select.noOptions')}
+          </option>
+        ) : (
+          options.map((op) => (
+            <option className={selectOptionClassName} key={op.value} value={op.value}>
+              {op.label}
+            </option>
+          ))
+        )}
+      </select>
+      {!multiple && <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />}
+    </div>
+  );
+};
+
+export { InputSelect };
+export type { ISelectOption };
+export type { InputSelectProps };
