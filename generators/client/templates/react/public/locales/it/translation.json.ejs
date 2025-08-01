@@ -41,6 +41,7 @@
     "sqlsrv": "SQL Server"
   },
   "entities": {
+    "entities": "Entità",
     <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
       `\n      "${entity.name}": "${to.capital(entity.name)}"`,
       `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
