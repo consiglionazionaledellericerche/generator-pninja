@@ -13,6 +13,9 @@ const Menu: React.FC = () => {
   const { isAuthenticated } = useAuthState();
   const { t } = useTranslation();
   const location = useLocation();
+<%  if (entities.length > 1) { -%>
+  const [activeEntity, setActiveEntity] = useState<string | null>(null);
+<% } -%>
   const isActive = (path: string) =>
     location.pathname === path
       ? ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300'
@@ -24,6 +27,15 @@ const Menu: React.FC = () => {
       htmlElement.addEventListener('click', () => setMenuVisible(false));
     }
   }, [htmlElement]);
+  useEffect(() => {
+<%  if (entities.length > 1) { -%>
+    setActiveEntity(null);
+<%  entities.forEach((entity, index) => {-%>
+    if (location.pathname === '/entities/<%- to.slug(pluralize(entity.name)) %>') setActiveEntity('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
+<%  });-%>
+<% } -%>
+    setMenuVisible(false); // Close the menu when the location changes
+  }, [location]);
   return (
     <nav className="nav-bar">
       <Link to="/" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
@@ -82,7 +94,7 @@ const Menu: React.FC = () => {
                 'w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link'
               }
             >
-              {t('entities.entities')} <ChevronDown size={16} />
+              {t(activeEntity || 'entities.entities')} <ChevronDown size={16} />
             </Button>
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
               <MenuItems>
