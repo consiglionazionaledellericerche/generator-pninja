@@ -16,7 +16,8 @@ const Menu: React.FC = () => {
   const isActive = (path: string) =>
     location.pathname === path
       ? ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300'
-      : '';  const [menuVisible, setMenuVisible] = useState(false);
+      : '';  
+  const [menuVisible, setMenuVisible] = useState(false);
   const htmlElement = document.querySelector('html');
   useEffect(() => {
     if (htmlElement) {
