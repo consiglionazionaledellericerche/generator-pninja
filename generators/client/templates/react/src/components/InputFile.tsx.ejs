@@ -3,7 +3,7 @@ import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
 
-import { UseFormRegister, FieldErrors, UseFormTrigger, UseFormSetValue } from 'react-hook-form';
+import { UseFormReturn } from 'react-hook-form';
 
 type TransformedFileData = {
   data: string;
@@ -19,11 +19,8 @@ const inputClassName = (hasErrors = false) =>
 interface InputFileProps {
   accept?: string;
   entity?: unknown;
-  errors?: FieldErrors<Record<string, unknown>>;
   fieldName: string;
-  register: UseFormRegister<Record<string, unknown>>;
-  setValue: UseFormSetValue<Record<string, unknown>>;
-  trigger: UseFormTrigger<Record<string, unknown>>;
+  formMethods: UseFormReturn;
   validations?: {
     required?: boolean;
     minbytes?: number;
@@ -52,11 +49,8 @@ function fileToBase64(file: File): Promise<string> {
 const InputFile: React.FC<InputFileProps> = ({
   accept,
   entity,
-  errors,
   fieldName,
-  register,
-  setValue,
-  trigger,
+  formMethods,
   validations,
 }) => {
   const { t } = useTranslation();
@@ -66,6 +60,12 @@ const InputFile: React.FC<InputFileProps> = ({
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
   const { required, minbytes, maxbytes } = validations || {};
   const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = formMethods;
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
