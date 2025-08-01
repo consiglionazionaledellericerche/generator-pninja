@@ -53,6 +53,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/FormLabel.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/InfoValidations.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/InputFile.tsx.ejs"), that.destinationPath(`client/src/components/InputFile.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/InputUuid.tsx.ejs"), that.destinationPath(`client/src/components/InputUuid.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});

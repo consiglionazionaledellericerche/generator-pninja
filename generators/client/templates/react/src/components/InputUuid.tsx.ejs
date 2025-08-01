@@ -1,0 +1,58 @@
+import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
+import { RefreshCw } from 'lucide-react';
+
+import { UseFormReturn } from 'react-hook-form';
+
+const inputClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+
+interface InputUuidProps {
+  fieldName: string;
+  formMethods: UseFormReturn;
+  validations?: {
+    required?: boolean;
+  };
+}
+
+const InputUuid: React.FC<InputUuidProps> = ({ fieldName, formMethods, validations }) => {
+  const { t } = useTranslation();
+  const { required } = validations || {};
+  const {
+    register,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = formMethods;
+
+  return (
+    <div className="grid grid-cols-1">
+      <input
+        type="text"
+        id={fieldName}
+        {...register(fieldName, {
+          required: required ? 'errors.validations.required' : false,
+          pattern: {
+            value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+            message: 'errors.validations.pattern',
+          },
+        })}
+        className={inputClassName(!!errors?.[fieldName]?.message) + ' col-start-1 row-start-1'}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          setValue(fieldName, uuidv4());
+          trigger(fieldName); // Re-validate the field
+        }}
+        className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
+        title={t('actions.generateUUID')}
+      >
+        <RefreshCw className="h-full" />
+      </button>
+    </div>
+  );
+};
+
+export { InputUuid };
+export type { InputUuidProps };
