@@ -168,7 +168,7 @@ export default function <%= entity.name %>() {
 <%          for(r of relatedEntities) { -%>
             <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
 <%          } -%>
-            <th scope="col">Actions</th>
+            <th scope="col">{t('actions.crud.actions')}</th>
           </tr>
         </thead>
         <tbody>
