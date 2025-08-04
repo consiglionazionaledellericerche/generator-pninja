@@ -10,6 +10,9 @@ const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', fal
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
 const hasNumber = entity?.body.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
 const hasDuration = entity?.body.reduce((res, {type}) => res || type === 'Duration', false);
+const hasDate = entity?.body.reduce((res, {type}) => res || type === 'LocalDate', false);
+const hasDateTime = entity?.body.reduce((res, {type}) => res || type === 'ZonedDateTime' || type === 'Instant', false);
+const hasTime = entity?.body.reduce((res, {type}) => res || type === 'LocalTime', false);
 const hasRequiredBlob = entity?.body
   .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
   .map(({ validations }) => validations)
@@ -203,6 +206,12 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
 import {
+<% if (hasDate) {-%>
+  DateField,
+<% } -%>
+<% if (hasDateTime) {-%>
+  DateTimeField,
+<% } -%>
 <% if (hasDuration) {-%>
   DurationField,
 <% } -%>
@@ -222,6 +231,9 @@ import {
 <% } -%>
 <% if (hasText) {-%>
   TextField,
+<% } -%>
+<% if (hasTime) {-%>
+  TimeField,
 <% } -%>
 <% if (hasUUID) {-%>
   UuidField,
@@ -391,6 +403,30 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           />
 <%      } else if (type === "Duration") {-%>
           <DurationField
+            fieldName="<%-to.snake(name)%>"
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === "LocalDate") {-%>
+          <DateField
+            fieldName="<%-to.snake(name)%>"
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === 'ZonedDateTime' || type === 'Instant') {-%>
+          <DateTimeField
+            fieldName="<%-to.snake(name)%>"
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === "LocalTime") {-%>
+          <TimeField
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
