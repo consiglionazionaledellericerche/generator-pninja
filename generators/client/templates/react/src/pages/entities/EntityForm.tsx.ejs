@@ -198,17 +198,22 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
-import { FormErrors } from '../../components/FormErrors';
-import { FormLabel } from '../../components/FormLabel';
+import {
+  FormErrors,
+  FormLabel,
 <% if (hasBlob) {-%>
-import { InputFile } from '../../components/InputFile';
+  InputFile,
 <% } -%>
 <% if (hasSelect) {-%>
-import { InputSelect<% if (hasRelated) {-%>, ISelectOption<% }-%> } from '../../components/InputSelect';
+  InputSelect,
+<%  if (hasRelated) {-%>
+  ISelectOption,
+<%  }-%>
 <% } -%>
 <% if (hasUUID) {-%>
-import { InputUuid } from '../../components/InputUuid';
+  InputUuid,
 <% } -%>
+} from '../../components/FormElements';
 import { detect } from 'detect-browser';
 
 const isMac = detect()?.os?.toLowerCase().includes('mac');
