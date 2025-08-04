@@ -66,30 +66,30 @@ const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
             </OverlayArrow>
             <div className="bg-slate-300 text-slate-700 dark:bg-gray-600 dark:text-gray-100 text-sm p-2 rounded-lg">
               {typeof validations.min === 'number' && (
-                <div>{t(`info.validations.min`, { min: validations?.min })}</div>
+                <div>{t(`info.validations.min`, { accepted: validations?.min })}</div>
               )}
               {typeof validations.max === 'number' && (
-                <div>{t(`info.validations.max`, { max: validations?.max })}</div>
+                <div>{t(`info.validations.max`, { accepted: validations?.max })}</div>
               )}
               {typeof validations.minbytes === 'number' && (
                 <div>
                   {t(`info.validations.minbytes`, {
-                    min: prettyBytes(Number(validations?.minbytes)),
+                    accepted: prettyBytes(Number(validations?.minbytes)),
                   })}
                 </div>
               )}
               {typeof validations.maxbytes === 'number' && (
                 <div>
                   {t(`info.validations.maxbytes`, {
-                    max: prettyBytes(Number(validations?.maxbytes)),
+                    accepted: prettyBytes(Number(validations?.maxbytes)),
                   })}
                 </div>
               )}
               {typeof validations.minlength === 'number' && (
-                <div>{t(`info.validations.minlength`, { min: validations?.minlength })}</div>
+                <div>{t(`info.validations.minlength`, { accepted: validations?.minlength })}</div>
               )}
               {typeof validations.maxlength === 'number' && (
-                <div>{t(`info.validations.maxlength`, { max: validations?.maxlength })}</div>
+                <div>{t(`info.validations.maxlength`, { accepted: validations?.maxlength })}</div>
               )}
               {validations.unique && <div>{t(`info.validations.unique`)}</div>}
             </div>
