@@ -21,25 +21,25 @@ const TextField: React.FC<TextFieldProps> = ({ fieldName, formMethods, validatio
     formState: { errors },
   } = formMethods;
 
-  const validationsObject: RegisterOptions<FieldValues, string> | undefined = {};
+  const opts: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    validationsObject.required = 'errors.validations.required';
+    opts.required = 'errors.validations.required';
   }
   if (minlength) {
-    validationsObject.minLength = {
+    opts.minLength = {
       value: minlength,
       message: `errors.validations.minlength:${minlength}`,
     };
   }
   if (maxlength) {
-    validationsObject.maxLength = {
+    opts.maxLength = {
       value: maxlength,
       message: `errors.validations.maxlength:${maxlength}`,
     };
   }
   if (pattern) {
-    validationsObject.pattern = {
+    opts.pattern = {
       value: typeof pattern === 'string' ? new RegExp(pattern) : pattern,
       message: 'errors.validations.pattern',
     };
@@ -49,7 +49,7 @@ const TextField: React.FC<TextFieldProps> = ({ fieldName, formMethods, validatio
     <input
       type="text"
       id={fieldName}
-      {...register(fieldName, validationsObject)}
+      {...register(fieldName, opts)}
       className={inputClassName(!!errors?.[fieldName]?.message)}
     />
   );
