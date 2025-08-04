@@ -9,6 +9,7 @@ const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', f
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
 const hasNumber = entity?.body.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
+const hasDuration = entity?.body.reduce((res, {type}) => res || type === 'Duration', false);
 const hasRequiredBlob = entity?.body
   .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
   .map(({ validations }) => validations)
@@ -202,6 +203,9 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
 import {
+<% if (hasDuration) {-%>
+  DurationField,
+<% } -%>
   FormErrors,
   FormLabel,
 <% if (hasBlob) {-%>
@@ -380,6 +384,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          if (fieldTypeToInputStep(type) !== 1) { -%>
             step={<%- fieldTypeToInputStep(type) %>}
 <%          } -%>
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === "Duration") {-%>
+          <DurationField
+            fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
             validations={<%- getValidationsFromValidations(validations) %>}

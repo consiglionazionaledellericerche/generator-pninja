@@ -3,19 +3,16 @@ import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface NumberFieldProps {
+interface DurationFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
-  step?: number | string;
   validations?: {
     required?: boolean;
-    min?: number;
-    max?: number;
   };
 }
 
-const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, step, validations }) => {
-  const { required, min, max } = validations || {};
+const DurationField: React.FC<DurationFieldProps> = ({ fieldName, formMethods, validations }) => {
+  const { required } = validations || {};
   const {
     register,
     formState: { errors },
@@ -23,33 +20,23 @@ const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, step,
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {
     valueAsNumber: true,
+    min: {
+      value: 0,
+      message: 'errors.validations.min:0',
+    },
   };
 
   if (required) {
     opts.required = 'errors.validations.required';
   }
-  if (min !== undefined && min !== null) {
-    opts.min = {
-      value: min,
-      message: `errors.validations.min:${min}`,
-    };
-  }
-  if (max !== undefined && max !== null) {
-    opts.max = {
-      value: max,
-      message: `errors.validations.max:${max}`,
-    };
-  }
-
   return (
     <input
       type="number"
       id={fieldName}
-      {...(step !== 1 && { step: step || 'any' })}
       {...register(fieldName, opts)}
       className={inputClassName(!!errors?.[fieldName]?.message)}
     />
   );
 };
 
-export { NumberField };
+export { DurationField };

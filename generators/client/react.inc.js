@@ -50,6 +50,7 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/FormElements.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/DurationField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DurationField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FileField.tsx.ejs"), that.destinationPath(`client/src/components/forms/FileField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormErrors.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormLabel.tsx`), {});
