@@ -105,7 +105,7 @@ getValidationsFromValidations = (validations) => {
 const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
-          <InputSelect
+          <Select
             fieldName="<%= to.snake(name) %>"
             formMethods={formMethods}
             loadingOptions={false}
@@ -202,16 +202,16 @@ import {
   FormErrors,
   FormLabel,
 <% if (hasBlob) {-%>
-  InputFile,
+  File,
 <% } -%>
 <% if (hasSelect) {-%>
-  InputSelect,
+  Select,
 <%  if (hasRelated) {-%>
   ISelectOption,
 <%  }-%>
 <% } -%>
 <% if (hasUUID) {-%>
-  InputUuid,
+  Uuid,
 <% } -%>
 } from '../../components/FormElements';
 import { detect } from 'detect-browser';
@@ -354,7 +354,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
           />
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
-          <InputFile
+          <File
 <%        if(type === 'ImageBlob') { -%>
             accept="image/*"
 <%        } -%>
@@ -366,7 +366,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } -%>
           />
 <%      } else if (type === 'UUID') {-%>
-          <InputUuid
+          <Uuid
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
@@ -388,7 +388,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <InputSelect
+          <Select
             fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
 <%          if (isArray) {-%>
             multiple={true}
@@ -412,7 +412,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <InputSelect
+          <Select
             fieldName="<%= to.snake(foreignId) %>"
             formMethods={formMethods}
             loadingOptions={loadingOptions}

@@ -15,7 +15,7 @@ interface ISelectOption {
   value: number | string;
 }
 
-interface InputSelectProps {
+interface SelectProps {
   fieldName: string;
   formMethods: UseFormReturn;
   loadingOptions?: boolean;
@@ -26,7 +26,7 @@ interface InputSelectProps {
   };
 }
 
-const InputSelect: React.FC<InputSelectProps> = ({
+const Select: React.FC<SelectProps> = ({
   fieldName,
   formMethods,
   loadingOptions,
@@ -74,6 +74,6 @@ const InputSelect: React.FC<InputSelectProps> = ({
   );
 };
 
-export { InputSelect };
+export { Select };
 export type { ISelectOption };
-export type { InputSelectProps };
+export type { SelectProps };
