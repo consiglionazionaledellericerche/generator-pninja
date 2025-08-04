@@ -134,7 +134,7 @@ const InputFile: React.FC<InputFileProps> = ({
     setShouldShowInput(false);
     setValue(fieldName, null);
     // Reset the input value
-    const input = document.getElementById(fieldName) as HTMLInputElement;
+    const input = document.querySelector(`[name=${fieldName}]`) as HTMLInputElement;
     if (input) input.value = '';
     setTimeout(() => {
       trigger(fieldName);
