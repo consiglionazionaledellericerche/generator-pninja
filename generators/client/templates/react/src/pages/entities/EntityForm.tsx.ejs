@@ -5,7 +5,8 @@ for({type} of entity.body) {
     enumsToImport.push(type);
   }
 }
-const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);;
+const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
+const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
 const hasRequiredBlob = entity?.body
   .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
@@ -210,6 +211,9 @@ import {
   ISelectOption,
 <%  }-%>
 <% } -%>
+<% if (hasText) {-%>
+  Text,
+<% } -%>
 <% if (hasUUID) {-%>
   Uuid,
 <% } -%>
@@ -359,6 +363,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             accept="image/*"
 <%        } -%>
             entity={<%= to.camel(entity.name)%>}
+            fieldName="<%-to.snake(name)%>"
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === 'String') {-%>
+          <Text
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>

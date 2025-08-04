@@ -1,0 +1,59 @@
+import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+
+const inputClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+
+interface TextProps {
+  fieldName: string;
+  formMethods: UseFormReturn;
+  validations?: {
+    required?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp | string;
+  };
+}
+
+const Text: React.FC<TextProps> = ({ fieldName, formMethods, validations }) => {
+  const { required, minlength, maxlength, pattern } = validations || {};
+  const {
+    register,
+    formState: { errors },
+  } = formMethods;
+
+  const validationsObject: RegisterOptions<FieldValues, string> | undefined = {};
+
+  if (required) {
+    validationsObject.required = 'errors.validations.required';
+  }
+  if (minlength) {
+    validationsObject.minLength = {
+      value: minlength,
+      message: `errors.validations.minlength.${minlength}`,
+    };
+  }
+  if (maxlength) {
+    validationsObject.maxLength = {
+      value: maxlength,
+      message: `errors.validations.maxlength.${maxlength}`,
+    };
+  }
+  if (pattern) {
+    validationsObject.pattern = {
+      value: typeof pattern === 'string' ? new RegExp(pattern) : pattern,
+      message: 'errors.validations.pattern',
+    };
+  }
+
+  return (
+    <input
+      type="text"
+      id={fieldName}
+      {...register(fieldName, validationsObject)}
+      className={inputClassName(!!errors?.[fieldName]?.message)}
+    />
+  );
+};
+
+export { Text };
+export type { TextProps };
