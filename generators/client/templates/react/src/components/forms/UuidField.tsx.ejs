@@ -7,7 +7,7 @@ import { UseFormReturn } from 'react-hook-form';
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface UuidProps {
+interface UuidFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
   validations?: {
@@ -15,7 +15,7 @@ interface UuidProps {
   };
 }
 
-const Uuid: React.FC<UuidProps> = ({ fieldName, formMethods, validations }) => {
+const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, validations }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
   const {
@@ -54,5 +54,4 @@ const Uuid: React.FC<UuidProps> = ({ fieldName, formMethods, validations }) => {
   );
 };
 
-export { Uuid };
-export type { UuidProps };
+export { UuidField };

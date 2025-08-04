@@ -8,6 +8,7 @@ for({type} of entity.body) {
 const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
+const hasNumber = entity?.body.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
 const hasRequiredBlob = entity?.body
   .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
   .map(({ validations }) => validations)
@@ -83,6 +84,7 @@ const fieldTypeToInputStep = (type) => {
         'Float': `'any'`,
         'Double': `'any'`,
         'Integer': 1,
+        'Long': 1,
         'ZonedDateTime': 1,
         'LocalTime': 1,
         'Instant': 1
@@ -106,7 +108,7 @@ getValidationsFromValidations = (validations) => {
 const getField = (type, name, validations) => {
     if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
-          <Select
+          <SelectField
             fieldName="<%= to.snake(name) %>"
             formMethods={formMethods}
             loadingOptions={false}
@@ -203,19 +205,22 @@ import {
   FormErrors,
   FormLabel,
 <% if (hasBlob) {-%>
-  File,
+  FileField,
+<% } -%>
+<% if (hasNumber) {-%>
+  NumberField,
 <% } -%>
 <% if (hasSelect) {-%>
-  Select,
+  SelectField,
 <%  if (hasRelated) {-%>
-  ISelectOption,
+  ISelectFieldOption,
 <%  }-%>
 <% } -%>
 <% if (hasText) {-%>
-  Text,
+  TextField,
 <% } -%>
 <% if (hasUUID) {-%>
-  Uuid,
+  UuidField,
 <% } -%>
 } from '../../components/FormElements';
 import { detect } from 'detect-browser';
@@ -234,10 +239,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   useAutoShortcuts();
   const { fetch } = useApi();
 <% for({field} of relatedEntities) {-%>
-  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<ISelectOption[]>([]);
+  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<ISelectFieldOption[]>([]);
 <% }-%>
 <% for({foreignId} of foreignIds) {-%>
-  const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<ISelectOption[]>([]);
+  const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<ISelectFieldOption[]>([]);
 <% }-%>
   const [loadingOptions, setLoadingOptions] = useState(true);
 
@@ -276,7 +281,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
-        }))).sort((a: ISelectOption, b: ISelectOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
+        }))).sort((a: ISelectFieldOption, b: ISelectFieldOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
@@ -299,7 +304,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else {-%>
           label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
 <%        }-%>
-        }))).sort((a: ISelectOption, b: ISelectOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
+        }))).sort((a: ISelectFieldOption, b: ISelectFieldOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
         addNotification({
@@ -358,7 +363,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
           />
 <%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
-          <File
+          <FileField
 <%        if(type === 'ImageBlob') { -%>
             accept="image/*"
 <%        } -%>
@@ -369,8 +374,19 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={<%- getValidationsFromValidations(validations) %>}
 <%        } -%>
           />
+<%      } else if (['Integer','Long','BigDecimal','Float','Double'].includes(type)) {-%>
+          <NumberField
+            fieldName="<%-to.snake(name)%>"
+<%          if (fieldTypeToInputStep(type) !== 1) { -%>
+            step={<%- fieldTypeToInputStep(type) %>}
+<%          } -%>
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
 <%      } else if (type === 'String') {-%>
-          <Text
+          <TextField
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
@@ -378,7 +394,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } -%>
           />
 <%      } else if (type === 'UUID') {-%>
-          <Uuid
+          <UuidField
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
@@ -400,7 +416,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <Select
+          <SelectField
             fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
 <%          if (isArray) {-%>
             multiple={true}
@@ -424,7 +440,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={{ required: true }}
 <%          }-%>
           />
-          <Select
+          <SelectField
             fieldName="<%= to.snake(foreignId) %>"
             formMethods={formMethods}
             loadingOptions={loadingOptions}

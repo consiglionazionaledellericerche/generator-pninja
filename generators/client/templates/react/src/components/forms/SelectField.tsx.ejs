@@ -10,23 +10,23 @@ const selectOptionClassName = `scheme-light dark:scheme-dark outline-0 hover:out
 const selectChevronClassName =
   'pointer-events-none col-start-1 row-start-1 mt-3 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4';
 
-interface ISelectOption {
+interface ISelectFieldOption {
   label: number | string | React.ReactNode;
   value: number | string;
 }
 
-interface SelectProps {
+interface SelectFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
   loadingOptions?: boolean;
   multiple?: boolean;
-  options: ISelectOption[];
+  options: ISelectFieldOption[];
   validations?: {
     required?: boolean;
   };
 }
 
-const Select: React.FC<SelectProps> = ({
+const SelectField: React.FC<SelectFieldProps> = ({
   fieldName,
   formMethods,
   loadingOptions,
@@ -74,6 +74,5 @@ const Select: React.FC<SelectProps> = ({
   );
 };
 
-export { Select };
-export type { ISelectOption };
-export type { SelectProps };
+export { SelectField };
+export type { ISelectFieldOption };

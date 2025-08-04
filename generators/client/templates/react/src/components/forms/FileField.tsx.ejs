@@ -16,7 +16,7 @@ type TransformedFileData = {
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface FileProps {
+interface FileFieldProps {
   accept?: string;
   entity?: unknown;
   fieldName: string;
@@ -28,7 +28,7 @@ interface FileProps {
   };
 }
 
-function fileToBase64(file: File): Promise<string> {
+function fileToBase64(file: FileField): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -46,7 +46,7 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-const File: React.FC<FileProps> = ({
+const FileField: React.FC<FileFieldProps> = ({
   accept,
   entity,
   fieldName,
@@ -239,5 +239,4 @@ const File: React.FC<FileProps> = ({
   );
 };
 
-export { File };
-export type { FileProps };
+export { FileField };

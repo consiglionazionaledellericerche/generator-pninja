@@ -50,13 +50,14 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/FormElements.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/forms/File.tsx.ejs"), that.destinationPath(`client/src/components/forms/File.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/FileField.tsx.ejs"), that.destinationPath(`client/src/components/forms/FileField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormErrors.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormLabel.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/forms/InfoValidations.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/forms/Select.tsx.ejs"), that.destinationPath(`client/src/components/forms/Select.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/forms/Text.tsx.ejs"), that.destinationPath(`client/src/components/forms/Text.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/forms/Uuid.tsx.ejs"), that.destinationPath(`client/src/components/forms/Uuid.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/NumberField.tsx.ejs"), that.destinationPath(`client/src/components/forms/NumberField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/forms/SelectField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/TextField.tsx.ejs"), that.destinationPath(`client/src/components/forms/TextField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/forms/UuidField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});

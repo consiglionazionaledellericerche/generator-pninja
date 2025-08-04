@@ -3,7 +3,7 @@ import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface TextProps {
+interface TextFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
   validations?: {
@@ -14,7 +14,7 @@ interface TextProps {
   };
 }
 
-const Text: React.FC<TextProps> = ({ fieldName, formMethods, validations }) => {
+const TextField: React.FC<TextFieldProps> = ({ fieldName, formMethods, validations }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const {
     register,
@@ -29,13 +29,13 @@ const Text: React.FC<TextProps> = ({ fieldName, formMethods, validations }) => {
   if (minlength) {
     validationsObject.minLength = {
       value: minlength,
-      message: `errors.validations.minlength.${minlength}`,
+      message: `errors.validations.minlength:${minlength}`,
     };
   }
   if (maxlength) {
     validationsObject.maxLength = {
       value: maxlength,
-      message: `errors.validations.maxlength.${maxlength}`,
+      message: `errors.validations.maxlength:${maxlength}`,
     };
   }
   if (pattern) {
@@ -55,5 +55,4 @@ const Text: React.FC<TextProps> = ({ fieldName, formMethods, validations }) => {
   );
 };
 
-export { Text };
-export type { TextProps };
+export { TextField };
