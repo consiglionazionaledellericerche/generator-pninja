@@ -27,6 +27,7 @@ const DateTimeField: React.FC<DateTimeFieldProps> = ({ fieldName, formMethods, v
   return (
     <input
       type="datetime-local"
+      step={1}
       id={fieldName}
       {...register(fieldName, opts)}
       className={inputClassName(!!errors?.[fieldName]?.message)}

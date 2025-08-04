@@ -27,6 +27,7 @@ const TimeField: React.FC<TimeFieldProps> = ({ fieldName, formMethods, validatio
   return (
     <input
       type="time"
+      step={1}
       id={fieldName}
       {...register(fieldName, opts)}
       className={inputClassName(!!errors?.[fieldName]?.message)}
