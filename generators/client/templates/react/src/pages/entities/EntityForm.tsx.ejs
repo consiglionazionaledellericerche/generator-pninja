@@ -110,88 +110,7 @@ getValidationsFromValidations = (validations) => {
   if (getPattern(validations)) v = {...v, pattern: getPattern(validations)};
   return JSON.stringify(v) !== '{}' ? JSON.stringify(v) : null;
 }
-
-const getField = (type, name, validations) => {
-    if ((enums.filter(enm => enm.name === type)).length === 1) {
 -%>
-          <SelectField
-            fieldName="<%= to.snake(name) %>"
-            formMethods={formMethods}
-            loadingOptions={false}
-            options={Object.values(<%= type %>).map((v) => ({
-              value: String(v),
-              label: String(v),
-            }))}
-          />
-<%    } else {
-    const T = fieldTypeToInputType(type);
-    const STEP = fieldTypeToInputStep(type);
--%>
-<%      if (T !== 'textarea') {-%>
-          <input
-            type="<%- T %>"
-<%        if (!!STEP) {-%>
-            step={<%- STEP %>}
-<%        }-%>
-            id="<%= to.snake(name) %>"
-            {...register('<%= to.snake(name) %>'<% if (validations.length > 0) { %>, {<%- "\n"%><% } -%>
-<%        if (!isOptional(validations)) { -%>
-              required: 'errors.validations.required',
-<%        } -%>
-<%        if (getMin(validations) !== undefined) { -%>
-              min: {
-                value: <%-getMin(validations)%>,
-                message: 'errors.validations.min:<%-getMin(validations)%>',
-              },
-<%        } -%>
-<%        if (getMax(validations) !== undefined) { -%>
-              max: {
-                value: <%-getMax(validations)%>,
-                message: 'errors.validations.max:<%-getMax(validations)%>',
-              },
-<%        } -%>
-<%        if (getMinlength(validations) !== undefined) { -%>
-              minLength: {
-                value: <%-getMinlength(validations)%>,
-                message: 'errors.validations.minlength:<%-getMinlength(validations)%>',
-              },
-<%        } -%>
-<%        if (getMaxlength(validations) !== undefined) { -%>
-              maxLength: {
-                value: <%-getMaxlength(validations)%>,
-                message: 'errors.validations.maxlength:<%-getMaxlength(validations)%>',
-              },
-<%        } -%>
-<%        if (getPattern(validations) !== undefined) { -%>
-              pattern: {
-                value: /<%-getPattern(validations)%>/,
-                message: 'errors.validations.pattern',
-              },
-<%        } -%>
-<%        if (isEmail(name) && getPattern(validations) === undefined) {-%>
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: 'errors.validations.pattern',
-              },
-<%        }-%>
-<%        if(T === 'number') {-%>
-              valueAsNumber: true,
-<%        }-%>
-<% if (validations.length > 0) { %>            }<% } %>)}
-            className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
-          />
-<%      } else {-%>
-          <Textarea
-            rows={10}
-            fieldName="<%= to.snake(name) %>"
-            formMethods={formMethods}
-<%         if (!isOptional(validations)) { -%>
-            validations={{ required: true }}
-<%         } -%>
-          />
-<%      }-%>
-<%    }-%>
-<%}-%>
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -384,7 +303,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
           />
-<%      if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
+<%      if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
+          <SelectField
+            fieldName="<%= to.snake(name) %>"
+            formMethods={formMethods}
+            loadingOptions={false}
+            options={Object.values(<%= type %>).map((v) => ({
+              value: String(v),
+              label: String(v),
+            }))}
+          />
+<%      } else if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
           <FileField
 <%        if(type === 'ImageBlob') { -%>
             accept="image/*"
@@ -463,8 +392,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             validations={<%- getValidationsFromValidations(validations) %>}
 <%        } -%>
           />
-<%        } else {-%>
-<%= getField(type, name, validations) -%>
+<%      } else if (type === 'TextBlob') {-%>
+          <Textarea
+            rows={10}
+            fieldName="<%= to.snake(name) %>"
+            formMethods={formMethods}
+<%         if (!isOptional(validations)) { -%>
+            validations={{ required: true }}
+<%         } -%>
+          />
 <%      }-%>
           <FormErrors errors={errors} fieldName="<%= to.snake(name) %>" />
         </div>
