@@ -54,6 +54,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DateField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DateField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DateTimeField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DateTimeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DurationField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DurationField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/EmailField.tsx.ejs"), that.destinationPath(`client/src/components/forms/EmailField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FileField.tsx.ejs"), that.destinationPath(`client/src/components/forms/FileField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormErrors.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/forms/FormLabel.tsx`), {});

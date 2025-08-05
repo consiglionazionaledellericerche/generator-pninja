@@ -5,6 +5,8 @@ for({type} of entity.body) {
     enumsToImport.push(type);
   }
 }
+const isEmail = (name) => name.toLowerCase().includes('email');
+const hasEmail = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
 const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
 const hasTextarea = entity?.body.reduce((res, {type}) => res || type === 'TextBlob', false);
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
@@ -39,7 +41,6 @@ const getMaxlength = (validations) => validations.reduce((maxlength, validation)
 const getMinbytes = (validations) => validations.reduce((minbytes, validation) => validation.key === 'minbytes' ? validation.value : minbytes, undefined);
 const getMaxbytes = (validations) => validations.reduce((maxbytes, validation) => validation.key === 'maxbytes' ? validation.value : maxbytes, undefined);
 const getPattern = (validations) => validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined);
-const isEmail = (name) => name.toLowerCase().includes('email');
 const fieldTypeToSchema = (type) => {
     const typeMap = {
         'String': 'string',
@@ -220,6 +221,9 @@ import {
 <% } -%>
 <% if (hasDuration) {-%>
   DurationField,
+<% } -%>
+<% if (hasEmail) {-%>
+  EmailField,
 <% } -%>
   FormErrors,
   FormLabel,
@@ -444,7 +448,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } -%>
           />
 <%      } else if (type === 'String') {-%>
-          <TextField
+          <<%- isEmail(name) ? 'EmailField' : 'TextField' %>
             fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
