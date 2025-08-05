@@ -1,0 +1,86 @@
+import { useTranslation } from 'react-i18next';
+import { UseFormReturn } from 'react-hook-form';
+
+const radioGroupClassName = (hasErrors = false) =>
+  `flex flex-col gap-1 scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
+
+interface IRadioGroupOption {
+  label: number | string | React.ReactNode;
+  value: number | string;
+}
+
+interface RadioGroupProps {
+  fieldName: string;
+  formMethods: UseFormReturn;
+  loadingOptions?: boolean;
+  multiple?: boolean;
+  options: IRadioGroupOption[];
+  validations?: {
+    required?: boolean;
+  };
+}
+
+const RadioGroup: React.FC<RadioGroupProps> = ({
+  fieldName,
+  formMethods,
+  loadingOptions,
+  options,
+  validations,
+}) => {
+  const { t } = useTranslation();
+  const { required } = validations || {};
+  const {
+    register,
+    formState: { errors },
+  } = formMethods;
+
+  return (
+    <div className={radioGroupClassName(!!errors?.[fieldName]?.message)}>
+      {loadingOptions ? (
+        <div>{t('common.select.loading')}</div>
+      ) : options.length === 0 ? (
+        <label className="flex gap-2 items-center">
+          <input
+            type="radio"
+            value={undefined}
+            disabled
+            {...register(fieldName, {
+              required: required ? 'errors.validations.required' : false,
+            })}
+          />
+          {t('common.select.noOptions')}
+        </label>
+      ) : (
+        <>
+          {options.map((op) => (
+            <label className="flex gap-2 items-center" key={op.value}>
+              <input
+                type="radio"
+                value={op.value}
+                {...register(fieldName, {
+                  required: required ? 'errors.validations.required' : false,
+                })}
+              />
+              {op.label}
+            </label>
+          ))}
+          {!required && (
+            <label className="flex gap-2 items-center">
+              <input
+                value={undefined}
+                type="radio"
+                {...register(fieldName, {
+                  required: required ? 'errors.validations.required' : false,
+                })}
+              />
+              {t('common.select.noValue')}
+            </label>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+export { RadioGroup };
+export type { IRadioGroupOption };
