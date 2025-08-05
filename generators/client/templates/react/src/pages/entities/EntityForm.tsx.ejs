@@ -144,8 +144,6 @@ import {
 <% if (hasEmail) {-%>
   EmailField,
 <% } -%>
-  FormErrors,
-  FormLabel,
 <% if (hasBlob) {-%>
   FileField,
 <% } -%>
@@ -197,7 +195,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   const formMethods = useForm();
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     reset,
   } = formMethods;
 
