@@ -51,7 +51,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         className={selectClassName(!!errors?.[fieldName]?.message)}
       >
         {!multiple && !loadingOptions && options.length > 0 && (
-          <option className={selectOptionClassName} value={''}></option>
+          <option className={selectOptionClassName} value={''} disabled={required}></option>
         )}
         {loadingOptions ? (
           <option className={selectOptionClassName} disabled>
