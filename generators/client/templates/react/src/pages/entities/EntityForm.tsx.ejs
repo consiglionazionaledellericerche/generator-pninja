@@ -6,6 +6,7 @@ for({type} of entity.body) {
   }
 }
 const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
+const hasTextarea = entity?.body.reduce((res, {type}) => res || type === 'TextBlob', false);
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
 const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
 const hasNumber = entity?.body.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
@@ -179,11 +180,13 @@ const getField = (type, name, validations) => {
             className={<%- (T === 'checkbox') ? 'checkBoxClassName' : 'inputClassName' %>(!!errors?.<%= to.snake(name) %>?.message)}
           />
 <%      } else {-%>
-          <textarea
+          <Textarea
             rows={10}
-            id="<%= to.snake(name) %>"
-            {...register('<%= to.snake(name) %>'<% if (!isOptional(validations)) { -%>, { required: 'errors.validations.required' }<% } -%>)}
-            className={inputClassName(!!errors?.<%= to.snake(name) %>?.message)}
+            fieldName="<%= to.snake(name) %>"
+            formMethods={formMethods}
+<%         if (!isOptional(validations)) { -%>
+            validations={{ required: true }}
+<%         } -%>
           />
 <%      }-%>
 <%    }-%>
@@ -206,6 +209,9 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
 import {
+<% if (hasCheckbox) {-%>
+  Checkbox,
+<% } -%>
 <% if (hasDate) {-%>
   DateField,
 <% } -%>
@@ -228,6 +234,9 @@ import {
 <%  if (hasRelated) {-%>
   ISelectFieldOption,
 <%  }-%>
+<% } -%>
+<% if (hasTextarea) {-%>
+  Textarea,
 <% } -%>
 <% if (hasText) {-%>
   TextField,
@@ -264,7 +273,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 
   const formMethods = useForm();
   const {
-    register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -360,12 +368,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     }
   }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
 
-  const inputClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
-<%  if (hasCheckbox) {-%>
-  const checkBoxClassName = (hasErrors = false) =>
-    `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
-<%  } -%>
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
       <div className="max-w-5xl mx-auto space-y-4">
@@ -396,6 +398,14 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          if (fieldTypeToInputStep(type) !== 1) { -%>
             step={<%- fieldTypeToInputStep(type) %>}
 <%          } -%>
+            formMethods={formMethods}
+<%        if(getValidationsFromValidations(validations)) {-%>
+            validations={<%- getValidationsFromValidations(validations) %>}
+<%        } -%>
+          />
+<%      } else if (type === "Boolean") {-%>
+          <Checkbox
+            fieldName="<%-to.snake(name)%>"
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
             validations={<%- getValidationsFromValidations(validations) %>}

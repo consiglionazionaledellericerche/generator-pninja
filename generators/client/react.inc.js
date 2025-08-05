@@ -50,6 +50,7 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/FormElements.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/Checkbox.tsx.ejs"), that.destinationPath(`client/src/components/forms/Checkbox.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DateField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DateField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DateTimeField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DateTimeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/DurationField.tsx.ejs"), that.destinationPath(`client/src/components/forms/DurationField.tsx`), {});
@@ -59,6 +60,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/forms/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/forms/InfoValidations.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/NumberField.tsx.ejs"), that.destinationPath(`client/src/components/forms/NumberField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/forms/SelectField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/forms/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/forms/Textarea.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/TextField.tsx.ejs"), that.destinationPath(`client/src/components/forms/TextField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/forms/TimeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/forms/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/forms/UuidField.tsx`), {});
