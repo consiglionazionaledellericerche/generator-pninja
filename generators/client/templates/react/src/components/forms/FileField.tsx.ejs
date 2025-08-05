@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
-
 import { UseFormReturn } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 type TransformedFileData = {
   data: string;
@@ -21,6 +22,7 @@ interface FileFieldProps {
   entity?: unknown;
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   validations?: {
     required?: boolean;
     minbytes?: number;
@@ -51,6 +53,7 @@ const FileField: React.FC<FileFieldProps> = ({
   entity,
   fieldName,
   formMethods,
+  label,
   validations,
 }) => {
   const { t } = useTranslation();
@@ -142,6 +145,8 @@ const FileField: React.FC<FileFieldProps> = ({
   };
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <div>
       {hasFile && !shouldShowInput && !isMarkedForDeletion && (
         <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
@@ -236,6 +241,8 @@ const FileField: React.FC<FileFieldProps> = ({
         </div>
       </div>
     </div>
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 

@@ -1,4 +1,6 @@
 import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 const checkBoxClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-3 px-3`;
@@ -6,12 +8,13 @@ const checkBoxClassName = (hasErrors = false) =>
 interface CheckboxProps {
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ fieldName, formMethods, validations }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ fieldName, formMethods, label, validations }) => {
   const { required } = validations || {};
   const {
     register,
@@ -25,12 +28,16 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, formMethods, validations
   }
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <input
       type="checkbox"
       id={fieldName}
       {...register(fieldName, opts)}
       className={checkBoxClassName(!!errors?.[fieldName]?.message)}
     />
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 

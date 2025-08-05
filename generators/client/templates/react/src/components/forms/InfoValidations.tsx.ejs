@@ -13,7 +13,7 @@ interface IInfoValidations {
   max?: number;
   maxbytes?: number;
   maxlength?: number;
-  pattern?: string;
+  pattern?: string | RegExp;
   required?: boolean;
   unique?: boolean;
 }

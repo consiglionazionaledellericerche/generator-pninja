@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { RefreshCw } from 'lucide-react';
-
 import { UseFormReturn } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
@@ -10,12 +11,13 @@ const inputClassName = (hasErrors = false) =>
 interface UuidFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, validations }) => {
+const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, label, validations }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
   const {
@@ -26,6 +28,8 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, validatio
   } = formMethods;
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <div className="grid grid-cols-1">
       <input
         type="text"
@@ -51,6 +55,8 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, validatio
         <RefreshCw className="h-full" />
       </button>
     </div>
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 

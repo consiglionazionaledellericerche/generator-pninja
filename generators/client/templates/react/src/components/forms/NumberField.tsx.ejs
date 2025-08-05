@@ -1,4 +1,6 @@
 import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
@@ -6,6 +8,7 @@ const inputClassName = (hasErrors = false) =>
 interface NumberFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   step?: number | string;
   validations?: {
     required?: boolean;
@@ -14,7 +17,7 @@ interface NumberFieldProps {
   };
 }
 
-const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, step, validations }) => {
+const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, label, step, validations }) => {
   const { required, min, max } = validations || {};
   const {
     register,
@@ -42,6 +45,8 @@ const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, step,
   }
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <input
       type="number"
       id={fieldName}
@@ -49,6 +54,8 @@ const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, step,
       {...register(fieldName, opts)}
       className={inputClassName(!!errors?.[fieldName]?.message)}
     />
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 

@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { ChevronsUpDown } from 'lucide-react';
-
 import { UseFormReturn } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 const selectContainerClassName = 'grid grid-cols-1';
 const selectClassName = (hasErrors = false) =>
@@ -18,6 +19,7 @@ interface ISelectFieldOption {
 interface SelectFieldProps {
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   loadingOptions?: boolean;
   multiple?: boolean;
   options: ISelectFieldOption[];
@@ -29,6 +31,7 @@ interface SelectFieldProps {
 const SelectField: React.FC<SelectFieldProps> = ({
   fieldName,
   formMethods,
+  label,
   loadingOptions,
   multiple = false,
   options,
@@ -42,6 +45,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
   } = formMethods;
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <div className={selectContainerClassName}>
       <select
         multiple={multiple}
@@ -71,6 +76,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
       </select>
       {!multiple && <ChevronsUpDown aria-hidden="true" className={selectChevronClassName} />}
     </div>
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 

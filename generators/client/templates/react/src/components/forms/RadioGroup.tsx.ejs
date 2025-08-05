@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { UseFormReturn } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
 
 const radioGroupClassName = (hasErrors = false) =>
   `flex flex-col gap-1 scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 p-2 text-base appearance-none col-start-1 row-start-1`;
@@ -12,6 +14,7 @@ interface IRadioGroupOption {
 interface RadioGroupProps {
   fieldName: string;
   formMethods: UseFormReturn;
+  label: string;
   loadingOptions?: boolean;
   multiple?: boolean;
   options: IRadioGroupOption[];
@@ -23,6 +26,7 @@ interface RadioGroupProps {
 const RadioGroup: React.FC<RadioGroupProps> = ({
   fieldName,
   formMethods,
+  label,
   loadingOptions,
   options,
   validations,
@@ -35,6 +39,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   } = formMethods;
 
   return (
+    <>
+    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
     <div className={radioGroupClassName(!!errors?.[fieldName]?.message)}>
       {loadingOptions ? (
         <div>{t('common.select.loading')}</div>
@@ -79,6 +85,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
         </>
       )}
     </div>
+    <FormErrors errors={errors} fieldName={fieldName} />
+    </>
   );
 };
 
