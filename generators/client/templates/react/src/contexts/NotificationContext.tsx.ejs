@@ -54,7 +54,7 @@ function ToastContainer({ position = 'bottom-right' }: { position: ToastPosition
 
   return (
     <div
-      className={`fixed z-50 flex gap-2 ${positionClasses[position]} ${getFlexDirection(position)}`}
+      className={`fixed z-9999 flex gap-2 ${positionClasses[position]} ${getFlexDirection(position)}`}
     >
       {notifications.map((notification) => (
         <Toast key={notification.id} notification={notification} />
