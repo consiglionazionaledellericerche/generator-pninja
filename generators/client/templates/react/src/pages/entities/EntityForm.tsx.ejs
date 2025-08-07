@@ -6,6 +6,7 @@ for({type} of entity.body) {
   }
 }
 const isEmail = (name) => name.toLowerCase().includes('email');
+const isPassword = (name) => name.toLowerCase().includes('password');
 const hasEmail = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
 const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
 const hasTextarea = entity?.body.reduce((res, {type}) => res || type === 'TextBlob', false);
@@ -83,19 +84,6 @@ const fieldTypeToInputType = (type) => {
         'ImageBlob': 'file'
     };
     return typeMap[type] || 'text';
-}
-const fieldTypeToInputStep = (type) => {
-    const stepMap = {
-        'BigDecimal': `'any'`,
-        'Float': `'any'`,
-        'Double': `'any'`,
-        'Integer': 1,
-        'Long': 1,
-        'ZonedDateTime': 1,
-        'LocalTime': 1,
-        'Instant': 1
-    };
-    return stepMap[type] || null;
 }
 
 getValidationsFromValidations = (validations) => {
@@ -322,9 +310,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <NumberField
             fieldName="<%-to.snake(name)%>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-<%          if (fieldTypeToInputStep(type) !== 1) { -%>
-            step={<%- fieldTypeToInputStep(type) %>}
-<%          } -%>
             formMethods={formMethods}
 <%        if(getValidationsFromValidations(validations)) {-%>
             validations={<%- getValidationsFromValidations(validations) %>}
@@ -376,7 +361,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } -%>
           />
 <%      } else if (type === 'String') {-%>
-          <<%- isEmail(name) ? 'EmailField' : 'TextField' %>
+          <<%- isEmail(name) ? 'EmailField' : (isPassword(name) ? 'PasswordField' : 'TextField') %>
             fieldName="<%-to.snake(name)%>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
             formMethods={formMethods}
