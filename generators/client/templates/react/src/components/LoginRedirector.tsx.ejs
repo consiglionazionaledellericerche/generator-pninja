@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAuthState } from '../hooks/useAuthState';
+import { SimpleLoader } from './SimpleLoader';
 
 interface LoginRedirectorProps {
   redirectUrl?: string;
@@ -23,5 +24,9 @@ export const LoginRedirector: React.FC<LoginRedirectorProps> = ({ redirectUrl })
     }
   }, [login, redirectUrl]);
 
-  return null;
+  return (
+    <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-slate-200 dark:bg-gray-900">
+      <SimpleLoader />
+    </div>
+  );
 };
