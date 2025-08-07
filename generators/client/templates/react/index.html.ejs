@@ -7,7 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><%= appName %></title>
   <script>
-    if (JSON.parse(localStorage.getItem('dark-mode')) || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (!localStorage.getItem('dark-mode')) {
+      localStorage.setItem('dark-mode', JSON.stringify(true));
+    }
+    if (JSON.parse(localStorage.getItem('dark-mode'))) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark')
