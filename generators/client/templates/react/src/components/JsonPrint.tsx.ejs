@@ -1,15 +1,16 @@
 interface JsonPrintProps {
   data: unknown;
+  pp?: boolean;
   className?: string;
 }
 
-export function JsonPrint({ data, className = '' }: JsonPrintProps) {
+export function JsonPrint({ data, pp = true, className = '' }: JsonPrintProps) {
   try {
-    const jsonString = JSON.stringify(data, null, 2);
+    const jsonString = pp ? JSON.stringify(data, null, 2) : JSON.stringify(data);
 
     return (
       <pre
-        className={`whitespace-pre bg-slate-800 text-xs text-lime-300 p-4 rounded-md overflow-auto ${className}`}
+        className={`whitespace-pre text-xs bg-black text-lime-500 p-2 rounded-md overflow-auto ${className}`}
       >
         {jsonString}
       </pre>
