@@ -103,16 +103,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
-<%for(related of [...new Set(relatedEntities.map(({related}) => related)), ...new Set(foreignIds.map(({related}) => related))]) {-%>
-<%  if (related !== entity.name) {-%>
-import { I<%= related %> } from '../../shared/model/<%= to.slug(related)%>.model';
-<%  }-%>
-<%}-%>
-import { useApi } from '../../hooks/useApi';
-<% if (hasRelated) {-%>
-import { HttpError } from '../../hooks/useApi';
-<% }-%>
-import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
@@ -140,9 +130,6 @@ import {
 <% } -%>
 <% if (hasSelect) {-%>
   SelectField,
-<%  if (hasRelated) {-%>
-  ISelectFieldOption,
-<%  }-%>
 <% } -%>
 <% if (hasTextarea) {-%>
   Textarea,
@@ -169,16 +156,7 @@ interface <%= entity.name %>FormProps {
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
-  const { addNotification } = useNotifications();
   useAutoShortcuts();
-  const { fetch } = useApi();
-<% for({field} of relatedEntities) {-%>
-  const [<%= to.camel((field)) %>DataOptions, <%= to.camel(`set_${(field)}_data_options`) %>] = useState<ISelectFieldOption[]>([]);
-<% }-%>
-<% for({foreignId} of foreignIds) {-%>
-  const [<%= to.camel((foreignId)) %>DataOptions, <%= to.camel(`set_${(foreignId)}_data_options`) %>] = useState<ISelectFieldOption[]>([]);
-<% }-%>
-  const [loadingOptions, setLoadingOptions] = useState(true);
 
   const formMethods = useForm();
   const {
@@ -196,66 +174,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   };
 
   useEffect(() => {
-    const fetchOptions = async () => {
-      setLoadingOptions(true);
-<%  for({field, related, labelField, cardinality} of relatedEntities) {
-  let filter = '';
-  if (cardinality === "OneToOne") {
-    filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
-  }
--%>
-      try {
-        const <%= to.camel(field) %>Response = await fetch(`/api/<%=to.slug(pluralize(related))%><%-filter%>`);
-        const <%= to.camel(field) %>Data = await <%= to.camel(field) %>Response.json();
-        <%= to.camel(`set_${field}_data_options`) %>((<%= to.camel(field) %>Data.map((item: I<%-related%>) => ({
-          value: item.id,
-<%        if (labelField === 'id') {-%>
-          label: `${item.id}`
-<%        } else {-%>
-          label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
-<%        }-%>
-        }))).sort((a: ISelectFieldOption, b: ISelectFieldOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
-      } catch (error: unknown) {
-        console.error('Error fetching options:', error);
-        addNotification({
-          type: 'error',
-          message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}`,
-          details: error instanceof Error ? error.message : undefined,
-          techDetails: error instanceof HttpError ? error.details : undefined,
-          duration: 10000,
-        });
-      }
-<%  }-%>
-<%  for({foreignId, related, labelField} of foreignIds) {-%>
-      try {
-        const <%= to.camel(foreignId) %>Response = await fetch('/api/<%=to.slug(pluralize(related))%>');
-        const <%= to.camel(foreignId) %>Data = await <%= to.camel(foreignId) %>Response.json();
-        <%= to.camel(`set_${foreignId}_data_options`) %>((<%= to.camel(foreignId) %>Data.map((item: I<%-related%>) => ({
-          value: item.id,
-<%        if (labelField === 'id') {%>
-          label: `${item.id}`
-<%        } else {-%>
-          label: `${item.<%-to.snake(labelField)%> || ''} (ID: ${item.id})`
-<%        }-%>
-        }))).sort((a: ISelectFieldOption, b: ISelectFieldOption) => String(a.label).localeCompare(String(b.label), undefined, { numeric: true })));
-      } catch (error: unknown) {
-        console.error('Error fetching options:', error);
-        addNotification({
-          type: 'error',
-          message: `${t('errors.options.load')} ${t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}`,
-          details: error instanceof Error ? error.message : undefined,
-          techDetails: error instanceof HttpError ? error.details : undefined,
-          duration: 10000,
-        });
-      }
-<%  }-%>
-      setLoadingOptions(false);
-    };
-
-    fetchOptions();
-  }, [<%= to.camel(entity.name)-%>, fetch, addNotification, t]);
-
-  useEffect(() => {
     if (<%= to.camel(entity.name)-%>) {
       reset({
 <% for({name, type, validations} of entity.body) {-%>
@@ -263,19 +181,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
         <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %><%= isOptional(validations) ? ' ?? undefined' : '' %>,
 <%  } -%>
 <% } -%>
-<% for({field, related, isArray} of relatedEntities) {-%>
-<%  if (isArray) {-%>
-        <%= to.snake(field) %>: <%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => String(item.id)),
-<%  } else {-%>
-        <%= to.snake(field) %>_id: String(<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id || ''),
-<%  }-%>
-<% }-%>
-<% for({foreignId, related} of foreignIds) {-%>
-        <%= to.snake(foreignId) %>: String(<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %> || ''),
-<% }-%>
       });
     }
-  }, [<%= to.camel(entity.name)%>, reset, loadingOptions]);
+  }, [<%= to.camel(entity.name)%>, reset]);
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
@@ -287,7 +195,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             fieldName="<%= to.snake(name) %>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
             formMethods={formMethods}
-            loadingOptions={false}
             options={Object.values(<%= type %>).map((v) => ({
               value: String(v),
               label: String(v),
@@ -391,7 +298,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      }-%>
         </div>
 <%    }-%>
-<%    for({field, related, isArray, nullable} of relatedEntities) {-%>
+<%    for({field, related, labelField, cardinality, isArray, nullable} of relatedEntities) {
+        let filter = '';
+        if (cardinality === "OneToOne") {
+          filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
+        }  
+-%>
         <div>
           <SelectField
             fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
@@ -400,8 +312,17 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             multiple={true}
 <%          }-%>
             formMethods={formMethods}
-            loadingOptions={loadingOptions}
-            options={<%= to.camel(field) %>DataOptions}
+            optionsLoad={{
+              url: `/api/<%=to.slug(pluralize(related))%><%-filter%>`,
+<%          if (labelField !== 'id') {-%>
+              labelAttribute: '<%-to.snake(labelField)%>',
+<%          }-%>
+            }}
+<%          if (isArray) {-%>
+            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => item.id)}
+<%          } else {-%>
+            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id}
+<%          }-%>
 <%          if(!nullable) { %>
             validations={{ required: true }}
 <%          }-%>
@@ -414,8 +335,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             fieldName="<%= to.snake(foreignId) %>"
             label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
             formMethods={formMethods}
-            loadingOptions={loadingOptions}
-            options={<%= to.camel(foreignId) %>DataOptions}
+            optionsLoad={{
+              url: '/api/<%=to.slug(pluralize(related))%>',
+<%          if (labelField !== 'id') {-%>
+              labelAttribute: '<%-to.snake(labelField)%>',
+<%          }-%>
+            }}
+            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
 <%          if(!nullable) { %>
             validations={{ required: true }}
 <%          }-%>
