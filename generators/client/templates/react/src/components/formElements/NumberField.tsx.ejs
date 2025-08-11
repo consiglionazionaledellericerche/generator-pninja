@@ -17,7 +17,13 @@ interface NumberFieldProps {
   };
 }
 
-const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, label, step, validations }) => {
+const NumberField: React.FC<NumberFieldProps> = ({
+  fieldName,
+  formMethods,
+  label,
+  step,
+  validations,
+}) => {
   const { required, min, max } = validations || {};
   const {
     register,
@@ -46,15 +52,17 @@ const NumberField: React.FC<NumberFieldProps> = ({ fieldName, formMethods, label
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <input
-      type="number"
-      id={fieldName}
-      {...(step !== 1 && { step: step || 'any' })}
-      {...register(fieldName, opts)}
-      className={inputClassName(!!errors?.[fieldName]?.message)}
-    />
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <input
+        type="number"
+        id={fieldName}
+        {...(min !== undefined && min !== null && { min })}
+        {...(max !== undefined && max !== null && { max })}
+        {...(step !== 1 && { step: step || 'any' })}
+        {...register(fieldName, opts)}
+        className={inputClassName(!!errors?.[fieldName]?.message)}
+      />
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };
