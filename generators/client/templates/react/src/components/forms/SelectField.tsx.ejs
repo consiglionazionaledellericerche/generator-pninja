@@ -17,90 +17,41 @@ const selectChevronClassName =
 
 interface ISelectFieldOption {
   label: number | string;
-  value: number | string;
+  value: number | string | undefined;
 }
 
 interface ISelectFieldOptionsLoad {
   url: string;
   valueAttribute?: string;
-  getValue?: (item: Record<string, unknown>) => string | undefined;
+  getValue?: (item: Record<string, unknown>) => string | number | undefined;
   labelAttribute?: string;
-  getLabel?: (item: Record<string, unknown>) => string | undefined;
+  getLabel?: (item: Record<string, unknown>) => string | number | undefined;
 }
 
-interface SelectFieldProps {
+interface SelectFieldBase {
   fieldName: string;
   formMethods: UseFormReturn;
   label: string;
-  loadingOptions?: boolean;
   multiple?: boolean;
-  options?: ISelectFieldOption[];
-  optionsLoad?: ISelectFieldOptionsLoad;
   size?: number;
   validations?: {
     required?: boolean;
   };
-  defaultValue?: (number | undefined | string) | (number | undefined | string)[] | undefined;
+  defaultValue?: (number | string | undefined) | (number | string | undefined)[] | undefined;
+  sortBy?: 'label' | 'value' | 'label:asc' | 'value:asc' | 'label:desc' | 'value:desc';
 }
 
-const optionsLoadAreEqual = (
-  a: ISelectFieldOptionsLoad | undefined,
-  b: ISelectFieldOptionsLoad | undefined
-): boolean => {
-  if (a === undefined && b === undefined) return true;
-  return (
-    a?.url === b?.url &&
-    a?.valueAttribute === b?.valueAttribute &&
-    a?.labelAttribute === b?.labelAttribute &&
-    a?.getValue?.toString() === b?.getValue?.toString() &&
-    a?.getLabel?.toString() === b?.getLabel?.toString()
-  );
-};
+interface SelectFieldWithOptions extends SelectFieldBase {
+  options: ISelectFieldOption[];
+  optionsLoad?: never; // if options is set, optionsLoad cannot be set
+}
 
-const areSelectFieldOptionArraysEqual = (
-  arr1: ISelectFieldOption[],
-  arr2: ISelectFieldOption[]
-): boolean => {
-  if (arr1.length !== arr2.length) return false;
+interface SelectFieldWithOptionsLoad extends SelectFieldBase {
+  options?: never; // if optionsLoad is set, options cannot be set
+  optionsLoad: ISelectFieldOptionsLoad;
+}
 
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i].label !== arr2[i].label || arr1[i].value !== arr2[i].value) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
-const arraysHaveSameElements = (
-  arr1: (string | number | null | undefined)[] | null | undefined,
-  arr2: (string | number | null | undefined)[] | null | undefined
-) => {
-  if (arr1 === undefined && arr2 === undefined) return true;
-  if (arr1 === undefined || arr2 === undefined) return false;
-  if (arr1 === null && arr2 === null) return true;
-  if (arr1 === null || arr2 === null) return false;
-  if (arr1.length === 0 && arr2.length === 0) return true;
-  if (arr1.length !== arr2.length) return false;
-  const sorted1 = [...arr1].sort();
-  const sorted2 = [...arr2].sort();
-  for (let i = 0; i < sorted1.length; i++) {
-    if (sorted1[i] !== sorted2[i]) return false;
-  }
-  return true;
-};
-
-const valuesAreEqual = (
-  v: string | number | (string | number | undefined | null)[] | undefined | null,
-  w: string | number | (string | number | undefined | null)[] | undefined | null
-) => {
-  if (v === undefined && w === undefined) return true;
-  if (v === undefined || w === undefined) return false;
-  if (Array.isArray(v) && Array.isArray(w)) {
-    return arraysHaveSameElements(v, w);
-  }
-  return String(v) === String(w);
-};
+type SelectFieldProps = SelectFieldWithOptions | SelectFieldWithOptionsLoad;
 
 const SelectField: React.FC<SelectFieldProps> = ({
   fieldName,
@@ -112,73 +63,56 @@ const SelectField: React.FC<SelectFieldProps> = ({
   size,
   validations,
   defaultValue,
+  sortBy,
 }) => {
   const { t } = useTranslation();
   const { addNotification } = useNotifications();
   const { required } = validations || {};
   const { fetch } = useApi();
-  const [opts, setOpts] = useState<ISelectFieldOption[] | undefined>(undefined);
+  const [remoteOptions, setRemoteOptions] = useState<Record<string, unknown>[] | undefined>(
+    undefined
+  );
   const [loading, setLoading] = useState(false);
-  const [currentSelectFieldOptionsLoad, setCurrentSelectFieldOptionsLoad] = useState<
-    ISelectFieldOptionsLoad | undefined
-  >(undefined);
-  const [currentOptions, setCurrentOptions] = useState<ISelectFieldOption[] | undefined>(undefined);
-  const [currentDefaultValue, setCurrentDefaultValue] = useState<
-    (number | undefined | string) | (number | undefined | string)[] | undefined
-  >(undefined);
+
   const {
     register,
     formState: { errors },
     setValue,
   } = formMethods;
 
+  const optionsSorter = (a: ISelectFieldOption, b: ISelectFieldOption) => {
+    let result: number;
+    const [by, order] = (sortBy ?? 'value:asc').split(':');
+    if (by === 'label') {
+      result = String(a.label).localeCompare(String(b.label), undefined, { numeric: true });
+    } else {
+      result = String(a.value).localeCompare(String(b.value), undefined, { numeric: true });
+    }
+    return order === 'desc' ? -result : result;
+  };
+
+  const getValue = (item: Record<string, unknown>): number | string | undefined =>
+    optionsLoad?.getValue
+      ? optionsLoad.getValue(item)
+      : ((item[optionsLoad?.valueAttribute ?? 'id'] ?? undefined) as number | string | undefined);
+
+  const getLabel = (item: Record<string, unknown>): string =>
+    optionsLoad?.getLabel
+      ? String(optionsLoad?.getLabel(item))
+      : String(item[optionsLoad?.labelAttribute ?? optionsLoad?.valueAttribute ?? 'id']);
+
   useEffect(() => {
-    const setDefaultValue = (
-      value: (number | undefined | string) | (number | undefined | string)[] | undefined
-    ) => {
-      if (value !== undefined) {
-        setValue(fieldName, Array.isArray(value) ? value.map((val) => String(val)) : String(value));
-      } else {
-        setValue(fieldName, undefined);
-      }
-    };
-    if (
-      optionsLoadAreEqual(currentSelectFieldOptionsLoad, optionsLoad) &&
-      areSelectFieldOptionArraysEqual(currentOptions ?? [], options ?? []) &&
-      valuesAreEqual(currentDefaultValue, defaultValue)
-    ) {
-      return;
-    }
-    if (options) {
-      setDefaultValue(defaultValue);
-      setCurrentSelectFieldOptionsLoad(optionsLoad);
-      setCurrentOptions(options);
-      setCurrentDefaultValue(defaultValue);
-    }
+    // Load options from the provided URL if optionsLoad is defined
     if (!optionsLoad?.url) return;
     const fetchOptions = async () => {
       setLoading(true);
       try {
         const reponse = await fetch(optionsLoad?.url ?? '');
         const responseData = await reponse.json();
-        const loadedOptions = responseData
-          .map((item: Record<string, unknown>) => ({
-            value: optionsLoad?.getValue
-              ? optionsLoad?.getValue(item)
-              : item[optionsLoad?.valueAttribute ?? 'id'],
-            label: optionsLoad?.getLabel
-              ? optionsLoad?.getLabel(item)
-              : item[optionsLoad?.labelAttribute ?? optionsLoad?.valueAttribute ?? 'id'],
-          }))
-          .sort((a: ISelectFieldOption, b: ISelectFieldOption) =>
-            String(a.label).localeCompare(String(b.label), undefined, { numeric: true })
-          );
-
-        setOpts(loadedOptions);
-        setDefaultValue(defaultValue);
+        setRemoteOptions(responseData);
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
-        setOpts(undefined);
+        setRemoteOptions(undefined);
         addNotification({
           type: 'error',
           message: `${t('errors.options.load')} ${t('entities.gggg.a_id')}`,
@@ -187,26 +121,39 @@ const SelectField: React.FC<SelectFieldProps> = ({
           duration: 10000,
         });
       }
-      setCurrentSelectFieldOptionsLoad(optionsLoad);
-      setCurrentOptions(options);
-      setCurrentDefaultValue(defaultValue);
       setLoading(false);
     };
-
     fetchOptions();
-  }, [
-    fetch,
-    addNotification,
-    t,
-    optionsLoad,
-    defaultValue,
-    fieldName,
-    setValue,
-    options,
-    currentSelectFieldOptionsLoad,
-    currentOptions,
-    currentDefaultValue,
-  ]);
+  }, [optionsLoad?.url, addNotification, fetch, t]);
+
+  useEffect(() => {
+    // Set the default value for the select field
+    if (defaultValue !== undefined) {
+      setValue(
+        fieldName,
+        multiple && Array.isArray(defaultValue)
+          ? defaultValue.map((val) => String(val))
+          : String(defaultValue)
+      );
+    } else {
+      setValue(fieldName, multiple ? [] : '');
+    }
+  }, [remoteOptions, options, defaultValue, fieldName, multiple, setValue]);
+
+  const getOptions = () => {
+    if (options) {
+      return options.sort(optionsSorter);
+    }
+    if (remoteOptions) {
+      return remoteOptions
+        .map((item) => ({
+          label: getLabel(item),
+          value: getValue(item),
+        }))
+        .sort(optionsSorter);
+    }
+    return [];
+  };
 
   return (
     <>
@@ -215,26 +162,23 @@ const SelectField: React.FC<SelectFieldProps> = ({
         <select
           multiple={multiple}
           id={fieldName}
-          size={
-            size ??
-            (multiple ? Math.min(10, Math.max(5, (opts ?? options ?? []).length)) + 1 : undefined)
-          }
+          size={size ?? (multiple ? Math.min(10, Math.max(5, getOptions().length)) + 1 : undefined)}
           {...register(fieldName, { required: required ? 'errors.validations.required' : false })}
           className={selectClassName(!!errors?.[fieldName]?.message)}
         >
-          {!multiple && !loading && (opts ?? options ?? []).length > 0 && (
+          {!multiple && !loading && getOptions().length > 0 && (
             <option className={selectOptionClassName} value={''} disabled={required}></option>
           )}
           {loading ? (
             <option className={selectOptionClassName} disabled>
               {t('common.select.loading')}
             </option>
-          ) : (opts ?? options ?? []).length === 0 ? (
+          ) : getOptions().length === 0 ? (
             <option className={selectOptionClassName} disabled>
               {t('common.select.noOptions')}
             </option>
           ) : (
-            (opts ?? options ?? []).map((op) => (
+            getOptions().map((op) => (
               <option className={selectOptionClassName} key={op.value} value={op.value}>
                 {op.label}
               </option>
