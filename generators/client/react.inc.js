@@ -149,8 +149,8 @@ export async function createReactClient(that, parsedJDL) {
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
         that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/EntityForm.tsx.ejs"),
-            that.destinationPath(`client/src/pages/entities/${entity.name}Form.tsx`),
+            that.templatePath("react/src/components/entities/EntityForm.tsx.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.name}Form.tsx`),
             {
                 entity,
                 enums,

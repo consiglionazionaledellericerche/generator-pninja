@@ -6,7 +6,7 @@ import { HttpError } from '../../hooks/useApi';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
-import { <%= entity.name %>Form } from './<%= entity.name %>Form';
+import { <%= entity.name %>Form } from '../../components/entities/<%= entity.name %>Form';
 
 interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
