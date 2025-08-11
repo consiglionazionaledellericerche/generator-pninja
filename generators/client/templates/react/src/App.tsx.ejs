@@ -7,7 +7,7 @@ import Err404 from './pages/errors/Err404';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 <% for (const entity of entities) {%>
-import <%=entity.name%> from './pages/entities/<%=entity.name%>';
+import <%=entity.name%>List from './pages/entities/<%=entity.name%>List';
 import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
 import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
 <%}-%>
@@ -37,7 +37,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
 <%  for (const entity of entities) {-%>
-            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%> />} />
+            <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%>List />} />
             <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
             <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
             <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />

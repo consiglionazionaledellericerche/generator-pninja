@@ -114,8 +114,8 @@ export async function createReactClient(that, parsedJDL) {
 
     for (const entity of entities) {
         that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/Entity.tsx.ejs"),
-            that.destinationPath(`client/src/pages/entities/${entity.name}.tsx`),
+            that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
             {
                 entity,
                 to,
