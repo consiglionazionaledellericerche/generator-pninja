@@ -1,0 +1,81 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import './wysiwyg-editor.css'; // Custom styles for the editor
+function cleanHtmlValue(html: string | null | undefined): string {
+  if (!html) return ''; // se è già null/undefined
+  const temp = document.createElement('div');
+  temp.innerHTML = html.trim();
+  const textContent = temp.textContent
+    .replace(/\u200B/g, '') // rimuove zero-width space
+    .trim();
+  return textContent.length === 0 ? '' : html;
+}
+
+interface WysiwygEditorProps {
+  hasErrors?: boolean; // Optional prop to indicate if there are errors
+  onChange?(value: string): void; // Optional callback for value changes
+  defaultValue?: string; // Optional default value for the editor
+}
+
+const modules = {
+  toolbar: {
+    container: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ color: [] }, { background: [] }],
+      ['link'],
+      ['image', 'video'],
+      ['clean'],
+      ['undo', 'redo'], // Questi pulsanti custom
+    ],
+    handlers: {
+      // Questi sono i callback che mancavano!
+      undo: function () {
+        this.quill.history.undo();
+      },
+      redo: function () {
+        this.quill.history.redo();
+      },
+    },
+  },
+  history: {
+    delay: 1000,
+    maxStack: 500,
+    userOnly: true,
+  },
+};
+
+const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
+  hasErrors, // field name for the textarea
+  onChange, // label for the textarea
+  defaultValue, // whether to use a WYSIWYG editor
+}) => {
+  return (
+    <div
+      className={`
+      ${hasErrors ? 'outline-2 -outline-offset-2 outline-red-500' : 'outline-0'}
+      focus-within:outline-2
+      focus-within:-outline-offset-2
+      ${hasErrors ? 'focus-within:outline-red-500' : 'focus-within:outline-blue-600'}
+      rounded-md
+      block
+      w-full
+      mt-3
+      border-none
+      bg-neutral-50 text-neutral-900
+      text-sm/6
+      shadow-sm
+      `}
+    >
+      <ReactQuill
+        theme="snow"
+        value={cleanHtmlValue(defaultValue)}
+        onChange={(value) => onChange && onChange(cleanHtmlValue(value))}
+        modules={modules} // Solo questa riga aggiunta
+      />
+    </div>
+  );
+};
+
+export default WysiwygEditor;

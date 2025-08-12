@@ -1,6 +1,7 @@
 import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
+import WysiwygEditor from './WysiwygEditor';
 
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
@@ -12,13 +13,17 @@ interface TextareaProps {
   validations?: {
     required?: boolean;
   };
+  wyisiwyg?: boolean;
 }
 
-const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, validations }) => {
+const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, wyisiwyg, validations }) => {
   const { required } = validations || {};
   const {
     register,
     formState: { errors },
+    getValues,
+    setValue,
+    trigger,
   } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
@@ -26,17 +31,27 @@ const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, validations
   if (required) {
     opts.required = 'errors.validations.required';
   }
-
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <textarea
-      rows={rows || 10}
-      id={fieldName}
-      {...register(fieldName, opts)}
-      className={inputClassName(!!errors?.[fieldName]?.message)}
-    />
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <textarea
+        rows={rows || 10}
+        id={fieldName}
+        {...register(fieldName, opts)}
+        readOnly={wyisiwyg}
+        className={`${inputClassName(!!errors?.[fieldName]?.message)} ${wyisiwyg ? 'h-0! p-0! m-0! ' : ''}`}
+      />
+      {wyisiwyg && (
+        <WysiwygEditor
+          hasErrors={!!errors?.[fieldName]}
+          onChange={(value: string) => {
+            setValue(fieldName, value);
+            if (errors?.[fieldName]) trigger(fieldName);
+          }}
+          defaultValue={getValues(fieldName)}
+        />
+      )}
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };

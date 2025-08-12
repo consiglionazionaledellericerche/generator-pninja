@@ -67,7 +67,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TimeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/WysiwygEditorField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/WysiwygEditorField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/WysiwygEditor.tsx.ejs"), that.destinationPath(`client/src/components/formElements/WysiwygEditor.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/wysiwyg-editor.css.ejs"), that.destinationPath(`client/src/components/formElements/wysiwyg-editor.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
