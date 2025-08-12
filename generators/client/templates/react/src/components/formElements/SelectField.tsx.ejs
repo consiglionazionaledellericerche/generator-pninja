@@ -37,7 +37,7 @@ interface SelectFieldBase {
   validations?: {
     required?: boolean;
   };
-  defaultValue?: (number | string | undefined) | (number | string | undefined)[] | undefined;
+  defaultValue?: (number | string | undefined | null) | (number | string | undefined | null)[];
   sortBy?: 'label' | 'value' | 'label:asc' | 'value:asc' | 'label:desc' | 'value:desc';
 }
 
