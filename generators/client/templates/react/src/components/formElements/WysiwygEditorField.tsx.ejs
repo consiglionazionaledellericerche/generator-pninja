@@ -1,0 +1,89 @@
+import React, { useEffect, useRef } from 'react';
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
+import { UseFormReturn } from 'react-hook-form';
+
+interface WysiwygEditorFieldProps {
+  // value?: string;
+  // onChange?: (value: string) => void;
+  placeholder?: string;
+  readOnly?: boolean;
+  fieldName: string;
+  formMethods: UseFormReturn;
+}
+
+const WysiwygEditorField: React.FC<WysiwygEditorFieldProps> = ({
+  // value,
+  // onChange,
+  fieldName,
+  formMethods,
+  placeholder = 'Scrivi...',
+  readOnly = false
+}) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const quillRef = useRef<Quill | null>(null);
+
+  useEffect(() => {
+    if (!editorRef.current) return;
+
+    // Pulisci il contenuto precedente
+    if (quillRef.current) {
+      quillRef.current = null;
+    }
+
+    // Svuota l'elemento prima di inizializzare
+    editorRef.current.innerHTML = '';
+
+    const quill = new Quill(editorRef.current, {
+      theme: 'snow',
+      placeholder,
+      readOnly,
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ color: [] }, { background: [] }],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image', 'blockquote', 'code-block'],
+          ['clean']
+        ]
+      }
+    });
+
+    quillRef.current = quill;
+
+    // if (value) {
+    //   quill.root.innerHTML = value;
+    // }
+    if (formMethods.getValues(fieldName)) {
+      // Imposta il valore iniziale dal form se disponibile
+      quill.root.innerHTML = formMethods.getValues(fieldName) || '';
+    }
+
+    quill.on('text-change', () => {
+      console.log('Text change detected', quill.root.innerHTML);
+      formMethods.setValue(fieldName, quill.root.innerHTML);
+    });
+
+    return () => {
+      if (quillRef.current) {
+        // Distruggi completamente l'istanza
+        const toolbar = editorRef.current?.previousSibling;
+        if (toolbar && toolbar.classList?.contains('ql-toolbar')) {
+          toolbar.remove();
+        }
+        quillRef.current = null;
+      }
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   if (quillRef.current && value !== quillRef.current.root.innerHTML) {
+  //     quillRef.current.root.innerHTML = value || '';
+  //   }
+  // }, [value]);
+
+  return <div ref={editorRef} style={{ height: '300px' }} />;
+};
+
+export default WysiwygEditorField;
