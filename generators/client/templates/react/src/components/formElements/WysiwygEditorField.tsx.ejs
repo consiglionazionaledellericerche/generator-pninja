@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface WysiwygEditorFieldProps {
   // value?: string;
@@ -9,14 +9,12 @@ interface WysiwygEditorFieldProps {
   placeholder?: string;
   readOnly?: boolean;
   fieldName: string;
-  formMethods: UseFormReturn;
 }
 
 const WysiwygEditorField: React.FC<WysiwygEditorFieldProps> = ({
   // value,
   // onChange,
   fieldName,
-  formMethods,
   placeholder = 'Scrivi...',
   readOnly = false
 }) => {

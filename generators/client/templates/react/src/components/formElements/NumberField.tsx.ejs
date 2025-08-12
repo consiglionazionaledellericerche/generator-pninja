@@ -1,4 +1,4 @@
-import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -7,7 +7,6 @@ const inputClassName = (hasErrors = false) =>
 
 interface NumberFieldProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   step?: number | string;
   validations?: {
@@ -19,7 +18,6 @@ interface NumberFieldProps {
 
 const NumberField: React.FC<NumberFieldProps> = ({
   fieldName,
-  formMethods,
   label,
   step,
   validations,
@@ -28,7 +26,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {
     valueAsNumber: true,

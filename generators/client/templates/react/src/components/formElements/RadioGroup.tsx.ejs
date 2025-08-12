@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -13,7 +13,6 @@ interface IRadioGroupOption {
 
 interface RadioGroupProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   loadingOptions?: boolean;
   multiple?: boolean;
@@ -25,7 +24,6 @@ interface RadioGroupProps {
 
 const RadioGroup: React.FC<RadioGroupProps> = ({
   fieldName,
-  formMethods,
   label,
   loadingOptions,
   options,
@@ -36,7 +34,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   return (
     <>

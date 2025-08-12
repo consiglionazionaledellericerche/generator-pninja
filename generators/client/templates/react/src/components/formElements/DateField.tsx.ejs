@@ -1,4 +1,4 @@
-import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -7,19 +7,18 @@ const inputClassName = (hasErrors = false) =>
 
 interface DateFieldProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const DateField: React.FC<DateFieldProps> = ({ fieldName, formMethods, label, validations }) => {
+const DateField: React.FC<DateFieldProps> = ({ fieldName, label, validations }) => {
   const { required } = validations || {};
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
 

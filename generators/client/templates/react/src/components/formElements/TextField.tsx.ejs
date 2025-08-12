@@ -1,4 +1,4 @@
-import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -7,7 +7,6 @@ const inputClassName = (hasErrors = false) =>
 
 interface TextFieldProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
@@ -17,12 +16,12 @@ interface TextFieldProps {
   };
 }
 
-const TextField: React.FC<TextFieldProps> = ({ fieldName, formMethods, label, validations }) => {
+const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
 

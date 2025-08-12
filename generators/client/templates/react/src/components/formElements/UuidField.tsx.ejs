@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { RefreshCw } from 'lucide-react';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -10,14 +10,13 @@ const inputClassName = (hasErrors = false) =>
 
 interface UuidFieldProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, label, validations }) => {
+const UuidField: React.FC<UuidFieldProps> = ({ fieldName, label, validations }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
   const {
@@ -25,7 +24,7 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, formMethods, label, va
     setValue,
     trigger,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   return (
     <>

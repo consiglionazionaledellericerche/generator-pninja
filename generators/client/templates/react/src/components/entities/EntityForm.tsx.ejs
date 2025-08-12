@@ -100,7 +100,7 @@ getValidationsFromValidations = (validations) => {
 }
 -%>
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
@@ -186,188 +186,177 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   }, [<%= to.camel(entity.name)%>, reset]);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-      <div className="max-w-5xl mx-auto space-y-4">
-<%    for({name, type, validations} of entity.body) {-%>
-        <div>
-<%      if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
-          <SelectField
-            fieldName="<%= to.snake(name) %>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-            options={Object.values(<%= type %>).map((v) => ({
-              value: String(v),
-              label: String(v),
-            }))}
-          />
-<%      } else if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
-          <FileField
-<%        if(type === 'ImageBlob') { -%>
-            accept="image/*"
-<%        } -%>
-            entity={<%= to.camel(entity.name)%>}
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (['Integer','Long','BigDecimal','Float','Double'].includes(type)) {-%>
-          <NumberField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === "Boolean") {-%>
-          <Checkbox
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === "Duration") {-%>
-          <DurationField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === "LocalDate") {-%>
-          <DateField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === 'ZonedDateTime' || type === 'Instant') {-%>
-          <DateTimeField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === "LocalTime") {-%>
-          <TimeField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === 'String') {-%>
-          <<%- isEmail(name) ? 'EmailField' : (isPassword(name) ? 'PasswordField' : 'TextField') %>
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === 'UUID') {-%>
-          <UuidField
-            fieldName="<%-to.snake(name)%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%        if(getValidationsFromValidations(validations)) {-%>
-            validations={<%- getValidationsFromValidations(validations) %>}
-<%        } -%>
-          />
-<%      } else if (type === 'TextBlob') {-%>
-          <Textarea
-            rows={10}
-            fieldName="<%= to.snake(name) %>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
-            formMethods={formMethods}
-<%         if (!isOptional(validations)) { -%>
-            validations={{ required: true }}
-<%         } -%>
-          />
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+        <div className="max-w-5xl mx-auto space-y-4">
+<%      for({name, type, validations} of entity.body) {-%>
+          <div>
+<%        if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
+            <SelectField
+              fieldName="<%= to.snake(name) %>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              options={Object.values(<%= type %>).map((v) => ({
+                value: String(v),
+                label: String(v),
+              }))}
+            />
+<%        } else if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
+            <FileField
+<%          if(type === 'ImageBlob') { -%>
+              accept="image/*"
+<%          } -%>
+              entity={<%= to.camel(entity.name)%>}
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (['Integer','Long','BigDecimal','Float','Double'].includes(type)) {-%>
+            <NumberField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === "Boolean") {-%>
+            <Checkbox
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === "Duration") {-%>
+            <DurationField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === "LocalDate") {-%>
+            <DateField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === 'ZonedDateTime' || type === 'Instant') {-%>
+            <DateTimeField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === "LocalTime") {-%>
+            <TimeField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === 'String') {-%>
+            <<%- isEmail(name) ? 'EmailField' : (isPassword(name) ? 'PasswordField' : 'TextField') %>
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === 'UUID') {-%>
+            <UuidField
+              fieldName="<%-to.snake(name)%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
+            />
+<%        } else if (type === 'TextBlob') {-%>
+            <Textarea
+              rows={10}
+              fieldName="<%= to.snake(name) %>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+<%           if (!isOptional(validations)) { -%>
+              validations={{ required: true }}
+<%           } -%>
+            />
+<%        }-%>
+          </div>
+<%      }-%>
+<%      for({field, related, labelField, cardinality, isArray, nullable} of relatedEntities) {
+          let filter = '';
+          if (cardinality === "OneToOne") {
+            filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
+          }  
+-%>
+          <div>
+            <SelectField
+              fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
+<%            if (isArray) {-%>
+              multiple={true}
+<%            }-%>
+              optionsLoad={{
+<%            if (filter !== '') {-%>
+                url: `/api/<%=to.slug(pluralize(related))%><%-filter%>`,
+<%            } else {-%>
+                url: '/api/<%=to.slug(pluralize(related))%>',
+<%            }-%>
+<%            if (labelField !== 'id') {-%>
+                labelAttribute: '<%-to.snake(labelField)%>',
+<%            }-%>
+              }}
+<%            if (isArray) {-%>
+              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => item.id)}
+<%            } else {-%>
+              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id}
+<%            }-%>
+<%            if(!nullable) {-%>
+              validations={{ required: true }}
+<%            }-%>
+            />
+          </div>
+<%      }-%>
+<%      for({foreignId, related, isArray, nullable} of foreignIds) {-%>
+          <div>
+            <SelectField
+              fieldName="<%= to.snake(foreignId) %>"
+              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
+              optionsLoad={{
+                url: '/api/<%=to.slug(pluralize(related))%>',
+<%            if (labelField !== 'id') {-%>
+                labelAttribute: '<%-to.snake(labelField)%>',
+<%            }-%>
+              }}
+              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
+<%            if(!nullable) { -%>
+              validations={{ required: true }}
+<%            }-%>
+            />
+          </div>
 <%      }-%>
         </div>
-<%    }-%>
-<%    for({field, related, labelField, cardinality, isArray, nullable} of relatedEntities) {
-        let filter = '';
-        if (cardinality === "OneToOne") {
-          filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
-        }  
--%>
-        <div>
-          <SelectField
-            fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
-<%          if (isArray) {-%>
-            multiple={true}
-<%          }-%>
-            formMethods={formMethods}
-            optionsLoad={{
-<%          if (filter !== '') {-%>
-              url: `/api/<%=to.slug(pluralize(related))%><%-filter%>`,
-<%          } else {-%>
-              url: '/api/<%=to.slug(pluralize(related))%>',
-<%          }-%>
-<%          if (labelField !== 'id') {-%>
-              labelAttribute: '<%-to.snake(labelField)%>',
-<%          }-%>
-            }}
-<%          if (isArray) {-%>
-            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => item.id)}
-<%          } else {-%>
-            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id}
-<%          }-%>
-<%          if(!nullable) {-%>
-            validations={{ required: true }}
-<%          }-%>
-          />
+        <div className="flex justify-center gap-4 my-8">
+          <button type="button" onClick={onCancel} className="cancel-button">
+            {t('actions.crud.cancel')}
+          </button>
+          <button
+            data-shortcut="ctrl+enter"
+            type="submit"
+            disabled={isSubmitting}
+            className="primary-button"
+          >
+            {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
+            <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+            <kbd className="kdb-shortcut">↵</kbd>
+          </button>
         </div>
-<%    }-%>
-<%    for({foreignId, related, isArray, nullable} of foreignIds) {-%>
-        <div>
-          <SelectField
-            fieldName="<%= to.snake(foreignId) %>"
-            label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
-            formMethods={formMethods}
-            optionsLoad={{
-              url: '/api/<%=to.slug(pluralize(related))%>',
-<%          if (labelField !== 'id') {-%>
-              labelAttribute: '<%-to.snake(labelField)%>',
-<%          }-%>
-            }}
-            defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
-<%          if(!nullable) { -%>
-            validations={{ required: true }}
-<%          }-%>
-          />
-        </div>
-<%    }-%>
-      </div>
-      <div className="flex justify-center gap-4 my-8">
-        <button type="button" onClick={onCancel} className="cancel-button">
-          {t('actions.crud.cancel')}
-        </button>
-        <button
-          data-shortcut="ctrl+enter"
-          type="submit"
-          disabled={isSubmitting}
-          className="primary-button"
-        >
-          {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
-          <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
-          <kbd className="kdb-shortcut">↵</kbd>
-        </button>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 }

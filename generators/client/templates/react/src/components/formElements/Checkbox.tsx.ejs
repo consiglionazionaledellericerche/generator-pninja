@@ -1,4 +1,4 @@
-import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -7,19 +7,18 @@ const checkBoxClassName = (hasErrors = false) =>
 
 interface CheckboxProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ fieldName, formMethods, label, validations }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations }) => {
   const { required } = validations || {};
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
 

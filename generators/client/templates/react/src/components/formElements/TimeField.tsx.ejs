@@ -1,4 +1,4 @@
-import { UseFormReturn, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -7,19 +7,18 @@ const inputClassName = (hasErrors = false) =>
 
 interface TimeFieldProps {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const TimeField: React.FC<TimeFieldProps> = ({ fieldName, formMethods, label, validations }) => {
+const TimeField: React.FC<TimeFieldProps> = ({ fieldName, label, validations }) => {
   const { required } = validations || {};
   const {
     register,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
 

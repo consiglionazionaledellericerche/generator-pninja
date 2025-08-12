@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronsUpDown } from 'lucide-react';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -30,7 +30,6 @@ interface ISelectFieldOptionsLoad {
 
 interface SelectFieldBase {
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   multiple?: boolean;
   size?: number;
@@ -55,7 +54,6 @@ type SelectFieldProps = SelectFieldWithOptions | SelectFieldWithOptionsLoad;
 
 const SelectField: React.FC<SelectFieldProps> = ({
   fieldName,
-  formMethods,
   label,
   multiple = false,
   options,
@@ -77,8 +75,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const {
     register,
     formState: { errors },
+    getValues,
     setValue,
-  } = formMethods;
+  } = useFormContext();
 
   const optionsSorter = (a: ISelectFieldOption, b: ISelectFieldOption) => {
     let result: number;
@@ -154,6 +153,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
     }
     return [];
   };
+
+  if (defaultValue === undefined) defaultValue = getValues(fieldName);
 
   return (
     <>

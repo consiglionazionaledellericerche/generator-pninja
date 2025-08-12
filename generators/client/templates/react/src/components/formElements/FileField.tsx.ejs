@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
@@ -21,7 +21,6 @@ interface FileFieldProps {
   accept?: string;
   entity?: unknown;
   fieldName: string;
-  formMethods: UseFormReturn;
   label: string;
   validations?: {
     required?: boolean;
@@ -52,7 +51,6 @@ const FileField: React.FC<FileFieldProps> = ({
   accept,
   entity,
   fieldName,
-  formMethods,
   label,
   validations,
 }) => {
@@ -68,7 +66,7 @@ const FileField: React.FC<FileFieldProps> = ({
     setValue,
     trigger,
     formState: { errors },
-  } = formMethods;
+  } = useFormContext();
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
