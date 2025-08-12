@@ -13,10 +13,10 @@ interface TextareaProps {
   validations?: {
     required?: boolean;
   };
-  wyisiwyg?: boolean;
+  editor?: boolean;
 }
 
-const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, wyisiwyg, validations }) => {
+const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, editor, validations }) => {
   const { required } = validations || {};
   const {
     register,
@@ -38,10 +38,10 @@ const Textarea: React.FC<TextareaProps> = ({ fieldName, label, rows, wyisiwyg, v
         rows={rows || 10}
         id={fieldName}
         {...register(fieldName, opts)}
-        readOnly={wyisiwyg}
-        className={`${inputClassName(!!errors?.[fieldName]?.message)} ${wyisiwyg ? 'h-0! p-0! m-0! ' : ''}`}
+        readOnly={editor}
+        className={`${inputClassName(!!errors?.[fieldName]?.message)} ${editor ? 'h-0! p-0! m-0! ' : ''}`}
       />
-      {wyisiwyg && (
+      {editor && (
         <WysiwygEditor
           hasErrors={!!errors?.[fieldName]}
           onChange={(value: string) => {
