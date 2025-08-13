@@ -6,7 +6,7 @@ function cleanHtmlValue(html: string | null | undefined): string {
   const temp = document.createElement('div');
   temp.innerHTML = html.trim();
   const textContent = temp.textContent
-    .replace(/\u200B/g, ''
+    .replace(/\u200B/g, '')
     .trim();
   return textContent.length === 0 ? '' : html;
 }
