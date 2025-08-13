@@ -1,20 +1,20 @@
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './wysiwyg-editor.css'; // Custom styles for the editor
+import './wysiwyg-editor.css';
 function cleanHtmlValue(html: string | null | undefined): string {
-  if (!html) return ''; // se è già null/undefined
+  if (!html) return '';
   const temp = document.createElement('div');
   temp.innerHTML = html.trim();
   const textContent = temp.textContent
-    .replace(/\u200B/g, '') // rimuove zero-width space
+    .replace(/\u200B/g, ''
     .trim();
   return textContent.length === 0 ? '' : html;
 }
 
 interface WysiwygEditorProps {
-  hasErrors?: boolean; // Optional prop to indicate if there are errors
-  onChange?(value: string): void; // Optional callback for value changes
-  defaultValue?: string; // Optional default value for the editor
+  hasErrors?: boolean;
+  onChange?(value: string): void;
+  defaultValue?: string;
 }
 
 const modules = {
@@ -27,10 +27,9 @@ const modules = {
       ['link'],
       ['image', 'video'],
       ['clean'],
-      ['undo', 'redo'], // Questi pulsanti custom
+      ['undo', 'redo'],
     ],
     handlers: {
-      // Questi sono i callback che mancavano!
       undo: function () {
         this.quill.history.undo();
       },
@@ -47,9 +46,9 @@ const modules = {
 };
 
 const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
-  hasErrors, // field name for the textarea
-  onChange, // label for the textarea
-  defaultValue, // whether to use a WYSIWYG editor
+  hasErrors,
+  onChange,
+  defaultValue,
 }) => {
   return (
     <div
@@ -72,7 +71,7 @@ const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
         theme="snow"
         value={cleanHtmlValue(defaultValue)}
         onChange={(value) => onChange && onChange(cleanHtmlValue(value))}
-        modules={modules} // Solo questa riga aggiunta
+        modules={modules}
       />
     </div>
   );
