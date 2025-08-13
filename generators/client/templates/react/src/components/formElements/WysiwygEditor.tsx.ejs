@@ -1,15 +1,8 @@
+import { useEffect, useRef } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './wysiwyg-editor.css';
-function cleanHtmlValue(html: string | null | undefined): string {
-  if (!html) return '';
-  const temp = document.createElement('div');
-  temp.innerHTML = html.trim();
-  const textContent = temp.textContent
-    .replace(/\u200B/g, '')
-    .trim();
-  return textContent.length === 0 ? '' : html;
-}
+import Quill, { ExpandedQuillOptions, Module } from 'quill';
 
 interface WysiwygEditorProps {
   hasErrors?: boolean;
@@ -20,6 +13,7 @@ interface WysiwygEditorProps {
 const modules = {
   toolbar: {
     container: [
+      ['undo', 'redo'],
       [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [{ list: 'ordered' }, { list: 'bullet' }],
@@ -27,14 +21,13 @@ const modules = {
       ['link'],
       ['image', 'video'],
       ['clean'],
-      ['undo', 'redo'],
     ],
     handlers: {
       undo: function () {
-        this.quill.history.undo();
+        (this as unknown as Module).quill.history.undo();
       },
       redo: function () {
-        this.quill.history.redo();
+        (this as unknown as Module).quill.history.redo();
       },
     },
   },
@@ -45,11 +38,41 @@ const modules = {
   },
 };
 
-const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
-  hasErrors,
-  onChange,
-  defaultValue,
-}) => {
+const updateButtonStates = (quill: Quill) => {
+  const toolbar = quill.getModule('toolbar') as ExpandedQuillOptions;
+  const undoButton = toolbar?.container.querySelector('.ql-undo');
+  const redoButton = toolbar?.container.querySelector('.ql-redo');
+
+  if (undoButton) {
+    if (quill.history.stack.undo.length === 0) {
+      undoButton.classList.add('ql-disabled');
+    } else {
+      undoButton.classList.remove('ql-disabled');
+    }
+  }
+
+  if (redoButton) {
+    if (quill.history.stack.redo.length === 0) {
+      redoButton.classList.add('ql-disabled');
+    } else {
+      redoButton.classList.remove('ql-disabled');
+    }
+  }
+};
+
+const WysiwygEditor: React.FC<WysiwygEditorProps> = ({ hasErrors, onChange, defaultValue }) => {
+  const quillRef = useRef<ReactQuill>(null);
+  useEffect(() => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+
+      quill.on('text-change', () => {
+        setTimeout(() => updateButtonStates(quill), 0);
+      });
+
+      setTimeout(() => updateButtonStates(quill), 0);
+    }
+  }, []);
   return (
     <div
       className={`
@@ -68,9 +91,10 @@ const WysiwygEditor: React.FC<WysiwygEditorProps> = ({
       `}
     >
       <ReactQuill
+        ref={quillRef}
         theme="snow"
-        value={cleanHtmlValue(defaultValue)}
-        onChange={(value) => onChange && onChange(cleanHtmlValue(value))}
+        value={defaultValue}
+        onChange={(value) => onChange && onChange(value)}
         modules={modules}
       />
     </div>
