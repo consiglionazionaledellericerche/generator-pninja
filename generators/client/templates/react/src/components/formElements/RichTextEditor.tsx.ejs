@@ -28,6 +28,9 @@ interface JoditInstance {
     on: (event: string, callback: () => void) => void;
   };
   destruct: () => void;
+  observer: {
+    clear: () => void;
+  };
 }
 
 interface RichTextEditorProps {
@@ -82,16 +85,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           '|',
           'source',
         ],
-        controls: {
-          paragraph: {
-            list: {
-              p: 'Paragrafo',
-              h1: 'Titolo 1',
-              h2: 'Titolo 2',
-              h3: 'Titolo 3',
-            },
-          },
-        },
         uploader: {
           insertImageAsBase64URI: true,
         },
@@ -101,7 +94,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       editorRef.current = joditInstance;
 
       // Set initial content
-      joditInstance.value = initialContent;
+      joditInstance.value = '';
 
       // Handle changes
       const handleChange = () => {
@@ -136,9 +129,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   }, []);
 
   useEffect(() => {
-    const editor = editorRef.current as unknown as HTMLTextAreaElement;
+    const editor = editorRef.current as unknown as JoditInstance;
     if (editor && initialContent && editor?.value?.trim() === '') {
       editor.value = initialContent;
+      editor.observer.clear();
     }
   }, [initialContent]);
 
