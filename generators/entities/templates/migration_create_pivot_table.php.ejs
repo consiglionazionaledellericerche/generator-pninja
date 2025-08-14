@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('<%-pivotName%>', function (Blueprint $table) {
             $table->unique(['<%- fromForeignId %>_id', '<%- toForeignId %>_id']);
-            $table->foreignId('<%- fromForeignId %>_id')->nullable()->constrained('<%-toTabName%>')<%- nullable ? `->cascadeOnDelete()` : `->restrictOnDelete()` %>;
-            $table->foreignId('<%- toForeignId %>_id')->nullable()->constrained('<%-fromTabName%>')<%- nullable ? `->cascadeOnDelete()` : `->restrictOnDelete()` %>;
+            $table->foreignId('<%- fromForeignId %>_id')->nullable()->constrained('<%-toTabName%>')->cascadeOnDelete();
+            $table->foreignId('<%- toForeignId %>_id')->nullable()->constrained('<%-fromTabName%>')->cascadeOnDelete();
             $table->timestamps();
         });
     }
