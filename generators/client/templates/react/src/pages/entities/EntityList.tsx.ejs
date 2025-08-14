@@ -117,7 +117,7 @@ export default function <%= entity.name %>List() {
         loadRecords();
         addNotification({
             type: 'success',
-            message: `<%= entity.name %> ID ${id} deleted successfully`,
+            message: t(`actions.crud.successfullyDeleted`, {id}),
             duration: 3000
         });
       })
