@@ -137,7 +137,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     } else {
       setValue(fieldName, multiple ? [] : '');
     }
-  }, [remoteOptions, options, defaultValue, fieldName, multiple, setValue]);
+  }, [remoteOptions, options, [...[defaultValue]].join(','), fieldName, multiple, setValue]);
 
   const getOptions = () => {
     if (options) {
