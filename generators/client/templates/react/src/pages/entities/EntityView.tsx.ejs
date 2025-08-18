@@ -156,7 +156,7 @@ export default function <%= entity.name %>View() {
         <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
           {t('actions.crud.edit')}
         </Link>
-        <<%= entity.name %>DeleteButton />
+        <<%= entity.name %>DeleteButton id={id} />
       </div>
       )}
     </div>

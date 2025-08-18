@@ -1,23 +1,21 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { HttpError, useApi } from '../../hooks/useApi';
 import ConfirmButton from '../ConfirmButton';
-import { OctagonAlert } from 'lucide-react';
 
-interface DeleteButtonParams extends Record<string, string | undefined> {
-  id: string;
+interface DeleteButtonProps {
+  id: string | number | null | undefined;
 }
 
-export default function <%= entity.name %>DeleteButton() {
+const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
   const { t } = useTranslation();
-  const { id } = useParams<DeleteButtonParams>();
 
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
   const { fetch } = useApi();
 
-  const deleteRecord = (id: number | undefined) => {
+  const deleteRecord = (id: string | number | null | undefined) => {
     if (!id) return;
     fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
       method: 'DELETE',
@@ -25,7 +23,7 @@ export default function <%= entity.name %>DeleteButton() {
       .then(() => {
         addNotification({
           type: 'success',
-          message: t(`actions.crud.successfullyDeleted`, {id}),
+          message: t(`actions.crud.successfullyDeleted`, { id }),
           duration: 3000,
         });
       })
@@ -42,7 +40,6 @@ export default function <%= entity.name %>DeleteButton() {
       });
   };
 
-
   return (
     <ConfirmButton
       onConfirm={() => deleteRecord(Number(id))}
@@ -50,11 +47,9 @@ export default function <%= entity.name %>DeleteButton() {
       pendingClassName="danger-button"
       label={t('actions.crud.delete')}
       pendingLabel={
-        <span className="flex items-center gap-2">
-          <OctagonAlert size={20} />
-          {t('actions.crud.confirmDelete')}
-        </span>
+        <span className="flex items-center gap-2">{t('actions.crud.confirmDelete')}</span>
       }
     />
   );
 }
+export default <%= entity.name %>DeleteButton;
