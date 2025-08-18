@@ -10,15 +10,22 @@ const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
 interface UuidFieldProps {
+  autoGenerate?: boolean;
   fieldName: string;
   label: string;
-  auto?: boolean;
+  placeholder?: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const UuidField: React.FC<UuidFieldProps> = ({ fieldName, auto = true, label, validations }) => {
+const UuidField: React.FC<UuidFieldProps> = ({
+  autoGenerate = true,
+  fieldName,
+  label,
+  placeholder,
+  validations,
+}) => {
   const { t } = useTranslation();
   const { required } = validations || {};
   const {
@@ -30,10 +37,10 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, auto = true, label, va
   } = useFormContext();
 
   useEffect(() => {
-    if (!getValues(fieldName) && auto) {
+    if (!getValues(fieldName) && autoGenerate) {
       setValue(fieldName, uuidv4());
     }
-  }, [auto, fieldName, getValues, setValue]);
+  }, [autoGenerate, fieldName, getValues, setValue]);
 
   return (
     <>
@@ -41,7 +48,8 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, auto = true, label, va
       <div className="grid grid-cols-1">
         <input
           type="text"
-          readOnly={auto}
+          {...(placeholder ? { placeholder } : {})}
+          readOnly={autoGenerate}
           id={fieldName}
           {...register(fieldName, {
             required: required ? 'errors.validations.required' : false,
@@ -61,7 +69,7 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, auto = true, label, va
           className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
           title={t('actions.generateUUID')}
         >
-          {!auto && <RefreshCw className="h-full" />}
+          {!autoGenerate && <RefreshCw className="h-full" />}
         </button>
       </div>
       <FormErrors errors={errors} fieldName={fieldName} />

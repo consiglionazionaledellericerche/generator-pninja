@@ -8,6 +8,7 @@ const inputClassName = (hasErrors = false) =>
 interface TextFieldProps {
   fieldName: string;
   label: string;
+  placeholder?: string;
   validations?: {
     required?: boolean;
     minlength?: number;
@@ -16,7 +17,7 @@ interface TextFieldProps {
   };
 }
 
-const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations }) => {
+const TextField: React.FC<TextFieldProps> = ({ fieldName, label, placeholder, validations }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const {
     register,
@@ -49,14 +50,15 @@ const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations }) 
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <input
-      type="text"
-      id={fieldName}
-      {...register(fieldName, opts)}
-      className={inputClassName(!!errors?.[fieldName]?.message)}
-    />
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <input
+        type="text"
+        {...(placeholder ? { placeholder } : {})}
+        id={fieldName}
+        {...register(fieldName, opts)}
+        className={inputClassName(!!errors?.[fieldName]?.message)}
+      />
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };

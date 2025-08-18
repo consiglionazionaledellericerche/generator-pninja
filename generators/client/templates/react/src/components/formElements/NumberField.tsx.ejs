@@ -8,6 +8,7 @@ const inputClassName = (hasErrors = false) =>
 interface NumberFieldProps {
   fieldName: string;
   label: string;
+  placeholder?: string;
   step?: number | string;
   validations?: {
     required?: boolean;
@@ -19,6 +20,7 @@ interface NumberFieldProps {
 const NumberField: React.FC<NumberFieldProps> = ({
   fieldName,
   label,
+  placeholder,
   step,
   validations,
 }) => {
@@ -53,6 +55,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
       <input
         type="number"
+        {...(placeholder ? { placeholder } : {})}
         id={fieldName}
         {...(min !== undefined && min !== null && { min })}
         {...(max !== undefined && max !== null && { max })}

@@ -8,6 +8,7 @@ const inputClassName = (hasErrors = false) =>
 interface EmailFieldProps {
   fieldName: string;
   label: string;
+  placeholder?: string;
   validations?: {
     required?: boolean;
     minlength?: number;
@@ -16,7 +17,7 @@ interface EmailFieldProps {
   };
 }
 
-const EmailField: React.FC<EmailFieldProps> = ({ fieldName, label, validations }) => {
+const EmailField: React.FC<EmailFieldProps> = ({ fieldName, label, placeholder, validations }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const {
     register,
@@ -54,14 +55,15 @@ const EmailField: React.FC<EmailFieldProps> = ({ fieldName, label, validations }
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <input
-      type="email"
-      id={fieldName}
-      {...register(fieldName, opts)}
-      className={inputClassName(!!errors?.[fieldName]?.message)}
-    />
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <input
+        type="email"
+        {...(placeholder ? { placeholder } : {})}
+        id={fieldName}
+        {...register(fieldName, opts)}
+        className={inputClassName(!!errors?.[fieldName]?.message)}
+      />
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };

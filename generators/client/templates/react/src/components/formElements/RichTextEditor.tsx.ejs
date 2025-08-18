@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 // Dichiarazioni di tipo per Jodit
 interface JoditConfig {
+  placeholder?: string;
   height?: number;
   buttons?: (string | object)[];
   controls?: {
@@ -34,12 +35,14 @@ interface JoditInstance {
 }
 
 interface RichTextEditorProps {
+  placeholder?: string;
   hasErrors?: boolean;
   onChange?(value: string): void;
   initialContent?: string;
 }
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({
+  placeholder = '',
   onChange,
   initialContent = '',
   hasErrors = false,
@@ -53,7 +56,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     const initEditor = () => {
       if (!window.Jodit || !textareaRef.current) return;
 
-      const config = {
+      const config: JoditConfig = {
+        placeholder: placeholder,
         height: 400,
         buttons: [
           'undo',
