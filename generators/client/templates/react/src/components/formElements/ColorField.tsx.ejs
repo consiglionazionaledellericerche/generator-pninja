@@ -8,13 +8,12 @@ const inputClassName = (hasErrors = false) =>
 interface ColorFieldProps {
   fieldName: string;
   label: string;
-  placeholder?: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const ColorField: React.FC<ColorFieldProps> = ({ fieldName, label, placeholder, validations }) => {
+const ColorField: React.FC<ColorFieldProps> = ({ fieldName, label, validations }) => {
   const { required } = validations || {};
   const {
     register,
@@ -32,7 +31,6 @@ const ColorField: React.FC<ColorFieldProps> = ({ fieldName, label, placeholder, 
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
       <input
         type="color"
-        {...(placeholder ? { placeholder } : {})}
         id={fieldName}
         {...register(fieldName, opts)}
         className={inputClassName(!!errors?.[fieldName]?.message)}
