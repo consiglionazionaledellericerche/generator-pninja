@@ -7,7 +7,12 @@ for({type} of entity.body) {
 }
 const isEmail = (name) => name.toLowerCase().includes('email');
 const isPassword = (name) => name.toLowerCase().includes('password');
+const isTel = (name) => /(phone|phonenumber)$/.test(name.toLowerCase());
+const isUrl = (name) => /url$/.test(name.toLowerCase());
 const hasEmail = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
+const hasPassword = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isPassword(name)), false);
+const hasTel = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isTel(name)), false);
+const hasUrl = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isUrl(name)), false);
 const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
 const hasTextarea = entity?.body.reduce((res, {type}) => res || type === 'TextBlob', false);
 const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
@@ -29,6 +34,13 @@ const hasRequiredBlob = entity?.body
       ),
     false
   );
+const getStringFieldType = (name) => {
+  if (isEmail(name)) return 'EmailField';
+  if (isPassword(name)) return 'PasswordField';
+  if (isTel(name)) return 'TelField';
+  if (isUrl(name)) return 'UrlField';
+  return 'TextField';
+}
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
 const hasCheckbox = entity?.body.filter(({type}) => type === 'Boolean').length > 0;
 const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
@@ -130,6 +142,15 @@ import {
 <% } -%>
 <% if (hasNumber) {-%>
   NumberField,
+<% } -%>
+<% if (hasPassword) {-%>
+  PasswordField,
+<% } -%>
+<% if (hasUrl) {-%>
+  UrlField,
+<% } -%>
+<% if (hasTel) {-%>
+  TelField,
 <% } -%>
 <% if (hasSelect) {-%>
   SelectField,
@@ -264,7 +285,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
             />
 <%        } else if (type === 'String') {-%>
-            <<%- isEmail(name) ? 'EmailField' : (isPassword(name) ? 'PasswordField' : 'TextField') %>
+            <<%- getStringFieldType(name) %>
               fieldName="<%-to.snake(name)%>"
               label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
