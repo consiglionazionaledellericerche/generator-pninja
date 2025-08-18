@@ -68,6 +68,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TimeField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/UrlField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UrlField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/HtmlViewer.tsx.ejs"), that.destinationPath(`client/src/components/HtmlViewer.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
