@@ -1,0 +1,66 @@
+import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
+
+const inputClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+
+interface TelFieldProps {
+  fieldName: string;
+  label: string;
+  placeholder?: string;
+  validations?: {
+    required?: boolean;
+    minlength?: number;
+    maxlength?: number;
+    pattern?: RegExp | string;
+  };
+}
+
+const TelField: React.FC<TelFieldProps> = ({ fieldName, label, placeholder, validations }) => {
+  const { required, minlength, maxlength, pattern } = validations || {};
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+
+  if (required) {
+    opts.required = 'errors.validations.required';
+  }
+  if (minlength) {
+    opts.minLength = {
+      value: minlength,
+      message: `errors.validations.minlength:${minlength}`,
+    };
+  }
+  if (maxlength) {
+    opts.maxLength = {
+      value: maxlength,
+      message: `errors.validations.maxlength:${maxlength}`,
+    };
+  }
+  if (pattern) {
+    opts.pattern = {
+      value: typeof pattern === 'string' ? new RegExp(pattern) : pattern,
+      message: 'errors.validations.pattern',
+    };
+  }
+
+  return (
+    <>
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <input
+        type="tel"
+        {...(placeholder ? { placeholder } : {})}
+        id={fieldName}
+        {...register(fieldName, opts)}
+        className={inputClassName(!!errors?.[fieldName]?.message)}
+      />
+      <FormErrors errors={errors} fieldName={fieldName} />
+    </>
+  );
+};
+
+export { TelField };
