@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 import { RefreshCw } from 'lucide-react';
@@ -11,12 +12,13 @@ const inputClassName = (hasErrors = false) =>
 interface UuidFieldProps {
   fieldName: string;
   label: string;
+  auto?: boolean;
   validations?: {
     required?: boolean;
   };
 }
 
-const UuidField: React.FC<UuidFieldProps> = ({ fieldName, label, validations }) => {
+const UuidField: React.FC<UuidFieldProps> = ({ fieldName, auto = true, label, validations }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
   const {
@@ -24,37 +26,45 @@ const UuidField: React.FC<UuidFieldProps> = ({ fieldName, label, validations }) 
     setValue,
     trigger,
     formState: { errors },
+    getValues,
   } = useFormContext();
+
+  useEffect(() => {
+    if (!getValues(fieldName) && auto) {
+      setValue(fieldName, uuidv4());
+    }
+  }, [auto, fieldName, getValues, setValue]);
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <div className="grid grid-cols-1">
-      <input
-        type="text"
-        id={fieldName}
-        {...register(fieldName, {
-          required: required ? 'errors.validations.required' : false,
-          pattern: {
-            value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-            message: 'errors.validations.pattern',
-          },
-        })}
-        className={inputClassName(!!errors?.[fieldName]?.message) + ' col-start-1 row-start-1'}
-      />
-      <button
-        type="button"
-        onClick={() => {
-          setValue(fieldName, uuidv4());
-          trigger(fieldName); // Re-validate the field
-        }}
-        className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
-        title={t('actions.generateUUID')}
-      >
-        <RefreshCw className="h-full" />
-      </button>
-    </div>
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <div className="grid grid-cols-1">
+        <input
+          type="text"
+          readOnly={auto}
+          id={fieldName}
+          {...register(fieldName, {
+            required: required ? 'errors.validations.required' : false,
+            pattern: {
+              value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+              message: 'errors.validations.pattern',
+            },
+          })}
+          className={inputClassName(!!errors?.[fieldName]?.message) + ' col-start-1 row-start-1'}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            setValue(fieldName, uuidv4());
+            trigger(fieldName); // Re-validate the field
+          }}
+          className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
+          title={t('actions.generateUUID')}
+        >
+          {!auto && <RefreshCw className="h-full" />}
+        </button>
+      </div>
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };
