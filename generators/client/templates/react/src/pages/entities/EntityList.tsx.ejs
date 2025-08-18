@@ -108,29 +108,6 @@ export default function <%= entity.name %>List() {
     );
   };
 
-  const delete<%= entity.name %> = (id: number | undefined) => {
-    if (!id) return;
-    fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
-      method: 'DELETE',
-    })
-      .then(() => {
-        loadRecords();
-        addNotification({
-            type: 'success',
-            message: t(`actions.crud.successfullyDeleted`, {id}),
-            duration: 3000
-        });
-      })
-      .catch((error) => {
-        addNotification({
-            type: 'error',
-            message: error.message || `Error deleting <%= entity.name %> ID ${id}`,
-            details: error?.details,
-            duration: 5000
-        });
-      });
-  };
-
   useEffect(() => loadRecords(), [loadRecords]);
 
   useEffect(() => {
@@ -199,12 +176,6 @@ export default function <%= entity.name %>List() {
                 <div className="flex space-x-2">
                   <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>
                   <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>
-                  <button
-                    onClick={() => delete<%= entity.name %>(row.id)}
-                    className="text-link cursor-pointer uppercase"
-                  >
-                    {t('actions.crud.delete')}
-                  </button>
                 </div>
               </td>
             </tr>

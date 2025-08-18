@@ -48,6 +48,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
     that.fs.copyTpl(that.templatePath("assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
+    that.fs.copyTpl(that.templatePath("react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormElements.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Checkbox.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Checkbox.tsx`), {});
@@ -165,6 +166,15 @@ export async function createReactClient(that, parsedJDL) {
                     relation.cardinality === 'OneToOne'
                     && relation.from.name === entity.name
                 ).map(rel => to.snake(rel.from.injectedField || rel.to.name)),
+                to,
+                pluralize,
+            }
+        );
+        that.fs.copyTpl(
+            that.templatePath("react/src/components/entities/EntityDeleteButton.tsx.ejs"),
+            that.destinationPath(`client/src/components/entities/${entity.name}DeleteButton.tsx`),
+            {
+                entity,
                 to,
                 pluralize,
             }

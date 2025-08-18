@@ -8,6 +8,7 @@ import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+import <%= entity.name %>DeleteButton from '../../components/entities/<%= entity.name %>DeleteButton';
 <%relatedEntities
     .map(r => r.related)
     .filter(r => r !== entity.name)
@@ -149,12 +150,13 @@ export default function <%= entity.name %>View() {
       {!loading && (
       <div className="flex justify-center gap-4 mt-4">
         <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>`} className="cancel-button">
-          <ArrowLeft size={16} />
+          <ArrowLeft size={20} />
           {t('actions.crud.back')}
         </Link>
         <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
-          {t('actions.crud.edit')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
+          {t('actions.crud.edit')}
         </Link>
+        <<%= entity.name %>DeleteButton />
       </div>
       )}
     </div>

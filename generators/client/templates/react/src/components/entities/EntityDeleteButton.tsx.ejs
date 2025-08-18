@@ -1,0 +1,60 @@
+import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { HttpError, useApi } from '../../hooks/useApi';
+import ConfirmButton from '../ConfirmButton';
+import { OctagonAlert } from 'lucide-react';
+
+interface DeleteButtonParams extends Record<string, string | undefined> {
+  id: string;
+}
+
+export default function <%= entity.name %>DeleteButton() {
+  const { t } = useTranslation();
+  const { id } = useParams<DeleteButtonParams>();
+
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+  const { fetch } = useApi();
+
+  const deleteRecord = (id: number | undefined) => {
+    if (!id) return;
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t(`actions.crud.successfullyDeleted`, {id}),
+          duration: 3000,
+        });
+      })
+      .catch((error: HttpError) => {
+        addNotification({
+          type: 'error',
+          message: error.message || `Error deleting record ID ${id}`,
+          details: error?.details || '',
+          duration: 5000,
+        });
+      })
+      .finally(() => {
+        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+      });
+  };
+
+
+  return (
+    <ConfirmButton
+      onConfirm={() => deleteRecord(Number(id))}
+      className="danger-button"
+      pendingClassName="danger-button"
+      label={t('actions.crud.delete')}
+      pendingLabel={
+        <span className="flex items-center gap-2">
+          <OctagonAlert size={20} />
+          {t('actions.crud.confirmDelete')}
+        </span>
+      }
+    />
+  );
+}

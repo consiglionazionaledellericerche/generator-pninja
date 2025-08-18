@@ -1,0 +1,97 @@
+import { ReactElement, useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { X } from 'lucide-react';
+
+interface ConfirmButtonProps {
+  label: string | ReactElement;
+  pendingLabel?: string | ReactElement;
+  className?: string;
+  pendingClassName?: string;
+  timeout?: number;
+  onConfirm: () => void | Promise<void>;
+}
+
+const ConfirmButton: React.FC<ConfirmButtonProps> = ({
+  label,
+  pendingLabel,
+  className,
+  pendingClassName,
+  timeout = 5000,
+  onConfirm,
+}) => {
+  const [pendingLaunch, setPendingLaunch] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const { t } = useTranslation();
+  const confirmTimer = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (pendingLaunch) {
+      setCountdown(timeout / 1000);
+
+      const updateTimer = setInterval(() => {
+        setCountdown((prev: number) => {
+          if (prev <= 0) {
+            clearInterval(updateTimer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      const timer = setTimeout(() => {
+        clearInterval(updateTimer);
+        setPendingLaunch(false);
+      }, timeout);
+
+      confirmTimer.current = timer;
+    } else {
+      if (confirmTimer.current) {
+        clearTimeout(confirmTimer.current);
+        confirmTimer.current = null;
+      }
+      setCountdown(0);
+    }
+
+    return () => {
+      if (confirmTimer.current) {
+        clearTimeout(confirmTimer.current);
+      }
+    };
+  }, [pendingLaunch, timeout]);
+
+  return (
+    <>
+      {!pendingLaunch && (
+        <button type="button" className={className} onClick={() => setPendingLaunch(true)}>
+          {label}
+        </button>
+      )}
+      {pendingLaunch && (
+        <span className="flex">
+          <button
+            type="button"
+            onClick={onConfirm}
+            className={`${pendingClassName} rounded-none! rounded-l-md!`}
+          >
+            <span className="flex gap-2">{pendingLabel}</span>
+            <span>({countdown !== null ? countdown : 0})</span>
+          </button>
+          <button
+            title={t('common.cancel')}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setPendingLaunch(false);
+            }}
+            className={`${pendingClassName} rounded-none! rounded-r-md!`}
+          >
+            <X size={20} />
+            <span className="sr-only">{t('common.cancel')}</span>
+          </button>
+        </span>
+      )}
+    </>
+  );
+};
+
+export default ConfirmButton;

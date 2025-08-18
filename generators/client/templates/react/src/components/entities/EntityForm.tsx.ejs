@@ -104,6 +104,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+
+import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
+
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
 
 import {
@@ -355,6 +358,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
             <kbd className="kdb-shortcut">↵</kbd>
           </button>
+          <EeeeDeleteButton />
         </div>
       </form>
     </FormProvider>
