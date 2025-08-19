@@ -1,0 +1,104 @@
+import { useFormContext, RegisterOptions, FieldValues, set } from 'react-hook-form';
+import { FormLabel } from './FormLabel';
+import { FormErrors } from './FormErrors';
+import { JsonPrint } from '../JsonPrint';
+import { useEffect, useState } from 'react';
+import { type } from './SelectField';
+
+const inputClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+
+interface RangeField {
+  fieldName: string;
+  label: string;
+  placeholder?: string;
+  step?: number | string;
+  validations?: {
+    required?: boolean;
+    min?: number;
+    max?: number;
+  };
+}
+
+const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step, validations }) => {
+  const { required, min, max } = validations || {};
+  const {
+    register,
+    formState: { errors },
+    getValues,
+    setValue,
+  } = useFormContext();
+
+  const [currentValue, setCurrentValue] = useState(
+    getValues(fieldName) !== undefined && getValues(fieldName) !== null
+      ? getValues(fieldName)
+      : ((min || 0) + (max || 100)) / 2
+  );
+
+  const opts: RegisterOptions<FieldValues, string> | undefined = {
+    valueAsNumber: true,
+  };
+
+  if (required) {
+    opts.required = 'errors.validations.required';
+  }
+  if (min !== undefined && min !== null) {
+    opts.min = {
+      value: min,
+      message: `errors.validations.min:${min}`,
+    };
+  }
+  if (max !== undefined && max !== null) {
+    opts.max = {
+      value: max,
+      message: `errors.validations.max:${max}`,
+    };
+  }
+
+  useEffect(() => {
+    setCurrentValue(
+      getValues(fieldName) !== undefined && getValues(fieldName) !== null
+        ? getValues(fieldName)
+        : ((min || 0) + (max || 100)) / 2
+    );
+  }, [getValues, fieldName, min, max]);
+
+  return (
+    <>
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      {(min || 0) >= (max || 100) && (
+        <div className="text-red-500">Invalid range: min should be less than max.</div>
+      )}
+      <div className="flex gap-2">
+        <input
+          type="range"
+          {...(placeholder ? { placeholder } : {})}
+          id={fieldName}
+          min={min || 0}
+          max={max || 100}
+          step={step || 1}
+          {...register(fieldName, opts)}
+          className={inputClassName(!!errors?.[fieldName]?.message)}
+          onChange={(e) => setCurrentValue(Number(e.target.value))}
+          value={currentValue}
+        />
+        <input
+          type="number"
+          min={min || 0}
+          max={max || 100}
+          step={step || 1}
+          className={`${inputClassName(!!errors?.[fieldName]?.message)} w-25!`}
+          onChange={(e) => {
+            setCurrentValue(Number(e.target.value));
+            setValue(fieldName, Number(e.target.value));
+          }}
+          value={currentValue}
+        />
+      </div>
+      <JsonPrint data={{ currentValue }} />
+      <FormErrors errors={errors} fieldName={fieldName} />
+    </>
+  );
+};
+
+export { RangeField };

@@ -64,6 +64,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/NumberField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/NumberField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/PasswordField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/PasswordField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RichTextEditor.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RichTextEditor.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/SearchField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SearchField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), {});
