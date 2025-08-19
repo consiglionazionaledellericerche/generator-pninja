@@ -9,16 +9,15 @@ export async function createReactClient(that, parsedJDL) {
 
     that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
 
-    that.fs.copyTpl(that.templatePath('react/.env'), that.destinationPath('client/.env'), {});
-    that.fs.copyTpl(that.templatePath('react/.gitignore'), that.destinationPath('client/.gitignore'), {});
-
-    that.fs.copyTpl(that.templatePath('react/eslint.config.js'), that.destinationPath('client/eslint.config.js'), {});
+    that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), {});
+    that.fs.copyTpl(that.templatePath('react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
+    that.fs.copyTpl(that.templatePath('react/eslint.config.js.ejs'), that.destinationPath('client/eslint.config.js'), {});
     that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
     that.fs.copyTpl(that.templatePath('react/package.json.ejs'), that.destinationPath('client/package.json'), { name: to.slug(appName) });
     that.fs.copyTpl(that.templatePath('react/package-lock.json.ejs'), that.destinationPath('client/package-lock.json'), { name: to.slug(appName) });
     that.fs.copyTpl(that.templatePath('react/tsconfig.app.json.ejs'), that.destinationPath('client/tsconfig.app.json'), {});
     that.fs.copyTpl(that.templatePath('react/tsconfig.json.ejs'), that.destinationPath('client/tsconfig.json'), {});
-    that.fs.copyTpl(that.templatePath('react/tsconfig.node.json'), that.destinationPath('client/tsconfig.node.json'), {});
+    that.fs.copyTpl(that.templatePath('react/tsconfig.node.json.ejs'), that.destinationPath('client/tsconfig.node.json'), {});
     that.fs.copyTpl(that.templatePath('react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
 
     for (const lang of ['en', 'it', 'fr', 'de']) {
@@ -28,7 +27,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
 
-    that.fs.copyTpl(that.templatePath("react/src/App.css"), that.destinationPath(`client/src/App.css`), {});
+    that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {});
     that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), {});
