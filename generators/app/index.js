@@ -62,6 +62,20 @@ export default class extends Generator {
       namespace: 'pninja:client'
     });
 
+    // sub generator Docker
+    const dockerGeneratorPath = path.resolve(__dirname, '../docker/index.js');
+    const { default: DockerGenerator } = await import(dockerGeneratorPath);
+
+    await this.composeWith({
+      Generator: DockerGenerator,
+      path: path.dirname(dockerGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: dockerGeneratorPath,
+      namespace: 'pninja:docker'
+    });
+
     // sub generator Final
     const finalGeneratorPath = path.resolve(__dirname, '../final/index.js');
     const { default: FinalGenerator } = await import(finalGeneratorPath);
@@ -154,7 +168,7 @@ export default class extends Generator {
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     if (this.answers.dbms === 'sqlite') {
       envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlite`);
-      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `# DB_DATABASE=/absolute/path/to/database.sqlite\n# DB_PREFIX=`);
+      envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=database/database.sqlite`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$\n/m, ``);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$\n/m, ``);
       envFileContents = envFileContents.replace(/^(# )?DB_USERNAME=.*$\n/m, ``);

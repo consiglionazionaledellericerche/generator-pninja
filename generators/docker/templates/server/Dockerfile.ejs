@@ -1,0 +1,31 @@
+FROM php:8.2-fpm
+
+# Installa dipendenze di sistema
+RUN apt-get update && apt-get install -y unzip
+
+# Installa Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Torna alla directory di lavoro
+WORKDIR /var/www/html
+
+# Copia i file dell'applicazione
+COPY . .
+
+RUN composer install --no-dev --optimize-autoloader
+RUN composer require fakerphp/faker --dev
+
+# Configura permessi
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Migrate e seed
+RUN php artisan migrate:fresh --seed
+
+
+# Esponi porta 9000 per PHP-FPM
+EXPOSE 9000
+
+CMD ["php-fpm"]
