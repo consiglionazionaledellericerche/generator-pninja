@@ -13,7 +13,7 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
-RUN composer require fakerphp/faker --dev
+# RUN composer require fakerphp/faker --dev
 
 # Configura permessi
 RUN chown -R www-data:www-data /var/www/html \
@@ -21,9 +21,9 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Migrate e seed
-RUN php artisan migrate:fresh --seed
-
+# Migrate & seed
+RUN php artisan migrate:fresh
+#RUN php artisan migrate:fresh --seed
 
 # Esponi porta 9000 per PHP-FPM
 EXPOSE 9000
