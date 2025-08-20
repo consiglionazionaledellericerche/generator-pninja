@@ -4,7 +4,6 @@ import { Duration, serialize } from 'tinyduration';
 import { useTranslation } from 'react-i18next';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
-import { t } from 'i18next';
 
 const durationToMs = (duration: Duration): number | undefined => {
   if (duration === undefined) {
