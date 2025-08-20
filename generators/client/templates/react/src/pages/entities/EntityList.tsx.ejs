@@ -3,6 +3,9 @@ import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronsUpDown, ChevronUp, ChevronDown, Plus } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
+<% if(durationColumns.length) {-%>
+import { DurationFieldViewer } from '../../components/formElements/DurationField';
+<% } -%>
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -159,7 +162,11 @@ export default function <%= entity.name %>List() {
 <%            for(column of columns) { -%>
 <%              if (!fileColumns.includes(column)) { -%>
               <td>
+<%                if (!durationColumns.includes(column)) { -%>
                 {row.<%= column%>?.toString()}
+<%                } else {-%>
+                    <DurationFieldViewer duration={row.field_duration} format="iso"/>
+<%                }-%>
               </td>
 <%              } -%>
 <%            } -%>
