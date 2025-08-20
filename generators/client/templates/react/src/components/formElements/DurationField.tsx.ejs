@@ -1,14 +1,68 @@
+import { useEffect, useState } from 'react';
 import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
+import { Duration, serialize } from 'tinyduration';
+
+const durationToMs = (duration: Duration): number | undefined => {
+  if (duration === undefined) {
+    return undefined;
+  }
+  const { days, hours, minutes, seconds } = duration;
+  if (
+    (days === undefined || isNaN(days)) &&
+    (hours === undefined || isNaN(hours)) &&
+    (minutes === undefined || isNaN(minutes)) &&
+    (seconds === undefined || isNaN(seconds))
+  ) {
+    return undefined;
+  }
+  const ms =
+    ((days || 0) * 24 * 60 * 60 + (hours || 0) * 60 * 60 + (minutes || 0) * 60 + (seconds || 0)) *
+    1000;
+  return ms;
+};
+
+const msToDuration = (ms: number | undefined): Duration | undefined => {
+  if (ms === undefined) {
+    return undefined;
+  }
+  if (ms < 0) {
+    throw new Error('Duration cannot be negative');
+  }
+  if (ms === 0) {
+    return {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+  }
+  const days = Math.floor(ms / (24 * 60 * 60 * 1000));
+  ms %= 24 * 60 * 60 * 1000;
+  const hours = Math.floor(ms / (60 * 60 * 1000));
+  ms %= 60 * 60 * 1000;
+  const minutes = Math.floor(ms / (60 * 1000));
+  ms %= 60 * 1000;
+  const seconds = ms / 1000;
+  const duration: Duration = {
+    days: days,
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+  };
+  return duration;
+};
 
 const inputClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
 interface DurationFieldProps {
   fieldName: string;
   label: string;
   placeholder?: string;
+  step?: 1 | 0.1 | 0.01;
+  showIso?: boolean;
   validations?: {
     required?: boolean;
   };
@@ -18,12 +72,15 @@ const DurationField: React.FC<DurationFieldProps> = ({
   fieldName,
   label,
   placeholder,
+  showIso = true,
   validations,
 }) => {
   const { required } = validations || {};
   const {
     register,
     formState: { errors },
+    getValues,
+    setValue,
   } = useFormContext();
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {
@@ -37,19 +94,198 @@ const DurationField: React.FC<DurationFieldProps> = ({
   if (required) {
     opts.required = 'errors.validations.required';
   }
+
+  const [initialized, setInitialized] = useState(false);
+  const [days, setDays] = useState<number | string>('');
+  const [hours, setHours] = useState<number | string>('');
+  const [minutes, setMinutes] = useState<number | string>('');
+  const [seconds, setSeconds] = useState<number | string>('');
+  const [milliseconds, setMilliseconds] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (
+      (days === '' || Number.isNaN(days)) &&
+      (hours === '' || Number.isNaN(hours)) &&
+      (minutes === '' || Number.isNaN(minutes)) &&
+      (seconds === '' || Number.isNaN(seconds))
+    ) {
+      setMilliseconds(undefined);
+    } else {
+      setMilliseconds(
+        durationToMs({
+          days: parseInt(`${days}`, 10),
+          hours: parseInt(`${hours}`, 10),
+          minutes: parseInt(`${minutes}`, 10),
+          seconds: parseFloat(`${seconds}`),
+        })
+      );
+    }
+  }, [days, hours, minutes, seconds]);
+
+  useEffect(() => {
+    if (!initialized && getValues(fieldName) !== undefined) {
+      setMilliseconds(getValues(fieldName));
+      const duration = msToDuration(getValues(fieldName));
+      setDays(duration?.days ?? '');
+      setHours(duration?.hours ?? '');
+      setMinutes(duration?.minutes ?? '');
+      setSeconds(duration?.seconds ?? '');
+      setInitialized(true);
+    }
+  }, [fieldName, getValues, initialized, milliseconds]);
+
+  useEffect(() => {
+    setValue(fieldName, milliseconds);
+  }, [milliseconds, setValue, fieldName]);
+
   return (
     <>
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <input
-        type="number"
-        {...(placeholder ? { placeholder } : {})}
-        id={fieldName}
-        {...register(fieldName, opts)}
-        className={inputClassName(!!errors?.[fieldName]?.message)}
-      />
+      <div className="flex flex-col md:flex-row gap-2 mt-3">
+        <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
+          <div className="text-xs">Days</div>
+          <input
+            type="number"
+            placeholder="days"
+            value={days}
+            step={1}
+            min={0}
+            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            onChange={(e) => {
+              if (Number.isNaN(parseInt(e.target.value, 10))) {
+                setDays('');
+                return;
+              }
+              setDays(parseInt(e.target.value, 10));
+            }}
+          />
+        </div>
+        <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
+          <div className="text-xs">Hours</div>
+          <input
+            type="number"
+            placeholder="hours"
+            value={hours ?? ''}
+            step={1}
+            min={0}
+            max={23}
+            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            onChange={(e) => {
+              if (Number.isNaN(parseInt(e.target.value, 10))) {
+                setHours('');
+                return;
+              }
+              setHours(parseInt(e.target.value, 10));
+            }}
+          />
+        </div>
+        <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
+          <div className="text-xs">Minutes</div>
+          <input
+            type="number"
+            placeholder="minutes"
+            value={minutes ?? ''}
+            step={1}
+            min={0}
+            max={59}
+            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            onChange={(e) => {
+              if (Number.isNaN(parseInt(e.target.value, 10))) {
+                setMinutes('');
+                return;
+              }
+              setMinutes(parseInt(e.target.value, 10));
+            }}
+          />
+        </div>
+        <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
+          <div className="text-xs">Seconds</div>
+          <input
+            type="number"
+            placeholder="seconds"
+            value={seconds ?? ''}
+            min={0}
+            max={59.999}
+            step={1}
+            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            onChange={(e) => {
+              if (Number.isNaN(parseFloat(e.target.value))) {
+                setSeconds('');
+                return;
+              }
+              setSeconds(parseFloat(e.target.value));
+            }}
+          />
+        </div>
+        {showIso && (
+          <div className="md:w-1/5 text-slate-500 dark:text-gray-400">
+            <div className="text-xs">ISO 8601</div>
+            <input
+              type="text"
+              placeholder="--"
+              value={
+                milliseconds === undefined || msToDuration(milliseconds) === undefined
+                  ? ''
+                  : serialize(msToDuration(milliseconds) ?? {})
+              }
+              readOnly
+              className={`${inputClassName(!!errors?.[fieldName]?.message)} text-slate-500! dark:text-gray-400!`}
+            />
+          </div>
+        )}
+        <div className="w-0 h-0 overflow-hidden">
+          <div className="text-xs">Total ms</div>
+          <input
+            type="number"
+            {...(placeholder ? { placeholder } : {})}
+            id={fieldName}
+            {...register(fieldName, opts)}
+            className={inputClassName(!!errors?.[fieldName]?.message)}
+          />
+        </div>
+      </div>
       <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };
 
-export { DurationField };
+interface DurationFieldViewerProps {
+  duration: number | null | undefined;
+  format?: 'iso' | 'verbose' | 'raw' | ((duration: Duration) => string);
+}
+
+const DurationFieldViewer: React.FC<DurationFieldViewerProps> = ({ duration, format = 'iso' }) => {
+  if (duration === null || duration === undefined || msToDuration(duration) === undefined) {
+    return <span>--</span>;
+  }
+  if (typeof format === 'function') {
+    return <span>{format(msToDuration(duration) ?? {})}</span>;
+  }
+  if (format === 'verbose') {
+    const dur = msToDuration(duration) ?? {};
+    const parts = [];
+    if (dur.days !== undefined && dur.days > 0) {
+      parts.push(`${dur.days} day${dur.days > 1 ? 's' : ''}`);
+    }
+    if (dur.hours !== undefined && dur.hours > 0) {
+      parts.push(`${dur.hours} hour${dur.hours > 1 ? 's' : ''}`);
+    }
+    if (dur.minutes !== undefined && dur.minutes > 0) {
+      parts.push(`${dur.minutes} minute${dur.minutes > 1 ? 's' : ''}`);
+    }
+    if (dur.seconds !== undefined && dur.seconds > 0) {
+      parts.push(`${dur.seconds} second${dur.seconds > 1 ? 's' : ''}`);
+    }
+    return <span>{parts.join(', ') || '0 seconds'}</span>;
+  }
+  if (format === 'raw') {
+    return <span>{duration}</span>;
+  }
+  if (format !== 'iso') {
+    throw new Error(`Unsupported format: ${format}`);
+  }
+  return <span>{serialize(msToDuration(duration) ?? {})}</span>;
+};
+
+export { DurationField, DurationFieldViewer };
+export type { Duration };

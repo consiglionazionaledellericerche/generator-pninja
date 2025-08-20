@@ -144,7 +144,7 @@ export class FactoriesGenerator {
             case 'LocalTime':
                 return 'fake()->time()';
             case 'Duration':
-                return `fake()->numberBetween(${min || 1}, ${max || 1000000})`;
+                return `fake()->numberBetween(${min || 86400}, ${max || 8855999}) * 1000`;
             case 'TextBlob':
                 return 'fake()->text()';
             case 'UUID':
