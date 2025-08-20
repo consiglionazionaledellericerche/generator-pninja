@@ -128,8 +128,8 @@ export async function createReactClient(that, parsedJDL) {
                 to,
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
-                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
@@ -141,6 +141,7 @@ export async function createReactClient(that, parsedJDL) {
                 to,
                 pluralize,
                 columns: entity.body.map(c => to.snake(c.name)),
+                durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
                 fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)

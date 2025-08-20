@@ -7,6 +7,9 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 import { SimpleLoader } from '../../components/SimpleLoader';
+<% if(durationColumns.length) {-%>
+import { DurationFieldViewer } from '../../components/formElements/DurationField';
+<% } -%>
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import <%= entity.name %>DeleteButton from '../../components/entities/<%= entity.name %>DeleteButton';
 <%relatedEntities
@@ -42,7 +45,11 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
         <tr>
           <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
 <%        if (!fileColumns.includes(column)) { -%>
+<%          if (!durationColumns.includes(column)) { -%>
           <td>{data?.<%= column%>?.toString()}</td>
+<%          } else {-%>
+          <td><DurationFieldViewer duration={data?.<%= column%>} format="iso" /></td>
+<%          }-%>
 <%        } else {-%>
           <td>
             {data?.<%= column%>_path && data?.<%= column%>_name && (
