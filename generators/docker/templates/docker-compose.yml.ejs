@@ -1,28 +1,59 @@
 version: '3.8'
 
 services:
-  <%= name %>-client:
+<% if (dbms === 'pgsql') { -%>
+  <%= slugName %>-database:
+    image: postgres:15
+    container_name: <%= slugName %>-database
+    environment:
+      POSTGRES_DB: <%= snakeName %>
+      POSTGRES_USER: <%= snakeName %>_user
+      POSTGRES_PASSWORD: <%- dbPwd %>
+    ports:
+      - '54322:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - <%= slugName %>-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U <%= snakeName %>_user -d <%= snakeName %>']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+<% } else {-%>
+<% }-%>
+
+  <%= slugName %>-client:
     build:
       context: ..
       dockerfile: ./docker/nginx/Dockerfile
-    container_name: <%= name %>-client
+    container_name: <%= slugName %>-client
     ports:
       - '80:80'
     depends_on:
-      - <%= name %>-server
+      - <%= slugName %>-server
     networks:
-      - <%= name %>-network
+      - <%= slugName %>-network
 
-  <%= name %>-server:
+  <%= slugName %>-server:
     build:
       context: ..
       dockerfile: ./docker/server/Dockerfile
-    container_name: <%= name %>-server
+    container_name: <%= slugName %>-server
+    depends_on:
+      <%= slugName %>-database:
+        condition: service_healthy
     environment:
       - FRONTEND_URL=
     networks:
-      - <%= name %>-network
+      - <%= slugName %>-network
+
+<% if (dbms === 'pgsql') { -%>
+volumes:
+  postgres_data:
+<% } else {-%>
+<% }-%>
 
 networks:
-  <%= name %>-network:
+  <%= slugName %>-network:
     driver: bridge

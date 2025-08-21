@@ -1,6 +1,7 @@
 import Generator from 'yeoman-generator';
 import to from 'to-case';
-
+import { randomBytes } from 'node:crypto'
+const pwd = (n = 16, a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_-+=') => [...randomBytes(n)].map(b => a[b % a.length]).join('')
 export default class DockerGenerator extends Generator {
   static namespace = 'pninja:docker';
 
@@ -13,10 +14,29 @@ export default class DockerGenerator extends Generator {
   }
 
   async writing() {
+    const dbPwd = pwd();
     const appName = this.config.get('name');
+    const slugName = to.slug(appName);
+    const snakeName = to.snake(appName);
+    const dbms = this.config.get('dbms');
+    let envFileContents = this.fs.read(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
+    console.log(envFileContents);
     this.fs.copyTpl(this.templatePath('nginx/Dockerfile.ejs'), this.destinationPath('docker/nginx/Dockerfile'), {});
-    this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('docker/nginx/nginx.conf'), { name: to.slug(appName) });
-    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), {});
-    this.fs.copyTpl(this.templatePath('docker-compose.yml.ejs'), this.destinationPath('docker/docker-compose.yml'), { name: to.slug(appName) });
+    this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('docker/nginx/nginx.conf'), { name: slugName });
+    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), { dbms });
+    this.fs.copyTpl(this.templatePath('docker-compose.yml.ejs'), this.destinationPath('docker/docker-compose.yml'), {
+      slugName,
+      snakeName,
+      dbms,
+      dbPwd,
+    });
+    if (this.config.get('dbms') === 'pgsql') {
+      envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=${slugName}-database`);
+      envFileContents = envFileContents.replace(/^DB_PORT=.*$/m, `DB_PORT=5432`);
+      envFileContents = envFileContents.replace(/^DB_DATABASE=.*$/m, `DB_DATABASE=${snakeName}`);
+      envFileContents = envFileContents.replace(/^DB_USERNAME=.*$/m, `DB_USERNAME=${snakeName}_user`);
+      envFileContents = envFileContents.replace(/^DB_PASSWORD=.*$/m, `DB_PASSWORD="${dbPwd}"`);
+    }
+    this.fs.write(this.destinationPath('docker/server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
   }
 }

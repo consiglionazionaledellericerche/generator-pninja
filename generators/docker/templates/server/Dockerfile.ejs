@@ -1,7 +1,13 @@
+# server/Dockerfile
 FROM php:8.2-fpm
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y unzip
+RUN apt-get update && apt-get install -y unzip \
+<% if (dbms === 'pgsql') { -%>
+    libpq-dev \
+    && docker-php-ext-install pdo_pgsql
+<% } else {-%>
+<% }-%>
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -11,10 +17,11 @@ WORKDIR /var/www/html
 
 # Copy application files
 COPY ./server .
+COPY ./docker/server/.env ./.env
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
-# RUN composer require fakerphp/faker --dev
+RUN composer require fakerphp/faker --dev
 
 # Configure permissions
 RUN chown -R www-data:www-data /var/www/html \
@@ -22,12 +29,8 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Migrate & seed
-RUN php artisan migrate
-# !!DANGER!! RUN php artisan migrate:fresh --seed !!DANGER!!
-
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
 
 # Run PHP-FPM
-CMD ["php-fpm"]
+CMD ["sh", "-c", "php artisan migrate:fresh --seed && php-fpm"]

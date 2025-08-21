@@ -50,8 +50,9 @@ export default class AuthGenerator extends Generator {
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
 
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
-      fs.writeFileSync(this.destinationPath('server/.env'), envContent + `
+      this.fs.write(this.destinationPath('server/.env'), envContent + `
 FRONTEND_URL=http://localhost:5173
+
 KEYCLOAK_BASE_URL=https://sso.yourkeycloakbaseurl.net/auth
 KEYCLOAK_REALM=yourrealm
 KEYCLOAK_CLIENT_ID=yourclientid
