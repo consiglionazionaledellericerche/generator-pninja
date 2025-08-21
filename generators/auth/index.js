@@ -51,16 +51,17 @@ export default class AuthGenerator extends Generator {
 
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       fs.writeFileSync(this.destinationPath('server/.env'), envContent + `
-KEYCLOAK_REALM_PUBLIC_KEY=null
-# How to get realm public key? Click on "Realm Settings" > "Keys" > "Algorithm RS256" Line > "Public Key" Button
+FRONTEND_URL=http://localhost:5173
+KEYCLOAK_BASE_URL=https://sso.yourkeycloakbaseurl.net/auth
+KEYCLOAK_REALM=yourrealm
+KEYCLOAK_CLIENT_ID=yourclientid
+KEYCLOAK_CLIENT_SECRET=yourclientsecret
+KEYCLOAK_REALM_PUBLIC_KEY="yourrealmpublickey"
 KEYCLOAK_LOAD_USER_FROM_DATABASE=false
-KEYCLOAK_USER_PROVIDER_CREDENTIAL='username'
-KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE='preferred_username'
-KEYCLOAK_APPEND_DECODED_TOKEN=false
-KEYCLOAK_ALLOWED_RESOURCES=account
-KEYCLOAK_IGNORE_RESOURCES_VALIDATION=false
-KEYCLOAK_LEEWAY=0
-KEYCLOAK_TOKEN_INPUT_KEY=null`, { encoding: 'utf8', flag: 'w' });
+KEYCLOAK_USER_PROVIDER_CREDENTIAL=username
+KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
+KEYCLOAK_IGNORE_RESOURCES_VALIDATION=true
+KEYCLOAK_USE_SERVICE_ACCOUNT=true`, { encoding: 'utf8', flag: 'w' });
 
       if (this.fs.exists(`${this.destinationPath('server')}/config/auth.php`)) {
         fs.unlinkSync(`${this.destinationPath('server')}/config/auth.php`);
