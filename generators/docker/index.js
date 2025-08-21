@@ -32,7 +32,7 @@ export default class DockerGenerator extends Generator {
       dbPwd,
       dbRootPwd,
     });
-    if (['pgsql', 'mysql'].includes(this.config.get('dbms'))) {
+    if (['pgsql', 'mysql', 'mariadb'].includes(this.config.get('dbms'))) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=${slugName}-database`);
       envFileContents = envFileContents.replace(/^DB_DATABASE=.*$/m, `DB_DATABASE=${snakeName}`);
       envFileContents = envFileContents.replace(/^DB_USERNAME=.*$/m, `DB_USERNAME=${snakeName}_user`);

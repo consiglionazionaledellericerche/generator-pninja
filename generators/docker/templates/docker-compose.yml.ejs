@@ -20,9 +20,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-<% } else if (dbms === 'mysql') {-%>
+<% } else if (dbms === 'mysql' || dbms === 'mariadb') {-%>
   <%= slugName %>-database:
+<%  if (dbms === 'mysql') { -%>
     image: mysql:8.0
+<%  } -%>
+<%  if (dbms === 'mariadb') { -%>
+    image: mariadb:10.11
+<%  } -%>
     container_name: <%= slugName %>-database
     environment:
       MYSQL_DATABASE: <%= snakeName %>
@@ -32,7 +37,12 @@ services:
     ports:
       - '33066:3306'
     volumes:
+<%  if (dbms === 'mysql') { -%>
       - mysql_data:/var/lib/mysql
+<%  } -%>
+<%  if (dbms === 'mariadb') { -%>
+      - mariadb_data:/var/lib/mysql
+<%  } -%>
     networks:
       - <%= slugName %>-network
     healthcheck:
@@ -74,6 +84,9 @@ volumes:
 <% } else if (dbms === 'mysql') {-%>
 volumes:
   mysql_data:
+<% } else if (dbms === 'mariadb') {-%>
+volumes:
+  mariadb_data:
 <% }-%>
 
 networks:
