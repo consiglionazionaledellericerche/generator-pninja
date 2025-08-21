@@ -121,7 +121,11 @@ export default class extends Generator {
             value: "pgsql"
           },
           {
-            name: "SQL Server",
+            name: "SQL Server (Not implemented yet)",
+            value: "sqlsrv"
+          },
+          {
+            name: "Oracle (Not implemented yet)",
             value: "sqlsrv"
           }
         ]
