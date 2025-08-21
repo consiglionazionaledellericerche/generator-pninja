@@ -1,7 +1,7 @@
 import Generator from 'yeoman-generator';
 import to from 'to-case';
 import { randomBytes } from 'node:crypto'
-const pwd = (n = 16, a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*_-+=') => [...randomBytes(n)].map(b => a[b % a.length]).join('')
+const pwd = (n = 16, a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@%^*_-+=') => [...randomBytes(n)].map(b => a[b % a.length]).join('')
 export default class DockerGenerator extends Generator {
   static namespace = 'pninja:docker';
 
@@ -15,6 +15,7 @@ export default class DockerGenerator extends Generator {
 
   async writing() {
     const dbPwd = pwd();
+    const dbRootPwd = pwd(32);
     const appName = this.config.get('name');
     const slugName = to.slug(appName);
     const snakeName = to.snake(appName);
@@ -29,10 +30,10 @@ export default class DockerGenerator extends Generator {
       snakeName,
       dbms,
       dbPwd,
+      dbRootPwd,
     });
-    if (this.config.get('dbms') === 'pgsql') {
+    if (['pgsql', 'mysql'].includes(this.config.get('dbms'))) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=${slugName}-database`);
-      envFileContents = envFileContents.replace(/^DB_PORT=.*$/m, `DB_PORT=5432`);
       envFileContents = envFileContents.replace(/^DB_DATABASE=.*$/m, `DB_DATABASE=${snakeName}`);
       envFileContents = envFileContents.replace(/^DB_USERNAME=.*$/m, `DB_USERNAME=${snakeName}_user`);
       envFileContents = envFileContents.replace(/^DB_PASSWORD=.*$/m, `DB_PASSWORD="${dbPwd}"`);

@@ -20,7 +20,27 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-<% } else {-%>
+<% } else if (dbms === 'mysql') {-%>
+  <%= slugName %>-database:
+    image: mysql:8.0
+    container_name: <%= slugName %>-database
+    environment:
+      MYSQL_DATABASE: <%= snakeName %>
+      MYSQL_USER: <%= snakeName %>_user
+      MYSQL_PASSWORD: <%- dbPwd %>
+      MYSQL_ROOT_PASSWORD: <%- dbRootPwd %>
+    ports:
+      - '33066:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - <%= slugName %>-network
+    healthcheck:
+      test: ['CMD', 'mysql', '-h', 'localhost', '-u', '<%= snakeName %>_user', '-p<%- dbPwd %>', '-e', 'SELECT 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 <% }-%>
 
   <%= slugName %>-client:
@@ -51,7 +71,9 @@ services:
 <% if (dbms === 'pgsql') { -%>
 volumes:
   postgres_data:
-<% } else {-%>
+<% } else if (dbms === 'mysql') {-%>
+volumes:
+  mysql_data:
 <% }-%>
 
 networks:
