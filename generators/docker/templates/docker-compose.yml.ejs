@@ -3,23 +3,26 @@ version: '3.8'
 services:
   <%= name %>-client:
     build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+    container_name: <%= name %>-client
     ports:
       - '80:80'
     depends_on:
-      - php-app
+      - <%= name %>-server
     networks:
       - <%= name %>-network
 
   <%= name %>-server:
     build:
-      context: ./server
-      dockerfile: Dockerfile
+      context: ../server
+      dockerfile: ../docker/server/Dockerfile
+    container_name: <%= name %>-server
     environment:
       - FRONTEND_URL=
     networks:
       - <%= name %>-network
+
 networks:
   <%= name %>-network:
     driver: bridge

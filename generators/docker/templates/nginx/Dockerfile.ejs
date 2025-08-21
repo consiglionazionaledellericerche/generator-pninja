@@ -6,9 +6,9 @@ COPY ./client .
 RUN npm i
 RUN npm run build
 
-# Stage finale - nginx per servire i file statici (opzionale)
+# Stage finale - nginx per servire i file statici
 FROM nginx:alpine as production
 
 # Copia i file build
 COPY --from=builder /app/dist /var/www/html
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf

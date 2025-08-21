@@ -14,9 +14,9 @@ export default class DockerGenerator extends Generator {
 
   async writing() {
     const appName = this.config.get('name');
-    this.fs.copyTpl(this.templatePath('nginx/Dockerfile.ejs'), this.destinationPath('nginx/Dockerfile'), {});
-    this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('nginx/nginx.conf'), { name: to.slug(appName) });
-    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('server/Dockerfile'), {});
-    this.fs.copyTpl(this.templatePath('docker-compose.yml.ejs'), this.destinationPath('docker-compose.yml'), { name: to.slug(appName) });
+    this.fs.copyTpl(this.templatePath('nginx/Dockerfile.ejs'), this.destinationPath('docker/nginx/Dockerfile'), {});
+    this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('docker/nginx/nginx.conf'), { name: to.slug(appName) });
+    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), {});
+    this.fs.copyTpl(this.templatePath('docker-compose.yml.ejs'), this.destinationPath('docker/docker-compose.yml'), { name: to.slug(appName) });
   }
 }
