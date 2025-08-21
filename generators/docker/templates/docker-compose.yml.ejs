@@ -70,9 +70,11 @@ services:
       context: ..
       dockerfile: ./docker/server/Dockerfile
     container_name: <%= slugName %>-server
+<% if (dbms !== 'sqlite') { -%>
     depends_on:
       <%= slugName %>-database:
         condition: service_healthy
+<% }-%>
     environment:
       - FRONTEND_URL=
     networks:
