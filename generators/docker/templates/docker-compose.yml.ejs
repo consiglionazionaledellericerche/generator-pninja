@@ -15,8 +15,8 @@ services:
 
   <%= name %>-server:
     build:
-      context: ../server
-      dockerfile: ../docker/server/Dockerfile
+      context: ..
+      dockerfile: ./docker/server/Dockerfile
     container_name: <%= name %>-server
     environment:
       - FRONTEND_URL=

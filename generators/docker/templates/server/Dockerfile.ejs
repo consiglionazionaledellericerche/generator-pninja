@@ -10,7 +10,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Copia i file dell'applicazione
-COPY . .
+COPY ./server .
 
 RUN composer install --no-dev --optimize-autoloader
 # RUN composer require fakerphp/faker --dev
