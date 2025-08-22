@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 <% if (dbms === 'pgsql') { -%>
-  <%= slugName %>-database:
+  database:
     image: postgres:15
     container_name: <%= slugName %>-database
     environment:
@@ -21,7 +21,7 @@ services:
       timeout: 5s
       retries: 5
 <% } else if (dbms === 'mysql' || dbms === 'mariadb') {-%>
-  <%= slugName %>-database:
+  database:
 <%  if (dbms === 'mysql') { -%>
     image: mysql:8.0
 <%  } -%>
@@ -51,9 +51,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    restart: unless-stopped
 <% }-%>
 
-  <%= slugName %>-client:
+  client:
     build:
       context: ..
       dockerfile: ./docker/nginx/Dockerfile
@@ -61,32 +62,53 @@ services:
     ports:
       - '80:80'
     depends_on:
-      - <%= slugName %>-server
+      - server
     networks:
       - <%= slugName %>-network
+    restart: unless-stopped
 
-  <%= slugName %>-server:
+  server:
     build:
       context: ..
       dockerfile: ./docker/server/Dockerfile
     container_name: <%= slugName %>-server
 <% if (dbms !== 'sqlite') { -%>
     depends_on:
-      <%= slugName %>-database:
+      database:
         condition: service_healthy
 <% }-%>
     environment:
       - FRONTEND_URL=
     networks:
       - <%= slugName %>-network
+    restart: unless-stopped
 
+<% if (dbms !== 'sqlite') { -%>
+  adminer:
+    image: adminer:4.8.1
+    container_name: <%= slugName %>-adminer
+    ports:
+      - '8088:8080'
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - test-application-network
+    environment:
+      ADMINER_DEFAULT_SERVER: database
+      ADMINER_DESIGN: pepa-linha-dark
+    restart: unless-stopped
+<% }-%>
 <% if (dbms === 'pgsql') { -%>
+
 volumes:
   postgres_data:
 <% } else if (dbms === 'mysql') {-%>
+
 volumes:
   mysql_data:
 <% } else if (dbms === 'mariadb') {-%>
+
 volumes:
   mariadb_data:
 <% }-%>
