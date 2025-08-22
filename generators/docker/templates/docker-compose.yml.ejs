@@ -52,8 +52,8 @@ services:
       retries: 5
       start_period: 30s
     restart: unless-stopped
-<% }-%>
 
+<% }-%>
   client:
     build:
       context: ..
@@ -79,11 +79,15 @@ services:
 <% }-%>
     environment:
       - FRONTEND_URL=
+<% if (dbms === 'sqlite') { -%>
+    volumes:
+      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+<% }-%>
     networks:
       - <%= slugName %>-network
     restart: unless-stopped
-
 <% if (dbms !== 'sqlite') { -%>
+
   adminer:
     image: adminer:4.8.1
     container_name: <%= slugName %>-adminer

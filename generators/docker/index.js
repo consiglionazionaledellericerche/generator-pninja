@@ -1,6 +1,9 @@
 import Generator from 'yeoman-generator';
 import to from 'to-case';
 import { randomBytes } from 'node:crypto'
+import fs from 'node:fs';
+import path from 'node:path';
+
 const pwd = (n = 16, a = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@%^*_-+=') => [...randomBytes(n)].map(b => a[b % a.length]).join('')
 export default class DockerGenerator extends Generator {
   static namespace = 'pninja:docker';
@@ -32,11 +35,20 @@ export default class DockerGenerator extends Generator {
       dbPwd,
       dbRootPwd,
     });
-    if (['pgsql', 'mysql', 'mariadb'].includes(this.config.get('dbms'))) {
+    if (['pgsql', 'mysql', 'mariadb'].includes(dbms)) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=${slugName}-database`);
       envFileContents = envFileContents.replace(/^DB_DATABASE=.*$/m, `DB_DATABASE=${snakeName}`);
       envFileContents = envFileContents.replace(/^DB_USERNAME=.*$/m, `DB_USERNAME=${snakeName}_user`);
       envFileContents = envFileContents.replace(/^DB_PASSWORD=.*$/m, `DB_PASSWORD="${dbPwd}"`);
+    }
+    if (dbms === 'sqlite') {
+      const filePath = this.destinationPath('docker/database/database.sqlite');
+      const dirPath = path.dirname(filePath);
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+      fs.writeFileSync(filePath, '');
+      fs.chmodSync(filePath, 0o666);
     }
     this.fs.write(this.destinationPath('docker/server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
   }
