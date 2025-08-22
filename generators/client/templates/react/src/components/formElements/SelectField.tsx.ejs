@@ -132,7 +132,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         fieldName,
         multiple && Array.isArray(defaultValue)
           ? defaultValue.map((val) => String(val))
-          : String(defaultValue)
+          : String(defaultValue || '')
       );
     } else {
       setValue(fieldName, multiple ? [] : '');
