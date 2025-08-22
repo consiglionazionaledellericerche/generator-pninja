@@ -163,9 +163,9 @@ export default function <%= entity.name %>List() {
 <%              if (!fileColumns.includes(column)) { -%>
               <td>
 <%                if (!durationColumns.includes(column)) { -%>
-                {row.<%= column%>?.toString()}
+                {row.<%- column %>?.toString()}
 <%                } else {-%>
-                    <DurationFieldViewer duration={row.field_duration} format="iso"/>
+                <DurationFieldViewer duration={row.<%- column %>} format="iso"/>
 <%                }-%>
               </td>
 <%              } -%>
