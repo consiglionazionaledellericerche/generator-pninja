@@ -224,7 +224,7 @@ export default class extends Generator {
         projectVersion: this.projectVersion,
         authorName: this.authorName
       });
-
+    this.fs.copyTpl(this.templatePath(".gitignore.ejs"), this.destinationPath(".gitignore"))
     // Enable Facades and Eloquent
     const bootPath = `${this.destinationPath('server/bootstrap/app.php')}`;
     let bootContent = fs.readFileSync(bootPath, { encoding: 'utf8', flag: 'r' });
