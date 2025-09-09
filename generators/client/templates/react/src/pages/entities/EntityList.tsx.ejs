@@ -1,16 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
-  ChevronsUpDown,
-  Plus,
-} from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown, Plus } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
+import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 <% if(durationColumns.length) {-%>
 import { DurationFieldViewer } from '../../components/formElements/DurationField';
 <% } -%>
@@ -28,7 +22,7 @@ export default function <%= entity.name %>List() {
   const { addNotification } = useNotifications();
   const { fetch } = useApi();
   const [loading, setLoading] = useState(false);
-    const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
+  const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
     field: 'id',
     direction: 'asc',
   });
@@ -172,41 +166,7 @@ export default function <%= entity.name %>List() {
           ))}
         </tbody>
       </table>
-      {page.links && page.links.length > 0 && (
-        <div className="text-center">
-          <nav
-            aria-label="Pagination"
-            className="isolate inline-flex -space-x-px rounded-md shadow-xs mb-5"
-          >
-            {page.links &&
-              page.links.length > 0 &&
-              page.links.map((link, index, array) => (
-                <button
-                  key={index}
-                  type="button"
-                  className={`
-                    ${link.url ? 'cursor-pointer hover:bg-gray-50 hover:dark:bg-gray-800' : 'cursor-not-allowed bg-gray-200 dark:bg-gray-700'}
-                    ${link.active ? 'font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'}
-                    focus:outline-none focus-visible:ring-4 focus:z-99 relative inline-flex items-center
-                    ${index === 0 ? 'rounded-l-md' : ''}
-                    ${index === array.length - 1 ? 'rounded-r-md' : ''}
-                    px-4 py-2 inset-ring inset-ring-gray-200 dark:inset-ring-gray-700
-                    `}
-                  onClick={() =>
-                    link.url &&
-                    setCurrentPage(
-                      link.url.split('page=')[1].split('&')[0] as unknown as number
-                    )
-                  }
-                >
-                  {index === 0 && <ChevronLeft size={16} />}
-                  {index === array.length - 1 && <ChevronRight size={16} />}
-                  {index > 0 && index < array.length - 1 && link.label}
-                </button>
-              ))}
-          </nav>
-        </div>
-      )}
+      <ApiResponsePagination pageLinks={page.links || []} onSelectPage={setCurrentPage} />
     </div>
     )}
   </div>;

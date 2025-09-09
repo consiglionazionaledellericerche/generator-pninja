@@ -47,6 +47,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
     that.fs.copyTpl(that.templatePath("assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
+    that.fs.copyTpl(that.templatePath("react/src/components/ApiResponsePagination.tsx.ejs"), that.destinationPath(`client/src/components/ApiResponsePagination.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormElements.tsx`), {});
