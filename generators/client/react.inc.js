@@ -187,6 +187,7 @@ export async function createReactClient(that, parsedJDL) {
         );
     }
 
+    that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`), {});
 
     that.spawnCommandSync('npm', ['i'], { cwd: 'client' });

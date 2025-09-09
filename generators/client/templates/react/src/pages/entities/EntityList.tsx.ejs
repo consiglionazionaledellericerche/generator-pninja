@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
-import { Fragment, useCallback, useEffect, useState, useMemo } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronsUpDown, ChevronUp, ChevronDown, Plus } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  ChevronsUpDown,
+  Plus,
+} from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
+import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 <% if(durationColumns.length) {-%>
 import { DurationFieldViewer } from '../../components/formElements/DurationField';
 <% } -%>
@@ -13,29 +21,19 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
-type SortDirection = 'asc' | 'desc';
-type SortableField = keyof Pick<
-  I<%= entity.name %>,
-  | 'id'
-<%for(column of columns) { -%>
-<%  if (!fileColumns.includes(column)) { -%>
-  | '<%=column%>'
-<%  }-%>
-<%}-%>
->;
-
-interface SortConfig {
-  field: SortableField;
-  direction: SortDirection;
-}
+type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includes(column)) { %> | '<%=column%>'<% } %><% } %>;
 
 export default function <%= entity.name %>List() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
   const { fetch } = useApi();
-  const [<%=to.camel(pluralize(entity.name))%>, <%=to.camel(pluralize(`set${entity.name}`))%>] = useState<I<%= entity.name %>[]>([]);
   const [loading, setLoading] = useState(false);
-  const [sortConfig, setSortConfig] = useState<SortConfig>({ field: 'id', direction: 'asc' });
+    const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
+    field: 'id',
+    direction: 'asc',
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState<ApiResponsePage<I<%= entity.name %>> | null>(null);
   useAutoShortcuts();
   const sortableColumns: SortableField[] = [
     'id',
@@ -48,10 +46,10 @@ export default function <%= entity.name %>List() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    fetch(`/api/<%=to.slug(pluralize(entity.name))%>`)
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}`)
       .then((response) => response.json())
-      .then((data: I<%= entity.name %>[]) => {
-        <%=to.camel(pluralize(`set${entity.name}`))%>(data);
+      .then((page: ApiResponsePage<I<%= entity.name %>>) => {
+        setPage(page);
         setLoading(false);
       })
       .catch((error) => {
@@ -63,7 +61,7 @@ export default function <%= entity.name %>List() {
           duration: 5000,
         });
       });
-  }, [fetch, addNotification]);
+  }, [fetch, addNotification, sortConfig, currentPage]);
 
   const handleSort = (field: SortableField) => {
     setSortConfig((currentConfig) => ({
@@ -71,23 +69,8 @@ export default function <%= entity.name %>List() {
       direction:
         currentConfig.field === field && currentConfig.direction === 'asc' ? 'desc' : 'asc',
     }));
+    setCurrentPage(1);
   };
-
-  const <%=to.camel(pluralize(`sorted${entity.name}`))%> = useMemo(() => {
-    const sorted = [...<%=to.camel(pluralize(entity.name))%>];
-    sorted.sort((a, b) => {
-      const aValue = a[sortConfig.field];
-      const bValue = b[sortConfig.field];
-
-      if (aValue === null || aValue === undefined) return sortConfig.direction === 'asc' ? 1 : -1;
-      if (bValue === null || bValue === undefined) return sortConfig.direction === 'asc' ? -1 : 1;
-
-      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-      return 0;
-    });
-    return sorted;
-  }, [<%=to.camel(pluralize(entity.name))%>, sortConfig]);
 
   const renderSortHeader = (field: SortableField, label: string) => {
     const isSorted = sortConfig.field === field;
@@ -134,7 +117,7 @@ export default function <%= entity.name %>List() {
     <Fragment>
       <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
     </Fragment>
-    {!loading && <%=to.camel(pluralize(entity.name))%> && <%=to.camel(pluralize(entity.name))%>.length > 0 && (
+    {!loading && page?.data && page?.data.length > 0 && (
     <div className="relative overflow-x-auto">
       <table className="data-table">
         <thead>
@@ -152,7 +135,7 @@ export default function <%= entity.name %>List() {
           </tr>
         </thead>
         <tbody>
-          {<%=to.camel(pluralize(`sorted${entity.name}`))%>.map((row, key) => (
+          {page?.data.map((row, key) => (
             <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
               <td className="w-0">
                 <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`}>
@@ -189,6 +172,41 @@ export default function <%= entity.name %>List() {
           ))}
         </tbody>
       </table>
+      {page.links && page.links.length > 0 && (
+        <div className="text-center">
+          <nav
+            aria-label="Pagination"
+            className="isolate inline-flex -space-x-px rounded-md shadow-xs mb-5"
+          >
+            {page.links &&
+              page.links.length > 0 &&
+              page.links.map((link, index, array) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`
+                    ${link.url ? 'cursor-pointer hover:bg-gray-50 hover:dark:bg-gray-800' : 'cursor-not-allowed bg-gray-200 dark:bg-gray-700'}
+                    ${link.active ? 'font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800' : 'text-gray-500 dark:text-gray-400'}
+                    focus:outline-none focus-visible:ring-4 focus:z-99 relative inline-flex items-center
+                    ${index === 0 ? 'rounded-l-md' : ''}
+                    ${index === array.length - 1 ? 'rounded-r-md' : ''}
+                    px-4 py-2 inset-ring inset-ring-gray-200 dark:inset-ring-gray-700
+                    `}
+                  onClick={() =>
+                    link.url &&
+                    setCurrentPage(
+                      link.url.split('page=')[1].split('&')[0] as unknown as number
+                    )
+                  }
+                >
+                  {index === 0 && <ChevronLeft size={16} />}
+                  {index === array.length - 1 && <ChevronRight size={16} />}
+                  {index > 0 && index < array.length - 1 && link.label}
+                </button>
+              ))}
+          </nav>
+        </div>
+      )}
     </div>
     )}
   </div>;
