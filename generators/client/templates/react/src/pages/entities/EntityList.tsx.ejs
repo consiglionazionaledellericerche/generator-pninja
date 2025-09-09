@@ -94,80 +94,93 @@ export default function <%= entity.name %>List() {
     document.title = t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
-  return <div className="m-4">
-    <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
-    <div className="flex justify-end gap-4 mb-4">
-      <Link
-        to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
-        className="primary-button"
-        data-shortcut="ctrl+enter"
+  return (
+    <div className="m-4">
+      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
+      <div
+        className={
+          !loading && page?.data && page?.data.length === 0
+            ? 'text-center'
+            : `flex justify-end gap-4 mb-4`
+        }
       >
-        <Plus size={16} />
-        {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
-        <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
-        <kbd className="kdb-shortcut">↵</kbd>
-      </Link>
+        {!loading && page?.data && page?.data.length === 0 && (
+          <p className="mb-4 text-2xl">{t('messages.noData')}</p>
+        )}
+        <Link
+          to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
+          className="primary-button"
+          data-shortcut="ctrl+enter"
+        >
+          <Plus size={16} />
+          {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
+          <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+          <kbd className="kdb-shortcut">↵</kbd>
+        </Link>
+      </div>
+      <Fragment>
+        <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
+      </Fragment>
+      {!loading && page?.data && page?.data.length > 0 && (
+        <>
+          <div className="relative overflow-x-auto mb-4">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
+<%                for(column of columns) { -%>
+<%                  if (!fileColumns.includes(column)) { -%>
+                  {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
+<%                  } -%>
+<%                } -%>
+<%                for(r of relatedEntities) { -%>
+                  <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
+<%                } -%>
+                  <th scope="col">{t('actions.crud.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {page?.data.map((row, key) => (
+                  <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                    <td className="w-0">
+                      <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`}>
+                        {row.id}
+                      </Link>
+                    </td>
+<%                  for(column of columns) { -%>
+<%                    if (!fileColumns.includes(column)) { -%>
+                    <td>
+<%                      if (!durationColumns.includes(column)) { -%>
+                      {row.<%- column %>?.toString()}
+<%                      } else {-%>
+                      <DurationFieldViewer duration={row.<%- column %>} format="iso"/>
+<%                      }-%>
+                    </td>
+<%                    } -%>
+<%                  } -%>
+<%                  for(r of relatedEntities) { -%>
+                    <td>
+<%                  if(r.isArray) { -%>
+                      {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.<%-to.snake(r.labelField)%>}</Link></Fragment>))}
+<%                    } else { -%>
+                      {row?.<%-r.field%>?.id && <Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.<%-r.field%>?.id}`}>{row?.<%-r.field%>?.<%-to.snake(r.labelField)%>}</Link>}
+<%                    } -%>
+                    </td>
+<%                  } -%>
+                    <td className="text-nowrap w-0 uppercase">
+                      <div className="flex space-x-2">
+                        <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>
+                        <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ApiResponsePagination pageLinks={page.links || []} onSelectPage={setCurrentPage} />
+        </>
+      )}
     </div>
-    <Fragment>
-      <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
-    </Fragment>
-    {!loading && page?.data && page?.data.length > 0 && (
-    <div className="relative overflow-x-auto">
-      <table className="data-table">
-        <thead>
-          <tr>
-            {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
-<%          for(column of columns) { -%>
-<%            if (!fileColumns.includes(column)) { -%>
-            {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
-<%            } -%>
-<%          } -%>
-<%          for(r of relatedEntities) { -%>
-            <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
-<%          } -%>
-            <th scope="col">{t('actions.crud.actions')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {page?.data.map((row, key) => (
-            <tr key={key} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-              <td className="w-0">
-                <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`}>
-                  {row.id}
-                </Link>
-              </td>
-<%            for(column of columns) { -%>
-<%              if (!fileColumns.includes(column)) { -%>
-              <td>
-<%                if (!durationColumns.includes(column)) { -%>
-                {row.<%- column %>?.toString()}
-<%                } else {-%>
-                <DurationFieldViewer duration={row.<%- column %>} format="iso"/>
-<%                }-%>
-              </td>
-<%              } -%>
-<%            } -%>
-<%            for(r of relatedEntities) { -%>
-              <td>
-<%            if(r.isArray) { -%>
-                {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.<%-to.snake(r.labelField)%>}</Link></Fragment>))}
-<%              } else { -%>
-                {row?.<%-r.field%>?.id && <Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.<%-r.field%>?.id}`}>{row?.<%-r.field%>?.<%-to.snake(r.labelField)%>}</Link>}
-<%              } -%>
-              </td>
-<%            } -%>
-              <td className="text-nowrap w-0 uppercase">
-                <div className="flex space-x-2">
-                  <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>
-                  <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <ApiResponsePagination pageLinks={page.links || []} onSelectPage={setCurrentPage} />
-    </div>
-    )}
-  </div>;
+  );
 }
