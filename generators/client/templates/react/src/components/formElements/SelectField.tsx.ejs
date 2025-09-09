@@ -107,8 +107,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
       setLoading(true);
       try {
         const reponse = await fetch(optionsLoad?.url ?? '');
-        const responseData = await reponse.json();
-        setRemoteOptions(responseData);
+        const { data } = await reponse.json();
+        setRemoteOptions(data);
       } catch (error: unknown) {
         console.error('Error fetching options:', error);
         setRemoteOptions(undefined);
