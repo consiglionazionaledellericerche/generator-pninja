@@ -7,7 +7,6 @@ import { FormErrors } from './FormErrors';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
-import { JsonPrint } from '../JsonPrint';
 
 const inputWrapperClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus-within:outline-2 focus-within:-outline-offset-2 ${hasErrors ? 'focus-within:outline-red-500' : 'focus-within:outline-blue-600'} rounded-md flex flex-wrap items-center gap-1 w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-2 min-h-[38px]`;
@@ -418,148 +417,147 @@ const SelectField: React.FC<SelectFieldProps> = ({
   return (
     <div ref={containerRef}>
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-
-      <div className={inputWrapperClassName(!!errors?.[fieldName]?.message)}>
-        {searchable && <Search className="text-gray-400 w-4 h-4 flex-shrink-0" />}
-        <input
-          ref={searchInputRef}
-          type="text"
-          id={fieldName}
-          className={searchInputClassName}
-          placeholder={
-            placeholder ||
-            (searchable
-              ? multiple
-                ? t('common.select.searchMultiple')
-                : t('common.select.searchSingle')
-              : multiple
-                ? t('common.select.selectMultiple')
-                : t('common.select.selectSingle'))
-          }
-          value={isOpen && searchable ? searchTerm : showDisplayValue ? displayValue : searchTerm}
-          onChange={(e) => {
-            if (searchable) {
-              setSearchTerm(e.target.value);
-              if (!isOpen) setIsOpen(true);
+      <div className="relative">
+        <div className={inputWrapperClassName(!!errors?.[fieldName]?.message)}>
+          {searchable && <Search className="text-gray-400 w-4 h-4 flex-shrink-0" />}
+          <input
+            ref={searchInputRef}
+            type="text"
+            id={fieldName}
+            className={searchInputClassName}
+            placeholder={
+              placeholder ||
+              (searchable
+                ? multiple
+                  ? t('common.select.searchMultiple')
+                  : t('common.select.searchSingle')
+                : multiple
+                  ? t('common.select.selectMultiple')
+                  : t('common.select.selectSingle'))
             }
-          }}
-          onFocus={() => {
-            setIsOpen(true);
-            if (searchable && !multiple) {
-              setSearchTerm('');
-            }
-          }}
-          onKeyDown={handleKeyDown}
-          autoComplete="off"
-        />
+            value={isOpen && searchable ? searchTerm : showDisplayValue ? displayValue : searchTerm}
+            onChange={(e) => {
+              if (searchable) {
+                setSearchTerm(e.target.value);
+                if (!isOpen) setIsOpen(true);
+              }
+            }}
+            onFocus={() => {
+              setIsOpen(true);
+              if (searchable && !multiple) {
+                setSearchTerm('');
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            autoComplete="off"
+          />
 
-        <button
-          type="button"
-          className="text-gray-400 flex-shrink-0 p-1"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <ChevronsUpDown className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            className="text-gray-400 flex-shrink-0 p-1"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <ChevronsUpDown className="w-4 h-4" />
+          </button>
 
-        {multiple && selectedOptions.length > 0 && (
-          <div className="flex flex-wrap gap-1 w-full">
-            {selectedOptions.map((option) => (
-              <span key={option.value} className={tagClassName}>
-                {option.label}
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveTag(option);
-                  }}
-                  className="ml-1 hover:text-red-600 cursor-pointer"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {isOpen && (
-        <div ref={dropdownRef} className={dropdownClassName} onScroll={handleScroll}>
-          {loading && currentPage === 1 ? (
-            <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              {t('common.select.loading')}
-            </div>
-          ) : filteredOptions.length === 0 ? (
-            <div className={optionClassName()}>{t('common.select.noOptions')}</div>
-          ) : (
-            <>
-              {filteredOptions.map((option, index) => {
-                const isSelected = selectedOptions.some(
-                  (selected) => String(selected.value) === String(option.value)
-                );
-                const isHighlighted = index === highlightedIndex;
-
-                return (
-                  <div
-                    key={`${option.value}-${index}`}
-                    className={optionClassName(isSelected, isHighlighted)}
-                    onClick={() => handleSelect(option)}
-                    onMouseEnter={() => setHighlightedIndex(index)}
+          {multiple && selectedOptions.length > 0 && (
+            <div className="flex flex-wrap gap-1 w-full">
+              {selectedOptions.map((option) => (
+                <span key={option.value} className={tagClassName}>
+                  {option.label}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveTag(option);
+                    }}
+                    className="ml-1 hover:text-red-600 cursor-pointer"
                   >
-                    <span className="block truncate">
-                      {option.label}
-                      {isSelected && <span className="ml-2 text-xs">✓</span>}
-                    </span>
-                  </div>
-                );
-              })}
-              {loading && hasMorePages && (
-                <div className="flex items-center justify-center py-2 border-t">
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  {t('common.select.loadingMore')}
-                </div>
-              )}
-            </>
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
           )}
         </div>
-      )}
 
-      {multiple ? (
-        <select
-          multiple={multiple}
-          className="h-0 w-0 overflow-hidden absolute"
-          {...register(fieldName, {
-            setValueAs: () => {
-              return selectedOptions.map((option) => option.value);
-            },
-            validate: {
-              required: () => {
-                if (!required) return true;
-                return selectedOptions.length > 0 ? true : 'errors.validations.required';
-              },
-            },
-          })}
-        />
-      ) : (
-        <input
-          className="h-0 w-0 overflow-hidden absolute"
-          {...register(fieldName, {
-            setValueAs: () => {
-              const values = selectedOptions.map((option) => option.value);
-              return values[0] ?? '';
-            },
-            validate: {
-              required: () => {
-                if (!required) return true;
-                return selectedOptions.length > 0 ? true : 'errors.validations.required';
-              },
-            },
-          })}
-        />
-      )}
+        {isOpen && (
+          <div ref={dropdownRef} className={dropdownClassName} onScroll={handleScroll}>
+            {loading && currentPage === 1 ? (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                {t('common.select.loading')}
+              </div>
+            ) : filteredOptions.length === 0 ? (
+              <div className={optionClassName()}>{t('common.select.noOptions')}</div>
+            ) : (
+              <>
+                {filteredOptions.map((option, index) => {
+                  const isSelected = selectedOptions.some(
+                    (selected) => String(selected.value) === String(option.value)
+                  );
+                  const isHighlighted = index === highlightedIndex;
 
+                  return (
+                    <div
+                      key={`${option.value}-${index}`}
+                      className={optionClassName(isSelected, isHighlighted)}
+                      onClick={() => handleSelect(option)}
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                    >
+                      <span className="block truncate">
+                        {option.label}
+                        {isSelected && <span className="ml-2 text-xs">✓</span>}
+                      </span>
+                    </div>
+                  );
+                })}
+                {loading && hasMorePages && (
+                  <div className="flex items-center justify-center py-2 border-t">
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    {t('common.select.loadingMore')}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {multiple ? (
+          <select
+            multiple={multiple}
+            className="h-0 w-0 overflow-hidden absolute"
+            {...register(fieldName, {
+              setValueAs: () => {
+                return selectedOptions.map((option) => option.value);
+              },
+              validate: {
+                required: () => {
+                  if (!required) return true;
+                  return selectedOptions.length > 0 ? true : 'errors.validations.required';
+                },
+              },
+            })}
+          />
+        ) : (
+          <input
+            className="h-0 w-0 overflow-hidden absolute"
+            {...register(fieldName, {
+              setValueAs: () => {
+                const values = selectedOptions.map((option) => option.value);
+                return values[0] ?? '';
+              },
+              validate: {
+                required: () => {
+                  if (!required) return true;
+                  return selectedOptions.length > 0 ? true : 'errors.validations.required';
+                },
+              },
+            })}
+          />
+        )}
+      </div>
       <FormErrors errors={errors} fieldName={fieldName} />
-      <JsonPrint data={{ value: getValues(fieldName), selectedOptions, defaultValue }} />
     </div>
   );
 };
