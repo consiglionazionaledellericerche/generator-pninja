@@ -50,7 +50,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/ApiResponsePagination.tsx.ejs"), that.destinationPath(`client/src/components/ApiResponsePagination.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormElements.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormElements.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/index.ts.ejs"), that.destinationPath(`client/src/components/formElements/index.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Checkbox.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Checkbox.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/ColorField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/ColorField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/DateField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DateField.tsx`), {});

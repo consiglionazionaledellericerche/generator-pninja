@@ -25,6 +25,13 @@ export class ModelsGenerator {
                 }
                 return acc;
             }, []);
+            // toSearchableArray from entity property
+            const toSearchableArray = entity.body.reduce((acc, prop) => {
+                if (['String', 'UUID'].includes(prop.type)) {
+                    acc.push(`${to.snake(prop.name)}`);
+                }
+                return acc;
+            }, []);
             const relations = [];
             relationships.filter(relation => (
                 relation.cardinality === 'OneToMany' && relation.to.name === entity.name
@@ -106,6 +113,7 @@ export class ModelsGenerator {
                     className,
                     tableName,
                     fillable: fillable.join(",\n" + this.tab(2)),
+                    toSearchableArray,
                     relations: relations.join(`\n${this.tab(1)}`),
                     enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
                     casts: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {

@@ -8,17 +8,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Laravel\Scout\Searchable;
 <% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
 <% }); %>
 class <%- className %> extends Model
 {
     use HasFactory;
+    use Searchable;
 
     protected $table = '<%- tableName %>';
 
     protected $fillable = [
         <%- fillable %>
     ];
+<%  if (toSearchableArray && toSearchableArray.length > 0) { -%>
+    public function toSearchableArray()
+    {
+        return [
+<%    toSearchableArray.map(prop => { -%>
+            '<%- prop %>' => $this-><%- prop %>,
+<%    })-%>
+        ];
+    }
+<%  }-%>
 <%  if(casts && casts.length) {-%>
 
     protected $casts = [

@@ -69,7 +69,7 @@ interface SelectFieldWithOptionsLoad extends SelectFieldBase {
   optionsLoad: ISelectFieldOptionsLoad;
 }
 
-type SelectFieldProps = SelectFieldWithOptions | SelectFieldWithOptionsLoad;
+type AdvancedSelectFieldProps = SelectFieldWithOptions | SelectFieldWithOptionsLoad;
 
 interface PaginatedResponse {
   data: Record<string, unknown>[];
@@ -79,7 +79,7 @@ interface PaginatedResponse {
   total: number;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({
+const AdvancedSelectField: React.FC<AdvancedSelectFieldProps> = ({
   fieldName,
   label,
   multiple = false,
@@ -564,5 +564,5 @@ const SelectField: React.FC<SelectFieldProps> = ({
   );
 };
 
-export { SelectField };
+export { AdvancedSelectField };
 export type { ISelectFieldOption };
