@@ -22,7 +22,7 @@ http {
         }
 
         # Proxy API PHP
-        location /api/ {
+        location ^~ /api/ {
             fastcgi_pass php-backend;
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME /var/www/html/public/index.php;
