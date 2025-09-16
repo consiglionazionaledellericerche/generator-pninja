@@ -97,7 +97,7 @@ services:
       database:
         condition: service_healthy
     networks:
-      - test-application-network
+      - <%= slugName %>-network
     environment:
       ADMINER_DEFAULT_SERVER: database
       ADMINER_DESIGN: pepa-linha-dark
