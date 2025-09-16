@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
 <% if (dbms === 'pgsql') { -%>
@@ -10,13 +10,13 @@ services:
       POSTGRES_USER: <%= snakeName %>_user
       POSTGRES_PASSWORD: <%- dbPwd %>
     ports:
-      - '54322:5432'
+      - "54322:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - <%= slugName %>-network
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U <%= snakeName %>_user -d <%= snakeName %>']
+      test: ["CMD-SHELL", "pg_isready -U <%= snakeName %>_user -d <%= snakeName %>"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -35,7 +35,7 @@ services:
       MYSQL_PASSWORD: <%- dbPwd %>
       MYSQL_ROOT_PASSWORD: <%- dbRootPwd %>
     ports:
-      - '33066:3306'
+      - "33066:3306"
     volumes:
 <%  if (dbms === 'mysql') { -%>
       - mysql_data:/var/lib/mysql
@@ -46,7 +46,7 @@ services:
     networks:
       - <%= slugName %>-network
     healthcheck:
-      test: ['CMD', 'mysql', '-h', 'localhost', '-u', '<%= snakeName %>_user', '-p<%- dbPwd %>', '-e', 'SELECT 1']
+      test: ["CMD", "mysql", "-h", "localhost", "-u", "<%= snakeName %>_user", "-p<%- dbPwd %>", "-e", "SELECT 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -60,7 +60,7 @@ services:
       dockerfile: ./docker/nginx/Dockerfile
     container_name: <%= slugName %>-client
     ports:
-      - '80:80'
+      - "80:80"
     depends_on:
       - server
     networks:
@@ -92,7 +92,7 @@ services:
     image: adminer:4.8.1
     container_name: <%= slugName %>-adminer
     ports:
-      - '8088:8080'
+      - "8088:8080"
     depends_on:
       database:
         condition: service_healthy
