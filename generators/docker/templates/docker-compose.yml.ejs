@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
 <% if (dbms === 'pgsql') { -%>
@@ -72,10 +72,11 @@ services:
       context: ..
       dockerfile: ./docker/server/Dockerfile
     container_name: <%= slugName %>-server
+    volumes:
+      - laravel_storage:/var/www/html/storage
 <% if (dbms !== 'sqlite') { -%>
     depends_on:
-      database:
-        condition: service_healthy
+      - database
 <% }-%>
     environment:
       - FRONTEND_URL=
@@ -94,8 +95,7 @@ services:
     ports:
       - "8088:8080"
     depends_on:
-      database:
-        condition: service_healthy
+      - database
     networks:
       - <%= slugName %>-network
     environment:
@@ -107,14 +107,21 @@ services:
 
 volumes:
   postgres_data:
+  laravel_storage:
 <% } else if (dbms === 'mysql') {-%>
 
 volumes:
   mysql_data:
+  laravel_storage:
 <% } else if (dbms === 'mariadb') {-%>
 
 volumes:
   mariadb_data:
+  laravel_storage:
+<% } else {-%>
+
+volumes:
+  laravel_storage:
 <% }-%>
 
 networks:
