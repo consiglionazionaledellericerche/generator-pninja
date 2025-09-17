@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -8,9 +9,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::rename('jobs', 'queue__jobs');
-        Schema::rename('job_batches', 'queue__job_batches');
-        Schema::rename('failed_jobs', 'queue__failed_jobs');
+        // Controlla e rinomina solo se le tabelle esistono
+        if (Schema::hasTable('jobs')) {
+            Schema::rename('jobs', 'queue__jobs');
+        }
+        
+        if (Schema::hasTable('job_batches')) {
+            Schema::rename('job_batches', 'queue__job_batches');
+        }
+        
+        if (Schema::hasTable('failed_jobs')) {
+            Schema::rename('failed_jobs', 'queue__failed_jobs');
+        }
     }
 
     /**
@@ -20,8 +30,17 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::rename('queue__jobs', 'jobs');
-        Schema::rename('queue__job_batches', 'job_batches');
-        Schema::rename('queue__failed_jobs', 'failed_jobs');
+        // Controlla e rinomina solo se le tabelle con prefisso esistono
+        if (Schema::hasTable('queue__failed_jobs')) {
+            Schema::rename('queue__failed_jobs', 'failed_jobs');
+        }
+        
+        if (Schema::hasTable('queue__job_batches')) {
+            Schema::rename('queue__job_batches', 'job_batches');
+        }
+        
+        if (Schema::hasTable('queue__jobs')) {
+            Schema::rename('queue__jobs', 'jobs');
+        }
     }
 };
