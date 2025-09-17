@@ -3,6 +3,33 @@ import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
 
+const colorsA = [
+    "lime",
+    "green",
+    "emerald",
+    "teal",
+];
+const colorsB = [
+    "cyan",
+    "sky",
+    "blue",
+    "indigo",
+];
+const colorsC = [
+    "violet",
+    "purple",
+    "fuchsia",
+    "pink",
+];
+
+const colors = [
+    colorsA[Math.floor(Math.random() * colorsA.length)],
+    colorsB[Math.floor(Math.random() * colorsB.length)],
+    colorsC[Math.floor(Math.random() * colorsC.length)]
+];
+
+Math.random() < 0.5 && ([colors[0], colors[2]] = [colors[2], colors[0]])
+
 export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
@@ -30,7 +57,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {});
-    that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), {});
+    that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), { colors });
     that.fs.copyTpl(that.templatePath("react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`), {});

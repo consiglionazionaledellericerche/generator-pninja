@@ -17,9 +17,7 @@ const Menu: React.FC = () => {
   const [activeEntity, setActiveEntity] = useState<string | null>(null);
 <% } -%>
   const isActive = (path: string) =>
-    location.pathname === path
-      ? ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300'
-      : '';
+    location.pathname === path ? ' bg-white/70 text-black dark:bg-black/70 dark:text-white' : '';
   const [menuVisible, setMenuVisible] = useState(false);
   const htmlElement = document.querySelector('html');
   useEffect(() => {
@@ -41,7 +39,7 @@ const Menu: React.FC = () => {
       <Link to="/" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
         <img className="h-8 w-8 max-w-8" src={appLogo} alt="" />
       </Link>
-      <Link to="/" className="hover:text-sky-600 hover:dark:text-sky-400 text-xl">
+            <Link to="/" className="text-xl hover:text-black hover:dark:text-white hover:text-bold">
         {t('appName')}
       </Link>
       <span className="grow"></span>
@@ -54,22 +52,39 @@ const Menu: React.FC = () => {
           setMenuVisible(!menuVisible);
         }}
       >
-        <span className="sr-only">Open main menu</span>
-        <svg
-          className="w-5 h-5"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 17 14"
-        >
-          <path
+        <span className="sr-only">{menuVisible ? 'Close main menu' : 'Open main menu'}</span>
+        {menuVisible ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
             stroke="currentColor"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2"
-            d="M1 1h15M1 7h15M1 13h15"
-          />
-        </svg>
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        ) : (
+          <svg
+            className="w-5 h-5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 17 14"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 1h15M1 7h15M1 13h15"
+            />
+          </svg>
+        )}
       </button>
       <div
         className={`w-auto absolute ${menuVisible ? 'block' : 'hidden'} md:block md:static top-16 left-4 right-4`}
@@ -115,7 +130,7 @@ const Menu: React.FC = () => {
           </Link>
 <%      });-%>
 <% } %>
-          <div className="flex gap-1 md:gap-4 w-full md:w-auto">
+          <div className="flex flex-row flex-wrap items-center justify-end gap-1 md:gap-4 w-full md:w-auto">
             <LangSelect />
             <DarkModeToggle />
             {!isAuthenticated && <LoginButton />}
