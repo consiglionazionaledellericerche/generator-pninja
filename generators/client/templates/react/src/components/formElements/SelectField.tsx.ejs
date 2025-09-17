@@ -310,7 +310,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
         )
       : filtered;
 
-    setFilteredOptions(availableOptions);
+    setFilteredOptions(
+      multiple ? availableOptions : [{ label: '\xA0', value: '' }, ...availableOptions]
+    );
   }, [allOptions, searchTerm, searchable, optionsLoad?.url, selectedOptions, multiple]);
 
   useEffect(() => {
@@ -494,7 +496,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
               <>
                 {filteredOptions.map((option, index) => {
                   const isSelected = selectedOptions.some(
-                    (selected) => String(selected.value) === String(option.value)
+                    (selected) =>
+                      String(selected.value) === String(option.value) && option.label !== '\xA0'
                   );
                   const isHighlighted = index === highlightedIndex;
 
