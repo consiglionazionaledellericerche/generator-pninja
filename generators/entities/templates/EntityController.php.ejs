@@ -73,7 +73,7 @@ class <%- className %>Controller extends Controller
 <%  }-%>
                     ->paginate($perPage);
             } else {
-                $result = <%- className %><% if (withs) { %>::with(<%- withs %>)<% } %>
+                $result = <%- className %><%- withs ? `::with(${withs})` : '::query()' %>
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
                     ->whereNotIn('id', $excludeIds)
 <%  }-%>
