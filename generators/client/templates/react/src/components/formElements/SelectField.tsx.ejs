@@ -110,6 +110,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const scrollPositionBeforeLoadRef = useRef<number>(0);
 
   const {
     register,
@@ -188,6 +189,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
     async (search = '', page = 1, append = false) => {
       if (!optionsLoad?.url) return;
 
+      // Save the scroll position before loading new options
+      if (append && dropdownRef.current) {
+        scrollPositionBeforeLoadRef.current = dropdownRef.current.scrollTop;
+      }
+
       setLoading(true);
       try {
         const response = await fetch(buildApiUrl(search, page));
@@ -199,7 +205,20 @@ const SelectField: React.FC<SelectFieldProps> = ({
         }));
 
         if (append) {
-          setAllOptions((prev) => [...prev, ...newOptions]);
+          setAllOptions((prev) => {
+            const combined = [...prev, ...newOptions];
+            // Schedule scroll restoration after DOM update
+            setTimeout(() => {
+              if (dropdownRef.current) {
+                const optionHeight = 40; // approximate height of an option
+                const newItemsStartPosition = prev.length * optionHeight;
+                // Show a couple of previous options for context
+                const scrollToPosition = Math.max(0, newItemsStartPosition - optionHeight * 2);
+                dropdownRef.current.scrollTop = scrollToPosition;
+              }
+            }, 0);
+            return combined;
+          });
         } else {
           setAllOptions(newOptions);
         }
