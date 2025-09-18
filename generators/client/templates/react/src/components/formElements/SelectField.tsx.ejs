@@ -435,6 +435,23 @@ const SelectField: React.FC<SelectFieldProps> = ({
     setValue(fieldName, []); // call to trig setValueAs
   }, [defaultValue, setValue, fieldName, multiple]);
 
+  const OptionsSkeleton = () => (
+    <div className="animate-pulse">
+      {Array(20)
+        .fill('')
+        .map((_, index) => (
+          <div
+            key={index}
+            className="relative cursor-pointer select-none py-2 px-3 text-slate-900 dark:text-gray-300 hover:bg-slate-300 dark:hover:bg-gray-700"
+          >
+            <div>
+              <span className="rounded-md bg-gray-400 w-[70%] h-4 myy inline-block">&nbsp;</span>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
+
   return (
     <div ref={containerRef}>
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
@@ -505,10 +522,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         {isOpen && (
           <div ref={dropdownRef} className={dropdownClassName} onScroll={handleScroll}>
             {loading && currentPage === 1 ? (
-              <div className="flex items-center justify-center py-4">
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                {t('common.select.loading')}
-              </div>
+              <OptionsSkeleton />
             ) : filteredOptions.length === 0 ? (
               <div className={optionClassName()}>{t('common.select.noOptions')}</div>
             ) : (
@@ -534,12 +548,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
                     </div>
                   );
                 })}
-                {loading && hasMorePages && (
-                  <div className="flex items-center justify-center py-2 border-t">
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    {t('common.select.loadingMore')}
-                  </div>
-                )}
+                {loading && hasMorePages && <OptionsSkeleton />}
               </>
             )}
           </div>
