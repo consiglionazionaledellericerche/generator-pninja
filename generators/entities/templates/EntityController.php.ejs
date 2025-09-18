@@ -71,6 +71,7 @@ class <%- className %>Controller extends Controller
                         $builder->with(<%- withs %>);
                     })
 <%  }-%>
+                    ->orderBy($sortBy, $sortDirection)
                     ->paginate($perPage);
             } else {
                 $result = <%- className %><%- withs ? `::with(${withs})` : '::query()' %>
