@@ -309,15 +309,15 @@ const SelectField: React.FC<SelectFieldProps> = ({
   useEffect(() => {
     let filtered: ISelectFieldOption[] = [];
 
-    if (!searchable || !searchTerm) {
+    if (!searchable || !searchTerm.trim()) {
       filtered = [...allOptions];
     } else if (optionsLoad?.url) {
       filtered = [...allOptions];
     } else {
       filtered = allOptions.filter(
         (option) =>
-          String(option.label).toLowerCase().includes(searchTerm.toLowerCase()) ||
-          String(option.value).toLowerCase().includes(searchTerm.toLowerCase())
+          String(option.label).toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
+          String(option.value).toLowerCase().includes(searchTerm.trim().toLowerCase())
       );
     }
 
