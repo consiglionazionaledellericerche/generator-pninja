@@ -70,7 +70,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
                 ) : (
                   <a
                     href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
-                    className="text-blue-600 hover:underline"
+                    className="text-link"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
