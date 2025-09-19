@@ -62,9 +62,9 @@ export class MigrationsGenerator {
                 }
                 res.push(`${fieldDefinition};`);
             } else {
-                res.push(`$table->longText('${fieldName}_blob', 255)->nullable();`);
-                res.push(`$table->string('${fieldName}_type', 255)->nullable();`);
-                res.push(`$table->string('${fieldName}_name', 255)->nullable();`);
+                res.push(`$table->longText('${fieldName}_blob')->nullable();`);
+                res.push(`$table->string('${fieldName}_type')->nullable();`);
+                res.push(`$table->string('${fieldName}_name')->nullable();`);
             }
             return res;
         }, []);
