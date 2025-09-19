@@ -17,8 +17,11 @@ Route::prefix('auth')->group(function () {
 
 // API protette: /api/my-entities, /api/files/*
 Route::middleware(['session.auth'])->group(function () {
-<% eRoutes.forEach(({className, rootPath}) => {-%>
+<% eRoutes.forEach(({className, rootPath, hasBlob}) => {-%>
     Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
+<%  if (hasBlob) { -%>
+    Route::get('<%- rootPath %>/{id}/{field}/{filename?}', [<%- className %>Controller::class, 'serveBlob']);
+<%  }; -%>
 <% }); -%>
 
     Route::get('/files/{path}', [FileController::class, 'serveFile'])

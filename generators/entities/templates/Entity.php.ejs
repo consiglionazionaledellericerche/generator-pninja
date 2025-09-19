@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Scout\Searchable;
+<% if (hasBlobs) { -%>
+use App\Casts\Base64BinaryCast;
+<% }; -%>
 <% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
 <% }); %>
 class <%- className %> extends Model
@@ -17,10 +20,23 @@ class <%- className %> extends Model
     use Searchable;
 
     protected $table = '<%- tableName %>';
-
+<%  if(hidden) {-%>
+    protected $hidden = [<%- hidden %>];
+<%  }-%>
+<%  if(casts && casts.length) {-%>
+    protected $casts = [
+<%      casts.forEach(function(cast) { -%>
+<%          cast.attrsName.forEach(function(attrName) { -%>
+        '<%- attrName %>' => <%- cast.className %>::class,
+<%          }); -%>
+<%      }); -%>
+    ];
+<%  }-%>
+<%  if (fillable) { -%>
     protected $fillable = [
         <%- fillable %>
     ];
+<%  }-%>
 <%  if (toSearchableArray && toSearchableArray.length > 0) { -%>
     public function toSearchableArray()
     {
@@ -30,16 +46,6 @@ class <%- className %> extends Model
 <%    })-%>
         ];
     }
-<%  }-%>
-<%  if(casts && casts.length) {-%>
-
-    protected $casts = [
-<%      casts.forEach(function(cast) { -%>
-<%          cast.attrsName.forEach(function(attrName) { -%>
-        '<%- attrName %>' => <%- cast.className %>::class,
-<%          }); -%>
-<%      }); -%>
-    ];
 <%  }-%>
 <%  if (relations) { -%>
     <%- relations -%>

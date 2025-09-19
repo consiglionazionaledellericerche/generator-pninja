@@ -47,16 +47,10 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-const FileField: React.FC<FileFieldProps> = ({
-  accept,
-  entity,
-  fieldName,
-  label,
-  validations,
-}) => {
+const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label, validations }) => {
   const { t } = useTranslation();
   const entityData = entity as Record<string, unknown>;
-  const hasFile = entityData?.[`${fieldName}_path`] || false;
+  const hasFile = entityData?.[`${fieldName}_name`] || false;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
   const { required, minbytes, maxbytes } = validations || {};
@@ -89,7 +83,7 @@ const FileField: React.FC<FileFieldProps> = ({
       if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
         return `errors.validations.file.maxSize:${prettyBytes(maxbytes)}:${prettyBytes(fileData?.size)}`;
       }
-      if (required && (fileData?.delete || (!fileData && !entityData?.[`${fieldName}_path`]))) {
+      if (required && (fileData?.delete || (!fileData && !entityData?.[`${fieldName}_name`]))) {
         return 'errors.validations.file.required';
       }
       return true;
@@ -144,102 +138,103 @@ const FileField: React.FC<FileFieldProps> = ({
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <div>
-      {hasFile && !shouldShowInput && !isMarkedForDeletion && (
-        <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
-          <div className="flex items-center justify-between">
-            <a
-              href={`/api/files/${entityData?.[`${fieldName}_path`]}`}
-              className="text-slate-900 dark:text-gray-300 hover:underline flex items-center"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
-                <FileImageIcon className="mr-2 h-4 w-4" />
-              ) : (
-                <FileIcon className="mr-2 h-4 w-4" />
-              )}
-              {t('actions.crud.file.viewOrDownload')} {entityData?.[`${fieldName}_name`] as string}
-            </a>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setShouldShowInput(true)}
-                className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <div>
+        {hasFile && !shouldShowInput && !isMarkedForDeletion && (
+          <div className="mt-3 p-3 bg-slate-100 dark:bg-gray-700 rounded-md">
+            <div className="flex items-center justify-between">
+              <a
+                href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${entityData?.[`${fieldName}_name`]}`}
+                className="text-slate-900 dark:text-gray-300 hover:underline flex items-center"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <EditIcon className="mr-1 h-4 w-4" />
-                {t('actions.crud.edit')}
-              </button>
-              <button
-                type="button"
-                onClick={() => markForDeletion(true)}
-                className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
-              >
-                <Trash2Icon className="mr-1 h-4 w-4" />
-                {t('actions.crud.delete')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {isMarkedForDeletion && (
-        <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-red-800 dark:text-red-200">
-              <Trash2Icon className="mr-2 h-4 w-4" />
-              <span className="text-sm font-medium">
-                {t('actions.crud.file.markedForDeletion')}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => markForDeletion(false)}
-              className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
-            >
-              <Undo2Icon className="mr-2 h-4 w-4" />
-              {t('common.undo')}
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
-        <div className="mt-3">
-          {hasFile && shouldShowInput && (
-            <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-yellow-800 dark:text-yellow-200">
-                  <InfoIcon className="mr-2 h-4 w-4" />
-                  <span className="text-sm font-medium">
-                    {t('actions.crud.file.replaceWarning')}
-                  </span>
-                </div>
+                {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
+                  <FileImageIcon className="mr-2 h-4 w-4" />
+                ) : (
+                  <FileIcon className="mr-2 h-4 w-4" />
+                )}
+                {t('actions.crud.file.viewOrDownload')}{' '}
+                {entityData?.[`${fieldName}_name`] as string}
+              </a>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => undoEdit()}
+                  onClick={() => setShouldShowInput(true)}
                   className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                 >
-                  <Undo2Icon className="mr-2 h-4 w-4" />
-                  {t('common.cancel')}
+                  <EditIcon className="mr-1 h-4 w-4" />
+                  {t('actions.crud.edit')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => markForDeletion(true)}
+                  className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
+                >
+                  <Trash2Icon className="mr-1 h-4 w-4" />
+                  {t('actions.crud.delete')}
                 </button>
               </div>
             </div>
-          )}
-          <input
-            type="file"
-            id={fieldName}
-            accept={accept ?? '*/*'}
-            {...registerProps}
-            onChange={handleFileChange}
-            ref={inputRef}
-            className={inputClassName(!!errors?.[fieldName]?.message)}
-          />
+          </div>
+        )}
+
+        {isMarkedForDeletion && (
+          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-red-800 dark:text-red-200">
+                <Trash2Icon className="mr-2 h-4 w-4" />
+                <span className="text-sm font-medium">
+                  {t('actions.crud.file.markedForDeletion')}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => markForDeletion(false)}
+                className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
+              >
+                <Undo2Icon className="mr-2 h-4 w-4" />
+                {t('common.undo')}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
+          <div className="mt-3">
+            {hasFile && shouldShowInput && (
+              <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-yellow-800 dark:text-yellow-200">
+                    <InfoIcon className="mr-2 h-4 w-4" />
+                    <span className="text-sm font-medium">
+                      {t('actions.crud.file.replaceWarning')}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => undoEdit()}
+                    className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
+                  >
+                    <Undo2Icon className="mr-2 h-4 w-4" />
+                    {t('common.cancel')}
+                  </button>
+                </div>
+              </div>
+            )}
+            <input
+              type="file"
+              id={fieldName}
+              accept={accept ?? '*/*'}
+              {...registerProps}
+              onChange={handleFileChange}
+              ref={inputRef}
+              className={inputClassName(!!errors?.[fieldName]?.message)}
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };

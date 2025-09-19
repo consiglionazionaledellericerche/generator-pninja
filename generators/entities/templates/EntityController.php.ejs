@@ -152,21 +152,13 @@ class <%- className %>Controller extends Controller
             ]);
             $data = $validated;
 <%  }-%>
-<%          fileFields.forEach((field) => {-%>
-            if(isset($data['<%-to.snake(field)%>']['data'])) {
-                $fileData = base64_decode($data['<%-to.snake(field)%>']['data']);
-                $mimeType = $data['<%-to.snake(field)%>']['mimeType'];
-                $originalName = $data['<%-to.snake(field)%>']['originalName'];
-                $filename = uniqid() . '-' . $originalName;
-                $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
-                $stored = Storage::disk('private')->put($path, $fileData);
-                if($stored) {
-                    $data['<%-to.snake(field)%>_path'] = $path;
-                    $data['<%-to.snake(field)%>_type'] = $mimeType;
-                    $data['<%-to.snake(field)%>_name'] = $originalName;
-                }
+<%  fileFields.forEach((field) => {-%>
+            if (!empty($data['<%-to.snake(field)%>']['data'])) {
+                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
+                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
+                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
             }
-<%    });-%>
+<%  });-%>
 
             $<%- entityName %> = <%- className %>::create($data);
 <%          if (createRelated) { -%>
@@ -180,6 +172,7 @@ class <%- className %>Controller extends Controller
             return $this->handleCreateError($e);
         }
     }
+
     public function update($id, Request $request)
     {
         try {
@@ -204,7 +197,7 @@ class <%- className %>Controller extends Controller
                 '<%- field %>.data' => [
 <%          validationsStore[field].forEach(validation => {-%>
 <%              if (validation === `'required'`) { -%>
-                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_path'] ? 'nullable' : 'required'` : `'nullable'` %>,
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
 <%              } else {-%>
                     <%- validation %>,
 <%              } -%>
@@ -229,44 +222,21 @@ class <%- className %>Controller extends Controller
 <%  }-%>
 <%  if(!isEmpty(fileFields)) {-%>
 
-            $filesToDeletePaths = [];
-
 <%      fileFields.forEach((field) => {-%>
-            if(isset($data['<%-to.snake(field)%>']['data'])) {
-                if ($<%- entityName %>-><%-to.snake(field)%>_path) {
-                    Storage::disk('private')->delete($<%- entityName %>-><%-to.snake(field)%>_path);
-                }
-                $fileData = base64_decode($data['<%-to.snake(field)%>']['data']);
-                $mimeType = $data['<%-to.snake(field)%>']['mimeType'];
-                $originalName = $data['<%-to.snake(field)%>']['originalName'];
-                $filename = uniqid() . '-' . $originalName;
-                $path = 'uploads/' . date('Y/m/d') . '/' . $filename;
-                $stored = Storage::disk('private')->put($path, $fileData);
-                if($stored) {
-                    $data['<%-to.snake(field)%>_path'] = $path;
-                    $data['<%-to.snake(field)%>_type'] = $mimeType;
-                    $data['<%-to.snake(field)%>_name'] = $originalName;
-                }
+            if (!empty($data['<%-to.snake(field)%>']['data'])) {
+                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
+                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
+                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
             }
-            if (isset($data['<%-to.snake(field)%>']['delete']) && $data['<%-to.snake(field)%>']['delete'] && $<%- entityName %>-><%-to.snake(field)%>_path) {
-                $filesToDeletePaths[] = $<%- entityName %>-><%-to.snake(field)%>_path;
-                $<%- entityName %>-><%-to.snake(field)%>_path = null;
+            if (!empty($data['<%-to.snake(field)%>']['delete']) && $data['<%-to.snake(field)%>']['delete']) {
                 $<%- entityName %>-><%-to.snake(field)%>_type = null;
                 $<%- entityName %>-><%-to.snake(field)%>_name = null;
+                $<%- entityName %>-><%-to.snake(field)%>_blob = null;
             }
 
 <%      });-%>
 <%  }-%>
             $<%- entityName %>->update($data);
-<%  if(!isEmpty(fileFields)) {-%>
-
-            foreach ($filesToDeletePaths as $filePath) {
-                if ($filePath && Storage::disk('private')->exists($filePath)) {
-                    Storage::disk('private')->delete($filePath);
-                }
-            }
-
-<%  }-%>
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>
@@ -281,14 +251,37 @@ class <%- className %>Controller extends Controller
         try {
             $<%- entityName %> = <%- className %>::findOrFail($id);
             $<%- entityName %>->delete();
-<%  fileFields.forEach((field) => {-%>
-            if ($<%- entityName %>-><%-to.snake(field)%>_path) {
-                Storage::disk('private')->delete($<%- entityName %>-><%-to.snake(field)%>_path);
-            }
-<%  });-%>
             return response(null, 200);
         } catch (\Exception $e) {
             return $this->handleDeleteError($e);
         }
     }
+
+<%  if(!isEmpty(fileFields)) {-%>
+    public function serveBlob($id, string $field)
+    {
+        try {
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+
+            $blobField = $field . '_blob';
+            $nameField = $field . '_name';
+            $mimeField = $field . '_type';
+
+            if (!$<%- entityName %>->$blobField) {
+                return response()->json(['error' => 'File not found'], 404);
+            }
+
+            $content = $<%- entityName %>->$blobField; // byte puri se usi il cast Base64
+            $name = $<%- entityName %>->$nameField ?? 'file';
+            $mime = $<%- entityName %>->$mimeField ?? 'application/octet-stream';
+
+            return response($content, 200)
+                ->header('Content-Type', $mime)
+                ->header('Content-Disposition', "inline; filename=\"$name\"");
+
+        } catch (\Exception $e) {
+            return $this->handleShowError($e);
+        }
+    }
+<%  }-%>
 }

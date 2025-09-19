@@ -2,6 +2,14 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { parseJDL } from '../../utils/jdlParser.js';
 
+const entityHasBlob = (entity) => entity.body.reduce((acc, prop) => {
+    if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+        return true;
+    }
+    return acc;
+}, false);
+
+
 export class RoutersGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
@@ -15,9 +23,11 @@ export class RoutersGenerator {
         const eRoutes = entities.map(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));
+            const hasBlob = entityHasBlob(entity);
             return {
                 className,
                 rootPath,
+                hasBlob,
             };
         });
         this.that.fs.copyTpl(

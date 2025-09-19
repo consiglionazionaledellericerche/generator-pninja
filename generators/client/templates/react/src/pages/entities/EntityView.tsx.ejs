@@ -52,24 +52,24 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
 <%          }-%>
 <%        } else {-%>
           <td>
-            {data?.<%= column%>_path && data?.<%= column%>_name && (
+            {data?.<%= column%>_name && (
               <div>
                 <p>{data.<%= column%>_name}</p>
                 {data.<%= column%>_type?.startsWith('image/') ? (
                   <a
-                    href={`/api/files/${data.<%= column%>_path}`}
+                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={`/api/files/${data.<%= column%>_path}`}
+                      src={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
                       alt={data.<%= column%>_name}
                       className="max-w-xs mt-2"
                     />
                   </a>
                 ) : (
                   <a
-                    href={`/api/files/${data.<%= column%>_path}`}
+                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
                     className="text-blue-600 hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"

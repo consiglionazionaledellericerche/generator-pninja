@@ -120,7 +120,6 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
 
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
-
 import {
 <% if (hasCheckbox) {-%>
   Checkbox,

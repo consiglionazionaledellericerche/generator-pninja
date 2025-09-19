@@ -53,7 +53,6 @@ export interface I<%= entity.name %> {
 <%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>?: <%= convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    } else {-%>
-  <%= to.snake(prop.name) %>_path?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
   <%= to.snake(prop.name) %>_type?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
   <%= to.snake(prop.name) %>_name?: string<%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    }-%>
@@ -71,7 +70,6 @@ export const defaultValue: Readonly<I<%= entity.name %>> = {
 <%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>: undefined,
 <%    } else {-%>
-  <%= to.snake(prop.name) %>_path: undefined,
   <%= to.snake(prop.name) %>_type: undefined,
   <%= to.snake(prop.name) %>_name: undefined,
 <%    }-%>
