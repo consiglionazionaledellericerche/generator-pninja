@@ -28,7 +28,7 @@ export class MigrationsGenerator {
             'Blob': 'binary',
             'AnyBlob': 'binary',
             'ImageBlob': 'binary',
-            'TextBlob': 'text',
+            'TextBlob': 'longText',
         };
 
         const enm = enums.reduce((res, e) => {
