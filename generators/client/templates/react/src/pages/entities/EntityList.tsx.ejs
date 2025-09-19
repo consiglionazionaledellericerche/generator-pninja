@@ -160,6 +160,8 @@ export default function <%= entity.name %>List() {
 <%                for(column of columns) { -%>
 <%                  if (!fileColumns.includes(column)) { -%>
                   {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
+<%                  } else {-%>
+                  <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
 <%                  } -%>
 <%                } -%>
 <%                for(r of relatedEntities) { -%>
@@ -184,6 +186,17 @@ export default function <%= entity.name %>List() {
 <%                      } else {-%>
                       <DurationFieldViewer duration={row.<%- column %>} format="iso"/>
 <%                      }-%>
+                    </td>
+<%                    } else { -%>
+                    <td>
+                      <a
+                        href={`/api/<%=to.slug(pluralize(entity.name))%>/${row.id}/<%- column %>/${row.<%- column %>_name}`}
+                        className="text-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {row.<%- column %>_name?.toString()}
+                      </a>
                     </td>
 <%                    } -%>
 <%                  } -%>
