@@ -15,7 +15,11 @@ Route::prefix('auth')->group(function () {
     Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
 });
 
-// API protette: /api/my-entities, /api/files/*
+Route::get('/files/public/{path}', [FileController::class, 'serveFile'])
+    ->where('path', '.*')
+    ->defaults('disk', 'public')
+    ->name('files.serve.public');
+
 Route::middleware(['session.auth'])->group(function () {
 <% eRoutes.forEach(({className, rootPath, hasBlob}) => {-%>
     Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
@@ -24,7 +28,8 @@ Route::middleware(['session.auth'])->group(function () {
 <%  }; -%>
 <% }); -%>
 
-    Route::get('/files/{path}', [FileController::class, 'serveFile'])
+    Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
         ->where('path', '.*')
-        ->name('files.serve');
+        ->defaults('disk', 'private')
+        ->name('files.serve.private');
 });

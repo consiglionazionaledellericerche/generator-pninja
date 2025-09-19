@@ -11,7 +11,7 @@ class FileController extends Controller
 
     // private $viewerRole = 'viewer';
 
-    public function serveFile(Request $request, $path)
+    public function serveFile(Request $request, $path, $disk)
     {
         // Decode the file path
         $decodedPath = urldecode($path);
@@ -26,22 +26,17 @@ class FileController extends Controller
             return response()->json(['error' => 'Path not allowed'], 400);
         }
 
-        // Validate the path format
-        if (!preg_match('/^uploads\/\d{4}\/\d{2}\/\d{2}\/[^\/]+$/', $decodedPath)) {
-            return response()->json(['error' => 'Invalid path format'], 400);
-        }
-
         // Check if the file exists
-        if (!Storage::disk('private')->exists($decodedPath)) {
+        if (!Storage::disk($disk)->exists($decodedPath)) {
             return response()->json(['error' => 'File not found'], 404);
         }
 
         // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
 
         // Get file details
-        $mimeType = Storage::disk('private')->mimeType($decodedPath);
+        $mimeType = Storage::disk($disk)->mimeType($decodedPath);
         $filename = basename($decodedPath);
-        $fileSize = Storage::disk('private')->size($decodedPath);
+        $fileSize = Storage::disk($disk)->size($decodedPath);
 
         // Set headers for the file response
         $headers = [
@@ -60,7 +55,7 @@ class FileController extends Controller
 
         // Serve the file
         return response()->file(
-            Storage::disk('private')->path($decodedPath),
+            Storage::disk($disk)->path($decodedPath),
             $headers
         );
     }
