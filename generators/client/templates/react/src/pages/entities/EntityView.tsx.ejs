@@ -148,7 +148,7 @@ export default function <%= entity.name %>View() {
   }, [id, i18n.language, t]);
 
   return (
-    <div className="m-4">
+    <>
       <h1 className="text-2xl mb-4">
         {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}
       </h1>
@@ -166,6 +166,6 @@ export default function <%= entity.name %>View() {
         <<%= entity.name %>DeleteButton id={id} />
       </div>
       )}
-    </div>
+    </>
   );
 }

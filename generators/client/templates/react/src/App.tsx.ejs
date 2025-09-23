@@ -33,7 +33,7 @@ function App() {
   ) : (
     <NotificationProvider position="top-center">
       <Menu />
-      <div className="p-4">
+      <div className="p-8 min-h-[50vh]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<ProtectedRoute />}>
@@ -52,10 +52,7 @@ function App() {
               />
             }
           >
-            <Route path="/admin" element={<div className="m-4">ADMIN EXAMPLE</div>} />
-          </Route>
-          <Route element={<ProtectedRoute requiredRoles={['apps_admin']} requireAll={false} />}>
-            <Route path="/apps-admin" element={<div className="m-4">APPS ADMIN EXAMPLE</div>} />
+            <Route path="/admin" element={<div>ADMIN EXAMPLE</div>} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />

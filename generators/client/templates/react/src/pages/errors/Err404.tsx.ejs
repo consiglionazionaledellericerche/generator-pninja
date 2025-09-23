@@ -6,9 +6,9 @@ export default function Err404() {
     document.title = t('errors.404.title');
   }, [t, i18n.language]);
   return (
-    <div className="m-4">
+    <>
       <h1 className="text-2xl mb-4">{t('errors.404.title')}</h1>
       <p>{t('errors.404.message')}</p>
-    </div>
+    </>
   );
 }

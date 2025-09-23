@@ -10,7 +10,7 @@ export default function Err403() {
     });
   }, [t, i18n.language, user]);
   return (
-    <div className="m-4">
+    <>
       <h1 className="text-2xl mb-4">
         {t('errors.403.title', {
           username:
@@ -27,6 +27,6 @@ export default function Err403() {
           components={{ 1: <strong /> }}
         />
       </p>
-    </div>
+    </>
   );
 }
