@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Acciones",
+      "back": "Atrás",
+      "cancel": "Cancelar",
+      "confirmDelete": "Confirmar eliminación",
+      "create": "Crear",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "update": "Actualizar",
+      "view": "Ver",
+      "file": {
+        "markedForDeletion": "Archivo marcado para eliminación (Guardar para confirmar)",
+        "viewOrDownload": "Ver/Descargar",
+        "replaceWarning": "Seleccionar un nuevo archivo reemplazará el existente"
+      },
+      "successfullyCreated": "Registro ID {{id}} creado con éxito",
+      "successfullyUpdated": "Registro ID {{id}} actualizado con éxito",
+      "successfullyDeleted": "Registro ID {{id}} eliminado con éxito"
+    },
+    "generateUUID": "Generar un UUID versión 4"
+  },
+  "common": {
+    "back": "Atrás",
+    "cancel": "Cancelar",
+    "undo": "Deshacer",
+    "select": {
+      "placeholder": "Selecciona una opción",
+      "noOptions": "Sin opciones",
+      "noValue": "Sin valor",
+      "loading": "Cargando opciones...",
+      "searchMultiple": "Selecciona o busca uno o más valores",
+      "searchSingle": "Selecciona o busca un valor",
+      "selectMultiple": "Selecciona uno o más valores",
+      "selectSingle": "Selecciona un valor"
+    },
+    "show": {
+      "more": "Mostrar más",
+      "less": "Mostrar menos"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entidades",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Error 401 – Acceso no autorizado",
+      "message": "Debes iniciar sesión para ver esta página. Verifica tus credenciales e inténtalo de nuevo."
+    },
+    "403": {
+      "title": "¡Ups! Error 403 – Lo siento, {{username}}",
+      "message": "Hola <1>{{username}}</1>, te hemos reconocido, pero no tienes los permisos necesarios para acceder a esta página. Si hay un error, ¡contáctanos!"
+    },
+    "404": {
+      "title": "¡Ups! Error 404 – Página no encontrada",
+      "message": "Parece que la página que buscas ya no existe. Puede que haya sido movida o eliminada. ¡Verifica la URL o regresa a la página principal!"
+    },
+    "entities": {
+      "create": "Error al crear",
+      "read": "Error al leer",
+      "update": "Error al actualizar",
+      "delete": "Error al eliminar"
+    },
+    "options": {
+      "load": "Error al cargar las opciones para"
+    },
+    "validations": {
+      "email": "Formato de correo electrónico no válido",
+      "file": {
+        "minSize": "El archivo debe ser de al menos {{accepted}}. Tamaño actual: {{actual}}",
+        "maxSize": "El archivo no puede superar {{accepted}}. Tamaño actual: {{actual}}",
+        "invalidType": "El tipo de archivo debe ser {{accepted}}. Tipo actual: {{actual}}",
+        "typeImage": "El archivo debe ser una imagen",
+        "required": "El archivo es obligatorio"
+      },
+      "min": "El número debe ser mayor o igual a {{accepted}}",
+      "minlength": "La cadena debe contener al menos {{accepted}} caracteres",
+      "minbytes": "El archivo debe ser de al menos {{accepted}}",
+      "max": "El número debe ser menor o igual a {{accepted}}",
+      "maxlength": "La cadena debe contener como máximo {{accepted}} caracteres",
+      "maxbytes": "El archivo no puede superar {{accepted}}",
+      "pattern": "Formato no válido",
+      "required": "Obligatorio",
+      "url": "Formato de URL no válido"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Día",
+      "hour": "Hora",
+      "minute": "Minuto",
+      "second": "Segundo",
+      "millisecond": "Milisegundo",
+      "days": "Días",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "seconds": "Segundos",
+      "milliseconds": "Milisegundos"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "El número debe ser mayor o igual a {{accepted}}",
+      "minlength": "La cadena debe contener al menos {{accepted}} caracteres",
+      "minbytes": "El archivo debe ser de al menos {{accepted}}",
+      "max": "El número debe ser menor o igual a {{accepted}}",
+      "maxlength": "La cadena debe contener como máximo {{accepted}} caracteres",
+      "maxbytes": "El archivo no puede superar {{accepted}}",
+      "required": "Obligatorio",
+      "unique": "El valor debe ser único"
+    }
+  },
+  "messages": {
+    "noData": "No se encontraron registros"
+  },
+  "pages": {
+    "Home": "Inicio"
+  },
+  "ui": {
+    "account": {
+      "login": "Iniciar sesión",
+      "loggingIn": "Iniciando sesión...",
+      "logout": "Cerrar sesión",
+      "loggingOut": "Cerrando sesión...",
+      "logoutError": "Error al cerrar sesión",
+      "unknownError": "Error desconocido"
+    },
+    "darkmode": {
+      "light": "Cambiar al modo claro",
+      "dark": "Cambiar al modo oscuro"
+    }
+  }
+}
