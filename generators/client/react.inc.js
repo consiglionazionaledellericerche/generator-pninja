@@ -25,7 +25,7 @@ export async function createReactClient(that, parsedJDL) {
     const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
 
-    that.spawnCommandSync('npm', ['create', 'vite@latest', 'client', '--', '--template', 'react-ts']);
+    that.spawnCommandSync('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts']);
 
     that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), {});
     that.fs.copyTpl(that.templatePath('react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
