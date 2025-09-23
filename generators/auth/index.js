@@ -26,8 +26,8 @@ export default class AuthGenerator extends Generator {
         message: `Which ${colors.yellow('*type*')} of authentication would you like to use?`,
         choices: [
           { name: 'Keycloak', value: 'keycloak' },
-          { name: 'Sanctum (Not implemented yet)', value: 'sanctum' },
-          { name: 'No authentication (Not implemented yet)', value: 'none' }
+          { name: 'Sanctum', value: 'sanctum', disabled: "Not implemented yet" },
+          { name: 'No authentication', value: 'none', disabled: "Not implemented yet" }
         ]
       }]]
     }

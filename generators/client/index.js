@@ -26,9 +26,9 @@ export default class AuthGenerator extends Generator {
                 default: this.config.get('clientType') || 'vue',
                 choices: [
                     { name: 'React', value: 'react' },
-                    { name: 'Vue (Not implemented yet)', value: 'vue' },
-                    { name: 'Angular (Not implemented yet)', value: 'angular' },
-                    { name: 'No client', value: false }
+                    { name: 'Vue', value: 'vue', disabled: "Not implemented yet" },
+                    { name: 'Angular', value: 'angular', disabled: "Not implemented yet" },
+                    { name: 'No client', value: false, disabled: "Not implemented yet" }
                 ]
             }]]
         }

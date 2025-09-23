@@ -121,12 +121,14 @@ export default class extends Generator {
             value: "pgsql"
           },
           {
-            name: "SQL Server (Not implemented yet)",
-            value: "sqlsrv"
+            name: "SQL Server",
+            value: "sqlsrv",
+            disabled: "Not implemented yet"
           },
           {
-            name: "Oracle (Not implemented yet)",
-            value: "sqlsrv"
+            name: "Oracle",
+            value: "oracle",
+            disabled: "Not implemented yet"
           }
         ]
       }, {
@@ -141,8 +143,9 @@ export default class extends Generator {
             value: "npm"
           },
           {
-            name: "Yarn (Not implemented yet)",
-            value: "yarn"
+            name: "Yarn",
+            value: "yarn",
+            disabled: "Not implemented yet"
           }
         ]
       },
@@ -217,7 +220,6 @@ export default class extends Generator {
     configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'search_path' => 'public',$/gmis, `'search_path' => env('DB_SCHEMA','public'),`);
     configDatabaseFileContents = configDatabaseFileContents.replace(/(?<=^\s+)'prefix' => '',$/gmis, `'prefix' => env('DB_PREFIX',''),`);
     fs.writeFileSync(`${this.destinationPath('server')}/config/database.php`, configDatabaseFileContents, { encoding: 'utf8', flag: 'w' });
-    // this.log(envFileContents.replace(/^([^=]+)(=.*)$/gm, colors.cyan('$1') + colors.whiteBright('$2')));
     this.fs.copyTpl(this.templatePath("package.json.ejs"), this.destinationPath("package.json"),
       {
         packageName: to.slug(this.answers.name),
@@ -226,7 +228,7 @@ export default class extends Generator {
         projectVersion: this.projectVersion,
         authorName: this.authorName
       });
-    this.fs.copyTpl(this.templatePath(".gitignore.ejs"), this.destinationPath(".gitignore"))
+    this.fs.copyTpl(this.templatePath(".gitignore.ejs"), this.destinationPath(".gitignore"));
     // Enable Facades and Eloquent
     const bootPath = `${this.destinationPath('server/bootstrap/app.php')}`;
     let bootContent = fs.readFileSync(bootPath, { encoding: 'utf8', flag: 'r' });
