@@ -85,7 +85,6 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RichTextEditor.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RichTextEditor.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/SearchField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SearchField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TelField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TelField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
@@ -101,6 +100,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginRedirector.tsx.ejs"), that.destinationPath(`client/src/components/LoginRedirector.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/ProtectedRoute.tsx.ejs"), that.destinationPath(`client/src/components/ProtectedRoute.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`), {});
