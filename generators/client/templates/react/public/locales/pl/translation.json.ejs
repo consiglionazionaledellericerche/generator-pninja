@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Akcje",
+      "back": "Wstecz",
+      "cancel": "Anuluj",
+      "confirmDelete": "Potwierdź usunięcie",
+      "create": "Utwórz",
+      "delete": "Usuń",
+      "edit": "Edytuj",
+      "save": "Zapisz",
+      "saving": "Zapisywanie...",
+      "update": "Aktualizuj",
+      "view": "Wyświetl",
+      "file": {
+        "markedForDeletion": "Plik oznaczony do usunięcia (Zapisz, aby potwierdzić)",
+        "viewOrDownload": "Wyświetl/Pobierz",
+        "replaceWarning": "Wybranie nowego pliku zastąpi istniejący"
+      },
+      "successfullyCreated": "Rekord ID {{id}} został pomyślnie utworzony",
+      "successfullyUpdated": "Rekord ID {{id}} został pomyślnie zaktualizowany",
+      "successfullyDeleted": "Rekord ID {{id}} został pomyślnie usunięty"
+    },
+    "generateUUID": "Wygeneruj UUID wersji 4"
+  },
+  "common": {
+    "back": "Wstecz",
+    "cancel": "Anuluj",
+    "undo": "Cofnij",
+    "select": {
+      "placeholder": "Wybierz opcję",
+      "noOptions": "Brak opcji",
+      "noValue": "Brak wartości",
+      "loading": "Ładowanie opcji...",
+      "searchMultiple": "Wybierz lub wyszukaj jedną lub więcej wartości",
+      "searchSingle": "Wybierz lub wyszukaj wartość",
+      "selectMultiple": "Wybierz jedną lub więcej wartości",
+      "selectSingle": "Wybierz wartość"
+    },
+    "show": {
+      "more": "Pokaż więcej",
+      "less": "Pokaż mniej"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Encje",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Błąd 401 – Nieautoryzowany",
+      "message": "Musisz się zalogować, aby uzyskać dostęp do tej strony. Sprawdź swoje dane uwierzytelniające i spróbuj ponownie."
+    },
+    "403": {
+      "title": "Ups! Błąd 403 – Przepraszamy, {{username}}",
+      "message": "Cześć <1>{{username}}</1>, rozpoznaliśmy Cię, ale nie masz odpowiednich uprawnień, aby uzyskać dostęp do tej strony. Jeśli uważasz, że to błąd, skontaktuj się z nami!"
+    },
+    "404": {
+      "title": "Ups! Błąd 404 – Strona nie znaleziona",
+      "message": "Wygląda na to, że strona, której szukasz, już nie istnieje. Mogła zostać przeniesiona lub usunięta. Sprawdź adres URL lub wróć na stronę główną!"
+    },
+    "entities": {
+      "create": "Błąd podczas tworzenia",
+      "read": "Błąd podczas odczytu",
+      "update": "Błąd podczas aktualizacji",
+      "delete": "Błąd podczas usuwania"
+    },
+    "options": {
+      "load": "Błąd podczas ładowania opcji dla"
+    },
+    "validations": {
+      "email": "Nieprawidłowy format adresu e-mail",
+      "file": {
+        "minSize": "Plik musi mieć co najmniej {{accepted}}. Obecny rozmiar: {{actual}}",
+        "maxSize": "Plik nie może przekraczać {{accepted}}. Obecny rozmiar: {{actual}}",
+        "invalidType": "Typ pliku musi być {{accepted}}. Obecny typ: {{actual}}",
+        "typeImage": "Plik musi być obrazem",
+        "required": "Plik jest wymagany"
+      },
+      "min": "Liczba musi być większa lub równa {{accepted}}",
+      "minlength": "Ciąg znaków musi zawierać co najmniej {{accepted}} znaków",
+      "minbytes": "Plik musi mieć co najmniej {{accepted}}",
+      "max": "Liczba musi być mniejsza lub równa {{accepted}}",
+      "maxlength": "Ciąg znaków może zawierać maksymalnie {{accepted}} znaków",
+      "maxbytes": "Plik nie może przekraczać {{accepted}}",
+      "pattern": "Nieprawidłowy format",
+      "required": "Wymagane",
+      "url": "Nieprawidłowy format URL"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dzień",
+      "hour": "Godzina",
+      "minute": "Minuta",
+      "second": "Sekunda",
+      "millisecond": "Milisekunda",
+      "days": "Dni",
+      "hours": "Godziny",
+      "minutes": "Minuty",
+      "seconds": "Sekundy",
+      "milliseconds": "Milisekundy"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Liczba musi być większa lub równa {{accepted}}",
+      "minlength": "Ciąg znaków musi zawierać co najmniej {{accepted}} znaków",
+      "minbytes": "Plik musi mieć co najmniej {{accepted}}",
+      "max": "Liczba musi być mniejsza lub równa {{accepted}}",
+      "maxlength": "Ciąg znaków może zawierać maksymalnie {{accepted}} znaków",
+      "maxbytes": "Plik nie może przekraczać {{accepted}}",
+      "required": "Wymagane",
+      "unique": "Wartość musi być unikalna"
+    }
+  },
+  "messages": {
+    "noData": "Nie znaleziono rekordów"
+  },
+  "pages": {
+    "Home": "Panel sterowania"
+  },
+  "ui": {
+    "account": {
+      "login": "Zaloguj się",
+      "loggingIn": "Logowanie...",
+      "logout": "Wyloguj się",
+      "loggingOut": "Wylogowywanie...",
+      "logoutError": "Błąd podczas wylogowywania",
+      "unknownError": "Nieznany błąd"
+    },
+    "darkmode": {
+      "light": "Przełącz na tryb jasny",
+      "dark": "Przełącz na tryb ciemny"
+    }
+  }
+}

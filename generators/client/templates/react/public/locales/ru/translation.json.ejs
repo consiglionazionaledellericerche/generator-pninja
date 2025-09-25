@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Действия",
+      "back": "Назад",
+      "cancel": "Отмена",
+      "confirmDelete": "Подтвердите удаление",
+      "create": "Создать",
+      "delete": "Удалить",
+      "edit": "Редактировать",
+      "save": "Сохранить",
+      "saving": "Сохранение...",
+      "update": "Обновить",
+      "view": "Просмотр",
+      "file": {
+        "markedForDeletion": "Файл помечен для удаления (Сохраните для подтверждения)",
+        "viewOrDownload": "Просмотр/Скачать",
+        "replaceWarning": "Выбор нового файла заменит существующий"
+      },
+      "successfullyCreated": "Запись с ID {{id}} успешно создана",
+      "successfullyUpdated": "Запись с ID {{id}} успешно обновлена",
+      "successfullyDeleted": "Запись с ID {{id}} успешно удалена"
+    },
+    "generateUUID": "Сгенерировать UUID версии 4"
+  },
+  "common": {
+    "back": "Назад",
+    "cancel": "Отмена",
+    "undo": "Отменить",
+    "select": {
+      "placeholder": "Выберите опцию",
+      "noOptions": "Нет опций",
+      "noValue": "Нет значения",
+      "loading": "Загрузка опций...",
+      "searchMultiple": "Выберите или найдите одно или несколько значений",
+      "searchSingle": "Выберите или найдите значение",
+      "selectMultiple": "Выберите одно или несколько значений",
+      "selectSingle": "Выберите значение"
+    },
+    "show": {
+      "more": "Показать больше",
+      "less": "Показать меньше"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Сущности",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Ошибка 401 – Неавторизован",
+      "message": "Вам нужно войти, чтобы получить доступ к этой странице. Проверьте свои учетные данные и попробуйте снова."
+    },
+    "403": {
+      "title": "Упс! Ошибка 403 – Извините, {{username}}",
+      "message": "Привет, <1>{{username}}</1>, мы вас узнали, но у вас нет прав для доступа к этой странице. Если вы считаете, что это ошибка, свяжитесь с нами!"
+    },
+    "404": {
+      "title": "Упс! Ошибка 404 – Страница не найдена",
+      "message": "Похоже, страница, которую вы ищете, больше не существует. Возможно, она была перемещена или удалена. Проверьте URL или вернитесь на главную страницу!"
+    },
+    "entities": {
+      "create": "Ошибка при создании",
+      "read": "Ошибка при чтении",
+      "update": "Ошибка при обновлении",
+      "delete": "Ошибка при удалении"
+    },
+    "options": {
+      "load": "Ошибка загрузки опций для"
+    },
+    "validations": {
+      "email": "Неверный формат электронной почты",
+      "file": {
+        "minSize": "Файл должен быть не менее {{accepted}}. Текущий размер: {{actual}}",
+        "maxSize": "Файл не может превышать {{accepted}}. Текущий размер: {{actual}}",
+        "invalidType": "Тип файла должен быть {{accepted}}. Текущий тип: {{actual}}",
+        "typeImage": "Файл должен быть изображением",
+        "required": "Файл обязателен"
+      },
+      "min": "Число должно быть больше или равно {{accepted}}",
+      "minlength": "Строка должна содержать не менее {{accepted}} символов",
+      "minbytes": "Файл должен быть не менее {{accepted}}",
+      "max": "Число должно быть меньше или равно {{accepted}}",
+      "maxlength": "Строка должна содержать не более {{accepted}} символов",
+      "maxbytes": "Файл не может превышать {{accepted}}",
+      "pattern": "Неверный формат",
+      "required": "Обязательно",
+      "url": "Неверный формат URL"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "День",
+      "hour": "Час",
+      "minute": "Минута",
+      "second": "Секунда",
+      "millisecond": "Миллисекунда",
+      "days": "Дни",
+      "hours": "Часы",
+      "minutes": "Минуты",
+      "seconds": "Секунды",
+      "milliseconds": "Миллисекунды"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Число должно быть больше или равно {{accepted}}",
+      "minlength": "Строка должна содержать не менее {{accepted}} символов",
+      "minbytes": "Файл должен быть не менее {{accepted}}",
+      "max": "Число должно быть меньше или равно {{accepted}}",
+      "maxlength": "Строка должна содержать не более {{accepted}} символов",
+      "maxbytes": "Файл не может превышать {{accepted}}",
+      "required": "Обязательно",
+      "unique": "Значение должно быть уникальным"
+    }
+  },
+  "messages": {
+    "noData": "Записи не найдены"
+  },
+  "pages": {
+    "Home": "Панель управления"
+  },
+  "ui": {
+    "account": {
+      "login": "Войти",
+      "loggingIn": "Вход...",
+      "logout": "Выйти",
+      "loggingOut": "Выход...",
+      "logoutError": "Ошибка выхода",
+      "unknownError": "Неизвестная ошибка"
+    },
+    "darkmode": {
+      "light": "Переключиться на светлый режим",
+      "dark": "Переключиться на темный режим"
+    }
+  }
+}

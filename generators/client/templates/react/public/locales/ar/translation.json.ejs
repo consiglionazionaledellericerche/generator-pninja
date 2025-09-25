@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "الإجراءات",
+      "back": "رجوع",
+      "cancel": "إلغاء",
+      "confirmDelete": "تأكيد الحذف",
+      "create": "إنشاء",
+      "delete": "حذف",
+      "edit": "تعديل",
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ...",
+      "update": "تحديث",
+      "view": "عرض",
+      "file": {
+        "markedForDeletion": "تم وضع علامة على الملف للحذف (احفظ للتأكيد)",
+        "viewOrDownload": "عرض/تنزيل",
+        "replaceWarning": "اختيار ملف جديد سيستبدل الملف الحالي"
+      },
+      "successfullyCreated": "تم إنشاء السجل برقم ID {{id}} بنجاح",
+      "successfullyUpdated": "تم تحديث السجل برقم ID {{id}} بنجاح",
+      "successfullyDeleted": "تم حذف السجل برقم ID {{id}} بنجاح"
+    },
+    "generateUUID": "إنشاء UUID الإصدار 4"
+  },
+  "common": {
+    "back": "رجوع",
+    "cancel": "إلغاء",
+    "undo": "تراجع",
+    "select": {
+      "placeholder": "اختر خيارًا",
+      "noOptions": "لا توجد خيارات",
+      "noValue": "لا توجد قيمة",
+      "loading": "جارٍ تحميل الخيارات...",
+      "searchMultiple": "اختر أو ابحث عن قيمة أو أكثر",
+      "searchSingle": "اختر أو ابحث عن قيمة",
+      "selectMultiple": "اختر قيمة أو أكثر",
+      "selectSingle": "اختر قيمة"
+    },
+    "show": {
+      "more": "عرض المزيد",
+      "less": "عرض أقل"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "الكيانات",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "خطأ 401 – غير مصرح",
+      "message": "تحتاج إلى تسجيل الدخول للوصول إلى هذه الصفحة. يرجى التحقق من بيانات الاعتماد الخاصة بك والمحاولة مرة أخرى."
+    },
+    "403": {
+      "title": "عذرًا! خطأ 403 – آسف، {{username}}",
+      "message": "مرحبًا <1>{{username}}</1>، لقد تعرفنا عليك، ولكن ليس لديك الأذونات اللازمة للوصول إلى هذه الصفحة. إذا كنت تعتقد أن هذا خطأ، فاتصل بنا!"
+    },
+    "404": {
+      "title": "عذرًا! خطأ 404 – الصفحة غير موجودة",
+      "message": "يبدو أن الصفحة التي تبحث عنها لم تعد موجودة. ربما تم نقلها أو حذفها. تحقق من عنوان URL أو عد إلى الصفحة الرئيسية!"
+    },
+    "entities": {
+      "create": "خطأ أثناء الإنشاء",
+      "read": "خطأ أثناء القراءة",
+      "update": "خطأ أثناء التحديث",
+      "delete": "خطأ أثناء الحذف"
+    },
+    "options": {
+      "load": "خطأ أثناء تحميل الخيارات لـ"
+    },
+    "validations": {
+      "email": "تنسيق البريد الإلكتروني غير صالح",
+      "file": {
+        "minSize": "يجب أن يكون الملف على الأقل {{accepted}}. الحجم الحالي: {{actual}}",
+        "maxSize": "لا يمكن أن يتجاوز الملف {{accepted}}. الحجم الحالي: {{actual}}",
+        "invalidType": "يجب أن يكون نوع الملف {{accepted}}. النوع الحالي: {{actual}}",
+        "typeImage": "يجب أن يكون الملف صورة",
+        "required": "الملف مطلوب"
+      },
+      "min": "يجب أن يكون الرقم أكبر من أو يساوي {{accepted}}",
+      "minlength": "يجب أن تحتوي السلسلة على {{accepted}} حرفًا على الأقل",
+      "minbytes": "يجب أن يكون الملف على الأقل {{accepted}}",
+      "max": "يجب أن يكون الرقم أقل من أو يساوي {{accepted}}",
+      "maxlength": "يجب أن تحتوي السلسلة على {{accepted}} حرفًا كحد أقصى",
+      "maxbytes": "لا يمكن أن يتجاوز الملف {{accepted}}",
+      "pattern": "تنسيق غير صالح",
+      "required": "مطلوب",
+      "url": "تنسيق URL غير صالح"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "يوم",
+      "hour": "ساعة",
+      "minute": "دقيقة",
+      "second": "ثانية",
+      "millisecond": "ميلي ثانية",
+      "days": "أيام",
+      "hours": "ساعات",
+      "minutes": "دقائق",
+      "seconds": "ثوانٍ",
+      "milliseconds": "ميلي ثانية"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "يجب أن يكون الرقم أكبر من أو يساوي {{accepted}}",
+      "minlength": "يجب أن تحتوي السلسلة على {{accepted}} حرفًا على الأقل",
+      "minbytes": "يجب أن يكون الملف على الأقل {{accepted}}",
+      "max": "يجب أن يكون الرقم أقل من أو يساوي {{accepted}}",
+      "maxlength": "يجب أن تحتوي السلسلة على {{accepted}} حرفًا كحد أقصى",
+      "maxbytes": "لا يمكن أن يتجاوز الملف {{accepted}}",
+      "required": "مطلوب",
+      "unique": "يجب أن تكون القيمة فريدة"
+    }
+  },
+  "messages": {
+    "noData": "لم يتم العثور على سجلات"
+  },
+  "pages": {
+    "Home": "لوحة التحكم"
+  },
+  "ui": {
+    "account": {
+      "login": "تسجيل الدخول",
+      "loggingIn": "جارٍ تسجيل الدخول...",
+      "logout": "تسجيل الخروج",
+      "loggingOut": "جارٍ تسجيل الخروج...",
+      "logoutError": "خطأ أثناء تسجيل الخروج",
+      "unknownError": "خطأ غير معروف"
+    },
+    "darkmode": {
+      "light": "التبديل إلى الوضع الفاتح",
+      "dark": "التبديل إلى الوضع الداكن"
+    }
+  }
+}

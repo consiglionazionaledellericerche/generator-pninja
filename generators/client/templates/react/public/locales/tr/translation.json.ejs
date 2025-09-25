@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Eylemler",
+      "back": "Geri",
+      "cancel": "İptal",
+      "confirmDelete": "Silme işlemini onayla",
+      "create": "Oluştur",
+      "delete": "Sil",
+      "edit": "Düzenle",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor...",
+      "update": "Güncelle",
+      "view": "Görüntüle",
+      "file": {
+        "markedForDeletion": "Silinmek üzere işaretlendi (Onaylamak için kaydedin)",
+        "viewOrDownload": "Görüntüle/İndir",
+        "replaceWarning": "Yeni bir dosya seçmek mevcut dosyayı değiştirecektir"
+      },
+      "successfullyCreated": "Kayıt ID {{id}} başarıyla oluşturuldu",
+      "successfullyUpdated": "Kayıt ID {{id}} başarıyla güncellendi",
+      "successfullyDeleted": "Kayıt ID {{id}} başarıyla silindi"
+    },
+    "generateUUID": "Sürüm 4 UUID oluştur"
+  },
+  "common": {
+    "back": "Geri",
+    "cancel": "İptal",
+    "undo": "Geri al",
+    "select": {
+      "placeholder": "Bir seçenek seçin",
+      "noOptions": "Seçenek yok",
+      "noValue": "Değer yok",
+      "loading": "Seçenekler yükleniyor...",
+      "searchMultiple": "Bir veya daha fazla değer seçin veya arayın",
+      "searchSingle": "Bir değer seçin veya arayın",
+      "selectMultiple": "Bir veya daha fazla değer seçin",
+      "selectSingle": "Bir değer seçin"
+    },
+    "show": {
+      "more": "Daha fazla göster",
+      "less": "Daha az göster"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Varlıklar",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Hata 401 – Yetkisiz",
+      "message": "Bu sayfaya erişmek için giriş yapmanız gerekiyor. Lütfen kimlik bilgilerinizi kontrol edin ve tekrar deneyin."
+    },
+    "403": {
+      "title": "Hata 403 – Üzgünüz, {{username}}",
+      "message": "Merhaba <1>{{username}}</1>, sizi tanıdık ancak bu sayfaya erişim izniniz yok. Bunun bir hata olduğunu düşünüyorsanız, bizimle iletişime geçin!"
+    },
+    "404": {
+      "title": "Hata 404 – Sayfa Bulunamadı",
+      "message": "Aradığınız sayfa artık mevcut değil gibi görünüyor. Taşınmış veya silinmiş olabilir. URL'yi kontrol edin veya ana sayfaya dönün!"
+    },
+    "entities": {
+      "create": "Oluşturma hatası",
+      "read": "Okuma hatası",
+      "update": "Güncelleme hatası",
+      "delete": "Silme hatası"
+    },
+    "options": {
+      "load": "Seçenekler yüklenirken hata oluştu"
+    },
+    "validations": {
+      "email": "Geçersiz e-posta formatı",
+      "file": {
+        "minSize": "Dosya en az {{accepted}} olmalıdır. Mevcut boyut: {{actual}}",
+        "maxSize": "Dosya {{accepted}}'i aşamaz. Mevcut boyut: {{actual}}",
+        "invalidType": "Dosya türü {{accepted}} olmalıdır. Mevcut tür: {{actual}}",
+        "typeImage": "Dosya bir resim olmalıdır",
+        "required": "Dosya gereklidir"
+      },
+      "min": "Sayı {{accepted}} veya daha büyük olmalıdır",
+      "minlength": "Dize en az {{accepted}} karakter içermelidir",
+      "minbytes": "Dosya en az {{accepted}} olmalıdır",
+      "max": "Sayı {{accepted}} veya daha küçük olmalıdır",
+      "maxlength": "Dize en fazla {{accepted}} karakter içermelidir",
+      "maxbytes": "Dosya {{accepted}}'i aşamaz",
+      "pattern": "Geçersiz format",
+      "required": "Gerekli",
+      "url": "Geçersiz URL formatı"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Gün",
+      "hour": "Saat",
+      "minute": "Dakika",
+      "second": "Saniye",
+      "millisecond": "Milisaniye",
+      "days": "Günler",
+      "hours": "Saatler",
+      "minutes": "Dakikalar",
+      "seconds": "Saniyeler",
+      "milliseconds": "Milisaniyeler"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Sayı {{accepted}} veya daha büyük olmalıdır",
+      "minlength": "Dize en az {{accepted}} karakter içermelidir",
+      "minbytes": "Dosya en az {{accepted}} olmalıdır",
+      "max": "Sayı {{accepted}} veya daha küçük olmalıdır",
+      "maxlength": "Dize en fazla {{accepted}} karakter içermelidir",
+      "maxbytes": "Dosya {{accepted}}'i aşamaz",
+      "required": "Gerekli",
+      "unique": "Değer benzersiz olmalıdır"
+    }
+  },
+  "messages": {
+    "noData": "Kayıt bulunamadı"
+  },
+  "pages": {
+    "Home": "Kontrol Paneli"
+  },
+  "ui": {
+    "account": {
+      "login": "Giriş Yap",
+      "loggingIn": "Giriş yapılıyor...",
+      "logout": "Çıkış Yap",
+      "loggingOut": "Çıkış yapılıyor...",
+      "logoutError": "Çıkış hatası",
+      "unknownError": "Bilinmeyen hata"
+    },
+    "darkmode": {
+      "light": "Aydınlık moda geç",
+      "dark": "Karanlık moda geç"
+    }
+  }
+}

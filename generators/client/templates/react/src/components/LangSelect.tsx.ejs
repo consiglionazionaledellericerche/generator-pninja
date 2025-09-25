@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Languages, ChevronDown } from 'lucide-react';
 
 const languages = <%- languages %>;
+const languagesData = <%- languagesData %>;
 
 export function LangSelect() {
   const { i18n } = useTranslation();
@@ -12,7 +13,8 @@ export function LangSelect() {
   };
   useEffect(() => {
     document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
+    document.documentElement.dir = i18n.dir();
+  }, [i18n.language, i18n.dir, i18n]);
   return (
     <MenuTrigger>
       <Button
@@ -20,7 +22,7 @@ export function LangSelect() {
         className="w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
         <Languages size={16} />
-        {i18n.language.toUpperCase()}
+        {languagesData.find((lang) => lang.value === i18n.language)?.name || i18n.language}
         <ChevronDown size={16} />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
@@ -31,7 +33,7 @@ export function LangSelect() {
               className={`rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2 cursor-pointer${i18n.language === language ? ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300' : ''}`}
               key={language}
             >
-              {language.toUpperCase()}
+              {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
             </MenuItem>
           ))}
         </Menu>

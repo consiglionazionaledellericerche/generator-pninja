@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "操作",
+      "back": "返回",
+      "cancel": "取消",
+      "confirmDelete": "确认删除",
+      "create": "创建",
+      "delete": "删除",
+      "edit": "编辑",
+      "save": "保存",
+      "saving": "保存中...",
+      "update": "更新",
+      "view": "查看",
+      "file": {
+        "markedForDeletion": "文件已标记为删除（保存以确认）",
+        "viewOrDownload": "查看/下载",
+        "replaceWarning": "选择新文件将替换现有文件"
+      },
+      "successfullyCreated": "记录 ID {{id}} 创建成功",
+      "successfullyUpdated": "记录 ID {{id}} 更新成功",
+      "successfullyDeleted": "记录 ID {{id}} 删除成功"
+    },
+    "generateUUID": "生成版本 4 UUID"
+  },
+  "common": {
+    "back": "返回",
+    "cancel": "取消",
+    "undo": "撤销",
+    "select": {
+      "placeholder": "选择一个选项",
+      "noOptions": "无选项",
+      "noValue": "无值",
+      "loading": "加载选项中...",
+      "searchMultiple": "选择或搜索一个或多个值",
+      "searchSingle": "选择或搜索一个值",
+      "selectMultiple": "选择一个或多个值",
+      "selectSingle": "选择一个值"
+    },
+    "show": {
+      "more": "显示更多",
+      "less": "显示更少"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "实体",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "错误 401 – 未授权",
+      "message": "您需要登录才能访问此页面。请检查您的凭据并重试。"
+    },
+    "403": {
+      "title": "哎呀！错误 403 – 抱歉，{{username}}",
+      "message": "嗨 <1>{{username}}</1>，我们认得您，但您没有权限访问此页面。如果您认为这是一个错误，请联系我们！"
+    },
+    "404": {
+      "title": "哎呀！错误 404 – 页面未找到",
+      "message": "看起来您正在寻找的页面不再存在。它可能已被移动或删除。检查 URL 或返回主页！"
+    },
+    "entities": {
+      "create": "创建错误",
+      "read": "读取错误",
+      "update": "更新错误",
+      "delete": "删除错误"
+    },
+    "options": {
+      "load": "加载选项时出错"
+    },
+    "validations": {
+      "email": "无效的电子邮件格式",
+      "file": {
+        "minSize": "文件大小必须至少为 {{accepted}}。当前大小：{{actual}}",
+        "maxSize": "文件大小不能超过 {{accepted}}。当前大小：{{actual}}",
+        "invalidType": "文件类型必须为 {{accepted}}。当前类型：{{actual}}",
+        "typeImage": "文件必须是图片",
+        "required": "文件是必需的"
+      },
+      "min": "数字必须大于或等于 {{accepted}}",
+      "minlength": "字符串必须包含至少 {{accepted}} 个字符",
+      "minbytes": "文件大小必须至少为 {{accepted}}",
+      "max": "数字必须小于或等于 {{accepted}}",
+      "maxlength": "字符串必须包含最多 {{accepted}} 个字符",
+      "maxbytes": "文件大小不能超过 {{accepted}}",
+      "pattern": "格式无效",
+      "required": "必填",
+      "url": "无效的 URL 格式"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "天",
+      "hour": "小时",
+      "minute": "分钟",
+      "second": "秒",
+      "millisecond": "毫秒",
+      "days": "天",
+      "hours": "小时",
+      "minutes": "分钟",
+      "seconds": "秒",
+      "milliseconds": "毫秒"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "数字必须大于或等于 {{accepted}}",
+      "minlength": "字符串必须包含至少 {{accepted}} 个字符",
+      "minbytes": "文件大小必须至少为 {{accepted}}",
+      "max": "数字必须小于或等于 {{accepted}}",
+      "maxlength": "字符串必须包含最多 {{accepted}} 个字符",
+      "maxbytes": "文件大小不能超过 {{accepted}}",
+      "required": "必填",
+      "unique": "值必须唯一"
+    }
+  },
+  "messages": {
+    "noData": "未找到记录"
+  },
+  "pages": {
+    "Home": "仪表板"
+  },
+  "ui": {
+    "account": {
+      "login": "登录",
+      "loggingIn": "登录中...",
+      "logout": "登出",
+      "loggingOut": "登出中...",
+      "logoutError": "登出错误",
+      "unknownError": "未知错误"
+    },
+    "darkmode": {
+      "light": "切换到浅色模式",
+      "dark": "切换到深色模式"
+    }
+  }
+}

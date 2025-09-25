@@ -2,6 +2,7 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
+import { getLanguageData } from './config/languages.js';
 
 const colors = [
     "lime",
@@ -101,7 +102,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), {
         to,
-        languages: JSON.stringify(languages).replaceAll(`"`, `'`)
+        languages: JSON.stringify(languages).replaceAll(`"`, `'`),
+        languagesData: JSON.stringify(languages.map(lng => getLanguageData(lng)), null, 2)
     });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});

@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "क्रियाएँ",
+      "back": "वापस",
+      "cancel": "रद्द करें",
+      "confirmDelete": "हटाने की पुष्टि करें",
+      "create": "बनाएँ",
+      "delete": "हटाएँ",
+      "edit": "संपादित करें",
+      "save": "सहेजें",
+      "saving": "सहेजा जा रहा है...",
+      "update": "अपडेट करें",
+      "view": "देखें",
+      "file": {
+        "markedForDeletion": "फ़ाइल को हटाने के लिए चिह्नित किया गया है (पुष्टि करने के लिए सहेजें)",
+        "viewOrDownload": "देखें/डाउनलोड करें",
+        "replaceWarning": "नई फ़ाइल का चयन मौजूदा फ़ाइल को बदल देगा"
+      },
+      "successfullyCreated": "रिकॉर्ड ID {{id}} सफलतापूर्वक बनाया गया",
+      "successfullyUpdated": "रिकॉर्ड ID {{id}} सफलतापूर्वक अपडेट किया गया",
+      "successfullyDeleted": "रिकॉर्ड ID {{id}} सफलतापूर्वक हटाया गया"
+    },
+    "generateUUID": "संस्करण 4 UUID उत्पन्न करें"
+  },
+  "common": {
+    "back": "वापस",
+    "cancel": "रद्द करें",
+    "undo": "पूर्ववत करें",
+    "select": {
+      "placeholder": "एक विकल्प चुनें",
+      "noOptions": "कोई विकल्प नहीं",
+      "noValue": "कोई मान नहीं",
+      "loading": "विकल्प लोड हो रहे हैं...",
+      "searchMultiple": "एक या अधिक मान चुनें या खोजें",
+      "searchSingle": "एक मान चुनें या खोजें",
+      "selectMultiple": "एक या अधिक मान चुनें",
+      "selectSingle": "एक मान चुनें"
+    },
+    "show": {
+      "more": "और दिखाएँ",
+      "less": "कम दिखाएँ"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "इकाइयाँ",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "त्रुटि 401 – अनधिकृत",
+      "message": "इस पृष्ठ तक पहुँचने के लिए आपको लॉग इन करना होगा। कृपया अपनी साख की जाँच करें और पुनः प्रयास करें।"
+    },
+    "403": {
+      "title": "ओह! त्रुटि 403 – क्षमा करें, {{username}}",
+      "message": "नमस्ते <1>{{username}}</1>, हमने आपको पहचान लिया है, लेकिन आपके पास इस पृष्ठ तक पहुँचने की अनुमति नहीं है। यदि आपको लगता है कि यह एक गलती है, तो हमसे संपर्क करें!"
+    },
+    "404": {
+      "title": "ओह! त्रुटि 404 – पृष्ठ नहीं मिला",
+      "message": "ऐसा लगता है कि आप जिस पृष्ठ की तलाश कर रहे हैं वह अब मौजूद नहीं है। इसे स्थानांतरित या हटा दिया गया हो सकता है। URL की जाँच करें या होमपेज पर वापस जाएँ!"
+    },
+    "entities": {
+      "create": "बनाने में त्रुटि",
+      "read": "पढ़ने में त्रुटि",
+      "update": "अपडेट करने में त्रुटि",
+      "delete": "हटाने में त्रुटि"
+    },
+    "options": {
+      "load": "के लिए विकल्प लोड करने में त्रुटि"
+    },
+    "validations": {
+      "email": "अमान्य ईमेल प्रारूप",
+      "file": {
+        "minSize": "फ़ाइल कम से कम {{accepted}} होनी चाहिए। वर्तमान आकार: {{actual}}",
+        "maxSize": "फ़ाइल {{accepted}} से अधिक नहीं हो सकती। वर्तमान आकार: {{actual}}",
+        "invalidType": "फ़ाइल प्रकार {{accepted}} होना चाहिए। वर्तमान प्रकार: {{actual}}",
+        "typeImage": "फ़ाइल एक छवि होनी चाहिए",
+        "required": "फ़ाइल आवश्यक है"
+      },
+      "min": "संख्या {{accepted}} से अधिक या बराबर होनी चाहिए",
+      "minlength": "स्ट्रिंग में कम से कम {{accepted}} वर्ण होने चाहिए",
+      "minbytes": "फ़ाइल कम से कम {{accepted}} होनी चाहिए",
+      "max": "संख्या {{accepted}} से कम या बराबर होनी चाहिए",
+      "maxlength": "स्ट्रिंग में अधिकतम {{accepted}} वर्ण होने चाहिए",
+      "maxbytes": "फ़ाइल {{accepted}} से अधिक नहीं हो सकती",
+      "pattern": "अमान्य प्रारूप",
+      "required": "आवश्यक",
+      "url": "अमान्य URL प्रारूप"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "दिन",
+      "hour": "घंटा",
+      "minute": "मिनट",
+      "second": "सेकंड",
+      "millisecond": "मिलीसेकंड",
+      "days": "दिन",
+      "hours": "घंटे",
+      "minutes": "मिनट",
+      "seconds": "सेकंड",
+      "milliseconds": "मिलीसेकंड"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "संख्या {{accepted}} से अधिक या बराबर होनी चाहिए",
+      "minlength": "स्ट्रिंग में कम से कम {{accepted}} वर्ण होने चाहिए",
+      "minbytes": "फ़ाइल कम से कम {{accepted}} होनी चाहिए",
+      "max": "संख्या {{accepted}} से कम या बराबर होनी चाहिए",
+      "maxlength": "स्ट्रिंग में अधिकतम {{accepted}} वर्ण होने चाहिए",
+      "maxbytes": "फ़ाइल {{accepted}} से अधिक नहीं हो सकती",
+      "required": "आवश्यक",
+      "unique": "मान अद्वितीय होना चाहिए"
+    }
+  },
+  "messages": {
+    "noData": "कोई रिकॉर्ड नहीं मिला"
+  },
+  "pages": {
+    "Home": "डैशबोर्ड"
+  },
+  "ui": {
+    "account": {
+      "login": "लॉगिन करें",
+      "loggingIn": "लॉगिन हो रहा है...",
+      "logout": "लॉगआउट करें",
+      "loggingOut": "लॉगआउट हो रहा है...",
+      "logoutError": "लॉगआउट में त्रुटि",
+      "unknownError": "अज्ञात त्रुटि"
+    },
+    "darkmode": {
+      "light": "लाइट मोड पर स्विच करें",
+      "dark": "डार्क मोड पर स्विच करें"
+    }
+  }
+}
