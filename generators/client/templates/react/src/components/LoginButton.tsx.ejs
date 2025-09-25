@@ -1,26 +1,27 @@
 import { useTranslation } from 'react-i18next';
-import { useAuthState } from '../hooks/useAuthState';
-import { LogIn, Loader } from 'lucide-react';
+import { useState } from 'react';
+import { LogIn, LoaderCircle } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const LoginButton: React.FC = () => {
   const { t } = useTranslation();
-  const { loading } = useAuthState();
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
     navigate('/login', { state: { from: location.pathname } });
+    setLoading(true);
   };
 
   return (
     <button
+      title={loading ? t('ui.account.loggingIn') : t('ui.account.login')}
       onClick={handleLogin}
       disabled={loading}
-      className={`inline-flex items-center gap-1 nav-bar-link ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
     >
-      {loading ? <Loader size={16} className="animate-spin" /> : <LogIn size={16} />}
-      {loading ? t('ui.account.loggingIn') : t('ui.account.login')}
+      {loading ? <LoaderCircle size={20} className="animate-spin" /> : <LogIn size={20} />}
     </button>
   );
 };

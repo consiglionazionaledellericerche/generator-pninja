@@ -11,9 +11,12 @@ const LogoutButton: React.FC = () => {
   };
 
   return (
-    <button onClick={handleLogout} className={`inline-flex items-center gap-1 nav-bar-link`}>
-      <LogOut size={16} />
-      {t('ui.account.logout')}
+    <button
+      onClick={handleLogout}
+      title={t('ui.account.logout')}
+      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer`}
+    >
+      <LogOut size={20} />
     </button>
   );
 };
