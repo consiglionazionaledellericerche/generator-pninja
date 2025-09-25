@@ -24,7 +24,6 @@ export default class DockerGenerator extends Generator {
     const snakeName = to.snake(appName);
     const dbms = this.config.get('dbms');
     let envFileContents = this.fs.read(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
-    console.log(envFileContents);
     this.fs.copyTpl(this.templatePath('nginx/Dockerfile.ejs'), this.destinationPath('docker/nginx/Dockerfile'), {});
     this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('docker/nginx/nginx.conf'), { name: slugName });
     this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), { dbms });
