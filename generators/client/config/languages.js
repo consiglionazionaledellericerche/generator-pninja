@@ -1,4 +1,3 @@
-// languages.js - Versione avanzata
 export const LANGUAGES_DATA = {
   ar: {
     name: 'العربية',
