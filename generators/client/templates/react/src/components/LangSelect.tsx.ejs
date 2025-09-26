@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
 import { Languages, ChevronDown } from 'lucide-react';
-
-const languages = <%- languages %>;
-const languagesData = <%- languagesData %>;
+import { languages, languagesData} from '../config/languages.ts';
 
 export function LangSelect() {
   const { i18n } = useTranslation();

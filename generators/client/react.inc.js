@@ -100,11 +100,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/HtmlViewer.tsx.ejs"), that.destinationPath(`client/src/components/HtmlViewer.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), {
-        to,
-        languages: JSON.stringify(languages).replaceAll(`"`, `'`),
-        languagesData: JSON.stringify(languages.map(lng => getLanguageData(lng)), null, 2)
-    });
+    that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1 });
@@ -114,6 +110,11 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`), {});
+
+    that.fs.copyTpl(that.templatePath("react/src/config/languages.ts.ejs"), that.destinationPath(`client/src/config/languages.ts`), {
+        languages: JSON.stringify(languages).replaceAll(`"`, `'`),
+        languagesData: JSON.stringify(languages.map(lng => getLanguageData(lng)), null, 2)
+    });
 
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthContext.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
