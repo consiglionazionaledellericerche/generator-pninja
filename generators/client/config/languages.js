@@ -9,15 +9,15 @@ export const LANGUAGES_DATA = {
     engName: 'Bengali',
     value: 'bn',
   },
-  "zh-cn": {
-    name: '简体中文',
-    engName: 'Chinese, Simplified',
-    value: 'zh-cn',
+  "zh-CN": {
+    name: '中文 (简体)',
+    engName: 'Chinese (Simplified)',
+    value: 'zh-CN',
   },
-  "zh-tw": {
-    name: '繁體中文',
-    engName: 'Chinese, Traditional',
-    value: 'zh-tw',
+  "zh-TW": {
+    name: '中文 (繁體)',
+    engName: 'Chinese (Traditional)',
+    value: 'zh-TW',
   },
   nl: {
     name: 'Nederlands',
@@ -44,11 +44,26 @@ export const LANGUAGES_DATA = {
     engName: 'Greek',
     value: 'el',
   },
+  // ha: {
+  //   name: 'Hausa',
+  //   engName: 'Hausa',
+  //   value: 'ha',
+  // },
+  // he: {
+  //   name: 'עברית',
+  //   engName: 'Hebrew',
+  //   value: 'he',
+  // },
   hi: {
     name: 'हिंदी',
     engName: 'Hindi',
     value: 'hi',
   },
+  // id: {
+  //   name: 'Bahasa Indonesia',
+  //   engName: 'Indonesian',
+  //   value: 'id',
+  // },
   it: {
     name: 'Italiano',
     engName: 'Italian',
@@ -64,6 +79,11 @@ export const LANGUAGES_DATA = {
     engName: 'Korean',
     value: 'ko',
   },
+  // fa: {
+  //   name: 'فارسی',
+  //   engName: 'Persian',
+  //   value: 'fa',
+  // },
   pl: {
     name: 'Polski',
     engName: 'Polish',
@@ -99,12 +119,18 @@ export const LANGUAGES_DATA = {
     engName: 'Turkish',
     value: 'tr',
   },
+  // ur: {
+  //   name: 'اردو',
+  //   engName: 'Urdu',
+  //   value: 'ur',
+  // },
   uk: {
     name: 'Українська',
     engName: 'Ukrainian',
     value: 'uk',
   }
-};
+}
+  ;
 
 export const LANGUAGES = Object.values(LANGUAGES_DATA).map(({ engName, name, value }) => ({ name: `${engName} (${name})`, value }));
 
