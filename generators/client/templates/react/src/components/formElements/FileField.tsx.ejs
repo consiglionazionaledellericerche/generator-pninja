@@ -150,9 +150,9 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                 rel="noopener noreferrer"
               >
                 {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
-                  <FileImageIcon className="mr-2 h-4 w-4" />
+                  <FileImageIcon className="me-2 h-4 w-4" />
                 ) : (
-                  <FileIcon className="mr-2 h-4 w-4" />
+                  <FileIcon className="me-2 h-4 w-4" />
                 )}
                 {t('actions.crud.file.viewOrDownload')}{' '}
                 {entityData?.[`${fieldName}_name`] as string}
@@ -163,7 +163,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                   onClick={() => setShouldShowInput(true)}
                   className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                 >
-                  <EditIcon className="mr-1 h-4 w-4" />
+                  <EditIcon className="me-1 h-4 w-4" />
                   {t('actions.crud.edit')}
                 </button>
                 <button
@@ -171,7 +171,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                   onClick={() => markForDeletion(true)}
                   className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                 >
-                  <Trash2Icon className="mr-1 h-4 w-4" />
+                  <Trash2Icon className="me-1 h-4 w-4" />
                   {t('actions.crud.delete')}
                 </button>
               </div>
@@ -183,7 +183,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
           <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-red-800 dark:text-red-200">
-                <Trash2Icon className="mr-2 h-4 w-4" />
+                <Trash2Icon className="me-2 h-4 w-4" />
                 <span className="text-sm font-medium">
                   {t('actions.crud.file.markedForDeletion')}
                 </span>
@@ -193,7 +193,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                 onClick={() => markForDeletion(false)}
                 className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
               >
-                <Undo2Icon className="mr-2 h-4 w-4" />
+                <Undo2Icon className="me-2 h-4 w-4" />
                 {t('common.undo')}
               </button>
             </div>
@@ -206,7 +206,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
               <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center text-yellow-800 dark:text-yellow-200">
-                    <InfoIcon className="mr-2 h-4 w-4" />
+                    <InfoIcon className="me-2 h-4 w-4" />
                     <span className="text-sm font-medium">
                       {t('actions.crud.file.replaceWarning')}
                     </span>
@@ -216,7 +216,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                     onClick={() => undoEdit()}
                     className="flex items-center text-sm text-slate-900 dark:text-gray-300 cursor-pointer font-medium hover:text-slate-700 hover:dark:text-gray-100"
                   >
-                    <Undo2Icon className="mr-2 h-4 w-4" />
+                    <Undo2Icon className="me-2 h-4 w-4" />
                     {t('common.cancel')}
                   </button>
                 </div>

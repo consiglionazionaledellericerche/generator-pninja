@@ -66,7 +66,7 @@ const UuidField: React.FC<UuidFieldProps> = ({
             setValue(fieldName, uuidv4());
             trigger(fieldName); // Re-validate the field
           }}
-          className="cursor-pointer col-start-1 row-start-1 mt-3 mr-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
+          className="cursor-pointer col-start-1 row-start-1 mt-3 me-4 self-center justify-self-end text-gray-500 size-5 sm:size-4"
           title={t('actions.generateUUID')}
         >
           {!autoGenerate && <RefreshCw className="h-full" />}
