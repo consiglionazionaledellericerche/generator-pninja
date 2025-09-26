@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Acțiuni",
+      "back": "Înapoi",
+      "cancel": "Anulează",
+      "confirmDelete": "Confirmă ștergerea",
+      "create": "Creează",
+      "delete": "Șterge",
+      "edit": "Editează",
+      "save": "Salvează",
+      "saving": "Se salvează...",
+      "update": "Actualizează",
+      "view": "Vizualizează",
+      "file": {
+        "markedForDeletion": "Fișier marcat pentru ștergere (Salvează pentru a confirma)",
+        "viewOrDownload": "Vizualizează/Descarcă",
+        "replaceWarning": "Selectarea unui fișier nou va înlocui fișierul existent"
+      },
+      "successfullyCreated": "Înregistrarea cu ID {{id}} a fost creată cu succes",
+      "successfullyUpdated": "Înregistrarea cu ID {{id}} a fost actualizată cu succes",
+      "successfullyDeleted": "Înregistrarea cu ID {{id}} a fost ștearsă cu succes"
+    },
+    "generateUUID": "Generează un UUID versiunea 4"
+  },
+  "common": {
+    "back": "Înapoi",
+    "cancel": "Anulează",
+    "undo": "Anulează modificarea",
+    "select": {
+      "placeholder": "Selectează o opțiune",
+      "noOptions": "Nicio opțiune",
+      "noValue": "Nicio valoare",
+      "loading": "Se încarcă opțiunile...",
+      "searchMultiple": "Selectează sau caută una sau mai multe valori",
+      "searchSingle": "Selectează sau caută o valoare",
+      "selectMultiple": "Selectează una sau mai multe valori",
+      "selectSingle": "Selectează o valoare"
+    },
+    "show": {
+      "more": "Arată mai multe",
+      "less": "Arată mai puține"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entități",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Eroare 401 – Neautorizat",
+      "message": "Trebuie să te autentifici pentru a accesa această pagină. Verifică acreditările și încearcă din nou."
+    },
+    "403": {
+      "title": "Ups! Eroare 403 – Ne pare rău, {{username}}",
+      "message": "Salut <1>{{username}}</1>, te-am recunoscut, dar nu ai permisiunile necesare pentru a accesa această pagină. Dacă crezi că este o greșeală, contactează-ne!"
+    },
+    "404": {
+      "title": "Ups! Eroare 404 – Pagină negăsită",
+      "message": "Se pare că pagina pe care o cauți nu mai există. Este posibil să fi fost mutată sau ștearsă. Verifică URL-ul sau întoarce-te la pagina principală!"
+    },
+    "entities": {
+      "create": "Eroare la creare",
+      "read": "Eroare la citire",
+      "update": "Eroare la actualizare",
+      "delete": "Eroare la ștergere"
+    },
+    "options": {
+      "load": "Eroare la încărcarea opțiunilor pentru"
+    },
+    "validations": {
+      "email": "Format email invalid",
+      "file": {
+        "minSize": "Fișierul trebuie să aibă cel puțin {{accepted}}. Dimensiune actuală: {{actual}}",
+        "maxSize": "Fișierul nu poate depăși {{accepted}}. Dimensiune actuală: {{actual}}",
+        "invalidType": "Tipul fișierului trebuie să fie {{accepted}}. Tip actual: {{actual}}",
+        "typeImage": "Fișierul trebuie să fie o imagine",
+        "required": "Fișierul este obligatoriu"
+      },
+      "min": "Numărul trebuie să fie mai mare sau egal cu {{accepted}}",
+      "minlength": "Șirul trebuie să conțină cel puțin {{accepted}} caracter(e)",
+      "minbytes": "Fișierul trebuie să aibă cel puțin {{accepted}}",
+      "max": "Numărul trebuie să fie mai mic sau egal cu {{accepted}}",
+      "maxlength": "Șirul trebuie să conțină cel mult {{accepted}} caracter(e)",
+      "maxbytes": "Fișierul nu poate depăși {{accepted}}",
+      "pattern": "Format invalid",
+      "required": "Obligatoriu",
+      "url": "Format URL invalid"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Zi",
+      "hour": "Oră",
+      "minute": "Minut",
+      "second": "Secundă",
+      "millisecond": "Milisecundă",
+      "days": "Zile",
+      "hours": "Ore",
+      "minutes": "Minute",
+      "seconds": "Secunde",
+      "milliseconds": "Milisecunde"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Numărul trebuie să fie mai mare sau egal cu {{accepted}}",
+      "minlength": "Șirul trebuie să conțină cel puțin {{accepted}} caracter(e)",
+      "minbytes": "Fișierul trebuie să aibă cel puțin {{accepted}}",
+      "max": "Numărul trebuie să fie mai mic sau egal cu {{accepted}}",
+      "maxlength": "Șirul trebuie să conțină cel mult {{accepted}} caracter(e)",
+      "maxbytes": "Fișierul nu poate depăși {{accepted}}",
+      "required": "Obligatoriu",
+      "unique": "Valoarea trebuie să fie unică"
+    }
+  },
+  "messages": {
+    "noData": "Nu s-au găsit înregistrări"
+  },
+  "pages": {
+    "Home": "Tablou de bord"
+  },
+  "ui": {
+    "account": {
+      "login": "Autentificare",
+      "loggingIn": "Se autentifică...",
+      "logout": "Deconectare",
+      "loggingOut": "Se deconectează...",
+      "logoutError": "Eroare la deconectare",
+      "unknownError": "Eroare necunoscută"
+    },
+    "darkmode": {
+      "light": "Comută la modul luminos",
+      "dark": "Comută la modul întunecat"
+    }
+  }
+}

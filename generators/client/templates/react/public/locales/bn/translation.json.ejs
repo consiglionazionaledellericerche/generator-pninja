@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "ক্রিয়াকলাপ",
+      "back": "ফিরে যান",
+      "cancel": "বাতিল করুন",
+      "confirmDelete": "মুছে ফেলার নিশ্চিত করুন",
+      "create": "তৈরি করুন",
+      "delete": "মুছে ফেলুন",
+      "edit": "সম্পাদনা করুন",
+      "save": "সংরক্ষণ করুন",
+      "saving": "সংরক্ষণ করা হচ্ছে...",
+      "update": "আপডেট করুন",
+      "view": "দেখুন",
+      "file": {
+        "markedForDeletion": "ফাইলটি মুছে ফেলার জন্য চিহ্নিত করা হয়েছে (নিশ্চিত করতে সংরক্ষণ করুন)",
+        "viewOrDownload": "দেখুন/ডাউনলোড করুন",
+        "replaceWarning": "নতুন ফাইল নির্বাচন করলে বিদ্যমান ফাইল প্রতিস্থাপিত হবে"
+      },
+      "successfullyCreated": "রেকর্ড ID {{id}} সফলভাবে তৈরি হয়েছে",
+      "successfullyUpdated": "রেকর্ড ID {{id}} সফলভাবে আপডেট হয়েছে",
+      "successfullyDeleted": "রেকর্ড ID {{id}} সফলভাবে মুছে ফেলা হয়েছে"
+    },
+    "generateUUID": "সংস্করণ 4 UUID তৈরি করুন"
+  },
+  "common": {
+    "back": "ফিরে যান",
+    "cancel": "বাতিল করুন",
+    "undo": "পূর্বাবস্থা ফিরিয়ে আনুন",
+    "select": {
+      "placeholder": "একটি বিকল্প নির্বাচন করুন",
+      "noOptions": "কোনও বিকল্প নেই",
+      "noValue": "কোনও মান নেই",
+      "loading": "বিকল্পগুলি লোড হচ্ছে...",
+      "searchMultiple": "এক বা একাধিক মান নির্বাচন করুন বা অনুসন্ধান করুন",
+      "searchSingle": "একটি মান নির্বাচন করুন বা অনুসন্ধান করুন",
+      "selectMultiple": "এক বা একাধিক মান নির্বাচন করুন",
+      "selectSingle": "একটি মান নির্বাচন করুন"
+    },
+    "show": {
+      "more": "আরও দেখুন",
+      "less": "কম দেখুন"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "সত্তা",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "ত্রুটি 401 – অননুমোদিত",
+      "message": "এই পৃষ্ঠায় অ্যাক্সেস করতে আপনাকে লগইন করতে হবে। আপনার শংসাপত্রগুলি পরীক্ষা করুন এবং আবার চেষ্টা করুন।"
+    },
+    "403": {
+      "title": "উফ! ত্রুটি 403 – দুঃখিত, {{username}}",
+      "message": "হ্যালো <1>{{username}}</1>, আমরা আপনাকে চিনেছি, কিন্তু আপনার এই পৃষ্ঠায় অ্যাক্সেস করার অনুমতি নেই। আপনি যদি মনে করেন এটি একটি ভুল, আমাদের সাথে যোগাযোগ করুন!"
+    },
+    "404": {
+      "title": "উফ! ত্রুটি 404 – পৃষ্ঠা পাওয়া যায়নি",
+      "message": "আপনি যে পৃষ্ঠাটি খুঁজছেন তা আর বিদ্যমান নেই বলে মনে হচ্ছে। এটি স্থানান্তরিত বা মুছে ফেলা হতে পারে। URL পরীক্ষা করুন বা হোমপেজে ফিরে যান!"
+    },
+    "entities": {
+      "create": "তৈরি করার সময় ত্রুটি",
+      "read": "পড়ার সময় ত্রুটি",
+      "update": "আপডেট করার সময় ত্রুটি",
+      "delete": "মুছে ফেলার সময় ত্রুটি"
+    },
+    "options": {
+      "load": "এর জন্য বিকল্পগুলি লোড করার সময় ত্রুটি"
+    },
+    "validations": {
+      "email": "অবৈধ ইমেল ফরম্যাট",
+      "file": {
+        "minSize": "ফাইলটি কমপক্ষে {{accepted}} হতে হবে। বর্তমান আকার: {{actual}}",
+        "maxSize": "ফাইলটি {{accepted}} অতিক্রম করতে পারবে না। বর্তমান আকার: {{actual}}",
+        "invalidType": "ফাইলের ধরন {{accepted}} হতে হবে। বর্তমান ধরন: {{actual}}",
+        "typeImage": "ফাইলটি একটি চিত্র হতে হবে",
+        "required": "ফাইলটি প্রয়োজনীয়"
+      },
+      "min": "সংখ্যাটি {{accepted}} বা তার বেশি হতে হবে",
+      "minlength": "স্ট্রিংটিতে কমপক্ষে {{accepted}} অক্ষর থাকতে হবে",
+      "minbytes": "ফাইলটি কমপক্ষে {{accepted}} হতে হবে",
+      "max": "সংখ্যাটি {{accepted}} বা তার কম হতে হবে",
+      "maxlength": "স্ট্রিংটিতে সর্বাধিক {{accepted}} অক্ষর থাকতে পারে",
+      "maxbytes": "ফাইলটি {{accepted}} অতিক্রম করতে পারবে না",
+      "pattern": "অবৈধ ফরম্যাট",
+      "required": "প্রয়োজনীয়",
+      "url": "অবৈধ URL ফরম্যাট"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "দিন",
+      "hour": "ঘণ্টা",
+      "minute": "মিনিট",
+      "second": "সেকেন্ড",
+      "millisecond": "মিলিসেকেন্ড",
+      "days": "দিন",
+      "hours": "ঘণ্টা",
+      "minutes": "মিনিট",
+      "seconds": "সেকেন্ড",
+      "milliseconds": "মিলিসেকেন্ড"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "সংখ্যাটি {{accepted}} বা তার বেশি হতে হবে",
+      "minlength": "স্ট্রিংটিতে কমপক্ষে {{accepted}} অক্ষর থাকতে হবে",
+      "minbytes": "ফাইলটি কমপক্ষে {{accepted}} হতে হবে",
+      "max": "সংখ্যাটি {{accepted}} বা তার কম হতে হবে",
+      "maxlength": "স্ট্রিংটিতে সর্বাধিক {{accepted}} অক্ষর থাকতে পারে",
+      "maxbytes": "ফাইলটি {{accepted}} অতিক্রম করতে পারবে না",
+      "required": "প্রয়োজনীয়",
+      "unique": "মানটি অনন্য হতে হবে"
+    }
+  },
+  "messages": {
+    "noData": "কোনও রেকর্ড পাওয়া যায়নি"
+  },
+  "pages": {
+    "Home": "ড্যাশবোর্ড"
+  },
+  "ui": {
+    "account": {
+      "login": "লগইন",
+      "loggingIn": "লগইন করা হচ্ছে...",
+      "logout": "লগআউট",
+      "loggingOut": "লগআউট করা হচ্ছে...",
+      "logoutError": "লগআউট করার সময় ত্রুটি",
+      "unknownError": "অজানা ত্রুটি"
+    },
+    "darkmode": {
+      "light": "লাইট মোডে পরিবর্তন করুন",
+      "dark": "ডার্ক মোডে পরিবর্তন করুন"
+    }
+  }
+}

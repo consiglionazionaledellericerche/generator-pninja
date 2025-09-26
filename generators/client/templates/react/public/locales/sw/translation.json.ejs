@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Vitendo",
+      "back": "Rudi",
+      "cancel": "Ghairi",
+      "confirmDelete": "Thibitisha kufuta",
+      "create": "Unda",
+      "delete": "Futa",
+      "edit": "Hariri",
+      "save": "Hifadhi",
+      "saving": "Inahifadhi...",
+      "update": "Sasisha",
+      "view": "Tazama",
+      "file": {
+        "markedForDeletion": "Faili imetiwa alama ya kufutwa (Hifadhi ili kuthibitisha)",
+        "viewOrDownload": "Tazama/Pakua",
+        "replaceWarning": "Kuchagua faili mpya kutabadilisha faili iliyopo"
+      },
+      "successfullyCreated": "Rekodi ID {{id}} imeundwa kwa mafanikio",
+      "successfullyUpdated": "Rekodi ID {{id}} imesasishwa kwa mafanikio",
+      "successfullyDeleted": "Rekodi ID {{id}} imefutwa kwa mafanikio"
+    },
+    "generateUUID": "Tengeneza UUID toleo la 4"
+  },
+  "common": {
+    "back": "Rudi",
+    "cancel": "Ghairi",
+    "undo": "Tengua",
+    "select": {
+      "placeholder": "Chagua chaguo",
+      "noOptions": "Hakuna chaguo",
+      "noValue": "Hakuna thamani",
+      "loading": "Inapakia chaguo...",
+      "searchMultiple": "Chagua au tafuta moja au zaidi",
+      "searchSingle": "Chagua au tafuta thamani",
+      "selectMultiple": "Chagua moja au zaidi",
+      "selectSingle": "Chagua thamani"
+    },
+    "show": {
+      "more": "Onyesha zaidi",
+      "less": "Onyesha kidogo"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Viumbe",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Hitilafu 401 – Haijaruhusiwa",
+      "message": "Unahitaji kuingia ili kufikia ukurasa huu. Tafadhali angalia sifa zako na ujaribu tena."
+    },
+    "403": {
+      "title": "Pole! Hitilafu 403 – Samahani, {{username}}",
+      "message": "Habari <1>{{username}}</1>, tumekutambua, lakini huna ruhusa za kufikia ukurasa huu. Ikiwa unafikiri hii ni hitilafu, wasiliana nasi!"
+    },
+    "404": {
+      "title": "Pole! Hitilafu 404 – Ukurasa Haupatikani",
+      "message": "Inaonekana ukurasa unaotafuta haupo tena. Huenda umehamishwa au kufutwa. Angalia URL au rudi kwenye ukurasa wa nyumbani!"
+    },
+    "entities": {
+      "create": "Hitilafu wakati wa kuunda",
+      "read": "Hitilafu wakati wa kusoma",
+      "update": "Hitilafu wakati wa kusasisha",
+      "delete": "Hitilafu wakati wa kufuta"
+    },
+    "options": {
+      "load": "Hitilafu wakati wa kupakia chaguo kwa"
+    },
+    "validations": {
+      "email": "Muundo wa barua pepe si sahihi",
+      "file": {
+        "minSize": "Faili lazima iwe angalau {{accepted}}. Ukubwa wa sasa: {{actual}}",
+        "maxSize": "Faili haiwezi kuzidi {{accepted}}. Ukubwa wa sasa: {{actual}}",
+        "invalidType": "Aina ya faili lazima iwe {{accepted}}. Aina ya sasa: {{actual}}",
+        "typeImage": "Faili lazima iwe picha",
+        "required": "Faili inahitajika"
+      },
+      "min": "Nambari lazima iwe kubwa au sawa na {{accepted}}",
+      "minlength": "Mstari lazima uwe na angalau herufi {{accepted}}",
+      "minbytes": "Faili lazima iwe angalau {{accepted}}",
+      "max": "Nambari lazima iwe ndogo au sawa na {{accepted}}",
+      "maxlength": "Mstari lazima uwe na herufi zisizozidi {{accepted}}",
+      "maxbytes": "Faili haiwezi kuzidi {{accepted}}",
+      "pattern": "Muundo si sahihi",
+      "required": "Inahitajika",
+      "url": "Muundo wa URL si sahihi"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Siku",
+      "hour": "Saa",
+      "minute": "Dakika",
+      "second": "Sekunde",
+      "millisecond": "Milisekunde",
+      "days": "Siku",
+      "hours": "Saa",
+      "minutes": "Dakika",
+      "seconds": "Sekunde",
+      "milliseconds": "Milisekunde"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Nambari lazima iwe kubwa au sawa na {{accepted}}",
+      "minlength": "Mstari lazima uwe na angalau herufi {{accepted}}",
+      "minbytes": "Faili lazima iwe angalau {{accepted}}",
+      "max": "Nambari lazima iwe ndogo au sawa na {{accepted}}",
+      "maxlength": "Mstari lazima uwe na herufi zisizozidi {{accepted}}",
+      "maxbytes": "Faili haiwezi kuzidi {{accepted}}",
+      "required": "Inahitajika",
+      "unique": "Thamani lazima iwe ya kipekee"
+    }
+  },
+  "messages": {
+    "noData": "Hakuna rekodi zilizopatikana"
+  },
+  "pages": {
+    "Home": "Dashibodi"
+  },
+  "ui": {
+    "account": {
+      "login": "Ingia",
+      "loggingIn": "Inaingia...",
+      "logout": "Toka",
+      "loggingOut": "Inatoka...",
+      "logoutError": "Hitilafu wakati wa kutoka",
+      "unknownError": "Hitilafu isiyojulikana"
+    },
+    "darkmode": {
+      "light": "Badilisha hadi hali ya mwanga",
+      "dark": "Badilisha hadi hali ya giza"
+    }
+  }
+}

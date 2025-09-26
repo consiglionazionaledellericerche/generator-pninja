@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Acties",
+      "back": "Terug",
+      "cancel": "Annuleren",
+      "confirmDelete": "Bevestig verwijdering",
+      "create": "Aanmaken",
+      "delete": "Verwijderen",
+      "edit": "Bewerken",
+      "save": "Opslaan",
+      "saving": "Opslaan...",
+      "update": "Bijwerken",
+      "view": "Bekijken",
+      "file": {
+        "markedForDeletion": "Bestand gemarkeerd voor verwijdering (Opslaan om te bevestigen)",
+        "viewOrDownload": "Bekijken/Downloaden",
+        "replaceWarning": "Het selecteren van een nieuw bestand vervangt het bestaande bestand"
+      },
+      "successfullyCreated": "Record ID {{id}} succesvol aangemaakt",
+      "successfullyUpdated": "Record ID {{id}} succesvol bijgewerkt",
+      "successfullyDeleted": "Record ID {{id}} succesvol verwijderd"
+    },
+    "generateUUID": "Genereer een versie 4 UUID"
+  },
+  "common": {
+    "back": "Terug",
+    "cancel": "Annuleren",
+    "undo": "Ongedaan maken",
+    "select": {
+      "placeholder": "Selecteer een optie",
+      "noOptions": "Geen opties",
+      "noValue": "Geen waarde",
+      "loading": "Opties laden...",
+      "searchMultiple": "Selecteer of zoek naar één of meer waarden",
+      "searchSingle": "Selecteer of zoek naar een waarde",
+      "selectMultiple": "Selecteer één of meer waarden",
+      "selectSingle": "Selecteer een waarde"
+    },
+    "show": {
+      "more": "Meer weergeven",
+      "less": "Minder weergeven"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entiteiten",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Fout 401 – Niet gemachtigd",
+      "message": "U moet inloggen om toegang te krijgen tot deze pagina. Controleer uw inloggegevens en probeer het opnieuw."
+    },
+    "403": {
+      "title": "Oeps! Fout 403 – Sorry, {{username}}",
+      "message": "Hallo <1>{{username}}</1>, we herkennen u, maar u heeft niet de juiste rechten om deze pagina te bekijken. Als u denkt dat dit een fout is, neem dan contact met ons op!"
+    },
+    "404": {
+      "title": "Oeps! Fout 404 – Pagina niet gevonden",
+      "message": "Het lijkt erop dat de pagina die u zoekt niet meer bestaat. Deze is mogelijk verplaatst of verwijderd. Controleer de URL of ga terug naar de startpagina!"
+    },
+    "entities": {
+      "create": "Fout bij aanmaken",
+      "read": "Fout bij lezen",
+      "update": "Fout bij bijwerken",
+      "delete": "Fout bij verwijderen"
+    },
+    "options": {
+      "load": "Fout bij laden van opties voor"
+    },
+    "validations": {
+      "email": "Ongeldig e-mailformaat",
+      "file": {
+        "minSize": "Het bestand moet minimaal {{accepted}} zijn. Huidige grootte: {{actual}}",
+        "maxSize": "Het bestand mag niet groter zijn dan {{accepted}}. Huidige grootte: {{actual}}",
+        "invalidType": "Het bestandstype moet {{accepted}} zijn. Huidig type: {{actual}}",
+        "typeImage": "Het bestand moet een afbeelding zijn",
+        "required": "Het bestand is verplicht"
+      },
+      "min": "Het getal moet groter dan of gelijk zijn aan {{accepted}}",
+      "minlength": "De string moet minimaal {{accepted}} teken(s) bevatten",
+      "minbytes": "Het bestand moet minimaal {{accepted}} zijn",
+      "max": "Het getal moet kleiner dan of gelijk zijn aan {{accepted}}",
+      "maxlength": "De string mag maximaal {{accepted}} teken(s) bevatten",
+      "maxbytes": "Het bestand mag niet groter zijn dan {{accepted}}",
+      "pattern": "Ongeldig formaat",
+      "required": "Verplicht",
+      "url": "Ongeldig URL-formaat"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dag",
+      "hour": "Uur",
+      "minute": "Minuut",
+      "second": "Seconde",
+      "millisecond": "Milliseconde",
+      "days": "Dagen",
+      "hours": "Uren",
+      "minutes": "Minuten",
+      "seconds": "Seconden",
+      "milliseconds": "Milliseconden"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Het getal moet groter dan of gelijk zijn aan {{accepted}}",
+      "minlength": "De string moet minimaal {{accepted}} teken(s) bevatten",
+      "minbytes": "Het bestand moet minimaal {{accepted}} zijn",
+      "max": "Het getal moet kleiner dan of gelijk zijn aan {{accepted}}",
+      "maxlength": "De string mag maximaal {{accepted}} teken(s) bevatten",
+      "maxbytes": "Het bestand mag niet groter zijn dan {{accepted}}",
+      "required": "Verplicht",
+      "unique": "De waarde moet uniek zijn"
+    }
+  },
+  "messages": {
+    "noData": "Geen records gevonden"
+  },
+  "pages": {
+    "Home": "Dashboard"
+  },
+  "ui": {
+    "account": {
+      "login": "Inloggen",
+      "loggingIn": "Bezig met inloggen...",
+      "logout": "Uitloggen",
+      "loggingOut": "Bezig met uitloggen...",
+      "logoutError": "Fout bij uitloggen",
+      "unknownError": "Onbekende fout"
+    },
+    "darkmode": {
+      "light": "Schakel over naar lichte modus",
+      "dark": "Schakel over naar donkere modus"
+    }
+  }
+}

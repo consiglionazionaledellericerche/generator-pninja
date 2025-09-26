@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Дії",
+      "back": "Назад",
+      "cancel": "Скасувати",
+      "confirmDelete": "Підтвердити видалення",
+      "create": "Створити",
+      "delete": "Видалити",
+      "edit": "Редагувати",
+      "save": "Зберегти",
+      "saving": "Збереження...",
+      "update": "Оновити",
+      "view": "Переглянути",
+      "file": {
+        "markedForDeletion": "Файл позначено для видалення (Збережіть, щоб підтвердити)",
+        "viewOrDownload": "Переглянути/Завантажити",
+        "replaceWarning": "Вибір нового файлу замінить існуючий"
+      },
+      "successfullyCreated": "Запис ID {{id}} успішно створено",
+      "successfullyUpdated": "Запис ID {{id}} успішно оновлено",
+      "successfullyDeleted": "Запис ID {{id}} успішно видалено"
+    },
+    "generateUUID": "Згенерувати UUID версії 4"
+  },
+  "common": {
+    "back": "Назад",
+    "cancel": "Скасувати",
+    "undo": "Скасувати зміни",
+    "select": {
+      "placeholder": "Виберіть опцію",
+      "noOptions": "Немає опцій",
+      "noValue": "Немає значення",
+      "loading": "Завантаження опцій...",
+      "searchMultiple": "Виберіть або знайдіть одне чи більше значень",
+      "searchSingle": "Виберіть або знайдіть значення",
+      "selectMultiple": "Виберіть одне чи більше значень",
+      "selectSingle": "Виберіть значення"
+    },
+    "show": {
+      "more": "Показати більше",
+      "less": "Показати менше"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Сутності",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Помилка 401 – Неавторизовано",
+      "message": "Вам потрібно увійти, щоб отримати доступ до цієї сторінки. Будь ласка, перевірте свої облікові дані та спробуйте ще раз."
+    },
+    "403": {
+      "title": "Упс! Помилка 403 – Вибачте, {{username}}",
+      "message": "Привіт, <1>{{username}}</1>, ми вас впізнали, але у вас немає прав доступу до цієї сторінки. Якщо ви вважаєте, що це помилка, зв'яжіться з нами!"
+    },
+    "404": {
+      "title": "Упс! Помилка 404 – Сторінку не знайдено",
+      "message": "Схоже, сторінка, яку ви шукаєте, більше не існує. Можливо, її було переміщено або видалено. Перевірте URL або поверніться на головну сторінку!"
+    },
+    "entities": {
+      "create": "Помилка створення",
+      "read": "Помилка читання",
+      "update": "Помилка оновлення",
+      "delete": "Помилка видалення"
+    },
+    "options": {
+      "load": "Помилка завантаження опцій для"
+    },
+    "validations": {
+      "email": "Недійсний формат електронної пошти",
+      "file": {
+        "minSize": "Файл має бути не менше {{accepted}}. Поточний розмір: {{actual}}",
+        "maxSize": "Файл не може перевищувати {{accepted}}. Поточний розмір: {{actual}}",
+        "invalidType": "Тип файлу має бути {{accepted}}. Поточний тип: {{actual}}",
+        "typeImage": "Файл має бути зображенням",
+        "required": "Файл є обов'язковим"
+      },
+      "min": "Число має бути більше або дорівнювати {{accepted}}",
+      "minlength": "Рядок має містити щонайменше {{accepted}} символ(ів)",
+      "minbytes": "Файл має бути не менше {{accepted}}",
+      "max": "Число має бути менше або дорівнювати {{accepted}}",
+      "maxlength": "Рядок має містити не більше {{accepted}} символ(ів)",
+      "maxbytes": "Файл не може перевищувати {{accepted}}",
+      "pattern": "Недійсний формат",
+      "required": "Обов'язково",
+      "url": "Недійсний формат URL"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "День",
+      "hour": "Година",
+      "minute": "Хвилина",
+      "second": "Секунда",
+      "millisecond": "Мілісекунда",
+      "days": "Дні",
+      "hours": "Години",
+      "minutes": "Хвилини",
+      "seconds": "Секунди",
+      "milliseconds": "Мілісекунди"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Число має бути більше або дорівнювати {{accepted}}",
+      "minlength": "Рядок має містити щонайменше {{accepted}} символ(ів)",
+      "minbytes": "Файл має бути не менше {{accepted}}",
+      "max": "Число має бути менше або дорівнювати {{accepted}}",
+      "maxlength": "Рядок має містити не більше {{accepted}} символ(ів)",
+      "maxbytes": "Файл не може перевищувати {{accepted}}",
+      "required": "Обов'язково",
+      "unique": "Значення має бути унікальним"
+    }
+  },
+  "messages": {
+    "noData": "Записів не знайдено"
+  },
+  "pages": {
+    "Home": "Панель керування"
+  },
+  "ui": {
+    "account": {
+      "login": "Увійти",
+      "loggingIn": "Вхід...",
+      "logout": "Вийти",
+      "loggingOut": "Вихід...",
+      "logoutError": "Помилка виходу",
+      "unknownError": "Невідома помилка"
+    },
+    "darkmode": {
+      "light": "Перемкнути на світлий режим",
+      "dark": "Перемкнути на темний режим"
+    }
+  }
+}
