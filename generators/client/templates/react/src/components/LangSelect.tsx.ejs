@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
 import { Languages, ChevronDown } from 'lucide-react';
-import { languages, languagesData} from '../config/languages.ts';
+import { languages, languagesData } from '../config/languages.ts';
 
 export function LangSelect() {
   const { i18n } = useTranslation();
@@ -20,7 +20,9 @@ export function LangSelect() {
         className="w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
         <Languages size={16} />
-        {languagesData.find((lang) => lang.value === i18n.language)?.name || i18n.language}
+        {languagesData.find(
+          (lang) => lang.value === i18n.language || lang.value === i18n.language.split('-')[0]
+        )?.name || i18n.language}
         <ChevronDown size={16} />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
