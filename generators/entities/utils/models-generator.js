@@ -46,6 +46,7 @@ export class ModelsGenerator {
                 }
                 return acc;
             }, []);
+            const relationsType = [];
             const relations = [];
             relationships.filter(relation => (
                 relation.cardinality === 'OneToMany' && relation.to.name === entity.name
@@ -63,6 +64,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'OneToOne' && relation.from.name === entity.name
                 && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('BelongsTo');
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): BelongsTo { return $this->belongsTo(${relation.to.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
@@ -71,6 +73,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'OneToOne' && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('HasOne');
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): HasOne { return $this->hasOne(${relation.from.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
@@ -79,6 +82,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'OneToMany' && relation.from.name === entity.name
                 && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('HasMany');
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): HasMany { return $this->hasMany(${relation.to.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
             });
 
@@ -87,6 +91,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'OneToMany' && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('BelongsTo');
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsTo { return $this->belongsTo(${relation.from.name}::class, '${to.snake(relation.to.injectedField || relation.from.name)}_id'); }`);
             });
 
@@ -95,6 +100,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'ManyToOne' && relation.from.name === entity.name
                 && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('BelongsTo');
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): BelongsTo { return $this->belongsTo(${relation.to.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
@@ -103,6 +109,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'ManyToOne' && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('HasMany');
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): HasMany { return $this->hasMany(${relation.from.name}::class, '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
@@ -111,6 +118,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'ManyToMany' && relation.from.name === entity.name
                 && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('BelongsToMany');
                 relations.push(`public function ${to.snake(relation.from.injectedField || relation.to.name)}(): BelongsToMany { return $this->belongsToMany(${relation.to.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}', '${to.snake(relation.to.injectedField || relation.from.name)}_id', '${to.snake(relation.from.injectedField || relation.to.name)}_id'); }`);
             });
 
@@ -119,6 +127,7 @@ export class ModelsGenerator {
                 relation.cardinality === 'ManyToMany' && relation.to.name === entity.name
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
+                relationsType.push('BelongsToMany');
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsToMany { return $this->belongsToMany(${relation.from.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}', '${to.snake(relation.from.injectedField || relation.to.name)}_id', '${to.snake(relation.to.injectedField || relation.froom.name)}_id'); }`);
             });
 
@@ -146,6 +155,7 @@ export class ModelsGenerator {
                     hidden: blobs.join(", "),
                     toSearchableArray,
                     relations: relations.join(`\n${this.tab(1)}`),
+                    relationsType: [...new Set(relationsType)],
                     enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
                     castsClasses: [...castsClasses, ...castsB64],
                     casts: [...castsBoolean]
