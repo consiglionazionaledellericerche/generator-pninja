@@ -23,11 +23,16 @@ class <%- className %> extends Model
 <%  if(hidden) {-%>
     protected $hidden = [<%- hidden %>];
 <%  }-%>
-<%  if(casts && casts.length) {-%>
+<%  if((castsClasses && castsClasses.length) || (casts && casts.length)) {-%>
     protected $casts = [
-<%      casts.forEach(function(cast) { -%>
+<%      castsClasses.forEach(function(cast) { -%>
 <%          cast.attrsName.forEach(function(attrName) { -%>
         '<%- attrName %>' => <%- cast.className %>::class,
+<%          }); -%>
+<%      }); -%>
+<%      casts.forEach(function(cast) { -%>
+<%          cast.attrsName.forEach(function(attrName) { -%>
+        '<%- attrName %>' => '<%- cast.cast %>',
 <%          }); -%>
 <%      }); -%>
     ];

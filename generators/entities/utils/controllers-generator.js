@@ -229,7 +229,6 @@ export class ControllersGenerator {
                     fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     imageFields: entity.body.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     booleanFields: entity.body.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),
-                    isSqlite: this.that.config.get('dbms') === 'sqlite',
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,

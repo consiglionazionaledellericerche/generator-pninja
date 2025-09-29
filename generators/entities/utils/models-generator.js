@@ -32,6 +32,13 @@ export class ModelsGenerator {
                 }
                 return acc;
             }, []);
+            // blob columns from entity property
+            const booleans = entity.body.reduce((acc, prop) => {
+                if (prop.type === 'Boolean') {
+                    acc.push(`'${to.snake(prop.name)}'`);
+                }
+                return acc;
+            }, []);
             // toSearchableArray from entity property
             const toSearchableArray = entity.body.reduce((acc, prop) => {
                 if (['String', 'UUID'].includes(prop.type)) {
@@ -115,16 +122,20 @@ export class ModelsGenerator {
                 relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsToMany { return $this->belongsToMany(${relation.from.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}', '${to.snake(relation.from.injectedField || relation.to.name)}_id', '${to.snake(relation.to.injectedField || relation.froom.name)}_id'); }`);
             });
 
-            const casts = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {
+            const castsClasses = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {
                 return {
                     attrsName: entity.body.filter(f => f.type === e.name).map(f => to.snake(f.name)),
                     className: e.name
                 }
-            })
+            });
             const castsB64 = blobs.map(c => ({
                 attrsName: [c.replace(/'/g, '')],
                 className: 'Base64BinaryCast'
-            }))
+            }));
+            const castsBoolean = booleans.map(c => ({
+                attrsName: [c.replace(/'/g, '')],
+                cast: 'boolean'
+            }));
 
             this.that.fs.copyTpl(this.that.templatePath("Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
                 {
@@ -133,11 +144,11 @@ export class ModelsGenerator {
                     hasBlobs: blobs.length > 0,
                     fillable: fillable.join(",\n" + this.tab(2)),
                     hidden: blobs.join(", "),
-                    castsB64: blobs.map(c => `${c} => Base64BinaryCast::class`).join(",\n" + this.tab(2)),
                     toSearchableArray,
                     relations: relations.join(`\n${this.tab(1)}`),
                     enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
-                    casts: [...casts, ...castsB64],
+                    castsClasses: [...castsClasses, ...castsB64],
+                    casts: [...castsBoolean]
                 });
         }
         for (const enm of enums) {
