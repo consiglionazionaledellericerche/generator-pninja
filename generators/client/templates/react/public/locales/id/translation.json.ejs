@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Tindakan",
+      "back": "Kembali",
+      "cancel": "Batal",
+      "confirmDelete": "Konfirmasi penghapusan",
+      "create": "Buat",
+      "delete": "Hapus",
+      "edit": "Edit",
+      "save": "Simpan",
+      "saving": "Menyimpan...",
+      "update": "Perbarui",
+      "view": "Lihat",
+      "file": {
+        "markedForDeletion": "File ditandai untuk dihapus (Simpan untuk mengonfirmasi)",
+        "viewOrDownload": "Lihat/Unduh",
+        "replaceWarning": "Memilih file baru akan menggantikan file yang ada"
+      },
+      "successfullyCreated": "Rekaman ID {{id}} berhasil dibuat",
+      "successfullyUpdated": "Rekaman ID {{id}} berhasil diperbarui",
+      "successfullyDeleted": "Rekaman ID {{id}} berhasil dihapus"
+    },
+    "generateUUID": "Hasilkan UUID versi 4"
+  },
+  "common": {
+    "back": "Kembali",
+    "cancel": "Batal",
+    "undo": "Batalkan",
+    "select": {
+      "placeholder": "Pilih sebuah opsi",
+      "noOptions": "Tidak ada opsi",
+      "noValue": "Tidak ada nilai",
+      "loading": "Memuat opsi...",
+      "searchMultiple": "Pilih atau cari satu atau lebih nilai",
+      "searchSingle": "Pilih atau cari satu nilai",
+      "selectMultiple": "Pilih satu atau lebih nilai",
+      "selectSingle": "Pilih satu nilai"
+    },
+    "show": {
+      "more": "Tampilkan lebih banyak",
+      "less": "Tampilkan lebih sedikit"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entitas",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Kesalahan 401 – Tidak Diizinkan",
+      "message": "Anda perlu masuk untuk mengakses halaman ini. Silakan periksa kredensial Anda dan coba lagi."
+    },
+    "403": {
+      "title": "Ups! Kesalahan 403 – Maaf, {{username}}",
+      "message": "Hai <1>{{username}}</1>, kami mengenali Anda, tetapi Anda tidak memiliki izin yang tepat untuk mengakses halaman ini. Jika Anda merasa ini adalah kesalahan, hubungi kami!"
+    },
+    "404": {
+      "title": "Ups! Kesalahan 404 – Halaman Tidak Ditemukan",
+      "message": "Sepertinya halaman yang Anda cari tidak ada lagi. Mungkin telah dipindahkan atau dihapus. Periksa URL atau kembali ke halaman utama!"
+    },
+    "entities": {
+      "create": "Kesalahan saat membuat",
+      "read": "Kesalahan saat membaca",
+      "update": "Kesalahan saat memperbarui",
+      "delete": "Kesalahan saat menghapus"
+    },
+    "options": {
+      "load": "Kesalahan saat memuat opsi untuk"
+    },
+    "validations": {
+      "email": "Format email tidak valid",
+      "file": {
+        "minSize": "File harus setidaknya {{accepted}}. Ukuran saat ini: {{actual}}",
+        "maxSize": "File tidak boleh lebih dari {{accepted}}. Ukuran saat ini: {{actual}}",
+        "invalidType": "Jenis file harus {{accepted}}. Jenis saat ini: {{actual}}",
+        "typeImage": "File harus berupa gambar",
+        "required": "File diperlukan"
+      },
+      "min": "Angka harus lebih besar atau sama dengan {{accepted}}",
+      "minlength": "String harus mengandung setidaknya {{accepted}} karakter",
+      "minbytes": "File harus setidaknya {{accepted}}",
+      "max": "Angka harus lebih kecil atau sama dengan {{accepted}}",
+      "maxlength": "String harus mengandung paling banyak {{accepted}} karakter",
+      "maxbytes": "File tidak boleh lebih dari {{accepted}}",
+      "pattern": "Format tidak valid",
+      "required": "Diperlukan",
+      "url": "Format URL tidak valid"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Hari",
+      "hour": "Jam",
+      "minute": "Menit",
+      "second": "Detik",
+      "millisecond": "Milidetik",
+      "days": "Hari",
+      "hours": "Jam",
+      "minutes": "Menit",
+      "seconds": "Detik",
+      "milliseconds": "Milidetik"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Angka harus lebih besar atau sama dengan {{accepted}}",
+      "minlength": "String harus mengandung setidaknya {{accepted}} karakter",
+      "minbytes": "File harus setidaknya {{accepted}}",
+      "max": "Angka harus lebih kecil atau sama dengan {{accepted}}",
+      "maxlength": "String harus mengandung paling banyak {{accepted}} karakter",
+      "maxbytes": "File tidak boleh lebih dari {{accepted}}",
+      "required": "Diperlukan",
+      "unique": "Nilai harus unik"
+    }
+  },
+  "messages": {
+    "noData": "Tidak ada data yang ditemukan"
+  },
+  "pages": {
+    "Home": "Dasbor"
+  },
+  "ui": {
+    "account": {
+      "login": "Masuk",
+      "loggingIn": "Sedang masuk...",
+      "logout": "Keluar",
+      "loggingOut": "Sedang keluar...",
+      "logoutError": "Kesalahan saat keluar",
+      "unknownError": "Kesalahan tidak diketahui"
+    },
+    "darkmode": {
+      "light": "Beralih ke mode terang",
+      "dark": "Beralih ke mode gelap"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "פעולות",
+      "back": "חזור",
+      "cancel": "ביטול",
+      "confirmDelete": "אשר מחיקה",
+      "create": "צור",
+      "delete": "מחק",
+      "edit": "ערוך",
+      "save": "שמור",
+      "saving": "שומר...",
+      "update": "עדכן",
+      "view": "צפה",
+      "file": {
+        "markedForDeletion": "הקובץ סומן למחיקה (שמור לאישור)",
+        "viewOrDownload": "צפה/הורד",
+        "replaceWarning": "בחירת קובץ חדש תחליף את הקובץ הקיים"
+      },
+      "successfullyCreated": "רשומה עם מזהה {{id}} נוצרה בהצלחה",
+      "successfullyUpdated": "רשומה עם מזהה {{id}} עודכנה בהצלחה",
+      "successfullyDeleted": "רשומה עם מזהה {{id}} נמחקה בהצלחה"
+    },
+    "generateUUID": "צור UUID גרסה 4"
+  },
+  "common": {
+    "back": "חזור",
+    "cancel": "ביטול",
+    "undo": "בטל",
+    "select": {
+      "placeholder": "בחר אפשרות",
+      "noOptions": "אין אפשרויות",
+      "noValue": "אין ערך",
+      "loading": "טוען אפשרויות...",
+      "searchMultiple": "בחר או חפש ערך אחד או יותר",
+      "searchSingle": "בחר או חפש ערך",
+      "selectMultiple": "בחר ערך אחד או יותר",
+      "selectSingle": "בחר ערך"
+    },
+    "show": {
+      "more": "הצג עוד",
+      "less": "הצג פחות"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "ישויות",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "שגיאה 401 – לא מורשה",
+      "message": "עליך להתחבר כדי לגשת לדף זה. אנא בדוק את האישורים שלך ונסה שוב."
+    },
+    "403": {
+      "title": "אופס! שגיאה 403 – מצטערים, {{username}}",
+      "message": "שלום <1>{{username}}</1>, זיהינו אותך, אך אין לך הרשאות לגשת לדף זה. אם אתה חושב שזו טעות, צור איתנו קשר!"
+    },
+    "404": {
+      "title": "אופס! שגיאה 404 – הדף לא נמצא",
+      "message": "נראה שהדף שאתה מחפש כבר לא קיים. ייתכן שהוא הועבר או נמחק. בדוק את כתובת ה-URL או חזור לדף הבית!"
+    },
+    "entities": {
+      "create": "שגיאה ביצירה",
+      "read": "שגיאה בקריאה",
+      "update": "שגיאה בעדכון",
+      "delete": "שגיאה במחיקה"
+    },
+    "options": {
+      "load": "שגיאה בטעינת אפשרויות עבור"
+    },
+    "validations": {
+      "email": "פורמט אימייל לא תקין",
+      "file": {
+        "minSize": "הקובץ חייב להיות לפחות {{accepted}}. גודל נוכחי: {{actual}}",
+        "maxSize": "הקובץ לא יכול לעלות על {{accepted}}. גודל נוכחי: {{actual}}",
+        "invalidType": "סוג הקובץ חייב להיות {{accepted}}. סוג נוכחי: {{actual}}",
+        "typeImage": "הקובץ חייב להיות תמונה",
+        "required": "הקובץ נדרש"
+      },
+      "min": "המספר חייב להיות גדול או שווה ל-{{accepted}}",
+      "minlength": "המחרוזת חייבת להכיל לפחות {{accepted}} תווים",
+      "minbytes": "הקובץ חייב להיות לפחות {{accepted}}",
+      "max": "המספר חייב להיות קטן או שווה ל-{{accepted}}",
+      "maxlength": "המחרוזת יכולה להכיל לכל היותר {{accepted}} תווים",
+      "maxbytes": "הקובץ לא יכול לעלות על {{accepted}}",
+      "pattern": "פורמט לא תקין",
+      "required": "נדרש",
+      "url": "פורמט URL לא תקין"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "יום",
+      "hour": "שעה",
+      "minute": "דקה",
+      "second": "שנייה",
+      "millisecond": "מילישנייה",
+      "days": "ימים",
+      "hours": "שעות",
+      "minutes": "דקות",
+      "seconds": "שניות",
+      "milliseconds": "מילישניות"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "המספר חייב להיות גדול או שווה ל-{{accepted}}",
+      "minlength": "המחרוזת חייבת להכיל לפחות {{accepted}} תווים",
+      "minbytes": "הקובץ חייב להיות לפחות {{accepted}}",
+      "max": "המספר חייב להיות קטן או שווה ל-{{accepted}}",
+      "maxlength": "המחרוזת יכולה להכיל לכל היותר {{accepted}} תווים",
+      "maxbytes": "הקובץ לא יכול לעלות על {{accepted}}",
+      "required": "נדרש",
+      "unique": "הערך חייב להיות ייחודי"
+    }
+  },
+  "messages": {
+    "noData": "לא נמצאו רשומות"
+  },
+  "pages": {
+    "Home": "לוח מחוונים"
+  },
+  "ui": {
+    "account": {
+      "login": "התחבר",
+      "loggingIn": "מתחבר...",
+      "logout": "התנתק",
+      "loggingOut": "מתנתק...",
+      "logoutError": "שגיאה בהתנתקות",
+      "unknownError": "שגיאה לא ידועה"
+    },
+    "darkmode": {
+      "light": "עבור למצב בהיר",
+      "dark": "עבור למצב כהה"
+    }
+  }
+}

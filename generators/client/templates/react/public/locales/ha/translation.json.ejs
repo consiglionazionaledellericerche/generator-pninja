@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Ayyuka",
+      "back": "Komawa",
+      "cancel": "Soke",
+      "confirmDelete": "Tabbatar da gogewa",
+      "create": "Ƙirƙiri",
+      "delete": "Goge",
+      "edit": "Gyara",
+      "save": "Ajiye",
+      "saving": "Ana ajiye...",
+      "update": "Sabunta",
+      "view": "Duba",
+      "file": {
+        "markedForDeletion": "An yi alama don gogewa (Ajiye don tabbatarwa)",
+        "viewOrDownload": "Duba/Zazzage",
+        "replaceWarning": "Zaɓin sabon fayil zai maye gurbin wanda yake akwai"
+      },
+      "successfullyCreated": "An ƙirƙiri rikodin ID {{id}} cikin nasara",
+      "successfullyUpdated": "An sabunta rikodin ID {{id}} cikin nasara",
+      "successfullyDeleted": "An goge rikodin ID {{id}} cikin nasara"
+    },
+    "generateUUID": "Ƙirƙiri UUID sigar 4"
+  },
+  "common": {
+    "back": "Komawa",
+    "cancel": "Soke",
+    "undo": "Cire",
+    "select": {
+      "placeholder": "Zaɓi zaɓi",
+      "noOptions": "Babu zaɓuɓɓuka",
+      "noValue": "Babu ƙima",
+      "loading": "Ana loda zaɓuɓɓuka...",
+      "searchMultiple": "Zaɓi ko bincika ɗaya ko fiye da ƙima",
+      "searchSingle": "Zaɓi ko bincika ƙima",
+      "selectMultiple": "Zaɓi ɗaya ko fiye da ƙima",
+      "selectSingle": "Zaɓi ƙima"
+    },
+    "show": {
+      "more": "Nuna ƙari",
+      "less": "Nuna kaɗan"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Ƙungiyoyi",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Kuskure 401 – Ba a izini ba",
+      "message": "Dole ne ku shiga don samun damar wannan shafin. Da fatan za a duba bayanan ku kuma sake gwadawa."
+    },
+    "403": {
+      "title": "Yi hakuri! Kuskure 403 – Yi hakuri, {{username}}",
+      "message": "Sannu <1>{{username}}</1>, mun gane ku, amma ba ku da izinin shiga wannan shafin. Idan kuna tsammanin wannan kuskure ne, tuntuɓi mu!"
+    },
+    "404": {
+      "title": "Yi hakuri! Kuskure 404 – Ba a sami shafin ba",
+      "message": "Da alama shafin da kuke nema ba ya wanzu. Wataƙila an matsar da shi ko an goge shi. Duba URL ko koma shafin farko!"
+    },
+    "entities": {
+      "create": "Kuskure yayin ƙirƙira",
+      "read": "Kuskure yayin karantawa",
+      "update": "Kuskure yayin sabuntawa",
+      "delete": "Kuskure yayin gogewa"
+    },
+    "options": {
+      "load": "Kuskure yayin loda zaɓuɓɓuka don"
+    },
+    "validations": {
+      "email": "Tsarin imel mara inganci",
+      "file": {
+        "minSize": "Fayil ɗin dole ne ya zama aƙalla {{accepted}}. Girman yanzu: {{actual}}",
+        "maxSize": "Fayil ɗin ba zai iya wuce {{accepted}} ba. Girman yanzu: {{actual}}",
+        "invalidType": "Nau'in fayil ɗin dole ne ya zama {{accepted}}. Nau'in yanzu: {{actual}}",
+        "typeImage": "Fayil ɗin dole ne ya zama hoto",
+        "required": "Fayil ɗin yana da mahimmanci"
+      },
+      "min": "Lambar dole ne ta fi ko ta yi daidai da {{accepted}}",
+      "minlength": "Sarkar dole ne ta ƙunshi aƙalla haruffa {{accepted}}",
+      "minbytes": "Fayil ɗin dole ne ya zama aƙalla {{accepted}}",
+      "max": "Lambar dole ne ta yi ƙasa da ko ta yi daidai da {{accepted}}",
+      "maxlength": "Sarkar dole ne ta ƙunshi mafi yawan haruffa {{accepted}}",
+      "maxbytes": "Fayil ɗin ba zai iya wuce {{accepted}} ba",
+      "pattern": "Tsarin mara inganci",
+      "required": "An buƙata",
+      "url": "Tsarin URL mara inganci"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Rana",
+      "hour": "Awanni",
+      "minute": "Minti",
+      "second": "Sakanni",
+      "millisecond": "Milisakanni",
+      "days": "Ranaku",
+      "hours": "Awanni",
+      "minutes": "Minti",
+      "seconds": "Sakanni",
+      "milliseconds": "Milisakanni"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Lambar dole ne ta fi ko ta yi daidai da {{accepted}}",
+      "minlength": "Sarkar dole ne ta ƙunshi aƙalla haruffa {{accepted}}",
+      "minbytes": "Fayil ɗin dole ne ya zama aƙalla {{accepted}}",
+      "max": "Lambar dole ne ta yi ƙasa da ko ta yi daidai da {{accepted}}",
+      "maxlength": "Sarkar dole ne ta ƙunshi mafi yawan haruffa {{accepted}}",
+      "maxbytes": "Fayil ɗin ba zai iya wuce {{accepted}} ba",
+      "required": "An buƙata",
+      "unique": "Darajar dole ne ta zama ta musamman"
+    }
+  },
+  "messages": {
+    "noData": "Babu bayanai da aka samu"
+  },
+  "pages": {
+    "Home": "Dashboard"
+  },
+  "ui": {
+    "account": {
+      "login": "Shiga",
+      "loggingIn": "Ana shiga...",
+      "logout": "Fita",
+      "loggingOut": "Ana fita...",
+      "logoutError": "Kuskure yayin fita",
+      "unknownError": "Kuskure mara sani"
+    },
+    "darkmode": {
+      "light": "Canza zuwa yanayin haske",
+      "dark": "Canza zuwa yanayin duhu"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "اقدامات",
+      "back": "بازگشت",
+      "cancel": "لغو",
+      "confirmDelete": "تأیید حذف",
+      "create": "ایجاد",
+      "delete": "حذف",
+      "edit": "ویرایش",
+      "save": "ذخیره",
+      "saving": "در حال ذخیره‌سازی...",
+      "update": "به‌روزرسانی",
+      "view": "مشاهده",
+      "file": {
+        "markedForDeletion": "فایل برای حذف علامت‌گذاری شده است (برای تأیید ذخیره کنید)",
+        "viewOrDownload": "مشاهده/دانلود",
+        "replaceWarning": "انتخاب فایل جدید، فایل موجود را جایگزین می‌کند"
+      },
+      "successfullyCreated": "رکورد با شناسه {{id}} با موفقیت ایجاد شد",
+      "successfullyUpdated": "رکورد با شناسه {{id}} با موفقیت به‌روزرسانی شد",
+      "successfullyDeleted": "رکورد با شناسه {{id}} با موفقیت حذف شد"
+    },
+    "generateUUID": "تولید UUID نسخه ۴"
+  },
+  "common": {
+    "back": "بازگشت",
+    "cancel": "لغو",
+    "undo": "بازگردانی",
+    "select": {
+      "placeholder": "یک گزینه انتخاب کنید",
+      "noOptions": "گزینه‌ای وجود ندارد",
+      "noValue": "مقداری وجود ندارد",
+      "loading": "در حال بارگذاری گزینه‌ها...",
+      "searchMultiple": "یک یا چند مقدار را انتخاب یا جستجو کنید",
+      "searchSingle": "یک مقدار را انتخاب یا جستجو کنید",
+      "selectMultiple": "یک یا چند مقدار را انتخاب کنید",
+      "selectSingle": "یک مقدار را انتخاب کنید"
+    },
+    "show": {
+      "more": "نمایش بیشتر",
+      "less": "نمایش کمتر"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "موجودیت‌ها",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "خطای ۴۰۱ – غیرمجاز",
+      "message": "برای دسترسی به این صفحه باید وارد شوید. لطفاً اطلاعات کاربری خود را بررسی کرده و دوباره تلاش کنید."
+    },
+    "403": {
+      "title": "اوه! خطای ۴۰۳ – متأسفیم، {{username}}",
+      "message": "سلام <1>{{username}}</1>، ما شما را شناسایی کردیم، اما شما مجوزهای لازم برای دسترسی به این صفحه را ندارید. اگر فکر می‌کنید این یک اشتباه است، با ما تماس بگیرید!"
+    },
+    "404": {
+      "title": "اوه! خطای ۴۰۴ – صفحه پیدا نشد",
+      "message": "به نظر می‌رسد صفحه‌ای که به دنبال آن هستید دیگر وجود ندارد. ممکن است جابه‌جا شده یا حذف شده باشد. آدرس URL را بررسی کنید یا به صفحه اصلی بازگردید!"
+    },
+    "entities": {
+      "create": "خطا در ایجاد",
+      "read": "خطا در خواندن",
+      "update": "خطا در به‌روزرسانی",
+      "delete": "خطا در حذف"
+    },
+    "options": {
+      "load": "خطا در بارگذاری گزینه‌ها برای"
+    },
+    "validations": {
+      "email": "فرمت ایمیل نامعتبر است",
+      "file": {
+        "minSize": "فایل باید حداقل {{accepted}} باشد. اندازه فعلی: {{actual}}",
+        "maxSize": "فایل نمی‌تواند از {{accepted}} بیشتر باشد. اندازه فعلی: {{actual}}",
+        "invalidType": "نوع فایل باید {{accepted}} باشد. نوع فعلی: {{actual}}",
+        "typeImage": "فایل باید یک تصویر باشد",
+        "required": "فایل الزامی است"
+      },
+      "min": "عدد باید بزرگتر یا مساوی {{accepted}} باشد",
+      "minlength": "رشته باید حداقل {{accepted}} کاراکتر داشته باشد",
+      "minbytes": "فایل باید حداقل {{accepted}} باشد",
+      "max": "عدد باید کوچکتر یا مساوی {{accepted}} باشد",
+      "maxlength": "رشته باید حداکثر {{accepted}} کاراکتر داشته باشد",
+      "maxbytes": "فایل نمی‌تواند از {{accepted}} بیشتر باشد",
+      "pattern": "فرمت نامعتبر است",
+      "required": "الزامی است",
+      "url": "فرمت URL نامعتبر است"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "روز",
+      "hour": "ساعت",
+      "minute": "دقیقه",
+      "second": "ثانیه",
+      "millisecond": "میلی‌ثانیه",
+      "days": "روزها",
+      "hours": "ساعت‌ها",
+      "minutes": "دقیقه‌ها",
+      "seconds": "ثانیه‌ها",
+      "milliseconds": "میلی‌ثانیه‌ها"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "عدد باید بزرگتر یا مساوی {{accepted}} باشد",
+      "minlength": "رشته باید حداقل {{accepted}} کاراکتر داشته باشد",
+      "minbytes": "فایل باید حداقل {{accepted}} باشد",
+      "max": "عدد باید کوچکتر یا مساوی {{accepted}} باشد",
+      "maxlength": "رشته باید حداکثر {{accepted}} کاراکتر داشته باشد",
+      "maxbytes": "فایل نمی‌تواند از {{accepted}} بیشتر باشد",
+      "required": "الزامی است",
+      "unique": "مقدار باید یکتا باشد"
+    }
+  },
+  "messages": {
+    "noData": "رکوردی یافت نشد"
+  },
+  "pages": {
+    "Home": "داشبورد"
+  },
+  "ui": {
+    "account": {
+      "login": "ورود",
+      "loggingIn": "در حال ورود...",
+      "logout": "خروج",
+      "loggingOut": "در حال خروج...",
+      "logoutError": "خطا در خروج",
+      "unknownError": "خطای ناشناخته"
+    },
+    "darkmode": {
+      "light": "تغییر به حالت روشن",
+      "dark": "تغییر به حالت تاریک"
+    }
+  }
+}
