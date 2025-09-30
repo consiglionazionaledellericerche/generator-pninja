@@ -1,4 +1,9 @@
 export const LANGUAGES_DATA = {
+  am: {
+    name: 'አማርኛ',
+    engName: 'Amharic',
+    value: 'am',
+  },
   ar: {
     name: 'العربية',
     engName: 'Arabic',
@@ -13,6 +18,11 @@ export const LANGUAGES_DATA = {
     name: 'Български',
     engName: 'Bulgarian',
     value: 'bg',
+  },
+  ca: {
+    name: 'Català',
+    engName: 'Catalan',
+    value: 'ca',
   },
   zh: {
     name: '中文 (简体)',
@@ -89,6 +99,11 @@ export const LANGUAGES_DATA = {
     engName: 'Indonesian',
     value: 'id',
   },
+  ga: {
+    name: 'Gaeilge',
+    engName: 'Irish',
+    value: 'ga',
+  },
   it: {
     name: 'Italiano',
     engName: 'Italian',
@@ -159,6 +174,11 @@ export const LANGUAGES_DATA = {
     engName: 'Swahili',
     value: 'sw',
   },
+  ta: {
+    name: 'தமிழ்',
+    engName: 'Tamil',
+    value: 'ta',
+  },
   tr: {
     name: 'Türkçe',
     engName: 'Turkish',
@@ -173,6 +193,11 @@ export const LANGUAGES_DATA = {
     name: 'Українська',
     engName: 'Ukrainian',
     value: 'uk',
+  },
+  yo: {
+    name: 'Yorùbá',
+    engName: 'Yoruba',
+    value: 'yo',
   }
 };
 
