@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Àwọn Ìṣe",
+      "back": "Padà",
+      "cancel": "Fagilee",
+      "confirmDelete": "Jẹ́rìí Ìparẹ́",
+      "create": "Ṣẹ̀dá",
+      "delete": "Pa rẹ́",
+      "edit": "Ṣàtúnṣe",
+      "save": "Fi pamọ́",
+      "saving": "Ń fi pamọ́...",
+      "update": "Ṣe ìmúdójúìwọ̀n",
+      "view": "Wo",
+      "file": {
+        "markedForDeletion": "Fáìlì ti a sàmì fún ìparẹ́ (Fi pamọ́ láti jẹ́rìí)",
+        "viewOrDownload": "Wo/Gba Sílẹ̀",
+        "replaceWarning": "Yíyàn fáìlì tuntun yóò rọ́pò èyí tó wà"
+      },
+      "successfullyCreated": "Ìwé ID {{id}} ti ṣẹ̀dá ní àṣeyọrí",
+      "successfullyUpdated": "Ìwé ID {{id}} ti ṣe ìmúdójúìwọ̀n ní àṣeyọrí",
+      "successfullyDeleted": "Ìwé ID {{id}} ti parẹ́ ní àṣeyọrí"
+    },
+    "generateUUID": "Ṣẹ̀dá UUID ẹ̀yà 4"
+  },
+  "common": {
+    "back": "Padà",
+    "cancel": "Fagilee",
+    "undo": "Fagi",
+    "select": {
+      "placeholder": "Yan àṣàyàn kan",
+      "noOptions": "Kò sí àwọn àṣàyàn",
+      "noValue": "Kò sí iye",
+      "loading": "Àwọn àṣàyàn ń wọlé...",
+      "searchMultiple": "Yan tàbí wá fún iye kan tàbí púpọ̀",
+      "searchSingle": "Yan tàbí wá fún iye kan",
+      "selectMultiple": "Yan iye kan tàbí púpọ̀",
+      "selectSingle": "Yan iye kan"
+    },
+    "show": {
+      "more": "Ṣàfihàn síi",
+      "less": "Ṣàfihàn díẹ̀"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Àwọn Ohun",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Àṣìṣe 401 – Àìláṣẹ",
+      "message": "O gbọdọ̀ wọlé láti wọ ojú ìwé yìí. Jọ̀wọ́ ṣàyẹ̀wò ìwé ẹ̀rí rẹ kí o sì gbìyànjú lẹ́ẹ̀kan sí i."
+    },
+    "403": {
+      "title": "Àkíyèsí! Àṣìṣe 403 – Má bínú, {{username}}",
+      "message": "Kí ni <1>{{username}}</1>, a mọ̀ ọ́, ṣùgbọ́n o kò ní àwọn àṣẹ tó tọ́ láti wọ ojú ìwé yìí. Tí o bá rò pé èyí jẹ́ àṣìṣe, jọ̀wọ́ kàn sí wa!"
+    },
+    "404": {
+      "title": "Àkíyèsí! Àṣìṣe 404 – A Kò Rí Ojú Ìwé Náà",
+      "message": "Ó dà bí ẹni pé ojú ìwé tí o ń wá kò sí mọ́. Ó lè ti yípadà tàbí kí a ti pa á rẹ́. Ṣàyẹ̀wò URL náà tàbí padà sí ojú ìwé àkọ́kọ́!"
+    },
+    "entities": {
+      "create": "Àṣìṣe ní ìṣẹ̀dá",
+      "read": "Àṣìṣe ní kíkà",
+      "update": "Àṣìṣe ní ìmúdójúìwọ̀n",
+      "delete": "Àṣìṣe ní ìparẹ́"
+    },
+    "options": {
+      "load": "Àṣìṣe ní kíka àwọn àṣàyàn fún"
+    },
+    "validations": {
+      "email": "Ọ̀nà imeeli tí kò tọ́",
+      "file": {
+        "minSize": "Fáìlì gbọdọ̀ jẹ́ {{accepted}} ó kéré jù. Ìwọ̀n lọ́wọ́lọ́wọ́: {{actual}}",
+        "maxSize": "Fáìlì kò lè kọjá {{accepted}}. Ìwọ̀n lọ́wọ́lọ́wọ́: {{actual}}",
+        "invalidType": "Irú fáìlì gbọdọ̀ jẹ́ {{accepted}}. Irú lọ́wọ́lọ́wọ́: {{actual}}",
+        "typeImage": "Fáìlì gbọdọ̀ jẹ́ àwòrán",
+        "required": "Fáìlì jẹ́ dandan"
+      },
+      "min": "Nọ́mbà gbọdọ̀ jẹ́ púpọ̀ tàbí dọ́gba pẹ̀lú {{accepted}}",
+      "minlength": "Ọ̀rọ̀ gbọdọ̀ ní àwọn lẹ́tà {{accepted}} ó kéré jù",
+      "minbytes": "Fáìlì gbọdọ̀ jẹ́ {{accepted}} ó kéré jù",
+      "max": "Nọ́mbà gbọdọ̀ jẹ́ kéré tàbí dọ́gba pẹ̀lú {{accepted}}",
+      "maxlength": "Ọ̀rọ̀ lè ní àwọn lẹ́tà {{accepted}} ó pọ̀ jù",
+      "maxbytes": "Fáìlì kò lè kọjá {{accepted}}",
+      "pattern": "Ọ̀nà tí kò tọ́",
+      "required": "Dandan",
+      "url": "Ọ̀nà URL tí kò tọ́"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Ọjọ́",
+      "hour": "Wákàtí",
+      "minute": "Ìṣẹ́jú",
+      "second": "Ìṣẹ́jú Ààyá",
+      "millisecond": "Mílísẹ́kọ̀ndù",
+      "days": "Àwọn Ọjọ́",
+      "hours": "Àwọn Wákàtí",
+      "minutes": "Àwọn Ìṣẹ́jú",
+      "seconds": "Àwọn Ìṣẹ́jú Ààyá",
+      "milliseconds": "Àwọn Mílísẹ́kọ̀ndù"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Nọ́mbà gbọdọ̀ jẹ́ púpọ̀ tàbí dọ́gba pẹ̀lú {{accepted}}",
+      "minlength": "Ọ̀rọ̀ gbọdọ̀ ní àwọn lẹ́tà {{accepted}} ó kéré jù",
+      "minbytes": "Fáìlì gbọdọ̀ jẹ́ {{accepted}} ó kéré jù",
+      "max": "Nọ́mbà gbọdọ̀ jẹ́ kéré tàbí dọ́gba pẹ̀lú {{accepted}}",
+      "maxlength": "Ọ̀rọ̀ lè ní àwọn lẹ́tà {{accepted}} ó pọ̀ jù",
+      "maxbytes": "Fáìlì kò lè kọjá {{accepted}}",
+      "required": "Dandan",
+      "unique": "Iye gbọdọ̀ jẹ́ àkànṣe"
+    }
+  },
+  "messages": {
+    "noData": "A kò rí àwọn ìwé"
+  },
+  "pages": {
+    "Home": "Pátákó Àkọ́sílẹ̀"
+  },
+  "ui": {
+    "account": {
+      "login": "Wọlé",
+      "loggingIn": "Ń wọlé...",
+      "logout": "Jáde",
+      "loggingOut": "Ń jáde...",
+      "logoutError": "Àṣìṣe ní jíjáde",
+      "unknownError": "Àṣìṣe àìmọ̀"
+    },
+    "darkmode": {
+      "light": "Yí padà sí ipò ìmọ́lẹ̀",
+      "dark": "Yí padà sí ipò òkùnkùn"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Gníomhartha",
+      "back": "Ar ais",
+      "cancel": "Cealaigh",
+      "confirmDelete": "Deimhnigh an scriosadh",
+      "create": "Cruthaigh",
+      "delete": "Scrios",
+      "edit": "Cuir in eagar",
+      "save": "Sábháil",
+      "saving": "Á shábháil...",
+      "update": "Nuashonraigh",
+      "view": "Amharc",
+      "file": {
+        "markedForDeletion": "Comhad marcáilte le scriosadh (Sábháil le deimhniú)",
+        "viewOrDownload": "Amharc/Íoslódáil",
+        "replaceWarning": "Má roghnaítear comhad nua, cuirfear an ceann atá ann in ionad é"
+      },
+      "successfullyCreated": "Taifead ID {{id}} cruthaithe go rathúil",
+      "successfullyUpdated": "Taifead ID {{id}} nuashonraithe go rathúil",
+      "successfullyDeleted": "Taifead ID {{id}} scriosta go rathúil"
+    },
+    "generateUUID": "Gin UUID leagan 4"
+  },
+  "common": {
+    "back": "Ar ais",
+    "cancel": "Cealaigh",
+    "undo": "Cealaigh",
+    "select": {
+      "placeholder": "Roghnaigh rogha",
+      "noOptions": "Níl aon roghanna ann",
+      "noValue": "Níl aon luach ann",
+      "loading": "Roghanna á lódáil...",
+      "searchMultiple": "Roghnaigh nó cuardaigh luach amháin nó níos mó",
+      "searchSingle": "Roghnaigh nó cuardaigh luach",
+      "selectMultiple": "Roghnaigh luach amháin nó níos mó",
+      "selectSingle": "Roghnaigh luach"
+    },
+    "show": {
+      "more": "Taispeáin níos mó",
+      "less": "Taispeáin níos lú"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Eintitis",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Earráid 401 – Neamhúdaraithe",
+      "message": "Ní mór duit logáil isteach chun rochtain a fháil ar an leathanach seo. Seiceáil do chuid dintiúir le do thoil agus bain triail eile as."
+    },
+    "403": {
+      "title": "Úps! Earráid 403 – Ár leithscéal, {{username}}",
+      "message": "Haigh <1>{{username}}</1>, aithnímid thú, ach níl na ceadanna cearta agat chun rochtain a fháil ar an leathanach seo. Má cheapann tú gur earráid é seo, téigh i dteagmháil linn!"
+    },
+    "404": {
+      "title": "Úps! Earráid 404 – Leathanach gan aimsiú",
+      "message": "Is cosúil nach bhfuil an leathanach atá á lorg agat ann a thuilleadh. B'fhéidir go bhfuil sé bogtha nó scriosta. Seiceáil an URL nó téigh ar ais go dtí an leathanach baile!"
+    },
+    "entities": {
+      "create": "Earráid agus é á chruthú",
+      "read": "Earráid agus é á léamh",
+      "update": "Earráid agus é á nuashonrú",
+      "delete": "Earráid agus é á scriosadh"
+    },
+    "options": {
+      "load": "Earráid ag lódáil roghanna do"
+    },
+    "validations": {
+      "email": "Formáid ríomhphoist neamhbhailí",
+      "file": {
+        "minSize": "Caithfidh an comhad a bheith {{accepted}} ar a laghad. Méid reatha: {{actual}}",
+        "maxSize": "Ní féidir leis an gcomhad {{accepted}} a shárú. Méid reatha: {{actual}}",
+        "invalidType": "Caithfidh cineál an chomhaid a bheith {{accepted}}. Cineál reatha: {{actual}}",
+        "typeImage": "Caithfidh an comhad a bheith ina íomhá",
+        "required": "Tá an comhad riachtanach"
+      },
+      "min": "Caithfidh an uimhir a bheith níos mó ná nó cothrom le {{accepted}}",
+      "minlength": "Caithfidh an téacs {{accepted}} carachtar ar a laghad a bheith ann",
+      "minbytes": "Caithfidh an comhad a bheith {{accepted}} ar a laghad",
+      "max": "Caithfidh an uimhir a bheith níos lú ná nó cothrom le {{accepted}}",
+      "maxlength": "Ní féidir leis an téacs níos mó ná {{accepted}} carachtar a bheith ann",
+      "maxbytes": "Ní féidir leis an gcomhad {{accepted}} a shárú",
+      "pattern": "Formáid neamhbhailí",
+      "required": "Riachtanach",
+      "url": "Formáid URL neamhbhailí"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Lá",
+      "hour": "Uair",
+      "minute": "Nóiméad",
+      "second": "Soicind",
+      "millisecond": "Milleasoicind",
+      "days": "Laethanta",
+      "hours": "Uaireanta",
+      "minutes": "Nóiméid",
+      "seconds": "Soicindí",
+      "milliseconds": "Milleasoicindí"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Caithfidh an uimhir a bheith níos mó ná nó cothrom le {{accepted}}",
+      "minlength": "Caithfidh an téacs {{accepted}} carachtar ar a laghad a bheith ann",
+      "minbytes": "Caithfidh an comhad a bheith {{accepted}} ar a laghad",
+      "max": "Caithfidh an uimhir a bheith níos lú ná nó cothrom le {{accepted}}",
+      "maxlength": "Ní féidir leis an téacs níos mó ná {{accepted}} carachtar a bheith ann",
+      "maxbytes": "Ní féidir leis an gcomhad {{accepted}} a shárú",
+      "required": "Riachtanach",
+      "unique": "Caithfidh an luach a bheith uathúil"
+    }
+  },
+  "messages": {
+    "noData": "Níor aimsíodh aon taifid"
+  },
+  "pages": {
+    "Home": "Deais"
+  },
+  "ui": {
+    "account": {
+      "login": "Logáil isteach",
+      "loggingIn": "Á logáil isteach...",
+      "logout": "Logáil amach",
+      "loggingOut": "Á logáil amach...",
+      "logoutError": "Earráid agus é á logáil amach",
+      "unknownError": "Earráid anaithnid"
+    },
+    "darkmode": {
+      "light": "Athraigh go mód éadrom",
+      "dark": "Athraigh go mód dorcha"
+    }
+  }
+}

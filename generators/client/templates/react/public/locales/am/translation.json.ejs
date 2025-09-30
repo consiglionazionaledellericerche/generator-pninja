@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "እርምጃዎች",
+      "back": "ወደ ኋላ",
+      "cancel": "ሰርዝ",
+      "confirmDelete": "መሰረዙን አረጋግጥ",
+      "create": "ፍጠር",
+      "delete": "ሰርዝ",
+      "edit": "አርትዕ",
+      "save": "አስቀምጥ",
+      "saving": "በማስቀመጥ ላይ...",
+      "update": "አዘምን",
+      "view": "ተመልከት",
+      "file": {
+        "markedForDeletion": "ፋይል ለመሰረዝ ምልክት ተደርጎበታል (ለማረጋገጥ ያስቀምጡ)",
+        "viewOrDownload": "ተመልከት/አውርድ",
+        "replaceWarning": "አዲስ ፋይል መምረጥ ያለውን ይተካዋል"
+      },
+      "successfullyCreated": "መዝገብ መለያ {{id}} በተሳካ ሁኔታ ተፈጠረ",
+      "successfullyUpdated": "መዝገብ መለያ {{id}} በተሳካ ሁኔታ ተዘምኗል",
+      "successfullyDeleted": "መዝገብ መለያ {{id}} በተሳካ ሁኔታ ተሰርዟል"
+    },
+    "generateUUID": "ስሪት 4 UUID ይፍጠሩ"
+  },
+  "common": {
+    "back": "ወደ ኋላ",
+    "cancel": "ሰርዝ",
+    "undo": "መልስ",
+    "select": {
+      "placeholder": "አንድ አማራጭ ይምረጡ",
+      "noOptions": "ምንም አማራጮች የሉም",
+      "noValue": "ምንም ዋጋ የለም",
+      "loading": "አማራጮች በመጫን ላይ...",
+      "searchMultiple": "አንድ ወይም ብዙ እሴቶችን ይምረጡ ወይም ይፈልጉ",
+      "searchSingle": "አንድ እሴት ይምረጡ ወይም ይፈልጉ",
+      "selectMultiple": "አንድ ወይም ብዙ እሴቶችን ይምረጡ",
+      "selectSingle": "አንድ እሴት ይምረጡ"
+    },
+    "show": {
+      "more": "ተጨማሪ አሳይ",
+      "less": "ያነሰ አሳይ"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "አካላት",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "ስህተት 401 – ያልተፈቀደ",
+      "message": "ይህን ገጽ ለማግኘት መግባት አለብዎት። እባክዎ የመግቢያ መረጃዎን ያረጋግጡ እና እንደገና ይሞክሩ።"
+    },
+    "403": {
+      "title": "ውይ! ስህተት 403 – ይቅርታ፣ {{username}}",
+      "message": "ሰላም <1>{{username}}</1>፣ እናውቅሃለን፣ ግን ይህን ገጽ ለማግኘት ትክክለኛ ፈቃዶች የሉዎትም። ይህ ስህተት ነው ብለው ከገመቱ እባክዎ ያግኙን!"
+    },
+    "404": {
+      "title": "ውይ! ስህተት 404 – ገጹ አልተገኘም",
+      "message": "እየፈለጉት ያሉት ገጽ አሁን የለም ይመስላል። ተንቀሳቅሶ ወይም ተሰርዟል ሊሆን ይችላል። URL ያረጋግጡ ወይም ወደ መነሻ ገጹ ይመለሱ!"
+    },
+    "entities": {
+      "create": "በመፍጠር ላይ ስህተት",
+      "read": "በማንበብ ላይ ስህተት",
+      "update": "በማዘመን ላይ ስህተት",
+      "delete": "በመሰረዝ ላይ ስህተት"
+    },
+    "options": {
+      "load": "አማራጮችን በመጫን ላይ ስህተት ለ"
+    },
+    "validations": {
+      "email": "የተሳሳተ ኢሜይል ቅርጸት",
+      "file": {
+        "minSize": "ፋይሉ ቢያንስ {{accepted}} መሆን አለበት። አሁን ያለው መጠን፡ {{actual}}",
+        "maxSize": "ፋይሉ {{accepted}} ማለፍ አይችልም። አሁን ያለው መጠን፡ {{actual}}",
+        "invalidType": "የፋይል ዓይነት {{accepted}} መሆን አለበት። አሁን ያለው ዓይነት፡ {{actual}}",
+        "typeImage": "ፋይሉ ምስል መሆን አለበት",
+        "required": "ፋይሉ አስፈላጊ ነው"
+      },
+      "min": "ቁጥሩ ከ {{accepted}} ጋር እኩል ወይም ከዚያ በላይ መሆን አለበት",
+      "minlength": "ጽሑፉ ቢያንስ {{accepted}} ቁምፊዎችን መያዝ አለበት",
+      "minbytes": "ፋይሉ ቢያንስ {{accepted}} መሆን አለበት",
+      "max": "ቁጥሩ ከ {{accepted}} ጋር እኩል ወይም ያነሰ መሆን አለበት",
+      "maxlength": "ጽሑፉ ከፍተኛው {{accepted}} ቁምፊዎችን መያዝ ይችላል",
+      "maxbytes": "ፋይሉ {{accepted}} ማለፍ አይችልም",
+      "pattern": "የተሳሳተ ቅርጸት",
+      "required": "አስፈላጊ",
+      "url": "የተሳሳተ URL ቅርጸት"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "ቀን",
+      "hour": "ሰዓት",
+      "minute": "ደቂቃ",
+      "second": "ሰከንድ",
+      "millisecond": "ሚሊሰከንድ",
+      "days": "ቀናት",
+      "hours": "ሰዓታት",
+      "minutes": "ደቂቃዎች",
+      "seconds": "ሰከንዶች",
+      "milliseconds": "ሚሊሰከንዶች"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "ቁጥሩ ከ {{accepted}} ጋር እኩል ወይም ከዚያ በላይ መሆን አለበት",
+      "minlength": "ጽሑፉ ቢያንስ {{accepted}} ቁምፊዎችን መያዝ አለበት",
+      "minbytes": "ፋይሉ ቢያንስ {{accepted}} መሆን አለበት",
+      "max": "ቁጥሩ ከ {{accepted}} ጋር እኩል ወይም ያነሰ መሆን አለበት",
+      "maxlength": "ጽሑፉ ከፍተኛው {{accepted}} ቁምፊዎችን መያዝ ይችላል",
+      "maxbytes": "ፋይሉ {{accepted}} ማለፍ አይችልም",
+      "required": "አስፈላጊ",
+      "unique": "እሴቱ ልዩ መሆን አለበት"
+    }
+  },
+  "messages": {
+    "noData": "ምንም መዝገቦች አልተገኙም"
+  },
+  "pages": {
+    "Home": "ዳሽቦርድ"
+  },
+  "ui": {
+    "account": {
+      "login": "ግባ",
+      "loggingIn": "በመግባት ላይ...",
+      "logout": "ውጣ",
+      "loggingOut": "በመውጣት ላይ...",
+      "logoutError": "በመውጣት ላይ ስህተት",
+      "unknownError": "ያልታወቀ ስህተት"
+    },
+    "darkmode": {
+      "light": "ወደ ብሩህ ሁነታ ቀይር",
+      "dark": "ወደ ጨለማ ሁነታ ቀይር"
+    }
+  }
+}
