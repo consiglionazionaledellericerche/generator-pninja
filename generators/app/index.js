@@ -76,6 +76,20 @@ export default class extends Generator {
       namespace: 'pninja:docker'
     });
 
+    // sub generator Search
+    const searchGeneratorPath = path.resolve(__dirname, '../search/index.js');
+    const { default: SearchGenerator } = await import(searchGeneratorPath);
+
+    await this.composeWith({
+      Generator: SearchGenerator,
+      path: path.dirname(searchGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: searchGeneratorPath,
+      namespace: 'pninja:search'
+    });
+
     // sub generator Final
     const finalGeneratorPath = path.resolve(__dirname, '../final/index.js');
     const { default: FinalGenerator } = await import(finalGeneratorPath);
@@ -172,11 +186,10 @@ export default class extends Generator {
     queueConfigFileContents = queueConfigFileContents.replace(`'table' => 'failed_jobs',`, `'table' => 'queue__failed_jobs',`);
     fs.writeFileSync(this.destinationPath(`${this.destinationPath('server/config/queue.php')}`), queueConfigFileContents, { encoding: 'utf8', flag: 'w' });
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
-    this.log(`${colors.green('   write settings to')} ${colors.whiteBright(`${this.destinationPath('server')}/.env`)}`);
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);
     if (this.answers.dbms === 'sqlite') {
-      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `SCOUT_DRIVER=database\n\nDB_CONNECTION=sqlite`);
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlite`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=database/database.sqlite`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$\n/m, ``);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$\n/m, ``);
@@ -184,7 +197,7 @@ export default class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$\n/m, ``);
     }
     if (this.answers.dbms === 'mysql') {
-      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `SCOUT_DRIVER=database\n\nDB_CONNECTION=mysql`);
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mysql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);
@@ -192,7 +205,7 @@ export default class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8mb4\nDB_COLLATION=utf8mb4_unicode_ci`);
     }
     if (this.answers.dbms === 'mariadb') {
-      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `SCOUT_DRIVER=database\n\nDB_CONNECTION=mariadb`);
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=mariadb`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=3306`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);
@@ -200,7 +213,7 @@ export default class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8mb4\nDB_COLLATION=utf8mb4_unicode_ci`);
     }
     if (this.answers.dbms === 'pgsql') {
-      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `SCOUT_DRIVER=database\n\nDB_CONNECTION=pgsql`);
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=pgsql`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=5432`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=\nDB_SCHEMA=public`);
@@ -208,7 +221,7 @@ export default class extends Generator {
       envFileContents = envFileContents.replace(/^(# )?DB_PASSWORD=.*$/m, `DB_PASSWORD=mysecretpassword\nDB_CHARSET=utf8`);
     }
     if (this.answers.dbms === 'sqlsrv') {
-      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `SCOUT_DRIVER=database\n\nDB_CONNECTION=sqlsrv`);
+      envFileContents = envFileContents.replace(/^DB_CONNECTION=.*$/m, `DB_CONNECTION=sqlsrv`);
       envFileContents = envFileContents.replace(/^(# )?DB_HOST=.*$/m, `DB_HOST=127.0.0.1`);
       envFileContents = envFileContents.replace(/^(# )?DB_PORT=.*$/m, `DB_PORT=1433`);
       envFileContents = envFileContents.replace(/^(# )?DB_DATABASE=.*$/m, `DB_DATABASE=test\n# DB_PREFIX=`);

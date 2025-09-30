@@ -40,16 +40,15 @@ class <%- className %> extends Model
         <%- fillable %>
     ];
 <%  }-%>
-<%  if (toSearchableArray && toSearchableArray.length > 0) { -%>
     public function toSearchableArray()
     {
         return [
+            'id' => $this->id,
 <%    toSearchableArray.map(prop => { -%>
             '<%- prop %>' => $this-><%- prop %>,
 <%    })-%>
         ];
     }
-<%  }-%>
 <%  if (relations) { -%>
     <%- relations -%>
 <%  }-%>
