@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Akcie",
+      "back": "Späť",
+      "cancel": "Zrušiť",
+      "confirmDelete": "Potvrdiť vymazanie",
+      "create": "Vytvoriť",
+      "delete": "Vymazať",
+      "edit": "Upraviť",
+      "save": "Uložiť",
+      "saving": "Ukladanie...",
+      "update": "Aktualizovať",
+      "view": "Zobraziť",
+      "file": {
+        "markedForDeletion": "Súbor označený na vymazanie (Uložte pre potvrdenie)",
+        "viewOrDownload": "Zobraziť/Stiahnuť",
+        "replaceWarning": "Výberom nového súboru nahradíte existujúci"
+      },
+      "successfullyCreated": "Záznam ID {{id}} bol úspešne vytvorený",
+      "successfullyUpdated": "Záznam ID {{id}} bol úspešne aktualizovaný",
+      "successfullyDeleted": "Záznam ID {{id}} bol úspešne vymazaný"
+    },
+    "generateUUID": "Vygenerovať UUID verzie 4"
+  },
+  "common": {
+    "back": "Späť",
+    "cancel": "Zrušiť",
+    "undo": "Vrátiť späť",
+    "select": {
+      "placeholder": "Vyberte možnosť",
+      "noOptions": "Žiadne možnosti",
+      "noValue": "Žiadna hodnota",
+      "loading": "Načítanie možností...",
+      "searchMultiple": "Vyberte alebo vyhľadajte jednu alebo viac hodnôt",
+      "searchSingle": "Vyberte alebo vyhľadajte hodnotu",
+      "selectMultiple": "Vyberte jednu alebo viac hodnôt",
+      "selectSingle": "Vyberte hodnotu"
+    },
+    "show": {
+      "more": "Zobraziť viac",
+      "less": "Zobraziť menej"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entity",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Chyba 401 – Neautorizované",
+      "message": "Na prístup k tejto stránke sa musíte prihlásiť. Skontrolujte svoje prihlasovacie údaje a skúste to znova."
+    },
+    "403": {
+      "title": "Ups! Chyba 403 – Ospravedlňujeme sa, {{username}}",
+      "message": "Ahoj <1>{{username}}</1>, poznáme ťa, ale nemáš potrebné oprávnenia na prístup k tejto stránke. Ak si myslíš, že ide o chybu, ozvi sa nám!"
+    },
+    "404": {
+      "title": "Ups! Chyba 404 – Stránka nebola nájdená",
+      "message": "Vyzerá to, že stránka, ktorú hľadáš, už neexistuje. Možno bola presunutá alebo vymazaná. Skontroluj URL alebo sa vráť na hlavnú stránku!"
+    },
+    "entities": {
+      "create": "Chyba pri vytváraní",
+      "read": "Chyba pri čítaní",
+      "update": "Chyba pri aktualizácii",
+      "delete": "Chyba pri vymazávaní"
+    },
+    "options": {
+      "load": "Chyba pri načítaní možností pre"
+    },
+    "validations": {
+      "email": "Neplatný formát e-mailu",
+      "file": {
+        "minSize": "Súbor musí mať aspoň {{accepted}}. Aktuálna veľkosť: {{actual}}",
+        "maxSize": "Súbor nesmie presiahnuť {{accepted}}. Aktuálna veľkosť: {{actual}}",
+        "invalidType": "Typ súboru musí byť {{accepted}}. Aktuálny typ: {{actual}}",
+        "typeImage": "Súbor musí byť obrázok",
+        "required": "Súbor je povinný"
+      },
+      "min": "Číslo musí byť väčšie alebo rovné {{accepted}}",
+      "minlength": "Text musí obsahovať aspoň {{accepted}} znak(ov)",
+      "minbytes": "Súbor musí mať aspoň {{accepted}}",
+      "max": "Číslo musí byť menšie alebo rovné {{accepted}}",
+      "maxlength": "Text môže obsahovať maximálne {{accepted}} znak(ov)",
+      "maxbytes": "Súbor nesmie presiahnuť {{accepted}}",
+      "pattern": "Neplatný formát",
+      "required": "Povinné",
+      "url": "Neplatný formát URL"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Deň",
+      "hour": "Hodina",
+      "minute": "Minúta",
+      "second": "Sekunda",
+      "millisecond": "Milisekunda",
+      "days": "Dni",
+      "hours": "Hodiny",
+      "minutes": "Minúty",
+      "seconds": "Sekundy",
+      "milliseconds": "Milisekundy"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Číslo musí byť väčšie alebo rovné {{accepted}}",
+      "minlength": "Text musí obsahovať aspoň {{accepted}} znak(ov)",
+      "minbytes": "Súbor musí mať aspoň {{accepted}}",
+      "max": "Číslo musí byť menšie alebo rovné {{accepted}}",
+      "maxlength": "Text môže obsahovať maximálne {{accepted}} znak(ov)",
+      "maxbytes": "Súbor nesmie presiahnuť {{accepted}}",
+      "required": "Povinné",
+      "unique": "Hodnota musí byť jedinečná"
+    }
+  },
+  "messages": {
+    "noData": "Neboli nájdené žiadne záznamy"
+  },
+  "pages": {
+    "Home": "Nástenka"
+  },
+  "ui": {
+    "account": {
+      "login": "Prihlásiť sa",
+      "loggingIn": "Prihlasovanie...",
+      "logout": "Odhlásiť sa",
+      "loggingOut": "Odhlasovanie...",
+      "logoutError": "Chyba pri odhlasovaní",
+      "unknownError": "Neznáma chyba"
+    },
+    "darkmode": {
+      "light": "Prepnúť na svetlý režim",
+      "dark": "Prepnúť na tmavý režim"
+    }
+  }
+}

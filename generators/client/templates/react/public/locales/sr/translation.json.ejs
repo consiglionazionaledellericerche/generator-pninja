@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Акције",
+      "back": "Назад",
+      "cancel": "Откажи",
+      "confirmDelete": "Потврди брисање",
+      "create": "Креирај",
+      "delete": "Обриши",
+      "edit": "Измени",
+      "save": "Сачувај",
+      "saving": "Чување...",
+      "update": "Ажурирај",
+      "view": "Прегледај",
+      "file": {
+        "markedForDeletion": "Фајл означен за брисање (Сачувајте за потврду)",
+        "viewOrDownload": "Прегледај/Преузми",
+        "replaceWarning": "Избор новог фајла ће заменити постојећи"
+      },
+      "successfullyCreated": "Запис ID {{id}} успешно креиран",
+      "successfullyUpdated": "Запис ID {{id}} успешно ажуриран",
+      "successfullyDeleted": "Запис ID {{id}} успешно обрисан"
+    },
+    "generateUUID": "Генериши UUID верзију 4"
+  },
+  "common": {
+    "back": "Назад",
+    "cancel": "Откажи",
+    "undo": "Поништи",
+    "select": {
+      "placeholder": "Изаберите опцију",
+      "noOptions": "Нема опција",
+      "noValue": "Нема вредности",
+      "loading": "Учитавање опција...",
+      "searchMultiple": "Изаберите или претражите једну или више вредности",
+      "searchSingle": "Изаберите или претражите вредност",
+      "selectMultiple": "Изаберите једну или више вредности",
+      "selectSingle": "Изаберите вредност"
+    },
+    "show": {
+      "more": "Прикажи више",
+      "less": "Прикажи мање"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Ентитети",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Грешка 401 – Неовлашћено",
+      "message": "Морате се пријавити да бисте приступили овој страници. Проверите своје податке за пријаву и покушајте поново."
+    },
+    "403": {
+      "title": "Упс! Грешка 403 – Извињавамо се, {{username}}",
+      "message": "Здраво <1>{{username}}</1>, препознајемо вас, али немате одговарајуће дозволе за приступ овој страници. Ако мислите да је ово грешка, контактирајте нас!"
+    },
+    "404": {
+      "title": "Упс! Грешка 404 – Страница није пронађена",
+      "message": "Изгледа да страница коју тражите више не постоји. Можда је премештена или обрисана. Проверите URL или се вратите на почетну страницу!"
+    },
+    "entities": {
+      "create": "Грешка при креирању",
+      "read": "Грешка при читању",
+      "update": "Грешка при ажурирању",
+      "delete": "Грешка при брисању"
+    },
+    "options": {
+      "load": "Грешка при учитавању опција за"
+    },
+    "validations": {
+      "email": "Неисправан формат е-поште",
+      "file": {
+        "minSize": "Фајл мора бити најмање {{accepted}}. Тренутна величина: {{actual}}",
+        "maxSize": "Фајл не може прећи {{accepted}}. Тренутна величина: {{actual}}",
+        "invalidType": "Тип фајла мора бити {{accepted}}. Тренутни тип: {{actual}}",
+        "typeImage": "Фајл мора бити слика",
+        "required": "Фајл је обавезан"
+      },
+      "min": "Број мора бити већи или једнак {{accepted}}",
+      "minlength": "Текст мора садржати најмање {{accepted}} карактера",
+      "minbytes": "Фајл мора бити најмање {{accepted}}",
+      "max": "Број мора бити мањи или једнак {{accepted}}",
+      "maxlength": "Текст може садржати највише {{accepted}} карактера",
+      "maxbytes": "Фајл не може прећи {{accepted}}",
+      "pattern": "Неисправан формат",
+      "required": "Обавезно",
+      "url": "Неисправан URL формат"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Дан",
+      "hour": "Сат",
+      "minute": "Минут",
+      "second": "Секунда",
+      "millisecond": "Милисекунда",
+      "days": "Дана",
+      "hours": "Сати",
+      "minutes": "Минута",
+      "seconds": "Секунди",
+      "milliseconds": "Милисекунди"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Број мора бити већи или једнак {{accepted}}",
+      "minlength": "Текст мора садржати најмање {{accepted}} карактера",
+      "minbytes": "Фајл мора бити најмање {{accepted}}",
+      "max": "Број мора бити мањи или једнак {{accepted}}",
+      "maxlength": "Текст може садржати највише {{accepted}} карактера",
+      "maxbytes": "Фајл не може прећи {{accepted}}",
+      "required": "Обавезно",
+      "unique": "Вредност мора бити јединствена"
+    }
+  },
+  "messages": {
+    "noData": "Нису пронађени записи"
+  },
+  "pages": {
+    "Home": "Контролна табла"
+  },
+  "ui": {
+    "account": {
+      "login": "Пријава",
+      "loggingIn": "Пријављивање...",
+      "logout": "Одјава",
+      "loggingOut": "Одјављивање...",
+      "logoutError": "Грешка при одјави",
+      "unknownError": "Непозната грешка"
+    },
+    "darkmode": {
+      "light": "Пребаци на светли режим",
+      "dark": "Пребаци на тамни режим"
+    }
+  }
+}

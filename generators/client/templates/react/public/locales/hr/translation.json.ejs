@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Radnje",
+      "back": "Natrag",
+      "cancel": "Odustani",
+      "confirmDelete": "Potvrdi brisanje",
+      "create": "Kreiraj",
+      "delete": "Obriši",
+      "edit": "Uredi",
+      "save": "Spremi",
+      "saving": "Spremanje...",
+      "update": "Ažuriraj",
+      "view": "Pregled",
+      "file": {
+        "markedForDeletion": "Datoteka označena za brisanje (Spremite za potvrdu)",
+        "viewOrDownload": "Pregled/Preuzimanje",
+        "replaceWarning": "Odabir nove datoteke zamijenit će postojeću"
+      },
+      "successfullyCreated": "Zapis ID {{id}} uspješno kreiran",
+      "successfullyUpdated": "Zapis ID {{id}} uspješno ažuriran",
+      "successfullyDeleted": "Zapis ID {{id}} uspješno obrisan"
+    },
+    "generateUUID": "Generiraj UUID verziju 4"
+  },
+  "common": {
+    "back": "Natrag",
+    "cancel": "Odustani",
+    "undo": "Poništi",
+    "select": {
+      "placeholder": "Odaberite opciju",
+      "noOptions": "Nema opcija",
+      "noValue": "Nema vrijednosti",
+      "loading": "Učitavanje opcija...",
+      "searchMultiple": "Odaberite ili pretražite jednu ili više vrijednosti",
+      "searchSingle": "Odaberite ili pretražite vrijednost",
+      "selectMultiple": "Odaberite jednu ili više vrijednosti",
+      "selectSingle": "Odaberite vrijednost"
+    },
+    "show": {
+      "more": "Prikaži više",
+      "less": "Prikaži manje"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entiteti",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Greška 401 – Neovlašteno",
+      "message": "Morate se prijaviti kako biste pristupili ovoj stranici. Molimo provjerite svoje podatke i pokušajte ponovno."
+    },
+    "403": {
+      "title": "Ups! Greška 403 – Žao nam je, {{username}}",
+      "message": "Hej <1>{{username}}</1>, prepoznajemo te, ali nemaš odgovarajuće dozvole za pristup ovoj stranici. Ako misliš da je ovo greška, javi nam se!"
+    },
+    "404": {
+      "title": "Ups! Greška 404 – Stranica nije pronađena",
+      "message": "Izgleda da stranica koju tražiš više ne postoji. Možda je premještena ili obrisana. Provjeri URL ili se vrati na početnu stranicu!"
+    },
+    "entities": {
+      "create": "Greška pri kreiranju",
+      "read": "Greška pri čitanju",
+      "update": "Greška pri ažuriranju",
+      "delete": "Greška pri brisanju"
+    },
+    "options": {
+      "load": "Greška pri učitavanju opcija za"
+    },
+    "validations": {
+      "email": "Neispravan format e-pošte",
+      "file": {
+        "minSize": "Datoteka mora biti najmanje {{accepted}}. Trenutna veličina: {{actual}}",
+        "maxSize": "Datoteka ne može premašiti {{accepted}}. Trenutna veličina: {{actual}}",
+        "invalidType": "Tip datoteke mora biti {{accepted}}. Trenutni tip: {{actual}}",
+        "typeImage": "Datoteka mora biti slika",
+        "required": "Datoteka je obavezna"
+      },
+      "min": "Broj mora biti veći ili jednak {{accepted}}",
+      "minlength": "Tekst mora sadržavati najmanje {{accepted}} znak(ova)",
+      "minbytes": "Datoteka mora biti najmanje {{accepted}}",
+      "max": "Broj mora biti manji ili jednak {{accepted}}",
+      "maxlength": "Tekst može sadržavati najviše {{accepted}} znak(ova)",
+      "maxbytes": "Datoteka ne može premašiti {{accepted}}",
+      "pattern": "Neispravan format",
+      "required": "Obavezno",
+      "url": "Neispravan URL format"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dan",
+      "hour": "Sat",
+      "minute": "Minuta",
+      "second": "Sekunda",
+      "millisecond": "Milisekunda",
+      "days": "Dana",
+      "hours": "Sati",
+      "minutes": "Minute",
+      "seconds": "Sekunde",
+      "milliseconds": "Milisekunde"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Broj mora biti veći ili jednak {{accepted}}",
+      "minlength": "Tekst mora sadržavati najmanje {{accepted}} znak(ova)",
+      "minbytes": "Datoteka mora biti najmanje {{accepted}}",
+      "max": "Broj mora biti manji ili jednak {{accepted}}",
+      "maxlength": "Tekst može sadržavati najviše {{accepted}} znak(ova)",
+      "maxbytes": "Datoteka ne može premašiti {{accepted}}",
+      "required": "Obavezno",
+      "unique": "Vrijednost mora biti jedinstvena"
+    }
+  },
+  "messages": {
+    "noData": "Nema pronađenih zapisa"
+  },
+  "pages": {
+    "Home": "Kontrolna ploča"
+  },
+  "ui": {
+    "account": {
+      "login": "Prijava",
+      "loggingIn": "Prijavljivanje...",
+      "logout": "Odjava",
+      "loggingOut": "Odjavljivanje...",
+      "logoutError": "Greška pri odjavi",
+      "unknownError": "Nepoznata greška"
+    },
+    "darkmode": {
+      "light": "Prebaci na svijetli način rada",
+      "dark": "Prebaci na tamni način rada"
+    }
+  }
+}

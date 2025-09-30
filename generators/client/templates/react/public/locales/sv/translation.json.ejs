@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Åtgärder",
+      "back": "Tillbaka",
+      "cancel": "Avbryt",
+      "confirmDelete": "Bekräfta radering",
+      "create": "Skapa",
+      "delete": "Ta bort",
+      "edit": "Redigera",
+      "save": "Spara",
+      "saving": "Sparar...",
+      "update": "Uppdatera",
+      "view": "Visa",
+      "file": {
+        "markedForDeletion": "Fil markerad för radering (Spara för att bekräfta)",
+        "viewOrDownload": "Visa/Ladda ner",
+        "replaceWarning": "Att välja en ny fil kommer att ersätta den befintliga"
+      },
+      "successfullyCreated": "Post ID {{id}} skapades framgångsrikt",
+      "successfullyUpdated": "Post ID {{id}} uppdaterades framgångsrikt",
+      "successfullyDeleted": "Post ID {{id}} raderades framgångsrikt"
+    },
+    "generateUUID": "Generera en version 4 UUID"
+  },
+  "common": {
+    "back": "Tillbaka",
+    "cancel": "Avbryt",
+    "undo": "Ångra",
+    "select": {
+      "placeholder": "Välj ett alternativ",
+      "noOptions": "Inga alternativ",
+      "noValue": "Inget värde",
+      "loading": "Laddar alternativ...",
+      "searchMultiple": "Välj eller sök efter ett eller flera värden",
+      "searchSingle": "Välj eller sök efter ett värde",
+      "selectMultiple": "Välj ett eller flera värden",
+      "selectSingle": "Välj ett värde"
+    },
+    "show": {
+      "more": "Visa mer",
+      "less": "Visa mindre"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entiteter",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Fel 401 – Obehörig",
+      "message": "Du måste logga in för att komma åt denna sida. Kontrollera dina inloggningsuppgifter och försök igen."
+    },
+    "403": {
+      "title": "Hoppsan! Fel 403 – Tyvärr, {{username}}",
+      "message": "Hej <1>{{username}}</1>, vi känner igen dig, men du har inte rätt behörigheter för att komma åt denna sida. Om du tror att detta är ett fel, kontakta oss!"
+    },
+    "404": {
+      "title": "Hoppsan! Fel 404 – Sidan hittades inte",
+      "message": "Det verkar som att sidan du letar efter inte finns längre. Den kan ha flyttats eller raderats. Kontrollera URL:en eller gå tillbaka till startsidan!"
+    },
+    "entities": {
+      "create": "Fel vid skapande",
+      "read": "Fel vid läsning",
+      "update": "Fel vid uppdatering",
+      "delete": "Fel vid radering"
+    },
+    "options": {
+      "load": "Fel vid laddning av alternativ för"
+    },
+    "validations": {
+      "email": "Ogiltigt e-postformat",
+      "file": {
+        "minSize": "Filen måste vara minst {{accepted}}. Nuvarande storlek: {{actual}}",
+        "maxSize": "Filen får inte överstiga {{accepted}}. Nuvarande storlek: {{actual}}",
+        "invalidType": "Filtypen måste vara {{accepted}}. Nuvarande typ: {{actual}}",
+        "typeImage": "Filen måste vara en bild",
+        "required": "Filen är obligatorisk"
+      },
+      "min": "Numret måste vara större än eller lika med {{accepted}}",
+      "minlength": "Texten måste innehålla minst {{accepted}} tecken",
+      "minbytes": "Filen måste vara minst {{accepted}}",
+      "max": "Numret måste vara mindre än eller lika med {{accepted}}",
+      "maxlength": "Texten får innehålla högst {{accepted}} tecken",
+      "maxbytes": "Filen får inte överstiga {{accepted}}",
+      "pattern": "Ogiltigt format",
+      "required": "Obligatorisk",
+      "url": "Ogiltigt URL-format"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dag",
+      "hour": "Timme",
+      "minute": "Minut",
+      "second": "Sekund",
+      "millisecond": "Millisekund",
+      "days": "Dagar",
+      "hours": "Timmar",
+      "minutes": "Minuter",
+      "seconds": "Sekunder",
+      "milliseconds": "Millisekunder"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Numret måste vara större än eller lika med {{accepted}}",
+      "minlength": "Texten måste innehålla minst {{accepted}} tecken",
+      "minbytes": "Filen måste vara minst {{accepted}}",
+      "max": "Numret måste vara mindre än eller lika med {{accepted}}",
+      "maxlength": "Texten får innehålla högst {{accepted}} tecken",
+      "maxbytes": "Filen får inte överstiga {{accepted}}",
+      "required": "Obligatorisk",
+      "unique": "Värdet måste vara unikt"
+    }
+  },
+  "messages": {
+    "noData": "Inga poster hittades"
+  },
+  "pages": {
+    "Home": "Instrumentpanel"
+  },
+  "ui": {
+    "account": {
+      "login": "Logga in",
+      "loggingIn": "Loggar in...",
+      "logout": "Logga ut",
+      "loggingOut": "Loggar ut...",
+      "logoutError": "Fel vid utloggning",
+      "unknownError": "Okänt fel"
+    },
+    "darkmode": {
+      "light": "Byt till ljust läge",
+      "dark": "Byt till mörkt läge"
+    }
+  }
+}

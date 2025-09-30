@@ -9,6 +9,11 @@ export const LANGUAGES_DATA = {
     engName: 'Bengali',
     value: 'bn',
   },
+  bg: {
+    name: 'Български',
+    engName: 'Bulgarian',
+    value: 'bg',
+  },
   "zh-CN": {
     name: '中文 (简体)',
     engName: 'Chinese (Simplified)',
@@ -19,6 +24,21 @@ export const LANGUAGES_DATA = {
     engName: 'Chinese (Traditional)',
     value: 'zh-TW',
   },
+  hr: {
+    name: 'Hrvatski',
+    engName: 'Croatian',
+    value: 'hr',
+  },
+  cs: {
+    name: 'Čeština',
+    engName: 'Czech',
+    value: 'cs',
+  },
+  da: {
+    name: 'Dansk',
+    engName: 'Danish',
+    value: 'da',
+  },
   nl: {
     name: 'Nederlands',
     engName: 'Dutch',
@@ -28,6 +48,11 @@ export const LANGUAGES_DATA = {
     name: 'English',
     engName: 'English',
     value: 'en',
+  },
+  fi: {
+    name: 'Suomi',
+    engName: 'Finnish',
+    value: 'fi',
   },
   fr: {
     name: 'Français',
@@ -59,6 +84,11 @@ export const LANGUAGES_DATA = {
     engName: 'Hindi',
     value: 'hi',
   },
+  hu: {
+    name: 'Magyar',
+    engName: 'Hungarian',
+    value: 'hu',
+  },
   id: {
     name: 'Bahasa Indonesia',
     engName: 'Indonesian',
@@ -78,6 +108,11 @@ export const LANGUAGES_DATA = {
     name: '한국어',
     engName: 'Korean',
     value: 'ko',
+  },
+  no: {
+    name: 'Norsk',
+    engName: 'Norwegian',
+    value: 'no',
   },
   fa: {
     name: 'فارسی',
@@ -104,10 +139,25 @@ export const LANGUAGES_DATA = {
     engName: 'Russian',
     value: 'ru',
   },
+  sr: {
+    name: 'Српски',
+    engName: 'Serbian',
+    value: 'sr',
+  },
+  sk: {
+    name: 'Slovenčina',
+    engName: 'Slovak',
+    value: 'sk',
+  },
   es: {
     name: 'Español',
     engName: 'Spanish',
     value: 'es',
+  },
+  sv: {
+    name: 'Svenska',
+    engName: 'Swedish',
+    value: 'sv',
   },
   sw: {
     name: 'Kiswahili',

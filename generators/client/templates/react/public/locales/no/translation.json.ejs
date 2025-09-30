@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Handlinger",
+      "back": "Tilbake",
+      "cancel": "Avbryt",
+      "confirmDelete": "Bekreft sletting",
+      "create": "Opprett",
+      "delete": "Slett",
+      "edit": "Rediger",
+      "save": "Lagre",
+      "saving": "Lagrer...",
+      "update": "Oppdater",
+      "view": "Vis",
+      "file": {
+        "markedForDeletion": "Fil merket for sletting (Lagre for å bekrefte)",
+        "viewOrDownload": "Vis/Last ned",
+        "replaceWarning": "Å velge en ny fil vil erstatte den eksisterende"
+      },
+      "successfullyCreated": "Post ID {{id}} opprettet",
+      "successfullyUpdated": "Post ID {{id}} oppdatert",
+      "successfullyDeleted": "Post ID {{id}} slettet"
+    },
+    "generateUUID": "Generer en versjon 4 UUID"
+  },
+  "common": {
+    "back": "Tilbake",
+    "cancel": "Avbryt",
+    "undo": "Angre",
+    "select": {
+      "placeholder": "Velg et alternativ",
+      "noOptions": "Ingen alternativer",
+      "noValue": "Ingen verdi",
+      "loading": "Laster alternativer...",
+      "searchMultiple": "Velg eller søk etter en eller flere verdier",
+      "searchSingle": "Velg eller søk etter en verdi",
+      "selectMultiple": "Velg en eller flere verdier",
+      "selectSingle": "Velg en verdi"
+    },
+    "show": {
+      "more": "Vis mer",
+      "less": "Vis mindre"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entiteter",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Feil 401 – Uautorisert",
+      "message": "Du må logge inn for å få tilgang til denne siden. Vennligst sjekk påloggingsinformasjonen din og prøv igjen."
+    },
+    "403": {
+      "title": "Oops! Feil 403 – Beklager, {{username}}",
+      "message": "Hei <1>{{username}}</1>, vi gjenkjenner deg, men du har ikke de rette tillatelsene for å få tilgang til denne siden. Hvis du tror dette er en feil, ta kontakt med oss!"
+    },
+    "404": {
+      "title": "Oops! Feil 404 – Siden ble ikke funnet",
+      "message": "Det ser ut til at siden du leter etter ikke eksisterer lenger. Den kan ha blitt flyttet eller slettet. Sjekk URL-en eller gå tilbake til forsiden!"
+    },
+    "entities": {
+      "create": "Feil ved opprettelse",
+      "read": "Feil ved lesing",
+      "update": "Feil ved oppdatering",
+      "delete": "Feil ved sletting"
+    },
+    "options": {
+      "load": "Feil ved lasting av alternativer for"
+    },
+    "validations": {
+      "email": "Ugyldig e-postformat",
+      "file": {
+        "minSize": "Filen må være minst {{accepted}}. Nåværende størrelse: {{actual}}",
+        "maxSize": "Filen kan ikke overstige {{accepted}}. Nåværende størrelse: {{actual}}",
+        "invalidType": "Filtypen må være {{accepted}}. Nåværende type: {{actual}}",
+        "typeImage": "Filen må være et bilde",
+        "required": "Filen er påkrevd"
+      },
+      "min": "Tallet må være større enn eller lik {{accepted}}",
+      "minlength": "Teksten må inneholde minst {{accepted}} tegn",
+      "minbytes": "Filen må være minst {{accepted}}",
+      "max": "Tallet må være mindre enn eller lik {{accepted}}",
+      "maxlength": "Teksten kan inneholde maksimalt {{accepted}} tegn",
+      "maxbytes": "Filen kan ikke overstige {{accepted}}",
+      "pattern": "Ugyldig format",
+      "required": "Påkrevd",
+      "url": "Ugyldig URL-format"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dag",
+      "hour": "Time",
+      "minute": "Minutt",
+      "second": "Sekund",
+      "millisecond": "Millisekund",
+      "days": "Dager",
+      "hours": "Timer",
+      "minutes": "Minutter",
+      "seconds": "Sekunder",
+      "milliseconds": "Millisekunder"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Tallet må være større enn eller lik {{accepted}}",
+      "minlength": "Teksten må inneholde minst {{accepted}} tegn",
+      "minbytes": "Filen må være minst {{accepted}}",
+      "max": "Tallet må være mindre enn eller lik {{accepted}}",
+      "maxlength": "Teksten kan inneholde maksimalt {{accepted}} tegn",
+      "maxbytes": "Filen kan ikke overstige {{accepted}}",
+      "required": "Påkrevd",
+      "unique": "Verdien må være unik"
+    }
+  },
+  "messages": {
+    "noData": "Ingen poster funnet"
+  },
+  "pages": {
+    "Home": "Dashbord"
+  },
+  "ui": {
+    "account": {
+      "login": "Logg inn",
+      "loggingIn": "Logger inn...",
+      "logout": "Logg ut",
+      "loggingOut": "Logger ut...",
+      "logoutError": "Feil ved utlogging",
+      "unknownError": "Ukjent feil"
+    },
+    "darkmode": {
+      "light": "Bytt til lys modus",
+      "dark": "Bytt til mørk modus"
+    }
+  }
+}

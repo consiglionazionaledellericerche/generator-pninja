@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Műveletek",
+      "back": "Vissza",
+      "cancel": "Mégse",
+      "confirmDelete": "Törlés megerősítése",
+      "create": "Létrehozás",
+      "delete": "Törlés",
+      "edit": "Szerkesztés",
+      "save": "Mentés",
+      "saving": "Mentés...",
+      "update": "Frissítés",
+      "view": "Megtekintés",
+      "file": {
+        "markedForDeletion": "A fájl törlésre jelölve (Mentés a megerősítéshez)",
+        "viewOrDownload": "Megtekintés/Letöltés",
+        "replaceWarning": "Új fájl kiválasztása lecseréli a meglévőt"
+      },
+      "successfullyCreated": "{{id}} azonosítójú rekord sikeresen létrehozva",
+      "successfullyUpdated": "{{id}} azonosítójú rekord sikeresen frissítve",
+      "successfullyDeleted": "{{id}} azonosítójú rekord sikeresen törölve"
+    },
+    "generateUUID": "4-es verziójú UUID generálása"
+  },
+  "common": {
+    "back": "Vissza",
+    "cancel": "Mégse",
+    "undo": "Visszavonás",
+    "select": {
+      "placeholder": "Válasszon egy lehetőséget",
+      "noOptions": "Nincs lehetőség",
+      "noValue": "Nincs érték",
+      "loading": "Lehetőségek betöltése...",
+      "searchMultiple": "Válasszon vagy keressen egy vagy több értéket",
+      "searchSingle": "Válasszon vagy keressen egy értéket",
+      "selectMultiple": "Válasszon egy vagy több értéket",
+      "selectSingle": "Válasszon egy értéket"
+    },
+    "show": {
+      "more": "Több megjelenítése",
+      "less": "Kevesebb megjelenítése"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entitások",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "401-es hiba – Nem engedélyezett",
+      "message": "Be kell jelentkeznie az oldal eléréséhez. Kérjük, ellenőrizze a bejelentkezési adatait, és próbálja újra."
+    },
+    "403": {
+      "title": "Hoppá! 403-as hiba – Sajnáljuk, {{username}}",
+      "message": "Szia <1>{{username}}</1>, felismerjük önt, de nincs megfelelő jogosultsága az oldal eléréséhez. Ha úgy gondolja, hogy ez hiba, vegye fel velünk a kapcsolatot!"
+    },
+    "404": {
+      "title": "Hoppá! 404-es hiba – Az oldal nem található",
+      "message": "Úgy tűnik, a keresett oldal már nem létezik. Lehet, hogy áthelyezték vagy törölték. Ellenőrizze az URL-t, vagy térjen vissza a főoldalra!"
+    },
+    "entities": {
+      "create": "Hiba a létrehozáskor",
+      "read": "Hiba az olvasáskor",
+      "update": "Hiba a frissítéskor",
+      "delete": "Hiba a törléskor"
+    },
+    "options": {
+      "load": "Hiba a lehetőségek betöltésekor:"
+    },
+    "validations": {
+      "email": "Érvénytelen e-mail formátum",
+      "file": {
+        "minSize": "A fájlnak legalább {{accepted}} méretűnek kell lennie. Jelenlegi méret: {{actual}}",
+        "maxSize": "A fájl nem haladhatja meg a következőt: {{accepted}}. Jelenlegi méret: {{actual}}",
+        "invalidType": "A fájltípusnak a következőnek kell lennie: {{accepted}}. Jelenlegi típus: {{actual}}",
+        "typeImage": "A fájlnak képnek kell lennie",
+        "required": "A fájl kötelező"
+      },
+      "min": "A számnak nagyobbnak vagy egyenlőnek kell lennie, mint {{accepted}}",
+      "minlength": "A szövegnek legalább {{accepted}} karaktert kell tartalmaznia",
+      "minbytes": "A fájlnak legalább {{accepted}} méretűnek kell lennie",
+      "max": "A számnak kisebbnek vagy egyenlőnek kell lennie, mint {{accepted}}",
+      "maxlength": "A szöveg legfeljebb {{accepted}} karaktert tartalmazhat",
+      "maxbytes": "A fájl nem haladhatja meg a következőt: {{accepted}}",
+      "pattern": "Érvénytelen formátum",
+      "required": "Kötelező",
+      "url": "Érvénytelen URL formátum"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Nap",
+      "hour": "Óra",
+      "minute": "Perc",
+      "second": "Másodperc",
+      "millisecond": "Ezredmásodperc",
+      "days": "Napok",
+      "hours": "Órák",
+      "minutes": "Percek",
+      "seconds": "Másodpercek",
+      "milliseconds": "Ezredmásodpercek"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "A számnak nagyobbnak vagy egyenlőnek kell lennie, mint {{accepted}}",
+      "minlength": "A szövegnek legalább {{accepted}} karaktert kell tartalmaznia",
+      "minbytes": "A fájlnak legalább {{accepted}} méretűnek kell lennie",
+      "max": "A számnak kisebbnek vagy egyenlőnek kell lennie, mint {{accepted}}",
+      "maxlength": "A szöveg legfeljebb {{accepted}} karaktert tartalmazhat",
+      "maxbytes": "A fájl nem haladhatja meg a következőt: {{accepted}}",
+      "required": "Kötelező",
+      "unique": "Az értéknek egyedinek kell lennie"
+    }
+  },
+  "messages": {
+    "noData": "Nem találhatók rekordok"
+  },
+  "pages": {
+    "Home": "Irányítópult"
+  },
+  "ui": {
+    "account": {
+      "login": "Bejelentkezés",
+      "loggingIn": "Bejelentkezés...",
+      "logout": "Kijelentkezés",
+      "loggingOut": "Kijelentkezés...",
+      "logoutError": "Hiba a kijelentkezéskor",
+      "unknownError": "Ismeretlen hiba"
+    },
+    "darkmode": {
+      "light": "Váltás világos módra",
+      "dark": "Váltás sötét módra"
+    }
+  }
+}

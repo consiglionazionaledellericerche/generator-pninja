@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Действия",
+      "back": "Назад",
+      "cancel": "Отказ",
+      "confirmDelete": "Потвърдете изтриването",
+      "create": "Създай",
+      "delete": "Изтрий",
+      "edit": "Редактирай",
+      "save": "Запази",
+      "saving": "Запазване...",
+      "update": "Актуализирай",
+      "view": "Преглед",
+      "file": {
+        "markedForDeletion": "Файлът е маркиран за изтриване (Запазете за потвърждение)",
+        "viewOrDownload": "Преглед/Изтегляне",
+        "replaceWarning": "Избирането на нов файл ще замени съществуващия"
+      },
+      "successfullyCreated": "Записът с ID {{id}} е създаден успешно",
+      "successfullyUpdated": "Записът с ID {{id}} е актуализиран успешно",
+      "successfullyDeleted": "Записът с ID {{id}} е изтрит успешно"
+    },
+    "generateUUID": "Генерирай UUID версия 4"
+  },
+  "common": {
+    "back": "Назад",
+    "cancel": "Отказ",
+    "undo": "Отмени",
+    "select": {
+      "placeholder": "Изберете опция",
+      "noOptions": "Няма опции",
+      "noValue": "Няма стойност",
+      "loading": "Зареждане на опции...",
+      "searchMultiple": "Изберете или потърсете една или повече стойности",
+      "searchSingle": "Изберете или потърсете стойност",
+      "selectMultiple": "Изберете една или повече стойности",
+      "selectSingle": "Изберете стойност"
+    },
+    "show": {
+      "more": "Покажи повече",
+      "less": "Покажи по-малко"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Обекти",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Грешка 401 – Неоторизиран",
+      "message": "Трябва да влезете, за да получите достъп до тази страница. Моля, проверете вашите данни и опитайте отново."
+    },
+    "403": {
+      "title": "Опа! Грешка 403 – Съжаляваме, {{username}}",
+      "message": "Здравей <1>{{username}}</1>, разпознаваме те, но нямаш необходимите разрешения за достъп до тази страница. Ако смяташ, че това е грешка, свържи се с нас!"
+    },
+    "404": {
+      "title": "Опа! Грешка 404 – Страницата не е намерена",
+      "message": "Изглежда, че страницата, която търсиш, вече не съществува. Може да е преместена или изтрита. Провери URL адреса или се върни на началната страница!"
+    },
+    "entities": {
+      "create": "Грешка при създаване",
+      "read": "Грешка при четене",
+      "update": "Грешка при актуализиране",
+      "delete": "Грешка при изтриване"
+    },
+    "options": {
+      "load": "Грешка при зареждане на опции за"
+    },
+    "validations": {
+      "email": "Невалиден формат на имейл",
+      "file": {
+        "minSize": "Файлът трябва да бъде най-малко {{accepted}}. Текущ размер: {{actual}}",
+        "maxSize": "Файлът не може да надвишава {{accepted}}. Текущ размер: {{actual}}",
+        "invalidType": "Типът на файла трябва да бъде {{accepted}}. Текущ тип: {{actual}}",
+        "typeImage": "Файлът трябва да бъде изображение",
+        "required": "Файлът е задължителен"
+      },
+      "min": "Числото трябва да бъде по-голямо или равно на {{accepted}}",
+      "minlength": "Текстът трябва да съдържа поне {{accepted}} символ(а)",
+      "minbytes": "Файлът трябва да бъде най-малко {{accepted}}",
+      "max": "Числото трябва да бъде по-малко или равно на {{accepted}}",
+      "maxlength": "Текстът трябва да съдържа най-много {{accepted}} символ(а)",
+      "maxbytes": "Файлът не може да надвишава {{accepted}}",
+      "pattern": "Невалиден формат",
+      "required": "Задължително",
+      "url": "Невалиден формат на URL"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Ден",
+      "hour": "Час",
+      "minute": "Минута",
+      "second": "Секунда",
+      "millisecond": "Милисекунда",
+      "days": "Дни",
+      "hours": "Часове",
+      "minutes": "Минути",
+      "seconds": "Секунди",
+      "milliseconds": "Милисекунди"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Числото трябва да бъде по-голямо или равно на {{accepted}}",
+      "minlength": "Текстът трябва да съдържа поне {{accepted}} символ(а)",
+      "minbytes": "Файлът трябва да бъде най-малко {{accepted}}",
+      "max": "Числото трябва да бъде по-малко или равно на {{accepted}}",
+      "maxlength": "Текстът трябва да съдържа най-много {{accepted}} символ(а)",
+      "maxbytes": "Файлът не може да надвишава {{accepted}}",
+      "required": "Задължително",
+      "unique": "Стойността трябва да бъде уникална"
+    }
+  },
+  "messages": {
+    "noData": "Не са намерени записи"
+  },
+  "pages": {
+    "Home": "Табло"
+  },
+  "ui": {
+    "account": {
+      "login": "Вход",
+      "loggingIn": "Влизане...",
+      "logout": "Изход",
+      "loggingOut": "Излизане...",
+      "logoutError": "Грешка при излизане",
+      "unknownError": "Неизвестна грешка"
+    },
+    "darkmode": {
+      "light": "Превключи на светъл режим",
+      "dark": "Превключи на тъмен режим"
+    }
+  }
+}

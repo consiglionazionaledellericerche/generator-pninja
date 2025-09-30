@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Handlinger",
+      "back": "Tilbage",
+      "cancel": "Annuller",
+      "confirmDelete": "Bekræft sletning",
+      "create": "Opret",
+      "delete": "Slet",
+      "edit": "Rediger",
+      "save": "Gem",
+      "saving": "Gemmer...",
+      "update": "Opdater",
+      "view": "Vis",
+      "file": {
+        "markedForDeletion": "Fil markeret til sletning (Gem for at bekræfte)",
+        "viewOrDownload": "Vis/Download",
+        "replaceWarning": "Valg af en ny fil vil erstatte den eksisterende"
+      },
+      "successfullyCreated": "Post ID {{id}} oprettet med succes",
+      "successfullyUpdated": "Post ID {{id}} opdateret med succes",
+      "successfullyDeleted": "Post ID {{id}} slettet med succes"
+    },
+    "generateUUID": "Generer en version 4 UUID"
+  },
+  "common": {
+    "back": "Tilbage",
+    "cancel": "Annuller",
+    "undo": "Fortryd",
+    "select": {
+      "placeholder": "Vælg en mulighed",
+      "noOptions": "Ingen muligheder",
+      "noValue": "Ingen værdi",
+      "loading": "Indlæser muligheder...",
+      "searchMultiple": "Vælg eller søg efter en eller flere værdier",
+      "searchSingle": "Vælg eller søg efter en værdi",
+      "selectMultiple": "Vælg en eller flere værdier",
+      "selectSingle": "Vælg en værdi"
+    },
+    "show": {
+      "more": "Vis mere",
+      "less": "Vis mindre"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Entiteter",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Fejl 401 – Uautoriseret",
+      "message": "Du skal logge ind for at få adgang til denne side. Kontroller venligst dine loginoplysninger og prøv igen."
+    },
+    "403": {
+      "title": "Ups! Fejl 403 – Beklager, {{username}}",
+      "message": "Hej <1>{{username}}</1>, vi genkender dig, men du har ikke de rette tilladelser til at få adgang til denne side. Hvis du mener, dette er en fejl, så kontakt os!"
+    },
+    "404": {
+      "title": "Ups! Fejl 404 – Siden blev ikke fundet",
+      "message": "Det ser ud til, at siden du leder efter, ikke eksisterer længere. Den kan være flyttet eller slettet. Kontroller URL'en eller gå tilbage til forsiden!"
+    },
+    "entities": {
+      "create": "Fejl ved oprettelse",
+      "read": "Fejl ved læsning",
+      "update": "Fejl ved opdatering",
+      "delete": "Fejl ved sletning"
+    },
+    "options": {
+      "load": "Fejl ved indlæsning af muligheder for"
+    },
+    "validations": {
+      "email": "Ugyldigt e-mail-format",
+      "file": {
+        "minSize": "Filen skal være mindst {{accepted}}. Nuværende størrelse: {{actual}}",
+        "maxSize": "Filen må ikke overstige {{accepted}}. Nuværende størrelse: {{actual}}",
+        "invalidType": "Filtypen skal være {{accepted}}. Nuværende type: {{actual}}",
+        "typeImage": "Filen skal være et billede",
+        "required": "Filen er påkrævet"
+      },
+      "min": "Tallet skal være større end eller lig med {{accepted}}",
+      "minlength": "Teksten skal indeholde mindst {{accepted}} tegn",
+      "minbytes": "Filen skal være mindst {{accepted}}",
+      "max": "Tallet skal være mindre end eller lig med {{accepted}}",
+      "maxlength": "Teksten må højst indeholde {{accepted}} tegn",
+      "maxbytes": "Filen må ikke overstige {{accepted}}",
+      "pattern": "Ugyldigt format",
+      "required": "Påkrævet",
+      "url": "Ugyldigt URL-format"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dag",
+      "hour": "Time",
+      "minute": "Minut",
+      "second": "Sekund",
+      "millisecond": "Millisekund",
+      "days": "Dage",
+      "hours": "Timer",
+      "minutes": "Minutter",
+      "seconds": "Sekunder",
+      "milliseconds": "Millisekunder"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Tallet skal være større end eller lig med {{accepted}}",
+      "minlength": "Teksten skal indeholde mindst {{accepted}} tegn",
+      "minbytes": "Filen skal være mindst {{accepted}}",
+      "max": "Tallet skal være mindre end eller lig med {{accepted}}",
+      "maxlength": "Teksten må højst indeholde {{accepted}} tegn",
+      "maxbytes": "Filen må ikke overstige {{accepted}}",
+      "required": "Påkrævet",
+      "unique": "Værdien skal være unik"
+    }
+  },
+  "messages": {
+    "noData": "Ingen poster fundet"
+  },
+  "pages": {
+    "Home": "Dashboard"
+  },
+  "ui": {
+    "account": {
+      "login": "Log ind",
+      "loggingIn": "Logger ind...",
+      "logout": "Log ud",
+      "loggingOut": "Logger ud...",
+      "logoutError": "Fejl ved log ud",
+      "unknownError": "Ukendt fejl"
+    },
+    "darkmode": {
+      "light": "Skift til lys tilstand",
+      "dark": "Skift til mørk tilstand"
+    }
+  }
+}
