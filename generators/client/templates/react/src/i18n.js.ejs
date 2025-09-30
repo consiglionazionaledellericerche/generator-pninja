@@ -9,13 +9,11 @@ i18n
   .use(initReactI18next)
   .init({
     supportedLngs: <%- supportedLngs %>,
-    fallbackLng: {
-<%  if (supportedLngs.includes("'zh-CN'")) { -%>
-      'zh': ['zh-CN'],
-<%  } -%>
-      'default': ['<%- fallbackLng %>']
-    },
+    fallbackLng: '<%- fallbackLng %>',
     nonExplicitSupportedLngs: true,
+    detection: {
+      convertDetectedLanguage: (lng) => lng.split('-')[0]
+    },
     interpolation: {
       escapeValue: false, // React already escapes by default
     },
