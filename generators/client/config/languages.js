@@ -14,15 +14,10 @@ export const LANGUAGES_DATA = {
     engName: 'Bulgarian',
     value: 'bg',
   },
-  "zh-CN": {
+  zh: {
     name: '中文 (简体)',
     engName: 'Chinese (Simplified)',
-    value: 'zh-CN',
-  },
-  "zh-TW": {
-    name: '中文 (繁體)',
-    engName: 'Chinese (Traditional)',
-    value: 'zh-TW',
+    value: 'zh',
   },
   hr: {
     name: 'Hrvatski',
