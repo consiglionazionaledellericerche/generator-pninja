@@ -25,7 +25,7 @@ export function LangSelect() {
         )?.name || i18n.language}
         <ChevronDown size={16} />
       </Button>
-      <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
+      <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300 max-h-[60vh] overflow-y-auto thin-scrollbar">
         <Menu>
           {languages.map((language) => (
             <MenuItem

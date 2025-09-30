@@ -103,3 +103,23 @@
     }
   }
 }
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af transparent;
+}
+
+/* Chrome, Edge, Safari */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+  border-radius: 9999px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+}
