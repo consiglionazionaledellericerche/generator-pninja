@@ -198,6 +198,11 @@ export const LANGUAGES_DATA = {
     name: 'Yorùbá',
     engName: 'Yoruba',
     value: 'yo',
+  },
+  zu: {
+    name: 'isiZulu',
+    engName: 'Zulu',
+    value: 'zu',
   }
 };
 

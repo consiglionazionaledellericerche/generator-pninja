@@ -1,0 +1,152 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Izenzo",
+      "back": "Emuva",
+      "cancel": "Khansela",
+      "confirmDelete": "Qinisekisa ukususa",
+      "create": "Dala",
+      "delete": "Susa",
+      "edit": "Hlela",
+      "save": "Londoloza",
+      "saving": "Kulondolozwa...",
+      "update": "Buyekeza",
+      "view": "Buka",
+      "file": {
+        "markedForDeletion": "Ifayela libekwe uphawu lokususa (Londoloza ukuze uqinisekise)",
+        "viewOrDownload": "Buka/Landa",
+        "replaceWarning": "Ukukhetha ifayela elisha kuzothatha indawo yefayela elikhona"
+      },
+      "successfullyCreated": "Irekhodi le-ID {{id}} lidalwe ngempumelelo",
+      "successfullyUpdated": "Irekhodi le-ID {{id}} libuyekezwe ngempumelelo",
+      "successfullyDeleted": "Irekhodi le-ID {{id}} lisusiwe ngempumelelo"
+    },
+    "generateUUID": "Dala i-UUID enguqulo 4"
+  },
+  "common": {
+    "back": "Emuva",
+    "cancel": "Khansela",
+    "undo": "Buyisela emuva",
+    "select": {
+      "placeholder": "Khetha inketho",
+      "noOptions": "Azikho izinketho",
+      "noValue": "Ayikho inani",
+      "loading": "Kulayishwa izinketho...",
+      "searchMultiple": "Khetha noma useshe inani elilodwa noma amaningi",
+      "searchSingle": "Khetha noma useshe inani",
+      "selectMultiple": "Khetha inani elilodwa noma amaningi",
+      "selectSingle": "Khetha inani"
+    },
+    "show": {
+      "more": "Bonisa okuningi",
+      "less": "Bonisa okuncane"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "entities": {
+    "entities": "Izinto",
+    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
+      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
+      `"id": "ID"`,
+      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
+      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
+      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
+    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  },
+  "errors": {
+    "401": {
+      "title": "Iphutha 401 – Akugunyaziwe",
+      "message": "Udinga ukungena ngemvume ukuze ufinyelele kuleli khasi. Sicela uhlole iziqinisekiso zakho bese uzama futhi."
+    },
+    "403": {
+      "title": "Uxolo! Iphutha 403 – Uxolo, {{username}}",
+      "message": "Sawubona <1>{{username}}</1>, sikubonile, kodwa awunayo imvume efanele yokufinyelela kuleli khasi. Uma ucabanga ukuthi lokhu kuyiphutha, xhumana nathi!"
+    },
+    "404": {
+      "title": "Uxolo! Iphutha 404 – Ikhasi Alitholakali",
+      "message": "Kubukeka sengathi ikhasi olifunayo alisekho. Kungenzeka ukuthi selihanjisiwe noma lisusiwe. Hlola i-URL noma ubuyele ekhasini eliyisiqalo!"
+    },
+    "entities": {
+      "create": "Iphutha ekudaleni",
+      "read": "Iphutha ekufundeni",
+      "update": "Iphutha ekubuyekezweni",
+      "delete": "Iphutha ekususeni"
+    },
+    "options": {
+      "load": "Iphutha ekulayisheni izinketho zika"
+    },
+    "validations": {
+      "email": "Ifomethi ye-imeyili ayivumelekile",
+      "file": {
+        "minSize": "Ifayela kufanele libe okungenani {{accepted}}. Usayizi wamanje: {{actual}}",
+        "maxSize": "Ifayela alikwazi ukudlula {{accepted}}. Usayizi wamanje: {{actual}}",
+        "invalidType": "Uhlobo lwefayela kufanele lube {{accepted}}. Uhlobo lwamanje: {{actual}}",
+        "typeImage": "Ifayela kufanele libe isithombe",
+        "required": "Ifayela liyadingeka"
+      },
+      "min": "Inombolo kufanele ibe nkulu noma ilingane no-{{accepted}}",
+      "minlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
+      "minbytes": "Ifayela kufanele libe okungenani {{accepted}}",
+      "max": "Inombolo kufanele ibe ncane noma ilingane no-{{accepted}}",
+      "maxlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
+      "maxbytes": "Ifayela alikwazi ukudlula {{accepted}}",
+      "pattern": "Ifomethi ayivumelekile",
+      "required": "Kuyadingeka",
+      "url": "Ifomethi ye-URL ayivumelekile"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Usuku",
+      "hour": "Ihora",
+      "minute": "Umzuzu",
+      "second": "Isibili",
+      "millisecond": "Umzuzwana",
+      "days": "Izinsuku",
+      "hours": "Amahora",
+      "minutes": "Imizuzu",
+      "seconds": "Amasekhondi",
+      "milliseconds": "Imizuzwana"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Inombolo kufanele ibe nkulu noma ilingane no-{{accepted}}",
+      "minlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
+      "minbytes": "Ifayela kufanele libe okungenani {{accepted}}",
+      "max": "Inombolo kufanele ibe ncane noma ilingane no-{{accepted}}",
+      "maxlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
+      "maxbytes": "Ifayela alikwazi ukudlula {{accepted}}",
+      "required": "Kuyadingeka",
+      "unique": "Inani kufanele libe eliyingqayizivele"
+    }
+  },
+  "messages": {
+    "noData": "Azikho amarekhodi atholakele"
+  },
+  "pages": {
+    "Home": "I-Dashboard"
+  },
+  "ui": {
+    "account": {
+      "login": "Ngena ngemvume",
+      "loggingIn": "Kuyangenwa ngemvume...",
+      "logout": "Phuma",
+      "loggingOut": "Kuyaphuma...",
+      "logoutError": "Iphutha ekuphumeni",
+      "unknownError": "Iphutha elingaziwa"
+    },
+    "darkmode": {
+      "light": "Shintshela kwimodi ekhanyayo",
+      "dark": "Shintshela kwimodi emnyama"
+    }
+  }
+}
