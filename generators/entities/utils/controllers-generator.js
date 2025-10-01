@@ -167,6 +167,7 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), {});
 
         for (const entity of entities) {
+            const useElastic = this.that.config.get('searchEngine') === 'elastic'
             const withs = getWits(entity, relationships);
             const createRelated = [];
             relationships.forEach(relation => {
@@ -220,6 +221,7 @@ export class ControllersGenerator {
             this.that.fs.copyTpl(this.that.templatePath("KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
+            this.that.fs.copyTpl(this.that.templatePath("Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,
@@ -232,6 +234,7 @@ export class ControllersGenerator {
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,
+                    useElastic,
                     to,
                 });
 

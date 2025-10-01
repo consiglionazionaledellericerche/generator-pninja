@@ -32,8 +32,12 @@ class <%- className %>Controller extends Controller
     {
         try {
             // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
+            $search = $request->has('search') ? ScoutQuerySanitizer::sanitize($request->get('search')) : null;
             $perPage = min($request->get('per_page', 10), 100);
             $sortBy = $request->get('sort_by', 'id');
+<% if (useElastic) { -%>
+            $sortBy = $sortBy . (($search && $sortBy !== 'id') ? '.keyword' : '');
+<%  } -%>
             $sortDirection = $request->get('sort_direction', 'asc');
 
             if ($request->has('ids') && !empty($request->get('ids'))) {
@@ -60,8 +64,8 @@ class <%- className %>Controller extends Controller
             }
 <%      })-%>
 <%  }-%>
-            if ($request->has('search') && !empty($request->get('search'))) {
-                $result = <%- className %>::search($request->get('search'))
+            if ($search) {
+                $result = <%- className %>::search($search)
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
                     ->query(function ($builder) use ($excludeIds) {
                         $builder->whereNotIn('id', $excludeIds)<% if (withs) { %>->with(<%- withs %>)<% } %>;

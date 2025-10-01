@@ -166,7 +166,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
       const url = new URL(optionsLoad.url, window.location.origin);
 
       if (search) {
+<%  if (useElastic) { %>
+        url.searchParams.set(optionsLoad.searchParam ?? 'search', `${search} OR *${search}*`);
+<%  } else {-%>
         url.searchParams.set(optionsLoad.searchParam ?? 'search', search);
+<%  } -%>
       }
 
       url.searchParams.set(optionsLoad.pageParam ?? 'page', page.toString());

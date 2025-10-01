@@ -43,6 +43,12 @@ export default class EntityGenerator extends Generator {
         name: "entitiesFilePath",
         message: "Entities definition file path",
         default: this.config.get('entitiesFilePath') || 'entities.jdl'
+      }, {
+        store: true,
+        type: "number",
+        name: "howManyToGenerate",
+        message: "How many entities to generate for each entity (factories)?",
+        default: this.config.get('howManyToGenerate') || 0
       }]);
       this.answers = { ...this.answers, ...answers };
     }
@@ -57,7 +63,6 @@ export default class EntityGenerator extends Generator {
 
   async writing() {
     let spinner = undefined;
-    let generatedFiles = undefined;
     if (this.options.fromMain && !this.answers.build) {
       // Nothing to do
       return;
@@ -129,7 +134,7 @@ export default class EntityGenerator extends Generator {
     // Generating Factories and DatabaseSeeder
     try {
       spinner = ora(`Generating Factory files`);
-      (new FactoriesGenerator(this, entitiesFilePath)).generateFactories(10);
+      (new FactoriesGenerator(this, entitiesFilePath)).generateFactories(this.config.get('howManyToGenerate') || 0);
       spinner.succeed(`Factory files generated`);
     } catch (error) {
       spinner.fail();

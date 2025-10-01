@@ -41,7 +41,7 @@ export class ModelsGenerator {
             }, []);
             // toSearchableArray from entity property
             const toSearchableArray = entity.body.reduce((acc, prop) => {
-                if (['String', 'UUID'].includes(prop.type)) {
+                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
                     acc.push(`${to.snake(prop.name)}`);
                 }
                 return acc;
