@@ -147,7 +147,7 @@ export class FactoriesGenerator {
                 return `${isRequired ? 'true' : 'fake()->boolean()'}`;
             case 'LocalDate':
             case 'Date':
-                return 'fake()->dateTimeBetween("-1 year", "now")';
+                return 'fake()->dateTimeBetween("-1 year", "now")->format("Y-m-d")';
             case 'ZonedDateTime':
             case 'Instant':
                 return 'fake()->dateTimeBetween("-1 year", "now")';
