@@ -1,0 +1,23 @@
+<?php
+
+use Elastic\Migrations\Facades\Index;
+use Elastic\Migrations\MigrationInterface;
+
+final class Create<%- className %>Index implements MigrationInterface
+{
+    public function up(): void
+    {
+        Index::create('<%- indexName %>', function ($index) {
+            $index->integer('id');
+<%  columns.map(column => { -%>
+            $index->keyword('<%- column %>');
+<%  })-%>
+            $index->text('__fulltext');
+        });
+    }
+
+    public function down(): void
+    {
+        Index::dropIfExists('<%- indexName %>');
+    }
+}

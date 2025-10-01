@@ -35,9 +35,6 @@ class <%- className %>Controller extends Controller
             $search = $request->has('search') ? ScoutQuerySanitizer::sanitize($request->get('search')) : null;
             $perPage = min($request->get('per_page', 10), 100);
             $sortBy = $request->get('sort_by', 'id');
-<% if (useElastic) { -%>
-            $sortBy = $sortBy . (($search && $sortBy !== 'id') ? '.keyword' : '');
-<%  } -%>
             $sortDirection = $request->get('sort_direction', 'asc');
 
             if ($request->has('ids') && !empty($request->get('ids'))) {

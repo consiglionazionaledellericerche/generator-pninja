@@ -44,9 +44,17 @@ class <%- className %> extends Model
     {
         return [
             'id' => $this->id,
-<%    toSearchableArray.map(prop => { -%>
+<%  toSearchableArray.map(prop => { -%>
             '<%- prop %>' => $this-><%- prop %>,
-<%    })-%>
+<%  })-%>
+<%  if (useElastic) { %>
+            '__fulltext' => implode(' ', array_filter([
+                $this->id,
+<%      toSearchableArray.map(prop => { -%>
+                $this-><%- prop %> ?? null,
+<%      })-%>
+            ]))
+<%  }-%>
         ];
     }
 <%  if (relations) { -%>
