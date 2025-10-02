@@ -31,14 +31,26 @@ class ScoutQuerySanitizer
         
         $sanitized = trim($query);
         
+        // Rimuovi caratteri speciali pericolosi
         $sanitized = str_replace(['\\', '/'], '', $sanitized);
         $sanitized = preg_replace('/[\^\[\]{}]/', '', $sanitized);
+        
+        // Bilancia le parentesi
         $sanitized = self::balanceParentheses($sanitized);
-        $sanitized = preg_replace('/^\s*(AND|OR|NOT)\s+/i', '', $sanitized);
-        $sanitized = preg_replace('/\s+(AND|OR|NOT)\s*$/i', '', $sanitized);
+        
+        // Rimuovi operatori booleani all'inizio (parole e simboli)
+        $sanitized = preg_replace('/^\s*(AND|OR|NOT|&&|\|\|)\s+/i', '', $sanitized);
+        
+        // Rimuovi operatori booleani alla fine (parole e simboli)
+        $sanitized = preg_replace('/\s+(AND|OR|NOT|&&|\|\|)\s*$/i', '', $sanitized);
+        
+        // Rimuovi operatori booleani doppi
         $sanitized = preg_replace('/\s+(AND|OR|NOT)\s+(AND|OR|NOT)\s+/i', ' $1 ', $sanitized);
+        
+        // Rimuovi spazi multipli
         $sanitized = preg_replace('/\s+/', ' ', $sanitized);
         
+        // Rimuovi virgolette non bilanciate
         $quoteCount = substr_count($sanitized, '"');
         if ($quoteCount % 2 !== 0) {
             $sanitized = str_replace('"', '', $sanitized);
@@ -58,11 +70,11 @@ class ScoutQuerySanitizer
         
         $sanitized = trim($query);
         
-        // Rimuovi operatori Elasticsearch
-        $sanitized = preg_replace('/\s+(AND|OR|NOT)\s+/i', ' ', $sanitized);
+        // Rimuovi operatori Elasticsearch (parole e simboli)
+        $sanitized = preg_replace('/\s+(AND|OR|NOT|&&|\|\|)\s+/i', ' ', $sanitized);
         
         // Rimuovi wildcard e caratteri speciali
-        $sanitized = str_replace(['*', '?', '(', ')', '[', ']', '{', '}', '\\', '/', '^', '"'], '', $sanitized);
+        $sanitized = str_replace(['*', '?', '(', ')', '[', ']', '{', '}', '\\', '/', '^', '"', '&&', '||'], '', $sanitized);
         
         // Escape SQL LIKE
         $sanitized = str_replace(['%', '_'], ['\\%', '\\_'], $sanitized);
@@ -79,7 +91,7 @@ class ScoutQuerySanitizer
     }
     
     /**
-     * Sanitizzazione base per altri driver (Algolia, Meilisearch, etc.)
+     * Sanitizzazione base per altri driver
      */
     private static function sanitizeDefault(?string $query): string
     {
