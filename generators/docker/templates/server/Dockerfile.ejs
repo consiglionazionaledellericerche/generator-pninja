@@ -26,7 +26,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN composer require fakerphp/faker --dev
 
 # Configure permissions
-RUN chmod -R 775 storage bootstrap/cache
+RUN touch storage/logs/laravel.log && chown www-data:www-data storage/logs/laravel.log && chmod -R 775 storage bootstrap/cache
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000
