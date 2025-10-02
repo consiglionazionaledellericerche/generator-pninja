@@ -74,9 +74,14 @@ services:
     container_name: <%= slugName %>-server
     volumes:
       - laravel_storage:/var/www/html/storage
-<% if (dbms !== 'sqlite') { -%>
+<% if (dbms !== 'sqlite' || searchEngine === 'elastic') { -%>
     depends_on:
+<% }-%>
+<% if (dbms !== 'sqlite') { -%>
       - database
+<% }-%>
+<% if (searchEngine === 'elastic') { -%>
+      - elasticsearch
 <% }-%>
     environment:
       - FRONTEND_URL=
@@ -87,43 +92,43 @@ services:
     networks:
       - <%= slugName %>-network
     restart: unless-stopped
-<% if (dbms !== 'sqlite') { -%>
+<% if (searchEngine === 'elastic') { -%>
 
-  adminer:
-    image: adminer:4.8.1
-    container_name: <%= slugName %>-adminer
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: <%= slugName %>-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
     ports:
-      - "8088:8080"
-    depends_on:
-      - database
+      - "9201:9200"
+      - "9301:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - <%= slugName %>-network
-    environment:
-      ADMINER_DEFAULT_SERVER: database
-      ADMINER_DESIGN: pepa-linha-dark
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     restart: unless-stopped
 <% }-%>
+volumes:
+  laravel_storage:
 <% if (dbms === 'pgsql') { -%>
-
-volumes:
   postgres_data:
-  laravel_storage:
 <% } else if (dbms === 'mysql') {-%>
-
-volumes:
   mysql_data:
-  laravel_storage:
 <% } else if (dbms === 'mariadb') {-%>
-
-volumes:
   mariadb_data:
-  laravel_storage:
-<% } else {-%>
-
-volumes:
-  laravel_storage:
-<% }-%>
-
+<% } -%>
+<% if (searchEngine === 'elastic') {-%>
+  elasticsearch_data:
+    driver: local
+<% } -%>
 networks:
   <%= slugName %>-network:
     driver: bridge

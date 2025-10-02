@@ -23,16 +23,18 @@ export default class DockerGenerator extends Generator {
     const slugName = to.slug(appName);
     const snakeName = to.snake(appName);
     const dbms = this.config.get('dbms');
+    const searchEngine = this.config.get('searchEngine');
     let envFileContents = this.fs.read(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     this.fs.copyTpl(this.templatePath('nginx/Dockerfile.ejs'), this.destinationPath('docker/nginx/Dockerfile'), {});
     this.fs.copyTpl(this.templatePath('nginx/nginx.conf.ejs'), this.destinationPath('docker/nginx/nginx.conf'), { name: slugName });
-    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), { dbms });
+    this.fs.copyTpl(this.templatePath('server/Dockerfile.ejs'), this.destinationPath('docker/server/Dockerfile'), { dbms, searchEngine });
     this.fs.copyTpl(this.templatePath('docker-compose.yml.ejs'), this.destinationPath('docker/docker-compose.yml'), {
       slugName,
       snakeName,
       dbms,
       dbPwd,
       dbRootPwd,
+      searchEngine,
     });
     if (['pgsql', 'mysql', 'mariadb'].includes(dbms)) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=database`);
@@ -48,6 +50,11 @@ export default class DockerGenerator extends Generator {
       }
       fs.writeFileSync(filePath, '');
       fs.chmodSync(filePath, 0o666);
+    }
+    console.log(`\n\n\n\n\n\nsearchEngine ${searchEngine}\n\n\n\n\n\n`);
+    if (searchEngine === 'elastic') {
+      console.log('\n\n\n\n\n\nConfiguring for Elasticsearch...\n\n\n\n\n\n');
+      envFileContents = envFileContents.replace(/^ELASTIC_HOST=.*$/m, `ELASTIC_HOST=http://elasticsearch:9200`);
     }
     this.fs.write(this.destinationPath('docker/server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
   }

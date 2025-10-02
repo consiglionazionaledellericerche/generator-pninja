@@ -32,4 +32,5 @@ RUN chmod -R 775 storage bootstrap/cache
 EXPOSE 9000
 
 # Run PHP-FPM
-CMD ["sh", "-c", "php artisan migrate && php-fpm"]
+# CMD ["sh", "-c", "php artisan migrate && php-fpm"]
+CMD ["sh", "-c", "php artisan migrate<%- (searchEngine === 'elastic') ? ' && php artisan elastic:migrate' : '' %> && php-fpm"]

@@ -62,20 +62,6 @@ export default class extends Generator {
       namespace: 'pninja:client'
     });
 
-    // sub generator Docker
-    const dockerGeneratorPath = path.resolve(__dirname, '../docker/index.js');
-    const { default: DockerGenerator } = await import(dockerGeneratorPath);
-
-    await this.composeWith({
-      Generator: DockerGenerator,
-      path: path.dirname(dockerGeneratorPath)
-    }, {
-      fromMain: true,
-      env: this.env,
-      resolved: dockerGeneratorPath,
-      namespace: 'pninja:docker'
-    });
-
     // sub generator Search
     const searchGeneratorPath = path.resolve(__dirname, '../search/index.js');
     const { default: SearchGenerator } = await import(searchGeneratorPath);
@@ -88,6 +74,20 @@ export default class extends Generator {
       env: this.env,
       resolved: searchGeneratorPath,
       namespace: 'pninja:search'
+    });
+
+    // sub generator Docker
+    const dockerGeneratorPath = path.resolve(__dirname, '../docker/index.js');
+    const { default: DockerGenerator } = await import(dockerGeneratorPath);
+
+    await this.composeWith({
+      Generator: DockerGenerator,
+      path: path.dirname(dockerGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: dockerGeneratorPath,
+      namespace: 'pninja:docker'
     });
 
     // sub generator Final
