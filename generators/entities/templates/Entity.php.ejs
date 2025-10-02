@@ -51,7 +51,7 @@ class <%- className %> extends Model
             '__fulltext' => implode(' ', array_filter([
                 $this->id,
 <%      toSearchableArray.map(prop => { -%>
-                $this-><%- prop %> ?? null,
+                $this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %> ?? null,
 <%      })-%>
             ]))
 <%  }-%>

@@ -147,6 +147,8 @@ export class ModelsGenerator {
                 cast: 'boolean'
             }));
 
+            const enumsInEntity = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name);
+            const enumColumns = entity.body.filter(f => enumsInEntity.includes(f.type)).map(f => to.snake(f.name));
             this.that.fs.copyTpl(this.that.templatePath("Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
                 {
                     className,
@@ -157,7 +159,8 @@ export class ModelsGenerator {
                     toSearchableArray,
                     relations: relations.join(`\n${this.tab(1)}`),
                     relationsType: [...new Set(relationsType)],
-                    enums: enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name),
+                    enums: enumsInEntity,
+                    enumColumns,
                     castsClasses: [...castsClasses, ...castsB64],
                     casts: [...castsBoolean],
                     useElastic,
