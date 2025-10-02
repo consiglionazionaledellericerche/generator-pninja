@@ -4,7 +4,9 @@ import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
+<% if (withLangSelect) { -%>
 import { LangSelect } from './LangSelect';
+<% } -%>
 import { useAuthState } from '../hooks/useAuthState';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
