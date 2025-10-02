@@ -51,9 +51,7 @@ export default class DockerGenerator extends Generator {
       fs.writeFileSync(filePath, '');
       fs.chmodSync(filePath, 0o666);
     }
-    console.log(`\n\n\n\n\n\nsearchEngine ${searchEngine}\n\n\n\n\n\n`);
     if (searchEngine === 'elastic') {
-      console.log('\n\n\n\n\n\nConfiguring for Elasticsearch...\n\n\n\n\n\n');
       envFileContents = envFileContents.replace(/^ELASTIC_HOST=.*$/m, `ELASTIC_HOST=http://elasticsearch:9200`);
     }
     this.fs.write(this.destinationPath('docker/server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
