@@ -239,7 +239,8 @@ export default class extends Generator {
         projectName: to.title(this.answers.name),
         projectDescription: this.projectDescription,
         projectVersion: this.projectVersion,
-        authorName: this.authorName
+        authorName: this.authorName,
+        searchEngine: this.config.get('searchEngine') || 'none',
       });
     this.fs.copyTpl(this.templatePath(".gitignore.ejs"), this.destinationPath(".gitignore"));
     // Enable Facades and Eloquent
