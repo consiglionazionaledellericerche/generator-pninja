@@ -61,9 +61,7 @@ SCOUT_PREFIX=${snakeName}_`;
     }
     if (this.answers.searchEngine === 'elastic') {
       searchEngineConfig += `
-ELASTICSEARCH_HOST=http://localhost:9200
-ELASTICSEARCH_USERNAME=
-ELASTICSEARCH_PASSWORD=`;
+ELASTIC_HOST=http://localhost:9200`;
     }
     searchEngineConfig += "\n";
     const envContent = this.fs.read(this.destinationPath(`server/.env`));
@@ -72,7 +70,7 @@ ELASTICSEARCH_PASSWORD=`;
     if (this.answers.searchEngine === 'elastic') {
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }
-    if (this.answers.searchEngine === 'elastic' || true) {
+    if (this.answers.searchEngine === 'elastic') {
       const { entities } = parseJDL(this.config.get('entitiesFilePath'));
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
       for (const entity of entities) {
