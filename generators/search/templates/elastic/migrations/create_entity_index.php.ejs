@@ -7,12 +7,17 @@ final class Create<%- className %>Index implements MigrationInterface
 {
     public function up(): void
     {
-        Index::create('<%- indexName %>', function ($index) {
+        Index::create('<%- indexName %>', function ($index, $settings) {
             $index->integer('id');
 <%  columns.map(column => { -%>
             $index->keyword('<%- column %>');
 <%  })-%>
             $index->text('__fulltext');
+            $settings->index([
+                'query' => [
+                    'default_field' => '__fulltext'
+                ]
+            ]);
         });
     }
 
