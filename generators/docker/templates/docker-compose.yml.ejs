@@ -74,6 +74,9 @@ services:
     container_name: <%= slugName %>-server
     volumes:
       - laravel_storage:/var/www/html/storage
+<% if (dbms === 'sqlite') { -%>
+      - ./database/database.sqlite:/var/www/html/database/database.sqlite
+<% }-%>
 <% if (dbms !== 'sqlite' || searchEngine === 'elastic') { -%>
     depends_on:
 <% }-%>
@@ -81,14 +84,11 @@ services:
       - database
 <% }-%>
 <% if (searchEngine === 'elastic') { -%>
-      - elasticsearch
+      elasticsearch:
+        condition: service_healthy
 <% }-%>
     environment:
       - FRONTEND_URL=
-<% if (dbms === 'sqlite') { -%>
-    volumes:
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
-<% }-%>
     networks:
       - <%= slugName %>-network
     restart: unless-stopped
@@ -102,9 +102,6 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
-    ports:
-      - "9201:9200"
-      - "9301:9300"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
@@ -115,6 +112,19 @@ services:
       timeout: 10s
       retries: 5
     restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: <%= slugName %>-kibana
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - <%= slugName %>-network
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
 <% }-%>
 volumes:
   laravel_storage:
