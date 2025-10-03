@@ -81,7 +81,8 @@ services:
     depends_on:
 <% }-%>
 <% if (dbms !== 'sqlite') { -%>
-      - database
+      database:
+        condition: service_healthy
 <% }-%>
 <% if (searchEngine === 'elastic') { -%>
       elasticsearch:
