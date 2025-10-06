@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           const newUrl =
             window.location.pathname +
             (window.location.search
-              ? window.location.search.replace(/auth_success=true&?/, '')
+              ? window.location.search.replace(/auth_success=true&?/, '').replace(/\?$/, '')
               : '') +
             window.location.hash;
           window.history.replaceState({}, document.title, newUrl);
