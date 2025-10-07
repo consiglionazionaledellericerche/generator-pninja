@@ -47,7 +47,7 @@ class <%- className %> extends Model
 <%  toSearchableArray.map(prop => { -%>
             '<%- prop %>' => $this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
 <%  })-%>
-<%  if (useElastic) { -%>
+<%  if (searchEngine === 'elastic') { -%>
             '__fulltext' => implode(' ', array_filter([
                 $this->id,
 <%      toSearchableArray.map(prop => { -%>

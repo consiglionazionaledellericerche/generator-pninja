@@ -26,9 +26,11 @@ export default class SearchGenerator extends Generator {
         default: this.config.get('searchEngine') || 'database',
         choices: [
           { name: 'Database', value: 'database' },
+          { name: 'Meilisearch', value: 'meilisearch' },
           { name: 'Elasticsearch', value: 'elastic' },
-          { name: 'Meilisearch', value: 'meilisearch', disabled: "Not implemented yet" },
+          { name: 'Algolia', value: 'algolia', disabled: "Not implemented yet" },
           { name: 'Typesense', value: 'typesense', disabled: "Not implemented yet" },
+          { name: 'Solr', value: 'solr', disabled: "Not implemented yet" },
           { name: 'No Search Engine', value: "null", disabled: "Not implemented yet" }
         ]
       }]]
@@ -46,31 +48,57 @@ export default class SearchGenerator extends Generator {
   async writing() {
     const appName = this.config.get('name');
     const snakeName = to.snake(appName);
-    if (this.answers.searchEngine === 'elastic') {
+    const searchEngine = this.answers.searchEngine;
+    if (searchEngine === 'elastic') {
       this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
       this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-scout-driver'], { cwd: 'server' });
       this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Elastic\Migrations\ServiceProvider"'], { cwd: 'server' });
-
+    }
+    if (searchEngine === 'meilisearch') {
+      this.spawnCommandSync('composer', ['require', 'meilisearch/meilisearch-php'], { cwd: 'server' });
+      this.spawnCommandSync('composer', ['require', 'http-interop/http-factory-guzzle'], { cwd: 'server' });
     }
     let searchEngineConfig = `
-SCOUT_DRIVER=${this.answers.searchEngine}
+SCOUT_DRIVER=${searchEngine}
 SCOUT_QUEUE=false`;
-    if (['meilisearch', 'typesense', 'elastic'].includes(this.answers.searchEngine)) {
+    if (['meilisearch', 'typesense', 'elastic'].includes(searchEngine)) {
       searchEngineConfig += `
 SCOUT_PREFIX=${snakeName}_`;
     }
-    if (this.answers.searchEngine === 'elastic') {
+    if (searchEngine === 'elastic') {
       searchEngineConfig += `
 ELASTIC_HOST=http://localhost:9200`;
+    }
+    if (searchEngine === 'meilisearch') {
+      searchEngineConfig += `
+MEILISEARCH_HOST=http://localhost:7700
+MEILISEARCH_KEY=meilisearch-master-key-change-me`;
     }
     searchEngineConfig += "\n";
     const envContent = this.fs.read(this.destinationPath(`server/.env`));
     this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
-    this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'));
-    if (this.answers.searchEngine === 'elastic') {
+    const { entities } = parseJDL(this.config.get('entitiesFilePath'));
+    const mailiserachIndexSettings = searchEngine === 'meilisearch' ? entities.reduce((res, entity) => {
+      const indexName = `${to.snake(pluralize(entity.tableName))}`;
+      res += `
+            '${indexName}' => [
+                'searchableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
+                'filterableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
+                'sortableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
+                'displayedAttributes' => ['*'],
+                'rankingRules' => ['words', 'typo', 'proximity', 'attribute', 'sort', 'exactness']
+            ],`;
+      return res;
+    }
+      , '') : '';
+    this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'), {
+      searchEngine: searchEngine,
+      mailiserachIndexSettings
+    });
+    if (searchEngine === 'elastic') {
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }
-    if (this.answers.searchEngine === 'elastic') {
+    if (searchEngine === 'elastic') {
       const { entities } = parseJDL(this.config.get('entitiesFilePath'));
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
       for (const entity of entities) {

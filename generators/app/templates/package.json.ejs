@@ -18,6 +18,9 @@
         "elastic:migrate:reset": "cd server && php artisan elastic:migrate:reset",
         "elastic:migrate:refresh": "cd server && php artisan elastic:migrate:refresh",
 <%  } -%>
+<%  if (searchEngine === 'meilisearch') { -%>
+        "scout:sync-index-settings": "cd server && php artisan scout:sync-index-settings",
+<%  } -%>
         "seed": "cd server && php artisan db:seed",
         "server": "cd server && php artisan serve"
     }

@@ -11,7 +11,7 @@ export class ModelsGenerator {
 
     generateModels() {
         const { enums, entities, relationships } = this.parsedJDL;
-        const useElastic = this.that.config.get('searchEngine') === 'elastic'
+        const searchEngine = this.that.config.get('searchEngine');
         for (const entity of entities) {
             const className = entity.name;
             const tableName = to.snake(pluralize(entity.tableName));
@@ -163,7 +163,7 @@ export class ModelsGenerator {
                     enumColumns,
                     castsClasses: [...castsClasses, ...castsB64],
                     casts: [...castsBoolean],
-                    useElastic,
+                    searchEngine,
                 });
         }
         for (const enm of enums) {
