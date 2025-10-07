@@ -77,11 +77,15 @@ services:
 <% if (dbms === 'sqlite') { -%>
       - ./database/database.sqlite:/var/www/html/database/database.sqlite
 <% }-%>
-<% if (dbms !== 'sqlite' || searchEngine === 'elastic') { -%>
+<% if (dbms !== 'sqlite' || searchEngine === 'elastic' || searchEngine === 'meilisearch') { -%>
     depends_on:
 <% }-%>
 <% if (dbms !== 'sqlite') { -%>
       database:
+        condition: service_healthy
+<% }-%>
+<% if (searchEngine === 'meilisearch') { -%>
+      meilisearch:
         condition: service_healthy
 <% }-%>
 <% if (searchEngine === 'elastic') { -%>
@@ -93,6 +97,33 @@ services:
     networks:
       - <%= slugName %>-network
     restart: unless-stopped
+<% if (searchEngine === 'meilisearch') { -%>
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.22
+    container_name: <%= slugName %>-meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_MASTER_KEY=<%- meiliMasterKey %>
+      - MEILI_ENV=development
+      - MEILI_NO_ANALYTICS=true
+      - MEILI_MAX_INDEXING_MEMORY=2gb
+      - MEILI_MAX_INDEXING_THREADS=4
+      - MEILI_LOG_LEVEL=INFO
+      - MEILI_HTTP_PAYLOAD_SIZE_LIMIT=104857600  # 100MB
+    networks:
+      - <%= slugName %>-network   
+    volumes:
+      - meilisearch_data:/meili_data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+<% }-%>
 <% if (searchEngine === 'elastic') { -%>
 
   elasticsearch:
@@ -138,6 +169,10 @@ volumes:
 <% } -%>
 <% if (searchEngine === 'elastic') {-%>
   elasticsearch_data:
+    driver: local
+<% } -%>
+<% if (searchEngine === 'meilisearch') {-%>
+  meilisearch_data:
     driver: local
 <% } -%>
 networks:

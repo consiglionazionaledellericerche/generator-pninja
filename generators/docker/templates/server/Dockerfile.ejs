@@ -33,4 +33,4 @@ EXPOSE 9000
 
 # Run PHP-FPM
 # CMD ["sh", "-c", "php artisan migrate && php-fpm"]
-CMD ["sh", "-c", "php artisan migrate<%- (searchEngine === 'elastic') ? ' && php artisan elastic:migrate' : '' %> && php-fpm"]
+CMD ["sh", "-c", "php artisan migrate<%- (searchEngine === 'elastic') ? ' && php artisan elastic:migrate' : '' %><%- (searchEngine === 'meilisearch') ? ' && php artisan scout:sync-index-settings' : '' %> && php-fpm"]

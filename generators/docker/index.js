@@ -17,8 +17,9 @@ export default class DockerGenerator extends Generator {
   }
 
   async writing() {
-    const dbPwd = pwd();
-    const dbRootPwd = pwd(32);
+    const dbPwd = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
+    const dbRootPwd = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
+    const meiliMasterKey = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
     const appName = this.config.get('name');
     const slugName = to.slug(appName);
     const snakeName = to.snake(appName);
@@ -35,6 +36,7 @@ export default class DockerGenerator extends Generator {
       dbPwd,
       dbRootPwd,
       searchEngine,
+      meiliMasterKey,
     });
     if (['pgsql', 'mysql', 'mariadb'].includes(dbms)) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=database`);
@@ -50,6 +52,10 @@ export default class DockerGenerator extends Generator {
       }
       fs.writeFileSync(filePath, '');
       fs.chmodSync(filePath, 0o666);
+    }
+    if (searchEngine === 'meilisearch') {
+      envFileContents = envFileContents.replace(/^MEILISEARCH_HOST=.*$/m, `MEILISEARCH_HOST=http://meilisearch:7700`);
+      envFileContents = envFileContents.replace(/^MEILISEARCH_KEY=.*$/m, `MEILISEARCH_KEY=${meiliMasterKey}`);
     }
     if (searchEngine === 'elastic') {
       envFileContents = envFileContents.replace(/^ELASTIC_HOST=.*$/m, `ELASTIC_HOST=http://elasticsearch:9200`);
