@@ -82,11 +82,8 @@ MEILISEARCH_KEY=meilisearch-master-key-change-me`;
       const indexName = `${to.snake(pluralize(entity.tableName))}`;
       res += `
             '${indexName}' => [
-                'searchableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
-                'filterableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
                 'sortableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
-                'displayedAttributes' => ['*'],
-                'rankingRules' => ['words', 'typo', 'proximity', 'attribute', 'sort', 'exactness']
+                'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness']
             ],`;
       return res;
     }
