@@ -50,6 +50,13 @@
     "pgsql": "PostgreSQL",
     "sqlsrv": "SQL Server"
   },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
   "entities": {
     "entities": "Ентитети",
     <%- entities.map(entity => `"${to.snake(entity.name)}": {${[

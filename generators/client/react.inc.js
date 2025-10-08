@@ -58,11 +58,13 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), { navbarStartcolor });
     that.fs.copyTpl(that.templatePath("react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`), {});
-    that.fs.copyTpl(that.templatePath("assets/icon.svg"), that.destinationPath(`client/public/icon.svg`), {});
+    that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`));
+    that.fs.copyTpl(that.templatePath("assets/icon.svg"), that.destinationPath(`client/public/icon.svg`));
+    that.fs.copyTpl(that.templatePath("assets/elastic-logo.svg"), that.destinationPath(`client/src/assets/elastic-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
+    that.fs.copyTpl(that.templatePath("assets/meilisearch-logo.svg"), that.destinationPath(`client/src/assets/meilisearch-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/pninja-logo-dark.svg"), that.destinationPath(`client/src/assets/pninja-logo-dark.svg`));
@@ -121,7 +123,10 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/contexts/NotificationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/NotificationContext.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), { dbms: that.config.get('dbms') });
+    that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), {
+        dbms: that.config.get('dbms'),
+        searchEngine: that.config.get('searchEngine')
+    });
     that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/Logout.tsx.ejs"), that.destinationPath(`client/src/pages/Logout.tsx`));
 

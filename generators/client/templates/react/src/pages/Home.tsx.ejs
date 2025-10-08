@@ -1,5 +1,6 @@
 <%
 let dbmsLink = undefined;
+let searchEngineLink = undefined;
 switch (dbms) {
   case "sqlite":
     dbmsLink = "https://www.sqlite.org/"
@@ -17,6 +18,15 @@ switch (dbms) {
     dbmsLink = "https://www.microsoft.com/sql-server/"
     break;
 }
+switch (searchEngine) {
+  case "meilisearch":
+    searchEngineLink = "https://www.meilisearch.com/"
+    break;
+  case "elastic":
+    searchEngineLink = "https://www.elastic.co/elasticsearch"
+    break;
+}
+
 -%>
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +37,9 @@ import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import pninjaLogoLight from '../assets/pninja-logo-light.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
 import <%= dbms %>Logo from '../assets/<%= dbms %>-logo.svg';
+<%  if (['meilisearch', 'elastic'].includes(searchEngine)) { -%>
+import <%= searchEngine %>Logo from '../assets/<%= searchEngine %>-logo.svg';
+<%  } -%>
 import reactLogo from '../assets/react.svg';
 import viteLogo from '../assets/vite.svg';
 
@@ -47,6 +60,12 @@ export default function Home() {
         <a target="_blank" href="<%-dbmsLink%>">
           <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
         </a>
+<%  if (['meilisearch', 'elastic'].includes(searchEngine)) { -%>
+        <span>+</span>
+        <a target="_blank" href="<%-searchEngineLink%>">
+          <img className="h-24" src={<%= searchEngine %>Logo} alt={t('searchEngine.<%= searchEngine %>')} title={t('searchEngine.<%= searchEngine %>')} />
+        </a>
+<%  } -%>
         <span>+</span>
         <a target="_blank" href="https://react.dev/">
           <img className="h-24" src={reactLogo} alt="React" title="React" />
