@@ -43,11 +43,12 @@ class <%- className %> extends Model
     public function toSearchableArray()
     {
         return [
-            'id' => $this->id,
+            'id' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this->id,
+            '__id_sort' => $this->id,
 <%  toSearchableArray.map(prop => { -%>
-            '<%- prop %>' => $this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
+            '<%- prop %>' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
 <%  })-%>
-<%  if (searchEngine === 'elastic') { -%>
+<%  if (['elastic', 'typesense'].includes(searchEngine)) { -%>
             '__fulltext' => implode(' ', array_filter([
                 $this->id,
 <%      toSearchableArray.map(prop => { -%>

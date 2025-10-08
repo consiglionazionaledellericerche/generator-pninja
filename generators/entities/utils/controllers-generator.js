@@ -167,7 +167,7 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), {});
 
         for (const entity of entities) {
-            const useElastic = this.that.config.get('searchEngine') === 'elastic'
+            const searchEngine = this.that.config.get('searchEngine');
             const withs = getWits(entity, relationships);
             const createRelated = [];
             relationships.forEach(relation => {
@@ -234,7 +234,7 @@ export class ControllersGenerator {
                     withs: withs.length ? `[${withs.join(', ')}]` : null,
                     createRelated: createRelated.join(''),
                     relatedEntitiesForFilters,
-                    useElastic,
+                    searchEngine,
                     to,
                 });
 

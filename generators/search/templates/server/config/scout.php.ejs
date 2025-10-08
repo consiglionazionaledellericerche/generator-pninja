@@ -1,5 +1,9 @@
 <?php
 
+<%  if (searchEngine === 'typesense') { -%>
+<% entities.forEach(function(entity) { %>
+use App\Models\<%= entity.name %>;<% }); %>
+<%  } -%>
 return [
 
     /*
@@ -182,6 +186,10 @@ return [
             'retry_interval_seconds' => env('TYPESENSE_RETRY_INTERVAL_SECONDS', 1),
         ],
         // 'max_total_results' => env('TYPESENSE_MAX_TOTAL_RESULTS', 1000),
+<%  if (searchEngine === 'typesense') { -%>
+<%- typesenseModelSettings -%>
+<%  } -%>
+<%  if (searchEngine !== 'typesense') { -%>
         'model-settings' => [
             // User::class => [
             //     'collection-schema' => [
@@ -206,6 +214,7 @@ return [
             //     ],
             // ],
         ],
+<%  } -%>
     ],
 
 ];

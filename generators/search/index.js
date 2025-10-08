@@ -26,10 +26,10 @@ export default class SearchGenerator extends Generator {
         default: this.config.get('searchEngine') || 'database',
         choices: [
           { name: 'Database', value: 'database' },
-          { name: 'Meilisearch', value: 'meilisearch' },
           { name: 'Elasticsearch', value: 'elastic' },
+          { name: 'Meilisearch', value: 'meilisearch' },
+          { name: 'Typesense', value: 'typesense' },
           { name: 'Algolia', value: 'algolia', disabled: "Not implemented yet" },
-          { name: 'Typesense', value: 'typesense', disabled: "Not implemented yet" },
           { name: 'Solr', value: 'solr', disabled: "Not implemented yet" },
           { name: 'No Search Engine', value: "null", disabled: "Not implemented yet" }
         ]
@@ -58,6 +58,9 @@ export default class SearchGenerator extends Generator {
       this.spawnCommandSync('composer', ['require', 'meilisearch/meilisearch-php'], { cwd: 'server' });
       this.spawnCommandSync('composer', ['require', 'http-interop/http-factory-guzzle'], { cwd: 'server' });
     }
+    if (searchEngine === 'typesense') {
+      this.spawnCommandSync('composer', ['require', 'typesense/typesense-php'], { cwd: 'server' });
+    }
     let searchEngineConfig = `
 SCOUT_DRIVER=${searchEngine}
 SCOUT_QUEUE=false`;
@@ -74,6 +77,13 @@ ELASTIC_HOST=http://localhost:9200`;
 MEILISEARCH_HOST=http://localhost:7700
 MEILISEARCH_KEY=meilisearch-master-key-change-me`;
     }
+    if (searchEngine === 'typesense') {
+      searchEngineConfig += `
+TYPESENSE_API_KEY=xyz
+TYPESENSE_HOST=localhost
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http`;
+    }
     searchEngineConfig += "\n";
     const envContent = this.fs.read(this.destinationPath(`server/.env`));
     this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
@@ -88,9 +98,25 @@ MEILISEARCH_KEY=meilisearch-master-key-change-me`;
       return res;
     }
       , '') : '';
+
+    const typesenseModelSettings = searchEngine === 'typesense' ? `
+        'model-settings' => [${entities.map(entity => `
+            ${entity.name}::class => [
+                'collection-schema' => [
+                    'fields' => [
+                      ['name' => '__id_sort', 'type' => 'int32', 'sort' => true],
+                      ['name' => '__fulltext', 'type' => 'string', 'infix' => true],
+                      ${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => `['name' => '${to.snake(f.name)}', 'type' => 'string', 'optional' => true, 'sort' => true]`).join(",\n                      ")}
+                    ],
+                ],
+            ]`).join(",")}
+        ],` : '';
+
     this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'), {
+      entities,
       searchEngine: searchEngine,
-      mailiserachIndexSettings
+      mailiserachIndexSettings,
+      typesenseModelSettings
     });
     if (searchEngine === 'elastic') {
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
