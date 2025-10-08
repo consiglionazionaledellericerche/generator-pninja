@@ -19,11 +19,14 @@ switch (dbms) {
     break;
 }
 switch (searchEngine) {
+  case "elastic":
+    searchEngineLink = "https://www.elastic.co/elasticsearch"
+    break;
   case "meilisearch":
     searchEngineLink = "https://www.meilisearch.com/"
     break;
-  case "elastic":
-    searchEngineLink = "https://www.elastic.co/elasticsearch"
+  case "typesense":
+    searchEngineLink = "https://typesense.org/"
     break;
 }
 
@@ -37,7 +40,7 @@ import pninjaLogoDark from '../assets/pninja-logo-dark.svg';
 import pninjaLogoLight from '../assets/pninja-logo-light.svg';
 import laravelLogo from '../assets/laravel-logo.svg';
 import <%= dbms %>Logo from '../assets/<%= dbms %>-logo.svg';
-<%  if (['meilisearch', 'elastic'].includes(searchEngine)) { -%>
+<%  if (searchEngine !== 'database') { -%>
 import <%= searchEngine %>Logo from '../assets/<%= searchEngine %>-logo.svg';
 <%  } -%>
 import reactLogo from '../assets/react.svg';
@@ -60,10 +63,10 @@ export default function Home() {
         <a target="_blank" href="<%-dbmsLink%>">
           <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
         </a>
-<%  if (['meilisearch', 'elastic'].includes(searchEngine)) { -%>
+<%  if (searchEngine !== 'database') { -%>
         <span>+</span>
         <a target="_blank" href="<%-searchEngineLink%>">
-          <img className="h-24" src={<%= searchEngine %>Logo} alt={t('searchEngine.<%= searchEngine %>')} title={t('searchEngine.<%= searchEngine %>')} />
+          <img className="h-24<%-searchEngine === 'typesense' ? ' brightness-0 dark:brightness-100' : ''%>" src={<%= searchEngine %>Logo} alt={t('searchEngine.<%= searchEngine %>')} title={t('searchEngine.<%= searchEngine %>')} />
         </a>
 <%  } -%>
         <span>+</span>
