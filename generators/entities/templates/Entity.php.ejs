@@ -44,11 +44,11 @@ class <%- className %> extends Model
     {
         return [
             'id' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this->id,
-            '__id_sort' => $this->id,
+            '__id' => $this->id,
 <%  toSearchableArray.map(prop => { -%>
             '<%- prop %>' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
 <%  })-%>
-<%  if (['elastic', 'typesense'].includes(searchEngine)) { -%>
+<%  if (['elastic'].includes(searchEngine)) { -%>
             '__fulltext' => implode(' ', array_filter([
                 $this->id,
 <%      toSearchableArray.map(prop => { -%>

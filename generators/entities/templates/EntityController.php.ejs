@@ -63,16 +63,9 @@ class <%- className %>Controller extends Controller
 <%  }-%>
             if ($search) {
 <%  if (searchEngine === 'typesense') {-%>
-                $sortBy = $sortBy == 'id' ? '__id_sort' : $sortBy;
+                $sortBy = $sortBy == 'id' ? '__id' : $sortBy;
 <%  } -%>
                 $result = <%- className %>::search($search)
-<%  if (searchEngine === 'typesense') {-%>
-                    ->options([
-                        'query_by' => '__fulltext',
-                        'prefix' => true,
-                        'infix' => 'always'
-                    ])
-<%  } -%>
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
                     ->query(function ($builder) use ($excludeIds) {
                         $builder->whereNotIn('id', $excludeIds)<% if (withs) { %>->with(<%- withs %>)<% } %>;
