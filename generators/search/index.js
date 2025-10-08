@@ -4,6 +4,22 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { parseJDL } from '../utils/jdlParser.js';
 
+// const typeToTypesenseType = {
+//   'String': 'string',
+//   'Integer': 'int32',
+//   'Long': 'int64',
+//   'BigDecimal': 'float',
+//   'Float': 'float',
+//   'Double': 'float',
+//   'Boolean': 'bool',
+//   'LocalDate': 'int64',
+//   'ZonedDateTime': 'int64',
+//   'Instant': 'int64',
+//   'Duration': 'int64',
+//   'LocalTime': 'int64',
+//   'UUID': 'string',
+//   'TextBlob': 'string',
+// }
 export default class SearchGenerator extends Generator {
   static namespace = 'pninja:search';
 
@@ -104,10 +120,13 @@ TYPESENSE_PROTOCOL=http`;
             ${entity.name}::class => [
                 'collection-schema' => [
                     'fields' => [
-                      ['name' => '__id_sort', 'type' => 'int32', 'sort' => true],
-                      ['name' => '__fulltext', 'type' => 'string', 'infix' => true],
+                      ['name' => '__id', 'type' => 'int32', 'sort' => true],
                       ${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => `['name' => '${to.snake(f.name)}', 'type' => 'string', 'optional' => true, 'sort' => true]`).join(",\n                      ")}
                     ],
+                ],
+                'search-parameters' => [
+                    'query_by' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join(",")}',
+                    'prefix' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(f.type) ? 'true' : 'false').join(",")}',
                 ],
             ]`).join(",")}
         ],` : '';
