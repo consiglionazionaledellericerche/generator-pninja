@@ -58,6 +58,9 @@ class <%- className %> extends Model
 <%  }-%>
         ];
     }
+<%  if(typesenseSearchParameters) {-%>
+<%- typesenseSearchParameters %>
+<%  }-%>
 <%  if (relations) { -%>
     <%- relations -%>
 <%  }-%>

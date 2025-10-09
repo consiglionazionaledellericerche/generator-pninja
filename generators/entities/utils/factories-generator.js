@@ -150,7 +150,7 @@ export class FactoriesGenerator {
                 return 'fake()->dateTimeBetween("-1 year", "now")->format("Y-m-d")';
             case 'ZonedDateTime':
             case 'Instant':
-                return 'fake()->dateTimeBetween("-1 year", "now")';
+                return 'fake()->dateTimeBetween("-1 year", "now")->format("Y-m-d H:i:s")';
             case 'LocalTime':
                 return 'fake()->time()';
             case 'Duration':

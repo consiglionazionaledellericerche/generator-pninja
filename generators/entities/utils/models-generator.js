@@ -47,6 +47,12 @@ export class ModelsGenerator {
                 }
                 return acc;
             }, []);
+            const toSearchableArrayTypes = entity.body.reduce((acc, prop) => {
+                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+                    acc[`${to.snake(prop.name)}`] = prop.type;
+                }
+                return acc;
+            }, {});
             const relationsType = [];
             const relations = [];
             relationships.filter(relation => (
@@ -149,6 +155,15 @@ export class ModelsGenerator {
 
             const enumsInEntity = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name);
             const enumColumns = entity.body.filter(f => enumsInEntity.includes(f.type)).map(f => to.snake(f.name));
+            const typesenseSearchParameters = searchEngine === 'typesense' ? `
+    public function typesenseSearchParameters(): array
+    {
+        return [
+            'query_by' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join(",")}',
+            'prefix' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'true' : 'false').join(",")}',
+            'infix' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'always' : 'off').join(",")}',
+        ];
+    }` : '';
             this.that.fs.copyTpl(this.that.templatePath("Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
                 {
                     className,
@@ -157,6 +172,7 @@ export class ModelsGenerator {
                     fillable: fillable.join(",\n" + this.tab(2)),
                     hidden: blobs.join(", "),
                     toSearchableArray,
+                    toSearchableArrayTypes,
                     relations: relations.join(`\n${this.tab(1)}`),
                     relationsType: [...new Set(relationsType)],
                     enums: enumsInEntity,
@@ -164,6 +180,7 @@ export class ModelsGenerator {
                     castsClasses: [...castsClasses, ...castsB64],
                     casts: [...castsBoolean],
                     searchEngine,
+                    typesenseSearchParameters,
                 });
         }
         for (const enm of enums) {
