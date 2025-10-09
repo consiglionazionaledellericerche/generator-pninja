@@ -184,18 +184,6 @@ services:
       retries: 3
       start_period: 10s
     restart: unless-stopped
-
-  typesense_dashboard:
-    container_name: <%= slugName %>-typesense-dashboard
-    image: ghcr.io/bfritscher/typesense-dashboard:latest
-    restart: unless-stopped
-    ports:
-      - 9990:80
-    networks:
-      - <%= slugName %>-network
-    depends_on:
-      typesense:
-        condition: service_healthy
 <% }-%>
 volumes:
   laravel_storage:
