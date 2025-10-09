@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
+<%  if (entities.length > 1) { -%>
 import { ChevronDown } from 'lucide-react';
+<% } -%>
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 <% if (withLangSelect) { -%>
