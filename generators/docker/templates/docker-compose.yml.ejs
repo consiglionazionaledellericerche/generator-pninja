@@ -173,7 +173,7 @@ services:
     ports:
       - '8188:8108'
     volumes:
-      - ./typesense_data:/data
+      - typesense_data:/data
     networks:
       - <%= slugName %>-network
     command: "--data-dir /data --api-key=<%- typesenseApiKey %> --enable-cors"
