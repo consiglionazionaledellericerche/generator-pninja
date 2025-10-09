@@ -77,7 +77,7 @@ services:
 <% if (dbms === 'sqlite') { -%>
       - ./database/database.sqlite:/var/www/html/database/database.sqlite
 <% }-%>
-<% if (dbms !== 'sqlite' || searchEngine === 'elastic' || searchEngine === 'meilisearch') { -%>
+<% if (dbms !== 'sqlite' || searchEngine !== 'database') { -%>
     depends_on:
 <% }-%>
 <% if (dbms !== 'sqlite') { -%>
@@ -90,6 +90,10 @@ services:
 <% }-%>
 <% if (searchEngine === 'elastic') { -%>
       elasticsearch:
+        condition: service_healthy
+<% }-%>
+<% if (searchEngine === 'typesense') { -%>
+      typesense:
         condition: service_healthy
 <% }-%>
     environment:
@@ -158,6 +162,41 @@ services:
       elasticsearch:
         condition: service_healthy
 <% }-%>
+<% if (searchEngine === 'typesense') { -%>
+
+  typesense:
+    image: typesense/typesense:27.1
+    container_name: <%= slugName %>-typesense
+    environment:
+      - TYPESENSE_API_KEY=<%- typesenseApiKey %>
+      - TYPESENSE_DATA_DIR=/data
+    ports:
+      - '8188:8108'
+    volumes:
+      - ./typesense_data:/data
+    networks:
+      - <%= slugName %>-network
+    command: "--data-dir /data --api-key=<%- typesenseApiKey %> --enable-cors"
+    healthcheck:
+      test: ["CMD-SHELL", "cat /proc/net/tcp | grep -q 1FAC || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  typesense_dashboard:
+    container_name: <%= slugName %>-typesense-dashboard
+    image: ghcr.io/bfritscher/typesense-dashboard:latest
+    restart: unless-stopped
+    ports:
+      - 9990:80
+    networks:
+      - <%= slugName %>-network
+    depends_on:
+      typesense:
+        condition: service_healthy
+<% }-%>
 volumes:
   laravel_storage:
 <% if (dbms === 'pgsql') { -%>
@@ -173,6 +212,10 @@ volumes:
 <% } -%>
 <% if (searchEngine === 'meilisearch') {-%>
   meilisearch_data:
+    driver: local
+<% } -%>
+<% if (searchEngine === 'typesense') {-%>
+  typesense_data:
     driver: local
 <% } -%>
 networks:

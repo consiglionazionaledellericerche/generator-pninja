@@ -20,6 +20,7 @@ export default class DockerGenerator extends Generator {
     const dbPwd = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
     const dbRootPwd = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
     const meiliMasterKey = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
+    const typesenseApiKey = pwd(1, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') + pwd(31);
     const appName = this.config.get('name');
     const slugName = to.slug(appName);
     const snakeName = to.snake(appName);
@@ -37,6 +38,7 @@ export default class DockerGenerator extends Generator {
       dbRootPwd,
       searchEngine,
       meiliMasterKey,
+      typesenseApiKey,
     });
     if (['pgsql', 'mysql', 'mariadb'].includes(dbms)) {
       envFileContents = envFileContents.replace(/^DB_HOST=.*$/m, `DB_HOST=database`);
@@ -59,6 +61,10 @@ export default class DockerGenerator extends Generator {
     }
     if (searchEngine === 'elastic') {
       envFileContents = envFileContents.replace(/^ELASTIC_HOST=.*$/m, `ELASTIC_HOST=http://elasticsearch:9200`);
+    }
+    if (searchEngine === 'typesense') {
+      envFileContents = envFileContents.replace(/^TYPESENSE_HOST=.*$/m, `TYPESENSE_HOST=typesense`);
+      envFileContents = envFileContents.replace(/^TYPESENSE_API_KEY=.*$/m, `TYPESENSE_API_KEY=${typesenseApiKey}`);
     }
     this.fs.write(this.destinationPath('docker/server/.env'), envFileContents, { encoding: 'utf8', flag: 'w' });
   }
