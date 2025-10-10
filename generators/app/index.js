@@ -119,28 +119,28 @@ export default class extends Generator {
         default: "sqlite",
         choices: [
           {
-            name: "SQLite",
+            name: `SQLite ${colors.dim('(Lightweight, serverless, file-based)')}`,
             value: "sqlite"
           },
           {
-            name: "MySQL",
+            name: `MySQL ${colors.dim('(Popular, open-source, widely supported)')}`,
             value: "mysql"
           },
           {
-            name: "MariaDB",
+            name: `MariaDB ${colors.dim('(MySQL fork, open-source, drop-in replacement)')}`,
             value: "mariadb"
           },
           {
-            name: "PostgreSQL",
+            name: `PostgreSQL ${colors.dim('(Advanced, feature-rich, standards-compliant)')}`,
             value: "pgsql"
           },
           {
-            name: "SQL Server",
+            name: `SQL Server ${colors.dim('(Microsoft enterprise database (licensed))')}`,
             value: "sqlsrv",
             disabled: "Not implemented yet"
           },
           {
-            name: "Oracle",
+            name: `Oracle ${colors.dim('(Enterprise-grade (commercial license required))')}`,
             value: "oracle",
             disabled: "Not implemented yet"
           }
