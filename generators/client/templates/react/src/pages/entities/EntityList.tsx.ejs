@@ -78,6 +78,9 @@ export default function <%= entity.name %>List() {
   }, [searchTerm]);
 
   const renderSortHeader = (field: SortableField, label: string) => {
+<%  if (searchEngine === 'algolia') {-%>
+    if (debouncedSearchTerm) return <th scope="col">{label}</th>; // Algolia does its own sorting
+<% } -%>
     const isSorted = sortConfig.field === field;
     return (
       <th

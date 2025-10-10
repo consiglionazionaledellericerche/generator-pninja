@@ -23,7 +23,7 @@ const colors = [
 const navbarStartcolor = colors[Math.floor(Math.random() * colors.length)];
 
 export async function createReactClient(that, parsedJDL) {
-    const useElastic = that.config.get('searchEngine') === 'elastic'
+    const searchEngine = that.config.get('searchEngine');
     const { entities, enums, relationships } = parsedJDL;
     const appName = that.config.get('name');
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
@@ -96,7 +96,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RichTextEditor.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RichTextEditor.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), { useElastic });
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), { searchEngine });
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TelField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TelField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
@@ -170,7 +170,8 @@ export async function createReactClient(that, parsedJDL) {
                 durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
                 fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
+                relatedEntities: getModelRelatedEntities(entity, relationships),
+                searchEngine,
             });
         that.fs.copyTpl(
             that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
