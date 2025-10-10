@@ -60,6 +60,7 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`));
     that.fs.copyTpl(that.templatePath("assets/icon.svg"), that.destinationPath(`client/public/icon.svg`));
+    that.fs.copyTpl(that.templatePath("assets/algolia-logo.svg"), that.destinationPath(`client/src/assets/algolia-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/elastic-logo.svg"), that.destinationPath(`client/src/assets/elastic-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
     that.fs.copyTpl(that.templatePath("assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));

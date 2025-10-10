@@ -25,12 +25,12 @@ export default class SearchGenerator extends Generator {
         message: `Which ${colors.yellow('*Search Engine*')} would you like to use?`,
         default: this.config.get('searchEngine') || 'database',
         choices: [
-          { name: 'Database', value: 'database' },
-          { name: 'Elasticsearch', value: 'elastic' },
-          { name: 'Meilisearch', value: 'meilisearch' },
-          { name: 'Typesense', value: 'typesense' },
-          { name: 'Algolia', value: 'algolia', disabled: "Not implemented yet" },
-          { name: 'Solr', value: 'solr', disabled: "Not implemented yet" },
+          { name: `Database ${colors.gray('(Built-in database search, no external deps)')}`, value: 'database' },
+          { name: `Algolia ${colors.gray('(Hosted search-as-a-service, free tier limits apply)')}`, value: 'algolia' },
+          { name: `Elasticsearch ${colors.gray('(Self-hosted, powerful full-text search)')}`, value: 'elastic' },
+          { name: `Meilisearch ${colors.gray('(Self-hosted, fast & typo-tolerant)')}`, value: 'meilisearch' },
+          { name: `Typesense ${colors.gray('(Self-hosted, low-latency & typo-tolerant)')}`, value: 'typesense' },
+          { name: `Solr ${colors.gray('(Self-hosted, enterprise Apache Lucene)')}`, value: 'solr', disabled: "Not implemented yet" },
           { name: 'No Search Engine', value: "null", disabled: "Not implemented yet" }
         ]
       }]]
@@ -61,6 +61,9 @@ export default class SearchGenerator extends Generator {
     if (searchEngine === 'typesense') {
       this.spawnCommandSync('composer', ['require', 'typesense/typesense-php'], { cwd: 'server' });
     }
+    if (searchEngine === 'algolia') {
+      this.spawnCommandSync('composer', ['require', 'algolia/algoliasearch-client-php'], { cwd: 'server' });
+    }
     let searchEngineConfig = `
 SCOUT_DRIVER=${searchEngine}
 SCOUT_QUEUE=false`;
@@ -83,6 +86,11 @@ TYPESENSE_API_KEY=xyz
 TYPESENSE_HOST=localhost
 TYPESENSE_PORT=8108
 TYPESENSE_PROTOCOL=http`;
+    }
+    if (searchEngine === 'algolia') {
+      searchEngineConfig += `
+ALGOLIA_APP_ID=your-application-id
+ALGOLIA_SECRET=your-admin-api-key`;
     }
     searchEngineConfig += "\n";
     const envContent = this.fs.read(this.destinationPath(`server/.env`));

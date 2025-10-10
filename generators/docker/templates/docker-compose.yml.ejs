@@ -77,7 +77,7 @@ services:
 <% if (dbms === 'sqlite') { -%>
       - ./database/database.sqlite:/var/www/html/database/database.sqlite
 <% }-%>
-<% if (dbms !== 'sqlite' || searchEngine !== 'database') { -%>
+<% if (dbms !== 'sqlite' || !['database','algolia'].includes(searchEngine)) { -%>
     depends_on:
 <% }-%>
 <% if (dbms !== 'sqlite') { -%>
