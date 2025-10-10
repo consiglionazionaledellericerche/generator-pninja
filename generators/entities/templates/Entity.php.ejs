@@ -60,6 +60,12 @@ class <%- className %> extends Model
 <%  }-%>
         ];
     }
+<%  if (searchEngine === 'solr') { -%>
+    public function searchableAs()
+	{
+	    return config('scout.prefix').$this->getTable();
+	}
+<%  }-%>
 <%  if(typesenseSearchParameters) {-%>
 <%- typesenseSearchParameters %>
 <%  }-%>

@@ -30,7 +30,7 @@ export default class SearchGenerator extends Generator {
           { name: `Elasticsearch ${colors.dim('(Self-hosted, powerful full-text search')}`, value: 'elastic' },
           { name: `Meilisearch ${colors.dim('(Self-hosted, fast & typo-tolerant')}`, value: 'meilisearch' },
           { name: `Typesense ${colors.dim('(Self-hosted, low-latency & typo-tolerant')}`, value: 'typesense' },
-          { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene')}`, value: 'solr', disabled: "Not implemented yet" },
+          { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene')}`, value: 'solr' },
           { name: 'No Search Engine', value: "null", disabled: "Not implemented yet" }
         ]
       }]]
@@ -64,10 +64,13 @@ export default class SearchGenerator extends Generator {
     if (searchEngine === 'algolia') {
       this.spawnCommandSync('composer', ['require', 'algolia/algoliasearch-client-php'], { cwd: 'server' });
     }
+    if (searchEngine === 'solr') {
+      this.spawnCommandSync('composer', ['require', 'klaasie/scout-solr-engine'], { cwd: 'server' });
+    }
     let searchEngineConfig = `
 SCOUT_DRIVER=${searchEngine}
 SCOUT_QUEUE=false`;
-    if (['meilisearch', 'typesense', 'elastic'].includes(searchEngine)) {
+    if (['meilisearch', 'typesense', 'elastic', 'solr'].includes(searchEngine)) {
       searchEngineConfig += `
 SCOUT_PREFIX=${snakeName}_`;
     }
@@ -91,6 +94,12 @@ TYPESENSE_PROTOCOL=http`;
       searchEngineConfig += `
 ALGOLIA_APP_ID=your-application-id
 ALGOLIA_SECRET=your-admin-api-key`;
+    }
+    if (searchEngine === 'solr') {
+      searchEngineConfig += `
+SOLR_HOST=127.0.0.1
+SOLR_PORT=8983
+SOLR_PATH=/`;
     }
     searchEngineConfig += "\n";
     const envContent = this.fs.read(this.destinationPath(`server/.env`));
