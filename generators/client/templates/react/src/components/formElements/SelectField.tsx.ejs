@@ -168,6 +168,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
       if (search) {
 <%  if (searchEngine === 'elastic') { -%>
         url.searchParams.set(optionsLoad.searchParam ?? 'search', `${search} OR *${search}*`);
+<%  } else if (searchEngine === 'solr') { -%>
+        url.searchParams.set(optionsLoad.searchParam ?? 'search', `*${search}*`);
 <%  } else {-%>
         url.searchParams.set(optionsLoad.searchParam ?? 'search', search);
 <%  } -%>
