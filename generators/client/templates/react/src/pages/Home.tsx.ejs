@@ -67,7 +67,7 @@ export default function Home() {
         </a>
         <span>+</span>
         <a target="_blank" href="<%-dbmsLink%>">
-          <img className="h-24" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
+          <img className="h-24<%-dbms === 'mariadb' ? ' brightness-0 dark:brightness-100' : ''%>" src={<%= dbms %>Logo} alt={t('dbms.<%= dbms %>')} title={t('dbms.<%= dbms %>')} />
         </a>
 <%  if (searchEngine !== 'database') { -%>
         <span>+</span>
