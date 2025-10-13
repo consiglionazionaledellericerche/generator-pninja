@@ -62,6 +62,9 @@ export default class DockerGenerator extends Generator {
     if (searchEngine === 'elastic') {
       envFileContents = envFileContents.replace(/^ELASTIC_HOST=.*$/m, `ELASTIC_HOST=http://elasticsearch:9200`);
     }
+    if (searchEngine === 'solr') {
+      envFileContents = envFileContents.replace(/^SOLR_HOST=.*$/m, `SOLR_HOST=solr`);
+    }
     if (searchEngine === 'typesense') {
       envFileContents = envFileContents.replace(/^TYPESENSE_HOST=.*$/m, `TYPESENSE_HOST=typesense`);
       envFileContents = envFileContents.replace(/^TYPESENSE_API_KEY=.*$/m, `TYPESENSE_API_KEY=${typesenseApiKey}`);

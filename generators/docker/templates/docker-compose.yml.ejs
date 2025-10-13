@@ -96,6 +96,10 @@ services:
       typesense:
         condition: service_healthy
 <% }-%>
+<% if (searchEngine === 'solr') { -%>
+      solr:
+        condition: service_healthy
+<% }-%>
     environment:
       - FRONTEND_URL=
     networks:
@@ -185,6 +189,34 @@ services:
       start_period: 10s
     restart: unless-stopped
 <% }-%>
+<% if (searchEngine === 'solr') { -%>
+
+  solr:
+    image: solr:9
+    container_name: <%= slugName %>-solr
+    ports:
+      - "8984:8983"
+    volumes:
+      - solr_data:/var/solr
+    networks:
+      - <%= slugName %>-network
+    entrypoint:
+      - bash
+      - "-c"
+      - |
+        if [ ! -d "/var/solr/data/configsets/_default" ]; then
+          mkdir -p /var/solr/data/configsets
+          cp -r /opt/solr/server/solr/configsets/_default /var/solr/data/configsets/
+        fi
+        exec solr-foreground
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8983/solr/admin/info/system?wt=json || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+<% }-%>
 volumes:
   laravel_storage:
 <% if (dbms === 'pgsql') { -%>
@@ -204,6 +236,10 @@ volumes:
 <% } -%>
 <% if (searchEngine === 'typesense') {-%>
   typesense_data:
+    driver: local
+<% } -%>
+<% if (searchEngine === 'solr') {-%>
+  solr_data:
     driver: local
 <% } -%>
 networks:
