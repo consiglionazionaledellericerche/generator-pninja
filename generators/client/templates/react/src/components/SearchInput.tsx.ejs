@@ -23,18 +23,20 @@ const SearchInput: React.FC<ISearchInput> = ({ onChange, onClear }) => {
         }}
         value={searchTerm}
       />
-      <button
-        type="button"
-        onClick={() => {
-          if (searchTerm) {
-            setSearchTerm('');
-            onClear();
-          }
-        }}
-        className="cursor-pointer col-start-1 row-start-1 me-4 self-center justify-self-end size-5 sm:size-4"
-      >
-        {searchTerm && <X className="h-full" />}
-      </button>
+      {searchTerm && (
+        <button
+          type="button"
+          onClick={() => {
+            if (searchTerm) {
+              setSearchTerm('');
+              onClear();
+            }
+          }}
+          className="cursor-pointer col-start-1 row-start-1 me-4 self-center justify-self-end size-5 sm:size-4"
+        >
+          <X className="h-full" />
+        </button>
+      )}
     </div>
   );
 };
