@@ -65,7 +65,13 @@ class <%- className %>Controller extends Controller
 <%  if (searchEngine === 'typesense') {-%>
                 $sortBy = $sortBy == 'id' ? '__id' : $sortBy;
 <%  } -%>
-                $result = <%- className %>::search($search)
+<%  if (searchEngine === 'solr') {-%>
+                $sortBy = $sortBy == 'id' ? '__id_i' : $sortBy;
+<%      toSearchableArray.map(prop => { -%>
+                $sortBy = $sortBy == '<%- prop %>' ? '<%- `${prop}${getSolrSuffix(toSearchableArrayTypes[prop])}` %>' : $sortBy;
+<%      })-%>
+<%  } -%>
+                $result = <%- className %>::search(<%- searchEngine === 'solr' ? `'__fulltext_t:'.` : '' %>$search)
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
                     ->query(function ($builder) use ($excludeIds) {
                         $builder->whereNotIn('id', $excludeIds)<% if (withs) { %>->with(<%- withs %>)<% } %>;

@@ -218,6 +218,48 @@ export class ControllersGenerator {
                 };
             });
 
+            const getSolrSuffix = (type) => {
+                switch (type) {
+                    case 'String':
+                    case 'UUID':
+                        return '_s';
+                    case 'TextBlob':
+                        return '_t';
+                    case 'Integer':
+                    case 'Long':
+                        return '_i';
+                    case 'Float':
+                    case 'Double':
+                    case 'BigDecimal':
+                        return '_d';
+                    case 'LocalDate':
+                        return '_dt';
+                    case 'ZonedDateTime':
+                    case 'Instant':
+                        return '_dt';
+                    case 'Duration':
+                        return '_l';
+                    case 'LocalTime':
+                        return '_t';
+                    case 'Boolean':
+                        return '_b';
+                    default:
+                        return '_s';
+                }
+            }
+            const toSearchableArray = entity.body.reduce((acc, prop) => {
+                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+                    acc.push(`${to.snake(prop.name)}`);
+                }
+                return acc;
+            }, []);
+            const toSearchableArrayTypes = entity.body.reduce((acc, prop) => {
+                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+                    acc[`${to.snake(prop.name)}`] = prop.type;
+                }
+                return acc;
+            }, {});
+
             this.that.fs.copyTpl(this.that.templatePath("KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
@@ -236,6 +278,9 @@ export class ControllersGenerator {
                     relatedEntitiesForFilters,
                     searchEngine,
                     to,
+                    getSolrSuffix,
+                    toSearchableArray,
+                    toSearchableArrayTypes,
                 });
 
         }

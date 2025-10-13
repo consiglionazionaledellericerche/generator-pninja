@@ -44,17 +44,17 @@ class <%- className %> extends Model
     {
         return [
             'id' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this->id,
-<%  if (['typesense'].includes(searchEngine)) { -%>
-            '__id' => $this->id,
+<%  if (['typesense', 'solr'].includes(searchEngine)) { -%>
+            '__id<%- searchEngine === 'solr' ? '_i' : '' %>' => $this->id,
 <%  }-%>
 <%  toSearchableArray.map(prop => { -%>
-            '<%- prop %>' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
+            '<%- prop %><%- searchEngine === 'solr' ? getSolrSuffix(toSearchableArrayTypes[prop]) : '' %>' => <%- searchEngine === 'typesense' ? '(string) ' : '' %>$this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %>,
 <%  })-%>
-<%  if (['elastic'].includes(searchEngine)) { -%>
-            '__fulltext' => implode(' ', array_filter([
+<%  if (['elastic','solr'].includes(searchEngine)) { -%>
+            '__fulltext<%- searchEngine === 'solr' ? '_t' : '' %>' => implode(' ', array_filter([
                 $this->id,
 <%      toSearchableArray.map(prop => { -%>
-                $this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %> ?? null,
+                $this-><%- prop %><%- (enumColumns.includes(prop)) ? '?->value' : '' %><%- toSearchableArrayTypes[prop] === 'Boolean' ? ` ? 'true' : 'false'` : '?? null'%>,
 <%      })-%>
             ]))
 <%  }-%>

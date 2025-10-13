@@ -153,6 +153,36 @@ export class ModelsGenerator {
                 cast: 'boolean'
             }));
 
+            const getSolrSuffix = (type) => {
+                switch (type) {
+                    case 'String':
+                    case 'UUID':
+                        return '_s';
+                    case 'TextBlob':
+                        return '_t';
+                    case 'Integer':
+                    case 'Long':
+                        return '_i';
+                    case 'Float':
+                    case 'Double':
+                    case 'BigDecimal':
+                        return '_d';
+                    case 'LocalDate':
+                        return '_dt';
+                    case 'ZonedDateTime':
+                    case 'Instant':
+                        return '_dt';
+                    case 'Duration':
+                        return '_l';
+                    case 'LocalTime':
+                        return '_t';
+                    case 'Boolean':
+                        return '_b';
+                    default:
+                        return '_s';
+                }
+            }
+
             const enumsInEntity = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => e.name);
             const enumColumns = entity.body.filter(f => enumsInEntity.includes(f.type)).map(f => to.snake(f.name));
             const typesenseSearchParameters = searchEngine === 'typesense' ? `
@@ -181,6 +211,7 @@ export class ModelsGenerator {
                     casts: [...castsBoolean],
                     searchEngine,
                     typesenseSearchParameters,
+                    getSolrSuffix,
                 });
         }
         for (const enm of enums) {
