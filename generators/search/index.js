@@ -27,11 +27,11 @@ export default class SearchGenerator extends Generator {
         choices: [
           { name: `Database ${colors.dim('(Built-in database search (no external deps))')}`, value: 'database' },
           { name: `Algolia ${colors.dim('(Hosted search-as-a-service (free tier limits apply))')}`, value: 'algolia' },
-          { name: `Elasticsearch ${colors.dim('(Self-hosted, powerful full-text search')}`, value: 'elastic' },
-          { name: `Meilisearch ${colors.dim('(Self-hosted, fast & typo-tolerant')}`, value: 'meilisearch' },
-          { name: `Typesense ${colors.dim('(Self-hosted, low-latency & typo-tolerant')}`, value: 'typesense' },
-          { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene')}`, value: 'solr' },
-          { name: 'No Search Engine', value: "null" }
+          { name: `Elasticsearch ${colors.dim('(Self-hosted, powerful full-text search)')}`, value: 'elastic' },
+          { name: `Meilisearch ${colors.dim('(Self-hosted, fast & typo-tolerant)')}`, value: 'meilisearch' },
+          { name: `Typesense ${colors.dim('(Self-hosted, low-latency & typo-tolerant)')}`, value: 'typesense' },
+          { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene)')}`, value: 'solr' },
+          { name: `No Search Engine ${colors.dim('(no filtering/search capabilities)')}`, value: "null" }
         ]
       }]]
     }
