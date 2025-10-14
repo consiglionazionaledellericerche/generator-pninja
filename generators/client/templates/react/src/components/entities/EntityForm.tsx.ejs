@@ -358,6 +358,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%            if (labelField !== 'id') {-%>
                 labelAttribute: '<%-to.snake(labelField)%>',
 <%            }-%>
+<%            if (searchEngine === 'null') {-%>
+                searchable: false,
+<%            }-%>
               }}
               defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
 <%            if(!nullable) { -%>
