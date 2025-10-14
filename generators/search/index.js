@@ -31,7 +31,7 @@ export default class SearchGenerator extends Generator {
           { name: `Meilisearch ${colors.dim('(Self-hosted, fast & typo-tolerant')}`, value: 'meilisearch' },
           { name: `Typesense ${colors.dim('(Self-hosted, low-latency & typo-tolerant')}`, value: 'typesense' },
           { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene')}`, value: 'solr' },
-          { name: 'No Search Engine', value: "null", disabled: "Not implemented yet" }
+          { name: 'No Search Engine', value: "null" }
         ]
       }]]
     }
@@ -49,6 +49,10 @@ export default class SearchGenerator extends Generator {
     const appName = this.config.get('name');
     const snakeName = to.snake(appName);
     const searchEngine = this.answers.searchEngine;
+    if (searchEngine !== 'null') {
+      this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
+      this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Laravel\Scout\ScoutServiceProvider"'], { cwd: 'server' });
+    }
     if (searchEngine === 'elastic') {
       this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
       this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-scout-driver'], { cwd: 'server' });
@@ -102,8 +106,10 @@ SOLR_PORT=8983
 SOLR_PATH=/`;
     }
     searchEngineConfig += "\n";
-    const envContent = this.fs.read(this.destinationPath(`server/.env`));
-    this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
+    if (searchEngine !== 'null') {
+      const envContent = this.fs.read(this.destinationPath(`server/.env`));
+      this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
+    }
     const { entities } = parseJDL(this.config.get('entitiesFilePath'));
     const mailiserachIndexSettings = searchEngine === 'meilisearch' ? entities.reduce((res, entity) => {
       const indexName = `${to.snake(pluralize(entity.tableName))}`;
@@ -128,12 +134,14 @@ SOLR_PATH=/`;
             ]`).join(",")}
         ],` : '';
 
-    this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'), {
-      entities,
-      searchEngine: searchEngine,
-      mailiserachIndexSettings,
-      typesenseModelSettings
-    });
+    if (searchEngine !== 'null') {
+      this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'), {
+        entities,
+        searchEngine: searchEngine,
+        mailiserachIndexSettings,
+        typesenseModelSettings
+      });
+    }
     if (searchEngine === 'elastic') {
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }

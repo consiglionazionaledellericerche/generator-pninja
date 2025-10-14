@@ -215,6 +215,7 @@ export async function createReactClient(that, parsedJDL) {
                 ).map(rel => to.snake(rel.from.injectedField || rel.to.name)),
                 to,
                 pluralize,
+                searchEngine
             }
         );
         that.fs.copyTpl(

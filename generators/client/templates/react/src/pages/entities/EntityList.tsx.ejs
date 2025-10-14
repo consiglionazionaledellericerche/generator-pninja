@@ -9,7 +9,9 @@ import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 import { DurationFieldViewer } from '../../components/formElements/DurationField';
 <% } -%>
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
+<% if (searchEngine !== 'null' ) { -%>
 import { SearchInput } from '../../components/SearchInput';
+<% } -%>
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
@@ -23,8 +25,10 @@ export default function <%= entity.name %>List() {
   const { addNotification } = useNotifications();
   const { fetch } = useApi();
   const [loading, setLoading] = useState(false);
+<% if (searchEngine !== 'null' ) { -%>
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+<% } -%>
   const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
     field: 'id',
     direction: 'asc',
@@ -43,7 +47,7 @@ export default function <%= entity.name %>List() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    fetch(`/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}`)
+    fetch(`/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}<% if (searchEngine !== 'null' ) { -%>${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}<% } -%>`)
       .then((response) => response.json())
       .then((page: ApiResponsePage<I<%= entity.name %>>) => {
         setPage(page);
@@ -58,7 +62,7 @@ export default function <%= entity.name %>List() {
           duration: 5000,
         });
       });
-  }, [fetch, addNotification, sortConfig, currentPage, debouncedSearchTerm]);
+  }, [fetch, addNotification, sortConfig, currentPage<% if (searchEngine !== 'null' ) { -%>, debouncedSearchTerm<% } -%>]);
 
   const handleSort = (field: SortableField) => {
     setSortConfig((currentConfig) => ({
@@ -68,6 +72,7 @@ export default function <%= entity.name %>List() {
     }));
     setCurrentPage(1);
   };
+<% if (searchEngine !== 'null' ) { -%>
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -76,6 +81,7 @@ export default function <%= entity.name %>List() {
     }, 300);
     return () => clearTimeout(timeoutId);
   }, [searchTerm]);
+<% } -%>
 
   const renderSortHeader = (field: SortableField, label: string) => {
 <%  if (searchEngine === 'algolia') {-%>
@@ -112,7 +118,9 @@ export default function <%= entity.name %>List() {
     <>
       <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
       <div className={`flex gap-4 mb-4`}>
+<% if (searchEngine !== 'null' ) { -%>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
+<% } -%>
         <Link
           to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
           className="primary-button whitespace-nowrap"

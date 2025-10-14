@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 <% relationsType.forEach(function(rel) { %>use Illuminate\Database\Eloquent\Relations\<%- rel %>;
 <% }); %>
+<% if (searchEngine !== 'null') { -%>
 use Laravel\Scout\Searchable;
+<% }; -%>
 <% if (hasBlobs) { -%>
 use App\Casts\Base64BinaryCast;
 <% }; -%>
@@ -15,7 +17,9 @@ use App\Casts\Base64BinaryCast;
 class <%- className %> extends Model
 {
     use HasFactory;
+<% if (searchEngine !== 'null') { -%>
     use Searchable;
+<% }; -%>
 
     protected $table = '<%- tableName %>';
 <%  if(hidden) {-%>
@@ -40,6 +44,7 @@ class <%- className %> extends Model
         <%- fillable %>
     ];
 <%  }-%>
+<% if (searchEngine !== 'null') { -%>
     public function toSearchableArray()
     {
         return [
@@ -60,6 +65,7 @@ class <%- className %> extends Model
 <%  }-%>
         ];
     }
+<% }; -%>
 <%  if (searchEngine === 'solr') { -%>
     public function searchableAs()
 	{

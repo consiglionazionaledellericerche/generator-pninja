@@ -175,10 +175,10 @@ export default class extends Generator {
 
   writing() {
     this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.6.1', 'server']);
-    this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
+    // this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
     this.spawnCommandSync('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     this.spawnCommandSync('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
-    this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Laravel\Scout\ScoutServiceProvider"'], { cwd: 'server' });
+    // this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Laravel\Scout\ScoutServiceProvider"'], { cwd: 'server' });
     this.fs.copyTpl(this.templatePath("rename_queue_table.php.ejs"), this.destinationPath(`server/database/migrations/${new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17)}_rename_queue_table.php`));
     let queueConfigFileContents = fs.readFileSync(`${this.destinationPath('server/config/queue.php')}`, { encoding: 'utf8', flag: 'r' });
     queueConfigFileContents = queueConfigFileContents.replace(`'table' => env('DB_QUEUE_TABLE', 'jobs'),`, `'table' => env('DB_QUEUE_TABLE', 'queue__jobs'),`);
