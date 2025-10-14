@@ -13,6 +13,7 @@
         "migrate:fresh": "cd server && php artisan migrate:fresh",
         "migrate:fresh:seed": "cd server && php artisan migrate:fresh --seed",
         "migrate:seed": "cd server && php artisan migrate --seed",
+        "db:seed": "cd server && php artisan db:seed",
 <%  if (searchEngine === 'elastic') { -%>
         "elastic:migrate": "cd server && php artisan elastic:migrate",
         "elastic:migrate:reset": "cd server && php artisan elastic:migrate:reset",
