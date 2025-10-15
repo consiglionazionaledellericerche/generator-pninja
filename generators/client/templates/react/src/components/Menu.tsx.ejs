@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 <%  if (entities.length > 1) { -%>
 import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Check } from 'lucide-react';
 <% } -%>
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -14,6 +14,7 @@ import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import appLogo from '../assets/logo.svg';
 const Menu: React.FC = () => {
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuthState();
   const { t } = useTranslation();
   const location = useLocation();
@@ -21,7 +22,7 @@ const Menu: React.FC = () => {
   const [activeEntity, setActiveEntity] = useState<string | null>(null);
 <% } -%>
   const isActive = (path: string) =>
-    location.pathname === path ? ' bg-white/70 text-black dark:bg-black/70 dark:text-white' : '';
+    location.pathname === path || location.pathname.startsWith(`${path}/`) ? ' bg-white/70 text-black dark:bg-black/70 dark:text-white' : '';
   const [menuVisible, setMenuVisible] = useState(false);
   const htmlElement = document.querySelector('html');
   useEffect(() => {
@@ -33,7 +34,7 @@ const Menu: React.FC = () => {
 <%  if (entities.length > 1) { -%>
     setActiveEntity(null);
 <%  entities.forEach((entity, index) => {-%>
-    if (location.pathname === '/entities/<%- to.slug(pluralize(entity.name)) %>') setActiveEntity('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
+    if (location.pathname === '/entities/<%- to.slug(pluralize(entity.name)) %>' || location.pathname.startsWith('/entities/<%- to.slug(pluralize(entity.name)) %>/')) setActiveEntity('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
 <%  });-%>
 <% } -%>
     setMenuVisible(false); // Close the menu when the location changes
@@ -105,20 +106,17 @@ const Menu: React.FC = () => {
 <%  if (entities.length > 1) { -%>
           <MenuTrigger>
             <Button
-              aria-label="Menu"
-              className={
-                'w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link'
-              }
+              aria-label={t('entities.entities')}
+              className={`w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link${activeEntity ? ' bg-white/70 text-black dark:bg-black/70 dark:text-white' : ''}`}
             >
               {t(activeEntity || 'entities.entities')} <ChevronDown size={16} />
             </Button>
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
-              <MenuItems>
+              <MenuItems onAction={(k) => navigate(`/entities/${k}`)}>
 <%            entities.forEach((entity, index) => {-%>
-                <MenuItem>
-                  <Link className={`rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`} to="/entities/<%- to.slug(pluralize(entity.name)) %>">
+                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')}`}>
                     {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
-                  </Link>
+                  {isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') && <Check className="inline w-4 h-4 ms-1" />}
                 </MenuItem>
 <%            });-%>
               </MenuItems>
