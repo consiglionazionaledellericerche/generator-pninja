@@ -51,7 +51,6 @@ export default class SearchGenerator extends Generator {
     const searchEngine = this.answers.searchEngine;
     if (searchEngine !== 'null') {
       this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
-      this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Laravel\Scout\ScoutServiceProvider"'], { cwd: 'server' });
     }
     if (searchEngine === 'elastic') {
       this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
