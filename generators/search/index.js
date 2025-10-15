@@ -25,13 +25,13 @@ export default class SearchGenerator extends Generator {
         message: `Which ${colors.yellow('*Search Engine*')} would you like to use?`,
         default: this.config.get('searchEngine') || 'database',
         choices: [
-          { name: `Database ${colors.dim('(Built-in database search (no external deps))')}`, value: 'database' },
-          { name: `Algolia ${colors.dim('(Hosted search-as-a-service (free tier limits apply))')}`, value: 'algolia' },
-          { name: `Elasticsearch ${colors.dim('(Self-hosted, powerful full-text search)')}`, value: 'elastic' },
-          { name: `Meilisearch ${colors.dim('(Self-hosted, fast & typo-tolerant)')}`, value: 'meilisearch' },
-          { name: `Typesense ${colors.dim('(Self-hosted, low-latency & typo-tolerant)')}`, value: 'typesense' },
-          { name: `Solr ${colors.dim('(Self-hosted, enterprise Apache Lucene)')}`, value: 'solr' },
-          { name: `No Search Engine ${colors.dim('(no filtering/search capabilities)')}`, value: "null" }
+          { name: `Database ${colors.dim('(Built-in search, limited features, no setup required)')}`, value: 'database' },
+          { name: `Algolia ${colors.dim('(Hosted SaaS, blazing fast, easy setup, free tier limits)')}`, value: 'algolia' },
+          { name: `Elasticsearch ${colors.dim('(Self-hosted, industry standard, highly scalable, complex setup)')}`, value: 'elastic' },
+          { name: `Meilisearch ${colors.dim('(Self-hosted, instant search, typo-tolerant, easy to deploy)')}`, value: 'meilisearch' },
+          { name: `Typesense ${colors.dim('(Self-hosted, typo-tolerant, <50ms search, minimal resources)')}`, value: 'typesense' },
+          { name: `Solr ${colors.dim('(Self-hosted, mature, enterprise-ready, rich feature set)')}`, value: 'solr' },
+          { name: `None ${colors.red(' (No search/filtering features - sure about that? 🤔) ')}`, value: "null" }
         ]
       }]]
     }
