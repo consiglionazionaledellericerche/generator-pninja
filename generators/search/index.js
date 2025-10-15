@@ -31,7 +31,7 @@ export default class SearchGenerator extends Generator {
           { name: `Meilisearch ${colors.dim('(Self-hosted, instant search, typo-tolerant, easy to deploy)')}`, value: 'meilisearch' },
           { name: `Typesense ${colors.dim('(Self-hosted, typo-tolerant, <50ms search, minimal resources)')}`, value: 'typesense' },
           { name: `Solr ${colors.dim('(Self-hosted, mature, enterprise-ready, rich feature set)')}`, value: 'solr' },
-          { name: `None ${colors.red(' (No search/filtering features - sure about that? 🤔) ')}`, value: "null" }
+          { name: `None ${colors.dim('(No search/filtering features - sure about that? 🤔)')}`, value: "null" },
         ]
       }]]
     }
