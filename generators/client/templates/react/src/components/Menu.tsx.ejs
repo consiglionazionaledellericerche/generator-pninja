@@ -39,8 +39,7 @@ const Menu: React.FC = () => {
     if (isActive('/entities/<%- to.slug(pluralize(entity.name)) %>')) setActiveEntity('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
 <%  });-%>
 <% } -%>
-    setMenuVisible(false); // Close the menu when the location changes
-  }, [location]);
+  }, [isActive]);
   return (
     <nav className="nav-bar">
       <Link to="/" className="rounded-full hover:ring-4 focus:outline-none focus-visible:ring-4">
