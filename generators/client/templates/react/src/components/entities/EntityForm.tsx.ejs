@@ -119,7 +119,7 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 
 import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
 
-<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") -%>
+<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") + "\n\n" -%>
 import {
 <% if (hasCheckbox) {-%>
   Checkbox,
@@ -219,9 +219,10 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               fieldName="<%= to.snake(name) %>"
               label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
               options={Object.values(<%= type %>).map((v) => ({
-                value: String(v),
-                label: String(v),
+                id: String(v),
+                name: String(v),
               }))}
+              initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(name) %>}
             />
 <%        } else if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
             <FileField
@@ -338,9 +339,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%            }-%>
               }}
 <%            if (isArray) {-%>
-              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => item.id)}
+              initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>?.map((item) => item.id)}
 <%            } else {-%>
-              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id}
+              initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(field) %>_id}
 <%            }-%>
 <%            if(!nullable) {-%>
               validations={{ required: true }}
@@ -362,7 +363,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 searchable: false,
 <%            }-%>
               }}
-              defaultValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
+              initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(foreignId) %>}
 <%            if(!nullable) { -%>
               validations={{ required: true }}
 <%            }-%>
