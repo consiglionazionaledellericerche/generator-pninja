@@ -119,9 +119,9 @@ const Menu: React.FC = () => {
               {t(activeEntity || 'entities.entities')} <ChevronDown size={16} />
             </Button>
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
-              <MenuItems onAction={(k) => navigate(`/entities/${k}`)}>
+              <MenuItems onAction={(k) => navigate(`/entities/${k}`)} className="outline-0">
 <%            entities.forEach((entity, index) => {-%>
-                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
+                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
                     {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                 </MenuItem>
 <%            });-%>
