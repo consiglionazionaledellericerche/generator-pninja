@@ -83,7 +83,7 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
   const { fetch } = useApi();
   const { t } = useTranslation();
   const { required } = validations || {};
-  const perPage = optionsLoad?.perPage ?? 20;
+  const perPage = optionsLoad?.perPage ?? 10;
   const [selected, setSelected] = useState<Selection>(new Set([]));
   const searchable = optionsLoad?.searchable ?? true;
   const { addNotification } = useNotifications();
@@ -92,23 +92,14 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
     async load({ signal, cursor, filterText }) {
       if (optionsLoad?.url) {
         try {
-          if (cursor) {
-            cursor = cursor.replace(
-              /.+\/api\/(.+)\?(.+)/,
-              '/api/$1?$2&sort_by=id&per_page=' + perPage
-            );
-          }
           const res = await fetch(cursor || buildApiUrl(filterText, 1), {
             signal,
           });
-          const { data, next_page_url } = await res.json();
-          const json = {
-            results: data,
-            next: next_page_url,
-          };
+          const { data, current_page, last_page } = await res.json();
           return {
-            items: json.results,
-            cursor: json.next,
+            items: data,
+            cursor:
+              current_page < last_page ? buildApiUrl(filterText, current_page + 1) : undefined,
           };
         } catch (error: unknown) {
           console.error('Error fetching options:', error);
@@ -121,14 +112,14 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
           });
           return {
             items: [],
-            cursor: null,
+            cursor: undefined,
           };
         }
       } else {
         if (!searchTerm) {
           return {
             items: options || [],
-            cursor: null,
+            cursor: undefined,
           };
         } else {
           return {
@@ -137,7 +128,7 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
                 String(opt?.name).toLowerCase().includes(searchTerm.toLowerCase()) ||
                 String(opt?.id).toLowerCase().includes(searchTerm.toLowerCase())
             ),
-            cursor: null,
+            cursor: undefined,
           };
         }
       }
@@ -323,30 +314,6 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
   return (
     <div {...focusWithinProps} tabIndex={0} className="outline-0">
       <label {...labelProps}>{label} 🧪</label>
-      <JsonPrint
-        className="max-h-40 my-1"
-        pp={false}
-        data={{
-          selected: [...selected],
-        }}
-      />
-      <JsonPrint
-        className="max-h-40 my-1"
-        data={{
-          selectedOptions,
-        }}
-      />
-      <JsonPrint
-        className="max-h-40 my-1"
-        pp={false}
-        data={{
-          error,
-          isTouched,
-          isDirty,
-        }}
-      />
-      <JsonPrint className="max-h-40 my-1" pp={false} data={{ initialValue }} />
-      <JsonPrint className="max-h-40 my-1" pp={false} data={{ value: value }} />
       <SearchField
         {...fieldProps}
         isInvalid={!!error}
@@ -431,7 +398,7 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
           >
             <Collection
               items={list.items
-                .filter((item) => !selectedOptions.map((opt) => opt.id).includes(item.id))
+                // .filter((item) => !selectedOptions.map((opt) => opt.id).includes(item.id))
                 .map((item) => ({
                   id: String(getValue(item as unknown as Record<string, unknown>)),
                   name: getLabel(item as unknown as Record<string, unknown>),
