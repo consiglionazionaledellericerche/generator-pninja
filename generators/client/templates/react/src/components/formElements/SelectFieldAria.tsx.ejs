@@ -4,14 +4,14 @@ import { useFocusWithin } from 'react-aria';
 import type { Selection } from 'react-aria-components';
 
 import { useNotifications } from '../../contexts/NotificationContext';
-import { Button, Input, ListBox, ListBoxItem, SearchField, Label } from 'react-aria-components';
+import { Button, Input, ListBox, ListBoxItem, SearchField } from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, FieldError, ListBoxLoadMoreItem } from 'react-aria-components';
-import { InfoValidations } from './InfoValidations';
+import { FormLabelAria as FormLabel } from './index';
 
 const tagClassName =
   'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
@@ -318,10 +318,7 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
         onFocus={() => setListIsOpen(true)}
         aria-label="Search"
       >
-        <div className="flex items-center gap-1">
-          <Label className="text-sm font-medium">{label}</Label>
-          <InfoValidations validations={validations ?? {}} />
-        </div>
+        <FormLabel validations={validations}>{label}</FormLabel>
         <div
           className={`
           scheme-light dark:scheme-dark outline-0 rounded-md mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-2
