@@ -210,7 +210,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     },
   });
 
-  const { onChange, onBlur, ref } = field;
+  const { onBlur, ref } = field;
   const { error } = fieldState;
 
   const getValue = useCallback(
@@ -268,8 +268,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
       );
 
       const formValue = multiple ? Array.from(newSelected) : (Array.from(newSelected)[0] ?? '');
-      // setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
-      onChange(formValue);
+      setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
 
       return newSelected;
     });
@@ -280,8 +279,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
     setSelected(newSelection);
 
     const formValue = multiple ? Array.from(newSelection) : (Array.from(newSelection)[0] ?? '');
-    // setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
-    onChange(formValue);
+    setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
   };
 
   // Carica i dettagli delle opzioni selezionate
@@ -314,12 +312,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
 
     // Imposta anche il valore nel form
     const formValue = multiple ? Array.from(newSelected) : (Array.from(newSelected)[0] ?? '');
-    // setValue(fieldName, formValue);
-    onChange(formValue);
+    setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
   }, [initValue, multiple, fieldName, setValue]);
 
   return (
-    <div {...focusWithinProps} tabIndex={0} className="outline-0">
+    <div {...focusWithinProps}>
       <SearchField
         {...ariaProps}
         isInvalid={!!error}
