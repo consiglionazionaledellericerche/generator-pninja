@@ -1,11 +1,16 @@
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import {
+  TextField as TextFieldAria,
+  Input,
+  TextFieldProps as TextFieldPropsAria,
+} from 'react-aria-components';
 
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface TextFieldProps {
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -17,13 +22,9 @@ interface TextFieldProps {
   };
 }
 
-const TextField: React.FC<TextFieldProps> = ({ fieldName, label, placeholder, validations }) => {
+const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-
+  const { control } = useFormContext();
   const opts: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
@@ -48,18 +49,21 @@ const TextField: React.FC<TextFieldProps> = ({ fieldName, label, placeholder, va
     };
   }
 
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules: opts,
+  });
+
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <input
-        type="text"
-        {...(placeholder ? { placeholder } : {})}
-        id={fieldName}
-        {...register(fieldName, opts)}
-        className={inputClassName(!!errors?.[fieldName]?.message)}
-      />
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+    <TextFieldAria isInvalid={!!error} {...ariaProps}>
+      <FormLabel validations={validations}>{label}</FormLabel>
+      <Input {...field} value={field.value || ''} className={inputClassName(!!error)} />
+      <FormErrors error={error} />
+    </TextFieldAria>
   );
 };
 
