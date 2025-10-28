@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFocusWithin, useLabel } from 'react-aria';
+import { useFocusWithin } from 'react-aria';
 import type { Selection } from 'react-aria-components';
 
 import { useNotifications } from '../../contexts/NotificationContext';
-import { Button, Input, ListBox, ListBoxItem, SearchField } from 'react-aria-components';
+import { Button, Input, ListBox, ListBoxItem, SearchField, Label } from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
@@ -165,7 +165,6 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
       setListIsOpen(false);
     },
   });
-  const { labelProps, fieldProps } = useLabel({ label: label });
 
   const [searchTerm, setSearchTerm] = useState('');
   useEffect(() => {
@@ -313,17 +312,16 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
 
   return (
     <div {...focusWithinProps} tabIndex={0} className="outline-0">
-      <label className="text-sm font-medium flex items-center gap-1" {...labelProps}>
-        {label}
-        <InfoValidations validations={validations ?? {}} />
-      </label>
       <SearchField
-        {...fieldProps}
         isInvalid={!!error}
         onChange={setSearchTerm}
         onFocus={() => setListIsOpen(true)}
         aria-label="Search"
       >
+        <div className="flex items-center gap-1">
+          <Label className="text-sm font-medium">{label}</Label>
+          <InfoValidations validations={validations ?? {}} />
+        </div>
         <div
           className={`
           scheme-light dark:scheme-dark outline-0 rounded-md mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-2
