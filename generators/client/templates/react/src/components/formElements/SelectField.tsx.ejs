@@ -1,33 +1,25 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronsUpDown, Search, X } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { useFocusWithin } from 'react-aria';
+import type { Selection } from 'react-aria-components';
+
 import { useNotifications } from '../../contexts/NotificationContext';
+import { Button, Input, ListBox, ListBoxItem, SearchField } from 'react-aria-components';
+import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
+import { useFormContext, useController } from 'react-hook-form';
+import { useAsyncList } from 'react-stately';
+import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
+import { FormLabelAria as FormLabel } from './index';
+import { FormErrorsAria as FormErrors } from './FormErrorsAria';
 
-const inputWrapperClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus-within:outline-2 focus-within:-outline-offset-2 ${hasErrors ? 'focus-within:outline-red-500' : 'focus-within:outline-blue-600'} rounded-md flex flex-wrap items-center gap-1 w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-2 min-h-[38px]`;
-const searchInputClassName =
-  'outline-none bg-transparent flex-1 min-w-[20em] text-base placeholder:text-gray-400';
-const dropdownClassName =
-  'absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-200 dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none';
-const optionClassName = (isSelected = false, isHighlighted = false) =>
-  `relative cursor-pointer select-none py-2 px-3 text-slate-900 dark:text-gray-300 ${
-    isHighlighted
-      ? 'bg-blue-600 text-white'
-      : isSelected
-        ? 'bg-slate-300 dark:bg-gray-700'
-        : 'hover:bg-slate-300 dark:hover:bg-gray-700'
-  }`;
 const tagClassName =
-  'inline-flex items-center gap-1 rounded-md bg-blue-600 px-2 py-1 text-sm font-medium text-white flex-shrink-0';
+  'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
 
 interface ISelectFieldOption {
-  label: number | string;
-  value: number | string | undefined;
+  name: number | string;
+  id: number | string | undefined;
 }
 
 interface ISelectFieldOptionsLoad {
@@ -52,7 +44,7 @@ interface SelectFieldBase {
   validations?: {
     required?: boolean;
   };
-  defaultValue?: (number | string | undefined | null) | (number | string | undefined | null)[];
+  initialValue?: (number | string | undefined | null) | (number | string | undefined | null)[];
   sortBy?: 'label' | 'value';
   sortDirection?: 'asc' | 'desc';
   placeholder?: string;
@@ -85,39 +77,134 @@ const SelectField: React.FC<SelectFieldProps> = ({
   options,
   optionsLoad,
   validations,
-  defaultValue,
-  sortBy = 'label',
+  initialValue,
   sortDirection = 'asc',
   placeholder,
 }) => {
-  const searchable = optionsLoad?.searchable ?? true;
-  const { t } = useTranslation();
-  const { addNotification } = useNotifications();
-  const { required } = validations || {};
   const { fetch } = useApi();
+  const { t } = useTranslation();
+  const { required } = validations || {};
+  const perPage = optionsLoad?.perPage ?? 10;
+  const [selected, setSelected] = useState<Selection>(new Set([]));
+  const searchable = optionsLoad?.searchable ?? true;
+  const { addNotification } = useNotifications();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const list = useAsyncList<ISelectFieldOption>({
+    async load({ signal, cursor, filterText }) {
+      if (optionsLoad?.url) {
+        try {
+          const res = await fetch(cursor || buildApiUrl(filterText, 1), {
+            signal,
+          });
+          const { data, current_page, last_page } = await res.json();
+          return {
+            items: data,
+            cursor:
+              current_page < last_page ? buildApiUrl(filterText, current_page + 1) : undefined,
+          };
+        } catch (error: unknown) {
+          console.error('Error fetching options:', error);
+          addNotification({
+            type: 'error',
+            message: `${t('errors.options.load')}`,
+            details: error instanceof Error ? error.message : undefined,
+            techDetails: error instanceof HttpError ? error.details : undefined,
+            duration: 10000,
+          });
+          return {
+            items: [],
+            cursor: undefined,
+          };
+        }
+      } else {
+        if (!searchTerm) {
+          return {
+            items: options || [],
+            cursor: undefined,
+          };
+        } else {
+          return {
+            items: (options || []).filter(
+              (opt) =>
+                String(opt?.name).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                String(opt?.id).toLowerCase().includes(searchTerm.toLowerCase())
+            ),
+            cursor: undefined,
+          };
+        }
+      }
+    },
+  });
+
+  const buildApiUrl = useCallback(
+    (search = '', page = 1) => {
+      if (!optionsLoad?.url) return '';
+
+      const url = new URL(optionsLoad.url, window.location.origin);
+
+      if (search) {
+        url.searchParams.set(optionsLoad.searchParam ?? 'search', search);
+      }
+
+      url.searchParams.set(optionsLoad.pageParam ?? 'page', page.toString());
+      url.searchParams.set(optionsLoad.perPageParam ?? 'per_page', perPage.toString());
+      url.searchParams.set(
+        optionsLoad.sortByParam ?? 'sort_by',
+        optionsLoad.labelAttribute ?? 'id'
+      );
+      url.searchParams.set(optionsLoad.sortDirectionParam ?? 'sort_direction', sortDirection);
+
+      return url.toString();
+    },
+    [optionsLoad, sortDirection, perPage]
+  );
+
+  const [listIsOpen, setListIsOpen] = useState(false);
+  const { focusWithinProps } = useFocusWithin({
+    onBlurWithin: () => {
+      onBlur();
+      setListIsOpen(false);
+    },
+  });
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [allOptions, setAllOptions] = useState<ISelectFieldOption[]>([]);
-  const [filteredOptions, setFilteredOptions] = useState<ISelectFieldOption[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMorePages, setHasMorePages] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      list.setFilterText(searchTerm);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
   const [selectedOptions, setSelectedOptions] = useState<ISelectFieldOption[]>([]);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const [initialValuesLoaded, setInitialValuesLoaded] = useState(false);
+  const { control, setValue } = useFormContext();
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const scrollPositionBeforeLoadRef = useRef<number>(0);
+  const initValue = useMemo(
+    () => initialValue,
+    [JSON.stringify(Array.isArray(initialValue) ? [...initialValue].sort() : initialValue)]
+  );
 
-  const {
-    register,
-    formState: { errors },
-    setValue,
-    getValues,
-  } = useFormContext();
+  const { field, fieldState } = useController({
+    name: fieldName,
+    control,
+    defaultValue: multiple
+      ? Array.isArray(initValue)
+        ? initValue.map((v) => String(v))
+        : []
+      : initValue
+        ? String(initValue)
+        : '',
+    rules: {
+      validate: (v) => {
+        console.log(`${fieldName} Validating required for value:`, v);
+        if (!required) return true;
+        if (!v) return 'errors.validations.required';
+        return (Array.isArray(v) ? v : [v]).length > 0 ? true : 'errors.validations.required';
+      },
+    },
+  });
+
+  const { onChange, onBlur, ref } = field;
+  const { error } = fieldState;
 
   const getValue = useCallback(
     (item: Record<string, unknown>): number | string | undefined =>
@@ -140,7 +227,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
       if (!optionsLoad?.url || values.length === 0) return [];
 
       try {
-        const url = new URL(optionsLoad.url, window.location.origin);
+        const url = new URL(String(optionsLoad?.url), window.location.origin);
         url.searchParams.set('ids', values.join(','));
         url.searchParams.set('per_page', '100');
 
@@ -148,92 +235,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
         const result: PaginatedResponse = await response.json();
 
         return result.data.map((item) => ({
-          label: getLabel(item),
-          value: getValue(item),
+          name: getLabel(item),
+          id: getValue(item),
         }));
       } catch (error) {
         console.error('Error loading selected values:', error);
-        return [];
-      }
-    },
-    [optionsLoad?.url, fetch, getValue, getLabel]
-  );
-
-  const buildApiUrl = useCallback(
-    (search = '', page = 1) => {
-      if (!optionsLoad?.url) return '';
-
-      const url = new URL(optionsLoad.url, window.location.origin);
-
-      if (search) {
-<%  if (searchEngine === 'elastic') { -%>
-        url.searchParams.set(optionsLoad.searchParam ?? 'search', `${search} OR *${search}*`);
-<%  } else if (searchEngine === 'solr') { -%>
-        url.searchParams.set(optionsLoad.searchParam ?? 'search', `*${search}*`);
-<%  } else {-%>
-        url.searchParams.set(optionsLoad.searchParam ?? 'search', search);
-<%  } -%>
-      }
-
-      url.searchParams.set(optionsLoad.pageParam ?? 'page', page.toString());
-      url.searchParams.set(
-        optionsLoad.perPageParam ?? 'per_page',
-        (optionsLoad.perPage ?? 20).toString()
-      );
-      url.searchParams.set(
-        optionsLoad.sortByParam ?? 'sort_by',
-        optionsLoad.labelAttribute ?? 'id'
-      );
-      url.searchParams.set(optionsLoad.sortDirectionParam ?? 'sort_direction', sortDirection);
-
-      return url.toString();
-    },
-    [optionsLoad, sortDirection]
-  );
-
-  const fetchOptions = useCallback(
-    async (search = '', page = 1, append = false) => {
-      if (!optionsLoad?.url) return;
-
-      // Save the scroll position before loading new options
-      if (append && dropdownRef.current) {
-        scrollPositionBeforeLoadRef.current = dropdownRef.current.scrollTop;
-      }
-
-      setLoading(true);
-      try {
-        const response = await fetch(buildApiUrl(search, page));
-        const result: PaginatedResponse = await response.json();
-
-        const newOptions = result.data.map((item) => ({
-          label: getLabel(item),
-          value: getValue(item),
-        }));
-
-        if (append) {
-          setAllOptions((prev) => {
-            const combined = [...prev, ...newOptions];
-            // Schedule scroll restoration after DOM update
-            setTimeout(() => {
-              if (dropdownRef.current) {
-                const optionHeight = 40; // approximate height of an option
-                const newItemsStartPosition = prev.length * optionHeight;
-                // Show a couple of previous options for context
-                const scrollToPosition = Math.max(0, newItemsStartPosition - optionHeight * 2);
-                dropdownRef.current.scrollTop = scrollToPosition;
-              }
-            }, 0);
-            return combined;
-          });
-        } else {
-          setAllOptions(newOptions);
-        }
-
-        setHasMorePages(result.current_page < result.last_page);
-        setCurrentPage(result.current_page);
-      } catch (error: unknown) {
-        console.error('Error fetching options:', error);
-        setAllOptions([]);
         addNotification({
           type: 'error',
           message: `${t('errors.options.load')}`,
@@ -241,274 +247,125 @@ const SelectField: React.FC<SelectFieldProps> = ({
           techDetails: error instanceof HttpError ? error.details : undefined,
           duration: 10000,
         });
+        return [];
       }
-      setLoading(false);
     },
-    [buildApiUrl, fetch, getValue, getLabel, addNotification, t, optionsLoad?.url]
+    [optionsLoad?.url, fetch, getLabel, getValue, addNotification, t]
   );
 
-  const loadMoreOptions = useCallback(() => {
-    if (hasMorePages && !loading) {
-      fetchOptions(searchTerm, currentPage + 1, true);
-    }
-  }, [fetchOptions, searchTerm, currentPage, hasMorePages, loading]);
+  // Handler per rimuovere tag
+  const handleRemoveTag = (optionToRemove: ISelectFieldOption) => {
+    setSelected((prevSelected) => {
+      const newSelected = new Set(
+        [...prevSelected].filter((id) => String(id) !== String(optionToRemove.id))
+      );
 
+      const formValue = multiple ? Array.from(newSelected) : (Array.from(newSelected)[0] ?? '');
+      // setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
+      onChange(formValue);
+
+      return newSelected;
+    });
+  };
+
+  // Handler per cambio selezione dalla ListBox
+  const handleSelectionChange = (newSelection: Selection) => {
+    setSelected(newSelection);
+
+    const formValue = multiple ? Array.from(newSelection) : (Array.from(newSelection)[0] ?? '');
+    // setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
+    onChange(formValue);
+  };
+
+  // Carica i dettagli delle opzioni selezionate
   useEffect(() => {
-    const loadInitialValues = async () => {
-      if (initialValuesLoaded) return;
-
-      const currentValue = getValues(fieldName) || defaultValue;
-      if (!currentValue) {
-        setInitialValuesLoaded(true);
-        return;
-      }
-
-      const valueArray = multiple
-        ? Array.isArray(currentValue)
-          ? currentValue
-          : [currentValue]
-        : [currentValue];
-
+    const run = async () => {
       if (optionsLoad?.url) {
-        const selectedFromApi = await loadSelectedValues(valueArray);
+        const selectedFromApi = await loadSelectedValues(Array.from(selected));
         setSelectedOptions(selectedFromApi);
       } else if (options) {
-        const selected = options.filter((option) =>
-          valueArray.some((val) => String(val) === String(option.value))
+        const selectedOpts = options.filter((option) =>
+          Array.from(selected).some((val) => String(val) === String(option.id))
         );
-        setSelectedOptions(selected);
-      }
-
-      setInitialValuesLoaded(true);
-    };
-
-    loadInitialValues();
-  }, [
-    fieldName,
-    defaultValue,
-    multiple,
-    options,
-    optionsLoad,
-    getValues,
-    loadSelectedValues,
-    initialValuesLoaded,
-  ]);
-
-  useEffect(() => {
-    if (options) {
-      const sortedOptions = [...options].sort((a, b) => {
-        const aVal = sortBy === 'label' ? String(a.label) : String(a.value);
-        const bVal = sortBy === 'label' ? String(b.label) : String(b.value);
-        const result = aVal.localeCompare(bVal, undefined, { numeric: true });
-        return sortDirection === 'desc' ? -result : result;
-      });
-      setAllOptions(sortedOptions);
-    }
-  }, [options, sortBy, sortDirection]);
-
-  useEffect(() => {
-    if (optionsLoad?.url && initialValuesLoaded) {
-      fetchOptions('', 1, false);
-    }
-  }, [fetchOptions, optionsLoad?.url, initialValuesLoaded]);
-
-  useEffect(() => {
-    let filtered: ISelectFieldOption[] = [];
-
-    if (!searchable || !searchTerm.trim()) {
-      filtered = [...allOptions];
-    } else if (optionsLoad?.url) {
-      filtered = [...allOptions];
-    } else {
-      filtered = allOptions.filter(
-        (option) =>
-          String(option.label).toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
-          String(option.value).toLowerCase().includes(searchTerm.trim().toLowerCase())
-      );
-    }
-
-    // Remove already selected options from the dropdown
-    const availableOptions = multiple
-      ? filtered.filter(
-          (option) =>
-            !selectedOptions.some((selected) => String(selected.value) === String(option.value))
-        )
-      : filtered;
-
-    setFilteredOptions(
-      multiple ? availableOptions : [{ label: '\xA0', value: '' }, ...availableOptions]
-    );
-  }, [allOptions, searchTerm, searchable, optionsLoad?.url, selectedOptions, multiple]);
-
-  useEffect(() => {
-    if (!optionsLoad?.url || !searchable || !initialValuesLoaded) return;
-
-    const timeoutId = setTimeout(() => {
-      fetchOptions(searchTerm, 1, false);
-      setCurrentPage(1);
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [searchTerm, fetchOptions, optionsLoad?.url, searchable, initialValuesLoaded]);
-
-  useEffect(() => {
-    setValue(fieldName, []); // call to trig setValueAs
-  }, [selectedOptions, fieldName, multiple, setValue]);
-
-  const handleSelect = (option: ISelectFieldOption) => {
-    if (multiple) {
-      const isSelected = selectedOptions.some(
-        (selected) => String(selected.value) === String(option.value)
-      );
-
-      if (isSelected) {
-        setSelectedOptions((prev) =>
-          prev.filter((selected) => String(selected.value) !== String(option.value))
-        );
-      } else {
-        setSelectedOptions((prev) => [...prev, option]);
-      }
-    } else {
-      setSelectedOptions([option]);
-      setIsOpen(false);
-      setSearchTerm('');
-    }
-  };
-
-  const handleRemoveTag = (optionToRemove: ISelectFieldOption) => {
-    setSelectedOptions((prev) =>
-      prev.filter((selected) => String(selected.value) !== String(optionToRemove.value))
-    );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isOpen) {
-      if (e.key === 'Enter' || e.key === 'ArrowDown') {
-        e.preventDefault();
-        setIsOpen(true);
-        setHighlightedIndex(0);
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (highlightedIndex >= 0 && filteredOptions[highlightedIndex]) {
-          handleSelect(filteredOptions[highlightedIndex]);
-        }
-        break;
-      case 'Escape':
-        setIsOpen(false);
-        setHighlightedIndex(-1);
-        break;
-    }
-  };
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-    if (scrollHeight - scrollTop === clientHeight) {
-      loadMoreOptions();
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setHighlightedIndex(-1);
+        setSelectedOptions(selectedOpts);
       }
     };
+    run();
+  }, [selected, loadSelectedValues, options, optionsLoad]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const displayValue =
-    !multiple && selectedOptions.length > 0 ? String(selectedOptions[0].label) : '';
-
-  const showDisplayValue = !multiple && selectedOptions.length > 0 && (!isOpen || !searchable);
-
+  // Inizializza selected quando initValue cambia
   useEffect(() => {
-    setValue(fieldName, []); // call to trig setValueAs
-  }, [defaultValue, setValue, fieldName, multiple]);
+    const newSelected = new Set(
+      Array.isArray(initValue)
+        ? initValue.map((v) => String(v))
+        : initValue
+          ? [String(initValue)]
+          : []
+    );
 
-  const OptionsSkeleton = () => (
-    <div className="animate-pulse">
-      {Array(20)
-        .fill('')
-        .map((_, index) => (
-          <div
-            key={index}
-            className="relative cursor-pointer select-none py-2 px-3 text-slate-900 dark:text-gray-300 hover:bg-slate-300 dark:hover:bg-gray-700"
-          >
-            <div>
-              <span className="rounded-md bg-gray-400 w-[70%] h-4 myy inline-block">&nbsp;</span>
-            </div>
-          </div>
-        ))}
-    </div>
-  );
+    setSelected(newSelected);
+
+    // Imposta anche il valore nel form
+    const formValue = multiple ? Array.from(newSelected) : (Array.from(newSelected)[0] ?? '');
+    // setValue(fieldName, formValue);
+    onChange(formValue);
+  }, [initValue, multiple, fieldName, setValue]);
 
   return (
-    <div ref={containerRef}>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <div className="relative">
-        <div className={inputWrapperClassName(!!errors?.[fieldName]?.message)}>
-          {searchable && <Search className="text-gray-400 w-4 h-4 flex-shrink-0" />}
-          <input
-            ref={searchInputRef}
-            type="text"
-            id={fieldName}
-            className={searchInputClassName}
-            placeholder={
-              placeholder ||
-              (searchable
-                ? multiple
-                  ? t('common.select.searchMultiple')
-                  : t('common.select.searchSingle')
-                : multiple
-                  ? t('common.select.selectMultiple')
-                  : t('common.select.selectSingle'))
-            }
-            value={isOpen && searchable ? searchTerm : showDisplayValue ? displayValue : searchTerm}
-            onChange={(e) => {
-              if (searchable) {
-                setSearchTerm(e.target.value);
-                if (!isOpen) setIsOpen(true);
-              }
-            }}
-            onFocus={() => {
-              setIsOpen(true);
-              if (searchable && !multiple) {
-                setSearchTerm('');
-              }
-            }}
-            onKeyDown={handleKeyDown}
-            autoComplete="off"
-          />
-
-          <button
-            type="button"
-            className="text-gray-400 flex-shrink-0 p-1"
-            onClick={() => setIsOpen(!isOpen)}
+    <div {...focusWithinProps} tabIndex={0} className="outline-0">
+      <SearchField
+        isInvalid={!!error}
+        onChange={setSearchTerm}
+        onFocus={() => setListIsOpen(true)}
+        aria-label="Search"
+      >
+        <FormLabel validations={validations}>{label}</FormLabel>
+        <div
+          className={`
+          scheme-light dark:scheme-dark outline-0 rounded-md mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-2
+          ${error ? ' outline-2 -outline-offset-2 outline-red-500 focus-within:outline-2 focus-within:outline-0' : ' focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-600'}
+          `}
+        >
+          <div
+            className={`group flex items-center forced-colors:bg-[Field]
+            has-focus:border-sky-600
+            rounded-full w-full`}
           >
-            <ChevronsUpDown className="w-4 h-4" />
-          </button>
-
-          {multiple && selectedOptions.length > 0 && (
-            <div className="flex flex-wrap gap-1 w-full">
+            <SearchIcon
+              aria-hidden
+              className="w-4 h-4 text-gray-600 forced-colors:text-[ButtonText]"
+            />
+            <Input
+              ref={ref}
+              placeholder={
+                placeholder ||
+                (searchable
+                  ? multiple
+                    ? t('common.select.searchMultiple')
+                    : t('common.select.searchSingle')
+                  : multiple
+                    ? t('common.select.selectMultiple')
+                    : t('common.select.selectSingle'))
+              }
+              className="px-2 flex-1 min-w-0 border-none outline-0 placeholder-gray-500 font-[inherit] [&::-webkit-search-cancel-button]:hidden"
+            />
+            {searchTerm && (
+              <Button className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-gray-600 bg-transparent hover:bg-black/[5%] pressed:bg-black/10 w-6 group-empty:invisible">
+                <XIcon aria-hidden className="w-4 h-4" />
+              </Button>
+            )}
+            <Button
+              className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-gray-600 bg-transparent hover:bg-black/[5%] pressed:bg-black/10 w-6 group-empty:invisible"
+              onClick={() => setListIsOpen((prev) => !prev)}
+            >
+              <ChevronsUpDownIcon aria-hidden className="w-4 h-4" />
+            </Button>
+          </div>
+          {selectedOptions.length > 0 && (
+            <div className="flex flex-wrap gap-1 w-full mt-1">
               {selectedOptions.map((option) => (
-                <span key={option.value} className={tagClassName}>
-                  {option.label}
+                <span key={option.id} className={tagClassName}>
+                  {option.name}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -517,87 +374,61 @@ const SelectField: React.FC<SelectFieldProps> = ({
                     }}
                     className="ms-1 hover:text-red-600 hover:bg-white rounded-full cursor-pointer"
                   >
-                    <X className="w-4 h-4" />
+                    <XIcon className="w-4 h-4" />
                   </button>
                 </span>
               ))}
             </div>
           )}
         </div>
+        <FormErrors error={error} />
+      </SearchField>
 
-        {isOpen && (
-          <div ref={dropdownRef} className={dropdownClassName} onScroll={handleScroll}>
-            {loading && currentPage === 1 ? (
-              <OptionsSkeleton />
-            ) : filteredOptions.length === 0 ? (
-              <div className={optionClassName()}>{t('common.select.noOptions')}</div>
-            ) : (
-              <>
-                {filteredOptions.map((option, index) => {
-                  const isSelected = selectedOptions.some(
-                    (selected) =>
-                      String(selected.value) === String(option.value) && option.label !== '\xA0'
-                  );
-                  const isHighlighted = index === highlightedIndex;
-
-                  return (
-                    <div
-                      key={`${option.value}-${index}`}
-                      className={optionClassName(isSelected, isHighlighted)}
-                      onClick={() => handleSelect(option)}
-                      onMouseEnter={() => setHighlightedIndex(index)}
-                    >
-                      <span className="block truncate">
-                        {option.label}
-                        {isSelected && <span className="ms-2 text-xs">✓</span>}
-                      </span>
-                    </div>
-                  );
-                })}
-                {loading && hasMorePages && <OptionsSkeleton />}
-              </>
-            )}
-          </div>
-        )}
-
-        {multiple ? (
-          <select
-            multiple={multiple}
-            className="h-0 w-0 overflow-hidden absolute"
-            {...register(fieldName, {
-              setValueAs: () => {
-                return selectedOptions.map((option) => option.value);
-              },
-              validate: {
-                required: () => {
-                  if (!required) return true;
-                  return selectedOptions.length > 0 ? true : 'errors.validations.required';
-                },
-              },
-            })}
-          />
-        ) : (
-          <input
-            className="h-0 w-0 overflow-hidden absolute"
-            {...register(fieldName, {
-              setValueAs: () => {
-                const values = selectedOptions.map((option) => option.value);
-                return values[0] ?? '';
-              },
-              validate: {
-                required: () => {
-                  if (!required) return true;
-                  return selectedOptions.length > 0 ? true : 'errors.validations.required';
-                },
-              },
-            })}
-          />
-        )}
-      </div>
-      <FormErrors errors={errors} fieldName={fieldName} />
+      {listIsOpen && (
+        <div className="relative">
+          <ListBox
+            onFocusChange={setListIsOpen}
+            selectionBehavior="toggle"
+            selectionMode={multiple ? 'multiple' : 'single'}
+            selectedKeys={selected}
+            onSelectionChange={handleSelectionChange}
+            aria-label="Select options"
+            renderEmptyState={() => ''}
+            className="
+            absolute z-10 top-0 right-0 left-0
+            mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-200 dark:bg-gray-800 text-base shadow-md focus:outline-none
+            "
+          >
+            <Collection
+              items={list.items
+                // .filter((item) => !selectedOptions.map((opt) => opt.id).includes(item.id))
+                .map((item) => ({
+                  id: String(getValue(item as unknown as Record<string, unknown>)),
+                  name: getLabel(item as unknown as Record<string, unknown>),
+                }))}
+            >
+              {(item) => (
+                <ListBoxItem
+                  key={item.id}
+                  textValue={item.name}
+                  className="cursor-default  data-[selected]:bg-blue-600 data-[selected]:text-white px-3 py-1.5 rounded-md m-1"
+                  id={item.id}
+                >
+                  {`${item.name} (ID: ${item.id})`}
+                </ListBoxItem>
+              )}
+            </Collection>
+            <ListBoxLoadMoreItem
+              onLoadMore={list.loadMore}
+              isLoading={list.loadingState === 'loadingMore'}
+            >
+              <LoaderCircle className="w-6 h-6 text-gray-600 animate-spin mx-auto my-2" />
+            </ListBoxLoadMoreItem>
+          </ListBox>
+        </div>
+      )}
     </div>
   );
 };
 
 export { SelectField };
-export type { ISelectFieldOption };
