@@ -10,8 +10,9 @@ import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
-import { Collection, FieldError, ListBoxLoadMoreItem } from 'react-aria-components';
+import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
 import { FormLabelAria as FormLabel } from './index';
+import { FormErrorsAria as FormErrors } from './FormErrorsAria';
 
 const tagClassName =
   'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
@@ -380,11 +381,7 @@ const SelectFieldAria: React.FC<SelectFieldProps> = ({
             </div>
           )}
         </div>
-        {error && (
-          <FieldError className="mt-1 text-sm text-red-600">
-            {t(error?.message ?? 'Unknown error')}
-          </FieldError>
-        )}
+        <FormErrors error={error} />
       </SearchField>
 
       {listIsOpen && (
