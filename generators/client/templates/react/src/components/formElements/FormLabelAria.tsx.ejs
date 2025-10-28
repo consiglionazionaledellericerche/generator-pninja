@@ -1,0 +1,18 @@
+import { IInfoValidations, InfoValidations } from './InfoValidations';
+import { Label } from 'react-aria-components';
+
+interface FormLabelProps {
+  children?: React.ReactNode;
+  validations?: IInfoValidations;
+}
+
+const FormLabelAria: React.FC<FormLabelProps> = ({ children, validations }) => {
+  return (
+    <div className="flex items-center gap-1">
+      <Label className="text-sm font-medium">{children}</Label>
+      <InfoValidations validations={validations ?? {}} />
+    </div>
+  );
+};
+
+export { FormLabelAria };
