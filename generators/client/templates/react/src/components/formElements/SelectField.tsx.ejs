@@ -4,7 +4,14 @@ import { useFocusWithin } from 'react-aria';
 import type { Selection } from 'react-aria-components';
 
 import { useNotifications } from '../../contexts/NotificationContext';
-import { Button, Input, ListBox, ListBoxItem, SearchField } from 'react-aria-components';
+import {
+  Button,
+  Input,
+  ListBox,
+  ListBoxItem,
+  SearchField,
+  SearchFieldProps as SearchFieldPropsAria,
+} from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
@@ -12,7 +19,6 @@ import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
 import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
-
 
 const tagClassName =
   'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
@@ -37,7 +43,8 @@ interface ISelectFieldOptionsLoad {
   searchable?: boolean;
 }
 
-interface SelectFieldBase {
+interface SelectFieldBase
+  extends Omit<SearchFieldPropsAria, 'isInvalid' | 'onChange' | 'onFocus' | 'children'> {
   fieldName: string;
   label: string;
   multiple?: boolean;
@@ -80,6 +87,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   initialValue,
   sortDirection = 'asc',
   placeholder,
+  ...ariaProps // Tutte le altre props di SearchField
 }) => {
   const { fetch } = useApi();
   const { t } = useTranslation();
@@ -313,6 +321,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   return (
     <div {...focusWithinProps} tabIndex={0} className="outline-0">
       <SearchField
+        {...ariaProps}
         isInvalid={!!error}
         onChange={setSearchTerm}
         onFocus={() => setListIsOpen(true)}
