@@ -34,12 +34,12 @@ const UuidField: React.FC<UuidFieldProps> = ({
   const { t } = useTranslation();
   const { required } = validations || {};
   const { control, setValue, getValues } = useFormContext();
-  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
-  opts.pattern = {
+  rules.pattern = {
     value: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
     message: 'errors.validations.pattern',
   };
@@ -50,7 +50,7 @@ const UuidField: React.FC<UuidFieldProps> = ({
   } = useController({
     name: fieldName,
     control,
-    rules: opts,
+    rules,
     defaultValue: getValues(fieldName) || (autoGenerate ? uuidv4() : ''),
   });
 
@@ -66,7 +66,6 @@ const UuidField: React.FC<UuidFieldProps> = ({
         />
         {!autoGenerate && (
           <Button
-            type="button"
             onClick={() => {
               setValue(fieldName, uuidv4(), { shouldValidate: true, shouldDirty: true });
             }}
