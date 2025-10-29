@@ -312,7 +312,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
 
     // Imposta anche il valore nel form
     const formValue = multiple ? Array.from(newSelected) : (Array.from(newSelected)[0] ?? '');
-    setValue(fieldName, formValue, { shouldValidate: true, shouldDirty: true });
+    setValue(fieldName, formValue);
   }, [initValue, multiple, fieldName, setValue]);
 
   return (
