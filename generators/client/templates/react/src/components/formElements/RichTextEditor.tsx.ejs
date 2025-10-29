@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 
 // Dichiarazioni di tipo per Jodit
 interface JoditConfig {
+  aria: boolean;
+  readonly: boolean;
+  disabled: boolean;
+  tabIndex: number;
   placeholder?: string;
   height?: number;
   buttons?: (string | object)[];
@@ -57,7 +61,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       if (!window.Jodit || !textareaRef.current) return;
 
       const config: JoditConfig = {
-        placeholder: placeholder,
+        aria: true,
+        readonly: false,
+        disabled: false,
+        tabIndex: 0,
+        placeholder,
         height: 400,
         buttons: [
           'undo',

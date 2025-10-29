@@ -1,20 +1,26 @@
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import {
+  TextField as TextFieldAria,
+  TextFieldProps as TextFieldPropsAria,
+  TextArea as TextAreaAria,
+} from 'react-aria-components';
 import RichTextEditor from './RichTextEditor';
+import { JsonPrint } from '../JsonPrint';
 
 const inputClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
 
-interface TextareaProps {
+interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
   rows?: number;
+  editor?: boolean;
   validations?: {
     required?: boolean;
   };
-  editor?: boolean;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -24,45 +30,48 @@ const Textarea: React.FC<TextareaProps> = ({
   rows,
   editor,
   validations,
+  ...ariaProps
 }) => {
   const { required } = validations || {};
-  const {
-    register,
-    formState: { errors },
-    getValues,
-    setValue,
-    trigger,
-  } = useFormContext();
-
-  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+  const { control, setValue, trigger } = useFormContext();
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
+
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules,
+  });
+
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <textarea
-        {...(placeholder ? { placeholder } : {})}
-        rows={rows || 10}
-        id={fieldName}
-        {...register(fieldName, opts)}
-        readOnly={editor}
-        className={`${editor ? 'h-0! p-0! m-0!' : inputClassName(!!errors?.[fieldName]?.message)}`}
+    <TextFieldAria isInvalid={!!error} {...ariaProps}>
+      <FormLabel validations={validations}>{label}</FormLabel>
+      <TextAreaAria
+        rows={rows || 4}
+        {...field}
+        value={field.value || ''}
+        className={`${editor ? 'sr-only ' : inputClassName(!!error)}`}
       />
       {editor && (
         <RichTextEditor
+          aria-hidden="true"
           {...(placeholder ? { placeholder } : {})}
-          hasErrors={!!errors?.[fieldName]}
-          initialContent={getValues(fieldName)}
+          hasErrors={!!error}
+          initialContent={field.value || ''}
           onChange={(value: string) => {
             setValue(fieldName, value);
             trigger(fieldName);
           }}
         />
       )}
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+      <FormErrors error={error} />
+    </TextFieldAria>
   );
 };
 
