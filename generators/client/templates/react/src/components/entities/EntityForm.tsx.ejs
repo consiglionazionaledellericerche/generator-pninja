@@ -299,6 +299,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
+              autoGenerate={false}
             />
 <%        } else if (type === 'TextBlob') {-%>
             <Textarea
