@@ -386,52 +386,58 @@ const SelectField: React.FC<SelectFieldProps> = ({
             </div>
           )}
         </div>
+        {listIsOpen && (
+          <div className="relative">
+            {list.items.length > 0 ? (
+              <ListBox
+                onFocusChange={setListIsOpen}
+                selectionBehavior="toggle"
+                selectionMode={multiple ? 'multiple' : 'single'}
+                selectedKeys={selected}
+                onSelectionChange={handleSelectionChange}
+                aria-label="Select options"
+                renderEmptyState={() => ''}
+                className="
+            absolute z-10 top-0 right-0 left-0
+            mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-200 dark:bg-gray-800 text-base shadow-md dark:shadow-md/70 focus:outline-none
+            "
+              >
+                <Collection
+                  items={list.items
+                    // .filter((item) => !selectedOptions.map((opt) => opt.id).includes(item.id))
+                    .map((item) => ({
+                      id: String(getValue(item as unknown as Record<string, unknown>)),
+                      name: getLabel(item as unknown as Record<string, unknown>),
+                    }))}
+                >
+                  {(item) => (
+                    <ListBoxItem
+                      key={item.id}
+                      textValue={item.name}
+                      className="cursor-default  data-[selected]:bg-blue-600 data-[selected]:text-white px-3 py-1.5 rounded-md m-1"
+                      id={item.id}
+                    >
+                      {`${item.name} (ID: ${item.id})`}
+                    </ListBoxItem>
+                  )}
+                </Collection>
+                <ListBoxLoadMoreItem
+                  onLoadMore={list.loadMore}
+                  isLoading={list.loadingState === 'loadingMore'}
+                >
+                  <LoaderCircle className="w-6 h-6 text-gray-600 animate-spin mx-auto my-2" />
+                </ListBoxLoadMoreItem>
+              </ListBox>
+            ) : (
+              <div className="absolute z-10 top-0 right-0 left-0 mt-1 w-full rounded-md bg-slate-200 dark:bg-gray-800 text-base shadow-md p-3">
+                {t('common.select.noOptions')}
+              </div>
+            )}
+          </div>
+        )}
+
         <FormErrors error={error} />
       </SearchField>
-
-      {listIsOpen && (
-        <div className="relative">
-          <ListBox
-            onFocusChange={setListIsOpen}
-            selectionBehavior="toggle"
-            selectionMode={multiple ? 'multiple' : 'single'}
-            selectedKeys={selected}
-            onSelectionChange={handleSelectionChange}
-            aria-label="Select options"
-            renderEmptyState={() => ''}
-            className="
-            absolute z-10 top-0 right-0 left-0
-            mt-1 max-h-60 w-full overflow-auto rounded-md bg-slate-200 dark:bg-gray-800 text-base shadow-md focus:outline-none
-            "
-          >
-            <Collection
-              items={list.items
-                // .filter((item) => !selectedOptions.map((opt) => opt.id).includes(item.id))
-                .map((item) => ({
-                  id: String(getValue(item as unknown as Record<string, unknown>)),
-                  name: getLabel(item as unknown as Record<string, unknown>),
-                }))}
-            >
-              {(item) => (
-                <ListBoxItem
-                  key={item.id}
-                  textValue={item.name}
-                  className="cursor-default  data-[selected]:bg-blue-600 data-[selected]:text-white px-3 py-1.5 rounded-md m-1"
-                  id={item.id}
-                >
-                  {`${item.name} (ID: ${item.id})`}
-                </ListBoxItem>
-              )}
-            </Collection>
-            <ListBoxLoadMoreItem
-              onLoadMore={list.loadMore}
-              isLoading={list.loadingState === 'loadingMore'}
-            >
-              <LoaderCircle className="w-6 h-6 text-gray-600 animate-spin mx-auto my-2" />
-            </ListBoxLoadMoreItem>
-          </ListBox>
-        </div>
-      )}
     </div>
   );
 };
