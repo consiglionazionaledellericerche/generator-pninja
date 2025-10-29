@@ -25,25 +25,25 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'childre
 const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const { control } = useFormContext();
-  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
   if (minlength) {
-    opts.minLength = {
+    rules.minLength = {
       value: minlength,
       message: `errors.validations.minlength:${minlength}`,
     };
   }
   if (maxlength) {
-    opts.maxLength = {
+    rules.maxLength = {
       value: maxlength,
       message: `errors.validations.maxlength:${maxlength}`,
     };
   }
   if (pattern) {
-    opts.pattern = {
+    rules.pattern = {
       value: typeof pattern === 'string' ? new RegExp(pattern) : pattern,
       message: 'errors.validations.pattern',
     };
@@ -55,7 +55,7 @@ const TextField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ..
   } = useController({
     name: fieldName,
     control,
-    rules: opts,
+    rules,
   });
 
   return (

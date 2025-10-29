@@ -29,21 +29,21 @@ const NumberField: React.FC<NumberFieldProps> = ({
 }) => {
   const { required, min, max } = validations || {};
   const { control } = useFormContext();
-  const opts: RegisterOptions<FieldValues, string> | undefined = {
+  const rules: RegisterOptions<FieldValues, string> | undefined = {
     valueAsNumber: true,
   };
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
   if (min !== undefined && min !== null) {
-    opts.min = {
+    rules.min = {
       value: min,
       message: `errors.validations.min:${min}`,
     };
   }
   if (max !== undefined && max !== null) {
-    opts.max = {
+    rules.max = {
       value: max,
       message: `errors.validations.max:${max}`,
     };
@@ -55,7 +55,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
   } = useController({
     name: fieldName,
     control,
-    rules: opts,
+    rules,
   });
 
   return (
