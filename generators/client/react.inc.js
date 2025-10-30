@@ -98,10 +98,10 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/PasswordField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/PasswordField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/RichTextEditor.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RichTextEditor.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), { searchEngine });
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TelField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TelField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.css"), that.destinationPath(`client/src/components/formElements/Textarea.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TimeField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UrlField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UrlField.tsx`), {});

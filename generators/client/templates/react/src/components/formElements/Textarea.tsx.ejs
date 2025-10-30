@@ -6,11 +6,27 @@ import {
   TextFieldProps as TextFieldPropsAria,
   TextArea as TextAreaAria,
 } from 'react-aria-components';
-import RichTextEditor from './RichTextEditor';
-import { JsonPrint } from '../JsonPrint';
+import { useTextField } from 'react-aria';
+import { useMemo, useRef, useEffect } from 'react';
+import JoditEditor from 'jodit-react';
+import type { IJodit } from 'jodit/types/types';
+import { InfoValidations } from './InfoValidations';
+import { useTranslation } from 'react-i18next';
 
 const inputClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+  `
+scheme-light
+dark:scheme-dark
+outline-2 -outline-offset-2 outline-slate-200 dark:outline-slate-600
+focus-within:outline-2 focus-within:-outline-offset-2 ${hasErrors ? 'focus-within:outline-red-500' : 'focus-within:outline-blue-600'}
+rounded-md
+block
+w-full
+mt-3 p-1
+border-none
+text-sm/6
+bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-50
+`;
 
 interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
@@ -26,19 +42,20 @@ interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children
 const Textarea: React.FC<TextareaProps> = ({
   fieldName,
   label,
-  placeholder,
   rows,
   editor,
   validations,
   ...ariaProps
 }) => {
   const { required } = validations || {};
-  const { control, setValue, trigger } = useFormContext();
+  const { control, setValue } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
     rules.required = 'errors.validations.required';
   }
+
+  const { t } = useTranslation();
 
   const {
     field,
@@ -49,30 +66,168 @@ const Textarea: React.FC<TextareaProps> = ({
     rules,
   });
 
-  return (
+  const cleanEmptyContent = (content: string): string => {
+    if (!content) return '';
+    const textOnly = content.replace(/<[^>]*>/g, '').trim();
+    return textOnly.length === 0 ? '' : content;
+  };
+
+  const editorRef = useRef<IJodit | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // ✅ Solo un ref per tracciare l'ultimo valore
+  const lastUserValue = useRef<string>('');
+
+  const handleContentChange = (newContent: string) => {
+    const cleanedContent = cleanEmptyContent(newContent);
+
+    // ✅ Salva il valore dell'utente
+    lastUserValue.current = cleanedContent;
+
+    setValue(fieldName, cleanedContent, {
+      shouldValidate: !!error,
+      shouldDirty: true,
+    });
+  };
+
+  const { labelProps, inputProps, errorMessageProps } = useTextField(
+    { label, validationState: error ? 'invalid' : 'valid', errorMessage: error?.message },
+    inputRef
+  );
+
+  // ✅ Logica semplificata
+  useEffect(() => {
+    if (!editorRef.current) return; // ✅ Necessario!
+
+    const newValue = field.value || '';
+
+    // Se il valore è diverso da quello che l'utente ha digitato,
+    // significa che viene dall'esterno (AJAX)
+    if (newValue !== lastUserValue.current) {
+      editorRef.current.value = newValue;
+      lastUserValue.current = newValue; // Sincronizza
+    }
+  }, [field.value]);
+
+  // useEffect per ARIA (rimane uguale)
+  useEffect(() => {
+    if (editorRef.current) {
+      const editorElement = editorRef?.current.editor;
+      if (editorElement) {
+        field.ref(editorElement);
+        editorElement.setAttribute('role', 'textbox');
+        editorElement.setAttribute('aria-multiline', 'true');
+        ['aria-labelledby' as const, 'aria-describedby' as const, 'aria-invalid' as const].forEach(
+          (attr) => {
+            if (inputProps[attr]) {
+              editorElement.setAttribute(attr, String(inputProps[attr]));
+            } else {
+              editorElement.removeAttribute(attr);
+            }
+          }
+        );
+        const toolbar = editorElement
+          .closest('.jodit-container')
+          ?.querySelector('.jodit-toolbar__box');
+
+        if (toolbar && !toolbar.hasAttribute('aria-label')) {
+          toolbar.setAttribute('aria-label', 'Toolbar');
+          toolbar.setAttribute('role', 'toolbar');
+        }
+      }
+    }
+  }, [inputProps]);
+
+  const joditConfig = useMemo(
+    () => ({
+      aria: true,
+      readonly: false,
+      disabled: false,
+      tabIndex: 0,
+      allowTabNavigation: true,
+      hidePoweredByJodit: true,
+      showPlaceholder: false,
+      minHeight: rows ? rows * 24 : 96,
+      toolbar: true,
+      spellcheck: true,
+      language: 'it',
+      toolbarButtonSize: 'small' as const,
+      toolbarAdaptive: false,
+      buttons: [
+        'undo',
+        'redo',
+        '|',
+        'cut',
+        'copy',
+        'paste',
+        '|',
+        'paragraph',
+        '|',
+        'bold',
+        'italic',
+        '|',
+        'ul',
+        'ol',
+        '|',
+        'left',
+        'center',
+        'right',
+        'justify',
+        '|',
+        'table',
+        'symbols',
+        '|',
+        'link',
+        'image',
+        'video',
+        '|',
+        'source',
+      ],
+      uploader: {
+        insertImageAsBase64URI: true,
+      },
+    }),
+    [rows]
+  );
+
+  const [message, accepted, actual] = error?.message?.split(':') || [];
+
+  return editor ? (
+    <div>
+      <div className="flex items-center gap-1">
+        <label className="text-sm font-medium" {...labelProps}>
+          {label}
+        </label>
+        <InfoValidations validations={validations ?? {}} />
+      </div>
+      <div className={inputClassName(!!error)} ref={inputRef}>
+        <JoditEditor
+          ref={(instance) => {
+            editorRef.current = instance;
+          }}
+          value={''}
+          config={joditConfig}
+          onBlur={handleContentChange}
+          onChange={handleContentChange}
+        />
+      </div>
+      {error?.message && (
+        <p {...errorMessageProps} className="mt-1 text-sm text-red-600">
+          {t(message, { accepted, actual: actual })}
+        </p>
+      )}
+    </div>
+  ) : (
     <TextFieldAria isInvalid={!!error} {...ariaProps}>
       <FormLabel validations={validations}>{label}</FormLabel>
       <TextAreaAria
         rows={rows || 4}
         {...field}
         value={field.value || ''}
-        className={`${editor ? 'sr-only ' : inputClassName(!!error)}`}
+        className={inputClassName(!!error)}
       />
-      {editor && (
-        <RichTextEditor
-          aria-hidden="true"
-          {...(placeholder ? { placeholder } : {})}
-          hasErrors={!!error}
-          initialContent={field.value || ''}
-          onChange={(value: string) => {
-            setValue(fieldName, value);
-            trigger(fieldName);
-          }}
-        />
-      )}
       <FormErrors error={error} />
     </TextFieldAria>
   );
 };
-
 export { Textarea };
