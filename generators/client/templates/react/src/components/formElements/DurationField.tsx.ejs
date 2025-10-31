@@ -56,7 +56,9 @@ const msToDuration = (ms: number | undefined): Duration | undefined => {
 };
 
 const inputClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full border-none bg-slate-200 text-slate-900 dark:bg-gray-800 dark:text-gray-300 text-sm/6 py-1.5 px-3`;
+  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
+const inputIsoClassName = (hasErrors = false) =>
+  `scheme-light dark:scheme-dark outline-2 -outline-offset-2 outline-dashed ${hasErrors ? 'outline-red-500' : 'outline-slate-200 dark:outline-slate-600'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 
 interface DurationFieldProps {
   fieldName: string;
@@ -220,9 +222,12 @@ const DurationField: React.FC<DurationFieldProps> = ({
           />
         </div>
         {showIso && (
-          <div className="md:w-1/5 text-slate-500 dark:text-gray-400">
+          <div className="md:w-1/5">
             <div className="text-xs">ISO 8601</div>
             <input
+              tabIndex={-1}
+              disabled={true}
+              readOnly={true}
               type="text"
               placeholder="--"
               value={
@@ -230,8 +235,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
                   ? ''
                   : serialize(msToDuration(milliseconds) ?? {})
               }
-              readOnly
-              className={`${inputClassName(!!errors?.[fieldName]?.message)} text-slate-500! dark:text-gray-400!`}
+              className={`${inputIsoClassName(!!errors?.[fieldName]?.message)}`}
             />
           </div>
         )}
