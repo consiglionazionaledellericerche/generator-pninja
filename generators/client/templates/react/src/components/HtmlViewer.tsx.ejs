@@ -43,7 +43,7 @@ const HtmlViewer: React.FC<TextareaProps> = ({ content }) => {
       </div>
       {showSource && (
         <div className="bg-black text-lime-500 p-2 rounded-md  font-mono text-sm">
-          <textarea className="code w-full min-h-[300px] focus:outline-none">{content}</textarea>
+          <textarea readOnly={true} className="code w-full min-h-[300px] focus:outline-none">{content}</textarea>
         </div>
       )}
       {!showSource && (
