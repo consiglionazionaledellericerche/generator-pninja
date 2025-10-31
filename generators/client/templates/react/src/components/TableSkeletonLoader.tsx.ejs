@@ -20,7 +20,9 @@ function createRow(cols = 5, key: number) {
       <td className="w-0">
         <div className="col-span-2 h-2 rounded bg-gray-200"></div>
       </td>
-      {Array(cols).fill('').map((_, i) => createTd(i))}
+      {Array(cols)
+        .fill('')
+        .map((_, i) => createTd(i))}
     </tr>
   );
 }
@@ -31,22 +33,32 @@ interface TableSkeletonLoaderProps {
   cols?: number;
 }
 
-export function TableSkeletonLoader({ loading = false, rows = 5, cols = 5 }: TableSkeletonLoaderProps) {
+export function TableSkeletonLoader({
+  loading = false,
+  rows = 5,
+  cols = 5,
+}: TableSkeletonLoaderProps) {
   if (!loading) return null;
-  
+  const colsFiltered = cols < 10 ? cols : 10;
   return (
     <div role="status" className="animate-pulse">
       <table className="data-table">
         <thead>
           <tr>
             <th scope="col" className="w-0">
-              <div className="col-span-2 h-2 rounded bg-gray-400">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+              <div className="col-span-2 h-2 rounded bg-gray-400">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </div>
             </th>
-            {Array(cols).fill('').map((_, i) => createTh(i))}
+            {Array(colsFiltered)
+              .fill('')
+              .map((_, i) => createTh(i))}
           </tr>
         </thead>
         <tbody>
-          {Array(rows).fill('').map((_, i) => createRow(cols, i))}
+          {Array(rows)
+            .fill('')
+            .map((_, i) => createRow(colsFiltered, i))}
         </tbody>
       </table>
       <p className="sr-only">Loading...</p>
