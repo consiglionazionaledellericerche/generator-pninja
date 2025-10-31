@@ -11,7 +11,7 @@ import { useMemo, useRef, useEffect } from 'react';
 import JoditEditor from 'jodit-react';
 import type { IJodit } from 'jodit/types/types';
 import { InfoValidations } from './InfoValidations';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, getI18n } from 'react-i18next';
 import './Textarea.css';
 
 const inputClassName = (hasErrors = false) =>
@@ -139,7 +139,7 @@ const Textarea: React.FC<TextareaProps> = ({
       minHeight: rows ? rows * 24 : 96,
       toolbar: true,
       spellcheck: true,
-      language: 'it',
+      language: getI18n().language,
       toolbarButtonSize: 'small' as const,
       toolbarAdaptive: false,
       buttons: [
