@@ -23,9 +23,10 @@ const Menu: React.FC = () => {
 <%  if (entities.length > 1) { -%>
   const [activeEntity, setActiveEntity] = useState<string | null>(null);
 <% } -%>
-  const menuIsActiveClass = ' bg-white/90 text-black dark:bg-black/70 dark:text-white';
+  const menuIsActiveClass = ' bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100';
 <%  if (entities.length > 1) { -%>
-  const menuItemIsActiveClass = ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300';
+  const menuItemIsActiveClass =
+    ' bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200';
 <%  } -%>
   const isActive = useCallback(
     (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`),
@@ -57,7 +58,7 @@ const Menu: React.FC = () => {
       <span className="grow"></span>
       <button
         type="button"
-        className={`inline-flex items-center p-0 w-10 h-10 justify-center rounded-md md:hidden hover:ring-4 focus:outline-none focus-visible:ring-4 ${menuVisible ? ' bg-slate-300 text-slate-900 dark:bg-gray-700 dark:text-gray-300' : ''}`}
+        className={`inline-flex items-center p-0 w-10 h-10 justify-center rounded-md md:hidden hover:ring-4 focus:outline-none focus-visible:ring-4 ${menuVisible ? ' bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-300' : ''}`}
         aria-expanded={menuVisible ? 'true' : 'false'}
         onClick={(e) => {
           e.stopPropagation();
@@ -118,10 +119,10 @@ const Menu: React.FC = () => {
             >
               {t(activeEntity || 'entities.entities')} <ChevronDown size={16} />
             </Button>
-            <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md shadow-lg ring-1 ring-black/25 dark:ring-white/25 bg-slate-100 text-slate-900 dark:bg-gray-900 dark:text-gray-300">
+            <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
               <MenuItems onAction={(k) => navigate(`/entities/${k}`)} className="outline-0">
 <%            entities.forEach((entity, index) => {-%>
-                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 hover:ring-4 data-[focus]:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
+                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
                     {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                 </MenuItem>
 <%            });-%>

@@ -99,9 +99,9 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
           <th scope="row" className="align-top">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
           <td className='flex flex-col gap-y-4'>
 <%             if(r.isArray) { -%>
-            {data?.<%-r.field%> && data?.<%-r.field%>?.map((item, index) => <div key={index} className='rounded-md border dark:border-gray-700 border-gray-200 p-4'><<%=r.related%>DataView data={item} /></div>)}
+            {data?.<%-r.field%> && data?.<%-r.field%>?.map((item, index) => <div key={index} className='rounded-md border dark:border-slate-700 border-slate-300 p-4'><<%=r.related%>DataView data={item} /></div>)}
 <%             } else { -%>
-            {data?.<%-r.field%> && <div className='rounded-md border dark:border-gray-700 border-gray-200 p-4'><<%=r.related%>DataView data={data?.<%-r.field%>} /></div>}
+            {data?.<%-r.field%> && <div className='rounded-md border dark:border-slate-700 border-slate-300 p-4'><<%=r.related%>DataView data={data?.<%-r.field%>} /></div>}
 <%             } -%>
           </td>
         </tr>
