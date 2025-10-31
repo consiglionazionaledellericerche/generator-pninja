@@ -1,7 +1,6 @@
 import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
-import { JsonPrint } from '../JsonPrint';
 import { useEffect, useState } from 'react';
 
 const inputClassName = (hasErrors = false) =>
@@ -94,7 +93,6 @@ const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step,
           value={currentValue}
         />
       </div>
-      <JsonPrint data={{ currentValue }} />
       <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
