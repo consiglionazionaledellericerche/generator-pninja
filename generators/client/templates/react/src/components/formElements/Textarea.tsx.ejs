@@ -75,16 +75,11 @@ const Textarea: React.FC<TextareaProps> = ({
 
   const editorRef = useRef<IJodit | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // ✅ Solo un ref per tracciare l'ultimo valore
   const lastUserValue = useRef<string>('');
 
   const handleContentChange = (newContent: string) => {
     const cleanedContent = cleanEmptyContent(newContent);
-
-    // ✅ Salva il valore dell'utente
     lastUserValue.current = cleanedContent;
-
     setValue(fieldName, cleanedContent, {
       shouldValidate: !!error,
       shouldDirty: true,
@@ -96,21 +91,15 @@ const Textarea: React.FC<TextareaProps> = ({
     inputRef
   );
 
-  // ✅ Logica semplificata
   useEffect(() => {
-    if (!editorRef.current) return; // ✅ Necessario!
-
+    if (!editorRef.current) return;
     const newValue = field.value || '';
-
-    // Se il valore è diverso da quello che l'utente ha digitato,
-    // significa che viene dall'esterno (AJAX)
     if (newValue !== lastUserValue.current) {
       editorRef.current.value = newValue;
-      lastUserValue.current = newValue; // Sincronizza
+      lastUserValue.current = newValue;
     }
   }, [field.value]);
 
-  // useEffect per ARIA (rimane uguale)
   useEffect(() => {
     if (editorRef.current) {
       const editorElement = editorRef?.current.editor;
@@ -130,14 +119,13 @@ const Textarea: React.FC<TextareaProps> = ({
         const toolbar = editorElement
           .closest('.jodit-container')
           ?.querySelector('.jodit-toolbar__box');
-
         if (toolbar && !toolbar.hasAttribute('aria-label')) {
           toolbar.setAttribute('aria-label', 'Toolbar');
           toolbar.setAttribute('role', 'toolbar');
         }
       }
     }
-  }, [inputProps]);
+  }, [inputProps, field]);
 
   const joditConfig = useMemo(
     () => ({
