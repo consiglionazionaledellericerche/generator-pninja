@@ -22,8 +22,6 @@
 }
 @custom-variant dark (&:where(.dark, .dark *));
 @theme {
-  --default-ring-width: 3px;
-  --default-ring-color: var(--color-blue-500);
   --font-sans: InterVariable, sans-serif;
   --font-mono: IBMPlexMono, monospace;
 }
@@ -34,6 +32,15 @@
   body {
     @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen;
   }
+  .form-field {
+    @apply scheme-light dark:scheme-dark outline-0 focus:outline-0 focus:ring-2 focus:ring-sky-600 rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3;
+    &[data-invalid='true'] {
+      @apply ring-2 ring-red-500;
+    }
+  }
+  .form-field-error {
+    @apply scheme-light dark:scheme-dark outline-0 focus:outline-0 ring-2 ring-red-500 rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3;
+  }
   .kdb-shortcut {
     @apply font-sans text-xs h-5 min-w-5 items-center justify-center rounded border px-1 hidden xl:inline-flex;
   }
@@ -41,16 +48,16 @@
     @apply -ms-0.5;
   }
   .primary-button {
-    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
+    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50;
   }
   .danger-button {
-    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-red-600 hover:bg-red-700 dark:bg-red-500 hover:dark:bg-red-600 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
+    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-red-600 hover:bg-red-700 dark:bg-red-500 hover:dark:bg-red-600 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50;
   }
   .cancel-button {
-    @apply hover:shadow-sm hover:dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-transparent dark:bg-transparent py-1.5 px-4 text-sm font-medium hover:bg-slate-300 hover:dark:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50;
+    @apply hover:shadow-sm hover:dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-transparent dark:bg-transparent py-1.5 px-4 text-sm font-medium hover:bg-slate-300 hover:dark:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50;
   }
   .text-link {
-    @apply rounded-md text-sky-600 dark:text-sky-400 hover:underline decoration-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600;
+    @apply rounded-md text-sky-600 dark:text-sky-400 hover:underline decoration-2 focus:ring-2 focus:outline-none;
   }
   .text-muted {
     @apply text-slate-400 dark:text-slate-500;
@@ -59,7 +66,7 @@
     @apply relative z-9999 flex flex-wrap items-center justify-between gap-4 h-16 px-4 text-slate-800 dark:text-slate-200 bg-<%- navbarStartcolor %>-400 dark:bg-<%- navbarStartcolor %>-800 ltr:bg-linear-45 rtl:-bg-linear-45 from-20% from-<%- navbarStartcolor %>-400 dark:from-<%- navbarStartcolor %>-800 via-sky-500 dark:via-sky-800 via-40% to-indigo-700 dark:to-indigo-900 to-80%;
 
     .nav-bar-link {
-      @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-2 text-sm font-medium bg-slate-50/70 text-slate-900 dark:bg-slate-900/70 dark:text-slate-100 hover:ring-4 focus:outline-none focus-visible:ring-4 cursor-pointer;
+      @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-2 text-sm font-medium bg-slate-50/70 text-slate-900 dark:bg-slate-900/70 dark:text-slate-100 hover:ring-4 hover:ring-sky-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-sky-600 cursor-pointer;
     }
     button {
       @apply cursor-pointer;

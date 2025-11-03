@@ -3,9 +3,6 @@ import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 import { useEffect, useState } from 'react';
 
-const inputClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-600 dark:outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-600 focus:dark:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full mt-3 border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
-
 interface RangeField {
   fieldName: string;
   label: string;
@@ -65,7 +62,9 @@ const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step,
     <>
       <FormLabel htmlFor={fieldName} label={label} validations={validations} />
       {(min || 0) >= (max || 100) && (
-        <div className="text-red-600 dark:text-red-500">Invalid range: min should be less than max.</div>
+        <div className="text-red-600 dark:text-red-500">
+          Invalid range: min should be less than max.
+        </div>
       )}
       <div className="flex gap-2">
         <input
@@ -76,7 +75,7 @@ const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step,
           max={max || 100}
           step={step || 1}
           {...register(fieldName, opts)}
-          className={inputClassName(!!errors?.[fieldName]?.message)}
+          className="form-field"
           onChange={(e) => setCurrentValue(Number(e.target.value))}
           value={currentValue}
         />
@@ -85,7 +84,7 @@ const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step,
           min={min || 0}
           max={max || 100}
           step={step || 1}
-          className={`${inputClassName(!!errors?.[fieldName]?.message)} w-25!`}
+          className="form-field w-25!"
           onChange={(e) => {
             setCurrentValue(Number(e.target.value));
             setValue(fieldName, Number(e.target.value));

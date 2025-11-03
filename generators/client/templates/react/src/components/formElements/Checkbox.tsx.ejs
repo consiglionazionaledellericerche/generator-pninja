@@ -2,9 +2,6 @@ import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
 import { FormLabel } from './FormLabel';
 import { FormErrors } from './FormErrors';
 
-const checkBoxClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 outline-offset-2 outline-red-600 dark:outline-red-500' : ''} focus:outline-2 focus:outline-offset-2 ${hasErrors ? 'focus:outline-red-600 focus:dark:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-5 h-5 mx-auto mt-3 border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-3 px-3`;
-
 interface CheckboxProps {
   fieldName: string;
   label: string;
@@ -28,14 +25,18 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations }) =>
 
   return (
     <>
-    <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-    <input
-      type="checkbox"
-      id={fieldName}
-      {...register(fieldName, opts)}
-      className={checkBoxClassName(!!errors?.[fieldName]?.message)}
-    />
-    <FormErrors errors={errors} fieldName={fieldName} />
+      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <input
+        type="checkbox"
+        id={fieldName}
+        {...register(fieldName, opts)}
+        className={
+          errors?.[fieldName]?.message
+            ? 'form-field-error mx-auto w-5 h-5 p-3'
+            : 'form-field mx-auto w-5 h-5 p-3'
+        }
+      />
+      <FormErrors errors={errors} fieldName={fieldName} />
     </>
   );
 };

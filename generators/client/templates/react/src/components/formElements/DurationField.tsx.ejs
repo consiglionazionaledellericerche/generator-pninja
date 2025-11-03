@@ -55,10 +55,8 @@ const msToDuration = (ms: number | undefined): Duration | undefined => {
   return duration;
 };
 
-const inputClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-0${hasErrors ? ' outline-2 -outline-offset-2 outline-red-600 dark:outline-red-500' : ''} focus:outline-2 focus:-outline-offset-2 ${hasErrors ? 'focus:outline-red-600 focus:dark:outline-red-500' : 'focus:outline-blue-600'} rounded-md block w-full border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 const inputIsoClassName = (hasErrors = false) =>
-  `scheme-light dark:scheme-dark outline-2 -outline-offset-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
+  `mt-3 scheme-light dark:scheme-dark outline-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600 -outline-offset-2'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 
 interface DurationFieldProps {
   fieldName: string;
@@ -154,7 +152,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
             value={days}
             step={1}
             min={0}
-            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setDays('');
@@ -173,7 +171,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
             step={1}
             min={0}
             max={23}
-            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setHours('');
@@ -192,7 +190,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
             step={1}
             min={0}
             max={59}
-            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setMinutes('');
@@ -211,7 +209,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
             min={0}
             max={59.999}
             step={1}
-            className={`${inputClassName(!!errors?.[fieldName]?.message)}`}
+            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseFloat(e.target.value))) {
                 setSeconds('');
@@ -246,7 +244,6 @@ const DurationField: React.FC<DurationFieldProps> = ({
             {...(placeholder ? { placeholder } : {})}
             id={fieldName}
             {...register(fieldName, opts)}
-            className={inputClassName(!!errors?.[fieldName]?.message)}
           />
         </div>
       </div>
