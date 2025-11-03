@@ -22,10 +22,26 @@ export function Toast({ notification }: { notification: INotification }) {
   const colors = useMemo(
     () =>
       ({
-        success: { bg: 'bg-green-500', progress: 'bg-green-400' },
-        error: { bg: 'bg-red-500', progress: 'bg-red-400' },
-        warning: { bg: 'bg-yellow-500', progress: 'bg-yellow-400' },
-        info: { bg: 'bg-blue-500', progress: 'bg-blue-400' },
+        success: {
+          main: 'bg-green-700 text-white',
+          details: 'bg-green-800 text-white',
+          progress: 'bg-green-500',
+        },
+        error: {
+          main: 'bg-red-600 text-white',
+          details: 'bg-red-700 text-white',
+          progress: 'bg-red-400',
+        },
+        warning: {
+          main: 'bg-yellow-500 text-yellow-900',
+          details: 'bg-yellow-600 text-yellow-950',
+          progress: 'bg-yellow-300',
+        },
+        info: {
+          main: 'bg-blue-600 text-white',
+          details: 'bg-blue-700 text-white',
+          progress: 'bg-blue-400',
+        },
       })[notification.type],
     [notification.type]
   );
@@ -63,7 +79,7 @@ export function Toast({ notification }: { notification: INotification }) {
 
   return (
     <div
-      className={`${colors.bg} text-white rounded-lg shadow-lg dark:shadow-lg/70 min-w-[300px] max-w-[50vw] overflow-hidden`}
+      className={`${colors.main} rounded-lg shadow-lg dark:shadow-lg/70 min-w-[300px] max-w-[50vw] overflow-hidden`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -73,7 +89,7 @@ export function Toast({ notification }: { notification: INotification }) {
             <div>{notification.message}</div>
           </div>
           {notification.details && (
-            <div className="mt-2 text-sm opacity-75 bg-black/10 p-2 rounded">
+            <div className={`${colors.details} mt-2 text-sm p-2 rounded`}>
               <div>
                 {notification.details}
                 {notification.techDetails && !showTechDetails && (
@@ -93,9 +109,7 @@ export function Toast({ notification }: { notification: INotification }) {
               </div>
               {showTechDetails && notification.techDetails && (
                 <>
-                  <pre className="mt-2 text-xs text-wrap text-white/80">
-                    {notification.techDetails}
-                  </pre>
+                  <pre className="mt-2 text-xs text-wrap">{notification.techDetails}</pre>
                   {notification.techDetails && showTechDetails && (
                     <span className="text-xs">
                       {' '}
