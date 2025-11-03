@@ -11,7 +11,9 @@ const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors }) => {
   const [message, accepted, actual] = errors?.[fieldName]?.message?.split(':') || [];
   return (
     errors?.[fieldName]?.message && (
-      <p className="mt-1 text-sm text-red-600">{t(message, { accepted, actual: actual })}</p>
+      <p className="mt-1 text-sm text-red-600 dark:text-red-500">
+        {t(message, { accepted, actual: actual })}
+      </p>
     )
   );
 };

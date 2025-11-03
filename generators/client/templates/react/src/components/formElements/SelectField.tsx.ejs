@@ -328,7 +328,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         <div
           className={`
           scheme-light dark:scheme-dark outline-0 rounded-md mt-3 border-none bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-2
-          ${error ? ' outline-2 -outline-offset-2 outline-red-500 focus-within:outline-2 focus-within:outline-0' : ' focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-600'}
+          ${error ? ' outline-2 -outline-offset-2 outline-red-600 dark:outline-red-500 focus-within:outline-2 focus-within:outline-0' : ' focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-600'}
           `}
         >
           <div
@@ -377,7 +377,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
                       e.stopPropagation();
                       handleRemoveTag(option);
                     }}
-                    className="ms-1 hover:text-red-600 hover:bg-white rounded-full cursor-pointer"
+                    className="ms-1 hover:text-red-600 hover:dark:text-red-500 hover:bg-white rounded-full cursor-pointer"
                   >
                     <XIcon className="w-4 h-4" />
                   </button>

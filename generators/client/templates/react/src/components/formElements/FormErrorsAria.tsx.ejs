@@ -10,7 +10,7 @@ const FormErrorsAria: React.FC<FormErrorsProps> = ({ error }) => {
   const { t } = useTranslation();
   const [message, accepted, actual] = error?.message?.split(':') || [];
   return (
-    <FieldErrorAria className="mt-1 text-sm text-red-600">
+    <FieldErrorAria className="mt-1 text-sm text-red-600 dark:text-red-500">
       {t(message, { accepted, actual: actual })}
     </FieldErrorAria>
   );

@@ -19,7 +19,7 @@ const inputClassName = (hasErrors = false) =>
 scheme-light
 dark:scheme-dark
 outline-2 -outline-offset-2 outline-slate-200 dark:outline-slate-600
-focus-within:outline-2 focus-within:-outline-offset-2 ${hasErrors ? 'focus-within:outline-red-500' : 'focus-within:outline-blue-600'}
+focus-within:outline-2 focus-within:-outline-offset-2 ${hasErrors ? 'focus-within:outline-red-600 focus-within:dark:outline-red-500' : 'focus-within:outline-blue-600'}
 rounded-md
 block
 w-full
@@ -201,7 +201,7 @@ const Textarea: React.FC<TextareaProps> = ({
         />
       </div>
       {error?.message && (
-        <p {...errorMessageProps} className="mt-1 text-sm text-red-600">
+        <p {...errorMessageProps} className="mt-1 text-sm text-red-600 dark:text-red-500">
           {t(message, { accepted, actual: actual })}
         </p>
       )}
