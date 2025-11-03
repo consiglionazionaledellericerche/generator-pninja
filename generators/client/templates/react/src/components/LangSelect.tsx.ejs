@@ -30,7 +30,7 @@ export function LangSelect() {
           {languages.map((language) => (
             <MenuItem
               onAction={() => changeLanguage(language)}
-              className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 block p-2${i18n.language === language ? ' bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}`}
+              className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-sky-600 block p-2${i18n.language === language ? ' bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}`}
               key={language}
             >
               {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
