@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Button, OverlayArrow, Tooltip, TooltipTrigger } from 'react-aria-components';
+import { Button, OverlayArrow, Tooltip, TooltipTrigger, Text } from 'react-aria-components';
 import { AsteriskIcon, InfoIcon } from 'lucide-react';
 import prettyBytes from 'pretty-bytes';
 
@@ -70,33 +70,35 @@ const InfoValidations: React.FC<InfoValidationsProps> = ({ validations }) => {
               </svg>
             </OverlayArrow>
             <div className="bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200 text-sm p-2 rounded-lg shadow-md dark:shadow-md/70">
-              {typeof validations.min === 'number' && (
-                <div>{t(`info.validations.min`, { accepted: validations?.min })}</div>
-              )}
-              {typeof validations.max === 'number' && (
-                <div>{t(`info.validations.max`, { accepted: validations?.max })}</div>
-              )}
-              {typeof validations.minbytes === 'number' && (
-                <div>
-                  {t(`info.validations.minbytes`, {
-                    accepted: prettyBytes(Number(validations?.minbytes)),
-                  })}
-                </div>
-              )}
-              {typeof validations.maxbytes === 'number' && (
-                <div>
-                  {t(`info.validations.maxbytes`, {
-                    accepted: prettyBytes(Number(validations?.maxbytes)),
-                  })}
-                </div>
-              )}
-              {typeof validations.minlength === 'number' && (
-                <div>{t(`info.validations.minlength`, { accepted: validations?.minlength })}</div>
-              )}
-              {typeof validations.maxlength === 'number' && (
-                <div>{t(`info.validations.maxlength`, { accepted: validations?.maxlength })}</div>
-              )}
-              {validations.unique && <div>{t(`info.validations.unique`)}</div>}
+              <Text slot="description">
+                {typeof validations.min === 'number' && (
+                  <div>{t(`info.validations.min`, { accepted: validations?.min })}</div>
+                )}
+                {typeof validations.max === 'number' && (
+                  <div>{t(`info.validations.max`, { accepted: validations?.max })}</div>
+                )}
+                {typeof validations.minbytes === 'number' && (
+                  <div>
+                    {t(`info.validations.minbytes`, {
+                      accepted: prettyBytes(Number(validations?.minbytes)),
+                    })}
+                  </div>
+                )}
+                {typeof validations.maxbytes === 'number' && (
+                  <div>
+                    {t(`info.validations.maxbytes`, {
+                      accepted: prettyBytes(Number(validations?.maxbytes)),
+                    })}
+                  </div>
+                )}
+                {typeof validations.minlength === 'number' && (
+                  <div>{t(`info.validations.minlength`, { accepted: validations?.minlength })}</div>
+                )}
+                {typeof validations.maxlength === 'number' && (
+                  <div>{t(`info.validations.maxlength`, { accepted: validations?.maxlength })}</div>
+                )}
+                {validations.unique && <div>{t(`info.validations.unique`)}</div>}
+              </Text>
             </div>
           </Tooltip>
         </TooltipTrigger>
