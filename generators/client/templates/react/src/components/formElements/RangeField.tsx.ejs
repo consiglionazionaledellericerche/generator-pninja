@@ -1,99 +1,51 @@
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
-import { useEffect, useState } from 'react';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel } from './index';
+import { Slider, SliderOutput, SliderThumb, SliderTrack, SliderProps } from 'react-aria-components';
 
-interface RangeField {
+interface RangeFieldProps extends Omit<SliderProps, 'minValue' | 'maxValue' | 'children'> {
   fieldName: string;
   label: string;
-  placeholder?: string;
-  step?: number | string;
-  validations?: {
-    required?: boolean;
-    min?: number;
-    max?: number;
-  };
+  minValue: number;
+  maxValue: number;
 }
 
-const RangeField: React.FC<RangeField> = ({ fieldName, label, placeholder, step, validations }) => {
-  const { required, min, max } = validations || {};
-  const {
-    register,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useFormContext();
+const RangeField: React.FC<RangeFieldProps> = ({
+  fieldName,
+  label,
+  minValue,
+  maxValue,
+  ...ariaProps
+}) => {
+  const { control } = useFormContext();
 
-  const [currentValue, setCurrentValue] = useState(
-    getValues(fieldName) !== undefined && getValues(fieldName) !== null
-      ? getValues(fieldName)
-      : ((min || 0) + (max || 100)) / 2
-  );
-
-  const opts: RegisterOptions<FieldValues, string> | undefined = {
-    valueAsNumber: true,
-  };
-
-  if (required) {
-    opts.required = 'errors.validations.required';
-  }
-  if (min !== undefined && min !== null) {
-    opts.min = {
-      value: min,
-      message: `errors.validations.min:${min}`,
-    };
-  }
-  if (max !== undefined && max !== null) {
-    opts.max = {
-      value: max,
-      message: `errors.validations.max:${max}`,
-    };
-  }
-
-  useEffect(() => {
-    setCurrentValue(
-      getValues(fieldName) !== undefined && getValues(fieldName) !== null
-        ? getValues(fieldName)
-        : ((min || 0) + (max || 100)) / 2
-    );
-  }, [getValues, fieldName, min, max]);
+  const { field } = useController({
+    name: fieldName,
+    control,
+  });
 
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      {(min || 0) >= (max || 100) && (
-        <div className="text-red-600 dark:text-red-500">
-          Invalid range: min should be less than max.
-        </div>
-      )}
-      <div className="flex gap-2">
-        <input
-          type="range"
-          {...(placeholder ? { placeholder } : {})}
-          id={fieldName}
-          min={min || 0}
-          max={max || 100}
-          step={step || 1}
-          {...register(fieldName, opts)}
-          className="form-field"
-          onChange={(e) => setCurrentValue(Number(e.target.value))}
-          value={currentValue}
-        />
-        <input
-          type="number"
-          min={min || 0}
-          max={max || 100}
-          step={step || 1}
-          className="form-field w-25!"
-          onChange={(e) => {
-            setCurrentValue(Number(e.target.value));
-            setValue(fieldName, Number(e.target.value));
-          }}
-          value={currentValue}
-        />
-      </div>
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+    <Slider
+      {...ariaProps}
+      {...field}
+      value={field.value}
+      step={ariaProps.step ? Number(ariaProps.step) : 1}
+      minValue={minValue}
+      maxValue={maxValue}
+      className={'has-[>[data-orientation=horizontal]]:grid grid-cols-2 gap-0 w-full pb-2'}
+    >
+      <FormLabel
+        validations={{
+          min: minValue,
+          max: maxValue,
+        }}
+      >
+        {label}
+      </FormLabel>
+      <SliderOutput className="text-right" aria-live="polite" />
+      <SliderTrack className="group col-span-2 relative data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full data-[orientation=vertical]:ms-2 data-[orientation=vertical]:h-[200px] data-[orientation=vertical]:w-2 rounded-full bg-slate-200 dark:bg-slate-600 mt-3">
+        <SliderThumb className="group-data-[orientation=horizontal]:top-[50%] group-data-[orientation=vertical]:left-[50%] bg-blue-600 h-6 w-6 rounded-full data-dragging:outline-2 data-dragging:outline-offset-3 data-dragging:outline-blue-500 data-focus-visible:outline-2 data-focus-visible:outline-offset-3 data-focus-visible:outline-blue-500 ring-3 ring-slate-50 dark:ring-slate-900 " />
+      </SliderTrack>
+    </Slider>
   );
 };
 
