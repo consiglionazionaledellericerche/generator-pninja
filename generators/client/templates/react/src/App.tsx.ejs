@@ -46,10 +46,7 @@ function App() {
           </Route>
           <Route
             element={
-              <ProtectedRoute
-                requiredRoles={['admin', 'superuser', 'master']}
-                requireAll={false}
-              />
+              <ProtectedRoute requiredRoles={['admin', 'superuser', 'master']} requireAll={false} />
             }
           >
             <Route path="/admin" element={<div>ADMIN EXAMPLE</div>} />
