@@ -48,7 +48,7 @@ export default class EntityGenerator extends Generator {
         type: "number",
         name: "howManyToGenerate",
         message: "How many entities to generate for each entity (factories)?",
-        default: this.config.get('howManyToGenerate') || 0
+        default: this.config.get('howManyToGenerate') || 10
       }]);
       this.answers = { ...this.answers, ...answers };
     }
