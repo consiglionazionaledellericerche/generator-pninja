@@ -223,6 +223,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 name: String(v),
               }))}
               initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(name) %>}
+<%          if(getValidationsFromValidations(validations)) {-%>
+              validations={<%- getValidationsFromValidations(validations) %>}
+<%          } -%>
             />
 <%        } else if(type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob') {-%>
             <FileField
