@@ -1,0 +1,56 @@
+import { useTranslation } from 'react-i18next';
+import { Text } from 'react-aria-components';
+import prettyBytes from 'pretty-bytes';
+
+interface FormFieldInfoProps {
+  validations: IFormFieldInfo;
+}
+interface IFormFieldInfo {
+  min?: number;
+  minbytes?: number;
+  minlength?: number;
+  max?: number;
+  maxbytes?: number;
+  maxlength?: number;
+  pattern?: string | RegExp;
+  required?: boolean;
+  unique?: boolean;
+}
+
+const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations }) => {
+  const { t } = useTranslation();
+  console.log({ validations });
+  const messages = Object.keys(validations as IFormFieldInfo)
+    .filter((key) => key !== 'pattern')
+    .map((key) => {
+      const typedKey = key as keyof IFormFieldInfo;
+      if (['min', 'max', 'minlength', 'maxlength'].includes(typedKey)) {
+        return t(`info.validations.${typedKey}`, { accepted: validations[typedKey] });
+      }
+      if (['minbytes', 'maxbytes'].includes(typedKey)) {
+        return t(`info.validations.${typedKey}`, {
+          accepted: prettyBytes(Number(validations[typedKey])),
+        });
+      }
+      if (typedKey === 'required') {
+        return <strong>{t(`info.validations.${typedKey}`)}</strong>;
+      }
+      return t(`info.validations.${typedKey}`);
+    });
+  return Object.keys(validations).length ? (
+    <p className="text-sm mt-2">
+      <Text slot="description">
+        {messages.map((msg, index) => (
+          <span key={index}>
+            {msg}
+            {index < messages.length - 1 && '; '}
+          </span>
+        ))}
+      </Text>
+    </p>
+  ) : (
+    ''
+  );
+};
+
+export { FormFieldInfo };

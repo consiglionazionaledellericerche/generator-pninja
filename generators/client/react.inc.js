@@ -91,6 +91,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FileField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FileField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormErrors.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormErrorsAria.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormErrorsAria.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormFieldInfo.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormFieldInfo.tsx.ejs`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormLabel.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormLabelAria.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormLabelAria.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/formElements/InfoValidations.tsx`), {});

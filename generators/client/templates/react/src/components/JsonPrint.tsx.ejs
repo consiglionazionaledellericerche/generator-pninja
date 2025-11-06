@@ -17,7 +17,7 @@ export function JsonPrint({ data, pp = true, className = '' }: JsonPrintProps) {
     );
   } catch (error) {
     return (
-      <pre className="whitespace-pre bg-red-800 text-xs text-white p-4 rounded-md">
+      <pre className="whitespace-pre text-xs p-4 rounded-md bg-red-600 text-white">
         Error formatting JSON: {error instanceof Error ? error.message : 'Unknown error'}
       </pre>
     );
