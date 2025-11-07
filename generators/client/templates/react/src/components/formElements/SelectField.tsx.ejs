@@ -18,7 +18,7 @@ import { HttpError } from '../../hooks/useApi';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
-import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
 
 const tagClassName =
   'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
@@ -428,7 +428,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
             )}
           </div>
         )}
-
+        <FormFieldInfo validations={validations || {}} />
         <FormErrors error={error} />
       </SearchField>
     </div>
