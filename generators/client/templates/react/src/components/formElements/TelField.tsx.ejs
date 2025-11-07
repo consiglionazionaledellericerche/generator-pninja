@@ -1,6 +1,6 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
 import {
   TextField as TextFieldAria,
   Input,
@@ -56,9 +56,10 @@ const TelField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...
   });
 
   return (
-    <TextFieldAria isInvalid={!!error} {...ariaProps} type="tel">
+    <TextFieldAria isInvalid={!!error} isRequired={validations?.required} {...ariaProps} type="tel">
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value || ''} className="form-field" />
+      <FormFieldInfo validations={validations || {}} />
       <FormErrors error={error} />
     </TextFieldAria>
   );

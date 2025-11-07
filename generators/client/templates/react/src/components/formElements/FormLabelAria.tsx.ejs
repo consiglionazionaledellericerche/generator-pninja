@@ -9,14 +9,15 @@ interface FormLabelProps {
 
 const FormLabelAria: React.FC<FormLabelProps> = ({ children, validations }) => {
   return (
-    <div className="flex items-center gap-1">
-      <Label className="text-sm font-medium">
-        {children}
-        {validations?.required && (
-          <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
-        )}
-      </Label>
-    </div>
+    <Label className="text-sm font-medium">
+      {children}
+      {validations?.required && (
+        <AsteriskIcon
+          aria-hidden="true"
+          className="inline align-top size-5 sm:size-4"
+        />
+      )}
+    </Label>
   );
 };
 

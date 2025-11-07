@@ -17,11 +17,10 @@ interface IFormFieldInfo {
   unique?: boolean;
 }
 
-const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations }) => {
+const FormFieldInfoContents: React.FC<FormFieldInfoProps> = ({ validations }) => {
   const { t } = useTranslation();
-  console.log({ validations });
   const messages = Object.keys(validations as IFormFieldInfo)
-    .filter((key) => key !== 'pattern')
+    .filter((key) => !['pattern', 'strength'].includes(key))
     .map((key) => {
       const typedKey = key as keyof IFormFieldInfo;
       if (['min', 'max', 'minlength', 'maxlength'].includes(typedKey)) {
@@ -32,25 +31,26 @@ const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations }) => {
           accepted: prettyBytes(Number(validations[typedKey])),
         });
       }
-      if (typedKey === 'required') {
-        return <strong>{t(`info.validations.${typedKey}`)}</strong>;
-      }
       return t(`info.validations.${typedKey}`);
     });
-  return Object.keys(validations).length ? (
-    <p className="text-sm mt-2">
-      <Text slot="description">
-        {messages.map((msg, index) => (
-          <span key={index}>
-            {msg}
-            {index < messages.length - 1 && '; '}
-          </span>
-        ))}
-      </Text>
-    </p>
-  ) : (
-    ''
-  );
+  return Object.keys(validations).length
+    ? messages.map((msg, index) => (
+        <span key={index}>
+          {msg}
+          {index < messages.length - 1 && '; '}
+        </span>
+      ))
+    : null;
 };
 
-export { FormFieldInfo };
+const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations, ...ariaProps }) => {
+  return Object.keys(validations).length ? (
+    <p className="text-sm mt-1">
+      <Text slot="description">
+        <FormFieldInfoContents validations={validations} {...ariaProps} />
+      </Text>
+    </p>
+  ) : null;
+};
+
+export { FormFieldInfo, FormFieldInfoContents };

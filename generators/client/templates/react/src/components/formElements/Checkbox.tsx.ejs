@@ -1,15 +1,17 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { SquareIcon, SquareCheckBigIcon } from 'lucide-react';
-import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import { SquareIcon, SquareCheckBigIcon, AsteriskIcon } from 'lucide-react';
+import { FormFieldInfoContents } from './index';
 import {
   Checkbox as CheckboxAria,
-  CheckboxGroup as CheckboxGroupAria,
   CheckboxProps as CheckboxPropsAria,
+  Text,
 } from 'react-aria-components';
+import { useId } from 'react-aria';
+import { useTranslation } from 'react-i18next';
 
 interface CheckboxProps
-  extends Omit<CheckboxPropsAria, 'isInvalid' | 'isSelected' | 'isRerquired' | 'children'> {
+  extends Omit<CheckboxPropsAria, 'isInvalid' | 'isSelected' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   validations?: {
@@ -18,6 +20,9 @@ interface CheckboxProps
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+  const { t } = useTranslation();
+  const descriptionId = useId();
+  const errorId = useId();
   const { required } = validations || {};
   const { control, setValue } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
@@ -34,34 +39,75 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
     rules,
   });
 
-  const className =
-    'mx-auto mt-3 h-7 w-7 rounded-md group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-600 group-data-focused:dark:outline-blue-500 group-data-disabled:opacity-50 text-slate-900 dark:text-slate-100 group-data-invalid:text-red-600 group-data-invalid:dark:text-red-500';
-
   return (
-    <CheckboxGroupAria
-      isInvalid={!!error}
-      isRequired={required}
-      className="bg-slate-50 dark:bg-slate-900"
-    >
-      <FormLabel validations={validations}>{label}</FormLabel>
-      <CheckboxAria
-        {...ariaProps}
-        {...field}
-        isRequired={required}
-        isSelected={field.value}
-        onChange={() =>
-          setValue(fieldName, !field.value, { shouldValidate: true, shouldDirty: true })
+    <>
+      <div>
+        <CheckboxAria
+          aria-describedby={error ? errorId : validations ? descriptionId : undefined}
+          {...ariaProps}
+          {...field}
+          isInvalid={!!error}
+          isRequired={required}
+          isSelected={field.value}
+          onChange={() =>
+            setValue(fieldName, !field.value, { shouldValidate: true, shouldDirty: true })
+          }
+          className="group"
+        >
+          <div className="text-sm font-medium">
+            {label}
+            {validations?.required && (
+              <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
+            )}
+          </div>
+          <div
+            className={`
+        mt-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 p-2
+        group-focus-within:outline-3
+        group-focus-within:outline-offset-3 group-focus-within:outline-blue-600
+        group-focus-within:dark:outline-blue-500 rounded-md block
+        ${
+          error
+            ? `
+        group-focus-within:ring-0
+        group-focus-within:outline-3
+        group-focus-within:outline-offset-3
+        group-focus-within:outline-red-600!
+        group-focus-within:dark:outline-red-500!
+        ring-2
+        ring-red-600
+        dark:ring-red-500`
+            : ''
         }
-        className="group"
-      >
-        {field.value ? (
-          <SquareCheckBigIcon className={className} aria-hidden="true" />
-        ) : (
-          <SquareIcon className={className} aria-hidden="true" />
-        )}
-      </CheckboxAria>
-      <FormErrors error={error} />
-    </CheckboxGroupAria>
+        `}
+          >
+            {field.value ? (
+              <SquareCheckBigIcon
+                className="mx-auto h-7 w-7 rounded-md outline-0"
+                aria-hidden="true"
+              />
+            ) : (
+              <SquareIcon className="mx-auto h-7 w-7 rounded-md outline-0" aria-hidden="true" />
+            )}
+          </div>
+        </CheckboxAria>
+      </div>
+      {validations && !error && (
+        <p className="text-sm mt-1">
+          <Text slot="description" id={descriptionId}>
+            <FormFieldInfoContents validations={validations} {...ariaProps} />
+          </Text>
+        </p>
+      )}
+      {error && error?.message && (
+        <p
+          id={errorId}
+          className="block mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500"
+        >
+          {t(error.message)}
+        </p>
+      )}
+    </>
   );
 };
 
