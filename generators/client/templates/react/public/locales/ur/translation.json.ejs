@@ -22,6 +22,7 @@
       "successfullyUpdated": "ریکارڈ ID {{id}} کامیابی کے ساتھ اپ ڈیٹ کیا گیا",
       "successfullyDeleted": "ریکارڈ ID {{id}} کامیابی کے ساتھ حذف کیا گیا"
     },
+    "hidePassword": "Hide password",
     "showPassword": "پاس ورڈ دکھائیں",
     "generateUUID": "ورژن 4 UUID تیار کریں"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "غلطی 401 – غیر مجاز",
@@ -106,6 +125,13 @@
       "max": "نمبر {{accepted}} سے کم یا اس کے برابر ہونا چاہیے",
       "maxlength": "سٹرنگ میں زیادہ سے زیادہ {{accepted}} حروف ہونے چاہئیں",
       "maxbytes": "فائل {{accepted}} سے زیادہ نہیں ہو سکتی",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "غلط فارمیٹ",
       "required": "ضروری",
       "url": "غلط URL فارمیٹ"

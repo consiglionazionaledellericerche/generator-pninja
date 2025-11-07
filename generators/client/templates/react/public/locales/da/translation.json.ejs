@@ -22,6 +22,7 @@
       "successfullyUpdated": "Post ID {{id}} opdateret med succes",
       "successfullyDeleted": "Post ID {{id}} slettet med succes"
     },
+    "hidePassword": "Hide password",
     "showPassword": "Vis adgangskode",
     "generateUUID": "Generer en version 4 UUID"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Fejl 401 – Uautoriseret",
@@ -106,6 +125,13 @@
       "max": "Tallet skal være mindre end eller lig med {{accepted}}",
       "maxlength": "Teksten må højst indeholde {{accepted}} tegn",
       "maxbytes": "Filen må ikke overstige {{accepted}}",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "Ugyldigt format",
       "required": "Påkrævet",
       "url": "Ugyldigt URL-format"

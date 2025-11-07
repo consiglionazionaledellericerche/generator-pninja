@@ -22,6 +22,7 @@
       "successfullyUpdated": "רשומה עם מזהה {{id}} עודכנה בהצלחה",
       "successfullyDeleted": "רשומה עם מזהה {{id}} נמחקה בהצלחה"
     },
+    "hidePassword": "Hide password",
     "showPassword": "הצג סיסמה",
     "generateUUID": "צור UUID גרסה 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "שגיאה 401 – לא מורשה",
@@ -106,6 +125,13 @@
       "max": "המספר חייב להיות קטן או שווה ל-{{accepted}}",
       "maxlength": "המחרוזת יכולה להכיל לכל היותר {{accepted}} תווים",
       "maxbytes": "הקובץ לא יכול לעלות על {{accepted}}",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "פורמט לא תקין",
       "required": "נדרש",
       "url": "פורמט URL לא תקין"

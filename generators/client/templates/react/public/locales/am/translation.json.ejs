@@ -22,6 +22,7 @@
       "successfullyUpdated": "መዝገብ መለያ {{id}} በተሳካ ሁኔታ ተዘምኗል",
       "successfullyDeleted": "መዝገብ መለያ {{id}} በተሳካ ሁኔታ ተሰርዟል"
     },
+    "hidePassword": "የይለፍ ቃል ደብቅ",
     "showPassword": "የይለፍ ቃል አሳይ",
     "generateUUID": "ስሪት 4 UUID ይፍጠሩ"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "የይለፍ ቃል ብርታት",
+    "generate": "ደህንነቱ የተጠበቀ የይለፍ ቃል ይፍጠሩ",
+    "copy": "የይለፍ ቃል ኮፒ አድርግ",
+    "copied": "የይለፍ ቃል ተቀድቷል!",
+    "strength": {
+      "weak": "ደካማ የይለፍ ቃል",
+      "medium": "መካከለኛ የይለፍ ቃል",
+      "strong": "ጠንካራ የይለፍ ቃል"
+    },
+    "criteria": {
+      "minLength": "ቢያንስ {{count}} ቁምፊዎች",
+      "uppercase": "አንድ ከፍተኛ ፊደል (A-Z)",
+      "lowercase": "አንድ ታችኛ ፊደል (a-z)",
+      "numbers": "አንድ ቁጥር (0-9)",
+      "specialChars": "አንድ ልዩ ቁምፊ (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "ስህተት 401 – ያልተፈቀደ",
@@ -106,6 +125,13 @@
       "max": "ቁጥሩ ከ {{accepted}} ጋር እኩል ወይም ያነሰ መሆን አለበት",
       "maxlength": "ጽሑፉ ከፍተኛው {{accepted}} ቁምፊዎችን መያዝ ይችላል",
       "maxbytes": "ፋይሉ {{accepted}} ማለፍ አይችልም",
+      "password": {
+        "minLength": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎችን መያዝ አለበት",
+        "requireUppercase": "የይለፍ ቃል ቢያንስ አንድ ከፍተኛ ፊደል መያዝ አለበት",
+        "requireLowercase": "የይለፍ ቃል ቢያንስ አንድ ታችኛ ፊደል መያዝ አለበት",
+        "requireNumbers": "የይለፍ ቃል ቢያንስ አንድ ቁጥር መያዝ አለበት",
+        "requireSpecialChars": "የይለፍ ቃል ቢያንስ አንድ ልዩ ቁምፊ መያዝ አለበት: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "የተሳሳተ ቅርጸት",
       "required": "አስፈላጊ",
       "url": "የተሳሳተ URL ቅርጸት"

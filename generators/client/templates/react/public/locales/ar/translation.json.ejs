@@ -22,6 +22,7 @@
       "successfullyUpdated": "تم تحديث السجل برقم ID {{id}} بنجاح",
       "successfullyDeleted": "تم حذف السجل برقم ID {{id}} بنجاح"
     },
+    "hidePassword": "إخفاء كلمة المرور",
     "showPassword": "عرض كلمة المرور",
     "generateUUID": "إنشاء UUID الإصدار 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "قوة كلمة المرور",
+    "generate": "إنشاء كلمة مرور آمنة",
+    "copy": "نسخ كلمة المرور",
+    "copied": "تم نسخ كلمة المرور!",
+    "strength": {
+      "weak": "كلمة مرور ضعيفة",
+      "medium": "كلمة مرور متوسطة",
+      "strong": "كلمة مرور قوية"
+    },
+    "criteria": {
+      "minLength": "على الأقل {{count}} حرفًا",
+      "uppercase": "حرف كبير (A-Z)",
+      "lowercase": "حرف صغير (a-z)",
+      "numbers": "رقم (0-9)",
+      "specialChars": "حرف خاص (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "خطأ 401 – غير مصرح",
@@ -106,6 +125,13 @@
       "max": "يجب أن يكون الرقم أقل من أو يساوي {{accepted}}",
       "maxlength": "يجب أن تحتوي السلسلة على {{accepted}} حرفًا كحد أقصى",
       "maxbytes": "لا يمكن أن يتجاوز الملف {{accepted}}",
+      "password": {
+        "minLength": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل",
+        "requireUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+        "requireLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
+        "requireNumbers": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+        "requireSpecialChars": "يجب أن تحتوي كلمة المرور على حرف خاص واحد على الأقل: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "تنسيق غير صالح",
       "required": "مطلوب",
       "url": "تنسيق URL غير صالح"

@@ -22,6 +22,7 @@
       "successfullyUpdated": "रिकॉर्ड ID {{id}} सफलतापूर्वक अपडेट किया गया",
       "successfullyDeleted": "रिकॉर्ड ID {{id}} सफलतापूर्वक हटाया गया"
     },
+    "hidePassword": "Hide password",
     "showPassword": "पासवर्ड दिखाएँ",
     "generateUUID": "संस्करण 4 UUID उत्पन्न करें"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "त्रुटि 401 – अनधिकृत",
@@ -106,6 +125,13 @@
       "max": "संख्या {{accepted}} से कम या बराबर होनी चाहिए",
       "maxlength": "स्ट्रिंग में अधिकतम {{accepted}} वर्ण होने चाहिए",
       "maxbytes": "फ़ाइल {{accepted}} से अधिक नहीं हो सकती",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "अमान्य प्रारूप",
       "required": "आवश्यक",
       "url": "अमान्य URL प्रारूप"

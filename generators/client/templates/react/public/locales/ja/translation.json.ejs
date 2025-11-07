@@ -22,6 +22,7 @@
       "successfullyUpdated": "レコード ID {{id}} が正常に更新されました",
       "successfullyDeleted": "レコード ID {{id}} が正常に削除されました"
     },
+    "hidePassword": "Hide password",
     "showPassword": "パスワードを表示",
     "generateUUID": "バージョン4 UUID を生成"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "エラー 401 – 認証されていません",
@@ -106,6 +125,13 @@
       "max": "数値は {{accepted}} 以下である必要があります",
       "maxlength": "文字列は最大 {{accepted}} 文字を含む必要があります",
       "maxbytes": "ファイルは {{accepted}} を超えることはできません",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "無効な形式",
       "required": "必須",
       "url": "無効なURL形式"

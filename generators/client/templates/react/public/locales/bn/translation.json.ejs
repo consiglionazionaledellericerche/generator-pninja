@@ -22,6 +22,7 @@
       "successfullyUpdated": "রেকর্ড ID {{id}} সফলভাবে আপডেট হয়েছে",
       "successfullyDeleted": "রেকর্ড ID {{id}} সফলভাবে মুছে ফেলা হয়েছে"
     },
+    "hidePassword": "পাসওয়ার্ড লুকান",
     "showPassword": "পাসওয়ার্ড দেখান",
     "generateUUID": "সংস্করণ 4 UUID তৈরি করুন"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "পাসওয়ার্ডের শক্তি",
+    "generate": "নিরাপদ পাসওয়ার্ড তৈরি করুন",
+    "copy": "পাসওয়ার্ড কপি করুন",
+    "copied": "পাসওয়ার্ড কপি হয়েছে!",
+    "strength": {
+      "weak": "দুর্বল পাসওয়ার্ড",
+      "medium": "মাঝারি পাসওয়ার্ড",
+      "strong": "শক্তিশালী পাসওয়ার্ড"
+    },
+    "criteria": {
+      "minLength": "কমপক্ষে {{count}} অক্ষর",
+      "uppercase": "একটি বড় হাতের অক্ষর (A-Z)",
+      "lowercase": "একটি ছোট হাতের অক্ষর (a-z)",
+      "numbers": "একটি সংখ্যা (0-9)",
+      "specialChars": "একটি বিশেষ অক্ষর (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "ত্রুটি 401 – অননুমোদিত",
@@ -106,6 +125,13 @@
       "max": "সংখ্যাটি {{accepted}} বা তার কম হতে হবে",
       "maxlength": "স্ট্রিংটিতে সর্বাধিক {{accepted}} অক্ষর থাকতে পারে",
       "maxbytes": "ফাইলটি {{accepted}} অতিক্রম করতে পারবে না",
+      "password": {
+        "minLength": "পাসওয়ার্ডে কমপক্ষে 8টি অক্ষর থাকতে হবে",
+        "requireUppercase": "পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর থাকতে হবে",
+        "requireLowercase": "পাসওয়ার্ডে কমপক্ষে একটি ছোট হাতের অক্ষর থাকতে হবে",
+        "requireNumbers": "পাসওয়ার্ডে কমপক্ষে একটি সংখ্যা থাকতে হবে",
+        "requireSpecialChars": "পাসওয়ার্ডে কমপক্ষে একটি বিশেষ অক্ষর থাকতে হবে: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "অবৈধ ফরম্যাট",
       "required": "প্রয়োজনীয়",
       "url": "অবৈধ URL ফরম্যাট"

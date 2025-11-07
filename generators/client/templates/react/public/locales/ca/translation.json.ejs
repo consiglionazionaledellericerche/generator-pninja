@@ -22,6 +22,7 @@
       "successfullyUpdated": "Registre ID {{id}} actualitzat correctament",
       "successfullyDeleted": "Registre ID {{id}} eliminat correctament"
     },
+    "hidePassword": "Amaga la contrasenya",
     "showPassword": "Mostra la contrasenya",
     "generateUUID": "Genera un UUID versió 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Força de la contrasenya",
+    "generate": "Genera una contrasenya segura",
+    "copy": "Copia la contrasenya",
+    "copied": "Contrasenya copiada!",
+    "strength": {
+      "weak": "Contrasenya feble",
+      "medium": "Contrasenya mitjana",
+      "strong": "Contrasenya forta"
+    },
+    "criteria": {
+      "minLength": "Com a mínim {{count}} caràcters",
+      "uppercase": "Una lletra majúscula (A-Z)",
+      "lowercase": "Una lletra minúscula (a-z)",
+      "numbers": "Un número (0-9)",
+      "specialChars": "Un caràcter especial (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Error 401 – No autoritzat",
@@ -106,6 +125,13 @@
       "max": "El número ha de ser menor o igual a {{accepted}}",
       "maxlength": "El text pot contenir com a màxim {{accepted}} caràcter(s)",
       "maxbytes": "El fitxer no pot superar {{accepted}}",
+      "password": {
+        "minLength": "La contrasenya ha de contenir almenys 8 caràcters",
+        "requireUppercase": "La contrasenya ha de contenir almenys una lletra majúscula",
+        "requireLowercase": "La contrasenya ha de contenir almenys una lletra minúscula",
+        "requireNumbers": "La contrasenya ha de contenir almenys un número",
+        "requireSpecialChars": "La contrasenya ha de contenir almenys un caràcter especial: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "Format no vàlid",
       "required": "Obligatori",
       "url": "Format d'URL no vàlid"

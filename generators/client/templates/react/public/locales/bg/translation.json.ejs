@@ -22,6 +22,7 @@
       "successfullyUpdated": "Записът с ID {{id}} е актуализиран успешно",
       "successfullyDeleted": "Записът с ID {{id}} е изтрит успешно"
     },
+    "hidePassword": "Скрий паролата",
     "showPassword": "Покажи паролата",
     "generateUUID": "Генерирай UUID версия 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Сила на паролата",
+    "generate": "Генерирай сигурна парола",
+    "copy": "Копирай паролата",
+    "copied": "Паролата е копирана!",
+    "strength": {
+      "weak": "Слаба парола",
+      "medium": "Средна парола",
+      "strong": "Силна парола"
+    },
+    "criteria": {
+      "minLength": "Поне {{count}} символа",
+      "uppercase": "Главна буква (A-Z)",
+      "lowercase": "Малка буква (a-z)",
+      "numbers": "Число (0-9)",
+      "specialChars": "Специален символ (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Грешка 401 – Неоторизиран",
@@ -106,6 +125,13 @@
       "max": "Числото трябва да бъде по-малко или равно на {{accepted}}",
       "maxlength": "Текстът трябва да съдържа най-много {{accepted}} символ(а)",
       "maxbytes": "Файлът не може да надвишава {{accepted}}",
+      "password": {
+        "minLength": "Паролата трябва да съдържа поне 8 символа",
+        "requireUppercase": "Паролата трябва да съдържа поне една главна буква",
+        "requireLowercase": "Паролата трябва да съдържа поне една малка буква",
+        "requireNumbers": "Паролата трябва да съдържа поне едно число",
+        "requireSpecialChars": "Паролата трябва да съдържа поне един специален символ: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "Невалиден формат",
       "required": "Задължително",
       "url": "Невалиден формат на URL"

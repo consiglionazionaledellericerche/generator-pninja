@@ -22,6 +22,7 @@
       "successfullyUpdated": "Запис ID {{id}} успешно ажуриран",
       "successfullyDeleted": "Запис ID {{id}} успешно обрисан"
     },
+    "hidePassword": "Hide password",
     "showPassword": "Прикажи лозинку",
     "generateUUID": "Генериши UUID верзију 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Грешка 401 – Неовлашћено",
@@ -106,6 +125,13 @@
       "max": "Број мора бити мањи или једнак {{accepted}}",
       "maxlength": "Текст може садржати највише {{accepted}} карактера",
       "maxbytes": "Фајл не може прећи {{accepted}}",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "Неисправан формат",
       "required": "Обавезно",
       "url": "Неисправан URL формат"

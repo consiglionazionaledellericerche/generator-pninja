@@ -22,6 +22,7 @@
       "successfullyUpdated": "Record ID {{id}} aggiornato con successo",
       "successfullyDeleted": "Record ID {{id}} eliminato con successo"
     },
+    "hidePassword": "Nascondi password",
     "showPassword": "Mostra password",
     "generateUUID": "Genera un UUID versione 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Forza della password",
+    "generate": "Genera password sicura",
+    "copy": "Copia password",
+    "copied": "Password copiata!",
+    "strength": {
+      "weak": "Password debole",
+      "medium": "Password media",
+      "strong": "Password forte"
+    },
+    "criteria": {
+      "minLength": "Almeno {{count}} caratteri",
+      "uppercase": "Una lettera maiuscola (A-Z)",
+      "lowercase": "Una lettera minuscola (a-z)",
+      "numbers": "Un numero (0-9)",
+      "specialChars": "Un carattere speciale (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Errore 401 – Accesso non autorizzato",
@@ -108,6 +127,13 @@
       "maxbytes": "Il file non può superare {{accepted}}",
       "pattern": "Formato non valido",
       "required": "Obbligatorio",
+      "password": {
+        "minLength": "La password deve contenere almeno 8 caratteri",
+        "requireUppercase": "La password deve contenere almeno una lettera maiuscola",
+        "requireLowercase": "La password deve contenere almeno una lettera minuscola",
+        "requireNumbers": "La password deve contenere almeno un numero",
+        "requireSpecialChars": "La password deve contenere almeno un carattere speciale: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "url": "Formato URL non valido"
     }
   },

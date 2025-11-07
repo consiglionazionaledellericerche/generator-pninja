@@ -22,6 +22,7 @@
       "successfullyUpdated": "Irekhodi le-ID {{id}} libuyekezwe ngempumelelo",
       "successfullyDeleted": "Irekhodi le-ID {{id}} lisusiwe ngempumelelo"
     },
+    "hidePassword": "Hide password",
     "showPassword": "Bonisa iphasiwedi",
     "generateUUID": "Dala i-UUID enguqulo 4"
   },
@@ -69,6 +70,24 @@
       ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
+  "password": {
+    "strengthLabel": "Password Strength",
+    "generate": "Generate secure password",
+    "copy": "Copy password",
+    "copied": "Password copied!",
+    "strength": {
+      "weak": "Weak password",
+      "medium": "Medium password",
+      "strong": "Strong password"
+    },
+    "criteria": {
+      "minLength": "At least {{count}} characters",
+      "uppercase": "An uppercase letter (A-Z)",
+      "lowercase": "A lowercase letter (a-z)",
+      "numbers": "A number (0-9)",
+      "specialChars": "A special character (!@#$%&*...)"
+    }
+  },
   "errors": {
     "401": {
       "title": "Iphutha 401 – Akugunyaziwe",
@@ -106,6 +125,13 @@
       "max": "Inombolo kufanele ibe ncane noma ilingane no-{{accepted}}",
       "maxlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
       "maxbytes": "Ifayela alikwazi ukudlula {{accepted}}",
+      "password": {
+        "minLength": "The password must contain at least 8 characters",
+        "requireUppercase": "The password must contain at least one uppercase letter",
+        "requireLowercase": "The password must contain at least one lowercase letter",
+        "requireNumbers": "The password must contain at least one number",
+        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+      },
       "pattern": "Ifomethi ayivumelekile",
       "required": "Kuyadingeka",
       "url": "Ifomethi ye-URL ayivumelekile"
