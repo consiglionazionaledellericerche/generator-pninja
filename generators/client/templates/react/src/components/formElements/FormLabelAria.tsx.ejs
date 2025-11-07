@@ -12,10 +12,7 @@ const FormLabelAria: React.FC<FormLabelProps> = ({ children, validations }) => {
     <Label className="text-sm font-medium">
       {children}
       {validations?.required && (
-        <AsteriskIcon
-          aria-hidden="true"
-          className="inline align-top size-5 sm:size-4"
-        />
+        <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
       )}
     </Label>
   );

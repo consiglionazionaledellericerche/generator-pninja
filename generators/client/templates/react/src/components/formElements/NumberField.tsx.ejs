@@ -1,12 +1,13 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors } from './index';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
 import {
   TextField as TextFieldAria,
   Input,
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
-interface NumberFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -17,12 +18,7 @@ interface NumberFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'child
   };
 }
 
-const NumberField: React.FC<NumberFieldProps> = ({
-  fieldName,
-  label,
-  validations,
-  ...ariaProps
-}) => {
+const NumberField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
   const { required, min, max } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {
@@ -55,9 +51,15 @@ const NumberField: React.FC<NumberFieldProps> = ({
   });
 
   return (
-    <TextFieldAria isInvalid={!!error} {...ariaProps} type="number">
+    <TextFieldAria
+      isInvalid={!!error}
+      isRequired={validations?.required}
+      {...ariaProps}
+      type="number"
+    >
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value || ''} className="form-field" />
+      <FormFieldInfo validations={validations || {}} />
       <FormErrors error={error} />
     </TextFieldAria>
   );
