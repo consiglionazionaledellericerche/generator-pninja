@@ -29,7 +29,7 @@ export async function createReactClient(that, parsedJDL) {
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
     const languages = [nativeLanguage, ...that.config.get('languages')] || ['en', 'es', 'it', 'fr', 'de'];
 
-    that.spawnCommandSync('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts']);
+    that.spawnCommandSync('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts', '--no-install']);
 
     that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), {});
     that.fs.copyTpl(that.templatePath('react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
@@ -235,5 +235,5 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`), {});
 
-    that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
+    // that.spawnCommandSync('npm', ['i'], { cwd: 'client' });
 }
