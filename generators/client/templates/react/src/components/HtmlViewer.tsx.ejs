@@ -1,49 +1,78 @@
 import React, { useState } from 'react';
 import { Eye, CodeXml, Lightbulb, LightbulbOff } from 'lucide-react';
+import { Button } from 'react-aria-components';
+import { useTranslation } from 'react-i18next';
+import { useId } from 'react-aria';
 
 interface TextareaProps {
   content: string | null | undefined;
 }
 
 const HtmlViewer: React.FC<TextareaProps> = ({ content }) => {
-  const uid = (Math.random() + 1).toString(36).substring(7);
+  const { t } = useTranslation();
   const [showSource, setShowSource] = useState(false);
   const [dark, setDark] = useState(false);
+  const textareaId = useId();
+  const uid = textareaId.replace(/:/g, '--');
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-2">
-        <button
+      <div
+        role="toolbar"
+        aria-label={t('ui.htmlViewer.controls')}
+        className="flex justify-between items-center mb-2"
+      >
+        <Button
           onClick={() => setShowSource(!showSource)}
-          className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors"
+          aria-label={t(showSource ? 'ui.htmlViewer.viewRendering' : 'ui.htmlViewer.viewSource')}
+          aria-pressed={showSource}
+          className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors focus:outline-3 focus:outline-offset-3 focus:outline-blue-600 focus:dark:outline-blue-500"
         >
           <Eye
+            aria-hidden="true"
             size={28}
             className={`rounded-full ${!showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
           />
           <CodeXml
+            aria-hidden="true"
             size={28}
             className={`rounded-full ${showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
           />
-        </button>
+        </Button>
         {!showSource && (
-          <button
+          <Button
             onClick={() => setDark(!dark)}
-            className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors"
+            aria-label={t(dark ? 'ui.darkmode.light' : 'ui.darkmode.dark')}
+            aria-pressed={dark}
+            className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors  focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-blue-600 focus-within:dark:outline-blue-500"
           >
             <Lightbulb
+              aria-hidden="true"
               size={28}
               className={`rounded-full ${!dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
             />
             <LightbulbOff
+              aria-hidden="true"
               size={28}
               className={`rounded-full ${dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
             />
-          </button>
+            <span className="sr-only">
+              {t(dark ? 'ui.darkmode.darkOn' : 'ui.darkmode.lightOn')}
+            </span>
+          </Button>
         )}
       </div>
       {showSource && (
-        <div className="bg-black text-emerald-500 p-2 rounded-md font-mono text-sm">
-          <textarea readOnly={true} className="code w-full min-h-[300px] focus:outline-none">
+        <div className="bg-black text-emerald-400 p-2 rounded-md font-mono text-sm focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-blue-600 focus-within:dark:outline-blue-500">
+          <label htmlFor={textareaId} className="sr-only">
+            {t('ui.htmlViewer.source')}
+          </label>
+          <textarea
+            id={textareaId}
+            readOnly={true}
+            aria-readonly={true}
+            className="code w-full min-h-[300px] focus:outline-none"
+          >
             {content}
           </textarea>
         </div>
@@ -52,6 +81,8 @@ const HtmlViewer: React.FC<TextareaProps> = ({ content }) => {
         <>
           <div
             id={`pn-htmlviewer-${uid}`}
+            role="region"
+            aria-label={t('ui.htmlViewer.renderedContent')}
             className={`p-2 rounded-lg shadow ${!dark ? 'bg-neutral-50 text-black' : 'text-white bg-neutral-950'} rounded-lg`}
             dangerouslySetInnerHTML={{ __html: content || '' }}
           ></div>

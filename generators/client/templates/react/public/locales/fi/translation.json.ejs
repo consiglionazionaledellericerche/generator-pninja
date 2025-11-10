@@ -22,7 +22,7 @@
       "successfullyUpdated": "Tietue ID {{id}} päivitetty onnistuneesti",
       "successfullyDeleted": "Tietue ID {{id}} poistettu onnistuneesti"
     },
-    "hidePassword": "Hide password",
+    "hidePassword": "Piilota salasana",
     "showPassword": "Näytä salasana",
     "generateUUID": "Luo versio 4 UUID"
   },
@@ -71,21 +71,21 @@
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
   "password": {
-    "strengthLabel": "Password Strength",
-    "generate": "Generate secure password",
-    "copy": "Copy password",
-    "copied": "Password copied!",
+    "strengthLabel": "Salasanan vahvuus",
+    "generate": "Luo turvallinen salasana",
+    "copy": "Kopioi salasana",
+    "copied": "Salasana kopioitu!",
     "strength": {
-      "weak": "Weak password",
-      "medium": "Medium password",
-      "strong": "Strong password"
+      "weak": "Heikko salasana",
+      "medium": "Keskivahva salasana",
+      "strong": "Vahva salasana"
     },
     "criteria": {
-      "minLength": "At least {{count}} characters",
-      "uppercase": "An uppercase letter (A-Z)",
-      "lowercase": "A lowercase letter (a-z)",
-      "numbers": "A number (0-9)",
-      "specialChars": "A special character (!@#$%&*...)"
+      "minLength": "Vähintään {{count}} merkkiä",
+      "uppercase": "Iso kirjain (A-Z)",
+      "lowercase": "Pieni kirjain (a-z)",
+      "numbers": "Numero (0-9)",
+      "specialChars": "Erikoismerkki (!@#$%&*...)"
     }
   },
   "errors": {
@@ -126,11 +126,11 @@
       "maxlength": "Teksti voi sisältää enintään {{accepted}} merkkiä",
       "maxbytes": "Tiedosto ei voi ylittää {{accepted}}",
       "password": {
-        "minLength": "The password must contain at least 8 characters",
-        "requireUppercase": "The password must contain at least one uppercase letter",
-        "requireLowercase": "The password must contain at least one lowercase letter",
-        "requireNumbers": "The password must contain at least one number",
-        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+        "minLength": "Salasanan on sisällettävä vähintään 8 merkkiä",
+        "requireUppercase": "Salasanan on sisällettävä vähintään yksi iso kirjain",
+        "requireLowercase": "Salasanan on sisällettävä vähintään yksi pieni kirjain",
+        "requireNumbers": "Salasanan on sisällettävä vähintään yksi numero",
+        "requireSpecialChars": "Salasanan on sisällettävä vähintään yksi erikoismerkki: !@#$%&*()_-+=[]{}:;'\",.?/"
       },
       "pattern": "Virheellinen muoto",
       "required": "Pakollinen",
@@ -180,7 +180,20 @@
     },
     "darkmode": {
       "light": "Vaihda vaaleaan tilaan",
-      "dark": "Vaihda tummaan tilaan"
+      "lightOn": "Vaalea teema käytössä",
+      "dark": "Vaihda tummaan tilaan",
+      "darkOn": "Tumma teema käytössä"
+    },
+    "htmlViewer": {
+      "controls": "Näytä hallintapainikkeet",
+      "viewSource": "Näytä lähdekoodi",
+      "viewRendering": "Näytä esikatselu",
+      "source": "HTML-lähdekoodi (vain luku)",
+      "sourceSection": "Lähdekoodiosio",
+      "renderedSection": "Renderöity sisältöosio",
+      "renderedContent": "Renderöity HTML-sisältö",
+      "sourceActive": "Lähdekooditila käytössä",
+      "renderingActive": "Esikatselutila käytössä"
     }
   }
 }

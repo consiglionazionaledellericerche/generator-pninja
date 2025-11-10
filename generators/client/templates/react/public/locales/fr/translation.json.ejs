@@ -22,7 +22,7 @@
       "successfullyUpdated": "Enregistrement ID {{id}} mis à jour avec succès",
       "successfullyDeleted": "Enregistrement ID {{id}} supprimé avec succès"
     },
-    "hidePassword": "Hide password",
+    "hidePassword": "Masquer le mot de passe",
     "showPassword": "Afficher le mot de passe",
     "generateUUID": "Générer un UUID version 4"
   },
@@ -71,23 +71,23 @@
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
   "password": {
-    "strengthLabel": "Password Strength",
-    "generate": "Generate secure password",
-    "copy": "Copy password",
-    "copied": "Password copied!",
+    "strengthLabel": "Force du mot de passe",
+    "generate": "Générer un mot de passe sécurisé",
+    "copy": "Copier le mot de passe",
+    "copied": "Mot de passe copié !",
     "strength": {
-      "weak": "Weak password",
-      "medium": "Medium password",
-      "strong": "Strong password"
+      "weak": "Mot de passe faible",
+      "medium": "Mot de passe moyen",
+      "strong": "Mot de passe fort"
     },
     "criteria": {
-      "minLength": "At least {{count}} characters",
-      "uppercase": "An uppercase letter (A-Z)",
-      "lowercase": "A lowercase letter (a-z)",
-      "numbers": "A number (0-9)",
-      "specialChars": "A special character (!@#$%&*...)"
+      "minLength": "Au moins {{count}} caractères",
+      "uppercase": "Une lettre majuscule (A-Z)",
+      "lowercase": "Une lettre minuscule (a-z)",
+      "numbers": "Un chiffre (0-9)",
+      "specialChars": "Un caractère spécial (!@#$%&*...)"
     }
-  },
+    },
   "errors": {
     "401": {
       "title": "Erreur 401 – Accès non autorisé",
@@ -126,11 +126,11 @@
       "maxlength": "La chaîne doit contenir au plus {{accepted}} caractère(s)",
       "maxbytes": "Le fichier ne peut pas dépasser {{accepted}}",
       "password": {
-        "minLength": "The password must contain at least 8 characters",
-        "requireUppercase": "The password must contain at least one uppercase letter",
-        "requireLowercase": "The password must contain at least one lowercase letter",
-        "requireNumbers": "The password must contain at least one number",
-        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+        "minLength": "Le mot de passe doit contenir au moins 8 caractères",
+        "requireUppercase": "Le mot de passe doit contenir au moins une lettre majuscule",
+        "requireLowercase": "Le mot de passe doit contenir au moins une lettre minuscule",
+        "requireNumbers": "Le mot de passe doit contenir au moins un chiffre",
+        "requireSpecialChars": "Le mot de passe doit contenir au moins un caractère spécial : !@#$%&*()_-+=[]{}:;'\",.?/"
       },
       "pattern": "Format invalide",
       "required": "Obligatoire",
@@ -180,7 +180,20 @@
     },
     "darkmode": {
       "light": "Passer en mode clair",
-      "dark": "Passer en mode sombre"
+      "lightOn": "Thème clair actif",
+      "dark": "Passer en mode sombre",
+      "darkOn": "Thème sombre actif"
+    },
+    "htmlViewer": {
+      "controls": "Voir les contrôles",
+      "viewSource": "Voir le code source",
+      "viewRendering": "Voir l'aperçu",
+      "source": "Code source HTML (lecture seule)",
+      "sourceSection": "Section du code source",
+      "renderedSection": "Section du contenu rendu",
+      "renderedContent": "Contenu HTML rendu",
+      "sourceActive": "Mode code source actif",
+      "renderingActive": "Mode aperçu actif"
     }
   }
 }

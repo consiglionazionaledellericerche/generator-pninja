@@ -58,7 +58,7 @@ const NumberField: React.FC<TextFieldProps> = ({ fieldName, label, validations, 
       type="number"
     >
       <FormLabel validations={validations}>{label}</FormLabel>
-      <Input {...field} value={field.value || ''} className="form-field" />
+      <Input {...field} value={field.value ?? ''} className="form-field" />
       <FormFieldInfo validations={validations || {}} />
       <FormErrors error={error} />
     </TextFieldAria>

@@ -22,7 +22,7 @@
       "successfullyUpdated": "{{id}} azonosítójú rekord sikeresen frissítve",
       "successfullyDeleted": "{{id}} azonosítójú rekord sikeresen törölve"
     },
-    "hidePassword": "Hide password",
+    "hidePassword": "Jelszó elrejtése",
     "showPassword": "Jelszó megjelenítése",
     "generateUUID": "4-es verziójú UUID generálása"
   },
@@ -71,21 +71,21 @@
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
   "password": {
-    "strengthLabel": "Password Strength",
-    "generate": "Generate secure password",
-    "copy": "Copy password",
-    "copied": "Password copied!",
+    "strengthLabel": "Jelszó erőssége",
+    "generate": "Biztonságos jelszó generálása",
+    "copy": "Jelszó másolása",
+    "copied": "Jelszó másolva!",
     "strength": {
-      "weak": "Weak password",
-      "medium": "Medium password",
-      "strong": "Strong password"
+      "weak": "Gyenge jelszó",
+      "medium": "Közepes jelszó",
+      "strong": "Erős jelszó"
     },
     "criteria": {
-      "minLength": "At least {{count}} characters",
-      "uppercase": "An uppercase letter (A-Z)",
-      "lowercase": "A lowercase letter (a-z)",
-      "numbers": "A number (0-9)",
-      "specialChars": "A special character (!@#$%&*...)"
+      "minLength": "Legalább {{count}} karakter",
+      "uppercase": "Egy nagybetű (A-Z)",
+      "lowercase": "Egy kisbetű (a-z)",
+      "numbers": "Egy szám (0-9)",
+      "specialChars": "Egy speciális karakter (!@#$%&*...)"
     }
   },
   "errors": {
@@ -126,11 +126,11 @@
       "maxlength": "A szöveg legfeljebb {{accepted}} karaktert tartalmazhat",
       "maxbytes": "A fájl nem haladhatja meg a következőt: {{accepted}}",
       "password": {
-        "minLength": "The password must contain at least 8 characters",
-        "requireUppercase": "The password must contain at least one uppercase letter",
-        "requireLowercase": "The password must contain at least one lowercase letter",
-        "requireNumbers": "The password must contain at least one number",
-        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+        "minLength": "A jelszónak legalább 8 karaktert kell tartalmaznia",
+        "requireUppercase": "A jelszónak legalább egy nagybetűt kell tartalmaznia",
+        "requireLowercase": "A jelszónak legalább egy kisbetűt kell tartalmaznia",
+        "requireNumbers": "A jelszónak legalább egy számot kell tartalmaznia",
+        "requireSpecialChars": "A jelszónak legalább egy speciális karaktert kell tartalmaznia: !@#$%&*()_-+=[]{}:;'\",.?/"
       },
       "pattern": "Érvénytelen formátum",
       "required": "Kötelező",
@@ -180,7 +180,20 @@
     },
     "darkmode": {
       "light": "Váltás világos módra",
-      "dark": "Váltás sötét módra"
+      "lightOn": "Világos téma aktív",
+      "dark": "Váltás sötét módra",
+      "darkOn": "Sötét téma aktív"
+    },
+    "htmlViewer": {
+      "controls": "Vezérlők megtekintése",
+      "viewSource": "Forráskód megtekintése",
+      "viewRendering": "Előnézet megtekintése",
+      "source": "HTML forráskód (csak olvasható)",
+      "sourceSection": "Forráskód szekció",
+      "renderedSection": "Renderelt tartalom szekció",
+      "renderedContent": "Renderelt HTML tartalom",
+      "sourceActive": "Forráskód mód aktív",
+      "renderingActive": "Előnézeti mód aktív"
     }
   }
 }

@@ -10,17 +10,17 @@
       "delete": "Slett",
       "edit": "Rediger",
       "save": "Lagre",
-      "saving": "Lagrer...",
+      "saving": "Lagrer…",
       "update": "Oppdater",
       "view": "Vis",
       "file": {
         "markedForDeletion": "Fil merket for sletting (Lagre for å bekrefte)",
         "viewOrDownload": "Vis/Last ned",
-        "replaceWarning": "Å velge en ny fil vil erstatte den eksisterende"
+        "replaceWarning": "Å velge ny fil vil erstatte den eksisterende"
       },
-      "successfullyCreated": "Post ID {{id}} opprettet",
-      "successfullyUpdated": "Post ID {{id}} oppdatert",
-      "successfullyDeleted": "Post ID {{id}} slettet"
+      "successfullyCreated": "Oppføring med ID {{id}} opprettet",
+      "successfullyUpdated": "Oppføring med ID {{id}} oppdatert",
+      "successfullyDeleted": "Oppføring med ID {{id}} slettet"
     },
     "hidePassword": "Skjul passord",
     "showPassword": "Vis passord",
@@ -34,10 +34,10 @@
       "placeholder": "Velg et alternativ",
       "noOptions": "Ingen alternativer",
       "noValue": "Ingen verdi",
-      "loading": "Laster alternativer...",
-      "searchMultiple": "Velg eller søk etter en eller flere verdier",
+      "loading": "Laster alternativer…",
+      "searchMultiple": "Velg eller søk etter én eller flere verdier",
       "searchSingle": "Velg eller søk etter en verdi",
-      "selectMultiple": "Velg en eller flere verdier",
+      "selectMultiple": "Velg én eller flere verdier",
       "selectSingle": "Velg en verdi"
     },
     "show": {
@@ -60,7 +60,7 @@
     "solr": "Solr"
   },
   "entities": {
-    "entities": "Entiteter",
+    "entities": "Enheter",
     <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
       `\n      "${entity.name}": "${to.capital(entity.name)}"`,
       `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
@@ -71,38 +71,38 @@
     ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
   },
   "password": {
-    "strengthLabel": "Password Strength",
-    "generate": "Generate secure password",
-    "copy": "Copy password",
-    "copied": "Password copied!",
+    "strengthLabel": "Passordstyrke",
+    "generate": "Generer sikkert passord",
+    "copy": "Kopier passord",
+    "copied": "Passord kopiert!",
     "strength": {
-      "weak": "Weak password",
-      "medium": "Medium password",
-      "strong": "Strong password"
+      "weak": "Svakt passord",
+      "medium": "Middels passord",
+      "strong": "Sterkt passord"
     },
     "criteria": {
-      "minLength": "At least {{count}} characters",
-      "uppercase": "An uppercase letter (A-Z)",
-      "lowercase": "A lowercase letter (a-z)",
-      "numbers": "A number (0-9)",
-      "specialChars": "A special character (!@#$%&*...)"
+      "minLength": "Minst {{count}} tegn",
+      "uppercase": "En stor bokstav (A-Z)",
+      "lowercase": "En liten bokstav (a-z)",
+      "numbers": "Et tall (0-9)",
+      "specialChars": "Et spesialtegn (!@#$%&*…)"
     }
   },
   "errors": {
     "401": {
       "title": "Feil 401 – Uautorisert",
-      "message": "Du må logge inn for å få tilgang til denne siden. Vennligst sjekk påloggingsinformasjonen din og prøv igjen."
+      "message": "Du må logge inn for å få tilgang til denne siden. Sjekk dine brukerdetaljer og prøv igjen."
     },
     "403": {
       "title": "Oops! Feil 403 – Beklager, {{username}}",
-      "message": "Hei <1>{{username}}</1>, vi gjenkjenner deg, men du har ikke de rette tillatelsene for å få tilgang til denne siden. Hvis du tror dette er en feil, ta kontakt med oss!"
+      "message": "Hei <1>{{username}}</1>, vi kjenner deg igjen, men du har ikke de nødvendige rettighetene for å få tilgang til denne siden. Hvis du mener dette er feil, ta kontakt med oss!"
     },
     "404": {
       "title": "Oops! Feil 404 – Siden ble ikke funnet",
-      "message": "Det ser ut til at siden du leter etter ikke eksisterer lenger. Den kan ha blitt flyttet eller slettet. Sjekk URL-en eller gå tilbake til forsiden!"
+      "message": "Det ser ut til at siden du leter etter ikke lenger eksisterer. Den kan ha blitt flyttet eller slettet. Sjekk URL-en eller gå tilbake til startsiden!"
     },
     "entities": {
-      "create": "Feil ved opprettelse",
+      "create": "Feil ved oppretting",
       "read": "Feil ved lesing",
       "update": "Feil ved oppdatering",
       "delete": "Feil ved sletting"
@@ -120,17 +120,17 @@
         "required": "Filen er påkrevd"
       },
       "min": "Tallet må være større enn eller lik {{accepted}}",
-      "minlength": "Teksten må inneholde minst {{accepted}} tegn",
+      "minlength": "Strengen må inneholde minst {{accepted}} tegn",
       "minbytes": "Filen må være minst {{accepted}}",
       "max": "Tallet må være mindre enn eller lik {{accepted}}",
-      "maxlength": "Teksten kan inneholde maksimalt {{accepted}} tegn",
+      "maxlength": "Strengen må inneholde maksimalt {{accepted}} tegn",
       "maxbytes": "Filen kan ikke overstige {{accepted}}",
       "password": {
-        "minLength": "The password must contain at least 8 characters",
-        "requireUppercase": "The password must contain at least one uppercase letter",
-        "requireLowercase": "The password must contain at least one lowercase letter",
-        "requireNumbers": "The password must contain at least one number",
-        "requireSpecialChars": "The password must contain at least one special character: !@#$%&*()_-+=[]{}:;'\",.?/"
+        "minLength": "Passordet må inneholde minst 8 tegn",
+        "requireUppercase": "Passordet må inneholde minst én stor bokstav",
+        "requireLowercase": "Passordet må inneholde minst én liten bokstav",
+        "requireNumbers": "Passordet må inneholde minst ett tall",
+        "requireSpecialChars": "Passordet må inneholde minst ett spesialtegn: !@#$%&*()_-+=[]{}:;'\",.?/"
       },
       "pattern": "Ugyldig format",
       "required": "Påkrevd",
@@ -154,17 +154,17 @@
   "info": {
     "validations": {
       "min": "Tallet må være større enn eller lik {{accepted}}",
-      "minlength": "Teksten må inneholde minst {{accepted}} tegn",
+      "minlength": "Strengen må inneholde minst {{accepted}} tegn",
       "minbytes": "Filen må være minst {{accepted}}",
       "max": "Tallet må være mindre enn eller lik {{accepted}}",
-      "maxlength": "Teksten kan inneholde maksimalt {{accepted}} tegn",
+      "maxlength": "Strengen må inneholde maksimalt {{accepted}} tegn",
       "maxbytes": "Filen kan ikke overstige {{accepted}}",
       "required": "Påkrevd",
       "unique": "Verdien må være unik"
     }
   },
   "messages": {
-    "noData": "Ingen poster funnet"
+    "noData": "Ingen oppføringer funnet"
   },
   "pages": {
     "Home": "Dashbord"
@@ -172,15 +172,28 @@
   "ui": {
     "account": {
       "login": "Logg inn",
-      "loggingIn": "Logger inn...",
+      "loggingIn": "Logger inn…",
       "logout": "Logg ut",
-      "loggingOut": "Logger ut...",
+      "loggingOut": "Logger ut…",
       "logoutError": "Feil ved utlogging",
       "unknownError": "Ukjent feil"
     },
     "darkmode": {
       "light": "Bytt til lys modus",
-      "dark": "Bytt til mørk modus"
+      "lightOn": "Lyst tema aktivt",
+      "dark": "Bytt til mørk modus",
+      "darkOn": "Mørkt tema aktivt"
+    },
+    "htmlViewer": {
+      "controls": "Vis kontroller",
+      "viewSource": "Vis kildetekst",
+      "viewRendering": "Vis forhåndsvisning",
+      "source": "HTML-kildetekst (skriv beskyttet)",
+      "sourceSection": "Kildetekstavsnitt",
+      "renderedSection": "Gjengitt innholdsdel",
+      "renderedContent": "Gjengitt HTML-innhold",
+      "sourceActive": "Kildetekstmodus aktiv",
+      "renderingActive": "Forhåndsvisningsmodus aktiv"
     }
   }
 }
