@@ -4,6 +4,7 @@ import prettyBytes from 'pretty-bytes';
 
 interface FormFieldInfoProps {
   validations: IFormFieldInfo;
+  id?: string;
 }
 interface IFormFieldInfo {
   min?: number;
@@ -43,10 +44,10 @@ const FormFieldInfoContents: React.FC<FormFieldInfoProps> = ({ validations }) =>
     : null;
 };
 
-const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations, ...ariaProps }) => {
+const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations, id, ...ariaProps }) => {
   return Object.keys(validations).length ? (
     <p className="text-sm mt-1">
-      <Text slot="description">
+      <Text slot="description" id={id ?? undefined}>
         <FormFieldInfoContents validations={validations} {...ariaProps} />
       </Text>
     </p>

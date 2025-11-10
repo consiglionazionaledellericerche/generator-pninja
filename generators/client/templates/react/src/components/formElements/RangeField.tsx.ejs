@@ -1,6 +1,14 @@
 import { useFormContext, useController } from 'react-hook-form';
 import { FormLabelAria as FormLabel, FormFieldInfo } from './index';
-import { Slider, SliderOutput, SliderThumb, SliderTrack, SliderProps } from 'react-aria-components';
+import {
+  Slider,
+  SliderOutput,
+  SliderThumb,
+  SliderTrack,
+  SliderProps,
+  SliderContext,
+} from 'react-aria-components';
+import { useId } from 'react-aria';
 
 interface RangeFieldProps extends Omit<SliderProps, 'minValue' | 'maxValue' | 'children'> {
   fieldName: string;
@@ -17,43 +25,49 @@ const RangeField: React.FC<RangeFieldProps> = ({
   ...ariaProps
 }) => {
   const { control } = useFormContext();
-
   const { field } = useController({
     name: fieldName,
     control,
   });
 
+  const descriptionId = useId();
+
   return (
-    <Slider
-      {...ariaProps}
-      {...field}
-      value={field.value}
-      step={ariaProps.step ? Number(ariaProps.step) : 1}
-      minValue={minValue}
-      maxValue={maxValue}
-      className={'has-[>[data-orientation=horizontal]]:grid grid-cols-2 gap-0 w-full pb-2'}
-    >
-      <FormLabel
-        validations={{
-          min: minValue,
-          max: maxValue,
-        }}
+    <SliderContext.Provider value={{ 'aria-describedby': descriptionId }}>
+      <Slider
+        {...ariaProps}
+        {...field}
+        value={field.value}
+        step={ariaProps.step ? Number(ariaProps.step) : 1}
+        minValue={minValue}
+        maxValue={maxValue}
+        className={'has-[>[data-orientation=horizontal]]:grid grid-cols-2 gap-0 w-full pb-2'}
       >
-        {label}
-      </FormLabel>
-      <SliderOutput className="ltr:text-right rtl:text-left" aria-live="polite" />
-      <SliderTrack className="group col-span-2 relative data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full data-[orientation=vertical]:ms-2 data-[orientation=vertical]:h-[200px] data-[orientation=vertical]:w-2 rounded-full bg-slate-200 my-3">
-        <SliderThumb className="group-data-[orientation=horizontal]:top-[50%] group-data-[orientation=vertical]:left-[50%] bg-blue-600 h-6 w-6 rounded-full data-dragging:outline-2 data-dragging:outline-offset-3 data-dragging:outline-blue-600 data-focus-visible:outline-2 data-focus-visible:outline-offset-3 data-focus-visible:outline-blue-500 ring-3 ring-slate-50 dark:ring-slate-900 " />
-      </SliderTrack>
-      <div className="col-span-2 ">
-        <FormFieldInfo
+        <FormLabel
           validations={{
             min: minValue,
             max: maxValue,
           }}
-        />
-      </div>
-    </Slider>
+        >
+          {label}
+        </FormLabel>
+        <SliderOutput className="ltr:text-right rtl:text-left" aria-live="polite" />
+        <SliderTrack className="group col-span-2 relative data-[orientation=horizontal]:h-2 data-[orientation=horizontal]:w-full data-[orientation=vertical]:ms-2 data-[orientation=vertical]:h-[200px] data-[orientation=vertical]:w-2 rounded-full bg-slate-200 my-3">
+          <SliderThumb className="group-data-[orientation=horizontal]:top-[50%] group-data-[orientation=vertical]:left-[50%] p-3 rounded-full relative data-dragging:outline-2 data-dragging:outline-offset-0 data-dragging:outline-blue-600 data-focus-visible:outline-2 data-focus-visible:outline-offset-0 data-focus-visible:outline-blue-500">
+            <div className="bg-blue-600 h-6 w-6 rounded-full ring-3 ring-slate-50 dark:ring-slate-900" />
+          </SliderThumb>
+        </SliderTrack>
+        <div className="col-span-2">
+          <FormFieldInfo
+            id={descriptionId}
+            validations={{
+              min: minValue,
+              max: maxValue,
+            }}
+          />
+        </div>
+      </Slider>
+    </SliderContext.Provider>
   );
 };
 
