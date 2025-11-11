@@ -11,6 +11,7 @@ import {
   ListBoxItem,
   SearchField,
   SearchFieldProps as SearchFieldPropsAria,
+  Text,
 } from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
 import { useApi } from '../../hooks/useApi';
@@ -18,10 +19,14 @@ import { HttpError } from '../../hooks/useApi';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
-import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
+import {
+  FormLabelAria as FormLabel,
+  FormErrorsAria as FormErrors,
+  FormFieldInfoContents,
+} from './index';
 
 const tagClassName =
-  'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-sm font-medium flex-shrink-0';
+  'inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-1 text-md font-medium flex-shrink-0';
 
 interface ISelectFieldOption {
   name: number | string;
@@ -95,6 +100,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   const perPage = optionsLoad?.perPage ?? 10;
   const [selected, setSelected] = useState<Selection>(new Set([]));
   const searchable = optionsLoad?.searchable ?? true;
+  const listboxId = `${fieldName}-listbox`;
   const { addNotification } = useNotifications();
 
   const list = useAsyncList<ISelectFieldOption>({
@@ -322,7 +328,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
         isInvalid={!!error}
         onChange={setSearchTerm}
         onFocus={() => setListIsOpen(true)}
-        aria-label="Search"
+        aria-expanded={listIsOpen}
+        aria-haspopup="listbox"
       >
         <FormLabel validations={validations}>{label}</FormLabel>
         <div
@@ -346,35 +353,41 @@ const SelectField: React.FC<SelectFieldProps> = ({
                     : t('common.select.selectSingle'))
               }
               className="px-2 flex-1 min-w-0 border-none outline-0 placeholder-slate-600 dark:placeholder-slate-300 font-[inherit] [&::-webkit-search-cancel-button]:hidden"
+              aria-controls={listIsOpen ? listboxId : undefined}
             />
             {searchTerm && (
-              <Button className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible">
-                <XIcon aria-hidden className="w-4 h-4" />
+              <Button
+                aria-label={t('common.cancel')}
+                className="text-md text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible"
+              >
+                <XIcon aria-hidden className="w-6 h-6" />
               </Button>
             )}
             <Button
-              className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible"
+              aria-hidden
+              className="text-md text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible"
               onClick={() => setListIsOpen((prev) => !prev)}
             >
-              <ChevronsUpDownIcon aria-hidden className="w-4 h-4" />
+              <ChevronsUpDownIcon aria-hidden className="w-6 h-6" />
             </Button>
           </div>
           {selectedOptions.length > 0 && (
-            <div className="flex flex-wrap gap-1 w-full mt-1">
+            <div role="list" className="flex flex-wrap gap-1 w-full mt-1">
               {selectedOptions.map((option) => (
-                <span key={option.id} className={tagClassName}>
+                <div role="listitem" key={option.id} className={tagClassName}>
                   {option.name}
                   <button
+                    aria-label={`${t('actions.crud.delete')} ${option.name}`}
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveTag(option);
                     }}
-                    className="ms-1 hover:text-red-600 hover:dark:text-red-500 hover:bg-white rounded-full cursor-pointer"
+                    className="p-1 ms-1 hover:text-red-600 hover:dark:text-red-500 hover:bg-white rounded-full cursor-pointer"
                   >
-                    <XIcon className="w-4 h-4" />
+                    <XIcon aria-hidden className="w-6 h-6" />
                   </button>
-                </span>
+                </div>
               ))}
             </div>
           )}
@@ -383,12 +396,12 @@ const SelectField: React.FC<SelectFieldProps> = ({
           <div className="relative">
             {list.items.length > 0 ? (
               <ListBox
+                id={listboxId}
                 onFocusChange={setListIsOpen}
                 selectionBehavior="toggle"
                 selectionMode={multiple ? 'multiple' : 'single'}
                 selectedKeys={selected}
                 onSelectionChange={handleSelectionChange}
-                aria-label="Select options"
                 renderEmptyState={() => ''}
                 className="
             absolute z-10 top-0 right-0 left-0
@@ -428,8 +441,23 @@ const SelectField: React.FC<SelectFieldProps> = ({
             )}
           </div>
         )}
-        <FormFieldInfo validations={validations || {}} />
-        <FormErrors error={error} />
+        <p className="text-sm mt-1">
+          <Text slot="description" aria-live="polite" aria-atomic="true">
+            {Object.keys(validations || {}).length && (
+              <FormFieldInfoContents validations={validations || {}} {...ariaProps} />
+            )}
+            {Object.keys(validations || {}).length && '; '}
+            {t(
+              selectedOptions.length === 1
+                ? 'common.select.oneElementSelected'
+                : 'common.select.nElementsSelected',
+              { count: selectedOptions.length }
+            )}
+          </Text>
+        </p>
+        <div role="alert">
+          <FormErrors error={error} />
+        </div>
       </SearchField>
     </div>
   );
