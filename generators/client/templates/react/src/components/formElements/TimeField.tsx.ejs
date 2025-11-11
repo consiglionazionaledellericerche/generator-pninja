@@ -1,40 +1,51 @@
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
+import {
+  TextField as TextFieldAria,
+  Input,
+  TextFieldProps as TextFieldPropsAria,
+} from 'react-aria-components';
 
-interface TimeFieldProps {
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
+  placeholder?: string;
   validations?: {
     required?: boolean;
   };
 }
 
-const TimeField: React.FC<TimeFieldProps> = ({ fieldName, label, validations }) => {
+const TimeField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
   const { required } = validations || {};
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-
-  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+  const { control } = useFormContext();
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
 
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules,
+  });
+
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <input
-        type="time"
-        step={1}
-        id={fieldName}
-        {...register(fieldName, opts)}
-        className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
-      />
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+    <TextFieldAria
+      isInvalid={!!error}
+      isRequired={validations?.required}
+      {...ariaProps}
+      type="time"
+    >
+      <FormLabel validations={validations}>{label}</FormLabel>
+      <Input {...field} value={field.value ?? undefined} className="form-field" step={1} />
+      <FormFieldInfo validations={validations || {}} />
+      <FormErrors error={error} />
+    </TextFieldAria>
   );
 };
 

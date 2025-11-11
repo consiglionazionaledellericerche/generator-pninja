@@ -11,9 +11,11 @@ const FormErrorsAria: React.FC<FormErrorsProps> = ({ error }) => {
   if (!error?.message) return null;
   const [message, accepted, actual] = error.message.split(':') || [];
   return (
-    <FieldErrorAria className="block mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500">
-      {t(message, { accepted, actual: actual })}
-    </FieldErrorAria>
+    <div role="alert">
+      <FieldErrorAria className="block mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500">
+        {t(message, { accepted, actual: actual })}
+      </FieldErrorAria>
+    </div>
   );
 };
 
