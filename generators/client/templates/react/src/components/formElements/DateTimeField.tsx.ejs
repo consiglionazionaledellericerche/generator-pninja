@@ -10,7 +10,7 @@ import {
 interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
-  placeholder?: string;
+  step?: number;
   validations?: {
     required?: boolean;
   };
@@ -19,6 +19,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'childre
 const DateTimeField: React.FC<TextFieldProps> = ({
   fieldName,
   label,
+  step,
   validations,
   ...ariaProps
 }) => {
@@ -47,7 +48,7 @@ const DateTimeField: React.FC<TextFieldProps> = ({
       type="datetime-local"
     >
       <FormLabel validations={validations}>{label}</FormLabel>
-      <Input {...field} value={field.value ?? undefined} className="form-field" step={1} />
+      <Input {...field} value={field.value ?? undefined} className="form-field" step={step ?? 1} />
       <FormFieldInfo validations={validations || {}} />
       <FormErrors error={error} />
     </TextFieldAria>
