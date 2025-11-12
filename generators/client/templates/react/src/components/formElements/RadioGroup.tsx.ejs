@@ -67,12 +67,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               {'' === String(field.value) ? (
                 <CircleCheck
                   aria-hidden
-                  className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6 text-blue-700 dark:text-sky-300"
+                  className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
                 />
               ) : (
                 <Circle
                   aria-hidden
-                  className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                  className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
                 />
               )}
               {t('common.select.noValue')}
@@ -82,12 +82,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
                 {String(op.id) === String(field.value) ? (
                   <CircleCheck
                     aria-hidden
-                    className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6 text-blue-700 dark:text-sky-300"
+                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
                   />
                 ) : (
                   <Circle
                     aria-hidden
-                    className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
                   />
                 )}
                 {op.name}
