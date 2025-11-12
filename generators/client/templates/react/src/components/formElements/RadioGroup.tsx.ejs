@@ -1,17 +1,23 @@
 import { useTranslation } from 'react-i18next';
-import { useFormContext } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
+import {
+  RadioGroup as RadioGroupAria,
+  RadioGroupProps as RadioGroupPropsAria,
+  Radio,
+} from 'react-aria-components';
+import { Circle, CircleCheck } from 'lucide-react';
+
 interface IRadioGroupOption {
   name: number | string | React.ReactNode;
   id: number | string;
 }
 
-interface RadioGroupProps {
+interface RadioGroupProps extends Omit<RadioGroupPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   loadingOptions?: boolean;
-  multiple?: boolean;
   options: IRadioGroupOption[];
   validations?: {
     required?: boolean;
@@ -24,63 +30,61 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   loadingOptions,
   options,
   validations,
+  ...ariaProps
 }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
+  const { control } = useFormContext();
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
+  if (required) {
+    rules.required = 'errors.validations.required';
+  }
   const {
-    register,
-    formState: { errors },
-  } = useFormContext();
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules,
+  });
 
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <div className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}>
+    <RadioGroupAria
+      {...field}
+      isInvalid={!!error}
+      isRequired={validations?.required}
+      {...ariaProps}
+    >
+      <FormLabel validations={validations}>{label}</FormLabel>
+      <div className={error ? 'form-field-error' : 'form-field'}>
         {loadingOptions ? (
           <div>{t('common.select.loading')}</div>
         ) : options.length === 0 ? (
-          <label className="flex gap-2 items-center">
-            <input
-              type="radio"
-              value={undefined}
-              disabled
-              {...register(fieldName, {
-                required: required ? 'errors.validations.required' : false,
-              })}
-            />
-            {t('common.select.noOptions')}
-          </label>
+          <div>{t('common.select.noOptions')}</div>
         ) : (
-          <>
+          <div className="flex flex-col gap-2">
             {options.map((op) => (
-              <label className="flex gap-2 items-center" key={op.id}>
-                <input
-                  type="radio"
-                  value={op.id}
-                  {...register(fieldName, {
-                    required: required ? 'errors.validations.required' : false,
-                  })}
-                />
+              <Radio key={op.id} value={String(op.id)} className="flex gap-2 items-center group">
+                {String(op.id) === String(field.value) ? (
+                  <CircleCheck
+                    aria-hidden
+                    className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6 text-blue-700 dark:text-sky-300"
+                  />
+                ) : (
+                  <Circle
+                    aria-hidden
+                    className="group-data-focused:rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                  />
+                )}
                 {op.name}
-              </label>
+              </Radio>
             ))}
-            {!required && (
-              <label className="flex gap-2 items-center">
-                <input
-                  value={undefined}
-                  type="radio"
-                  {...register(fieldName, {
-                    required: required ? 'errors.validations.required' : false,
-                  })}
-                />
-                {t('common.select.noValue')}
-              </label>
-            )}
-          </>
+          </div>
         )}
       </div>
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+      <FormFieldInfo validations={validations || {}} />
+      <FormErrors error={error} />
+    </RadioGroupAria>
   );
 };
 
