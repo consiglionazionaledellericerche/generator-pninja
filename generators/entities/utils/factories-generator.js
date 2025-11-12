@@ -128,6 +128,8 @@ export class FactoriesGenerator {
                     return `substr(str_pad(fake()->unique()->lastName(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (to.snake(field.name).includes('name')) {
                     return `substr(str_pad(fake()->unique()->name(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
+                } else if (to.snake(field.name).includes('password')) {
+                    return `fake()->unique()->password(${minlength || 16}, ${maxlength || 32})`;
                 } else if (field.name.toLowerCase().includes('phone')) {
                     return `substr(str_pad(fake()->unique()->phoneNumber(), ${minlength || 0}, '0', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (field.name.toLowerCase().includes('address')) {
