@@ -51,20 +51,20 @@ const Menu: React.FC = () => {
     <nav className="nav-bar">
       <Link
         to="/"
-        className="rounded-full focus:outline-none hover:ring-4 hover:ring-blue-600 hover:dark:ring-blue-500 focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-blue-500"
+        className="rounded-full focus:outline-none hover:ring-4 hover:ring-blue-600 hover:dark:ring-sky-300 focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300"
       >
         <img className="h-8 w-8 max-w-8" src={appLogo} alt="" />
       </Link>
       <Link
         to="/"
-        className="rounded-md text-xl hover:text-black hover:dark:text-white hover:text-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-blue-500"
+        className="rounded-md text-xl hover:text-black hover:dark:text-white hover:text-bold focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300"
       >
         {t('appName')}
       </Link>
       <span className="grow"></span>
       <button
         type="button"
-        className={`inline-flex items-center p-0 w-10 h-10 justify-center rounded-md md:hidden focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-blue-500 bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-300`}
+        className={`inline-flex items-center p-0 w-10 h-10 justify-center rounded-md md:hidden focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300 bg-slate-300 text-slate-900 dark:bg-slate-700 dark:text-slate-300`}
         aria-expanded={menuVisible ? 'true' : 'false'}
         onClick={(e) => {
           e.stopPropagation();
@@ -128,7 +128,7 @@ const Menu: React.FC = () => {
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
               <MenuItems onAction={(k) => navigate(`/entities/${k}`)} className="outline-0">
 <%            entities.forEach((entity, index) => {-%>
-                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-blue-500 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
+                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
                     {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                 </MenuItem>
 <%            });-%>
