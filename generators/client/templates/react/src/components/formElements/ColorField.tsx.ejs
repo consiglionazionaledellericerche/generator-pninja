@@ -6,6 +6,7 @@ import {
   Input,
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
+import { useId } from 'react-aria';
 
 interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
@@ -23,6 +24,10 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
   if (required) {
     rules.required = 'errors.validations.required';
   }
+  rules.pattern = {
+    value: /^#[0-9A-Fa-f]{6}$/,
+    message: 'errors.validations.pattern',
+  };
 
   const {
     field,
@@ -32,15 +37,11 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
     control,
     rules,
   });
-
+  const describedById = useId().replace(/:/g, '--');
   return (
-    <TextFieldAria
-      isInvalid={!!error}
-      isRequired={validations?.required}
-      {...ariaProps}
-      type="color"
-    >
+    <TextFieldAria type="color" isInvalid={!!error} {...ariaProps}>
       <FormLabel validations={validations}>{label}</FormLabel>
+
       <div
         className={`
         mt-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 p-2
@@ -62,19 +63,32 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
         }
         `}
       >
-        <div className="flex flex-col items-center gap-0 w-22">
-          <Input {...field} value={field.value || ''} className="h-21 w-21 block" />
-          <Input
-            placeholder="#******"
+        <div className="flex items-center gap-2">
+          <div className="h-10 w-10 rounded-full overflow-hidden flex items-center ring-3 ring-black">
+            <Input {...field} value={field.value || undefined} className="h-14 w-14 p-0! -m-2" />
+          </div>
+
+          <input
+            required={required}
+            aria-invalid={!!error}
+            type="text"
             value={field.value || ''}
             onChange={field.onChange}
-            type="text"
-            className="text-center text-sm border-b-1 p-0.5 w-16 font-mono focus:outline-none bg-transparent"
+            onBlur={field.onBlur}
+            ref={field.ref}
+            name={`${field.name}_hex`}
+            placeholder="#RRGGBB"
+            pattern="^#[0-9A-Fa-f]{6}$"
+            aria-label={`${label} - Hex CodeInput`}
+            className="border-b-1 py-0.5 w-[4.5em] font-mono focus:outline-none bg-transparent"
+            aria-describedby={describedById}
           />
         </div>
       </div>
-      <FormFieldInfo validations={validations || {}} />
-      <FormErrors error={error} />
+      <div id={describedById}>
+        <FormFieldInfo validations={validations || {}} />
+        <FormErrors error={error} />
+      </div>
     </TextFieldAria>
   );
 };
