@@ -1,8 +1,13 @@
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
+import {
+  TextField as TextFieldAria,
+  Input,
+  TextFieldProps as TextFieldPropsAria,
+} from 'react-aria-components';
 
-interface ColorFieldProps {
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   validations?: {
@@ -10,30 +15,67 @@ interface ColorFieldProps {
   };
 }
 
-const ColorField: React.FC<ColorFieldProps> = ({ fieldName, label, validations }) => {
+const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
   const { required } = validations || {};
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-
-  const opts: RegisterOptions<FieldValues, string> | undefined = {};
+  const { control } = useFormContext();
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
 
   if (required) {
-    opts.required = 'errors.validations.required';
+    rules.required = 'errors.validations.required';
   }
 
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules,
+  });
+
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
-      <input
-        type="color"
-        id={fieldName}
-        {...register(fieldName, opts)}
-        className="h-10 w-20 form-field"
-      />
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+    <TextFieldAria
+      isInvalid={!!error}
+      isRequired={validations?.required}
+      {...ariaProps}
+      type="color"
+    >
+      <FormLabel validations={validations}>{label}</FormLabel>
+      <div
+        className={`
+        mt-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 p-2
+        focus-within:outline-3
+        focus-within:outline-offset-3 focus-within:outline-blue-600
+        focus-within:dark:outline-sky-300 rounded-md block
+        ${
+          error
+            ? `
+        focus-within:ring-0
+        focus-within:outline-3
+        focus-within:outline-offset-3
+        focus-within:outline-red-600!
+        focus-within:dark:outline-red-500!
+        ring-2
+        ring-red-600
+        dark:ring-red-500`
+            : ''
+        }
+        `}
+      >
+        <div className="flex flex-col items-center gap-0 w-22">
+          <Input {...field} value={field.value || ''} className="h-21 w-21 block" />
+          <Input
+            placeholder="#******"
+            value={field.value || ''}
+            onChange={field.onChange}
+            type="text"
+            className="text-center text-sm border-b-1 p-0.5 w-16 font-mono focus:outline-none bg-transparent"
+          />
+        </div>
+      </div>
+      <FormFieldInfo validations={validations || {}} />
+      <FormErrors error={error} />
+    </TextFieldAria>
   );
 };
 
