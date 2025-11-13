@@ -5,11 +5,12 @@ import { Label } from 'react-aria-components';
 interface FormLabelProps {
   children?: React.ReactNode;
   validations?: IInfoValidations;
+  id?: string;
 }
 
-const FormLabelAria: React.FC<FormLabelProps> = ({ children, validations }) => {
+const FormLabelAria: React.FC<FormLabelProps> = ({ children, validations, id, ...ariaProps }) => {
   return (
-    <Label className="text-sm font-medium">
+    <Label className="text-sm font-medium" id={id ?? undefined} {...ariaProps}>
       {children}
       {validations?.required && (
         <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />

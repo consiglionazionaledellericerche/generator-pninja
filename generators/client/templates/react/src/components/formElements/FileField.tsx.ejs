@@ -2,9 +2,9 @@ import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { FileIcon, FileImageIcon, EditIcon, Trash2Icon, Undo2Icon, InfoIcon } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { useFormContext, useController, FieldError } from 'react-hook-form';
+import { FormLabelAria as FormLabel, FormFieldInfo } from './index';
+import { useId } from 'react-aria';
 
 type TransformedFileData = {
   data: string;
@@ -32,14 +32,14 @@ function fileToBase64(file: File): Promise<string> {
     reader.onload = () => {
       const result = reader.result;
       if (typeof result !== 'string') {
-        reject(new Error('Failed to read file as data URL'));
+        reject('Failed to read file as data URL');
         return;
       }
       // Removes "data:mime/type;base64," and keeps only the base64
       const base64 = result.split(',')[1];
       resolve(base64);
     };
-    reader.onerror = () => reject(new Error('Error reading file'));
+    reader.onerror = () => reject('Error reading file');
     reader.readAsDataURL(file);
   });
 }
@@ -53,11 +53,20 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
   const { required, minbytes, maxbytes } = validations || {};
   const inputRef = useRef<HTMLInputElement>(null);
   const {
+    control,
     register,
     setValue,
     trigger,
     formState: { errors },
   } = useFormContext();
+
+  const {
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules: {},
+  });
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
@@ -133,9 +142,16 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
     }, 0);
   };
 
+  const fieldId = useId();
+  const labelId = useId();
+  const errorId = useId();
+  const descriptionId = useId();
+
   return (
     <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+      <FormLabel id={labelId} validations={validations}>
+        {label}
+      </FormLabel>
       <div>
         {hasFile && !shouldShowInput && !isMarkedForDeletion && (
           <div className="mt-3 p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md">
@@ -145,14 +161,15 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                 className="hover:underline flex items-center"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`${t('actions.crud.file.viewOrDownload')} ${entityData?.[`${fieldName}_name`]} (${t('common.opensInNewWindow')})`}
               >
                 {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
-                  <FileImageIcon className="me-2 h-4 w-4" />
+                  <FileImageIcon aria-hidden className="me-2 h-4 w-4" />
                 ) : (
-                  <FileIcon className="me-2 h-4 w-4" />
+                  <FileIcon aria-hidden className="me-2 h-4 w-4" />
                 )}
                 {t('actions.crud.file.viewOrDownload')}{' '}
-                {entityData?.[`${fieldName}_name`] as string}
+                {entityData?.[`${fieldName}_name`] as string} ({t('common.opensInNewWindow')})
               </a>
               <div className="flex items-center gap-2">
                 <button
@@ -160,7 +177,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                   onClick={() => setShouldShowInput(true)}
                   className="flex items-center text-sm  cursor-pointer font-medium"
                 >
-                  <EditIcon className="me-1 h-4 w-4" />
+                  <EditIcon aria-hidden className="me-1 h-4 w-4" />
                   {t('actions.crud.edit')}
                 </button>
                 <button
@@ -168,7 +185,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                   onClick={() => markForDeletion(true)}
                   className="flex items-center text-sm  cursor-pointer font-medium"
                 >
-                  <Trash2Icon className="me-1 h-4 w-4" />
+                  <Trash2Icon aria-hidden className="me-1 h-4 w-4" />
                   {t('actions.crud.delete')}
                 </button>
               </div>
@@ -180,7 +197,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
           <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-red-800 dark:text-red-200">
-                <Trash2Icon className="me-2 h-4 w-4" />
+                <Trash2Icon aria-hidden className="me-2 h-4 w-4" />
                 <span className="text-sm font-medium">
                   {t('actions.crud.file.markedForDeletion')}
                 </span>
@@ -190,7 +207,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                 onClick={() => markForDeletion(false)}
                 className="flex items-center text-sm cursor-pointer font-medium"
               >
-                <Undo2Icon className="me-2 h-4 w-4" />
+                <Undo2Icon aria-hidden className="me-2 h-4 w-4" />
                 {t('common.undo')}
               </button>
             </div>
@@ -203,7 +220,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
               <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center text-yellow-800 dark:text-yellow-200">
-                    <InfoIcon className="me-2 h-4 w-4" />
+                    <InfoIcon aria-hidden className="me-2 h-4 w-4" />
                     <span className="text-sm font-medium">
                       {t('actions.crud.file.replaceWarning')}
                     </span>
@@ -213,7 +230,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
                     onClick={() => undoEdit()}
                     className="flex items-center text-sm cursor-pointer font-medium"
                   >
-                    <Undo2Icon className="me-2 h-4 w-4" />
+                    <Undo2Icon aria-hidden className="me-2 h-4 w-4" />
                     {t('common.cancel')}
                   </button>
                 </div>
@@ -221,7 +238,14 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
             )}
             <input
               type="file"
-              id={fieldName}
+              required={required && !hasFile && !isMarkedForDeletion}
+              aria-invalid={!!error}
+              aria-labelledby={labelId}
+              aria-describedby={
+                [validations ? descriptionId : '', error ? errorId : ''].join(' ').trim() ||
+                undefined
+              }
+              id={fieldId}
               accept={accept ?? '*/*'}
               {...registerProps}
               onChange={handleFileChange}
@@ -231,8 +255,24 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
           </div>
         </div>
       </div>
-      <FormErrors errors={errors} fieldName={fieldName} />
+      {validations && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
+      {error && <Error id={errorId} error={error} />}
     </>
+  );
+};
+
+const Error: React.FC<{ error: FieldError; id: string }> = ({ error, id }) => {
+  const { t } = useTranslation();
+  if (!error?.message) return null;
+  const [message, accepted, actual] = error.message.split(':') || [];
+  return (
+    <p
+      id={id}
+      role="alert"
+      className="block mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500"
+    >
+      {t(message, { accepted, actual: actual })}
+    </p>
   );
 };
 
