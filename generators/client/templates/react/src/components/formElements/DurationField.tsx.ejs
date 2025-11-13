@@ -1,9 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useFormContext, RegisterOptions, FieldValues } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { RegisterOptions, FieldValues } from 'react-hook-form';
+import { useFormContext, useController } from 'react-hook-form';
 import { Duration, serialize } from 'tinyduration';
 import { useTranslation } from 'react-i18next';
-import { FormLabel } from './FormLabel';
-import { FormErrors } from './FormErrors';
+import { FormLabelAria as FormLabel, FormErrorsAria as FormErrors, FormFieldInfo } from './index';
+import {
+  TextField as TextFieldAria,
+  Input,
+  TextFieldProps as TextFieldPropsAria,
+} from 'react-aria-components';
+import { useId } from 'react-aria';
 
 const durationToMs = (duration: Duration): number | undefined => {
   if (duration === undefined) {
@@ -58,7 +64,7 @@ const msToDuration = (ms: number | undefined): Duration | undefined => {
 const inputIsoClassName = (hasErrors = false) =>
   `mt-3 scheme-light dark:scheme-dark outline-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600 -outline-offset-2'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 
-interface DurationFieldProps {
+interface DurationFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -72,18 +78,27 @@ interface DurationFieldProps {
 const DurationField: React.FC<DurationFieldProps> = ({
   fieldName,
   label,
-  placeholder,
   showIso = true,
   validations,
+  ...ariaProps
 }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
+  const { control, setValue } = useFormContext();
+  const rules: RegisterOptions<FieldValues, string> | undefined = {};
+
+  if (required) {
+    rules.required = 'errors.validations.required';
+  }
+
   const {
-    register,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useFormContext();
+    field,
+    fieldState: { error },
+  } = useController({
+    name: fieldName,
+    control,
+    rules,
+  });
 
   const opts: RegisterOptions<FieldValues, string> | undefined = {
     valueAsNumber: true,
@@ -125,34 +140,50 @@ const DurationField: React.FC<DurationFieldProps> = ({
   }, [days, hours, minutes, seconds]);
 
   useEffect(() => {
-    if (!initialized && getValues(fieldName) !== undefined) {
-      setMilliseconds(getValues(fieldName));
-      const duration = msToDuration(getValues(fieldName));
+    if (!initialized && field.value !== undefined) {
+      setMilliseconds(field.value);
+      const duration = msToDuration(field.value);
       setDays(duration?.days ?? '');
       setHours(duration?.hours ?? '');
       setMinutes(duration?.minutes ?? '');
       setSeconds(duration?.seconds ?? '');
       setInitialized(true);
     }
-  }, [fieldName, getValues, initialized, milliseconds]);
+  }, [fieldName, field, initialized, milliseconds]);
 
   useEffect(() => {
     setValue(fieldName, milliseconds);
   }, [milliseconds, setValue, fieldName]);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dId = useId();
+  const hId = useId();
+  const mId = useId();
+  const sId = useId();
+  const iId = useId();
+  const descriptionId = useId();
+
   return (
-    <>
-      <FormLabel htmlFor={fieldName} label={label} validations={validations} />
+    <TextFieldAria isInvalid={!!error} {...ariaProps}>
+      <FormLabel validations={validations}>{label}</FormLabel>
       <div className="flex flex-col md:flex-row gap-2 mt-3">
         <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
-          <div className="text-xs">{t('fields.duration.days')}</div>
+          <label id={`${dId}-label`} htmlFor={dId} className="block text-xs">
+            {t('fields.duration.days')}
+          </label>
           <input
+            id={dId}
+            aria-labelledby={`${dId}-label`}
+            aria-describedby={descriptionId}
+            aria-invalid={!!error}
+            required={required}
+            ref={inputRef}
             type="number"
             placeholder={t('fields.duration.days')}
             value={days}
             step={1}
             min={0}
-            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+            className={error ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setDays('');
@@ -163,15 +194,22 @@ const DurationField: React.FC<DurationFieldProps> = ({
           />
         </div>
         <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
-          <div className="text-xs">{t('fields.duration.hours')}</div>
+          <label id={`${hId}-label`} htmlFor={hId} className="block text-xs">
+            {t('fields.duration.hours')}
+          </label>
           <input
+            id={hId}
+            aria-labelledby={`${hId}-label`}
+            aria-describedby={descriptionId}
+            aria-invalid={!!error}
+            required={required}
             type="number"
             placeholder={t('fields.duration.hours')}
             value={hours ?? ''}
             step={1}
             min={0}
             max={23}
-            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+            className={error ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setHours('');
@@ -182,15 +220,22 @@ const DurationField: React.FC<DurationFieldProps> = ({
           />
         </div>
         <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
-          <div className="text-xs">{t('fields.duration.minutes')}</div>
+          <label id={`${mId}-label`} htmlFor={mId} className="block text-xs">
+            {t('fields.duration.minutes')}
+          </label>
           <input
+            id={mId}
+            aria-labelledby={`${mId}-label`}
+            aria-describedby={descriptionId}
+            aria-invalid={!!error}
+            required={required}
             type="number"
             placeholder={t('fields.duration.minutes')}
             value={minutes ?? ''}
             step={1}
             min={0}
             max={59}
-            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+            className={error ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseInt(e.target.value, 10))) {
                 setMinutes('');
@@ -201,15 +246,22 @@ const DurationField: React.FC<DurationFieldProps> = ({
           />
         </div>
         <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
-          <div className="text-xs">{t('fields.duration.seconds')}</div>
+          <label id={`${sId}-label`} htmlFor={sId} className="block text-xs">
+            {t('fields.duration.seconds')}
+          </label>
           <input
+            id={sId}
+            aria-labelledby={`${sId}-label`}
+            aria-describedby={descriptionId}
+            aria-invalid={!!error}
+            required={required}
             type="number"
-            placeholder={t('fields.duration.minutes')}
+            placeholder={t('fields.duration.seconds')}
             value={seconds ?? ''}
             min={0}
             max={59.999}
             step={1}
-            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+            className={error ? 'form-field-error' : 'form-field'}
             onChange={(e) => {
               if (Number.isNaN(parseFloat(e.target.value))) {
                 setSeconds('');
@@ -221,8 +273,15 @@ const DurationField: React.FC<DurationFieldProps> = ({
         </div>
         {showIso && (
           <div className="md:w-1/5">
-            <div className="text-xs">ISO 8601</div>
+            <label id={`${iId}-label`} htmlFor={iId} className="block text-xs">
+              ISO 8601
+            </label>
             <input
+              id={iId}
+              aria-labelledby={`${iId}-label`}
+              aria-describedby={descriptionId}
+              aria-invalid={!!error}
+              required={required}
               tabIndex={-1}
               disabled={true}
               readOnly={true}
@@ -233,22 +292,26 @@ const DurationField: React.FC<DurationFieldProps> = ({
                   ? ''
                   : serialize(msToDuration(milliseconds) ?? {})
               }
-              className={`${inputIsoClassName(!!errors?.[fieldName]?.message)}`}
+              className={`${inputIsoClassName(!!error)}`}
             />
           </div>
         )}
         <div className="w-0 h-0 overflow-hidden">
-          <div className="text-xs">Total ms</div>
-          <input
+          <Input
+            tabIndex={-1}
+            aria-hidden="true"
+            {...field}
+            className={`${inputIsoClassName(!!error)}`}
             type="number"
-            {...(placeholder ? { placeholder } : {})}
-            id={fieldName}
-            {...register(fieldName, opts)}
+            onFocus={() => inputRef.current?.focus()}
           />
         </div>
       </div>
-      <FormErrors errors={errors} fieldName={fieldName} />
-    </>
+      <div id={descriptionId}>
+        <FormFieldInfo validations={validations || {}} />
+        <FormErrors error={error} />
+      </div>
+    </TextFieldAria>
   );
 };
 
