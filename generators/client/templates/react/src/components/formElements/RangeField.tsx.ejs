@@ -28,6 +28,7 @@ const RangeField: React.FC<RangeFieldProps> = ({
   const { field } = useController({
     name: fieldName,
     control,
+    defaultValue: false,
   });
 
   const descriptionId = useId();
