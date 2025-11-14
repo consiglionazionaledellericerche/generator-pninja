@@ -12,7 +12,7 @@ import {
   TextArea as TextAreaAria,
   Text,
 } from 'react-aria-components';
-import { useTextField } from 'react-aria';
+import { useId } from 'react-aria';
 import { useMemo, useRef, useEffect } from 'react';
 import JoditEditor from 'jodit-react';
 import type { IJodit } from 'jodit/types/types';
@@ -77,10 +77,9 @@ const Textarea: React.FC<TextareaProps> = ({
     });
   };
 
-  const { labelProps, inputProps, errorMessageProps, descriptionProps } = useTextField(
-    { label, validationState: error ? 'invalid' : 'valid', errorMessage: error?.message },
-    inputRef
-  );
+  const labelId = useId();
+  const descriptionId = useId();
+  const errorId = useId();
 
   useEffect(() => {
     if (!editorRef.current) return;
@@ -98,15 +97,20 @@ const Textarea: React.FC<TextareaProps> = ({
         field.ref(editorElement);
         editorElement.setAttribute('role', 'textbox');
         editorElement.setAttribute('aria-multiline', 'true');
-        ['aria-labelledby' as const, 'aria-describedby' as const, 'aria-invalid' as const].forEach(
-          (attr) => {
-            if (inputProps[attr]) {
-              editorElement.setAttribute(attr, String(inputProps[attr]));
-            } else {
-              editorElement.removeAttribute(attr);
-            }
-          }
-        );
+        editorElement.setAttribute('aria-labelledby', labelId);
+        if (error || validations)
+          editorElement.setAttribute(
+            'aria-describedby',
+            [validations ? descriptionId : '', error ? errorId : ''].join(' ').trim()
+          );
+        else {
+          editorElement.removeAttribute('aria-describedby');
+        }
+        if (error) {
+          editorElement.setAttribute('aria-invalid', 'true');
+        } else {
+          editorElement.removeAttribute('aria-invalid');
+        }
         const toolbar = editorElement
           .closest('.jodit-container')
           ?.querySelector('.jodit-toolbar__box');
@@ -116,7 +120,7 @@ const Textarea: React.FC<TextareaProps> = ({
         }
       }
     }
-  }, [inputProps, field]);
+  }, [field, error, validations, labelId, descriptionId, errorId]);
 
   const joditConfig = useMemo(
     () => ({
@@ -174,12 +178,9 @@ const Textarea: React.FC<TextareaProps> = ({
 
   return editor ? (
     <div>
-      <div className="flex items-center gap-1">
-        <label className="text-sm font-medium" {...labelProps}>
-          {label}
-        </label>
-        <InfoValidations validations={validations ?? {}} />
-      </div>
+      <FormLabel id={labelId} validations={validations}>
+        {label}
+      </FormLabel>
       <div
         className={
           error
@@ -199,15 +200,13 @@ const Textarea: React.FC<TextareaProps> = ({
         />
       </div>
       {error?.message && (
-        <p {...errorMessageProps} className="mt-1 text-sm text-red-600 dark:text-red-500">
+        <p id={errorId} role="alert" className="mt-1 text-sm text-red-600 dark:text-red-500">
           {t(message, { accepted, actual: actual })}
         </p>
       )}
       {!error?.message && validations && Object.keys(validations).length > 0 && (
-        <p className="text-sm" {...descriptionProps}>
-          <Text slot="description">
-            <FormFieldInfoContents validations={validations} {...ariaProps} />
-          </Text>
+        <p className="text-sm" id={descriptionId}>
+          <FormFieldInfoContents validations={validations} {...ariaProps} />
         </p>
       )}
     </div>
