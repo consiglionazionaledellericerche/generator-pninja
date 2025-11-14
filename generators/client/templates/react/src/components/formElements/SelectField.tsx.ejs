@@ -431,6 +431,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
           <div className="relative">
             {list.items.length > 0 ? (
               <ListBox
+                aria-label={
+                  multiple ? t('common.select.selectMultiple') : t('common.select.selectSingle')
+                }
                 id={listboxId}
                 onFocusChange={setListIsOpen}
                 selectionBehavior="toggle"
