@@ -13,7 +13,7 @@ const SearchInput: React.FC<ISearchInput> = ({ onChange, onClear }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const { t } = useTranslation();
   return (
-    <SearchField className="grid grid-cols-1 w-full">
+    <SearchField className="grid grid-cols-1 w-full" aria-label={t('common.search')}>
       <div className="cursor-pointer col-start-1 row-start-1 ms-2 self-center justify-self-start size-5 sm:size-4 relative">
         <Search aria-hidden className="h-full" />
       </div>
