@@ -7,7 +7,7 @@ import {
   RadioGroupProps as RadioGroupPropsAria,
   Radio,
 } from 'react-aria-components';
-import { Circle, CircleCheck } from 'lucide-react';
+import { Circle } from 'lucide-react';
 
 interface IRadioGroupOption {
   name: number | string | React.ReactNode;
@@ -69,7 +69,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
                   <Circle
                     aria-hidden
                     fill="currentColor"
-                    className="rounded-full outline-3 -outline-offset-6 outline-slate-600 w-6 h-6"
+                    className="rounded-full outline-3 -outline-offset-6 outline-slate-200 dark:outline-slate-600 w-6 h-6"
                   />
                 </div>
               ) : (
@@ -89,7 +89,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
                     <Circle
                       aria-hidden
                       fill="currentColor"
-                      className="rounded-full outline-3 -outline-offset-6 outline-slate-600 w-6 h-6"
+                      className="rounded-full outline-3 -outline-offset-6 outline-slate-200 dark:outline-slate-600 w-6 h-6"
                     />
                   </div>
                 ) : (
