@@ -43,7 +43,8 @@ const getStringFieldType = (name) => {
 }
 const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
 const hasCheckbox = entity?.body.filter(({type}) => type === 'Boolean').length > 0;
-const hasSelect = (enumsToImport.length + relatedEntities.length + foreignIds.length) > 0;
+const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
+const hasRadioGroup = enumsToImport.length > 0;
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
 const hasRelated = (relatedEntities.length + foreignIds.length) > 0;
 const isOptional = (validations) => !validations.reduce((required, validation) => required || validation.key === 'required', false);
@@ -145,14 +146,14 @@ import {
 <% if (hasPassword) {-%>
   PasswordField,
 <% } -%>
-<% if (hasUrl) {-%>
-  UrlField,
-<% } -%>
-<% if (hasTel) {-%>
-  TelField,
+<% if (hasRadioGroup) {-%>
+  RadioGroup,
 <% } -%>
 <% if (hasSelect) {-%>
   SelectField,
+<% } -%>
+<% if (hasTel) {-%>
+  TelField,
 <% } -%>
 <% if (hasTextarea) {-%>
   Textarea,
@@ -162,6 +163,9 @@ import {
 <% } -%>
 <% if (hasTime) {-%>
   TimeField,
+<% } -%>
+<% if (hasUrl) {-%>
+  UrlField,
 <% } -%>
 <% if (hasUUID) {-%>
   UuidField,
@@ -215,14 +219,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      for({name, type, validations} of entity.body) {-%>
           <div>
 <%        if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
-            <SelectField
+            <RadioGroup
               fieldName="<%= to.snake(name) %>"
               label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
               options={Object.values(<%= type %>).map((v) => ({
                 id: String(v),
                 name: String(v),
               }))}
-              initialValue={<%= to.camel(entity.name)%>?.<%= to.snake(name) %>}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
