@@ -1,11 +1,6 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import {
-  FormLabel,
-  FormErrors,
-  FormFieldInfo,
-  FormFieldInfoContents,
-} from './index';
+import { FormLabel, FormErrors, FormFieldInfo, FormFieldInfoContents } from './index';
 import {
   TextField as TextFieldAria,
   TextFieldProps as TextFieldPropsAria,
@@ -183,7 +178,7 @@ const Textarea: React.FC<TextareaProps> = ({
         className={
           error
             ? 'form-field-error p-1'
-            : 'form-field focus-within:outline-3 focus-within:outline-offset-3 focus-within:outline-blue-600! focus-within:dark:outline-sky-300! p-1'
+            : 'form-field focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600! focus-within:dark:outline-sky-300! p-1'
         }
         ref={inputRef}
       >

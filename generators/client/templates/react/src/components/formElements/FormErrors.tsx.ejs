@@ -11,7 +11,7 @@ const FormErrors: React.FC<FormErrorsProps> = ({ error }) => {
   if (!error?.message) return null;
   const [message, accepted, actual] = error.message.split(':') || [];
   return (
-    <p className="text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500">
+    <p className="text-sm mt-1 bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500">
       <FieldErrorAria>{t(message, { accepted, actual: actual })}</FieldErrorAria>
     </p>
   );
