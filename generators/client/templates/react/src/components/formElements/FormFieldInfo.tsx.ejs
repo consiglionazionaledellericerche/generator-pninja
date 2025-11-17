@@ -51,7 +51,7 @@ const FormFieldInfoContents: React.FC<FormFieldInfoProps> = ({ validations }) =>
 
 const FormFieldInfo: React.FC<FormFieldInfoProps> = ({ validations, id, ...ariaProps }) => {
   return Object.keys(validations).length ? (
-    <p className="text-sm mt-1">
+    <p className="text-sm">
       <Text slot="description" id={id ?? undefined}>
         <FormFieldInfoContents validations={validations} {...ariaProps} />
       </Text>

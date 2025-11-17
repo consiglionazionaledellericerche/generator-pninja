@@ -1,11 +1,10 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
 import { SquareIcon, SquareCheckBigIcon, AsteriskIcon } from 'lucide-react';
-import { FormFieldInfoContents } from './index';
+import { FormFieldInfo } from './index';
 import {
   Checkbox as CheckboxAria,
   CheckboxProps as CheckboxPropsAria,
-  Text,
 } from 'react-aria-components';
 import { useId } from 'react-aria';
 import { useTranslation } from 'react-i18next';
@@ -93,13 +92,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
           </div>
         </CheckboxAria>
       </div>
-      {validations && !error && (
-        <p className="text-sm mt-1">
-          <Text slot="description" id={descriptionId}>
-            <FormFieldInfoContents validations={validations} {...ariaProps} />
-          </Text>
-        </p>
-      )}
+      {!error && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
       {error && error?.message && (
         <p
           id={errorId}

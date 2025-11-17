@@ -49,7 +49,7 @@ const TimeField: React.FC<TextFieldProps> = ({
     >
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value ?? undefined} className="form-field" step={step ?? 1} />
-      <FormFieldInfo validations={validations || {}} />
+      {!error && <FormFieldInfo validations={validations || {}} />}
       <FormErrors error={error} />
     </TextFieldAria>
   );

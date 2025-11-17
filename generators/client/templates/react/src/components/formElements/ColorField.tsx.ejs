@@ -93,7 +93,7 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
         </div>
       </div>
       <div id={describedById}>
-        <FormFieldInfo validations={validations || {}} />
+        {!error && <FormFieldInfo validations={validations || {}} />}
         <FormErrors error={error} />
       </div>
     </TextFieldAria>

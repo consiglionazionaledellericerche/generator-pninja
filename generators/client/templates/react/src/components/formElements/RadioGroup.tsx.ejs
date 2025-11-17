@@ -108,7 +108,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
           </div>
         )}
       </div>
-      <FormFieldInfo validations={validations || {}} />
+      {!error && <FormFieldInfo validations={validations || {}} />}
       <FormErrors error={error} />
     </RadioGroupAria>
   );

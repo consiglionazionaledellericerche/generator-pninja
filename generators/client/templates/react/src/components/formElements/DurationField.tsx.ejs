@@ -313,7 +313,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
         </div>
       </div>
       <div id={descriptionId}>
-        <FormFieldInfo validations={validations || {}} />
+        {!error && <FormFieldInfo validations={validations || {}} />}
         <FormErrors error={error} />
       </div>
     </TextFieldAria>

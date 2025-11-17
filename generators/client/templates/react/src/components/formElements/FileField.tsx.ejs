@@ -252,7 +252,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
           />
         </div>
       </div>
-      {validations && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
+      {!error && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
       {error && <Error id={errorId} error={error} />}
     </>
   );
