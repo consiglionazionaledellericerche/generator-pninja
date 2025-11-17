@@ -65,11 +65,17 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
       >
         <div className="flex items-center gap-3">
           <div className="h-6 w-6 rounded-full overflow-hidden flex items-center ring-3 ring-black">
-            <Input {...field} value={field.value || undefined} className="h-10 w-10 p-0! -m-2" />
+            <Input
+              {...field}
+              value={field.value || undefined}
+              className={`h-10 w-10 p-0! -m-2${ariaProps.isReadOnly ? ' pointer-events-none' : ''}`}
+            />
           </div>
 
           <input
             required={required}
+            disabled={ariaProps.isDisabled}
+            readOnly={ariaProps.isReadOnly}
             aria-invalid={!!error}
             type="text"
             value={field.value || ''}

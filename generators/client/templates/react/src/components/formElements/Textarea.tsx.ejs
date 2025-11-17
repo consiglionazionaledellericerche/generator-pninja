@@ -10,17 +10,15 @@ import {
   TextField as TextFieldAria,
   TextFieldProps as TextFieldPropsAria,
   TextArea as TextAreaAria,
-  Text,
 } from 'react-aria-components';
 import { useId } from 'react-aria';
 import { useMemo, useRef, useEffect } from 'react';
 import JoditEditor from 'jodit-react';
 import type { IJodit } from 'jodit/types/types';
-import { InfoValidations } from './InfoValidations';
 import { useTranslation, getI18n } from 'react-i18next';
 import './Textarea.css';
 
-interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -125,8 +123,8 @@ const Textarea: React.FC<TextareaProps> = ({
   const joditConfig = useMemo(
     () => ({
       aria: true,
-      readonly: false,
-      disabled: false,
+      readonly: ariaProps.isReadOnly || false,
+      disabled: ariaProps.isDisabled || false,
       tabIndex: 0,
       allowTabNavigation: true,
       hidePoweredByJodit: true,

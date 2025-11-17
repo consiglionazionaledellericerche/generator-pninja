@@ -7,7 +7,7 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;

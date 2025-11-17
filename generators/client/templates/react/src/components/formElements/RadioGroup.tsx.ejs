@@ -14,7 +14,8 @@ interface IRadioGroupOption {
   id: number | string;
 }
 
-interface RadioGroupProps extends Omit<RadioGroupPropsAria, 'isInvalid' | 'children'> {
+interface RadioGroupProps
+  extends Omit<RadioGroupPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   loadingOptions?: boolean;

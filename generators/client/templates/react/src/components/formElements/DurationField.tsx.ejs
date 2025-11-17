@@ -64,7 +64,8 @@ const msToDuration = (ms: number | undefined): Duration | undefined => {
 const inputIsoClassName = (hasErrors = false) =>
   `scheme-light dark:scheme-dark outline-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600 -outline-offset-2'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 
-interface DurationFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+interface DurationFieldProps
+  extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -176,7 +177,8 @@ const DurationField: React.FC<DurationFieldProps> = ({
             aria-labelledby={`${dId}-label`}
             aria-describedby={descriptionId}
             aria-invalid={!!error}
-            required={required}
+            disabled={ariaProps.isDisabled}
+            readOnly={ariaProps.isReadOnly}
             ref={inputRef}
             type="number"
             placeholder={t('fields.duration.days')}
@@ -202,7 +204,8 @@ const DurationField: React.FC<DurationFieldProps> = ({
             aria-labelledby={`${hId}-label`}
             aria-describedby={descriptionId}
             aria-invalid={!!error}
-            required={required}
+            disabled={ariaProps.isDisabled}
+            readOnly={ariaProps.isReadOnly}
             type="number"
             placeholder={t('fields.duration.hours')}
             value={hours ?? ''}
@@ -228,7 +231,8 @@ const DurationField: React.FC<DurationFieldProps> = ({
             aria-labelledby={`${mId}-label`}
             aria-describedby={descriptionId}
             aria-invalid={!!error}
-            required={required}
+            disabled={ariaProps.isDisabled}
+            readOnly={ariaProps.isReadOnly}
             type="number"
             placeholder={t('fields.duration.minutes')}
             value={minutes ?? ''}
@@ -254,7 +258,8 @@ const DurationField: React.FC<DurationFieldProps> = ({
             aria-labelledby={`${sId}-label`}
             aria-describedby={descriptionId}
             aria-invalid={!!error}
-            required={required}
+            disabled={ariaProps.isDisabled}
+            readOnly={ariaProps.isReadOnly}
             type="number"
             placeholder={t('fields.duration.seconds')}
             value={seconds ?? ''}

@@ -11,7 +11,7 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface UuidFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+interface UuidFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
   autoGenerate?: boolean;
   fieldName: string;
   label: string;
@@ -72,15 +72,17 @@ const UuidField: React.FC<UuidFieldProps> = ({
           value={field.value || ''}
           className="outline-0 flex-1 border-none placeholder-slate-600 dark:placeholder-slate-300 font-[inherit]"
         />
-        <Button
-          onClick={() => {
-            setValue(fieldName, uuidv4(), { shouldValidate: true, shouldDirty: true });
-          }}
-          className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible"
-        >
-          <span className="sr-only">{t('actions.generateUUID')}</span>
-          <RefreshCw className="h-full" aria-hidden="true" />
-        </Button>
+        {!ariaProps.isDisabled && !ariaProps.isReadOnly && (
+          <Button
+            onClick={() => {
+              setValue(fieldName, uuidv4(), { shouldValidate: true, shouldDirty: true });
+            }}
+            className="text-sm text-center transition rounded-full border-0 p-1 flex items-center justify-center text-slate-600 dark:text-slate-300 bg-transparent hover:bg-black/[15%] pressed:bg-black/10 w-6 group-empty:invisible"
+          >
+            <span className="sr-only">{t('actions.generateUUID')}</span>
+            <RefreshCw className="h-full" aria-hidden="true" />
+          </Button>
+        )}
       </div>
       <FormFieldInfo validations={validations || {}} />
       <FormErrors error={error} />

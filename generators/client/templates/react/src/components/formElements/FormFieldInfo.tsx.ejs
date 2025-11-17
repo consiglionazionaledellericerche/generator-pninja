@@ -32,9 +32,14 @@ const FormFieldInfoContents: React.FC<FormFieldInfoProps> = ({ validations }) =>
           accepted: prettyBytes(Number(validations[typedKey])),
         });
       }
-      return t(`info.validations.${typedKey}`);
-    });
-  return Object.keys(validations).length
+      if (typedKey === 'required') {
+        return validations[typedKey] ? t(`info.validations.${typedKey}`) : null;
+      } else {
+        return t(`info.validations.${typedKey}`);
+      }
+    })
+    .filter((msg) => msg !== null) as string[];
+  return messages.length
     ? messages.map((msg, index) => (
         <span key={index}>
           {msg}
