@@ -62,7 +62,7 @@ const msToDuration = (ms: number | undefined): Duration | undefined => {
 };
 
 const inputIsoClassName = (hasErrors = false) =>
-  `mt-3 scheme-light dark:scheme-dark outline-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600 -outline-offset-2'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
+  `scheme-light dark:scheme-dark outline-2 outline-dashed ${hasErrors ? 'outline-red-600 dark:outline-red-500' : 'outline-slate-200 dark:outline-slate-600 -outline-offset-2'} rounded-md block w-full border-none  text-slate-800  dark:text-slate-50 placeholder-slate-600 dark:placeholder-slate-300 text-sm/6 py-1.5 px-3`;
 
 interface DurationFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
   fieldName: string;
@@ -166,7 +166,7 @@ const DurationField: React.FC<DurationFieldProps> = ({
   return (
     <TextFieldAria isInvalid={!!error} {...ariaProps}>
       <FormLabel validations={validations}>{label}</FormLabel>
-      <div className="flex flex-col md:flex-row gap-2 mt-3">
+      <div className="flex flex-col md:flex-row gap-2">
         <div className={showIso ? 'md:w-1/5' : 'md:w-1/4'}>
           <label id={`${dId}-label`} htmlFor={dId} className="block text-xs">
             {t('fields.duration.days')}

@@ -154,7 +154,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
       </FormLabel>
       <div>
         {hasFile && !shouldShowInput && !isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md">
+          <div className="p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md">
             <div className="flex items-center justify-between">
               <a
                 href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${entityData?.[`${fieldName}_name`]}`}
@@ -194,7 +194,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
         )}
 
         {isMarkedForDeletion && (
-          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+          <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center text-red-800 dark:text-red-200">
                 <Trash2Icon aria-hidden className="me-2 h-4 w-4" />
@@ -215,44 +215,41 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
         )}
 
         <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
-          <div className="mt-3">
-            {hasFile && shouldShowInput && (
-              <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center text-yellow-800 dark:text-yellow-200">
-                    <InfoIcon aria-hidden className="me-2 h-4 w-4" />
-                    <span className="text-sm font-medium">
-                      {t('actions.crud.file.replaceWarning')}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => undoEdit()}
-                    className="flex items-center text-sm cursor-pointer font-medium"
-                  >
-                    <Undo2Icon aria-hidden className="me-2 h-4 w-4" />
-                    {t('common.cancel')}
-                  </button>
+          {hasFile && shouldShowInput && (
+            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center text-yellow-800 dark:text-yellow-200">
+                  <InfoIcon aria-hidden className="me-2 h-4 w-4" />
+                  <span className="text-sm font-medium">
+                    {t('actions.crud.file.replaceWarning')}
+                  </span>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => undoEdit()}
+                  className="flex items-center text-sm cursor-pointer font-medium"
+                >
+                  <Undo2Icon aria-hidden className="me-2 h-4 w-4" />
+                  {t('common.cancel')}
+                </button>
               </div>
-            )}
-            <input
-              type="file"
-              required={required && !hasFile && !isMarkedForDeletion}
-              aria-invalid={!!error}
-              aria-labelledby={labelId}
-              aria-describedby={
-                [validations ? descriptionId : '', error ? errorId : ''].join(' ').trim() ||
-                undefined
-              }
-              id={fieldId}
-              accept={accept ?? '*/*'}
-              {...registerProps}
-              onChange={handleFileChange}
-              ref={inputRef}
-              className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
-            />
-          </div>
+            </div>
+          )}
+          <input
+            type="file"
+            required={required && !hasFile && !isMarkedForDeletion}
+            aria-invalid={!!error}
+            aria-labelledby={labelId}
+            aria-describedby={
+              [validations ? descriptionId : '', error ? errorId : ''].join(' ').trim() || undefined
+            }
+            id={fieldId}
+            accept={accept ?? '*/*'}
+            {...registerProps}
+            onChange={handleFileChange}
+            ref={inputRef}
+            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+          />
         </div>
       </div>
       {validations && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
