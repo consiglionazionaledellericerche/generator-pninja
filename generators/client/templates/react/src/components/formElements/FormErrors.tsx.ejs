@@ -1,20 +1,19 @@
-import { FieldErrors } from 'react-hook-form';
+import { FieldError } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { FieldError as FieldErrorAria } from 'react-aria-components';
 
 interface FormErrorsProps {
-  fieldName: string;
-  errors: FieldErrors<Record<string, unknown>>;
+  error: FieldError | undefined;
 }
 
-const FormErrors: React.FC<FormErrorsProps> = ({ fieldName, errors }) => {
+const FormErrors: React.FC<FormErrorsProps> = ({ error }) => {
   const { t } = useTranslation();
-  const [message, accepted, actual] = errors?.[fieldName]?.message?.split(':') || [];
+  if (!error?.message) return null;
+  const [message, accepted, actual] = error.message.split(':') || [];
   return (
-    errors?.[fieldName]?.message && (
-      <p className="mt-1 text-sm text-red-600 dark:text-red-500">
-        {t(message, { accepted, actual: actual })}
-      </p>
-    )
+    <p className="text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500">
+      <FieldErrorAria>{t(message, { accepted, actual: actual })}</FieldErrorAria>
+    </p>
   );
 };
 

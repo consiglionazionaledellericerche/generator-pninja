@@ -1,17 +1,21 @@
-import { IInfoValidations, InfoValidations } from './InfoValidations';
+import { AsteriskIcon } from 'lucide-react';
+import { IInfoValidations } from './InfoValidations';
+import { Label } from 'react-aria-components';
 
 interface FormLabelProps {
-  htmlFor: string;
-  label: string;
+  children?: React.ReactNode;
   validations?: IInfoValidations;
+  id?: string;
 }
 
-const FormLabel: React.FC<FormLabelProps> = ({ htmlFor, label, validations }) => {
+const FormLabel: React.FC<FormLabelProps> = ({ children, validations, id, ...ariaProps }) => {
   return (
-    <label htmlFor={htmlFor} className="text-sm font-medium flex items-center gap-1">
-      {label}
-      <InfoValidations validations={validations ?? {}} />
-    </label>
+    <Label className="text-sm font-medium" id={id ?? undefined} {...ariaProps}>
+      {children}
+      {validations?.required && (
+        <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
+      )}
+    </Label>
   );
 };
 
