@@ -16,7 +16,7 @@
       "file": {
         "markedForDeletion": "削除のためにマークされたファイル（確認するには保存してください）",
         "viewOrDownload": "表示/ダウンロード",
-        "replaceWarning": "新しいファイルを選択すると既存のファイルが置き換えられます"
+        "replaceWarning": "新しいファイルを選択すると、既存のファイルが置き換えられます"
       },
       "successfullyCreated": "レコード ID {{id}} が正常に作成されました",
       "successfullyUpdated": "レコード ID {{id}} が正常に更新されました",
@@ -29,12 +29,12 @@
   "common": {
     "back": "戻る",
     "cancel": "キャンセル",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "新しいウィンドウで開きます",
     "undo": "元に戻す",
-    "search": "Search...",
+    "search": "検索...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
+      "collapse": "リストを折りたたむ",
+      "expand": "リストを展開",
       "oneElementSelected": "1つの要素が選択されました",
       "nElementsSelected": "{{count}} 個の要素が選択されました",
       "placeholder": "オプションを選択",
@@ -47,7 +47,7 @@
       "selectSingle": "値を選択"
     },
     "show": {
-      "more": "もっと表示",
+      "more": "さらに表示",
       "less": "少なく表示"
     }
   },
@@ -100,21 +100,21 @@
       "message": "このページにアクセスするにはログインが必要です。資格情報を確認して、再試行してください。"
     },
     "403": {
-      "title": "おっと！エラー 403 – 申し訳ありません、{{username}}",
-      "message": "こんにちは <1>{{username}}</1>、あなたを認識しましたが、このページにアクセスする権限がありません。これが間違いだと思われる場合は、お問い合わせください！"
+      "title": "おっと！エラー 403 – {{username}} さん、申し訳ありません",
+      "message": "こんにちは <1>{{username}}</1> さん、あなたを認識しましたが、このページにアクセスする権限がありません。これが間違いだと思われる場合は、お問い合わせください！"
     },
     "404": {
       "title": "おっと！エラー 404 – ページが見つかりません",
-      "message": "お探しのページはもう存在しないようです。移動または削除された可能性があります。URLを確認するか、ホームページに戻ってください！"
+      "message": "お探しのページは存在しないようです。移動または削除された可能性があります。URLを確認するか、ホームページに戻ってください！"
     },
     "entities": {
-      "create": "作成エラー",
-      "read": "読み取りエラー",
-      "update": "更新エラー",
-      "delete": "削除エラー"
+      "create": "作成中のエラー",
+      "read": "読み取り中のエラー",
+      "update": "更新中のエラー",
+      "delete": "削除中のエラー"
     },
     "options": {
-      "load": "オプションの読み込みエラー"
+      "load": "オプションの読み込み中にエラーが発生しました"
     },
     "validations": {
       "email": "無効なメール形式",
@@ -131,9 +131,6 @@
       "max": "数値は {{accepted}} 以下である必要があります",
       "maxlength": "文字列は最大 {{accepted}} 文字を含む必要があります",
       "maxbytes": "ファイルは {{accepted}} を超えることはできません",
-      "password": {
-        "weakPassword": "The password is too weak"
-      },
       "pattern": "無効な形式",
       "required": "必須",
       "url": "無効なURL形式"
@@ -177,12 +174,25 @@
       "loggingIn": "ログイン中...",
       "logout": "ログアウト",
       "loggingOut": "ログアウト中...",
-      "logoutError": "ログアウトエラー",
+      "logoutError": "ログアウト中にエラーが発生しました",
       "unknownError": "不明なエラー"
     },
     "darkmode": {
       "light": "ライトモードに切り替え",
-      "dark": "ダークモードに切り替え"
+      "lightOn": "ライトテーマが有効",
+      "dark": "ダークモードに切り替え",
+      "darkOn": "ダークテーマが有効"
+    },
+    "htmlViewer": {
+      "controls": "コントロールを表示",
+      "viewSource": "ソースコードを表示",
+      "viewRendering": "プレビューを表示",
+      "source": "HTMLソースコード（読み取り専用）",
+      "sourceSection": "ソースコードセクション",
+      "renderedSection": "レンダリングされたコンテンツセクション",
+      "renderedContent": "レンダリングされたHTMLコンテンツ",
+      "sourceActive": "ソースコードモードが有効",
+      "renderingActive": "プレビューモードが有効"
     }
   }
 }
