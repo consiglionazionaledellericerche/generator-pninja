@@ -54,7 +54,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
           }
           className="group"
         >
-          <div className="text-sm font-medium">
+          <div className="text-sm font-medium mb-1">
             {label}
             {validations?.required && (
               <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
@@ -96,7 +96,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
       {error && error?.message && (
         <p
           id={errorId}
-          className="mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500"
+          className="text-sm mt-1 bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500"
         >
           {t(error.message)}
         </p>

@@ -124,7 +124,7 @@ const Textarea: React.FC<TextareaProps> = ({
       allowTabNavigation: true,
       hidePoweredByJodit: true,
       showPlaceholder: false,
-      minHeight: rows ? rows * 24 : 96,
+      minHeight: rows ? rows * 30 : 300,
       toolbar: true,
       spellcheck: true,
       language: getI18n().language,
@@ -193,7 +193,11 @@ const Textarea: React.FC<TextareaProps> = ({
         />
       </div>
       {error?.message && (
-        <p id={errorId} role="alert" className="mt-1 text-sm text-red-600 dark:text-red-500">
+        <p
+          id={errorId}
+          role="alert"
+          className="text-sm mt-1 bg-slate-50 dark:bg-slate-900 text-red-600 dark:text-red-500"
+        >
           {t(message, { accepted, actual: actual })}
         </p>
       )}
@@ -206,7 +210,7 @@ const Textarea: React.FC<TextareaProps> = ({
   ) : (
     <TextFieldAria isInvalid={!!error} {...ariaProps}>
       <FormLabel validations={validations}>{label}</FormLabel>
-      <TextAreaAria rows={rows || 4} {...field} value={field.value || ''} className="form-field" />
+      <TextAreaAria rows={rows || 10} {...field} value={field.value || ''} className="form-field" />
       {!error && <FormFieldInfo validations={validations || {}} />}
       <FormErrors error={error} />
     </TextFieldAria>
