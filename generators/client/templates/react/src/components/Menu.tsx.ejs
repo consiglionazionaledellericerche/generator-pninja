@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation<%-  (entities.length > 1) ? ', useNavigate' : ''%> } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 <%  if (entities.length > 1) { -%>
 import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { ChevronDown } from 'lucide-react';
@@ -14,9 +14,6 @@ import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
 import appLogo from '../assets/logo.svg';
 const Menu: React.FC = () => {
-<%  if (entities.length > 1) { -%>
-  const navigate = useNavigate();
-<%  } -%>
   const { isAuthenticated } = useAuthState();
   const { t } = useTranslation();
   const location = useLocation();
@@ -50,6 +47,7 @@ const Menu: React.FC = () => {
   return (
     <nav className="nav-bar">
       <Link
+        aria-hidden="true"
         to="/"
         className="rounded-full focus:outline-none hover:ring-4 hover:ring-blue-600 hover:dark:ring-sky-300 focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300"
       >
@@ -111,10 +109,14 @@ const Menu: React.FC = () => {
         <div className="flex flex-row flex-wrap items-center justify-between gap-1 md:gap-4 rounded-lg p-4 md:h-16 md:p-0 bg-slate-400 dark:bg-gray-600 md:bg-transparent md:dark:bg-transparent">
           <Link
             className={`w-full md:w-auto nav-bar-link${isActive('/') ? menuIsActiveClass : ''}`}
-            to="/">
+            to="/"
+          >
             {t('pages.Home')}
           </Link>
-          <Link className={`w-full md:w-auto nav-bar-link${isActive('/admin') ? menuIsActiveClass : ''}`} to="/admin">
+          <Link
+            className={`w-full md:w-auto nav-bar-link${isActive('/admin') ? menuIsActiveClass : ''}`}
+            to="/admin"
+          >
             Admin
           </Link>
 <%  if (entities.length > 1) { -%>
@@ -126,10 +128,14 @@ const Menu: React.FC = () => {
               {t(activeEntity || 'entities.entities')} <ChevronDown size={16} />
             </Button>
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
-              <MenuItems onAction={(k) => navigate(`/entities/${k}`)} className="outline-0">
+              <MenuItems className="outline-0">
 <%            entities.forEach((entity, index) => {-%>
-                <MenuItem id="<%- to.slug(pluralize(entity.name)) %>" className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}>
-                    {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
+                <MenuItem
+                  href="/entities/<%- to.slug(pluralize(entity.name)) %>"
+                  id="<%- to.slug(pluralize(entity.name)) %>"
+                  className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
+                >
+                  {t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                 </MenuItem>
 <%            });-%>
               </MenuItems>

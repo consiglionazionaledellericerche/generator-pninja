@@ -14,6 +14,7 @@ const LogoutButton: React.FC = () => {
     <button
       onClick={handleLogout}
       title={t('ui.account.logout')}
+      aria-label={t('ui.account.logout')}
       className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer`}
     >
       <LogOut size={20} />
