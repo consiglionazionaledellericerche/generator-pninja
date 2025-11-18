@@ -1,39 +1,54 @@
 import { useEffect } from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
-import { Languages, ChevronDown } from 'lucide-react';
+import { Languages, ChevronDown, Check } from 'lucide-react';
 import { languages, languagesData } from '../config/languages.ts';
 
 export function LangSelect() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
+
   useEffect(() => {
     document.documentElement.lang = i18n.language;
     document.documentElement.dir = i18n.dir();
   }, [i18n.language, i18n.dir, i18n]);
+
   return (
     <MenuTrigger>
       <Button
-        aria-label="Menu"
+        aria-label={t('ui.langSelect')}
         className="w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
-        <Languages size={16} />
+        <Languages aria-hidden size={16} />
         {languagesData.find(
           (lang) => lang.value === i18n.language || lang.value === i18n.language.split('-')[0]
         )?.name || i18n.language}
-        <ChevronDown size={16} />
+        <ChevronDown aria-hidden size={16} />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
-        <Menu className="outline-0">
+        <Menu
+          className="outline-0"
+          selectionMode="single"
+          selectedKeys={[i18n.language]}
+          onSelectionChange={(keys) => {
+            const selected = Array.from(keys)[0] as string;
+            changeLanguage(selected);
+          }}
+        >
           {languages.map((language) => (
             <MenuItem
-              onAction={() => changeLanguage(language)}
-              className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${i18n.language === language ? ' bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200' : ''}`}
+              id={language}
               key={language}
+              className="cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2 data-[selected]:bg-slate-300 data-[selected]:text-slate-800 dark:data-[selected]:bg-slate-700 dark:data-[selected]:text-slate-200"
             >
-              {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
+              {({ isSelected }) => (
+                <>
+                  {isSelected && <Check aria-hidden size={16} className="inline me-1" />}
+                  {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
+                </>
+              )}
             </MenuItem>
           ))}
         </Menu>

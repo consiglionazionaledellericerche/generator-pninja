@@ -22,7 +22,11 @@ const LoginButton: React.FC = () => {
       disabled={loading}
       className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
     >
-      {loading ? <LoaderCircle size={20} className="animate-spin" /> : <LogIn size={20} />}
+      {loading ? (
+        <LoaderCircle aria-hidden="true" size={20} className="animate-spin" />
+      ) : (
+        <LogIn aria-hidden="true" size={20} />
+      )}
     </button>
   );
 };
