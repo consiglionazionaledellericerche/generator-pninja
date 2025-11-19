@@ -11,6 +11,9 @@ i18n
     supportedLngs: <%- supportedLngs %>,
     fallbackLng: '<%- fallbackLng %>',
     nonExplicitSupportedLngs: true,
+    backend: {
+      loadPath: '/locales/{{lng}}.json'
+    },
     detection: {
       convertDetectedLanguage: (lng) => lng.split('-')[0]
     },
