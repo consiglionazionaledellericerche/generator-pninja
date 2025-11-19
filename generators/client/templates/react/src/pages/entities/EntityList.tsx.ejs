@@ -206,13 +206,7 @@ export default function <%= entity.name %>List() {
                     </td>
 <%                  for(column of columns) { -%>
 <%                    if (!fileColumns.includes(column)) { -%>
-                    <td>
-<%                      if (!durationColumns.includes(column)) { -%>
-                      {row.<%- column %>?.toString()}
-<%                      } else {-%>
-                      <DurationFieldViewer duration={row.<%- column %>} format="iso"/>
-<%                      }-%>
-                    </td>
+                    <td><% if (!durationColumns.includes(column)) { %>{row.<%- column %>?.toString()}<% } else { %><DurationFieldViewer duration={row.<%- column %>} format="iso"/><% } %></td>
 <%                    } else { -%>
                     <td>
                       <a
