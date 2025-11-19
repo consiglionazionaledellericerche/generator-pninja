@@ -83,27 +83,61 @@ export default function <%= entity.name %>List() {
   }, [searchTerm]);
 <% } -%>
 
-  const renderSortHeader = (field: SortableField, label: string) => {
+  interface SortHeaderProps extends React.HTMLAttributes<HTMLTableCellElement> {
+    field: string;
+    label: string;
+    className?: string;
+  }
+
+  const SortHeader: React.FC<SortHeaderProps> = ({ field, label, className, ...props }) => {
 <%  if (searchEngine === 'algolia') {-%>
     if (debouncedSearchTerm) return <th scope="col">{label}</th>; // Algolia does its own sorting
 <% } -%>
     const isSorted = sortConfig.field === field;
+    const isSortable = sortableColumns.includes(field as SortableField);
+    if (!isSortable) {
+      return (
+        <th scope="col" className={className ? className : ''} {...props}>
+          {label}
+        </th>
+      );
+    }
     return (
       <th
         scope="col"
-        className={`${sortableColumns.includes(field) ? 'cursor-pointer select-none' : ''} ${field === 'id' ? 'w-0' : ''}`}
-        onClick={() => sortableColumns.includes(field) && handleSort(field)}
+        className={`${isSortable ? 'cursor-pointer select-none py-0! px-0!' : ''}${className ? ' ' + className : ''}`}
+        onClick={() => isSortable && handleSort(field as SortableField)}
+        {...props}
       >
-        <div className="flex items-center gap-1">
-          <div>{label}</div>
+        <button
+          className="cursor-pointer flex items-center gap-4 w-full ps-6 py-3 text-nowrap truncate"
+          aria-label={t(
+            `common.sortBy.${isSorted && sortConfig.direction === 'asc' ? 'descending' : 'ascending'}`,
+            {
+              field: label,
+            }
+          )}
+        >
+          <div className="grow text-left">{label}</div>
           {isSorted &&
-            (sortConfig.direction === 'asc' ?
-              <ChevronDown className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4" />
-            :
-              <ChevronUp className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4" />
-            )}
-          {!isSorted && <ChevronsUpDown className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4" />}
-        </div>
+            (sortConfig.direction === 'asc' ? (
+              <ChevronDown
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ) : (
+              <ChevronUp
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ))}
+          {!isSorted && (
+            <ChevronsUpDown
+              aria-hidden
+              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+            />
+          )}
+        </button>
       </th>
     );
   };
@@ -142,17 +176,21 @@ export default function <%= entity.name %>List() {
         <>
           <div className="relative overflow-x-auto mb-4">
             <table className="data-table">
+              <caption className="w-full text-left mb-2 text-sm font-normal">
+                {t('pagination.summary', {
+                  entity: t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>'),
+                  from: page?.from,
+                  to: page?.to,
+                  total: page?.total,
+                })}
+              </caption>
               <thead>
                 <tr>
-                  {renderSortHeader('id', t('entities.<%-to.snake(entity.name)%>.id'))}
-<%                for(column of columns) { -%>
-<%                  if (!fileColumns.includes(column)) { -%>
-                  {renderSortHeader('<%-column%>', t('entities.<%-to.snake(entity.name)%>.<%-column%>'))}
-<%                  } else {-%>
-                  <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
-<%                  } -%>
-<%                } -%>
-<%                for(r of relatedEntities) { -%>
+                  <SortHeader className="w-0" field="id" label={t('entities.<%-to.snake(entity.name)%>.id')} />
+<%  for(column of columns) { -%>
+                  <SortHeader field="<%-column%>" label={t('entities.<%-to.snake(entity.name)%>.<%-column%>')} />
+<%  } -%>
+<%                if (false) for(r of relatedEntities) { -%>
                   <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
 <%                } -%>
                   <th scope="col">{t('actions.crud.actions')}</th>
@@ -188,7 +226,7 @@ export default function <%= entity.name %>List() {
                     </td>
 <%                    } -%>
 <%                  } -%>
-<%                  for(r of relatedEntities) { -%>
+<%                  if (false) for(r of relatedEntities) { -%>
                     <td>
 <%                  if(r.isArray) { -%>
                       {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.<%-to.snake(r.labelField)%>}</Link></Fragment>))}

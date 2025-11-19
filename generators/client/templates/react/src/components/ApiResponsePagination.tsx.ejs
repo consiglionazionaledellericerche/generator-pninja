@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { PageLink } from '../types/api-response.types';
 interface ApiResponsePaginationProps {
@@ -9,11 +10,12 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
   onSelectPage,
   pageLinks,
 }) => {
+  const { t } = useTranslation();
   return (
     pageLinks.length > 3 && (
       <div className="text-center">
         <nav
-          aria-label="Pagination"
+          aria-label={t('pagination.pagination')}
           className="isolate inline-flex -space-x-px rounded-md shadow-xs dark:shadow-xs/70 mb-5"
         >
           {pageLinks &&
@@ -22,6 +24,15 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
               <button
                 key={index}
                 type="button"
+                {...((index !== 0 || index === array.length - 1) && (!link.url || link.active)
+                  ? { 'aria-current': 'page' }
+                  : {})}
+                {...(!link.url || link.active ? { disabled: true } : {})}
+                {...(index === 0 ? { 'aria-label': t('pagination.previous') } : {})}
+                {...(index === array.length - 1 ? { 'aria-label': t('pagination.next') } : {})}
+                {...(index > 0 && index < array.length - 1
+                  ? { 'aria-label': t('pagination.goto', { page: link.label }) }
+                  : {})}
                 disabled={!link.url || link.active}
                 className={`
                 ${link.url ? 'cursor-pointer hover:bg-slate-200 hover:text-slate-800 hover:dark:bg-slate-800 hover:dark:text-slate-200' : 'cursor-not-allowed text-slate-300 dark:text-slate-600'}
@@ -36,8 +47,8 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
                   onSelectPage(link.url.split('page=')[1].split('&')[0] as unknown as number)
                 }
               >
-                {index === 0 && <ChevronLeft size={16} />}
-                {index === array.length - 1 && <ChevronRight size={16} />}
+                {index === 0 && <ChevronLeft aria-hidden size={16} />}
+                {index === array.length - 1 && <ChevronRight aria-hidden size={16} />}
                 {index > 0 && index < array.length - 1 && link.label}
               </button>
             ))}
