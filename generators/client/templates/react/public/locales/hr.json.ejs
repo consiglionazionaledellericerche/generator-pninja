@@ -3,48 +3,48 @@
   "actions": {
     "crud": {
       "actions": "Radnje",
-      "back": "Natrag",
-      "cancel": "Odustani",
+      "back": "Nazad",
+      "cancel": "Otkaži",
       "confirmDelete": "Potvrdi brisanje",
       "create": "Kreiraj",
-      "delete": "Obriši",
+      "delete": "Izbriši",
       "edit": "Uredi",
       "save": "Spremi",
       "saving": "Spremanje...",
       "update": "Ažuriraj",
-      "view": "Pregled",
+      "view": "Pogledaj",
       "file": {
-        "markedForDeletion": "Datoteka označena za brisanje (Spremite za potvrdu)",
-        "viewOrDownload": "Pregled/Preuzimanje",
+        "markedForDeletion": "Datoteka označena za brisanje (Spremi za potvrdu)",
+        "viewOrDownload": "Pogledaj/Preuzmi",
         "replaceWarning": "Odabir nove datoteke zamijenit će postojeću"
       },
       "successfullyCreated": "Zapis ID {{id}} uspješno kreiran",
       "successfullyUpdated": "Zapis ID {{id}} uspješno ažuriran",
-      "successfullyDeleted": "Zapis ID {{id}} uspješno obrisan"
+      "successfullyDeleted": "Zapis ID {{id}} uspješno izbrisan"
     },
     "hidePassword": "Sakrij lozinku",
     "showPassword": "Prikaži lozinku",
-    "generateUUID": "Generiraj UUID verziju 4"
+    "generateUUID": "Generiraj verziju 4 UUID"
   },
   "common": {
-    "back": "Natrag",
-    "cancel": "Odustani",
-    "opensInNewWindow": "Opens in a new window",
+    "back": "Nazad",
+    "cancel": "Otkaži",
+    "opensInNewWindow": "Otvara se u novom prozoru",
     "undo": "Poništi",
-    "search": "Search...",
+    "search": "Pretraži...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
+      "collapse": "Smanji popis",
+      "expand": "Proširi popis",
       "oneElementSelected": "Jedan element odabran",
-      "nElementsSelected": "{{count}} elemenata odabrano",
-      "placeholder": "Odaberite opciju",
+      "nElementsSelected": "{{count}} elemenata odabranih",
+      "placeholder": "Odaberi opciju",
       "noOptions": "Nema opcija",
       "noValue": "Nema vrijednosti",
       "loading": "Učitavanje opcija...",
-      "searchMultiple": "Odaberite ili pretražite jednu ili više vrijednosti",
-      "searchSingle": "Odaberite ili pretražite vrijednost",
-      "selectMultiple": "Odaberite jednu ili više vrijednosti",
-      "selectSingle": "Odaberite vrijednost"
+      "searchMultiple": "Odaberi ili pretraži jednu ili više vrijednosti",
+      "searchSingle": "Odaberi ili pretraži vrijednost",
+      "selectMultiple": "Odaberi jednu ili više vrijednosti",
+      "selectSingle": "Odaberi vrijednost"
     },
     "show": {
       "more": "Prikaži više",
@@ -63,11 +63,11 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Paginacija",
+    "pagination": "Pagiranje",
     "summary": "{{entity}}: zapisi od {{from}} do {{to}} od {{total}}",
     "previous": "Prethodna stranica",
     "next": "Sljedeća stranica",
-    "goto": "Idi na stranicu {{page}}"
+    "goto": "Idite na stranicu {{page}}"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -89,24 +89,24 @@
     },
     "criteria": {
       "minLength": "Najmanje {{count}} znakova",
-      "uppercase": "Veliko slovo (A-Z)",
-      "lowercase": "Malo slovo (a-z)",
-      "numbers": "Broj (0-9)",
-      "specialChars": "Poseban znak (!@#$%&*...)"
+      "uppercase": "Jedno veliko slovo (A-Z)",
+      "lowercase": "Jedno malo slovo (a-z)",
+      "numbers": "Jedan broj (0-9)",
+      "specialChars": "Jedan posebni znak (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
       "title": "Greška 401 – Neovlašteno",
-      "message": "Morate se prijaviti kako biste pristupili ovoj stranici. Molimo provjerite svoje podatke i pokušajte ponovno."
+      "message": "Morate se prijaviti za pristup ovoj stranici. Provjerite svoje vjerodajnice i pokušajte ponovo."
     },
     "403": {
       "title": "Ups! Greška 403 – Žao nam je, {{username}}",
-      "message": "Hej <1>{{username}}</1>, prepoznajemo te, ali nemaš odgovarajuće dozvole za pristup ovoj stranici. Ako misliš da je ovo greška, javi nam se!"
+      "message": "Hej <1>{{username}}</1>, prepoznajemo te, ali nemaš prava za pristup ovoj stranici. Ako misliš da je ovo greška, javi nam se!"
     },
     "404": {
       "title": "Ups! Greška 404 – Stranica nije pronađena",
-      "message": "Izgleda da stranica koju tražiš više ne postoji. Možda je premještena ili obrisana. Provjeri URL ili se vrati na početnu stranicu!"
+      "message": "Izgleda da stranica koju tražite više ne postoji. Moguće je da je premještena ili izbrisana. Provjerite URL ili se vratite na početnu stranicu!"
     },
     "entities": {
       "create": "Greška pri kreiranju",
@@ -121,19 +121,19 @@
       "email": "Neispravan format e-pošte",
       "file": {
         "minSize": "Datoteka mora biti najmanje {{accepted}}. Trenutna veličina: {{actual}}",
-        "maxSize": "Datoteka ne može premašiti {{accepted}}. Trenutna veličina: {{actual}}",
+        "maxSize": "Datoteka ne smije prelaziti {{accepted}}. Trenutna veličina: {{actual}}",
         "invalidType": "Tip datoteke mora biti {{accepted}}. Trenutni tip: {{actual}}",
         "typeImage": "Datoteka mora biti slika",
         "required": "Datoteka je obavezna"
       },
       "min": "Broj mora biti veći ili jednak {{accepted}}",
-      "minlength": "Tekst mora sadržavati najmanje {{accepted}} znak(ova)",
+      "minlength": "Niz mora sadržavati najmanje {{accepted}} znak(ova)",
       "minbytes": "Datoteka mora biti najmanje {{accepted}}",
       "max": "Broj mora biti manji ili jednak {{accepted}}",
-      "maxlength": "Tekst može sadržavati najviše {{accepted}} znak(ova)",
-      "maxbytes": "Datoteka ne može premašiti {{accepted}}",
+      "maxlength": "Niz mora sadržavati najviše {{accepted}} znak(ova)",
+      "maxbytes": "Datoteka ne smije prelaziti {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Lozinka je preslaba"
       },
       "pattern": "Neispravan format",
       "required": "Obavezno",
@@ -147,7 +147,7 @@
       "minute": "Minuta",
       "second": "Sekunda",
       "millisecond": "Milisekunda",
-      "days": "Dana",
+      "days": "Dani",
       "hours": "Sati",
       "minutes": "Minute",
       "seconds": "Sekunde",
@@ -157,11 +157,11 @@
   "info": {
     "validations": {
       "min": "Broj mora biti veći ili jednak {{accepted}}",
-      "minlength": "Tekst mora sadržavati najmanje {{accepted}} znak(ova)",
+      "minlength": "Niz mora sadržavati najmanje {{accepted}} znak(ova)",
       "minbytes": "Datoteka mora biti najmanje {{accepted}}",
       "max": "Broj mora biti manji ili jednak {{accepted}}",
-      "maxlength": "Tekst može sadržavati najviše {{accepted}} znak(ova)",
-      "maxbytes": "Datoteka ne može premašiti {{accepted}}",
+      "maxlength": "Niz mora sadržavati najviše {{accepted}} znak(ova)",
+      "maxbytes": "Datoteka ne smije prelaziti {{accepted}}",
       "required": "Obavezno",
       "unique": "Vrijednost mora biti jedinstvena"
     }
@@ -182,22 +182,22 @@
       "unknownError": "Nepoznata greška"
     },
     "darkmode": {
-      "light": "Prebaci na svijetli način",
+      "light": "Prebaci se na svijetli način",
       "lightOn": "Svijetla tema aktivna",
-      "dark": "Prebaci na tamni način",
+      "dark": "Prebaci se na tamni način",
       "darkOn": "Tamna tema aktivna"
     },
-    "langSelect": "Select language",
+    "langSelect": "Odaberi jezik",
     "htmlViewer": {
-      "controls": "Prikaži kontrole",
-      "viewSource": "Prikaži izvorni kod",
-      "viewRendering": "Prikaži pregled",
-      "source": "Izvorni HTML kod (samo za čitanje)",
-      "sourceSection": "Sekcija izvornog koda",
-      "renderedSection": "Sekcija prikazanog sadržaja",
-      "renderedContent": "Prikazani HTML sadržaj",
-      "sourceActive": "Način izvornog koda aktivan",
-      "renderingActive": "Način pregleda aktivan"
+      "controls": "Pogledaj kontrole",
+      "viewSource": "Pogledaj izvorni kod",
+      "viewRendering": "Pogledaj pregled",
+      "source": "HTML izvorni kod (samo za čitanje)",
+      "sourceSection": "Odjeljak izvorne verzije",
+      "renderedSection": "Odjeljak renderiranog sadržaja",
+      "renderedContent": "Renderirani HTML sadržaj",
+      "sourceActive": "Način rada izvorne verzije aktivan",
+      "renderingActive": "Način rada pregleda aktivan"
     }
   }
 }

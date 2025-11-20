@@ -2,44 +2,44 @@
   "appName": "<%= appName %>",
   "actions": {
     "crud": {
-      "actions": "Veprime",
+      "actions": "Akset",
       "back": "Kthehu",
       "cancel": "Anulo",
       "confirmDelete": "Konfirmo fshirjen",
       "create": "Krijo",
-      "delete": "Fshi",
+      "delete": "Fshij",
       "edit": "Redakto",
       "save": "Ruaj",
       "saving": "Duke ruajtur...",
       "update": "Përditëso",
       "view": "Shiko",
       "file": {
-        "markedForDeletion": "Skedari i shënuar për fshirje (Ruaj për të konfirmuar)",
+        "markedForDeletion": "Skedari është shënuar për fshirje (Ruaj për të konfirmuar)",
         "viewOrDownload": "Shiko/Shkarko",
-        "replaceWarning": "Zgjedhja e një skedari të ri do të zëvendësojë të tanishmin"
+        "replaceWarning": "Zgjedhja e një skedari të ri do të zëvendësojë atë ekzistues"
       },
-      "successfullyCreated": "ID e regjistrimit {{id}} e krijuar me sukses",
-      "successfullyUpdated": "ID e regjistrimit {{id}} e përditësuar me sukses",
-      "successfullyDeleted": "ID e regjistrimit {{id}} e fshirë me sukses"
+      "successfullyCreated": "ID e regjistrit {{id}} është krijuar me sukses",
+      "successfullyUpdated": "ID e regjistrit {{id}} është përditësuar me sukses",
+      "successfullyDeleted": "ID e regjistrit {{id}} është fshirë me sukses"
     },
-    "hidePassword": "Fsheh fjalëkalimin",
-    "showPassword": "Shfaq fjalëkalimin",
-    "generateUUID": "Gjenero një UUID version 4"
+    "hidePassword": "Fshih fjalëkalimin",
+    "showPassword": "Trego fjalëkalimin",
+    "generateUUID": "Gjej një UUID version 4"
   },
   "common": {
     "back": "Kthehu",
     "cancel": "Anulo",
-    "opensInNewWindow": "Hap në një dritare të re",
-    "undo": "Kthe pas",
+    "opensInNewWindow": "Hapet në një dritare të re",
+    "undo": "Merr përsipër",
     "search": "Kërko...",
     "select": {
-      "collapse": "Kollapso listën",
+      "collapse": "Përmbledh listën",
       "expand": "Zgjero listën",
-      "oneElementSelected": "Një element i zgjedhur",
-      "nElementsSelected": "{{count}} elemente të zgjedhura",
+      "oneElementSelected": "Një element është zgjedhur",
+      "nElementsSelected": "{{count}} elemente janë zgjedhur",
       "placeholder": "Zgjidh një opsion",
-      "noOptions": "Asnjë opsion",
-      "noValue": "Asnjë vlerë",
+      "noOptions": "Nuk ka opsione",
+      "noValue": "Nuk ka vlerë",
       "loading": "Duke ngarkuar opsionet...",
       "searchMultiple": "Zgjidh ose kërko një ose më shumë vlera",
       "searchSingle": "Zgjidh ose kërko një vlerë",
@@ -47,12 +47,12 @@
       "selectSingle": "Zgjidh një vlerë"
     },
     "show": {
-      "more": "Shfaq më shumë",
-      "less": "Shfaq më pak"
+      "more": "Trego më shumë",
+      "less": "Trego më pak"
     },
     "sortBy": {
-      "ascending": "Rendu sipas {{field}} rritës",
-      "descending": "Rendu sipas {{field}} zbritës"
+      "ascending": "Porositi sipas {{field}} ngjitës",
+      "descending": "Porositi sipas {{field}} zbritës"
     }
   },
   "dbms": {
@@ -63,8 +63,8 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Paginimi",
-    "summary": "{{entity}}: regjistrime nga {{from}} te {{to}} nga {{total}}",
+    "pagination": "Paginacion",
+    "summary": "{{entity}}: regjistrat nga {{from}} në {{to}} prej {{total}}",
     "previous": "Faqja e mëparshme",
     "next": "Faqja tjetër",
     "goto": "Shko në faqen {{page}}"
@@ -79,9 +79,9 @@
   "entities": "Entitetet",
   "password": {
     "strengthLabel": "Forca e fjalëkalimit",
-    "generate": "Gjenero fjalëkalim të sigurt",
+    "generate": "Gjej fjalëkalim të sigurt",
     "copy": "Kopjo fjalëkalimin",
-    "copied": "Fjalëkalimi është kopjuar!",
+    "copied": "Fjalëkalimi u kopjua!",
     "strength": {
       "weak": "Fjalëkalim i dobët",
       "medium": "Fjalëkalim mesatar",
@@ -89,36 +89,36 @@
     },
     "criteria": {
       "minLength": "Të paktën {{count}} karaktere",
-      "uppercase": "Një shkronjë të madhe (A-Z)",
-      "lowercase": "Një shkronjë të vogël (a-z)",
+      "uppercase": "Një shkronjë me shkronja të mëdha (A-Z)",
+      "lowercase": "Një shkronjë me shkronja të vogla (a-z)",
       "numbers": "Një numër (0-9)",
-      "specialChars": "Një karakter të veçantë (!@#$%&*...)"
+      "specialChars": "Një karakter special (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Gabim 401 – Nuk je autorizuar",
-      "message": "Duhet të hysh për të aksesuar këtë faqe. Kontrollo kredencialet e tua dhe provoje përsëri."
+      "title": "Gabim 401 – Nuk je i autorizuar",
+      "message": "Duhet të kyçeni për të aksesuar këtë faqe. Ju lutemi kontrolloni kredencialet e tua dhe provoni përsëri."
     },
     "403": {
-      "title": "Oups! Gabim 403 – Na vjen keq, {{username}}",
-      "message": "Hej <1>{{username}}</1>, të njohim, por nuk ke lejet e duhura për të aksesuar këtë faqe. Nëse mendon se është një gabim, kontakto me ne!"
+      "title": "Ups! Gabim 403 – Na vjen keq, {{username}}",
+      "message": "Hej <1>{{username}}</1>, ne të njohim, por nuk ke lejet e drejta për të aksesuar këtë faqe. Nëse mendon se është një gabim, na kontakto!"
     },
     "404": {
-      "title": "Oups! Gabim 404 – Faqja nuk u gjet",
-      "message": "Duket se faqja që po kërkon nuk ekziston më. Mund të jetë transferuar ose fshirë. Kontrollo URL-në ose kthehu në faqen kryesore!"
+      "title": "Ups! Gabim 404 – Faqja nuk u gjet",
+      "message": "Duket se faqja që po kërkon nuk ekziston më. Mund të ketë qenë e lëvizur ose e fshirë. Kontrollo URL-në ose kthehu në faqen kryesore!"
     },
     "entities": {
-      "create": "Gabim në krijim",
-      "read": "Gabim në lexim",
-      "update": "Gabim në përditësim",
+      "create": "Gabim në krijimin",
+      "read": "Gabim në leximin",
+      "update": "Gabim në përditësimin",
       "delete": "Gabim në fshirje"
     },
     "options": {
       "load": "Gabim në ngarkimin e opsioneve për"
     },
     "validations": {
-      "email": "Formati i email-it është i pavlefshëm",
+      "email": "Format i email-it është i pavlefshëm",
       "file": {
         "minSize": "Skedari duhet të jetë të paktën {{accepted}}. Madhësia aktuale: {{actual}}",
         "maxSize": "Skedari nuk mund të kalojë {{accepted}}. Madhësia aktuale: {{actual}}",
@@ -126,77 +126,77 @@
         "typeImage": "Skedari duhet të jetë një imazh",
         "required": "Skedari është i detyrueshëm"
       },
-      "min": "Numri duhet të jetë më i madh ose i barabartë me {{accepted}}",
+      "min": "Numri duhet të jetë më i madh se ose i barabartë me {{accepted}}",
       "minlength": "Stringu duhet të përmbajë të paktën {{accepted}} karakter(e)",
       "minbytes": "Skedari duhet të jetë të paktën {{accepted}}",
-      "max": "Numri duhet të jetë më i vogël ose i barabartë me {{accepted}}",
-      "maxlength": "Stringu duhet të përmbajë maksimumi {{accepted}} karakter(e)",
+      "max": "Numri duhet të jetë më i vogël se ose i barabartë me {{accepted}}",
+      "maxlength": "Stringu duhet të përmbajë maksimum {{accepted}} karakter(e)",
       "maxbytes": "Skedari nuk mund të kalojë {{accepted}}",
       "password": {
         "weakPassword": "Fjalëkalimi është shumë i dobët"
       },
-      "pattern": "Format i pavlefshëm",
-      "required": "I detyrueshëm",
+      "pattern": "Formati i pavlefshëm",
+      "required": "I nevojshëm",
       "url": "Formati i URL-së është i pavlefshëm"
     }
   },
   "fields": {
     "duration": {
-      "day": "Dita",
-      "hour": "Ora",
-      "minute": "Minuta",
-      "second": "Sekonda",
-      "millisecond": "Milisekonda",
+      "day": "Ditë",
+      "hour": "Orë",
+      "minute": "Minutë",
+      "second": "Sekondë",
+      "millisecond": "Millisekondë",
       "days": "Ditë",
       "hours": "Orë",
-      "minutes": "Minuta",
+      "minutes": "Minute",
       "seconds": "Sekonda",
-      "milliseconds": "Milisekonda"
+      "milliseconds": "Millisekonda"
     }
   },
   "info": {
     "validations": {
-      "min": "Numri duhet të jetë më i madh ose i barabartë me {{accepted}}",
+      "min": "Numri duhet të jetë më i madh se ose i barabartë me {{accepted}}",
       "minlength": "Stringu duhet të përmbajë të paktën {{accepted}} karakter(e)",
       "minbytes": "Skedari duhet të jetë të paktën {{accepted}}",
-      "max": "Numri duhet të jetë më i vogël ose i barabartë me {{accepted}}",
-      "maxlength": "Stringu duhet të përmbajë maksimumi {{accepted}} karakter(e)",
+      "max": "Numri duhet të jetë më i vogël se ose i barabartë me {{accepted}}",
+      "maxlength": "Stringu duhet të përmbajë maksimum {{accepted}} karakter(e)",
       "maxbytes": "Skedari nuk mund të kalojë {{accepted}}",
-      "required": "I detyrueshëm",
+      "required": "I nevojshëm",
       "unique": "Vlera duhet të jetë unike"
     }
   },
   "messages": {
-    "noData": "Nuk u gjetën regjistrime"
+    "noData": "Nuk u gjetën regjistra"
   },
   "pages": {
-    "Home": "Faqja Kryesore"
+    "Home": "Faqja kryesore"
   },
   "ui": {
     "account": {
       "login": "Kyçu",
       "loggingIn": "Duke u kyçur...",
-      "logout": "Çkyçu",
-      "loggingOut": "Duke u çkyçur...",
-      "logoutError": "Gabim në çkyçje",
+      "logout": "Shkyçu",
+      "loggingOut": "Duke u shkëputur...",
+      "logoutError": "Gabim në shkëputje",
       "unknownError": "Gabim i panjohur"
     },
     "darkmode": {
-      "light": "Kaloni në modin e dritës",
-      "lightOn": "Tema e lehtësisë aktive",
-      "dark": "Kaloni në modin e errët",
-      "darkOn": "Tema e errësirës aktive"
+      "light": "Kalo në modalitetin e dritës",
+      "lightOn": "Tema e lehtë aktive",
+      "dark": "Kalo në modalitetin e errët",
+      "darkOn": "Tema e errët aktive"
     },
     "langSelect": "Zgjidh gjuhën",
     "htmlViewer": {
-      "controls": "Shiko kontrollat",
+      "controls": "Shiko kontrolllet",
       "viewSource": "Shiko kodin burimor",
       "viewRendering": "Shiko parashikimin",
       "source": "Kodi burimor HTML (lexim vetëm)",
-      "sourceSection": "Sekcioni i kodit burimor",
-      "renderedSection": "Sekcioni i përmbajtjes së renditur",
+      "sourceSection": "Rubrika e kodit burimor",
+      "renderedSection": "Rubrika e përmbajtjes së renditur",
       "renderedContent": "Përmbajtja e renderuar HTML",
-      "sourceActive": "Njësi e kodit burimor aktive",
+      "sourceActive": "Modaliteti i kodit burimor aktiv",
       "renderingActive": "Modaliteti i parashikimit aktiv"
     }
   }

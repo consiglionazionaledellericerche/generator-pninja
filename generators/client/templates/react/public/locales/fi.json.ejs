@@ -5,7 +5,7 @@
       "actions": "Toiminnot",
       "back": "Takaisin",
       "cancel": "Peruuta",
-      "confirmDelete": "Vahvista poisto",
+      "confirmDelete": "Vahvista poistaminen",
       "create": "Luo",
       "delete": "Poista",
       "edit": "Muokkaa",
@@ -16,11 +16,11 @@
       "file": {
         "markedForDeletion": "Tiedosto merkitty poistettavaksi (Tallenna vahvistaaksesi)",
         "viewOrDownload": "Näytä/Lataa",
-        "replaceWarning": "Uuden tiedoston valitseminen korvaa olemassa olevan"
+        "replaceWarning": "Uuden tiedoston valitseminen korvata olemassa olevan"
       },
-      "successfullyCreated": "Tietue ID {{id}} luotu onnistuneesti",
-      "successfullyUpdated": "Tietue ID {{id}} päivitetty onnistuneesti",
-      "successfullyDeleted": "Tietue ID {{id}} poistettu onnistuneesti"
+      "successfullyCreated": "Tietue ID {{id}} luotiin onnistuneesti",
+      "successfullyUpdated": "Tietue ID {{id}} päivitettiin onnistuneesti",
+      "successfullyDeleted": "Tietue ID {{id}} poistettiin onnistuneesti"
     },
     "hidePassword": "Piilota salasana",
     "showPassword": "Näytä salasana",
@@ -29,25 +29,25 @@
   "common": {
     "back": "Takaisin",
     "cancel": "Peruuta",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Aukeaa uuteen ikkunaan",
     "undo": "Kumoa",
-    "search": "Search...",
+    "search": "Hae...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "Yksi kohde valittu",
-      "nElementsSelected": "{{count}} kohdetta valittu",
+      "collapse": "Pienennä luetteloa",
+      "expand": "Laajenna luetteloa",
+      "oneElementSelected": "Yksi elementti valittu",
+      "nElementsSelected": "{{count}} elementtiä valittu",
       "placeholder": "Valitse vaihtoehto",
       "noOptions": "Ei vaihtoehtoja",
       "noValue": "Ei arvoa",
       "loading": "Ladataan vaihtoehtoja...",
-      "searchMultiple": "Valitse tai etsi yksi tai useampi arvo",
-      "searchSingle": "Valitse tai etsi arvo",
+      "searchMultiple": "Valitse tai hae yksi tai useampi arvo",
+      "searchSingle": "Valitse tai hae arvo",
       "selectMultiple": "Valitse yksi tai useampi arvo",
       "selectSingle": "Valitse arvo"
     },
     "show": {
-      "more": "Näytä enemmän",
+      "more": "Näytä lisää",
       "less": "Näytä vähemmän"
     },
     "sortBy": {
@@ -64,7 +64,7 @@
   },
   "pagination": {
     "pagination": "Sivutus",
-    "summary": "{{entity}}: tietueet {{from}}:sta {{to}}:een, yhteensä {{total}}",
+    "summary": "{{entity}}: tietueet {{from}} - {{to}}/{{total}}",
     "previous": "Edellinen sivu",
     "next": "Seuraava sivu",
     "goto": "Siirry sivulle {{page}}"
@@ -84,7 +84,7 @@
     "copied": "Salasana kopioitu!",
     "strength": {
       "weak": "Heikko salasana",
-      "medium": "Keskivahva salasana",
+      "medium": "Keskinkertainen salasana",
       "strong": "Vahva salasana"
     },
     "criteria": {
@@ -97,43 +97,43 @@
   },
   "errors": {
     "401": {
-      "title": "Virhe 401 – Ei valtuutusta",
-      "message": "Sinun on kirjauduttava sisään päästäksesi tälle sivulle. Tarkista kirjautumistietosi ja yritä uudelleen."
+      "title": "Virhe 401 – Ei valtuutettu",
+      "message": "Sinun on kirjauduttava sisään päästäksesi tälle sivulle. Tarkista käyttäjätunnuksesi ja yritä uudelleen."
     },
     "403": {
-      "title": "Hups! Virhe 403 – Pahoittelut, {{username}}",
-      "message": "Hei <1>{{username}}</1>, tunnistamme sinut, mutta sinulla ei ole tarvittavia käyttöoikeuksia tälle sivulle. Jos uskot tämän olevan virhe, ota meihin yhteyttä!"
+      "title": "Ups! Virhe 403 – Anteeksi, {{username}}",
+      "message": "Hei <1>{{username}}</1>, tunnistamme sinut, mutta sinulla ei ole oikeuksia päästäksesi tälle sivulle. Jos luulet, että tämä on virhe, ota meihin yhteyttä!"
     },
     "404": {
-      "title": "Hups! Virhe 404 – Sivua ei löytynyt",
-      "message": "Näyttää siltä, että etsimääsi sivua ei enää ole olemassa. Se on ehkä siirretty tai poistettu. Tarkista URL-osoite tai palaa etusivulle!"
+      "title": "Ups! Virhe 404 – Sivua ei löytynyt",
+      "message": "Näyttää siltä, että etsimäsi sivu ei enää olemassa. Se on saattanut siirtyä tai poistua. Tarkista URL-osoite tai palaa etusivulle!"
     },
     "entities": {
-      "create": "Virhe luomisessa",
-      "read": "Virhe lukemisessa",
-      "update": "Virhe päivityksessä",
-      "delete": "Virhe poistamisessa"
+      "create": "Virhe luotaessa",
+      "read": "Virhe luettaessa",
+      "update": "Virhe päivittäessä",
+      "delete": "Virhe poistaessa"
     },
     "options": {
-      "load": "Virhe ladattaessa vaihtoehtoja kohteelle"
+      "load": "Virhe ladattaessa vaihtoehtoja"
     },
     "validations": {
-      "email": "Virheellinen sähköpostin muoto",
+      "email": "Virheellinen sähköpostimuoto",
       "file": {
         "minSize": "Tiedoston on oltava vähintään {{accepted}}. Nykyinen koko: {{actual}}",
-        "maxSize": "Tiedosto ei voi ylittää {{accepted}}. Nykyinen koko: {{actual}}",
-        "invalidType": "Tiedoston tyypin on oltava {{accepted}}. Nykyinen tyyppi: {{actual}}",
+        "maxSize": "Tiedoston ei pitäisi ylittää {{accepted}}. Nykyinen koko: {{actual}}",
+        "invalidType": "Tiedostotyypin on oltava {{accepted}}. Nykyinen tyyppi: {{actual}}",
         "typeImage": "Tiedoston on oltava kuva",
         "required": "Tiedosto on pakollinen"
       },
       "min": "Numeron on oltava suurempi tai yhtä suuri kuin {{accepted}}",
-      "minlength": "Tekstin on sisällettävä vähintään {{accepted}} merkkiä",
+      "minlength": "Merkkijonon on sisältävä vähintään {{accepted}} merkkiä",
       "minbytes": "Tiedoston on oltava vähintään {{accepted}}",
       "max": "Numeron on oltava pienempi tai yhtä suuri kuin {{accepted}}",
-      "maxlength": "Teksti voi sisältää enintään {{accepted}} merkkiä",
+      "maxlength": "Merkkijonon on sisältävä enintään {{accepted}} merkkiä",
       "maxbytes": "Tiedosto ei voi ylittää {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Salasana on liian heikko"
       },
       "pattern": "Virheellinen muoto",
       "required": "Pakollinen",
@@ -147,23 +147,23 @@
       "minute": "Minuutti",
       "second": "Sekunti",
       "millisecond": "Millisekunti",
-      "days": "Päivää",
-      "hours": "Tuntia",
-      "minutes": "Minuuttia",
-      "seconds": "Sekuntia",
-      "milliseconds": "Millisekuntia"
+      "days": "Päivät",
+      "hours": "Tunnit",
+      "minutes": "Minuutit",
+      "seconds": "Sekunnit",
+      "milliseconds": "Millisekunnit"
     }
   },
   "info": {
     "validations": {
       "min": "Numeron on oltava suurempi tai yhtä suuri kuin {{accepted}}",
-      "minlength": "Tekstin on sisällettävä vähintään {{accepted}} merkkiä",
+      "minlength": "Merkkijonon on sisältävä vähintään {{accepted}} merkkiä",
       "minbytes": "Tiedoston on oltava vähintään {{accepted}}",
       "max": "Numeron on oltava pienempi tai yhtä suuri kuin {{accepted}}",
-      "maxlength": "Teksti voi sisältää enintään {{accepted}} merkkiä",
+      "maxlength": "Merkkijonon on sisältävä enintään {{accepted}} merkkiä",
       "maxbytes": "Tiedosto ei voi ylittää {{accepted}}",
       "required": "Pakollinen",
-      "unique": "Arvon on oltava yksilöllinen"
+      "unique": "Arvon on oltava ainutlaatuinen"
     }
   },
   "messages": {
@@ -175,29 +175,29 @@
   "ui": {
     "account": {
       "login": "Kirjaudu sisään",
-      "loggingIn": "Kirjaudutaan sisään...",
+      "loggingIn": "Kirjautuu sisään...",
       "logout": "Kirjaudu ulos",
-      "loggingOut": "Kirjaudutaan ulos...",
-      "logoutError": "Virhe uloskirjautumisessa",
+      "loggingOut": "Kirjautuu ulos...",
+      "logoutError": "Virhe kirjautuessa ulos",
       "unknownError": "Tuntematon virhe"
     },
     "darkmode": {
-      "light": "Vaihda vaaleaan tilaan",
-      "lightOn": "Vaalea teema käytössä",
-      "dark": "Vaihda tummaan tilaan",
-      "darkOn": "Tumma teema käytössä"
+      "light": "Vaihda valo-tilaan",
+      "lightOn": "Vaalea teema aktiivinen",
+      "dark": "Vaihda tumma-tilaan",
+      "darkOn": "Tumma teema aktiivinen"
     },
-    "langSelect": "Select language",
+    "langSelect": "Valitse kieli",
     "htmlViewer": {
-      "controls": "Näytä hallintapainikkeet",
+      "controls": "Näytä ohjaimet",
       "viewSource": "Näytä lähdekoodi",
       "viewRendering": "Näytä esikatselu",
       "source": "HTML-lähdekoodi (vain luku)",
-      "sourceSection": "Lähdekoodiosio",
-      "renderedSection": "Renderöity sisältöosio",
+      "sourceSection": "Lähdekoodin osa",
+      "renderedSection": "Renderöity sisältöosa",
       "renderedContent": "Renderöity HTML-sisältö",
-      "sourceActive": "Lähdekooditila käytössä",
-      "renderingActive": "Esikatselutila käytössä"
+      "sourceActive": "Lähdekooditila aktiivinen",
+      "renderingActive": "Esikatselutila aktiivinen"
     }
   }
 }

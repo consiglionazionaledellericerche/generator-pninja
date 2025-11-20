@@ -2,48 +2,48 @@
   "appName": "<%= appName %>",
   "actions": {
     "crud": {
-      "actions": "Izenzo",
-      "back": "Emuva",
-      "cancel": "Khansela",
+      "actions": "Izinyathelo",
+      "back": "Phinda",
+      "cancel": "Cancela",
       "confirmDelete": "Qinisekisa ukususa",
       "create": "Dala",
       "delete": "Susa",
       "edit": "Hlela",
-      "save": "Londoloza",
-      "saving": "Kulondolozwa...",
-      "update": "Buyekeza",
-      "view": "Buka",
+      "save": "Gcina",
+      "saving": "Kugcina...",
+      "update": "Thuthukisa",
+      "view": "Bukela",
       "file": {
-        "markedForDeletion": "Ifayela libekwe uphawu lokususa (Londoloza ukuze uqinisekise)",
-        "viewOrDownload": "Buka/Landa",
-        "replaceWarning": "Ukukhetha ifayela elisha kuzothatha indawo yefayela elikhona"
+        "markedForDeletion": "Ifayela elibhalwe ukususwa (Gcina ukuze uqinisekise)",
+        "viewOrDownload": "Bukela/Thwebula",
+        "replaceWarning": "Ukukhetha ifayela elisha kuzokwenza ukuthi elikhona lisuswe"
       },
-      "successfullyCreated": "Irekhodi le-ID {{id}} lidalwe ngempumelelo",
-      "successfullyUpdated": "Irekhodi le-ID {{id}} libuyekezwe ngempumelelo",
-      "successfullyDeleted": "Irekhodi le-ID {{id}} lisusiwe ngempumelelo"
+      "successfullyCreated": "I-ID yokurekhoda {{id}} idalwe ngempumelelo",
+      "successfullyUpdated": "I-ID yokurekhoda {{id}} ibuyekezwe ngempumelelo",
+      "successfullyDeleted": "I-ID yokurekhoda {{id}} isusiwe ngempumelelo"
     },
     "hidePassword": "Fihla iphasiwedi",
     "showPassword": "Bonisa iphasiwedi",
-    "generateUUID": "Dala i-UUID enguqulo 4"
+    "generateUUID": "Dala i-version 4 UUID"
   },
   "common": {
-    "back": "Emuva",
-    "cancel": "Khansela",
-    "opensInNewWindow": "Opens in a new window",
+    "back": "Phinda",
+    "cancel": "Cancela",
+    "opensInNewWindow": "Iya efasiteleni elisha",
     "undo": "Buyisela emuva",
-    "search": "Search...",
+    "search": "Sesha...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "Into eyodwa ekhethiwe",
-      "nElementsSelected": "{{count}} izinto ezikhethiwe",
+      "collapse": "Nqamula uhlu",
+      "expand": "Nweba uhlu",
+      "oneElementSelected": "Esembi eyodwa ikhethiwe",
+      "nElementsSelected": "{{count}} izinto zikhethiwe",
       "placeholder": "Khetha inketho",
-      "noOptions": "Azikho izinketho",
+      "noOptions": "Ayikho inketho",
       "noValue": "Ayikho inani",
-      "loading": "Kulayishwa izinketho...",
-      "searchMultiple": "Khetha noma useshe inani elilodwa noma amaningi",
+      "loading": "Ilayisha izinketho...",
+      "searchMultiple": "Khetha noma useshe inani elilodwa noma ngaphezulu",
       "searchSingle": "Khetha noma useshe inani",
-      "selectMultiple": "Khetha inani elilodwa noma amaningi",
+      "selectMultiple": "Khetha elilodwa noma ngaphezulu",
       "selectSingle": "Khetha inani"
     },
     "show": {
@@ -51,8 +51,8 @@
       "less": "Bonisa okuncane"
     },
     "sortBy": {
-      "ascending": "Hlela ngokwe-{{field}} ukukhalipha",
-      "descending": "Hlela ngokwe-{{field}} ukwehla"
+      "ascending": "Hlela ngokwe {{field}} phezulu",
+      "descending": "Hlela ngokwe {{field}} phansi"
     }
   },
   "dbms": {
@@ -63,11 +63,11 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Ukuphepha",
-    "summary": "{{entity}}: amarekhodi avela ku-{{from}} kuya ku-{{to}} ku-{{total}}",
-    "previous": "Ikhasi langaphambili",
+    "pagination": "Uhlanga",
+    "summary": "{{entity}}: amarekhodi angu-{{from}} ukuya ku-{{to}} kwezingu-{{total}}",
+    "previous": "Ikhasi elisandulele",
     "next": "Ikhasi elilandelayo",
-    "goto": "Iya ekhasini le-{{page}}"
+    "goto": "Iya ekhasini {{page}}"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -78,126 +78,126 @@
   },
   "entities": "Izinto",
   "password": {
-    "strengthLabel": "Amandla Ephasiwedi",
+    "strengthLabel": "Amandla ePhasiwedi",
     "generate": "Dala iphasiwedi ephephile",
     "copy": "Kopisha iphasiwedi",
-    "copied": "Iphasiwedi ikopishiwe!",
+    "copied": "Iphasiwedi ikhophiwe!",
     "strength": {
       "weak": "Iphasiwedi ebuthakathaka",
-      "medium": "Iphasiwedi emaphakathi",
+      "medium": "Iphasiwedi ephakathi",
       "strong": "Iphasiwedi eqinile"
     },
     "criteria": {
-      "minLength": "Okungenani izinhlamvu {{count}}",
-      "uppercase": "Unhlamvu omkhulu (A-Z)",
-      "lowercase": "Unhlamvu omncane (a-z)",
+      "minLength": "Okungenani {{count}} izinhlamvu",
+      "uppercase": "Uchazi lwezincwadi olukhulu (A-Z)",
+      "lowercase": "Uchazi lwezincwadi oluncane (a-z)",
       "numbers": "Inombolo (0-9)",
-      "specialChars": "Uphawu olukhethekile (!@#$%&*...)"
+      "specialChars": "Uchazi olukhethekile (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Iphutha 401 – Akugunyaziwe",
-      "message": "Udinga ukungena ngemvume ukuze ufinyelele kuleli khasi. Sicela uhlole iziqinisekiso zakho bese uzama futhi."
+      "title": "Iphutha 401 – Ungagunyaziwe",
+      "message": "Udinga ukufaka ngemvume ukuze ufike kuleli khasi. Sicela uhlole izitifiketi zakho futhi uzame futhi."
     },
     "403": {
-      "title": "Uxolo! Iphutha 403 – Uxolo, {{username}}",
-      "message": "Sawubona <1>{{username}}</1>, sikubonile, kodwa awunayo imvume efanele yokufinyelela kuleli khasi. Uma ucabanga ukuthi lokhu kuyiphutha, xhumana nathi!"
+      "title": "Oph! Iphutha 403 – Uxolo, {{username}}",
+      "message": "Hey <1>{{username}}</1>, siyakuhlonipha, kodwa awunamalungelo afanele ukufinyelela kuleli khasi. Uma ucabanga ukuthi lokhu kuwuphutha, xhumana nathi!"
     },
     "404": {
-      "title": "Uxolo! Iphutha 404 – Ikhasi Alitholakali",
-      "message": "Kubukeka sengathi ikhasi olifunayo alisekho. Kungenzeka ukuthi selihanjisiwe noma lisusiwe. Hlola i-URL noma ubuyele ekhasini eliyisiqalo!"
+      "title": "Oph! Iphutha 404 – Ikhasi alitholakali",
+      "message": "Kubukeka sengathi ikhasi ofuna ukukukhalela alisasekho. Kungase kube kudluliselwe noma ukususwa. Hlola i-URL noma ubuyele ekhasini eliyinhloko!"
     },
     "entities": {
-      "create": "Iphutha ekudaleni",
-      "read": "Iphutha ekufundeni",
-      "update": "Iphutha ekubuyekezweni",
-      "delete": "Iphutha ekususeni"
+      "create": "Iphutha lokwenza",
+      "read": "Iphutha lokufunda",
+      "update": "Iphutha lokubuyekeza",
+      "delete": "Iphutha lokususa"
     },
     "options": {
-      "load": "Iphutha ekulayisheni izinketho zika"
+      "load": "Iphutha lokulayisha izinketho"
     },
     "validations": {
-      "email": "Ifomethi ye-imeyili ayivumelekile",
+      "email": "Uhlaka lwe-imeyili alusemthethweni",
       "file": {
-        "minSize": "Ifayela kufanele libe okungenani {{accepted}}. Usayizi wamanje: {{actual}}",
+        "minSize": "Ifayela kumele libe okungenani {{accepted}}. Usayizi wamanje: {{actual}}",
         "maxSize": "Ifayela alikwazi ukudlula {{accepted}}. Usayizi wamanje: {{actual}}",
-        "invalidType": "Uhlobo lwefayela kufanele lube {{accepted}}. Uhlobo lwamanje: {{actual}}",
-        "typeImage": "Ifayela kufanele libe isithombe",
+        "invalidType": "Uhlaka lwemfanelo kumele kube {{accepted}}. Uhlobo lwamanje: {{actual}}",
+        "typeImage": "Ifayela kumele libe isithombe",
         "required": "Ifayela liyadingeka"
       },
-      "min": "Inombolo kufanele ibe nkulu noma ilingane no-{{accepted}}",
-      "minlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
-      "minbytes": "Ifayela kufanele libe okungenani {{accepted}}",
-      "max": "Inombolo kufanele ibe ncane noma ilingane no-{{accepted}}",
-      "maxlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
-      "maxbytes": "Ifayela alikwazi ukudlula {{accepted}}",
+      "min": "Khetha ulimi",
+      "minlength": "Bukela ukuphathwa",
+      "minbytes": "Bukela ikhodi yomthombo",
+      "max": "Bukela ukubuka",
+      "maxlength": "Ikhodi yomthombo ye-HTML (funda kuphela)",
+      "maxbytes": "Ingxenye yekhodi yomthombo",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Okudingekayo"
       },
-      "pattern": "Ifomethi ayivumelekile",
-      "required": "Kuyadingeka",
-      "url": "Ifomethi ye-URL ayivumelekile"
+      "pattern": "Inani kumele libe lethulwa",
+      "required": "Ingxenye yokwethulwa",
+      "url": "Ikhasi eliyinhloko"
     }
   },
   "fields": {
     "duration": {
-      "day": "Usuku",
-      "hour": "Ihora",
-      "minute": "Umzuzu",
-      "second": "Isibili",
-      "millisecond": "Umzuzwana",
-      "days": "Izinsuku",
-      "hours": "Amahora",
-      "minutes": "Imizuzu",
-      "seconds": "Amasekhondi",
-      "milliseconds": "Imizuzwana"
+      "day": "Ngena",
+      "hour": "Uqinisekiswa...",
+      "minute": "Phuma",
+      "second": "Uphumile...",
+      "millisecond": "Iphutha lokuphuma",
+      "days": "Iphutha elingaziwa",
+      "hours": "Shintsha uye kumodi elula",
+      "minutes": "Isitayela sesibani sikhona",
+      "seconds": "Shintsha uye kumodi emnyama",
+      "milliseconds": "Isitayela sombala omnyama sikhona"
     }
   },
   "info": {
     "validations": {
-      "min": "Inombolo kufanele ibe nkulu noma ilingane no-{{accepted}}",
-      "minlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
-      "minbytes": "Ifayela kufanele libe okungenani {{accepted}}",
-      "max": "Inombolo kufanele ibe ncane noma ilingane no-{{accepted}}",
-      "maxlength": "Uchungechunge kufanele luqukathe okungenani izinhlamvu {{accepted}}",
-      "maxbytes": "Ifayela alikwazi ukudlula {{accepted}}",
-      "required": "Kuyadingeka",
-      "unique": "Inani kufanele libe eliyingqayizivele"
+      "min": "Khetha ulimi",
+      "minlength": "Bukela ukuphathwa",
+      "minbytes": "Bukela ikhodi yomthombo",
+      "max": "Bukela ukubuka",
+      "maxlength": "Ikhodi yomthombo ye-HTML (funda kuphela)",
+      "maxbytes": "Ingxenye yekhodi yomthombo",
+      "required": "Ingxenye yokwethulwa",
+      "unique": "Okuqukethwe okwenziwe"
     }
   },
   "messages": {
-    "noData": "Azikho amarekhodi atholakele"
+    "noData": "Imodi yekhodi yomthombo ikhona"
   },
   "pages": {
-    "Home": "Ikhasi eliyinhloko"
+    "Home": "Imodi yokubuka ikhona"
   },
   "ui": {
     "account": {
-      "login": "Ngena ngemvume",
-      "loggingIn": "Kuyangenwa ngemvume...",
-      "logout": "Phuma",
-      "loggingOut": "Kuyaphuma...",
-      "logoutError": "Iphutha ekuphumeni",
-      "unknownError": "Iphutha elingaziwa"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "Shintsha kumodi ekhanyayo",
-      "lightOn": "Itimu ekhanyayo iyasebenza",
-      "dark": "Shintsha kumodi emnyama",
-      "darkOn": "Itimu emnyama iyasebenza"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
     "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "Buka izilawuli",
-      "viewSource": "Buka ikhodi yomthombo",
-      "viewRendering": "Buka ukubuka kuqala",
-      "source": "Ikhodi yomthombo ye-HTML (funda kuphela)",
-      "sourceSection": "Ingxenye yekhodi yomthombo",
-      "renderedSection": "Ingxenye yokuqukethwe okubonisiwe",
-      "renderedContent": "Okuqukethwe kwe-HTML okubonisiwe",
-      "sourceActive": "Imodi yekhodi yomthombo iyasebenza",
-      "renderingActive": "Imodi yokubuka kuqala iyasebenza"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

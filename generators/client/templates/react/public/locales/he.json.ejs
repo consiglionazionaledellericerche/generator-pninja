@@ -4,7 +4,7 @@
     "crud": {
       "actions": "פעולות",
       "back": "חזור",
-      "cancel": "ביטול",
+      "cancel": "בטל",
       "confirmDelete": "אשר מחיקה",
       "create": "צור",
       "delete": "מחק",
@@ -14,28 +14,28 @@
       "update": "עדכן",
       "view": "צפה",
       "file": {
-        "markedForDeletion": "הקובץ סומן למחיקה (שמור לאישור)",
+        "markedForDeletion": "קובץ מסומן למחיקה (שמור כדי לאשר)",
         "viewOrDownload": "צפה/הורד",
         "replaceWarning": "בחירת קובץ חדש תחליף את הקובץ הקיים"
       },
-      "successfullyCreated": "רשומה עם מזהה {{id}} נוצרה בהצלחה",
-      "successfullyUpdated": "רשומה עם מזהה {{id}} עודכנה בהצלחה",
-      "successfullyDeleted": "רשומה עם מזהה {{id}} נמחקה בהצלחה"
+      "successfullyCreated": "מזהה הרשומה {{id}} נוצר בהצלחה",
+      "successfullyUpdated": "מזהה הרשומה {{id}} עודכן בהצלחה",
+      "successfullyDeleted": "מזהה הרשומה {{id}} נמחק בהצלחה"
     },
     "hidePassword": "הסתר סיסמה",
-    "showPassword": "הצג סיסמה",
+    "showPassword": "הראה סיסמה",
     "generateUUID": "צור UUID גרסה 4"
   },
   "common": {
     "back": "חזור",
-    "cancel": "ביטול",
-    "opensInNewWindow": "Opens in a new window",
+    "cancel": "בטל",
+    "opensInNewWindow": "נפתח בחלון חדש",
     "undo": "בטל",
-    "search": "Search...",
+    "search": "חיפוש...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "אלמנט אחד נבחר",
+      "collapse": "צמצם רשימה",
+      "expand": "הרחב רשימה",
+      "oneElementSelected": "אלement אחד נבחר",
       "nElementsSelected": "{{count}} אלמנטים נבחרו",
       "placeholder": "בחר אפשרות",
       "noOptions": "אין אפשרויות",
@@ -47,12 +47,12 @@
       "selectSingle": "בחר ערך"
     },
     "show": {
-      "more": "הצג עוד",
-      "less": "הצג פחות"
+      "more": "הראה יותר",
+      "less": "הראה פחות"
     },
     "sortBy": {
-      "ascending": "מיין לפי {{field}} בסדר ascending",
-      "descending": "מיין לפי {{field}} בסדר descending"
+      "ascending": "מיין לפי {{field}} בסדר עולה",
+      "descending": "מיין לפי {{field}} בסדר יורד"
     }
   },
   "dbms": {
@@ -63,11 +63,11 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "דפדוף",
-    "summary": "{{entity}}: רשומות מ-{{from}} עד {{to}} מתוך {{total}}",
+    "pagination": "הפחתה",
+    "summary": "{{entity}}: רשומות מ-{{from}} ל-{{to}} מתוך {{total}}",
     "previous": "עמוד קודם",
     "next": "עמוד הבא",
-    "goto": "לך לעמוד {{page}}"
+    "goto": "עבור לעמוד {{page}}"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -76,9 +76,9 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": "ישויות",
+  "entities": "יישויות",
   "password": {
-    "strengthLabel": "חוזק הסיסמה",
+    "strengthLabel": "חוזק סיסמה",
     "generate": "צור סיסמה מאובטחת",
     "copy": "העתק סיסמה",
     "copied": "הסיסמה הועתקה!",
@@ -91,22 +91,22 @@
       "minLength": "לפחות {{count}} תווים",
       "uppercase": "אות גדולה (A-Z)",
       "lowercase": "אות קטנה (a-z)",
-      "numbers": "ספרה (0-9)",
+      "numbers": "מספר (0-9)",
       "specialChars": "תו מיוחד (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
       "title": "שגיאה 401 – לא מורשה",
-      "message": "עליך להתחבר כדי לגשת לדף זה. אנא בדוק את האישורים שלך ונסה שוב."
+      "message": "נדרש להיכנס כדי לגשת לדף זה. אנא בדוק את האישורים שלך ונסה שוב."
     },
     "403": {
-      "title": "אופס! שגיאה 403 – מצטערים, {{username}}",
-      "message": "שלום <1>{{username}}</1>, זיהינו אותך, אך אין לך הרשאות לגשת לדף זה. אם אתה חושב שזו טעות, צור איתנו קשר!"
+      "title": "אופס! שגיאה 403 – מצטער, {{username}}",
+      "message": "היי <1>{{username}}</1>, אנחנו מזהים אותך, אבל אין לך את ההרשאות הנכונות כדי לגשת לדף זה. אם אתה חושב שזה טעות, פנה אלינו!"
     },
     "404": {
-      "title": "אופס! שגיאה 404 – הדף לא נמצא",
-      "message": "נראה שהדף שאתה מחפש כבר לא קיים. ייתכן שהוא הועבר או נמחק. בדוק את כתובת ה-URL או חזור לדף הבית!"
+      "title": "אופס! שגיאה 404 – דף לא נמצא",
+      "message": "נראה שהדף שאתה מחפש כבר לא קיים. ייתכן שהוא הועבר או נמחק. בדוק את ה-URL או חזור לדף הבית!"
     },
     "entities": {
       "create": "שגיאה ביצירה",
@@ -118,86 +118,86 @@
       "load": "שגיאה בטעינת אפשרויות עבור"
     },
     "validations": {
-      "email": "פורמט אימייל לא תקין",
+      "email": "פורמט דוא\"ל לא חוקי",
       "file": {
         "minSize": "הקובץ חייב להיות לפחות {{accepted}}. גודל נוכחי: {{actual}}",
         "maxSize": "הקובץ לא יכול לעלות על {{accepted}}. גודל נוכחי: {{actual}}",
         "invalidType": "סוג הקובץ חייב להיות {{accepted}}. סוג נוכחי: {{actual}}",
         "typeImage": "הקובץ חייב להיות תמונה",
-        "required": "הקובץ נדרש"
+        "required": "הקובץ נחוץ"
       },
-      "min": "המספר חייב להיות גדול או שווה ל-{{accepted}}",
-      "minlength": "המחרוזת חייבת להכיל לפחות {{accepted}} תווים",
-      "minbytes": "הקובץ חייב להיות לפחות {{accepted}}",
-      "max": "המספר חייב להיות קטן או שווה ל-{{accepted}}",
-      "maxlength": "המחרוזת יכולה להכיל לכל היותר {{accepted}} תווים",
-      "maxbytes": "הקובץ לא יכול לעלות על {{accepted}}",
+      "min": "בחר שפה",
+      "minlength": "צפה בבקרים",
+      "minbytes": "צפה בקוד מקור",
+      "max": "צפה בתצוגה מקדימה",
+      "maxlength": "קוד מקור HTML (קריאה בלבד)",
+      "maxbytes": "קטע קוד מקור",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "נדרש"
       },
-      "pattern": "פורמט לא תקין",
-      "required": "נדרש",
-      "url": "פורמט URL לא תקין"
+      "pattern": "ערך חייב להיות ייחודי",
+      "required": "קטע תוכן מוקרן",
+      "url": "דף הבית"
     }
   },
   "fields": {
     "duration": {
-      "day": "יום",
-      "hour": "שעה",
-      "minute": "דקה",
-      "second": "שנייה",
-      "millisecond": "מילישנייה",
-      "days": "ימים",
-      "hours": "שעות",
-      "minutes": "דקות",
-      "seconds": "שניות",
-      "milliseconds": "מילישניות"
+      "day": "התחברות",
+      "hour": "מתחבר...",
+      "minute": "יוציא",
+      "second": "מתנתק...",
+      "millisecond": "שגיאה בהתחברות",
+      "days": "שגיאה לא ידועה",
+      "hours": "העבר למצב בהיר",
+      "minutes": "נושא בהיר פעיל",
+      "seconds": "העבר למצב כהה",
+      "milliseconds": "נושא כהה פעיל"
     }
   },
   "info": {
     "validations": {
-      "min": "המספר חייב להיות גדול או שווה ל-{{accepted}}",
-      "minlength": "המחרוזת חייבת להכיל לפחות {{accepted}} תווים",
-      "minbytes": "הקובץ חייב להיות לפחות {{accepted}}",
-      "max": "המספר חייב להיות קטן או שווה ל-{{accepted}}",
-      "maxlength": "המחרוזת יכולה להכיל לכל היותר {{accepted}} תווים",
-      "maxbytes": "הקובץ לא יכול לעלות על {{accepted}}",
-      "required": "נדרש",
-      "unique": "הערך חייב להיות ייחודי"
+      "min": "בחר שפה",
+      "minlength": "צפה בבקרים",
+      "minbytes": "צפה בקוד מקור",
+      "max": "צפה בתצוגה מקדימה",
+      "maxlength": "קוד מקור HTML (קריאה בלבד)",
+      "maxbytes": "קטע קוד מקור",
+      "required": "קטע תוכן מוקרן",
+      "unique": "תוכן HTML מוקרן"
     }
   },
   "messages": {
-    "noData": "לא נמצאו רשומות"
+    "noData": "מצב קוד מקור פעיל"
   },
   "pages": {
-    "Home": "דף הבית"
+    "Home": "מצב תצוגה מקדימה פעיל"
   },
   "ui": {
     "account": {
-      "login": "התחבר",
-      "loggingIn": "מתחבר...",
-      "logout": "התנתק",
-      "loggingOut": "מתנתק...",
-      "logoutError": "שגיאה בהתנתקות",
-      "unknownError": "שגיאה לא ידועה"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "עבור למצב בהיר",
-      "lightOn": "ערכת נושא בהירה פעילה",
-      "dark": "עבור למצב כהה",
-      "darkOn": "ערכת נושא כהה פעילה"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
     "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "הצג בקרות",
-      "viewSource": "הצג קוד מקור",
-      "viewRendering": "הצג תצוגה מקדימה",
-      "source": "קוד מקור HTML (לקריאה בלבד)",
-      "sourceSection": "קטע קוד מקור",
-      "renderedSection": "קטע תוכן מעובד",
-      "renderedContent": "תוכן HTML מעובד",
-      "sourceActive": "מצב קוד מקור פעיל",
-      "renderingActive": "מצב תצוגה מקדימה פעיל"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

@@ -5,7 +5,7 @@
       "actions": "Eylemler",
       "back": "Geri",
       "cancel": "İptal",
-      "confirmDelete": "Silme işlemini onayla",
+      "confirmDelete": "Silme onayla",
       "create": "Oluştur",
       "delete": "Sil",
       "edit": "Düzenle",
@@ -14,9 +14,9 @@
       "update": "Güncelle",
       "view": "Görüntüle",
       "file": {
-        "markedForDeletion": "Silinmek üzere işaretlendi (Onaylamak için kaydedin)",
+        "markedForDeletion": "Silinmek üzere işaretlenmiş dosya (Onaylamak için kaydedin)",
         "viewOrDownload": "Görüntüle/İndir",
-        "replaceWarning": "Yeni bir dosya seçmek mevcut dosyayı değiştirecektir"
+        "replaceWarning": "Yeni bir dosya seçmek mevcut olanı değiştirecektir"
       },
       "successfullyCreated": "Kayıt ID {{id}} başarıyla oluşturuldu",
       "successfullyUpdated": "Kayıt ID {{id}} başarıyla güncellendi",
@@ -24,17 +24,17 @@
     },
     "hidePassword": "Şifreyi gizle",
     "showPassword": "Şifreyi göster",
-    "generateUUID": "Sürüm 4 UUID oluştur"
+    "generateUUID": "Versiyon 4 UUID oluştur"
   },
   "common": {
     "back": "Geri",
     "cancel": "İptal",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Yeni bir pencerede açılır",
     "undo": "Geri al",
-    "search": "Search...",
+    "search": "Ara…",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
+      "collapse": "Listeyi daralt",
+      "expand": "Listeyi genişlet",
       "oneElementSelected": "Bir öğe seçildi",
       "nElementsSelected": "{{count}} öğe seçildi",
       "placeholder": "Bir seçenek seçin",
@@ -44,11 +44,11 @@
       "searchMultiple": "Bir veya daha fazla değer seçin veya arayın",
       "searchSingle": "Bir değer seçin veya arayın",
       "selectMultiple": "Bir veya daha fazla değer seçin",
-      "selectSingle": "Bir değer seçin"
+      "selectSingle": "Bir değer seç"
     },
     "show": {
-      "more": "Daha fazla göster",
-      "less": "Daha az göster"
+      "more": "Daha fazlasını göster",
+      "less": "Daha azını göster"
     },
     "sortBy": {
       "ascending": "{{field}}'e göre artan sırala",
@@ -64,7 +64,7 @@
   },
   "pagination": {
     "pagination": "Sayfalama",
-    "summary": "{{entity}}: {{from}}'den {{to}}'ye {{total}} kayıt",
+    "summary": "{{entity}}: {{total}} içinden {{from}} ile {{to}} arası kayıtlar",
     "previous": "Önceki sayfa",
     "next": "Sonraki sayfa",
     "goto": "{{page}} sayfasına git"
@@ -91,113 +91,113 @@
       "minLength": "En az {{count}} karakter",
       "uppercase": "Bir büyük harf (A-Z)",
       "lowercase": "Bir küçük harf (a-z)",
-      "numbers": "Bir rakam (0-9)",
+      "numbers": "Bir sayı (0-9)",
       "specialChars": "Bir özel karakter (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Hata 401 – Yetkisiz",
-      "message": "Bu sayfaya erişmek için giriş yapmanız gerekiyor. Lütfen kimlik bilgilerinizi kontrol edin ve tekrar deneyin."
+      "title": "Hata 401 - Yetkisiz",
+      "message": "Bu sayfaya erişmek için giriş yapmalısınız. Lütfen kimlik bilgilerinizi kontrol edin ve tekrar deneyin."
     },
     "403": {
-      "title": "Hata 403 – Üzgünüz, {{username}}",
-      "message": "Merhaba <1>{{username}}</1>, sizi tanıdık ancak bu sayfaya erişim izniniz yok. Bunun bir hata olduğunu düşünüyorsanız, bizimle iletişime geçin!"
+      "title": "Hata! Hata 403 - Üzgünüm, {{username}}",
+      "message": "Merhaba <1>{{username}}</1>, seni tanıyoruz, ancak bu sayfaya erişmek için gerekli izinlerin yok. Bunun bir hata olduğunu düşünüyorsan, bizimle iletişime geç!"
     },
     "404": {
-      "title": "Hata 404 – Sayfa Bulunamadı",
-      "message": "Aradığınız sayfa artık mevcut değil gibi görünüyor. Taşınmış veya silinmiş olabilir. URL'yi kontrol edin veya ana sayfaya dönün!"
+      "title": "Hata! Hata 404 - Sayfa Bulunamadı",
+      "message": "Aradığınız sayfanın artık mevcut olmadığı gibi görünüyor. Taşınmış veya silinmiş olabilir. URL'yi kontrol edin veya ana sayfaya geri dönün!"
     },
     "entities": {
-      "create": "Oluşturma hatası",
-      "read": "Okuma hatası",
-      "update": "Güncelleme hatası",
-      "delete": "Silme hatası"
+      "create": "Hata oluşturma",
+      "read": "Hata okuma",
+      "update": "Hata güncelleme",
+      "delete": "Hata silme"
     },
     "options": {
-      "load": "Seçenekler yüklenirken hata oluştu"
+      "load": "Hata seçenekleri yükleme"
     },
     "validations": {
       "email": "Geçersiz e-posta formatı",
       "file": {
-        "minSize": "Dosya en az {{accepted}} olmalıdır. Mevcut boyut: {{actual}}",
-        "maxSize": "Dosya {{accepted}}'i aşamaz. Mevcut boyut: {{actual}}",
+        "minSize": "Dosya en az {{accepted}} boyutunda olmalıdır. Mevcut boyut: {{actual}}",
+        "maxSize": "Dosya {{accepted}}'yi aşamaz. Mevcut boyut: {{actual}}",
         "invalidType": "Dosya türü {{accepted}} olmalıdır. Mevcut tür: {{actual}}",
         "typeImage": "Dosya bir resim olmalıdır",
         "required": "Dosya gereklidir"
       },
-      "min": "Sayı {{accepted}} veya daha büyük olmalıdır",
-      "minlength": "Dize en az {{accepted}} karakter içermelidir",
-      "minbytes": "Dosya en az {{accepted}} olmalıdır",
-      "max": "Sayı {{accepted}} veya daha küçük olmalıdır",
-      "maxlength": "Dize en fazla {{accepted}} karakter içermelidir",
-      "maxbytes": "Dosya {{accepted}}'i aşamaz",
+      "min": "Dil seç",
+      "minlength": "Kontrolleri görüntüle",
+      "minbytes": "Kaynak kodunu görüntüle",
+      "max": "Önizlemeyi görüntüle",
+      "maxlength": "HTML kaynak kodu (sadece okunur)",
+      "maxbytes": "Kaynak kodu bölümü",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Gerekli"
       },
-      "pattern": "Geçersiz format",
-      "required": "Gerekli",
-      "url": "Geçersiz URL formatı"
+      "pattern": "Değer benzersiz olmalıdır",
+      "required": "Render edilmiş içerik bölümü",
+      "url": "Ana sayfa"
     }
   },
   "fields": {
     "duration": {
-      "day": "Gün",
-      "hour": "Saat",
-      "minute": "Dakika",
-      "second": "Saniye",
-      "millisecond": "Milisaniye",
-      "days": "Günler",
-      "hours": "Saatler",
-      "minutes": "Dakikalar",
-      "seconds": "Saniyeler",
-      "milliseconds": "Milisaniyeler"
+      "day": "Giriş",
+      "hour": "Giriş yapılıyor...",
+      "minute": "Çıkış",
+      "second": "Çıkış yapılıyor...",
+      "millisecond": "Çıkış yaparken hata",
+      "days": "Bilinmeyen hata",
+      "hours": "Aydınlık moda geç",
+      "minutes": "Aydınlık tema aktif",
+      "seconds": "Karanlık moda geç",
+      "milliseconds": "Karanlık tema aktif"
     }
   },
   "info": {
     "validations": {
-      "min": "Sayı {{accepted}} veya daha büyük olmalıdır",
-      "minlength": "Dize en az {{accepted}} karakter içermelidir",
-      "minbytes": "Dosya en az {{accepted}} olmalıdır",
-      "max": "Sayı {{accepted}} veya daha küçük olmalıdır",
-      "maxlength": "Dize en fazla {{accepted}} karakter içermelidir",
-      "maxbytes": "Dosya {{accepted}}'i aşamaz",
-      "required": "Gerekli",
-      "unique": "Değer benzersiz olmalıdır"
+      "min": "Dil seç",
+      "minlength": "Kontrolleri görüntüle",
+      "minbytes": "Kaynak kodunu görüntüle",
+      "max": "Önizlemeyi görüntüle",
+      "maxlength": "HTML kaynak kodu (sadece okunur)",
+      "maxbytes": "Kaynak kodu bölümü",
+      "required": "Render edilmiş içerik bölümü",
+      "unique": "Render edilmiş HTML içeriği"
     }
   },
   "messages": {
-    "noData": "Kayıt bulunamadı"
+    "noData": "Kaynak kodu modu aktif"
   },
   "pages": {
-    "Home": "Ana sayfa"
+    "Home": "Önizleme modu aktif"
   },
   "ui": {
     "account": {
-      "login": "Giriş Yap",
-      "loggingIn": "Giriş yapılıyor...",
-      "logout": "Çıkış Yap",
-      "loggingOut": "Çıkış yapılıyor...",
-      "logoutError": "Çıkış hatası",
-      "unknownError": "Bilinmeyen hata"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "Açık moda geç",
-      "lightOn": "Açık tema etkin",
-      "dark": "Koyu moda geç",
-      "darkOn": "Koyu tema etkin"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
     "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "Görünüm kontrolleri",
-      "viewSource": "Kaynak kodunu görüntüle",
-      "viewRendering": "Önizlemeyi görüntüle",
-      "source": "HTML kaynak kodu (salt okunur)",
-      "sourceSection": "Kaynak kodu bölümü",
-      "renderedSection": "Render edilmiş içerik bölümü",
-      "renderedContent": "Render edilmiş HTML içeriği",
-      "sourceActive": "Kaynak kodu modu etkin",
-      "renderingActive": "Önizleme modu etkin"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

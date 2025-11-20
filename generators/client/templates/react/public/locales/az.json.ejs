@@ -2,48 +2,48 @@
   "appName": "<%= appName %>",
   "actions": {
     "crud": {
-      "actions": "Əməliyyatlar",
+      "actions": "Əmələlər",
       "back": "Geri",
-      "cancel": "Ləğv et",
-      "confirmDelete": "Silinməni təsdiqlə",
+      "cancel": "İmtina et",
+      "confirmDelete": "Silinməni təsdiq et",
       "create": "Yarat",
       "delete": "Sil",
       "edit": "Redaktə et",
       "save": "Saxla",
       "saving": "Saxlanılır...",
       "update": "Yenilə",
-      "view": "Görünüş",
+      "view": "Görüntülə",
       "file": {
-        "markedForDeletion": "Fayl silinməyi mərkəzi təsdiqləmək üçün qeyd edilib (Təsdiqləmək üçün saxlayın)",
-        "viewOrDownload": "Görünüş/Yüklə",
-        "replaceWarning": "Yeni bir fayl seçmək mövcud olanı əvəz edəcək"
+        "markedForDeletion": "Silinməsi üçün qeyd edilmiş fayl (Təsdiq etmək üçün saxla)",
+        "viewOrDownload": "Görüntülə/Yüklə",
+        "replaceWarning": "Yeni bir fayl seçmək, mövcudunu əvəzləyəcək"
       },
-      "successfullyCreated": "Qeyd ID {{id}} müvəffəqiyyətlə yaradıldı",
-      "successfullyUpdated": "Qeyd ID {{id}} müvəffəqiyyətlə yeniləndi",
-      "successfullyDeleted": "Qeyd ID {{id}} müvəffəqiyyətlə silindi"
+      "successfullyCreated": "Qeyd ID {{id}} uğurla yaradıldı",
+      "successfullyUpdated": "Qeyd ID {{id}} uğurla yeniləndi",
+      "successfullyDeleted": "Qeyd ID {{id}} uğurla silindi"
     },
     "hidePassword": "Şifrəni gizlət",
     "showPassword": "Şifrəni göstər",
-    "generateUUID": "4-cü versiya UUID yaradın"
+    "generateUUID": "Versiya 4 UUID yaradın"
   },
   "common": {
     "back": "Geri",
-    "cancel": "Ləğv et",
+    "cancel": "İmtina et",
     "opensInNewWindow": "Yeni pəncərədə açılır",
     "undo": "Geri al",
     "search": "Axtar...",
     "select": {
-      "collapse": "Siyahını çökdür",
-      "expand": "Siyahını genişləndir",
-      "oneElementSelected": "Bir element seçilib",
-      "nElementsSelected": "{{count}} element seçilib",
+      "collapse": "Siyahını yığıl",
+      "expand": "Siyahını genişləndirin",
+      "oneElementSelected": "Bir element seçildi",
+      "nElementsSelected": "{{count}} element seçildi",
       "placeholder": "Bir seçim seçin",
-      "noOptions": "Heç bir seçim yoxdur",
-      "noValue": "Heç bir dəyər yoxdur",
+      "noOptions": "Seçim yoxdur",
+      "noValue": "Dəyər yoxdur",
       "loading": "Seçimlər yüklənir...",
       "searchMultiple": "Bir və ya daha çox dəyər seçin və ya axtarın",
       "searchSingle": "Bir dəyər seçin və ya axtarın",
-      "selectMultiple": "Bir və ya bir neçə dəyər seçin",
+      "selectMultiple": "Bir və ya bir neçə dəyəri seçin",
       "selectSingle": "Bir dəyər seçin"
     },
     "show": {
@@ -51,8 +51,8 @@
       "less": "Daha azını göstər"
     },
     "sortBy": {
-      "ascending": "{{field}} artan sıralama ilə sıralayın",
-      "descending": "{{field}} azalan sıralama ilə sıralayın"
+      "ascending": "{{field}} artan sıraya görə sıralayın",
+      "descending": "{{field}} azalan sıraya görə sıralayın"
     }
   },
   "dbms": {
@@ -64,9 +64,9 @@
   },
   "pagination": {
     "pagination": "Səhifələmə",
-    "summary": "{{entity}}: {{from}}-dan {{to}}-ya {{total}} qeydləri",
+    "summary": "{{entity}}: {{from}}-dən {{to}}-ya {{total}}-ə qədər qeydlər",
     "previous": "Əvvəlki səhifə",
-    "next": "Növbəti səhifə",
+    "next": "Sonrakı səhifə",
     "goto": "Səhifəyə keçin {{page}}"
   },
   "searchEngine": {
@@ -76,7 +76,7 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": "Varlıqlar",
+  "entities": "Vahidləri",
   "password": {
     "strengthLabel": "Şifrə Gücü",
     "generate": "Təhlükəsiz şifrə yaradın",
@@ -88,89 +88,89 @@
       "strong": "Güclü şifrə"
     },
     "criteria": {
-      "minLength": "Ən az {{count}} karakter",
+      "minLength": "Ən az {{count}} simvol",
       "uppercase": "Bir böyük hərf (A-Z)",
       "lowercase": "Bir kiçik hərf (a-z)",
-      "numbers": "Bir ədəd (0-9)",
+      "numbers": "Bir rəqəm (0-9)",
       "specialChars": "Bir xüsusi simvol (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Xəta 401 – İcazəsiz",
-      "message": "Bu səhifəyə daxil olmaq üçün daxil olmalısınız. Xahiş edirik, kimliklərinizi yoxlayın və yenidən cəhd edin."
+      "title": "Xeta 401 - İcazəsiz",
+      "message": "Bu səhifəyə giriş üçün daxil olmalısınız. Xahiş edirəm, kimlik bilgilerinizi yoxlayın və yenidən cəhd edin."
     },
     "403": {
-      "title": "Oh! Xəta 403 – Bağışlayın, {{username}}",
-      "message": "Salam <1>{{username}}</1>, sizi tanıyırıq, amma bu səhifəyə daxil olmaq üçün doğru icazələriniz yoxdur. Bu bir səhvdirsə, bizimlə əlaqə saxlayın!"
+      "title": "Oops! Xeta 403 - Bağışlayın, {{username}}",
+      "message": "Hey <1>{{username}}</1>, sizi tanıyırıq, amma bu səhifəyə daxil olmaq üçün doğru icazələriniz yoxdur. Bunun bir səhv olduğunu düşünürsünüzsə, bizimlə əlaqə saxlayın!"
     },
     "404": {
-      "title": "Oh! Xəta 404 – Səhifə Tapılmadı",
-      "message": "Axtardığınız səhifənin artıq mövcud görünmür. O köçürülmüş və ya silinmiş ola bilər. URL-ni yoxlayın və ya ana səhifəyə qayıdın!"
+      "title": "Oops! Xeta 404 - Səhifə Tapılmadı",
+      "message": "Görünür, axtardığınız səhifə artıq yoxdur. O, köçürülmüş və ya silinmiş ola bilər. URL-ni yoxlayın və ya ana səhifəyə qayıdın!"
     },
     "entities": {
-      "create": "Yaratma zamanı xəta",
-      "read": "Oxuma zamanı xəta",
-      "update": "Yeniləmə zamanı xəta",
-      "delete": "Silinmə zamanı xəta"
+      "create": "Yaratma xətası",
+      "read": "Oxuma xətası",
+      "update": "Yeniləmə xətası",
+      "delete": "Silinmə xətası"
     },
     "options": {
-      "load": "Seçimlər yüklənərkən xəta"
+      "load": "Seçimlər yüklənərkən xətası"
     },
     "validations": {
-      "email": "Yanlış e-poçt formatı",
+      "email": "Kömük e-poçt formatı",
       "file": {
-        "minSize": "Fayl ən azı {{accepted}} olmalıdır. Cari ölçü: {{actual}}",
-        "maxSize": "Fayl {{accepted}}-dan çox ola bilməz. Cari ölçü: {{actual}}",
-        "invalidType": "Fayl tipi {{accepted}}-ya uyğun olmalıdır. Cari tip: {{actual}}",
-        "typeImage": "Fayl bir şəkil olmalıdır",
+        "minSize": "Fayl ən az {{accepted}} olmalıdır. Cari ölçü: {{actual}}",
+        "maxSize": "Fayl {{accepted}}-i keçməməlidir. Cari ölçü: {{actual}}",
+        "invalidType": "Fayl tipi {{accepted}} -ə uyğun olmalıdır. Cari tip: {{actual}}",
+        "typeImage": "Fayl şəkil olmalıdır",
         "required": "Fayl tələb olunur"
       },
-      "min": "Dili seç",
-      "minlength": "İdarəetmələri görün",
-      "minbytes": "Mənbə kodunu görün",
-      "max": "Əvvəlcədən görünüşü görün",
+      "min": "Dil seçin",
+      "minlength": "Nəzarətləri görüntülə",
+      "minbytes": "Mənbə kodunu görüntülə",
+      "max": "Önizləməyi görüntülə",
       "maxlength": "HTML mənbə kodu (oxumaq üçün)",
       "maxbytes": "Mənbə kodu bölməsi",
       "password": {
-        "weakPassword": "T tələb olunur"
+        "weakPassword": "Tələb olunur"
       },
       "pattern": "Dəyər unikal olmalıdır",
-      "required": "Həkk olunmuş məzmun bölməsi",
-      "url": "Gösterge Paneli"
+      "required": "Qəbul edilmiş məzmun bölməsi",
+      "url": "Ana səhifə"
     }
   },
   "fields": {
     "duration": {
       "day": "Daxil ol",
       "hour": "Daxil olunur...",
-      "minute": "İxrac et",
-      "second": "İxrac olunur...",
-      "millisecond": "İxrac edilərkən xəta",
-      "days": "Naməlum xəta",
-      "hours": "İşıq moduluna keçin",
-      "minutes": "İşıq mövzusu aktiv",
-      "seconds": "Qaranlıq moduluna keçin",
-      "milliseconds": "Qaranlıq mövzusu aktiv"
+      "minute": "Çıxış",
+      "second": "Çıxılır...",
+      "millisecond": "Çıxış zamanı xətası",
+      "days": "Naməlum xətası",
+      "hours": "İşıq rejiminə keç",
+      "minutes": "İşıq mövzusu aktivdir",
+      "seconds": "Qaranlıq rejiminə keç",
+      "milliseconds": "Qaranlıq mövzu aktivdir"
     }
   },
   "info": {
     "validations": {
-      "min": "Dili seç",
-      "minlength": "İdarəetmələri görün",
-      "minbytes": "Mənbə kodunu görün",
-      "max": "Əvvəlcədən görünüşü görün",
+      "min": "Dil seçin",
+      "minlength": "Nəzarətləri görüntülə",
+      "minbytes": "Mənbə kodunu görüntülə",
+      "max": "Önizləməyi görüntülə",
       "maxlength": "HTML mənbə kodu (oxumaq üçün)",
       "maxbytes": "Mənbə kodu bölməsi",
-      "required": "Həkk olunmuş məzmun bölməsi",
-      "unique": "Həkk olunmuş HTML məzmunu"
+      "required": "Qəbul edilmiş məzmun bölməsi",
+      "unique": "Render edilmiş HTML məzmunu"
     }
   },
   "messages": {
-    "noData": "Mənbə kodu modu aktiv"
+    "noData": "Mənbə kodu rejimi aktivdir"
   },
   "pages": {
-    "Home": "Ana səhifə"
+    "Home": "Önizləmə rejimi aktivdir"
   },
   "ui": {
     "account": {

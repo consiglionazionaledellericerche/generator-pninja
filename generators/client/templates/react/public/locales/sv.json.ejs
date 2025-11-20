@@ -16,11 +16,11 @@
       "file": {
         "markedForDeletion": "Fil markerad för radering (Spara för att bekräfta)",
         "viewOrDownload": "Visa/Ladda ner",
-        "replaceWarning": "Att välja en ny fil kommer att ersätta den befintliga"
+        "replaceWarning": "Att välja en ny fil ersätter den befintliga"
       },
-      "successfullyCreated": "Post ID {{id}} skapades framgångsrikt",
-      "successfullyUpdated": "Post ID {{id}} uppdaterades framgångsrikt",
-      "successfullyDeleted": "Post ID {{id}} raderades framgångsrikt"
+      "successfullyCreated": "Post-ID {{id}} har skapats framgångsrikt",
+      "successfullyUpdated": "Post-ID {{id}} har uppdaterats framgångsrikt",
+      "successfullyDeleted": "Post-ID {{id}} har raderats framgångsrikt"
     },
     "hidePassword": "Dölj lösenord",
     "showPassword": "Visa lösenord",
@@ -29,18 +29,18 @@
   "common": {
     "back": "Tillbaka",
     "cancel": "Avbryt",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Öppnar i ett nytt fönster",
     "undo": "Ångra",
-    "search": "Search...",
+    "search": "Sök...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
+      "collapse": "Kollapsa lista",
+      "expand": "Expandera lista",
       "oneElementSelected": "Ett element valt",
-      "nElementsSelected": "{{count}} element valda",
+      "nElementsSelected": "{{count}} element valt",
       "placeholder": "Välj ett alternativ",
       "noOptions": "Inga alternativ",
       "noValue": "Inget värde",
-      "loading": "Laddar alternativ...",
+      "loading": "Läser in alternativ...",
       "searchMultiple": "Välj eller sök efter ett eller flera värden",
       "searchSingle": "Välj eller sök efter ett värde",
       "selectMultiple": "Välj ett eller flera värden",
@@ -51,8 +51,8 @@
       "less": "Visa mindre"
     },
     "sortBy": {
-      "ascending": "Sortera efter {{field}} i stigande ordning",
-      "descending": "Sortera efter {{field}} i fallande ordning"
+      "ascending": "Sortera efter {{field}} stigande",
+      "descending": "Sortera efter {{field}} fallande"
     }
   },
   "dbms": {
@@ -63,7 +63,7 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Sidnumrering",
+    "pagination": "Paginering",
     "summary": "{{entity}}: poster från {{from}} till {{to}} av {{total}}",
     "previous": "Föregående sida",
     "next": "Nästa sida",
@@ -89,24 +89,24 @@
     },
     "criteria": {
       "minLength": "Minst {{count}} tecken",
-      "uppercase": "En versal bokstav (A-Z)",
-      "lowercase": "En gemen bokstav (a-z)",
-      "numbers": "En siffra (0-9)",
+      "uppercase": "En versal (A-Z)",
+      "lowercase": "En gemen (a-z)",
+      "numbers": "Ett nummer (0-9)",
       "specialChars": "Ett specialtecken (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
       "title": "Fel 401 – Obehörig",
-      "message": "Du måste logga in för att komma åt denna sida. Kontrollera dina inloggningsuppgifter och försök igen."
+      "message": "Du måste logga in för att få åtkomst till denna sida. Kontrollera dina kontouppgifter och försök igen."
     },
     "403": {
-      "title": "Hoppsan! Fel 403 – Tyvärr, {{username}}",
-      "message": "Hej <1>{{username}}</1>, vi känner igen dig, men du har inte rätt behörigheter för att komma åt denna sida. Om du tror att detta är ett fel, kontakta oss!"
+      "title": "Oj! Fel 403 – Förlåt, {{username}}",
+      "message": "Hej <1>{{username}}</1>, vi känner igen dig, men du har inte rätt behörighet att få åtkomst till denna sida. Om du tycker detta är ett misstag, kontakta oss!"
     },
     "404": {
-      "title": "Hoppsan! Fel 404 – Sidan hittades inte",
-      "message": "Det verkar som att sidan du letar efter inte finns längre. Den kan ha flyttats eller raderats. Kontrollera URL:en eller gå tillbaka till startsidan!"
+      "title": "Oj! Fel 404 – Sidan hittades inte",
+      "message": "Det ser ut som att sidan du letar efter inte längre finns. Den kan ha flyttats eller raderats. Kontrollera URL:en eller gå tillbaka till hemsidan!"
     },
     "entities": {
       "create": "Fel vid skapande",
@@ -115,25 +115,25 @@
       "delete": "Fel vid radering"
     },
     "options": {
-      "load": "Fel vid laddning av alternativ för"
+      "load": "Fel vid inläsning av alternativ för"
     },
     "validations": {
       "email": "Ogiltigt e-postformat",
       "file": {
-        "minSize": "Filen måste vara minst {{accepted}}. Nuvarande storlek: {{actual}}",
-        "maxSize": "Filen får inte överstiga {{accepted}}. Nuvarande storlek: {{actual}}",
+        "minSize": "Filens storlek måste vara minst {{accepted}}. Nuvarande storlek: {{actual}}",
+        "maxSize": "Filens storlek får inte överstiga {{accepted}}. Nuvarande storlek: {{actual}}",
         "invalidType": "Filtypen måste vara {{accepted}}. Nuvarande typ: {{actual}}",
-        "typeImage": "Filen måste vara en bild",
-        "required": "Filen är obligatorisk"
+        "typeImage": "Filens måste vara en bild",
+        "required": "Fil krävs"
       },
       "min": "Numret måste vara större än eller lika med {{accepted}}",
-      "minlength": "Texten måste innehålla minst {{accepted}} tecken",
-      "minbytes": "Filen måste vara minst {{accepted}}",
+      "minlength": "Strängen måste innehålla minst {{accepted}} tecken",
+      "minbytes": "Filens måste vara minst {{accepted}}",
       "max": "Numret måste vara mindre än eller lika med {{accepted}}",
-      "maxlength": "Texten får innehålla högst {{accepted}} tecken",
-      "maxbytes": "Filen får inte överstiga {{accepted}}",
+      "maxlength": "Strängen måste innehålla högst {{accepted}} tecken",
+      "maxbytes": "Filens får inte överstiga {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Lösenordet är för svagt"
       },
       "pattern": "Ogiltigt format",
       "required": "Obligatorisk",
@@ -157,11 +157,11 @@
   "info": {
     "validations": {
       "min": "Numret måste vara större än eller lika med {{accepted}}",
-      "minlength": "Texten måste innehålla minst {{accepted}} tecken",
-      "minbytes": "Filen måste vara minst {{accepted}}",
+      "minlength": "Strängen måste innehålla minst {{accepted}} tecken",
+      "minbytes": "Filens måste vara minst {{accepted}}",
       "max": "Numret måste vara mindre än eller lika med {{accepted}}",
-      "maxlength": "Texten får innehålla högst {{accepted}} tecken",
-      "maxbytes": "Filen får inte överstiga {{accepted}}",
+      "maxlength": "Strängen måste innehålla högst {{accepted}} tecken",
+      "maxbytes": "Filens får inte överstiga {{accepted}}",
       "required": "Obligatorisk",
       "unique": "Värdet måste vara unikt"
     }
@@ -170,7 +170,7 @@
     "noData": "Inga poster hittades"
   },
   "pages": {
-    "Home": "Hemside"
+    "Home": "Hemspärr"
   },
   "ui": {
     "account": {
@@ -182,20 +182,20 @@
       "unknownError": "Okänt fel"
     },
     "darkmode": {
-      "light": "Byt till ljust läge",
+      "light": "Byt till ljus läge",
       "lightOn": "Ljust tema aktivt",
       "dark": "Byt till mörkt läge",
       "darkOn": "Mörkt tema aktivt"
     },
-    "langSelect": "Select language",
+    "langSelect": "Välj språk",
     "htmlViewer": {
       "controls": "Visa kontroller",
       "viewSource": "Visa källkod",
       "viewRendering": "Visa förhandsgranskning",
-      "source": "HTML-källkod (skrivskyddad)",
-      "sourceSection": "Källkodsektion",
-      "renderedSection": "Renderad innehållssektion",
-      "renderedContent": "Renderat HTML-innehåll",
+      "source": "HTML-källkod (endast läsning)",
+      "sourceSection": "Källkodssektion",
+      "renderedSection": "Visad innehållssektion",
+      "renderedContent": "Visat HTML-innehåll",
       "sourceActive": "Källkodsläge aktivt",
       "renderingActive": "Förhandsgranskningsläge aktivt"
     }

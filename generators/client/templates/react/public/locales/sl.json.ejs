@@ -4,7 +4,7 @@
     "crud": {
       "actions": "Dejanja",
       "back": "Nazaj",
-      "cancel": "prekliči",
+      "cancel": "Prekliči",
       "confirmDelete": "Potrdi izbris",
       "create": "Ustvari",
       "delete": "Izbriši",
@@ -15,12 +15,12 @@
       "view": "Poglej",
       "file": {
         "markedForDeletion": "Datoteka označena za izbris (Shrani za potrditev)",
-        "viewOrDownload": "Poglej/Prenesi",
-        "replaceWarning": "Izbira nove datoteke bo nadomestila obstoječo"
+        "viewOrDownload": "Poglej/Predvajaj",
+        "replaceWarning": "Izbira nove datoteke bo zamenjala obstoječo"
       },
-      "successfullyCreated": "Zapis ID {{id}} uspešno ustvarjen",
-      "successfullyUpdated": "Zapis ID {{id}} uspešno posodobljen",
-      "successfullyDeleted": "Zapis ID {{id}} uspešno izbrisan"
+      "successfullyCreated": "ID zapisa {{id}} uspešno ustvarjen",
+      "successfullyUpdated": "ID zapisa {{id}} uspešno posodobljen",
+      "successfullyDeleted": "ID zapisa {{id}} uspešno izbrisan"
     },
     "hidePassword": "Skrij geslo",
     "showPassword": "Prikaži geslo",
@@ -28,7 +28,7 @@
   },
   "common": {
     "back": "Nazaj",
-    "cancel": "prekliči",
+    "cancel": "Prekliči",
     "opensInNewWindow": "Odpre se v novem oknu",
     "undo": "Razveljavi",
     "search": "Išči...",
@@ -37,14 +37,14 @@
       "expand": "Razširi seznam",
       "oneElementSelected": "En element izbran",
       "nElementsSelected": "{{count}} elementov izbranih",
-      "placeholder": "Izberi možnost",
+      "placeholder": "Izberite možnost",
       "noOptions": "Brez možnosti",
       "noValue": "Brez vrednosti",
-      "loading": "Nalagam možnosti...",
-      "searchMultiple": "Izberi ali išči eno ali več vrednosti",
-      "searchSingle": "Izberi ali išči vrednost",
-      "selectMultiple": "Izberi eno ali več vrednosti",
-      "selectSingle": "Izberi vrednost"
+      "loading": "Nalaganje možnosti...",
+      "searchMultiple": "Izberite ali poiščite eno ali več vrednosti",
+      "searchSingle": "Izberite ali poiščite vrednost",
+      "selectMultiple": "Izberite eno ali več vrednosti",
+      "selectSingle": "Izberite vrednost"
     },
     "show": {
       "more": "Prikaži več",
@@ -63,7 +63,7 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Straničenje",
+    "pagination": "Paginacija",
     "summary": "{{entity}}: zapisi od {{from}} do {{to}} od {{total}}",
     "previous": "Prejšnja stran",
     "next": "Naslednja stran",
@@ -84,7 +84,7 @@
     "copied": "Geslo kopirano!",
     "strength": {
       "weak": "Šibko geslo",
-      "medium": "Srednje močno geslo",
+      "medium": "Srednje geslo",
       "strong": "Močno geslo"
     },
     "criteria": {
@@ -92,21 +92,21 @@
       "uppercase": "Velika črka (A-Z)",
       "lowercase": "Mala črka (a-z)",
       "numbers": "Številka (0-9)",
-      "specialChars": "Poseben znak (!@#$%&*...)"
+      "specialChars": "Posebni znak (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Napaka 401 – Neavtorizirano",
-      "message": "Moraš se prijaviti za dostop do te strani. Prosimo, preveri svoje poverilnice in poskusi znova."
+      "title": "Napaka 401 – Nepooblaščen dostop",
+      "message": "Moraš se prijaviti za dostop do te strani. Preveri svoje poverilnice in poskusi znova."
     },
     "403": {
       "title": "Ups! Napaka 403 – Opravičujemo se, {{username}}",
-      "message": "Hej <1>{{username}}</1>, prepoznamo te, vendar nimaš pravic za dostop do te strani. Če misliš, da gre za napako, se obrnite na nas!"
+      "message": "Hej <1>{{username}}</1>, prepoznamo te, a nimaš pravic za dostop do te strani. Če menite, da gre za napako, nas kontaktirajte!"
     },
     "404": {
       "title": "Ups! Napaka 404 – Stran ni bila najdena",
-      "message": "Zdi se, da stran, ki jo iščeš, ne obstaja več. Morda je bila premaknjena ali izbrisana. Preveri URL ali se vrni na domačo stran!"
+      "message": "Izgleda, da stran, ki jo iščeš, ni več dostopna. Morda je bila premaknjena ali izbrisana. Preveri URL ali se vrni na domačo stran!"
     },
     "entities": {
       "create": "Napaka pri ustvarjanju",
@@ -118,7 +118,7 @@
       "load": "Napaka pri nalaganju možnosti za"
     },
     "validations": {
-      "email": "Neveljaven format e-pošte",
+      "email": "Neveljaven format e-poštnega naslova",
       "file": {
         "minSize": "Datoteka mora biti vsaj {{accepted}}. Trenutna velikost: {{actual}}",
         "maxSize": "Datoteka ne sme presegati {{accepted}}. Trenutna velikost: {{actual}}",
@@ -126,78 +126,78 @@
         "typeImage": "Datoteka mora biti slika",
         "required": "Datoteka je obvezna"
       },
-      "min": "Število mora biti večje ali enako {{accepted}}",
-      "minlength": "Niz mora vsebovati vsaj {{accepted}} znak(e)",
-      "minbytes": "Datoteka mora biti vsaj {{accepted}}",
-      "max": "Število mora biti manjše ali enako {{accepted}}",
-      "maxlength": "Niz mora vsebovati največ {{accepted}} znak(e)",
-      "maxbytes": "Datoteka ne sme presegati {{accepted}}",
+      "min": "Izberite jezik",
+      "minlength": "Poglej kontrole",
+      "minbytes": "Poglej izvorno kodo",
+      "max": "Poglej predogled",
+      "maxlength": "HTML izvorna koda (samo za branje)",
+      "maxbytes": "Oddelek izvorne kode",
       "password": {
-        "weakPassword": "Geslo je prešibko"
+        "weakPassword": "Obvezno"
       },
-      "pattern": "Neveljaven format",
-      "required": "Obvezno",
-      "url": "Neveljaven format URL-ja"
+      "pattern": "Vrednost mora biti edinstvena",
+      "required": "Oddelek prikazane vsebine",
+      "url": "Domača stran"
     }
   },
   "fields": {
     "duration": {
-      "day": "Dan",
-      "hour": "Ura",
-      "minute": "Minuta",
-      "second": "Sekunda",
-      "millisecond": "Milisekunda",
-      "days": "Dnevi",
-      "hours": "Ure",
-      "minutes": "Minute",
-      "seconds": "Sekunde",
-      "milliseconds": "Milisekunde"
+      "day": "Prijava",
+      "hour": "Prijavljam se...",
+      "minute": "Odjava",
+      "second": "Odjavim se...",
+      "millisecond": "Napaka pri odjavi",
+      "days": "Nepoznata napaka",
+      "hours": "Preklopi na svetli način",
+      "minutes": "Svetla tema aktivna",
+      "seconds": "Preklopi na temni način",
+      "milliseconds": "Temna tema aktivna"
     }
   },
   "info": {
     "validations": {
-      "min": "Število mora biti večje ali enako {{accepted}}",
-      "minlength": "Niz mora vsebovati vsaj {{accepted}} znak(e)",
-      "minbytes": "Datoteka mora biti vsaj {{accepted}}",
-      "max": "Število mora biti manjše ali enako {{accepted}}",
-      "maxlength": "Niz mora vsebovati največ {{accepted}} znak(e)",
-      "maxbytes": "Datoteka ne sme presegati {{accepted}}",
-      "required": "Obvezno",
-      "unique": "Vrednost mora biti edinstvena"
+      "min": "Izberite jezik",
+      "minlength": "Poglej kontrole",
+      "minbytes": "Poglej izvorno kodo",
+      "max": "Poglej predogled",
+      "maxlength": "HTML izvorna koda (samo za branje)",
+      "maxbytes": "Oddelek izvorne kode",
+      "required": "Oddelek prikazane vsebine",
+      "unique": "Prikazana HTML vsebina"
     }
   },
   "messages": {
-    "noData": "Brez najdenih zapisov"
+    "noData": "Način izvorne kode aktiven"
   },
   "pages": {
-    "Home": "Domača stran"
+    "Home": "Način predogleda aktiven"
   },
   "ui": {
     "account": {
-      "login": "Prijava",
-      "loggingIn": "Prijavljam se...",
-      "logout": "Odjava",
-      "loggingOut": "Odjavim se...",
-      "logoutError": "Napaka pri odjavi",
-      "unknownError": "Neznana napaka"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "Preklopi na svetli način",
-      "lightOn": "Svetla tema aktivna",
-      "dark": "Preklopi na temni način",
-      "darkOn": "Temna tema aktivna"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
-    "langSelect": "Izberi jezik",
+    "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "Poglej kontrole",
-      "viewSource": "Poglej izvorno kodo",
-      "viewRendering": "Poglej predogled",
-      "source": "Izvorna koda HTML (samo za branje)",
-      "sourceSection": "Oddelek izvorne kode",
-      "renderedSection": "Oddelek prikazanega besedila",
-      "renderedContent": "Prikazano HTML besedilo",
-      "sourceActive": "Način izvorne kode aktiven",
-      "renderingActive": "Način predogleda aktiven"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

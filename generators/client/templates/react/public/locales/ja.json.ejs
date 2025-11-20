@@ -14,45 +14,45 @@
       "update": "更新",
       "view": "表示",
       "file": {
-        "markedForDeletion": "削除のためにマークされたファイル（確認するには保存してください）",
+        "markedForDeletion": "削除のためにファイルがマークされました（確認のために保存）",
         "viewOrDownload": "表示/ダウンロード",
         "replaceWarning": "新しいファイルを選択すると、既存のファイルが置き換えられます"
       },
-      "successfullyCreated": "レコード ID {{id}} が正常に作成されました",
-      "successfullyUpdated": "レコード ID {{id}} が正常に更新されました",
-      "successfullyDeleted": "レコード ID {{id}} が正常に削除されました"
+      "successfullyCreated": "レコードID {{id}} が正常に作成されました",
+      "successfullyUpdated": "レコードID {{id}} が正常に更新されました",
+      "successfullyDeleted": "レコードID {{id}} が正常に削除されました"
     },
     "hidePassword": "パスワードを隠す",
     "showPassword": "パスワードを表示",
-    "generateUUID": "バージョン4 UUID を生成"
+    "generateUUID": "バージョン4のUUIDを生成"
   },
   "common": {
     "back": "戻る",
     "cancel": "キャンセル",
-    "opensInNewWindow": "新しいウィンドウで開きます",
+    "opensInNewWindow": "新しいウィンドウで開く",
     "undo": "元に戻す",
     "search": "検索...",
     "select": {
       "collapse": "リストを折りたたむ",
-      "expand": "リストを展開",
+      "expand": "リストを展開する",
       "oneElementSelected": "1つの要素が選択されました",
-      "nElementsSelected": "{{count}} 個の要素が選択されました",
+      "nElementsSelected": "{{count}} の要素が選択されました",
       "placeholder": "オプションを選択",
-      "noOptions": "オプションがありません",
-      "noValue": "値がありません",
+      "noOptions": "オプションはありません",
+      "noValue": "値はありません",
       "loading": "オプションを読み込み中...",
-      "searchMultiple": "1つ以上の値を選択または検索",
-      "searchSingle": "値を選択または検索",
-      "selectMultiple": "1つ以上の値を選択",
+      "searchMultiple": "1つまたは複数の値を選択または検索",
+      "searchSingle": "1つの値を選択または検索",
+      "selectMultiple": "1つまたは複数の値を選択",
       "selectSingle": "値を選択"
     },
     "show": {
-      "more": "さらに表示",
+      "more": "もっと表示",
       "less": "少なく表示"
     },
     "sortBy": {
-      "ascending": "{{field}}の昇順で並べ替え",
-      "descending": "{{field}}の降順で並べ替え"
+      "ascending": "{{field}} に従って昇順でソート",
+      "descending": "{{field}} に従って降順でソート"
     }
   },
   "dbms": {
@@ -64,7 +64,7 @@
   },
   "pagination": {
     "pagination": "ページネーション",
-    "summary": "{{entity}}: {{from}} から {{to}} までの {{total}} 件",
+    "summary": "{{entity}}: {{from}} から {{to}} までのレコード {{total}}",
     "previous": "前のページ",
     "next": "次のページ",
     "goto": "ページ {{page}} に移動"
@@ -89,24 +89,24 @@
     },
     "criteria": {
       "minLength": "少なくとも {{count}} 文字",
-      "uppercase": "大文字 (A-Z)",
-      "lowercase": "小文字 (a-z)",
+      "uppercase": "大文字のアルファベット (A-Z)",
+      "lowercase": "小文字のアルファベット (a-z)",
       "numbers": "数字 (0-9)",
       "specialChars": "特殊文字 (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "エラー 401 – 認証されていません",
-      "message": "このページにアクセスするにはログインが必要です。資格情報を確認して、再試行してください。"
+      "title": "エラー 401 - 認証されていません",
+      "message": "このページにアクセスするにはログインが必要です。資格情報を確認し、もう一度お試しください。"
     },
     "403": {
-      "title": "おっと！エラー 403 – {{username}} さん、申し訳ありません",
-      "message": "こんにちは <1>{{username}}</1> さん、あなたを認識しましたが、このページにアクセスする権限がありません。これが間違いだと思われる場合は、お問い合わせください！"
+      "title": "おっと！エラー 403 - 残念ながら、{{username}}",
+      "message": "やあ <1>{{username}}</1>、あなたを認識していますが、このページにアクセスするための適切な権限がありません。これは間違いだと思う場合は、お問い合わせください！"
     },
     "404": {
-      "title": "おっと！エラー 404 – ページが見つかりません",
-      "message": "お探しのページは存在しないようです。移動または削除された可能性があります。URLを確認するか、ホームページに戻ってください！"
+      "title": "おっと！エラー 404 - ページが見つかりません",
+      "message": "探しているページはもう存在しないようです。移動したか削除された可能性があります。URLを確認するか、ホームページに戻ってください！"
     },
     "entities": {
       "create": "作成中のエラー",
@@ -115,89 +115,89 @@
       "delete": "削除中のエラー"
     },
     "options": {
-      "load": "オプションの読み込み中にエラーが発生しました"
+      "load": "オプションの読み込み中のエラー"
     },
     "validations": {
-      "email": "無効なメール形式",
+      "email": "無効なメールフォーマット",
       "file": {
-        "minSize": "ファイルは少なくとも {{accepted}} である必要があります。現在のサイズ: {{actual}}",
-        "maxSize": "ファイルは {{accepted}} を超えることはできません。現在のサイズ: {{actual}}",
-        "invalidType": "ファイルタイプは {{accepted}} である必要があります。現在のタイプ: {{actual}}",
-        "typeImage": "ファイルは画像である必要があります",
+        "minSize": "ファイルは少なくとも {{accepted}} バイトでなければなりません。現在のサイズ: {{actual}}",
+        "maxSize": "ファイルは {{accepted}} バイトを超えてはいけません。現在のサイズ: {{actual}}",
+        "invalidType": "ファイルタイプは {{accepted}} でなければなりません。現在のタイプ: {{actual}}",
+        "typeImage": "ファイルは画像でなければなりません",
         "required": "ファイルは必須です"
       },
-      "min": "数値は {{accepted}} 以上である必要があります",
-      "minlength": "文字列は少なくとも {{accepted}} 文字を含む必要があります",
-      "minbytes": "ファイルは少なくとも {{accepted}} である必要があります",
-      "max": "数値は {{accepted}} 以下である必要があります",
-      "maxlength": "文字列は最大 {{accepted}} 文字を含む必要があります",
-      "maxbytes": "ファイルは {{accepted}} を超えることはできません",
+      "min": "言語を選択",
+      "minlength": "コントロールを表示",
+      "minbytes": "ソースコードを表示",
+      "max": "プレビューを表示",
+      "maxlength": "HTMLソースコード（読み取り専用）",
+      "maxbytes": "ソースコードセクション",
       "password": {
-        "weakPassword": "パスワードは弱すぎます"
+        "weakPassword": "必須"
       },
-      "pattern": "無効な形式",
-      "required": "必須",
-      "url": "無効なURL形式"
+      "pattern": "値は一意でなければなりません",
+      "required": "レンダリングされたコンテンツセクション",
+      "url": "ホームページ"
     }
   },
   "fields": {
     "duration": {
-      "day": "日",
-      "hour": "時間",
-      "minute": "分",
-      "second": "秒",
-      "millisecond": "ミリ秒",
-      "days": "日々",
-      "hours": "時間",
-      "minutes": "分",
-      "seconds": "秒",
-      "milliseconds": "ミリ秒"
+      "day": "ログイン",
+      "hour": "ログイン中...",
+      "minute": "ログアウト",
+      "second": "ログアウト中...",
+      "millisecond": "ログアウト中のエラー",
+      "days": "不明なエラー",
+      "hours": "ライトモードに切り替え",
+      "minutes": "ライトテーマがアクティブ",
+      "seconds": "ダークモードに切り替え",
+      "milliseconds": "ダークテーマがアクティブ"
     }
   },
   "info": {
     "validations": {
-      "min": "数値は {{accepted}} 以上である必要があります",
-      "minlength": "文字列は少なくとも {{accepted}} 文字を含む必要があります",
-      "minbytes": "ファイルは少なくとも {{accepted}} である必要があります",
-      "max": "数値は {{accepted}} 以下である必要があります",
-      "maxlength": "文字列は最大 {{accepted}} 文字を含む必要があります",
-      "maxbytes": "ファイルは {{accepted}} を超えることはできません",
-      "required": "必須",
-      "unique": "値は一意である必要があります"
+      "min": "言語を選択",
+      "minlength": "コントロールを表示",
+      "minbytes": "ソースコードを表示",
+      "max": "プレビューを表示",
+      "maxlength": "HTMLソースコード（読み取り専用）",
+      "maxbytes": "ソースコードセクション",
+      "required": "レンダリングされたコンテンツセクション",
+      "unique": "レンダリングされたHTMLコンテンツ"
     }
   },
   "messages": {
-    "noData": "レコードが見つかりません"
+    "noData": "ソースコードモードがアクティブ"
   },
   "pages": {
-    "Home": "ホームページ"
+    "Home": "プレビューモードがアクティブ"
   },
   "ui": {
     "account": {
-      "login": "ログイン",
-      "loggingIn": "ログイン中...",
-      "logout": "ログアウト",
-      "loggingOut": "ログアウト中...",
-      "logoutError": "ログアウト中にエラーが発生しました",
-      "unknownError": "不明なエラー"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "ライトモードに切り替え",
-      "lightOn": "ライトテーマが有効",
-      "dark": "ダークモードに切り替え",
-      "darkOn": "ダークテーマが有効"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
-    "langSelect": "言語を選択",
+    "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "コントロールを表示",
-      "viewSource": "ソースコードを表示",
-      "viewRendering": "プレビューを表示",
-      "source": "HTMLソースコード（読み取り専用）",
-      "sourceSection": "ソースコードセクション",
-      "renderedSection": "レンダリングされたコンテンツセクション",
-      "renderedContent": "レンダリングされたHTMLコンテンツ",
-      "sourceActive": "ソースコードモードが有効",
-      "renderingActive": "プレビューモードが有効"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

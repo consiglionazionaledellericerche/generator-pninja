@@ -2,48 +2,48 @@
   "appName": "<%= appName %>",
   "actions": {
     "crud": {
-      "actions": "Toimingud",
+      "actions": "Tegevused",
       "back": "Tagasi",
       "cancel": "Tühista",
       "confirmDelete": "Kinnita kustutamine",
       "create": "Loo",
-      "delete": "Kusta",
+      "delete": "Kustuta",
       "edit": "Muuda",
       "save": "Salvesta",
       "saving": "Salvestamine...",
       "update": "Uuenda",
-      "view": "Vaata",
+      "view": "Vaada",
       "file": {
-        "markedForDeletion": "Fail on kustutamiseks märgitud (Salvesta, et kinnitada)",
+        "markedForDeletion": "Fail märgistatud kustutamiseks (Salvesta kinnitamiseks)",
         "viewOrDownload": "Vaata/Laadi alla",
         "replaceWarning": "Uue faili valimine asendab olemasoleva"
       },
-      "successfullyCreated": "Rekordi ID {{id}} loodud edukalt",
-      "successfullyUpdated": "Rekordi ID {{id}} uuendatud edukalt",
-      "successfullyDeleted": "Rekordi ID {{id}} kustutatud edukalt"
+      "successfullyCreated": "Kande ID {{id}} edukalt loodud",
+      "successfullyUpdated": "Kande ID {{id}} edukalt uuendatud",
+      "successfullyDeleted": "Kande ID {{id}} edukalt kustutatud"
     },
     "hidePassword": "Peida parool",
-    "showPassword": "Näita parooli",
-    "generateUUID": "Genera variandi 4 UUID"
+    "showPassword": "Kuva parool",
+    "generateUUID": "Loo versioon 4 UUID"
   },
   "common": {
     "back": "Tagasi",
     "cancel": "Tühista",
-    "opensInNewWindow": "Avab uues aknas",
+    "opensInNewWindow": "Ava uues aknas",
     "undo": "Tühista",
     "search": "Otsi...",
     "select": {
-      "collapse": "Vähenenud loend",
-      "expand": "Laienev loend",
+      "collapse": "Kokkupandud loend",
+      "expand": "Laiendatud loend",
       "oneElementSelected": "Üks element valitud",
       "nElementsSelected": "{{count}} elementi valitud",
       "placeholder": "Vali valik",
-      "noOptions": "Ei ole valikuid",
-      "noValue": "Ei ole väärtust",
-      "loading": "Valikute laadimine...",
-      "searchMultiple": "Või otsi üht või mitut väärtust",
-      "searchSingle": "Või otsi väärtust",
-      "selectMultiple": "Vali üks või mitu väärtust",
+      "noOptions": "Pole valikuid",
+      "noValue": "Pole väärtust",
+      "loading": "Laadimise valikud...",
+      "searchMultiple": "Vali või otsi ühte või rohkem väärtust",
+      "searchSingle": "Vali või otsi väärtust",
+      "selectMultiple": "Vali üks või rohkem väärtust",
       "selectSingle": "Vali väärtus"
     },
     "show": {
@@ -51,8 +51,8 @@
       "less": "Näita vähem"
     },
     "sortBy": {
-      "ascending": "Sorteeri {field} tõusvas järjestuses",
-      "descending": "Sorteeri {field} langevas järjestuses"
+      "ascending": "Sorteeri {{field}} kasvavalt",
+      "descending": "Sorteeri {{field}} kahanevalt"
     }
   },
   "dbms": {
@@ -63,8 +63,8 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Leheküljendus",
-    "summary": "{{entity}}: rekordid {{from}} kuni {{to}} {{total}}-st",
+    "pagination": "Lehekülgede jaotamine",
+    "summary": "{{entity}}: kanded {{from}}-st {{to}}-ni {{total}}-st",
     "previous": "Eelmine leht",
     "next": "Järgmine leht",
     "goto": "Mine lehele {{page}}"
@@ -76,10 +76,10 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": "Üksused",
+  "entities": "Entiteedid",
   "password": {
     "strengthLabel": "Parooli tugevus",
-    "generate": "Genera turvaline parool",
+    "generate": "Loo turvaline parool",
     "copy": "Kopeeri parool",
     "copied": "Parool kopeeritud!",
     "strength": {
@@ -88,25 +88,25 @@
       "strong": "Tugev parool"
     },
     "criteria": {
-      "minLength": "Alumine piir {{count}} tähte",
-      "uppercase": "Suurtäht (A-Z)",
-      "lowercase": "Väiketäht (a-z)",
+      "minLength": "Vähemalt {{count}} tähemärki",
+      "uppercase": "Suurtähe (A-Z)",
+      "lowercase": "Väiketähe (a-z)",
       "numbers": "Number (0-9)",
-      "specialChars": "Erilised sümbolid (!@#$%&*...)"
+      "specialChars": "Erimärk (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Viga 401 – Autentimine ebaõnnestus",
-      "message": "Sa pead sisse logima, et sellele lehele juurde pääseda. Palun kontrolli oma mandaate ja proovi uuesti."
+      "title": "Viga 401 – Volitamata",
+      "message": "Peate sisse logima, et sellele lehele ligi pääseda. Palun kontrollige oma mandaate ja proovige uuesti."
     },
     "403": {
       "title": "Ups! Viga 403 – Vabandust, {{username}}",
-      "message": "Hei <1>{{username}}</1>, me tunneme sind ära, aga sul pole õigusi sellele lehele juurde pääseda. Kui arvad, et see on vale, siis võta meiega ühendust!"
+      "message": "Hei <1>{{username}}</1>, me tunneme sind, kuid sul ei ole õigeid õigusi selle lehe külastamiseks. Kui arvad, et see on eksitus, võta meiega ühendust!"
     },
     "404": {
       "title": "Ups! Viga 404 – Lehte ei leitud",
-      "message": "Tundub, et leht, mida otsid, ei eksisteeri enam. See võis olla kolitud või kustutatud. Kontrolli URL-i või mine tagasi avalehele!"
+      "message": "Tundub, et leht, mida otsite, ei eksisteeri enam. See võidi kolida või kustutada. Kontrollige URL-i või minge tagasi avalehele!"
     },
     "entities": {
       "create": "Viga loomisel",
@@ -124,40 +124,40 @@
         "maxSize": "Fail ei tohi ületada {{accepted}}. Praegune suurus: {{actual}}",
         "invalidType": "Faili tüüp peab olema {{accepted}}. Praegune tüüp: {{actual}}",
         "typeImage": "Fail peab olema pilt",
-        "required": "Fail on nõutav"
+        "required": "Fail on kohustuslik"
       },
       "min": "Vali keel",
-      "minlength": "Vaata juhtpaneeli",
+      "minlength": "Vaata juhtnuppe",
       "minbytes": "Vaata allika koodi",
       "max": "Vaata eelvaadet",
       "maxlength": "HTML allika kood (ainult lugemiseks)",
       "maxbytes": "Allika koodi sektsioon",
       "password": {
-        "weakPassword": "Nõutav"
+        "weakPassword": "Kohustuslik"
       },
       "pattern": "Väärtus peab olema ainulaadne",
       "required": "Renderdatud sisu sektsioon",
-      "url": "Armatuurlau"
+      "url": "Avaleht"
     }
   },
   "fields": {
     "duration": {
-      "day": "Logi sisse",
+      "day": "Sisse logimine",
       "hour": "Sisenemine...",
-      "minute": "Logi välja",
-      "second": "Väljumine...",
-      "millisecond": "Viga väljumisel",
+      "minute": "Välja logimine",
+      "second": "Kasutuselt väljas...",
+      "millisecond": "Viga väljajätmisel",
       "days": "Tundmatu viga",
-      "hours": "Lülita heledasse režiimi",
+      "hours": "Lülitu heledasse režiimi",
       "minutes": "Hele teema aktiivne",
-      "seconds": "Lülita pimedasse režiimi",
+      "seconds": "Lülitu pimedasse režiimi",
       "milliseconds": "Tume teema aktiivne"
     }
   },
   "info": {
     "validations": {
       "min": "Vali keel",
-      "minlength": "Vaata juhtpaneeli",
+      "minlength": "Vaata juhtnuppe",
       "minbytes": "Vaata allika koodi",
       "max": "Vaata eelvaadet",
       "maxlength": "HTML allika kood (ainult lugemiseks)",
@@ -170,7 +170,7 @@
     "noData": "Allika koodi režiim aktiivne"
   },
   "pages": {
-    "Home": "Avaleht"
+    "Home": "Eelvaate režiim aktiivne"
   },
   "ui": {
     "account": {

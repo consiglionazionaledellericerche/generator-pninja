@@ -10,17 +10,17 @@
       "delete": "Slett",
       "edit": "Rediger",
       "save": "Lagre",
-      "saving": "Lagrer…",
+      "saving": "Lagrer...",
       "update": "Oppdater",
       "view": "Vis",
       "file": {
         "markedForDeletion": "Fil merket for sletting (Lagre for å bekrefte)",
         "viewOrDownload": "Vis/Last ned",
-        "replaceWarning": "Å velge ny fil vil erstatte den eksisterende"
+        "replaceWarning": "Å velge en ny fil vil erstatte den eksisterende"
       },
-      "successfullyCreated": "Oppføring med ID {{id}} opprettet",
-      "successfullyUpdated": "Oppføring med ID {{id}} oppdatert",
-      "successfullyDeleted": "Oppføring med ID {{id}} slettet"
+      "successfullyCreated": "Post ID {{id}} ble opprettet",
+      "successfullyUpdated": "Post ID {{id}} ble oppdatert",
+      "successfullyDeleted": "Post ID {{id}} ble slettet"
     },
     "hidePassword": "Skjul passord",
     "showPassword": "Vis passord",
@@ -29,21 +29,21 @@
   "common": {
     "back": "Tilbake",
     "cancel": "Avbryt",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Åpner i et nytt vindu",
     "undo": "Angre",
-    "search": "Search...",
+    "search": "Søker...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "Ett element valgt",
+      "collapse": "Reduce liste",
+      "expand": "Expand liste",
+      "oneElementSelected": "Én element valgt",
       "nElementsSelected": "{{count}} elementer valgt",
       "placeholder": "Velg et alternativ",
       "noOptions": "Ingen alternativer",
       "noValue": "Ingen verdi",
-      "loading": "Laster alternativer…",
-      "searchMultiple": "Velg eller søk etter én eller flere verdier",
+      "loading": "Laster inn alternativer...",
+      "searchMultiple": "Velg eller søk etter en eller flere verdier",
       "searchSingle": "Velg eller søk etter en verdi",
-      "selectMultiple": "Velg én eller flere verdier",
+      "selectMultiple": "Velg en eller flere verdier",
       "selectSingle": "Velg en verdi"
     },
     "show": {
@@ -63,7 +63,7 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Pagineringskontroll",
+    "pagination": "Paginering",
     "summary": "{{entity}}: poster fra {{from}} til {{to}} av {{total}}",
     "previous": "Forrige side",
     "next": "Neste side",
@@ -76,7 +76,7 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": "Enheter",
+  "entities": "Entiteter",
   "password": {
     "strengthLabel": "Passordstyrke",
     "generate": "Generer sikkert passord",
@@ -84,29 +84,29 @@
     "copied": "Passord kopiert!",
     "strength": {
       "weak": "Svakt passord",
-      "medium": "Middels passord",
+      "medium": "Moderat passord",
       "strong": "Sterkt passord"
     },
     "criteria": {
       "minLength": "Minst {{count}} tegn",
-      "uppercase": "En stor bokstav (A-Z)",
-      "lowercase": "En liten bokstav (a-z)",
+      "uppercase": "Et stort bokstav (A-Z)",
+      "lowercase": "Et lite bokstav (a-z)",
       "numbers": "Et tall (0-9)",
-      "specialChars": "Et spesialtegn (!@#$%&*…)"
+      "specialChars": "Et spesialtegn (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
       "title": "Feil 401 – Uautorisert",
-      "message": "Du må logge inn for å få tilgang til denne siden. Sjekk dine brukerdetaljer og prøv igjen."
+      "message": "Du må logge inn for å få tilgang til denne siden. Vennligst sjekk legitimasjonen din og prøv igjen."
     },
     "403": {
       "title": "Oops! Feil 403 – Beklager, {{username}}",
-      "message": "Hei <1>{{username}}</1>, vi kjenner deg igjen, men du har ikke de nødvendige rettighetene for å få tilgang til denne siden. Hvis du mener dette er feil, ta kontakt med oss!"
+      "message": "Hei <1>{{username}}</1>, vi kjenner deg igjen, men du har ikke de rette tillatelsene for å få tilgang til denne siden. Hvis du tror dette er en feil, ta kontakt med oss!"
     },
     "404": {
       "title": "Oops! Feil 404 – Siden ble ikke funnet",
-      "message": "Det ser ut til at siden du leter etter ikke lenger eksisterer. Den kan ha blitt flyttet eller slettet. Sjekk URL-en eller gå tilbake til startsiden!"
+      "message": "Det ser ut som siden du leter etter ikke eksisterer lenger. Den kan ha blitt flyttet eller slettet. Sjekk URL-en eller gå tilbake til startsiden!"
     },
     "entities": {
       "create": "Feil ved oppretting",
@@ -126,14 +126,14 @@
         "typeImage": "Filen må være et bilde",
         "required": "Filen er påkrevd"
       },
-      "min": "Tallet må være større enn eller lik {{accepted}}",
+      "min": "Nummer må være større enn eller lik {{accepted}}",
       "minlength": "Strengen må inneholde minst {{accepted}} tegn",
       "minbytes": "Filen må være minst {{accepted}}",
-      "max": "Tallet må være mindre enn eller lik {{accepted}}",
+      "max": "Nummer må være mindre enn eller lik {{accepted}}",
       "maxlength": "Strengen må inneholde maksimalt {{accepted}} tegn",
       "maxbytes": "Filen kan ikke overstige {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Passordet er for svakt"
       },
       "pattern": "Ugyldig format",
       "required": "Påkrevd",
@@ -156,10 +156,10 @@
   },
   "info": {
     "validations": {
-      "min": "Tallet må være større enn eller lik {{accepted}}",
+      "min": "Nummer må være større enn eller lik {{accepted}}",
       "minlength": "Strengen må inneholde minst {{accepted}} tegn",
       "minbytes": "Filen må være minst {{accepted}}",
-      "max": "Tallet må være mindre enn eller lik {{accepted}}",
+      "max": "Nummer må være mindre enn eller lik {{accepted}}",
       "maxlength": "Strengen må inneholde maksimalt {{accepted}} tegn",
       "maxbytes": "Filen kan ikke overstige {{accepted}}",
       "required": "Påkrevd",
@@ -167,7 +167,7 @@
     }
   },
   "messages": {
-    "noData": "Ingen oppføringer funnet"
+    "noData": "Ingen poster funnet"
   },
   "pages": {
     "Home": "Hjemmeside"
@@ -175,29 +175,29 @@
   "ui": {
     "account": {
       "login": "Logg inn",
-      "loggingIn": "Logger inn…",
+      "loggingIn": "Logger inn...",
       "logout": "Logg ut",
-      "loggingOut": "Logger ut…",
+      "loggingOut": "Logger ut...",
       "logoutError": "Feil ved utlogging",
       "unknownError": "Ukjent feil"
     },
     "darkmode": {
-      "light": "Bytt til lys modus",
-      "lightOn": "Lyst tema aktivt",
+      "light": "Bytt til lysmodus",
+      "lightOn": "Lys tema aktivt",
       "dark": "Bytt til mørk modus",
-      "darkOn": "Mørkt tema aktivt"
+      "darkOn": "Mørk tema aktivt"
     },
-    "langSelect": "Select language",
+    "langSelect": "Velg språk",
     "htmlViewer": {
       "controls": "Vis kontroller",
-      "viewSource": "Vis kildetekst",
+      "viewSource": "Vis kildekode",
       "viewRendering": "Vis forhåndsvisning",
-      "source": "HTML-kildetekst (skriv beskyttet)",
-      "sourceSection": "Kildetekstavsnitt",
-      "renderedSection": "Gjengitt innholdsdel",
-      "renderedContent": "Gjengitt HTML-innhold",
-      "sourceActive": "Kildetekstmodus aktiv",
-      "renderingActive": "Forhåndsvisningsmodus aktiv"
+      "source": "HTML kildekode (kun lesemodus)",
+      "sourceSection": "Kildekode seksjon",
+      "renderedSection": "Render innhold seksjon",
+      "renderedContent": "Render HTML innhold",
+      "sourceActive": "Kildekode modus aktivt",
+      "renderingActive": "Forhåndsvisning modus aktivt"
     }
   }
 }

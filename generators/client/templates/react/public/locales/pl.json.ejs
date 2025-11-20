@@ -16,7 +16,7 @@
       "file": {
         "markedForDeletion": "Plik oznaczony do usunięcia (Zapisz, aby potwierdzić)",
         "viewOrDownload": "Wyświetl/Pobierz",
-        "replaceWarning": "Wybranie nowego pliku zastąpi istniejący"
+        "replaceWarning": "Wybierając nowy plik, zastąpisz istniejący"
       },
       "successfullyCreated": "Rekord ID {{id}} został pomyślnie utworzony",
       "successfullyUpdated": "Rekord ID {{id}} został pomyślnie zaktualizowany",
@@ -24,19 +24,19 @@
     },
     "hidePassword": "Ukryj hasło",
     "showPassword": "Pokaż hasło",
-    "generateUUID": "Wygeneruj UUID wersji 4"
+    "generateUUID": "Wygeneruj wersję UUID typu 4"
   },
   "common": {
     "back": "Wstecz",
     "cancel": "Anuluj",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Otwarte w nowym oknie",
     "undo": "Cofnij",
-    "search": "Search...",
+    "search": "Szukaj...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "Jeden element wybrany",
-      "nElementsSelected": "Wybrano {{count}} elementy",
+      "collapse": "Zwiń listę",
+      "expand": "Rozwiń listę",
+      "oneElementSelected": "Wybrano jeden element",
+      "nElementsSelected": "Wybrano {{count}} elementów",
       "placeholder": "Wybierz opcję",
       "noOptions": "Brak opcji",
       "noValue": "Brak wartości",
@@ -63,7 +63,7 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Paginacja",
+    "pagination": "Stronicowanie",
     "summary": "{{entity}}: rekordy od {{from}} do {{to}} z {{total}}",
     "previous": "Poprzednia strona",
     "next": "Następna strona",
@@ -76,7 +76,7 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": "Encje",
+  "entities": "Jednostki",
   "password": {
     "strengthLabel": "Siła hasła",
     "generate": "Wygeneruj bezpieczne hasło",
@@ -89,36 +89,36 @@
     },
     "criteria": {
       "minLength": "Co najmniej {{count}} znaków",
-      "uppercase": "Wielka litera (A-Z)",
+      "uppercase": "Duża litera (A-Z)",
       "lowercase": "Mała litera (a-z)",
-      "numbers": "Cyfra (0-9)",
+      "numbers": "Liczba (0-9)",
       "specialChars": "Znak specjalny (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
       "title": "Błąd 401 – Nieautoryzowany",
-      "message": "Musisz się zalogować, aby uzyskać dostęp do tej strony. Sprawdź swoje dane uwierzytelniające i spróbuj ponownie."
+      "message": "Musisz się zalogować, aby uzyskać dostęp do tej strony. Sprawdź swoje dane logowania i spróbuj ponownie."
     },
     "403": {
-      "title": "Ups! Błąd 403 – Przepraszamy, {{username}}",
-      "message": "Cześć <1>{{username}}</1>, rozpoznaliśmy Cię, ale nie masz odpowiednich uprawnień, aby uzyskać dostęp do tej strony. Jeśli uważasz, że to błąd, skontaktuj się z nami!"
+      "title": "Ups! Błąd 403 – Przykro mi, {{username}}",
+      "message": "Cześć <1>{{username}}</1>, rozpoznajemy cię, ale nie masz odpowiednich uprawnień do uzyskania dostępu do tej strony. Jeśli uważasz, że to pomyłka, skontaktuj się z nami!"
     },
     "404": {
       "title": "Ups! Błąd 404 – Strona nie znaleziona",
-      "message": "Wygląda na to, że strona, której szukasz, już nie istnieje. Mogła zostać przeniesiona lub usunięta. Sprawdź adres URL lub wróć na stronę główną!"
+      "message": "Wygląda na to, że strona, której szukasz, już nie istnieje. Mogła zostać przeniesiona lub usunięta. Sprawdź URL lub wróć na stronę główną!"
     },
     "entities": {
-      "create": "Błąd podczas tworzenia",
-      "read": "Błąd podczas odczytu",
-      "update": "Błąd podczas aktualizacji",
-      "delete": "Błąd podczas usuwania"
+      "create": "Błąd tworzenia",
+      "read": "Błąd odczytu",
+      "update": "Błąd aktualizacji",
+      "delete": "Błąd usuwania"
     },
     "options": {
-      "load": "Błąd podczas ładowania opcji dla"
+      "load": "Błąd ładowania opcji dla"
     },
     "validations": {
-      "email": "Nieprawidłowy format adresu e-mail",
+      "email": "Nieprawidłowy format e-maila",
       "file": {
         "minSize": "Plik musi mieć co najmniej {{accepted}}. Obecny rozmiar: {{actual}}",
         "maxSize": "Plik nie może przekraczać {{accepted}}. Obecny rozmiar: {{actual}}",
@@ -127,13 +127,13 @@
         "required": "Plik jest wymagany"
       },
       "min": "Liczba musi być większa lub równa {{accepted}}",
-      "minlength": "Ciąg znaków musi zawierać co najmniej {{accepted}} znaków",
+      "minlength": "Ciąg musi zawierać co najmniej {{accepted}} znak(y)",
       "minbytes": "Plik musi mieć co najmniej {{accepted}}",
       "max": "Liczba musi być mniejsza lub równa {{accepted}}",
-      "maxlength": "Ciąg znaków może zawierać maksymalnie {{accepted}} znaków",
+      "maxlength": "Ciąg musi zawierać maksymalnie {{accepted}} znak(y)",
       "maxbytes": "Plik nie może przekraczać {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Hasło jest zbyt słabe"
       },
       "pattern": "Nieprawidłowy format",
       "required": "Wymagane",
@@ -157,10 +157,10 @@
   "info": {
     "validations": {
       "min": "Liczba musi być większa lub równa {{accepted}}",
-      "minlength": "Ciąg znaków musi zawierać co najmniej {{accepted}} znaków",
+      "minlength": "Ciąg musi zawierać co najmniej {{accepted}} znak(y)",
       "minbytes": "Plik musi mieć co najmniej {{accepted}}",
       "max": "Liczba musi być mniejsza lub równa {{accepted}}",
-      "maxlength": "Ciąg znaków może zawierać maksymalnie {{accepted}} znaków",
+      "maxlength": "Ciąg musi zawierać maksymalnie {{accepted}} znak(y)",
       "maxbytes": "Plik nie może przekraczać {{accepted}}",
       "required": "Wymagane",
       "unique": "Wartość musi być unikalna"
@@ -187,17 +187,17 @@
       "dark": "Przełącz na tryb ciemny",
       "darkOn": "Aktywny motyw ciemny"
     },
-    "langSelect": "Select language",
+    "langSelect": "Wybierz język",
     "htmlViewer": {
-      "controls": "Wyświetl kontrolki",
+      "controls": "Wyświetl kontrole",
       "viewSource": "Wyświetl kod źródłowy",
       "viewRendering": "Wyświetl podgląd",
       "source": "Kod źródłowy HTML (tylko do odczytu)",
       "sourceSection": "Sekcja kodu źródłowego",
-      "renderedSection": "Sekcja renderowanej zawartości",
-      "renderedContent": "Renderowana zawartość HTML",
-      "sourceActive": "Aktywny tryb kodu źródłowego",
-      "renderingActive": "Aktywny tryb podglądu"
+      "renderedSection": "Sekcja treści renderowanej",
+      "renderedContent": "Renderowana treść HTML",
+      "sourceActive": "Tryb kodu źródłowego aktywny",
+      "renderingActive": "Tryb podglądu aktywny"
     }
   }
 }

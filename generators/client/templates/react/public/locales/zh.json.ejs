@@ -14,13 +14,13 @@
       "update": "更新",
       "view": "查看",
       "file": {
-        "markedForDeletion": "文件已标记为删除（保存以确认）",
+        "markedForDeletion": "文件标记为删除（保存以确认）",
         "viewOrDownload": "查看/下载",
         "replaceWarning": "选择新文件将替换现有文件"
       },
-      "successfullyCreated": "记录 ID {{id}} 创建成功",
-      "successfullyUpdated": "记录 ID {{id}} 更新成功",
-      "successfullyDeleted": "记录 ID {{id}} 删除成功"
+      "successfullyCreated": "记录 ID {{id}} 成功创建",
+      "successfullyUpdated": "记录 ID {{id}} 成功更新",
+      "successfullyDeleted": "记录 ID {{id}} 成功删除"
     },
     "hidePassword": "隐藏密码",
     "showPassword": "显示密码",
@@ -29,14 +29,14 @@
   "common": {
     "back": "返回",
     "cancel": "取消",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "在新窗口中打开",
     "undo": "撤销",
-    "search": "Search...",
+    "search": "搜索...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
-      "oneElementSelected": "已选择一个元素",
-      "nElementsSelected": "已选择 {{count}} 个元素",
+      "collapse": "折叠列表",
+      "expand": "展开列表",
+      "oneElementSelected": "选择了一个元素",
+      "nElementsSelected": "选择了 {{count}} 个元素",
       "placeholder": "选择一个选项",
       "noOptions": "没有选项",
       "noValue": "没有值",
@@ -51,8 +51,8 @@
       "less": "显示更少"
     },
     "sortBy": {
-      "ascending": "按{{field}}升序排列",
-      "descending": "按{{field}}降序排列"
+      "ascending": "按 {{field}} 升序排序",
+      "descending": "按 {{field}} 降序排序"
     }
   },
   "dbms": {
@@ -64,10 +64,10 @@
   },
   "pagination": {
     "pagination": "分页",
-    "summary": "{{entity}}：从{{from}}到{{to}}的记录，共{{total}}条",
+    "summary": "{{entity}}: 从 {{from}} 到 {{to}} 的记录，共 {{total}}",
     "previous": "上一页",
     "next": "下一页",
-    "goto": "跳转到第{{page}}页"
+    "goto": "转到页面 {{page}}"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -97,22 +97,22 @@
   },
   "errors": {
     "401": {
-      "title": "错误 401 – 未授权",
+      "title": "错误 401 - 未授权",
       "message": "您需要登录才能访问此页面。请检查您的凭据并重试。"
     },
     "403": {
-      "title": "哎呀！错误 403 – 抱歉，{{username}}",
-      "message": "您好 <1>{{username}}</1>，我们已识别您，但您没有权限访问此页面。如果您认为这是一个错误，请联系我们！"
+      "title": "哎呀！错误 403 - 对不起，{{username}}",
+      "message": "嘿 <1>{{username}}</1>，我们识别了您，但您没有权利访问此页面。如果您认为这是一个错误，请与我们联系！"
     },
     "404": {
-      "title": "哎呀！错误 404 – 页面未找到",
-      "message": "您正在寻找的页面似乎不再存在。可能已被移动或删除。请检查 URL 或返回主页！"
+      "title": "哎呀！错误 404 - 页面未找到",
+      "message": "看起来您要找的页面不再存在。它可能已被移动或删除。请检查 URL 或返回主页！"
     },
     "entities": {
-      "create": "创建时出错",
-      "read": "读取时出错",
-      "update": "更新时出错",
-      "delete": "删除时出错"
+      "create": "创建错误",
+      "read": "读取错误",
+      "update": "更新错误",
+      "delete": "删除错误"
     },
     "options": {
       "load": "加载选项时出错"
@@ -120,23 +120,23 @@
     "validations": {
       "email": "无效的电子邮件格式",
       "file": {
-        "minSize": "文件大小必须至少为 {{accepted}}。当前大小：{{actual}}",
-        "maxSize": "文件大小不能超过 {{accepted}}。当前大小：{{actual}}",
+        "minSize": "文件必须至少为 {{accepted}}。当前大小：{{actual}}",
+        "maxSize": "文件不能超过 {{accepted}}。当前大小：{{actual}}",
         "invalidType": "文件类型必须为 {{accepted}}。当前类型：{{actual}}",
-        "typeImage": "文件必须是图片",
+        "typeImage": "文件必须是图像",
         "required": "文件是必需的"
       },
       "min": "数字必须大于或等于 {{accepted}}",
-      "minlength": "字符串必须包含至少 {{accepted}} 个字符",
-      "minbytes": "文件大小必须至少为 {{accepted}}",
+      "minlength": "字符串必须至少包含 {{accepted}} 个字符",
+      "minbytes": "文件必须至少为 {{accepted}}",
       "max": "数字必须小于或等于 {{accepted}}",
-      "maxlength": "字符串最多包含 {{accepted}} 个字符",
-      "maxbytes": "文件大小不能超过 {{accepted}}",
+      "maxlength": "字符串必须最多包含 {{accepted}} 个字符",
+      "maxbytes": "文件不能超过 {{accepted}}",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "密码太弱"
       },
-      "pattern": "无效的格式",
-      "required": "必填",
+      "pattern": "无效格式",
+      "required": "必需",
       "url": "无效的 URL 格式"
     }
   },
@@ -157,12 +157,12 @@
   "info": {
     "validations": {
       "min": "数字必须大于或等于 {{accepted}}",
-      "minlength": "字符串必须包含至少 {{accepted}} 个字符",
-      "minbytes": "文件大小必须至少为 {{accepted}}",
+      "minlength": "字符串必须至少包含 {{accepted}} 个字符",
+      "minbytes": "文件必须至少为 {{accepted}}",
       "max": "数字必须小于或等于 {{accepted}}",
-      "maxlength": "字符串最多包含 {{accepted}} 个字符",
-      "maxbytes": "文件大小不能超过 {{accepted}}",
-      "required": "必填",
+      "maxlength": "字符串必须最多包含 {{accepted}} 个字符",
+      "maxbytes": "文件不能超过 {{accepted}}",
+      "required": "必需",
       "unique": "值必须唯一"
     }
   },
@@ -170,7 +170,7 @@
     "noData": "未找到记录"
   },
   "pages": {
-    "Home": "首页"
+    "Home": "主页"
   },
   "ui": {
     "account": {
@@ -182,12 +182,12 @@
       "unknownError": "未知错误"
     },
     "darkmode": {
-      "light": "切换到浅色模式",
-      "lightOn": "浅色主题已激活",
-      "dark": "切换到深色模式",
-      "darkOn": "深色主题已激活"
+      "light": "切换到亮模式",
+      "lightOn": "亮主题已激活",
+      "dark": "切换到暗模式",
+      "darkOn": "暗主题已激活"
     },
-    "langSelect": "Select language",
+    "langSelect": "选择语言",
     "htmlViewer": {
       "controls": "查看控件",
       "viewSource": "查看源代码",

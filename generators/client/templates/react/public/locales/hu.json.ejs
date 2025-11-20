@@ -2,25 +2,25 @@
   "appName": "<%= appName %>",
   "actions": {
     "crud": {
-      "actions": "Műveletek",
+      "actions": "Akciók",
       "back": "Vissza",
       "cancel": "Mégse",
       "confirmDelete": "Törlés megerősítése",
-      "create": "Létrehozás",
-      "delete": "Törlés",
-      "edit": "Szerkesztés",
-      "save": "Mentés",
+      "create": "Létrehoz",
+      "delete": "Töröl",
+      "edit": "Szerkeszt",
+      "save": "Ment",
       "saving": "Mentés...",
-      "update": "Frissítés",
-      "view": "Megtekintés",
+      "update": "Frissít",
+      "view": "Megtekint",
       "file": {
-        "markedForDeletion": "A fájl törlésre jelölve (Mentés a megerősítéshez)",
+        "markedForDeletion": "Fájl jelölve törlésre (Mentés a megerősítéshez)",
         "viewOrDownload": "Megtekintés/Letöltés",
-        "replaceWarning": "Új fájl kiválasztása lecseréli a meglévőt"
+        "replaceWarning": "Új fájl kiválasztása helyettesíti a meglévőt"
       },
-      "successfullyCreated": "{{id}} azonosítójú rekord sikeresen létrehozva",
-      "successfullyUpdated": "{{id}} azonosítójú rekord sikeresen frissítve",
-      "successfullyDeleted": "{{id}} azonosítójú rekord sikeresen törölve"
+      "successfullyCreated": "Az {{id}} azonosítójú rekord sikeresen létrehozva",
+      "successfullyUpdated": "Az {{id}} azonosítójú rekord sikeresen frissítve",
+      "successfullyDeleted": "Az {{id}} azonosítójú rekord sikeresen törölve"
     },
     "hidePassword": "Jelszó elrejtése",
     "showPassword": "Jelszó megjelenítése",
@@ -29,12 +29,12 @@
   "common": {
     "back": "Vissza",
     "cancel": "Mégse",
-    "opensInNewWindow": "Opens in a new window",
+    "opensInNewWindow": "Új ablakban nyílik meg",
     "undo": "Visszavonás",
-    "search": "Search...",
+    "search": "Keresés...",
     "select": {
-      "collapse": "Collapse list",
-      "expand": "Expand list",
+      "collapse": "Lista összecsukása",
+      "expand": "Lista kibővítése",
       "oneElementSelected": "Egy elem kiválasztva",
       "nElementsSelected": "{{count}} elem kiválasztva",
       "placeholder": "Válasszon egy lehetőséget",
@@ -47,7 +47,7 @@
       "selectSingle": "Válasszon egy értéket"
     },
     "show": {
-      "more": "Több megjelenítése",
+      "more": "További megjelenítése",
       "less": "Kevesebb megjelenítése"
     },
     "sortBy": {
@@ -63,11 +63,11 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Oldalazás",
-    "summary": "{{entity}}: nyilvántartások {{from}}-tól {{to}}-ig {{total}}-ból",
+    "pagination": "Lapozás",
+    "summary": "{{entity}}: rekordok {{from}}-tól {{to}}-ig, összesen {{total}}",
     "previous": "Előző oldal",
     "next": "Következő oldal",
-    "goto": "Ugrás a {{page}} oldalra"
+    "goto": "Ugrás a {{page}}. oldalra"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -97,107 +97,107 @@
   },
   "errors": {
     "401": {
-      "title": "401-es hiba – Nem engedélyezett",
-      "message": "Be kell jelentkeznie az oldal eléréséhez. Kérjük, ellenőrizze a bejelentkezési adatait, és próbálja újra."
+      "title": "Hiba 401 – Jogosulatlan",
+      "message": "Be kell jelentkeznie, hogy hozzáférjen ehhez az oldalhoz. Kérjük, ellenőrizze a hitelesítő adatait és próbálja újra."
     },
     "403": {
-      "title": "Hoppá! 403-as hiba – Sajnáljuk, {{username}}",
-      "message": "Szia <1>{{username}}</1>, felismerjük önt, de nincs megfelelő jogosultsága az oldal eléréséhez. Ha úgy gondolja, hogy ez hiba, vegye fel velünk a kapcsolatot!"
+      "title": "Hopsz! Hiba 403 – Sajnáljuk, {{username}}",
+      "message": "Szia <1>{{username}}</1>, ismerünk, de nincs megfelelő engedélyed ehhez az oldalhoz való hozzáféréshez. Ha úgy gondolod, hogy ez hiba, vedd fel velünk a kapcsolatot!"
     },
     "404": {
-      "title": "Hoppá! 404-es hiba – Az oldal nem található",
-      "message": "Úgy tűnik, a keresett oldal már nem létezik. Lehet, hogy áthelyezték vagy törölték. Ellenőrizze az URL-t, vagy térjen vissza a főoldalra!"
+      "title": "Hopsz! Hiba 404 – Az oldal nem található",
+      "message": "Úgy tűnik, hogy az általad keresett oldal már nem létezik. Lehet, hogy áthelyezték vagy törölték. Ellenőrizd az URL-t vagy térj vissza a főoldalra!"
     },
     "entities": {
-      "create": "Hiba a létrehozáskor",
-      "read": "Hiba az olvasáskor",
-      "update": "Hiba a frissítéskor",
-      "delete": "Hiba a törléskor"
+      "create": "Hiba létrehozáskor",
+      "read": "Hiba olvasáskor",
+      "update": "Hiba frissítéskor",
+      "delete": "Hiba törléskor"
     },
     "options": {
-      "load": "Hiba a lehetőségek betöltésekor:"
+      "load": "Hiba lehetőségek betöltésekor"
     },
     "validations": {
-      "email": "Érvénytelen e-mail formátum",
+      "email": "Érvénytelen e-mail forma",
       "file": {
-        "minSize": "A fájlnak legalább {{accepted}} méretűnek kell lennie. Jelenlegi méret: {{actual}}",
-        "maxSize": "A fájl nem haladhatja meg a következőt: {{accepted}}. Jelenlegi méret: {{actual}}",
-        "invalidType": "A fájltípusnak a következőnek kell lennie: {{accepted}}. Jelenlegi típus: {{actual}}",
-        "typeImage": "A fájlnak képnek kell lennie",
+        "minSize": "A fájlnak legalább {{accepted}} kell lennie. Aktuális méret: {{actual}}",
+        "maxSize": "A fájl nem haladhatja meg a {{accepted}}. Aktuális méret: {{actual}}",
+        "invalidType": "A fájl típusa {{accepted}} kell, hogy legyen. Aktuális típus: {{actual}}",
+        "typeImage": "A fájlnak képként kell lennie",
         "required": "A fájl kötelező"
       },
-      "min": "A számnak nagyobbnak vagy egyenlőnek kell lennie, mint {{accepted}}",
-      "minlength": "A szövegnek legalább {{accepted}} karaktert kell tartalmaznia",
-      "minbytes": "A fájlnak legalább {{accepted}} méretűnek kell lennie",
-      "max": "A számnak kisebbnek vagy egyenlőnek kell lennie, mint {{accepted}}",
-      "maxlength": "A szöveg legfeljebb {{accepted}} karaktert tartalmazhat",
-      "maxbytes": "A fájl nem haladhatja meg a következőt: {{accepted}}",
+      "min": "Nyelv kiválasztása",
+      "minlength": "Vezérlők megtekintése",
+      "minbytes": "Forráskód megtekintése",
+      "max": "Előnézet megtekintése",
+      "maxlength": "HTML forráskód (csak olvasható)",
+      "maxbytes": "Forráskód szakasz",
       "password": {
-        "weakPassword": "The password is too weak"
+        "weakPassword": "Kötelező"
       },
-      "pattern": "Érvénytelen formátum",
-      "required": "Kötelező",
-      "url": "Érvénytelen URL formátum"
+      "pattern": "Az értéknek egyedinek kell lennie",
+      "required": "Megjelenített tartalom szakasz",
+      "url": "Főoldal"
     }
   },
   "fields": {
     "duration": {
-      "day": "Nap",
-      "hour": "Óra",
-      "minute": "Perc",
-      "second": "Másodperc",
-      "millisecond": "Ezredmásodperc",
-      "days": "Napok",
-      "hours": "Órák",
-      "minutes": "Percek",
-      "seconds": "Másodpercek",
-      "milliseconds": "Ezredmásodpercek"
+      "day": "Bejelentkezés",
+      "hour": "Bejelentkezés folyamatban...",
+      "minute": "Kijelentkezés",
+      "second": "Kijelentkezés folyamatban...",
+      "millisecond": "Hiba kijelentkezéskor",
+      "days": "Ismeretlen hiba",
+      "hours": "Átváltás világos módra",
+      "minutes": "Világos téma aktív",
+      "seconds": "Átváltás sötét módra",
+      "milliseconds": "Sötét téma aktív"
     }
   },
   "info": {
     "validations": {
-      "min": "A számnak nagyobbnak vagy egyenlőnek kell lennie, mint {{accepted}}",
-      "minlength": "A szövegnek legalább {{accepted}} karaktert kell tartalmaznia",
-      "minbytes": "A fájlnak legalább {{accepted}} méretűnek kell lennie",
-      "max": "A számnak kisebbnek vagy egyenlőnek kell lennie, mint {{accepted}}",
-      "maxlength": "A szöveg legfeljebb {{accepted}} karaktert tartalmazhat",
-      "maxbytes": "A fájl nem haladhatja meg a következőt: {{accepted}}",
-      "required": "Kötelező",
-      "unique": "Az értéknek egyedinek kell lennie"
+      "min": "Nyelv kiválasztása",
+      "minlength": "Vezérlők megtekintése",
+      "minbytes": "Forráskód megtekintése",
+      "max": "Előnézet megtekintése",
+      "maxlength": "HTML forráskód (csak olvasható)",
+      "maxbytes": "Forráskód szakasz",
+      "required": "Megjelenített tartalom szakasz",
+      "unique": "Megjelenített HTML tartalom"
     }
   },
   "messages": {
-    "noData": "Nem találhatók rekordok"
+    "noData": "Forráskód mód aktív"
   },
   "pages": {
-    "Home": "Főoldal"
+    "Home": "Előnézeti mód aktív"
   },
   "ui": {
     "account": {
-      "login": "Bejelentkezés",
-      "loggingIn": "Bejelentkezés...",
-      "logout": "Kijelentkezés",
-      "loggingOut": "Kijelentkezés...",
-      "logoutError": "Hiba a kijelentkezéskor",
-      "unknownError": "Ismeretlen hiba"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "Váltás világos módra",
-      "lightOn": "Világos téma aktív",
-      "dark": "Váltás sötét módra",
-      "darkOn": "Sötét téma aktív"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
     "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "Vezérlők megtekintése",
-      "viewSource": "Forráskód megtekintése",
-      "viewRendering": "Előnézet megtekintése",
-      "source": "HTML forráskód (csak olvasható)",
-      "sourceSection": "Forráskód szekció",
-      "renderedSection": "Renderelt tartalom szekció",
-      "renderedContent": "Renderelt HTML tartalom",
-      "sourceActive": "Forráskód mód aktív",
-      "renderingActive": "Előnézeti mód aktív"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }

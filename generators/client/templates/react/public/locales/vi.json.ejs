@@ -14,9 +14,9 @@
       "update": "Cập nhật",
       "view": "Xem",
       "file": {
-        "markedForDeletion": "Tập tin đã được đánh dấu để xóa (Lưu để xác nhận)",
+        "markedForDeletion": "Tập tin đánh dấu để xóa (Lưu để xác nhận)",
         "viewOrDownload": "Xem/Tải xuống",
-        "replaceWarning": "Chọn tệp mới sẽ thay thế tệp hiện tại"
+        "replaceWarning": "Chọn một tệp mới sẽ thay thế tệp hiện tại"
       },
       "successfullyCreated": "ID bản ghi {{id}} đã được tạo thành công",
       "successfullyUpdated": "ID bản ghi {{id}} đã được cập nhật thành công",
@@ -35,8 +35,8 @@
     "select": {
       "collapse": "Thu gọn danh sách",
       "expand": "Mở rộng danh sách",
-      "oneElementSelected": "Một phần tử đã được chọn",
-      "nElementsSelected": "{{count}} phần tử đã được chọn",
+      "oneElementSelected": "Một phần tử được chọn",
+      "nElementsSelected": "{{count}} phần tử được chọn",
       "placeholder": "Chọn một tùy chọn",
       "noOptions": "Không có tùy chọn",
       "noValue": "Không có giá trị",
@@ -48,7 +48,7 @@
     },
     "show": {
       "more": "Hiện thêm",
-      "less": "Hiện ít"
+      "less": "Hiện ít hơn"
     },
     "sortBy": {
       "ascending": "Sắp xếp theo {{field}} tăng dần",
@@ -67,7 +67,7 @@
     "summary": "{{entity}}: bản ghi từ {{from}} đến {{to}} của {{total}}",
     "previous": "Trang trước",
     "next": "Trang tiếp theo",
-    "goto": "Đi tới trang {{page}}"
+    "goto": "Đi đến trang {{page}}"
   },
   "searchEngine": {
     "algolia": "Algolia",
@@ -78,7 +78,7 @@
   },
   "entities": "Thực thể",
   "password": {
-    "strengthLabel": "Sức mạnh mật khẩu",
+    "strengthLabel": "Độ mạnh mật khẩu",
     "generate": "Tạo mật khẩu an toàn",
     "copy": "Sao chép mật khẩu",
     "copied": "Mật khẩu đã được sao chép!",
@@ -89,24 +89,24 @@
     },
     "criteria": {
       "minLength": "Ít nhất {{count}} ký tự",
-      "uppercase": "Một chữ cái in hoa (A-Z)",
-      "lowercase": "Một chữ cái thường (a-z)",
+      "uppercase": "Một chữ cái viết hoa (A-Z)",
+      "lowercase": "Một chữ cái viết thường (a-z)",
       "numbers": "Một số (0-9)",
       "specialChars": "Một ký tự đặc biệt (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Lỗi 401 – Không được ủy quyền",
+      "title": "Lỗi 401 – Không được phép",
       "message": "Bạn cần đăng nhập để truy cập trang này. Vui lòng kiểm tra thông tin xác thực của bạn và thử lại."
     },
     "403": {
       "title": "Ôi! Lỗi 403 – Xin lỗi, {{username}}",
-      "message": "Chào <1>{{username}}</1>, chúng tôi nhận ra bạn, nhưng bạn không có quyền truy cập vào trang này. Nếu bạn nghĩ đây là một sai sót, hãy liên hệ với chúng tôi!"
+      "message": "Chào <1>{{username}}</1>, chúng tôi nhận ra bạn, nhưng bạn không có quyền truy cập trang này. Nếu bạn nghĩ rằng đây là một sai sót, hãy liên hệ với chúng tôi!"
     },
     "404": {
       "title": "Ôi! Lỗi 404 – Trang không tìm thấy",
-      "message": "Có vẻ như trang bạn đang tìm kiếm không còn tồn tại nữa. Nó có thể đã bị di chuyển hoặc xóa. Kiểm tra URL hoặc quay lại trang chủ!"
+      "message": "Có vẻ như trang bạn đang tìm không còn tồn tại. Nó có thể đã bị di chuyển hoặc xóa. Kiểm tra URL hoặc quay lại trang chủ!"
     },
     "entities": {
       "create": "Lỗi tạo",
@@ -120,84 +120,84 @@
     "validations": {
       "email": "Định dạng email không hợp lệ",
       "file": {
-        "minSize": "Tập tin phải ít nhất {{accepted}}. Kích thước hiện tại: {{actual}}",
-        "maxSize": "Tập tin không được vượt quá {{accepted}}. Kích thước hiện tại: {{actual}}",
-        "invalidType": "Loại tập tin phải là {{accepted}}. Loại hiện tại: {{actual}}",
-        "typeImage": "Tập tin phải là hình ảnh",
-        "required": "Tập tin là bắt buộc"
+        "minSize": "Tệp phải có ít nhất {{accepted}}. Kích thước hiện tại: {{actual}}",
+        "maxSize": "Tệp không được vượt quá {{accepted}}. Kích thước hiện tại: {{actual}}",
+        "invalidType": "Loại tệp phải là {{accepted}}. Loại hiện tại: {{actual}}",
+        "typeImage": "Tệp phải là hình ảnh",
+        "required": "Tệp là bắt buộc"
       },
-      "min": "Chọn ngôn ngữ",
-      "minlength": "Xem điều khiển",
-      "minbytes": "Xem mã nguồn",
-      "max": "Xem bản xem trước",
-      "maxlength": "Mã nguồn HTML (chế độ chỉ đọc)",
-      "maxbytes": "Phần mã nguồn",
+      "min": "Số phải lớn hơn hoặc bằng {{accepted}}",
+      "minlength": "Chuỗi phải chứa ít nhất {{accepted}} ký tự",
+      "minbytes": "Tệp phải có ít nhất {{accepted}}",
+      "max": "Số phải nhỏ hơn hoặc bằng {{accepted}}",
+      "maxlength": "Chuỗi phải chứa tối đa {{accepted}} ký tự",
+      "maxbytes": "Tệp không được vượt quá {{accepted}}",
       "password": {
-        "weakPassword": "Bắt buộc"
+        "weakPassword": "Mật khẩu quá yếu"
       },
-      "pattern": "Giá trị phải duy nhất",
-      "required": "Phần nội dung đã được hiển thị",
-      "url": "Bảng điều khiển"
+      "pattern": "Định dạng không hợp lệ",
+      "required": "Bắt buộc",
+      "url": "Định dạng URL không hợp lệ"
     }
   },
   "fields": {
     "duration": {
-      "day": "Đăng nhập",
-      "hour": "Đang đăng nhập...",
-      "minute": "Đăng xuất",
-      "second": "Đang đăng xuất...",
-      "millisecond": "Lỗi đăng xuất",
-      "days": "Lỗi không rõ",
-      "hours": "Chuyển sang chế độ sáng",
-      "minutes": "Chủ đề sáng đang hoạt động",
-      "seconds": "Chuyển sang chế độ tối",
-      "milliseconds": "Chủ đề tối đang hoạt động"
+      "day": "Ngày",
+      "hour": "Giờ",
+      "minute": "Phút",
+      "second": "Giây",
+      "millisecond": "Phân tách",
+      "days": "Ngày",
+      "hours": "Giờ",
+      "minutes": "Phút",
+      "seconds": "Giây",
+      "milliseconds": "Phân tách"
     }
   },
   "info": {
     "validations": {
-      "min": "Chọn ngôn ngữ",
-      "minlength": "Xem điều khiển",
-      "minbytes": "Xem mã nguồn",
-      "max": "Xem bản xem trước",
-      "maxlength": "Mã nguồn HTML (chế độ chỉ đọc)",
-      "maxbytes": "Phần mã nguồn",
-      "required": "Phần nội dung đã được hiển thị",
-      "unique": "Nội dung HTML đã được hiển thị"
+      "min": "Số phải lớn hơn hoặc bằng {{accepted}}",
+      "minlength": "Chuỗi phải chứa ít nhất {{accepted}} ký tự",
+      "minbytes": "Tệp phải có ít nhất {{accepted}}",
+      "max": "Số phải nhỏ hơn hoặc bằng {{accepted}}",
+      "maxlength": "Chuỗi phải chứa tối đa {{accepted}} ký tự",
+      "maxbytes": "Tệp không được vượt quá {{accepted}}",
+      "required": "Bắt buộc",
+      "unique": "Giá trị phải là duy nhất"
     }
   },
   "messages": {
-    "noData": "Chế độ mã nguồn đang hoạt động"
+    "noData": "Không tìm thấy bản ghi nào"
   },
   "pages": {
-    "Home": "Trang chính"
+    "Home": "Trang chủ"
   },
   "ui": {
     "account": {
-      "login": "Login",
-      "loggingIn": "Logging in...",
-      "logout": "Logout",
-      "loggingOut": "Logging out...",
-      "logoutError": "Error logging out",
-      "unknownError": "Unknown error"
+      "login": "Đăng nhập",
+      "loggingIn": "Đang đăng nhập...",
+      "logout": "Đăng xuất",
+      "loggingOut": "Đang đăng xuất...",
+      "logoutError": "Lỗi đăng xuất",
+      "unknownError": "Lỗi không xác định"
     },
     "darkmode": {
-      "light": "Switch to light mode",
-      "lightOn": "Light theme active",
-      "dark": "Switch to dark mode",
-      "darkOn": "Dark theme active"
+      "light": "Chuyển sang chế độ sáng",
+      "lightOn": "Chủ đề sáng đang hoạt động",
+      "dark": "Chuyển sang chế độ tối",
+      "darkOn": "Chủ đề tối đang hoạt động"
     },
-    "langSelect": "Select language",
+    "langSelect": "Chọn ngôn ngữ",
     "htmlViewer": {
-      "controls": "View controls",
-      "viewSource": "View source code",
-      "viewRendering": "View preview",
-      "source": "HTML source code (read-only)",
-      "sourceSection": "Source code section",
-      "renderedSection": "Rendered content section",
-      "renderedContent": "Rendered HTML content",
-      "sourceActive": "Source code mode active",
-      "renderingActive": "Preview mode active"
+      "controls": "Xem điều khiển",
+      "viewSource": "Xem mã nguồn",
+      "viewRendering": "Xem bản xem trước",
+      "source": "Mã HTML (chỉ đọc)",
+      "sourceSection": "Mục mã nguồn",
+      "renderedSection": "Mục nội dung đã được tạo",
+      "renderedContent": "Nội dung HTML đã được tạo",
+      "sourceActive": "Chế độ mã nguồn đang hoạt động",
+      "renderingActive": "Chế độ xem trước đang hoạt động"
     }
   }
 }

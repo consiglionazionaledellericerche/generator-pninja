@@ -14,13 +14,13 @@
       "update": "Kemas kini",
       "view": "Lihat",
       "file": {
-        "markedForDeletion": "Fail ditandakan untuk penghapusan (Simpan untuk sah)",
-        "viewOrDownload": "Lihat/Muat turun",
-        "replaceWarning": "Memilih fail baru akan menggantikan yang sedia ada"
+        "markedForDeletion": "Fail ditandakan untuk dihapuskan (Simpan untuk mengesahkan)",
+        "viewOrDownload": "Lihat/ Muat turun",
+        "replaceWarning": "Memilih fail baru akan menggantikan fail sedia ada"
       },
-      "successfullyCreated": "ID rekod {{id}} berjaya dicipta",
-      "successfullyUpdated": "ID rekod {{id}} berjaya dikemas kini",
-      "successfullyDeleted": "ID rekod {{id}} berjaya dipadam"
+      "successfullyCreated": "Rekod ID {{id}} berjaya dicipta",
+      "successfullyUpdated": "Rekod ID {{id}} berjaya dikemas kini",
+      "successfullyDeleted": "Rekod ID {{id}} berjaya dihapuskan"
     },
     "hidePassword": "Sembunyikan kata laluan",
     "showPassword": "Tunjukkan kata laluan",
@@ -30,17 +30,17 @@
     "back": "Kembali",
     "cancel": "Batal",
     "opensInNewWindow": "Membuka dalam tetingkap baru",
-    "undo": "Batal",
+    "undo": "Gugurkan",
     "search": "Cari...",
     "select": {
-      "collapse": "Liputi senarai",
-      "expand": "Kembangkan senarai",
-      "oneElementSelected": "Satu elemen terpilih",
-      "nElementsSelected": "{{count}} elemen terpilih",
-      "placeholder": "Pilih satu pilihan",
+      "collapse": "Menyusutkan senarai",
+      "expand": "Besar senarai",
+      "oneElementSelected": "Satu elemen dipilih",
+      "nElementsSelected": "{{count}} elemen dipilih",
+      "placeholder": "Pilih pilihan",
       "noOptions": "Tiada pilihan",
       "noValue": "Tiada nilai",
-      "loading": "Membaca pilihan...",
+      "loading": "Memuatkan pilihan...",
       "searchMultiple": "Pilih atau cari satu atau lebih nilai",
       "searchSingle": "Pilih atau cari satu nilai",
       "selectMultiple": "Pilih satu atau lebih nilai",
@@ -51,8 +51,8 @@
       "less": "Tunjukkan kurang"
     },
     "sortBy": {
-      "ascending": "Susun mengikut {{field}} menaik",
-      "descending": "Susun mengikut {{field}} menurun"
+      "ascending": "Susun mengikut {{field}} secara menaik",
+      "descending": "Susun mengikut {{field}} secara menurun"
     }
   },
   "dbms": {
@@ -63,7 +63,7 @@
     "sqlsrv": "SQL Server"
   },
   "pagination": {
-    "pagination": "Paginasikan",
+    "pagination": "Paginasi",
     "summary": "{{entity}}: rekod dari {{from}} hingga {{to}} daripada {{total}}",
     "previous": "Halaman sebelumnya",
     "next": "Halaman seterusnya",
@@ -88,116 +88,116 @@
       "strong": "Kata laluan kuat"
     },
     "criteria": {
-      "minLength": "Sekurang-kurangnya {{count}} watak",
+      "minLength": "Sekurang-kurangnya {{count}} aksara",
       "uppercase": "Huruf besar (A-Z)",
       "lowercase": "Huruf kecil (a-z)",
-      "numbers": "Satu nombor (0-9)",
-      "specialChars": "Satu watak khas (!@#$%&*...)"
+      "numbers": "Nombor (0-9)",
+      "specialChars": "Watak khas (!@#$%&*...)"
     }
   },
   "errors": {
     "401": {
-      "title": "Ralat 401 – Tanpa Kebenaran",
-      "message": "Anda perlu masuk untuk mengakses halaman ini. Sila semak kelayakan anda dan cuba lagi."
+      "title": "Ralat 401 – Tidak Dibenarkan",
+      "message": "Anda perlu log masuk untuk mengakses halaman ini. Sila semak kelayakan anda dan cuba lagi."
     },
     "403": {
       "title": "Oops! Ralat 403 – Maaf, {{username}}",
-      "message": "Hai <1>{{username}}</1>, kami mengenali anda, tetapi anda tidak mempunyai kebenaran yang betul untuk mengakses halaman ini. Jika anda fikir ini adalah kesilapan, hubungi kami!"
+      "message": "Hey <1>{{username}}</1>, kami mengenali anda, tetapi anda tidak mempunyai kebenaran yang betul untuk mengakses halaman ini. Jika anda fikir ini adalah kesilapan, hubungi kami!"
     },
     "404": {
       "title": "Oops! Ralat 404 – Halaman Tidak Ditemui",
-      "message": "Nampaknya halaman yang anda cari sudah tiada lagi. Ia mungkin telah dipindahkan atau dipadam. Semak URL atau kembali ke halaman utama!"
+      "message": "Nampaknya halaman yang anda cari sudah tidak wujud lagi. Ia mungkin telah dipindahkan atau dihapuskan. Semak URL atau kembali ke halaman utama!"
     },
     "entities": {
-      "create": "Ralat mencipta",
-      "read": "Ralat membaca",
-      "update": "Ralat mengemas kini",
-      "delete": "Ralat menghapus"
+      "create": "Ralat semasa mencipta",
+      "read": "Ralat semasa membaca",
+      "update": "Ralat semasa mengemas kini",
+      "delete": "Ralat semasa menghapuskan"
     },
     "options": {
-      "load": "Ralat memuat pilihan untuk"
+      "load": "Ralat semasa memuatkan pilihan"
     },
     "validations": {
-      "email": "Format email tidak sah",
+      "email": "Format e-mel tidak sah",
       "file": {
         "minSize": "Fail mesti sekurang-kurangnya {{accepted}}. Saiz semasa: {{actual}}",
         "maxSize": "Fail tidak boleh melebihi {{accepted}}. Saiz semasa: {{actual}}",
         "invalidType": "Jenis fail mesti {{accepted}}. Jenis semasa: {{actual}}",
-        "typeImage": "Fail mesti merupakan imej",
+        "typeImage": "Fail mesti merupakan gambar",
         "required": "Fail adalah diperlukan"
       },
-      "min": "Nombor mesti lebih besar atau sama dengan {{accepted}}",
-      "minlength": "String mesti mengandungi sekurang-kurangnya {{accepted}} watak",
-      "minbytes": "Fail mesti sekurang-kurangnya {{accepted}}",
-      "max": "Nombor mesti kurang daripada atau sama dengan {{accepted}}",
-      "maxlength": "String mesti mengandungi paling banyak {{accepted}} watak",
-      "maxbytes": "Fail tidak boleh melebihi {{accepted}}",
+      "min": "Pilih bahasa",
+      "minlength": "Lihat kawalan",
+      "minbytes": "Lihat kod sumber",
+      "max": "Lihat pratonton",
+      "maxlength": "Kod sumber HTML (hanya baca)",
+      "maxbytes": "Bahagian kod sumber",
       "password": {
-        "weakPassword": "Kata laluan terlalu lemah"
+        "weakPassword": "Diperlukan"
       },
-      "pattern": "Format tidak sah",
-      "required": "Diperlukan",
-      "url": "Format URL tidak sah"
+      "pattern": "Nilai mesti unik",
+      "required": "Bahagian kandungan yang dirender",
+      "url": "Halaman Utama"
     }
   },
   "fields": {
     "duration": {
-      "day": "Hari",
-      "hour": "Jam",
-      "minute": "Minit",
-      "second": "Saat",
-      "millisecond": "Milisaat",
-      "days": "Hari",
-      "hours": "Jam",
-      "minutes": "Minit",
-      "seconds": "Saat",
-      "milliseconds": "Milisaat"
+      "day": "Log Masuk",
+      "hour": "Sedang log masuk...",
+      "minute": "Log Keluar",
+      "second": "Sedang log keluar...",
+      "millisecond": "Ralat semasa log keluar",
+      "days": "Ralat tidak diketahui",
+      "hours": "Tukar kepada mod cahaya",
+      "minutes": "Tema cahaya aktif",
+      "seconds": "Tukar kepada mod gelap",
+      "milliseconds": "Tema gelap aktif"
     }
   },
   "info": {
     "validations": {
-      "min": "Nombor mesti lebih besar atau sama dengan {{accepted}}",
-      "minlength": "String mesti mengandungi sekurang-kurangnya {{accepted}} watak",
-      "minbytes": "Fail mesti sekurang-kurangnya {{accepted}}",
-      "max": "Nombor mesti kurang daripada atau sama dengan {{accepted}}",
-      "maxlength": "String mesti mengandungi paling banyak {{accepted}} watak",
-      "maxbytes": "Fail tidak boleh melebihi {{accepted}}",
-      "required": "Diperlukan",
-      "unique": "Nilai mesti unik"
+      "min": "Pilih bahasa",
+      "minlength": "Lihat kawalan",
+      "minbytes": "Lihat kod sumber",
+      "max": "Lihat pratonton",
+      "maxlength": "Kod sumber HTML (hanya baca)",
+      "maxbytes": "Bahagian kod sumber",
+      "required": "Bahagian kandungan yang dirender",
+      "unique": "Kandungan HTML yang dirender"
     }
   },
   "messages": {
-    "noData": "Tiada rekod ditemui"
+    "noData": "Mod kod sumber aktif"
   },
   "pages": {
-    "Home": "Halaman utama"
+    "Home": "Mod pratonton aktif"
   },
   "ui": {
     "account": {
-      "login": "Log Masuk",
-      "loggingIn": "Sedang log masuk...",
-      "logout": "Log Keluar",
-      "loggingOut": "Sedang log keluar...",
-      "logoutError": "Ralat log keluar",
-      "unknownError": "Ralat tidak diketahui"
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
     },
     "darkmode": {
-      "light": "Tukar kepada mod terang",
-      "lightOn": "Tema terang aktif",
-      "dark": "Tukar kepada mod gelap",
-      "darkOn": "Tema gelap aktif"
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
     },
-    "langSelect": "Pilih bahasa",
+    "langSelect": "Select language",
     "htmlViewer": {
-      "controls": "Lihat kawalan",
-      "viewSource": "Lihat kod sumber",
-      "viewRendering": "Lihat pratonton",
-      "source": "Kod sumber HTML (baca sahaja)",
-      "sourceSection": "Bahagian kod sumber",
-      "renderedSection": "Bahagian kandungan yang dirender",
-      "renderedContent": "Kandungan HTML yang dirender",
-      "sourceActive": "Mod kod sumber aktif",
-      "renderingActive": "Mod pratonton aktif"
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
     }
   }
 }
