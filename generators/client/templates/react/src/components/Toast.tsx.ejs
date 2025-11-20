@@ -1,7 +1,16 @@
-import { X } from 'lucide-react';
+import { X, CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useId } from 'react-aria';
+
+type ToastVariant = 'success' | 'error' | 'warning' | 'info';
+const toastIcons: Record<ToastVariant, React.ElementType> = {
+  success: CheckCircle,
+  error: XCircle,
+  warning: AlertTriangle,
+  info: Info,
+};
 
 export function Toast({ notification }: { notification: INotification }) {
   const { t } = useTranslation();
@@ -77,15 +86,50 @@ export function Toast({ notification }: { notification: INotification }) {
     [remainingTime, duration, isPaused, hasTimer]
   );
 
+  const Icon = toastIcons[notification.type];
+  const detailsId = useId();
+  const showmoreRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Salva focus precedente solo per toast urgenti
+    if (notification.type === 'warning' || notification.type === 'error') {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      if (notification.type === 'warning') closeRef.current?.focus();
+      if (notification.type === 'error') {
+        if (showmoreRef.current) {
+          showmoreRef.current?.focus();
+        } else {
+          closeRef.current?.focus();
+        }
+      }
+    }
+
+    // Cleanup: ripristina focus quando toast si chiude
+    return () => {
+      if (
+        previousFocusRef.current &&
+        (notification.type === 'warning' || notification.type === 'error')
+      ) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [notification.type]);
+
   return (
     <div
+      role={['error', 'warning'].includes(notification.type) ? 'alert' : 'status'}
       className={`${colors.main} rounded-lg shadow-lg dark:shadow-lg/70 min-w-[300px] max-w-[50vw] overflow-hidden`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onAbort={handleMouseLeave}
     >
       <div className="p-4 flex justify-between items-start">
         <div className="flex-1">
           <div className="flex items-center gap-2">
+            <Icon aria-hidden className="w-8 h-8 me-2" />
             <div>{notification.message}</div>
           </div>
           {notification.details && (
@@ -96,31 +140,41 @@ export function Toast({ notification }: { notification: INotification }) {
                   <span className="text-xs">
                     {' '}
                     (
-                    <a
-                      href="#"
+                    <button
+                      ref={showmoreRef}
+                      aria-expanded={showTechDetails}
+                      aria-controls={detailsId}
                       onClick={() => setShowTechDetails(!showTechDetails)}
-                      className="hover:underline"
+                      className="hover:underline cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-md"
                     >
                       {t('common.show.more')} ...
-                    </a>
+                    </button>
                     )
                   </span>
                 )}
               </div>
               {showTechDetails && notification.techDetails && (
                 <>
-                  <pre className="mt-2 text-xs text-wrap">{notification.techDetails}</pre>
+                  <div
+                    id={detailsId}
+                    role="region"
+                    aria-label={t('common.errorDetails')}
+                    className="mt-2 text-xs whitespace-pre-wrap font-mono"
+                  >
+                    {notification.techDetails}
+                  </div>
                   {notification.techDetails && showTechDetails && (
                     <span className="text-xs">
                       {' '}
                       (
-                      <a
-                        href="#"
+                      <button
+                        aria-expanded={showTechDetails}
+                        aria-controls={detailsId}
                         onClick={() => setShowTechDetails(!showTechDetails)}
-                        className="hover:underline"
+                        className="hover:underline cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-md"
                       >
                         {t('common.show.less')}
-                      </a>
+                      </button>
                       )
                     </span>
                   )}
@@ -132,17 +186,21 @@ export function Toast({ notification }: { notification: INotification }) {
         <div className="flex items-center ms-2 gap-2 shrink-0">
           &nbsp;
           {hasTimer && (
-            <span className="text-sm opacity-75">({Math.ceil(remainingTime / 1000)}s)</span>
+            <span aria-hidden className="text-sm opacity-75">
+              ({Math.ceil(remainingTime / 1000)}s)
+            </span>
           )}
           <button
+            ref={closeRef}
+            aria-label={t('actions.closeNotification')}
             onClick={() => removeNotification(notification.id)}
-            className="cursor-pointer rounded-full"
+            className="cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
           >
-            <X size={18} />
+            <X aria-hidden size={18} />
           </button>
         </div>
       </div>
-      <div className="h-1 w-full">
+      <div className="h-1 w-full" aria-hidden>
         <div className={`h-full ${colors.progress}`} style={progressStyle} />
       </div>
     </div>
