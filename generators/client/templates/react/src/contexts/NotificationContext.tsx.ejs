@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { Toast } from '../components/Toast';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
@@ -66,11 +66,13 @@ function ToastContainer({ position = 'bottom-right' }: { position: ToastPosition
 interface NotificationProviderProps {
   children: React.ReactNode;
   position?: ToastPosition;
+  maxNotifications?: number;
 }
 
 export function NotificationProvider({
   children,
   position = 'bottom-right',
+  maxNotifications = 5,
 }: NotificationProviderProps) {
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const timeoutsRef = useRef<{
@@ -125,7 +127,7 @@ export function NotificationProvider({
         };
       }
 
-      setNotifications((curr) => [...curr, { ...notification, id }]);
+      setNotifications((curr) => [{ ...notification, id }, ...curr]);
     },
     [removeNotification]
   );
@@ -155,6 +157,17 @@ export function NotificationProvider({
     },
     [removeNotification]
   );
+
+  useEffect(() => {
+    console.log('Added notification', notifications.length + 1);
+    if (notifications.length === 0) return;
+    if (!maxNotifications) return;
+    if (notifications.length > maxNotifications) {
+      console.warn(`Too many notifications, removing the oldest one. ${notifications[0].id}`);
+      console.warn(notifications);
+      removeNotification(notifications[notifications.length - 1].id);
+    }
+  }, [notifications, removeNotification, maxNotifications]);
 
   return (
     <NotificationContext.Provider

@@ -96,8 +96,7 @@ export function Toast({ notification }: { notification: INotification }) {
     // Salva focus precedente solo per toast urgenti
     if (notification.type === 'warning' || notification.type === 'error') {
       previousFocusRef.current = document.activeElement as HTMLElement;
-      if (notification.type === 'warning') closeRef.current?.focus();
-      if (notification.type === 'error') {
+      if (['error', 'warning'].includes(notification.type)) {
         if (showmoreRef.current) {
           showmoreRef.current?.focus();
         } else {
