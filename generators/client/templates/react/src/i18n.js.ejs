@@ -8,11 +8,13 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    ns: ['entities', 'common'],
+    defaultNS: 'common',
     supportedLngs: <%- supportedLngs %>,
     fallbackLng: '<%- fallbackLng %>',
     nonExplicitSupportedLngs: true,
     backend: {
-      loadPath: '/locales/{{lng}}.json'
+      loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
     detection: {
       convertDetectedLanguage: (lng) => lng.split('-')[0]

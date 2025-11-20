@@ -145,12 +145,12 @@ export default function <%= entity.name %>List() {
   useEffect(() => loadRecords(), [loadRecords]);
 
   useEffect(() => {
-    document.title = t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
+    document.title = t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
   return (
     <>
-      <h1 className="text-2xl mb-4">{t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
+      <h1 className="text-2xl mb-4">{t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
       <div className={`flex gap-4 mb-4`}>
 <% if (searchEngine !== 'null' ) { -%>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
@@ -161,7 +161,7 @@ export default function <%= entity.name %>List() {
           data-shortcut="ctrl+enter"
         >
           <Plus size={16} />
-          {t('actions.crud.create')} {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')}
+          {t('actions.crud.create')} {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')}
           <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
           <kbd className="kdb-shortcut">↵</kbd>
         </Link>
@@ -178,7 +178,7 @@ export default function <%= entity.name %>List() {
             <table className="data-table">
               <caption className="w-full text-left mb-2 text-sm font-normal">
                 {t('pagination.summary', {
-                  entity: t('entities.<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>'),
+                  entity: t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>'),
                   from: page?.from,
                   to: page?.to,
                   total: page?.total,
@@ -186,12 +186,12 @@ export default function <%= entity.name %>List() {
               </caption>
               <thead>
                 <tr>
-                  <SortHeader className="w-0" field="id" label={t('entities.<%-to.snake(entity.name)%>.id')} />
+                  <SortHeader className="w-0" field="id" label={t('entities:<%-to.snake(entity.name)%>.id')} />
 <%  for(column of columns) { -%>
-                  <SortHeader field="<%-column%>" label={t('entities.<%-to.snake(entity.name)%>.<%-column%>')} />
+                  <SortHeader field="<%-column%>" label={t('entities:<%-to.snake(entity.name)%>.<%-column%>')} />
 <%  } -%>
 <%                if (false) for(r of relatedEntities) { -%>
-                  <th scope="col">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
+                  <th scope="col">{t('entities:<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
 <%                } -%>
                   <th scope="col">{t('actions.crud.actions')}</th>
                 </tr>

@@ -221,7 +221,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
             <RadioGroup
               fieldName="<%= to.snake(name) %>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
               options={Object.values(<%= type %>).map((v) => ({
                 id: String(v),
                 name: String(v),
@@ -237,7 +237,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%          } -%>
               entity={<%= to.camel(entity.name)%>}
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -245,7 +245,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (['Integer','Long','BigDecimal','Float','Double'].includes(type)) {-%>
             <NumberField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -253,7 +253,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === "Boolean") {-%>
             <Checkbox
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -261,7 +261,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === "Duration") {-%>
             <DurationField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -269,7 +269,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === "LocalDate") {-%>
             <DateField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -277,7 +277,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === 'ZonedDateTime' || type === 'Instant') {-%>
             <DateTimeField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -285,7 +285,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === "LocalTime") {-%>
             <TimeField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -293,7 +293,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === 'String') {-%>
             <<%- getStringFieldType(name) %>
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -301,7 +301,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === 'UUID') {-%>
             <UuidField
               fieldName="<%-to.snake(name)%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}
 <%          } -%>
@@ -311,7 +311,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <Textarea
               rows={10}
               fieldName="<%= to.snake(name) %>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%           if (!isOptional(validations)) { -%>
               validations={{ required: true }}
 <%           } -%>
@@ -328,7 +328,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div>
             <SelectField
               fieldName="<%= to.snake(field) %><%if (!isArray) {%>_id<%}%>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(field)%>')}
 <%            if (isArray) {-%>
               multiple={true}
 <%            }-%>
@@ -360,7 +360,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <div>
             <SelectField
               fieldName="<%= to.snake(foreignId) %>"
-              label={t('entities.<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
+              label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(foreignId)%>')}
               optionsLoad={{
                 url: '/api/<%=to.slug(pluralize(related))%>',
 <%            if (labelField !== 'id') {-%>

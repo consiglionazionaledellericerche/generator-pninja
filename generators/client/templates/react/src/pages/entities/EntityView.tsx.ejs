@@ -34,7 +34,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
     <table className="details-table">
       <tbody>
         <tr>
-          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.id')}</th>
+          <th scope="row">{t('entities:<%-to.snake(entity.name)%>.id')}</th>
           <td>
             <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${data?.id}`}>
               {data?.id}
@@ -43,7 +43,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
         </tr>
 <%      for(column of columns) { -%>
         <tr>
-          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-column%>')}</th>
+          <th scope="row">{t('entities:<%-to.snake(entity.name)%>.<%-column%>')}</th>
 <%        if (!fileColumns.includes(column)) { -%>
 <%          if (!durationColumns.includes(column)) { -%>
           <td>{data?.<%= column%>?.toString()}</td>
@@ -85,7 +85,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
 <%      } -%>
 <%      if(false) for(f of foreignIds) { -%>
         <tr>
-          <th scope="row">{t('entities.<%-to.snake(entity.name)%>.<%-f.foreignId%>')}</th>
+          <th scope="row">{t('entities:<%-to.snake(entity.name)%>.<%-f.foreignId%>')}</th>
           <td>
             <Link className="text-link" to={`/entities/<%=to.slug(pluralize(f.related))%>/view/${data?.<%= f.foreignId%>}`}>
               {data?.<%= f.foreignId%>?.toString()}
@@ -96,7 +96,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
 <%      for(r of relatedEntities) { -%>
         {Object.prototype.hasOwnProperty.call(data, '<%-r.field%>') && (
         <tr>
-          <th scope="row" className="align-top">{t('entities.<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
+          <th scope="row" className="align-top">{t('entities:<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
           <td className='flex flex-col gap-y-4'>
 <%             if(r.isArray) { -%>
             {data?.<%-r.field%> && data?.<%-r.field%>?.map((item, index) => <div key={index} className='rounded-md border dark:border-slate-700 border-slate-300 p-4'><<%=r.related%>DataView data={item} /></div>)}
@@ -134,7 +134,7 @@ export default function <%= entity.name %>View() {
       .catch((error: HttpError) => {
         addNotification({
           type: 'error',
-          message: `${t('errors.entities.read')} ${t('entities.<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
+          message: `${t('errors.entities.read')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           details: error?.message,
           techDetails: error?.details,
           duration: 10000,
@@ -144,13 +144,13 @@ export default function <%= entity.name %>View() {
   }, [fetch, id, navigate, t, addNotification]);
 
   useEffect(() => {
-    document.title = `${t('entities.<%-to.snake(entity.name)%>.<%-entity.name%>')} ID ${id}`;
+    document.title = `${t('entities:<%-to.snake(entity.name)%>.<%-entity.name%>')} ID ${id}`;
   }, [id, i18n.language, t]);
 
   return (
     <>
       <h1 className="text-2xl mb-4">
-        {t('entities.<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}
+        {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}
       </h1>
       <SimpleLoader loading={loading} />
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}

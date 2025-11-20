@@ -65,17 +65,7 @@
     "typesense": "Typesense",
     "solr": "Solr"
   },
-  "entities": {
-    "entities": "Entități",
-    <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
-      `\n      "${entity.name}": "${to.capital(entity.name)}"`,
-      `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
-      `"id": "ID"`,
-      ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
-      ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
-      ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
-    ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
-  },
+  "entities": "Entități",
   "password": {
     "strengthLabel": "Puterea parolei",
     "generate": "Generează o parolă sigură",

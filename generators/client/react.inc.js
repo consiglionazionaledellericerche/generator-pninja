@@ -43,7 +43,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath('react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
 
     for (const lang of languages) {
-        that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}.json`), { appName, entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
+        that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
+        that.fs.copyTpl(that.templatePath(`react/public/locales/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
     };
     that.fs.copyTpl(that.templatePath("react/public/fonts/IBMPlexMono-Regular.ttf"), that.destinationPath(`client/public/fonts/IBMPlexMono-Regular.ttf`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
