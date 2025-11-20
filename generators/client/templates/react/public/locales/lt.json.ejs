@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Veiksmai",
+      "back": "Atgal",
+      "cancel": "Atšaukti",
+      "confirmDelete": "Patvirtinti ištrynimą",
+      "create": "Sukurti",
+      "delete": "Ištrinti",
+      "edit": "Redaguoti",
+      "save": "Išsaugoti",
+      "saving": "Išsaugoma...",
+      "update": "Atnaujinti",
+      "view": "Peržiūrėti",
+      "file": {
+        "markedForDeletion": "Failas pažymėtas ištrynimui (Išsaugokite, kad patvirtintumėte)",
+        "viewOrDownload": "Peržiūrėti / Parsisiųsti",
+        "replaceWarning": "Pasirinkus naują failą, esamas bus pakeistas"
+      },
+      "successfullyCreated": "Įrašų ID {{id}} sėkmingai sukurtas",
+      "successfullyUpdated": "Įrašų ID {{id}} sėkmingai atnaujintas",
+      "successfullyDeleted": "Įrašų ID {{id}} sėkmingai ištrintas"
+    },
+    "hidePassword": "Paslėpti slaptažodį",
+    "showPassword": "Rodyti slaptažodį",
+    "generateUUID": "Generuoti versijos 4 UUID"
+  },
+  "common": {
+    "back": "Atgal",
+    "cancel": "Atšaukti",
+    "opensInNewWindow": "Atidaroma naujame lange",
+    "undo": "Atšaukti",
+    "search": "Ieškoti...",
+    "select": {
+      "collapse": "Suskleisti sąrašą",
+      "expand": "Išskleisti sąrašą",
+      "oneElementSelected": "Pasirinktas vienas elementas",
+      "nElementsSelected": "Pasirinkti {{count}} elementai",
+      "placeholder": "Pasirinkite parinktį",
+      "noOptions": "Nėra parinkčių",
+      "noValue": "Nėra vertės",
+      "loading": "Kraunamos parinktys...",
+      "searchMultiple": "Pasirinkite arba ieškokite vienos ar daugiau verčių",
+      "searchSingle": "Pasirinkite arba ieškokite vertės",
+      "selectMultiple": "Pasirinkite vieną ar daugiau verčių",
+      "selectSingle": "Pasirinkite vertę"
+    },
+    "show": {
+      "more": "Rodyti daugiau",
+      "less": "Rodyti mažiau"
+    },
+    "sortBy": {
+      "ascending": "Rūšiuoti pagal {{field}} didėjimo tvarka",
+      "descending": "Rūšiuoti pagal {{field}} mažėjimo tvarka"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Puslapiai",
+    "summary": "{{entity}}: įrašai nuo {{from}} iki {{to}} iš {{total}}",
+    "previous": "Ankstesnis puslapis",
+    "next": "Kitas puslapis",
+    "goto": "Eiti į puslapį {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Subjektai",
+  "password": {
+    "strengthLabel": "Slaptažodžio stiprumas",
+    "generate": "Generuoti saugų slaptažodį",
+    "copy": "Kopijuoti slaptažodį",
+    "copied": "Slaptažodis nukopijuotas!",
+    "strength": {
+      "weak": "Silpnas slaptažodis",
+      "medium": "Vidutinis slaptažodis",
+      "strong": "Stiprus slaptažodis"
+    },
+    "criteria": {
+      "minLength": "Ne mažiau nei {{count}} simbolių",
+      "uppercase": "Didžioji raidė (A-Z)",
+      "lowercase": "Mažoji raidė (a-z)",
+      "numbers": "Skaičius (0-9)",
+      "specialChars": "Specialus simbolis (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Klaida 401 – Neįgaliota",
+      "message": "Turite prisijungti, kad galėtumėte pasiekti šią puslapį. Prašome patikrinti savo prisijungimo duomenis ir bandyti iš naujo."
+    },
+    "403": {
+      "title": "O ne! Klaida 403 – Atsiprašome, {{username}}",
+      "message": "Sveiki <1>{{username}}</1>, mes jus atpažįstame, tačiau neturite reikiamų leidimų pasiekti šią puslapį. Jei manote, kad tai klaida, kreipkitės į mus!"
+    },
+    "404": {
+      "title": "O ne! Klaida 404 – Puslapis nerastas",
+      "message": "Atrodo, kad puslapis, kurio ieškote, jau nebeegzistuoja. Jis galėjo būti perkelti arba ištrinti. Patikrinkite URL arba grįžkite į pagrindinį puslapį!"
+    },
+    "entities": {
+      "create": "Klaida kuriant",
+      "read": "Klaida skaitant",
+      "update": "Klaida atnaujinant",
+      "delete": "Klaida trinant"
+    },
+    "options": {
+      "load": "Klaida kraunant parinktis"
+    },
+    "validations": {
+      "email": "Neteisingas el. pašto formatas",
+      "file": {
+        "minSize": "Failas turi būti bent {{accepted}}. Dabartinis dydis: {{actual}}",
+        "maxSize": "Failas negali viršyti {{accepted}}. Dabartinis dydis: {{actual}}",
+        "invalidType": "Failo tipas turi būti {{accepted}}. Dabartinis tipas: {{actual}}",
+        "typeImage": "Failas turi būti vaizdas",
+        "required": "Failas yra privalomas"
+      },
+      "min": "Pasirinkti kalbą",
+      "minlength": "Peržiūrėti valdiklius",
+      "minbytes": "Peržiūrėti šaltinio kodą",
+      "max": "Peržiūrėti peržiūrą",
+      "maxlength": "HTML šaltinio kodas (tik skaitymui)",
+      "maxbytes": "Šaltinio kodo skyrius",
+      "password": {
+        "weakPassword": "Reikalingas"
+      },
+      "pattern": "Vertė turi būti unikali",
+      "required": "Pateikto turinio skyrius",
+      "url": "Valdymo skydas"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Prisijungti",
+      "hour": "Prisijungimas...",
+      "minute": "Atsijungti",
+      "second": "Atsijungimas...",
+      "millisecond": "Klaida atsijungiant",
+      "days": "Nežinoma klaida",
+      "hours": "Perjungti į šviesų režimą",
+      "minutes": "Šviesus temas aktyvus",
+      "seconds": "Perjungti į tamsų režimą",
+      "milliseconds": "Tamsus temas aktyvus"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Pasirinkti kalbą",
+      "minlength": "Peržiūrėti valdiklius",
+      "minbytes": "Peržiūrėti šaltinio kodą",
+      "max": "Peržiūrėti peržiūrą",
+      "maxlength": "HTML šaltinio kodas (tik skaitymui)",
+      "maxbytes": "Šaltinio kodo skyrius",
+      "required": "Pateikto turinio skyrius",
+      "unique": "Pateiktas HTML turinys"
+    }
+  },
+  "messages": {
+    "noData": "Šaltinio kodo režimas aktyvus"
+  },
+  "pages": {
+    "Home": "Pagrindinis puslapis"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

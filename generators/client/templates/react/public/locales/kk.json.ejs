@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Әрекеттер",
+      "back": "Артқа",
+      "cancel": "Бас тарту",
+      "confirmDelete": "Жоюды растау",
+      "create": "Жасау",
+      "delete": "Жою",
+      "edit": "Өзгерту",
+      "save": "Сақтау",
+      "saving": "Сақталуда...",
+      "update": "Жаңарту",
+      "view": "Көрсету",
+      "file": {
+        "markedForDeletion": "Файл жоюға белгіленген (Растау үшін сақтау)",
+        "viewOrDownload": "Көрсету/Жүктеп алу",
+        "replaceWarning": "Жаңа файлды таңдау ағымдағысын алмастырады"
+      },
+      "successfullyCreated": "Жазба ID {{id}} сәтті жасалды",
+      "successfullyUpdated": "Жазба ID {{id}} сәтті жаңартылды",
+      "successfullyDeleted": "Жазба ID {{id}} сәтті жойылды"
+    },
+    "hidePassword": "Құпиясөзді жасыру",
+    "showPassword": "Құпиясөзді көрсету",
+    "generateUUID": "4-ші нұсқалы UUID генерациялау"
+  },
+  "common": {
+    "back": "Артқа",
+    "cancel": "Бас тарту",
+    "opensInNewWindow": "Жаңа терезеде ашады",
+    "undo": "Артқа қайтару",
+    "search": "Іздеу...",
+    "select": {
+      "collapse": "Тізімді collaps ету",
+      "expand": "Тізімді кеңейту",
+      "oneElementSelected": "Бір элемент таңдалды",
+      "nElementsSelected": "{{count}} элемент таңдалды",
+      "placeholder": "Мүмкіндікті таңдаңыз",
+      "noOptions": "Мүмкіндіктер жоқ",
+      "noValue": "Мән жоқ",
+      "loading": "Мүмкіндіктер жүктелуде...",
+      "searchMultiple": "Бір немесе бірнеше мәнді таңдаңыз немесе іздеңіз",
+      "searchSingle": "Бір мәнді таңдаңыз немесе іздеңіз",
+      "selectMultiple": "Бір немесе бірнеше мәнді таңдаңыз",
+      "selectSingle": "Мәнді таңдаңыз"
+    },
+    "show": {
+      "more": "Көбірек көрсету",
+      "less": "Аз көрсету"
+    },
+    "sortBy": {
+      "ascending": "{{field}} бойынша өсу тәртібімен сұрыптау",
+      "descending": "{{field}} бойынша кему тәртібімен сұрыптау"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Беттеу",
+    "summary": "{{entity}}: жазбалар {{from}} -дан {{to}} -ға {{total}}",
+    "previous": "Алдыңғы бет",
+    "next": "Келесі бет",
+    "goto": "Бет {{page}} -ға өту"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Субъектілер",
+  "password": {
+    "strengthLabel": "Құпиясөздің күштілігі",
+    "generate": "Қауіпсіз құпиясөз генерациялау",
+    "copy": "Құпиясөзді көшіру",
+    "copied": "Құпиясөз көшірілді!",
+    "strength": {
+      "weak": "Әлсіз құпиясөз",
+      "medium": "Орташа құпиясөз",
+      "strong": "Күшті құпиясөз"
+    },
+    "criteria": {
+      "minLength": "Кемінде {{count}} таңбалар",
+      "uppercase": "Үлкен әріп (A-Z)",
+      "lowercase": "Кіші әріп (a-z)",
+      "numbers": "Сан (0-9)",
+      "specialChars": "Арнайы таңба (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Қате 401 – Рұқсат етілмеген",
+      "message": "Бұл бетке кіру үшін жүйеге кіріңіз. Рұқсаттарыңызды тексеріңіз және қайтадан әрекет жасаңыз."
+    },
+    "403": {
+      "title": "Ойбай! Қате 403 – Кешіріңіз, {{username}}",
+      "message": "Сәлем <1>{{username}}</1>, біз сізді танимыз, бірақ бұл бетке кіруге рұқсаттарыңыз жоқ. Егер бұл қате деп ойласаңыз, бізге хабарласыңыз!"
+    },
+    "404": {
+      "title": "Ойбай! Қате 404 – Бет табылмады",
+      "message": "Сіз іздеген бет енді жоқ сияқты. Ол орын ауыстырылған немесе жойылған болуы мүмкін. URL-ді тексеріңіз немесе басты бетке оралыңыз!"
+    },
+    "entities": {
+      "create": "Жасау барысында қате",
+      "read": "Оқу барысында қате",
+      "update": "Жаңарту барысында қате",
+      "delete": "Жою барысында қате"
+    },
+    "options": {
+      "load": "Мүмкіндіктерді жүктеу барысында қате"
+    },
+    "validations": {
+      "email": "Электрондық пошта форматы жарамсыз",
+      "file": {
+        "minSize": "Файл кемінде {{accepted}} болуы тиіс. Ағымдағы өлшем: {{actual}}",
+        "maxSize": "Файл {{accepted}} -ден аспауы тиіс. Ағымдағы өлшем: {{actual}}",
+        "invalidType": "Файл түрі {{accepted}} болуы тиіс. Ағымдағы түрі: {{actual}}",
+        "typeImage": "Файл сурет болуы тиіс",
+        "required": "Файл қажет"
+      },
+      "min": "Тілді таңдау",
+      "minlength": "Басқару элементтерін көрсету",
+      "minbytes": "Кодтың шығуын көрсету",
+      "max": "Алдын ала қарауды көрсету",
+      "maxlength": "HTML шығу коды (оқуға тек)",
+      "maxbytes": "Шығу коды бөлімі",
+      "password": {
+        "weakPassword": "Қажет"
+      },
+      "pattern": "Мән ерекше болуы тиіс",
+      "required": "Сүреттелген мазмұн бөлімі",
+      "url": "Басқару тақтасы"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Жүйеге кіру",
+      "hour": "Жүйеге кіруде...",
+      "minute": "Шығу",
+      "second": "Шығып жатыр...",
+      "millisecond": "Шығу барысында қате",
+      "days": "Беймәлім қате",
+      "hours": "Жеңіл режимге ауысу",
+      "minutes": "Жеңіл тақырып белсенді",
+      "seconds": "Қараңғы режимге ауысу",
+      "milliseconds": "Қараңғы тақырып белсенді"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Тілді таңдау",
+      "minlength": "Басқару элементтерін көрсету",
+      "minbytes": "Кодтың шығуын көрсету",
+      "max": "Алдын ала қарауды көрсету",
+      "maxlength": "HTML шығу коды (оқуға тек)",
+      "maxbytes": "Шығу коды бөлімі",
+      "required": "Сүреттелген мазмұн бөлімі",
+      "unique": "Сүреттелген HTML мазмұны"
+    }
+  },
+  "messages": {
+    "noData": "Шығу коды режимі белсенді"
+  },
+  "pages": {
+    "Home": "Басты бет"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

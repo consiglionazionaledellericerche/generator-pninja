@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "գործողություններ",
+      "back": "Վերադառնալ",
+      "cancel": "Չեղարկել",
+      "confirmDelete": "Հաստատել ջնջումը",
+      "create": "Ստեղծել",
+      "delete": "Ջնջել",
+      "edit": "Խմբագրել",
+      "save": "Պահպանել",
+      "saving": "Պահպանվում է...",
+      "update": "Թարմացնել",
+      "view": "Դիտել",
+      "file": {
+        "markedForDeletion": "Պատճենված ֆայլը ջնջելու համար (Հաստատելու համար պահպանել)",
+        "viewOrDownload": "Դիտել/Բեռնել",
+        "replaceWarning": "Նոր ֆայլ ընտրելը փոխարինելու է առկա ֆայլը"
+      },
+      "successfullyCreated": "Տվյալների ID {{id}} հաջողությամբ ստեղծված է",
+      "successfullyUpdated": "Տվյալների ID {{id}} berhasil թարմացված է",
+      "successfullyDeleted": "Տվյալների ID {{id}} հաջողությամբ ջնջված է"
+    },
+    "hidePassword": "Դիմային գաղտնաբառը",
+    "showPassword": "Ձևափոխել գաղտնաբառը",
+    "generateUUID": "Գեներացնել 4-րդ տարբերակի UUID"
+  },
+  "common": {
+    "back": "Վերադառնալ",
+    "cancel": "Չեղարկել",
+    "opensInNewWindow": "Բացում է նոր պատուհանում",
+    "undo": "Վերադարձնել",
+    "search": "Փնտրել...",
+    "select": {
+      "collapse": "Փլվել ներդիր",
+      "expand": "Ընդլայնել ցուցակը",
+      "oneElementSelected": "Մի նիշ ընտրված",
+      "nElementsSelected": "{{count}} նիշ ընտրված",
+      "placeholder": "Ընտրել տարբերակ",
+      "noOptions": "Չկա տարբերակներ",
+      "noValue": "Չկա արժեք",
+      "loading": "Բեռնման տարբերակներ...",
+      "searchMultiple": "Ընտրել կամ փնտրել մեկ կամ ավելի արժեքներ",
+      "searchSingle": "Ընտրել կամ փնտրել արժեք",
+      "selectMultiple": "Ընտրել մեկ կամ ավելի արժեքներ",
+      "selectSingle": "Ընտրել արժեք"
+    },
+    "show": {
+      "more": "Ցույց տալ ավելին",
+      "less": "Ցույց տալ պակաս"
+    },
+    "sortBy": {
+      "ascending": "Համակարգել ըստ {{field}} աճող",
+      "descending": "Համակարգել ըստ {{field}} նվազող"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Զուգավորումներ",
+    "summary": "{{entity}}: գրառումներ {{from}}-ից {{to}}-ը {{total}}-ի",
+    "previous": "Նախորդ էջ",
+    "next": "Հաջորդ էջ",
+    "goto": "Գնալ էջ {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Էնթիթի",
+  "password": {
+    "strengthLabel": "Գաղտնաբառի ուժը",
+    "generate": "Գեներացնել ապահով գաղտնաբառ",
+    "copy": "Պատճենել գաղտնաբառը",
+    "copied": "Գաղտնաբառը պատճենված է!",
+    "strength": {
+      "weak": "Օդի գաղտնաբառ",
+      "medium": "Միջին գաղտնաբառ",
+      "strong": "Մ kuat գաղտնաբառ"
+    },
+    "criteria": {
+      "minLength": "Քիչ է {{count}} նիշեր",
+      "uppercase": "Մի մեծատառ (A-Z)",
+      "lowercase": "Մի փոքրատառ (a-z)",
+      "numbers": "Մի թիվ (0-9)",
+      "specialChars": "Մի հատուկ սիմվոլ (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Սխալ 401 – Անհավատարմագրված",
+      "message": "Դուք պետք է մուտք գործեք այս էջին հասնելու համար: Խնդրում ենք ստուգել ձեր հավատարմագրվածները և կրկին փորձեք:"
+    },
+    "403": {
+      "title": "Վայ! Սխալ 403 – Դու գիտես, {{username}}",
+      "message": "Ողջույն <1>{{username}}</1>, մենք ճանաչում ենք քեզ, բայց դու չունես համապատասխան թույլտվություններ այս էջին հասնելու համար: Եթե կարծում եք, որ սա սխալ է, դիմեք մեզ:"
+    },
+    "404": {
+      "title": "Վայ! Սխալ 404 – Էջը չի գտնվել",
+      "message": "Թվում է, որ այն էջը, որը ցանկանում եք տեսնել, այլևս գոյություն չունի: Դա կարող է տեղափոխվել կամ ջնջվել: Ստուգեք URL-ն կամ վերադարձեք գլխավոր էջ:"
+    },
+    "entities": {
+      "create": "Սխալ ստեղծել",
+      "read": "Սխալ կարդալու",
+      "update": "Սխալ թարմացնել",
+      "delete": "Սխալ ջնջել"
+    },
+    "options": {
+      "load": "Սխալ բեռնել տարբերակներ համար"
+    },
+    "validations": {
+      "email": "Սխալ էլ-նամակի ձևաչափ",
+      "file": {
+        "minSize": "Ֆայլը պետք է լինի առնվազն {{accepted}}. Գործող չափը: {{actual}}",
+        "maxSize": "Ֆայլը չի կարող գերազանցել {{accepted}}. Գործող չափը: {{actual}}",
+        "invalidType": "Ֆայլի տեսակն պետք է լինի {{accepted}}. Գործող տեսակ: {{actual}}",
+        "typeImage": "Ֆայլը պետք է լինի պատկեր",
+        "required": "Ֆայլը պարտադիր է"
+      },
+      "min": "Select language",
+      "minlength": "View controls",
+      "minbytes": "View source code",
+      "max": "View preview",
+      "maxlength": "HTML source code (read-only)",
+      "maxbytes": "Source code section",
+      "password": {
+        "weakPassword": "Պարտադիր է"
+      },
+      "pattern": "Արժեքը պետք է լինի հատուկ",
+      "required": "Rendered content section",
+      "url": "Ձայնագրություն"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Մուտք",
+      "hour": "Մուտք գործում է...",
+      "minute": "Ափսոսել",
+      "second": "Ափսոսում է...",
+      "millisecond": "Սխալ ափսոսելու",
+      "days": "Անծանոթ սխալ",
+      "hours": "Switch to light mode",
+      "minutes": "Light theme active",
+      "seconds": "Switch to dark mode",
+      "milliseconds": "Dark theme active"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Select language",
+      "minlength": "View controls",
+      "minbytes": "View source code",
+      "max": "View preview",
+      "maxlength": "HTML source code (read-only)",
+      "maxbytes": "Source code section",
+      "required": "Rendered content section",
+      "unique": "Rendered HTML content"
+    }
+  },
+  "messages": {
+    "noData": "Source code mode active"
+  },
+  "pages": {
+    "Home": "Գլխավոր էջ"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

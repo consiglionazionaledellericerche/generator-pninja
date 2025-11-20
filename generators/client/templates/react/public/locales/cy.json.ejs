@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Actions",
+      "back": "Yn ôl",
+      "cancel": "Diddymu",
+      "confirmDelete": "Cadarnhau dileu",
+      "create": "Creu",
+      "delete": "Dileu",
+      "edit": "Golygu",
+      "save": "Cadw",
+      "saving": "Yn cadw...",
+      "update": "Diweddaru",
+      "view": "Gweld",
+      "file": {
+        "markedForDeletion": "Ffeil wedi’i marcio ar gyfer dileu (Cadwch i gadarnhau)",
+        "viewOrDownload": "Gweld/Download",
+        "replaceWarning": "Dewis ffeil newydd a fydd yn disodli’r un presennol"
+      },
+      "successfullyCreated": "Rhif cofrestru {{id}} wedi’i greu’n llwyddiannus",
+      "successfullyUpdated": "Rhif cofrestru {{id}} wedi’i ddiweddaru’n llwyddiannus",
+      "successfullyDeleted": "Rhif cofrestru {{id}} wedi’i ddileu’n llwyddiannus"
+    },
+    "hidePassword": "Cuddio cyfrinair",
+    "showPassword": "Dangos cyfrinair",
+    "generateUUID": "Genera UUID fersiwn 4"
+  },
+  "common": {
+    "back": "Yn ôl",
+    "cancel": "Diddymu",
+    "opensInNewWindow": "Agor yn ffenestr newydd",
+    "undo": "Ail-ddechrau",
+    "search": "Chwilio...",
+    "select": {
+      "collapse": "Cwympo rhestr",
+      "expand": "Ehangu rhestr",
+      "oneElementSelected": "Un elfen wedi’i dewis",
+      "nElementsSelected": "{{count}} elfennau wedi’u dewis",
+      "placeholder": "Dewiswch opsiwn",
+      "noOptions": "Dim opsiynau",
+      "noValue": "Dim gwerth",
+      "loading": "Llwytho opsiynau...",
+      "searchMultiple": "Dewiswch neu chwiliwch am un neu fwy o werthoedd",
+      "searchSingle": "Dewiswch neu chwiliwch am werth",
+      "selectMultiple": "Dewiswch un neu fwy o werthoedd",
+      "selectSingle": "Dewiswch werth"
+    },
+    "show": {
+      "more": "Dangos mwy",
+      "less": "Dangos llai"
+    },
+    "sortBy": {
+      "ascending": "Trefnu gan {{field}} yn gynnydd",
+      "descending": "Trefnu gan {{field}} yn ddirywiaeth"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginasiwn",
+    "summary": "{{entity}}: cofrestr o {{from}} i {{to}} o {{total}}",
+    "previous": "Tudalen flaenorol",
+    "next": "Tudalen nesaf",
+    "goto": "Ewch i dudalen {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Cydrannau",
+  "password": {
+    "strengthLabel": "Cryfder Cyfrinair",
+    "generate": "Genera gyfrinair diogel",
+    "copy": "Copi cyfrinair",
+    "copied": "Cyfrinair wedi’i gopïo!",
+    "strength": {
+      "weak": "Cyfrinair gwan",
+      "medium": "Cyfrinair canolig",
+      "strong": "Cyfrinair cryf"
+    },
+    "criteria": {
+      "minLength": "O leiaf {{count}} cymeriad",
+      "uppercase": "Llythyren fawr (A-Z)",
+      "lowercase": "Llythyren fach (a-z)",
+      "numbers": "Rhif (0-9)",
+      "specialChars": "Ch symbol arbennig (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Gwall 401 – Heb awdurdodi",
+      "message": "Mae angen i chi logio i mewn i gael mynediad i’r dudalen hon. Gwiriwch eich cyfreithiau a cheisiwch eto."
+    },
+    "403": {
+      "title": "Oops! Gwall 403 – Mae’n flin, {{username}}",
+      "message": "Helo <1>{{username}}</1>, rydym yn cydnabod chi, ond nid yw gennych y trwyddedau cywir i gael mynediad i’r dudalen hon. Os ydych yn meddwl mai camgymeriad yw hwn, cysylltwch â ni!"
+    },
+    "404": {
+      "title": "Oops! Gwall 404 – Tudalen Heb ei Doddi",
+      "message": "Mae’n edrych fel nad yw’r dudalen rydych chi’n chwilio amdani yn bodoli mwyach. Gallai fod wedi’i symud neu’i dileu. Gwiriwch y URL neu dychwelwch i’r dudalen gartref!"
+    },
+    "entities": {
+      "create": "Gwall yn creu",
+      "read": "Gwall yn darllen",
+      "update": "Gwall yn diweddaru",
+      "delete": "Gwall yn dileu"
+    },
+    "options": {
+      "load": "Gwall yn llwytho opsiynau ar gyfer"
+    },
+    "validations": {
+      "email": "Fformat e-bost annilys",
+      "file": {
+        "minSize": "Mae’n rhaid i'r ffeil fod o leiaf {{accepted}}. Maint presennol: {{actual}}",
+        "maxSize": "Mae’n rhaid i’r ffeil ddim drosleisio {{accepted}}. Maint presennol: {{actual}}",
+        "invalidType": "Mae’n rhaid i’r math ffeil fod yn {{accepted}}. Math presennol: {{actual}}",
+        "typeImage": "Mae’n rhaid i’r ffeil fod yn delwedd",
+        "required": "Mae’r ffeil yn ofynnol"
+      },
+      "min": "Mae’r rhif yn rhaid bod yn fwy na neu’n hafal i {{accepted}}",
+      "minlength": "Mae’n rhaid i’r llinyn gynnwys o leiaf {{accepted}} cymeriad (d)",
+      "minbytes": "Mae’n rhaid i’r ffeil fod o leiaf {{accepted}}",
+      "max": "Mae’r rhif yn rhaid bod yn llai na neu’n hafal i {{accepted}}",
+      "maxlength": "Mae’n rhaid i’r llinyn gynnwys ar y mwyaf {{accepted}} cymeriad (d)",
+      "maxbytes": "Mae’r ffeil yn ni all drosleisio {{accepted}}",
+      "password": {
+        "weakPassword": "Cyfrinair yn rhy wan"
+      },
+      "pattern": "Fformat annilys",
+      "required": "Gofynnol",
+      "url": "Fformat URL annilys"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Diwrnod",
+      "hour": "Awr",
+      "minute": "Muinud",
+      "second": "Eiliad",
+      "millisecond": "Milished",
+      "days": "Diwrnod",
+      "hours": "Awr",
+      "minutes": "Muinud",
+      "seconds": "Eiliad",
+      "milliseconds": "Milished"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Mae’r rhif yn rhaid bod yn fwy na neu’n hafal i {{accepted}}",
+      "minlength": "Mae’n rhaid i’r llinyn gynnwys o leiaf {{accepted}} cymeriad (d)",
+      "minbytes": "Mae’n rhaid i’r ffeil fod o leiaf {{accepted}}",
+      "max": "Mae’r rhif yn rhaid bod yn llai na neu’n hafal i {{accepted}}",
+      "maxlength": "Mae’n rhaid i’r llinyn gynnwys ar y mwyaf {{accepted}} cymeriad (d)",
+      "maxbytes": "Mae’r ffeil yn ni all drosleisio {{accepted}}",
+      "required": "Gofynnol",
+      "unique": "Mae’n rhaid i’r gwerth fod yn unigryw"
+    }
+  },
+  "messages": {
+    "noData": "Dim cofrestriadau a geir"
+  },
+  "pages": {
+    "Home": "Tudalen gartref"
+  },
+  "ui": {
+    "account": {
+      "login": "Mewngofnodi",
+      "loggingIn": "Mewngofnodi...",
+      "logout": "Allgofnodi",
+      "loggingOut": "Allgofnodi...",
+      "logoutError": "Gwall wrth allgofnodi",
+      "unknownError": "Gwall anhysbys"
+    },
+    "darkmode": {
+      "light": "Trosglwyddo i modd golau",
+      "lightOn": "Thema golau weithredol",
+      "dark": "Trosglwyddo i fod golau",
+      "darkOn": "Thema tywyll weithredol"
+    },
+    "langSelect": "Dewiswch iaith",
+    "htmlViewer": {
+      "controls": "Gweld rheolaethau",
+      "viewSource": "Gweld cod ffynhonnell",
+      "viewRendering": "Gweld rhagolwg",
+      "source": "Cod ffynhonnell HTML (ddarllen yn unig)",
+      "sourceSection": "Adran cod ffynhonnell",
+      "renderedSection": "Adran cynnwys a gynhelir",
+      "renderedContent": "Cynnwys HTML a gynhelir",
+      "sourceActive": "Modd cod ffynhonnell yn weithredol",
+      "renderingActive": "Modd rhagolwg yn weithredol"
+    }
+  }
+}

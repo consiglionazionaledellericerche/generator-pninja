@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Ibikorwa",
+      "back": "Garuka",
+      "cancel": "Kureka",
+      "confirmDelete": "Emeza gusiba",
+      "create": "Tanga",
+      "delete": "Siba",
+      "edit": "Hindura",
+      "save": "Bika",
+      "saving": "Bika...",
+      "update": "Simbuza",
+      "view": "Reba",
+      "file": {
+        "markedForDeletion": "Icyegeranyo cyashyizweho kugirango gisibwe (Bika ngo wemere)",
+        "viewOrDownload": "Reba/Tohereze",
+        "replaceWarning": "Guhitamo indi dosiye bizasimbura iyo usanzwe ufite"
+      },
+      "successfullyCreated": "Icyandiko ID {{id}} cyakozwe neza",
+      "successfullyUpdated": "Icyandiko ID {{id}} cyavuguruwe neza",
+      "successfullyDeleted": "Icyandiko ID {{id}} cyasizwe neza"
+    },
+    "hidePassword": "Fiche ijambo ry'ibanga",
+    "showPassword": "Erekana ijambo ry'ibanga",
+    "generateUUID": "Hanga umuyoboro 4 UUID"
+  },
+  "common": {
+    "back": "Garuka",
+    "cancel": "Kureka",
+    "opensInNewWindow": "Fungura mu idirishya rishya",
+    "undo": "Subiza inyuma",
+    "search": "Shakisha...",
+    "select": {
+      "collapse": "Guhagarika urutonde",
+      "expand": "Kwagura urutonde",
+      "oneElementSelected": "Element imwe yahiswemo",
+      "nElementsSelected": "{{count}} elements zahiswemo",
+      "placeholder": "Hitamo amahitamo",
+      "noOptions": "Nta mahitamo",
+      "noValue": "Nta gaciro",
+      "loading": "Guhanga amahitamo...",
+      "searchMultiple": "Hitamo cyangwa ushakishe agaciro kamwe cyangwa menshi",
+      "searchSingle": "Hitamo cyangwa ushakishe agaciro",
+      "selectMultiple": "Hitamo agaciro kamwe cyangwa menshi",
+      "selectSingle": "Hitamo agaciro"
+    },
+    "show": {
+      "more": "Erekana byinshi",
+      "less": "Erekana bike"
+    },
+    "sortBy": {
+      "ascending": "Shyira mu byiciro {{field}} hejuru",
+      "descending": "Shyira mu byiciro {{field}} hasi"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Ibisekuru",
+    "summary": "{{entity}}: ibitabo kuva {{from}} kugeza {{to}} muri {{total}}",
+    "previous": "Urupapuro rwa mbere",
+    "next": "Urupapuro rukurikira",
+    "goto": "Jya ku rupapuro {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Ibikorwa",
+  "password": {
+    "strengthLabel": "Imbaraga z'ijambo ry'ibanga",
+    "generate": "Hanga ijambo ry'ibanga rifite umutekano",
+    "copy": "Capa ijambo ry'ibanga",
+    "copied": "Ijambo ry'ibanga ryakopyiwe!",
+    "strength": {
+      "weak": "Ijambo ry'ibanga rifite intege nke",
+      "medium": "Ijambo ry'ibanga rifite intege hagati",
+      "strong": "Ijambo ry'ibanga rikomeye"
+    },
+    "criteria": {
+      "minLength": "Nibura {{count}} inyuguti",
+      "uppercase": "Ibaruwa nini (A-Z)",
+      "lowercase": "Ibaruwa nto (a-z)",
+      "numbers": "Ikigereranyo (0-9)",
+      "specialChars": "Ikimenyetso cyihariye (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Ikosa 401 – Ntihabaho uruhushya",
+      "message": "Ugomba kwinjira kugirango ubone uru rupapuro. Nyamuneka reba ibyemezo byawe hanyuma uzagerageze nanone."
+    },
+    "403": {
+      "title": "Oya! Ikosa 403 – Mbabazwa, {{username}}",
+      "message": "Ntakibazo <1>{{username}}</1>, turakumenya, ariko nta burenganzira ufite bwo kubona uru rupapuro. Niba utekereza ko ari ikosa, twandikire!"
+    },
+    "404": {
+      "title": "Oya! Ikosa 404 – Urupapuro ntiruboneka",
+      "message": "Birasa nk'uko urupapuro ushaka rutakibaho. Rishobora kuba ryarimuwe cyangwa ryarasijwe. Reba URL cyangwa usubire ku ipaji y'ibanze!"
+    },
+    "entities": {
+      "create": "Ikosa mu gukora",
+      "read": "Ikosa mu gusoma",
+      "update": "Ikosa mu kuvugurura",
+      "delete": "Ikosa mu gusiba"
+    },
+    "options": {
+      "load": "Ikosa mu loading amahitamo yo"
+    },
+    "validations": {
+      "email": "Icyandiko cya email kitari cyo",
+      "file": {
+        "minSize": "Dosiye igomba kuba nibura {{accepted}}. Ingano y'ubu: {{actual}}",
+        "maxSize": "Dosiye ntishobora kurenza {{accepted}}. Ingano y'ubu: {{actual}}",
+        "invalidType": "Ubwoko bw'ikifuzo bugomba kuba {{accepted}}. Ubwoko bw'ubu: {{actual}}",
+        "typeImage": "Dosiye igomba kuba ishusho",
+        "required": "Dosiye irakenewe"
+      },
+      "min": "Hitamo ururimi",
+      "minlength": "Reba ibikoresho",
+      "minbytes": "Reba umuyoboro w'ibisource",
+      "max": "Reba ibisobanuro",
+      "maxlength": "Umuyoboro w'ibisource (gusoma gusa)",
+      "maxbytes": "Igice cy'umuyoboro w'ibisource",
+      "password": {
+        "weakPassword": "Irakenewe"
+      },
+      "pattern": "Agaciro kagomba kuba kadashobora kongerwaho",
+      "required": "Igice cy’ibisobanuro",
+      "url": "Ikibaho"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Injira",
+      "hour": "Birimo kwinjira...",
+      "minute": "Sohoka",
+      "second": "Birimo gusohoka...",
+      "millisecond": "Ikosa mu gusohoka",
+      "days": "Ikosa kitazwi",
+      "hours": "Hindura mu buryo bw'umucyo",
+      "minutes": "Ijambo ry'umucyo rirakora",
+      "seconds": "Hindura mu buryo bw'umukara",
+      "milliseconds": "Ijambo ry'umukara rirakora"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Hitamo ururimi",
+      "minlength": "Reba ibikoresho",
+      "minbytes": "Reba umuyoboro w'ibisource",
+      "max": "Reba ibisobanuro",
+      "maxlength": "Umuyoboro w'ibisource (gusoma gusa)",
+      "maxbytes": "Igice cy'umuyoboro w'ibisource",
+      "required": "Igice cy’ibisobanuro",
+      "unique": "Ibisobanuro byanditse"
+    }
+  },
+  "messages": {
+    "noData": "Imiterere y'umuyoboro irakora"
+  },
+  "pages": {
+    "Home": "Urupapuro rw'ingenzi"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

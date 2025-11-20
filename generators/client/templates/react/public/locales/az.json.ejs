@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Əməliyyatlar",
+      "back": "Geri",
+      "cancel": "Ləğv et",
+      "confirmDelete": "Silinməni təsdiqlə",
+      "create": "Yarat",
+      "delete": "Sil",
+      "edit": "Redaktə et",
+      "save": "Saxla",
+      "saving": "Saxlanılır...",
+      "update": "Yenilə",
+      "view": "Görünüş",
+      "file": {
+        "markedForDeletion": "Fayl silinməyi mərkəzi təsdiqləmək üçün qeyd edilib (Təsdiqləmək üçün saxlayın)",
+        "viewOrDownload": "Görünüş/Yüklə",
+        "replaceWarning": "Yeni bir fayl seçmək mövcud olanı əvəz edəcək"
+      },
+      "successfullyCreated": "Qeyd ID {{id}} müvəffəqiyyətlə yaradıldı",
+      "successfullyUpdated": "Qeyd ID {{id}} müvəffəqiyyətlə yeniləndi",
+      "successfullyDeleted": "Qeyd ID {{id}} müvəffəqiyyətlə silindi"
+    },
+    "hidePassword": "Şifrəni gizlət",
+    "showPassword": "Şifrəni göstər",
+    "generateUUID": "4-cü versiya UUID yaradın"
+  },
+  "common": {
+    "back": "Geri",
+    "cancel": "Ləğv et",
+    "opensInNewWindow": "Yeni pəncərədə açılır",
+    "undo": "Geri al",
+    "search": "Axtar...",
+    "select": {
+      "collapse": "Siyahını çökdür",
+      "expand": "Siyahını genişləndir",
+      "oneElementSelected": "Bir element seçilib",
+      "nElementsSelected": "{{count}} element seçilib",
+      "placeholder": "Bir seçim seçin",
+      "noOptions": "Heç bir seçim yoxdur",
+      "noValue": "Heç bir dəyər yoxdur",
+      "loading": "Seçimlər yüklənir...",
+      "searchMultiple": "Bir və ya daha çox dəyər seçin və ya axtarın",
+      "searchSingle": "Bir dəyər seçin və ya axtarın",
+      "selectMultiple": "Bir və ya bir neçə dəyər seçin",
+      "selectSingle": "Bir dəyər seçin"
+    },
+    "show": {
+      "more": "Daha çoxunu göstər",
+      "less": "Daha azını göstər"
+    },
+    "sortBy": {
+      "ascending": "{{field}} artan sıralama ilə sıralayın",
+      "descending": "{{field}} azalan sıralama ilə sıralayın"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Səhifələmə",
+    "summary": "{{entity}}: {{from}}-dan {{to}}-ya {{total}} qeydləri",
+    "previous": "Əvvəlki səhifə",
+    "next": "Növbəti səhifə",
+    "goto": "Səhifəyə keçin {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Varlıqlar",
+  "password": {
+    "strengthLabel": "Şifrə Gücü",
+    "generate": "Təhlükəsiz şifrə yaradın",
+    "copy": "Şifrəni kopyala",
+    "copied": "Şifrə kopyalandı!",
+    "strength": {
+      "weak": "Zəif şifrə",
+      "medium": "Orta şifrə",
+      "strong": "Güclü şifrə"
+    },
+    "criteria": {
+      "minLength": "Ən az {{count}} karakter",
+      "uppercase": "Bir böyük hərf (A-Z)",
+      "lowercase": "Bir kiçik hərf (a-z)",
+      "numbers": "Bir ədəd (0-9)",
+      "specialChars": "Bir xüsusi simvol (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Xəta 401 – İcazəsiz",
+      "message": "Bu səhifəyə daxil olmaq üçün daxil olmalısınız. Xahiş edirik, kimliklərinizi yoxlayın və yenidən cəhd edin."
+    },
+    "403": {
+      "title": "Oh! Xəta 403 – Bağışlayın, {{username}}",
+      "message": "Salam <1>{{username}}</1>, sizi tanıyırıq, amma bu səhifəyə daxil olmaq üçün doğru icazələriniz yoxdur. Bu bir səhvdirsə, bizimlə əlaqə saxlayın!"
+    },
+    "404": {
+      "title": "Oh! Xəta 404 – Səhifə Tapılmadı",
+      "message": "Axtardığınız səhifənin artıq mövcud görünmür. O köçürülmüş və ya silinmiş ola bilər. URL-ni yoxlayın və ya ana səhifəyə qayıdın!"
+    },
+    "entities": {
+      "create": "Yaratma zamanı xəta",
+      "read": "Oxuma zamanı xəta",
+      "update": "Yeniləmə zamanı xəta",
+      "delete": "Silinmə zamanı xəta"
+    },
+    "options": {
+      "load": "Seçimlər yüklənərkən xəta"
+    },
+    "validations": {
+      "email": "Yanlış e-poçt formatı",
+      "file": {
+        "minSize": "Fayl ən azı {{accepted}} olmalıdır. Cari ölçü: {{actual}}",
+        "maxSize": "Fayl {{accepted}}-dan çox ola bilməz. Cari ölçü: {{actual}}",
+        "invalidType": "Fayl tipi {{accepted}}-ya uyğun olmalıdır. Cari tip: {{actual}}",
+        "typeImage": "Fayl bir şəkil olmalıdır",
+        "required": "Fayl tələb olunur"
+      },
+      "min": "Dili seç",
+      "minlength": "İdarəetmələri görün",
+      "minbytes": "Mənbə kodunu görün",
+      "max": "Əvvəlcədən görünüşü görün",
+      "maxlength": "HTML mənbə kodu (oxumaq üçün)",
+      "maxbytes": "Mənbə kodu bölməsi",
+      "password": {
+        "weakPassword": "T tələb olunur"
+      },
+      "pattern": "Dəyər unikal olmalıdır",
+      "required": "Həkk olunmuş məzmun bölməsi",
+      "url": "Gösterge Paneli"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Daxil ol",
+      "hour": "Daxil olunur...",
+      "minute": "İxrac et",
+      "second": "İxrac olunur...",
+      "millisecond": "İxrac edilərkən xəta",
+      "days": "Naməlum xəta",
+      "hours": "İşıq moduluna keçin",
+      "minutes": "İşıq mövzusu aktiv",
+      "seconds": "Qaranlıq moduluna keçin",
+      "milliseconds": "Qaranlıq mövzusu aktiv"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Dili seç",
+      "minlength": "İdarəetmələri görün",
+      "minbytes": "Mənbə kodunu görün",
+      "max": "Əvvəlcədən görünüşü görün",
+      "maxlength": "HTML mənbə kodu (oxumaq üçün)",
+      "maxbytes": "Mənbə kodu bölməsi",
+      "required": "Həkk olunmuş məzmun bölməsi",
+      "unique": "Həkk olunmuş HTML məzmunu"
+    }
+  },
+  "messages": {
+    "noData": "Mənbə kodu modu aktiv"
+  },
+  "pages": {
+    "Home": "Ana səhifə"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

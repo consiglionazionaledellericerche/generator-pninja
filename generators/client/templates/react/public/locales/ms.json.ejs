@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Tindakan",
+      "back": "Kembali",
+      "cancel": "Batal",
+      "confirmDelete": "Sahkan penghapusan",
+      "create": "Cipta",
+      "delete": "Hapus",
+      "edit": "Sunting",
+      "save": "Simpan",
+      "saving": "Menyimpan...",
+      "update": "Kemas kini",
+      "view": "Lihat",
+      "file": {
+        "markedForDeletion": "Fail ditandakan untuk penghapusan (Simpan untuk sah)",
+        "viewOrDownload": "Lihat/Muat turun",
+        "replaceWarning": "Memilih fail baru akan menggantikan yang sedia ada"
+      },
+      "successfullyCreated": "ID rekod {{id}} berjaya dicipta",
+      "successfullyUpdated": "ID rekod {{id}} berjaya dikemas kini",
+      "successfullyDeleted": "ID rekod {{id}} berjaya dipadam"
+    },
+    "hidePassword": "Sembunyikan kata laluan",
+    "showPassword": "Tunjukkan kata laluan",
+    "generateUUID": "Hasilkan UUID versi 4"
+  },
+  "common": {
+    "back": "Kembali",
+    "cancel": "Batal",
+    "opensInNewWindow": "Membuka dalam tetingkap baru",
+    "undo": "Batal",
+    "search": "Cari...",
+    "select": {
+      "collapse": "Liputi senarai",
+      "expand": "Kembangkan senarai",
+      "oneElementSelected": "Satu elemen terpilih",
+      "nElementsSelected": "{{count}} elemen terpilih",
+      "placeholder": "Pilih satu pilihan",
+      "noOptions": "Tiada pilihan",
+      "noValue": "Tiada nilai",
+      "loading": "Membaca pilihan...",
+      "searchMultiple": "Pilih atau cari satu atau lebih nilai",
+      "searchSingle": "Pilih atau cari satu nilai",
+      "selectMultiple": "Pilih satu atau lebih nilai",
+      "selectSingle": "Pilih satu nilai"
+    },
+    "show": {
+      "more": "Tunjukkan lebih banyak",
+      "less": "Tunjukkan kurang"
+    },
+    "sortBy": {
+      "ascending": "Susun mengikut {{field}} menaik",
+      "descending": "Susun mengikut {{field}} menurun"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginasikan",
+    "summary": "{{entity}}: rekod dari {{from}} hingga {{to}} daripada {{total}}",
+    "previous": "Halaman sebelumnya",
+    "next": "Halaman seterusnya",
+    "goto": "Pergi ke halaman {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entiti",
+  "password": {
+    "strengthLabel": "Kekuatan Kata Laluan",
+    "generate": "Hasilkan kata laluan yang selamat",
+    "copy": "Salin kata laluan",
+    "copied": "Kata laluan disalin!",
+    "strength": {
+      "weak": "Kata laluan lemah",
+      "medium": "Kata laluan sederhana",
+      "strong": "Kata laluan kuat"
+    },
+    "criteria": {
+      "minLength": "Sekurang-kurangnya {{count}} watak",
+      "uppercase": "Huruf besar (A-Z)",
+      "lowercase": "Huruf kecil (a-z)",
+      "numbers": "Satu nombor (0-9)",
+      "specialChars": "Satu watak khas (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Ralat 401 – Tanpa Kebenaran",
+      "message": "Anda perlu masuk untuk mengakses halaman ini. Sila semak kelayakan anda dan cuba lagi."
+    },
+    "403": {
+      "title": "Oops! Ralat 403 – Maaf, {{username}}",
+      "message": "Hai <1>{{username}}</1>, kami mengenali anda, tetapi anda tidak mempunyai kebenaran yang betul untuk mengakses halaman ini. Jika anda fikir ini adalah kesilapan, hubungi kami!"
+    },
+    "404": {
+      "title": "Oops! Ralat 404 – Halaman Tidak Ditemui",
+      "message": "Nampaknya halaman yang anda cari sudah tiada lagi. Ia mungkin telah dipindahkan atau dipadam. Semak URL atau kembali ke halaman utama!"
+    },
+    "entities": {
+      "create": "Ralat mencipta",
+      "read": "Ralat membaca",
+      "update": "Ralat mengemas kini",
+      "delete": "Ralat menghapus"
+    },
+    "options": {
+      "load": "Ralat memuat pilihan untuk"
+    },
+    "validations": {
+      "email": "Format email tidak sah",
+      "file": {
+        "minSize": "Fail mesti sekurang-kurangnya {{accepted}}. Saiz semasa: {{actual}}",
+        "maxSize": "Fail tidak boleh melebihi {{accepted}}. Saiz semasa: {{actual}}",
+        "invalidType": "Jenis fail mesti {{accepted}}. Jenis semasa: {{actual}}",
+        "typeImage": "Fail mesti merupakan imej",
+        "required": "Fail adalah diperlukan"
+      },
+      "min": "Nombor mesti lebih besar atau sama dengan {{accepted}}",
+      "minlength": "String mesti mengandungi sekurang-kurangnya {{accepted}} watak",
+      "minbytes": "Fail mesti sekurang-kurangnya {{accepted}}",
+      "max": "Nombor mesti kurang daripada atau sama dengan {{accepted}}",
+      "maxlength": "String mesti mengandungi paling banyak {{accepted}} watak",
+      "maxbytes": "Fail tidak boleh melebihi {{accepted}}",
+      "password": {
+        "weakPassword": "Kata laluan terlalu lemah"
+      },
+      "pattern": "Format tidak sah",
+      "required": "Diperlukan",
+      "url": "Format URL tidak sah"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Hari",
+      "hour": "Jam",
+      "minute": "Minit",
+      "second": "Saat",
+      "millisecond": "Milisaat",
+      "days": "Hari",
+      "hours": "Jam",
+      "minutes": "Minit",
+      "seconds": "Saat",
+      "milliseconds": "Milisaat"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Nombor mesti lebih besar atau sama dengan {{accepted}}",
+      "minlength": "String mesti mengandungi sekurang-kurangnya {{accepted}} watak",
+      "minbytes": "Fail mesti sekurang-kurangnya {{accepted}}",
+      "max": "Nombor mesti kurang daripada atau sama dengan {{accepted}}",
+      "maxlength": "String mesti mengandungi paling banyak {{accepted}} watak",
+      "maxbytes": "Fail tidak boleh melebihi {{accepted}}",
+      "required": "Diperlukan",
+      "unique": "Nilai mesti unik"
+    }
+  },
+  "messages": {
+    "noData": "Tiada rekod ditemui"
+  },
+  "pages": {
+    "Home": "Halaman utama"
+  },
+  "ui": {
+    "account": {
+      "login": "Log Masuk",
+      "loggingIn": "Sedang log masuk...",
+      "logout": "Log Keluar",
+      "loggingOut": "Sedang log keluar...",
+      "logoutError": "Ralat log keluar",
+      "unknownError": "Ralat tidak diketahui"
+    },
+    "darkmode": {
+      "light": "Tukar kepada mod terang",
+      "lightOn": "Tema terang aktif",
+      "dark": "Tukar kepada mod gelap",
+      "darkOn": "Tema gelap aktif"
+    },
+    "langSelect": "Pilih bahasa",
+    "htmlViewer": {
+      "controls": "Lihat kawalan",
+      "viewSource": "Lihat kod sumber",
+      "viewRendering": "Lihat pratonton",
+      "source": "Kod sumber HTML (baca sahaja)",
+      "sourceSection": "Bahagian kod sumber",
+      "renderedSection": "Bahagian kandungan yang dirender",
+      "renderedContent": "Kandungan HTML yang dirender",
+      "sourceActive": "Mod kod sumber aktif",
+      "renderingActive": "Mod pratonton aktif"
+    }
+  }
+}

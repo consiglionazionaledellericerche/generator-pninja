@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Toimingud",
+      "back": "Tagasi",
+      "cancel": "Tühista",
+      "confirmDelete": "Kinnita kustutamine",
+      "create": "Loo",
+      "delete": "Kusta",
+      "edit": "Muuda",
+      "save": "Salvesta",
+      "saving": "Salvestamine...",
+      "update": "Uuenda",
+      "view": "Vaata",
+      "file": {
+        "markedForDeletion": "Fail on kustutamiseks märgitud (Salvesta, et kinnitada)",
+        "viewOrDownload": "Vaata/Laadi alla",
+        "replaceWarning": "Uue faili valimine asendab olemasoleva"
+      },
+      "successfullyCreated": "Rekordi ID {{id}} loodud edukalt",
+      "successfullyUpdated": "Rekordi ID {{id}} uuendatud edukalt",
+      "successfullyDeleted": "Rekordi ID {{id}} kustutatud edukalt"
+    },
+    "hidePassword": "Peida parool",
+    "showPassword": "Näita parooli",
+    "generateUUID": "Genera variandi 4 UUID"
+  },
+  "common": {
+    "back": "Tagasi",
+    "cancel": "Tühista",
+    "opensInNewWindow": "Avab uues aknas",
+    "undo": "Tühista",
+    "search": "Otsi...",
+    "select": {
+      "collapse": "Vähenenud loend",
+      "expand": "Laienev loend",
+      "oneElementSelected": "Üks element valitud",
+      "nElementsSelected": "{{count}} elementi valitud",
+      "placeholder": "Vali valik",
+      "noOptions": "Ei ole valikuid",
+      "noValue": "Ei ole väärtust",
+      "loading": "Valikute laadimine...",
+      "searchMultiple": "Või otsi üht või mitut väärtust",
+      "searchSingle": "Või otsi väärtust",
+      "selectMultiple": "Vali üks või mitu väärtust",
+      "selectSingle": "Vali väärtus"
+    },
+    "show": {
+      "more": "Näita rohkem",
+      "less": "Näita vähem"
+    },
+    "sortBy": {
+      "ascending": "Sorteeri {field} tõusvas järjestuses",
+      "descending": "Sorteeri {field} langevas järjestuses"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Leheküljendus",
+    "summary": "{{entity}}: rekordid {{from}} kuni {{to}} {{total}}-st",
+    "previous": "Eelmine leht",
+    "next": "Järgmine leht",
+    "goto": "Mine lehele {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Üksused",
+  "password": {
+    "strengthLabel": "Parooli tugevus",
+    "generate": "Genera turvaline parool",
+    "copy": "Kopeeri parool",
+    "copied": "Parool kopeeritud!",
+    "strength": {
+      "weak": "Nõrk parool",
+      "medium": "Keskmine parool",
+      "strong": "Tugev parool"
+    },
+    "criteria": {
+      "minLength": "Alumine piir {{count}} tähte",
+      "uppercase": "Suurtäht (A-Z)",
+      "lowercase": "Väiketäht (a-z)",
+      "numbers": "Number (0-9)",
+      "specialChars": "Erilised sümbolid (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Viga 401 – Autentimine ebaõnnestus",
+      "message": "Sa pead sisse logima, et sellele lehele juurde pääseda. Palun kontrolli oma mandaate ja proovi uuesti."
+    },
+    "403": {
+      "title": "Ups! Viga 403 – Vabandust, {{username}}",
+      "message": "Hei <1>{{username}}</1>, me tunneme sind ära, aga sul pole õigusi sellele lehele juurde pääseda. Kui arvad, et see on vale, siis võta meiega ühendust!"
+    },
+    "404": {
+      "title": "Ups! Viga 404 – Lehte ei leitud",
+      "message": "Tundub, et leht, mida otsid, ei eksisteeri enam. See võis olla kolitud või kustutatud. Kontrolli URL-i või mine tagasi avalehele!"
+    },
+    "entities": {
+      "create": "Viga loomisel",
+      "read": "Viga lugemisel",
+      "update": "Viga uuendamisel",
+      "delete": "Viga kustutamisel"
+    },
+    "options": {
+      "load": "Viga valikute laadimisel"
+    },
+    "validations": {
+      "email": "Vale e-posti formaat",
+      "file": {
+        "minSize": "Fail peab olema vähemalt {{accepted}}. Praegune suurus: {{actual}}",
+        "maxSize": "Fail ei tohi ületada {{accepted}}. Praegune suurus: {{actual}}",
+        "invalidType": "Faili tüüp peab olema {{accepted}}. Praegune tüüp: {{actual}}",
+        "typeImage": "Fail peab olema pilt",
+        "required": "Fail on nõutav"
+      },
+      "min": "Vali keel",
+      "minlength": "Vaata juhtpaneeli",
+      "minbytes": "Vaata allika koodi",
+      "max": "Vaata eelvaadet",
+      "maxlength": "HTML allika kood (ainult lugemiseks)",
+      "maxbytes": "Allika koodi sektsioon",
+      "password": {
+        "weakPassword": "Nõutav"
+      },
+      "pattern": "Väärtus peab olema ainulaadne",
+      "required": "Renderdatud sisu sektsioon",
+      "url": "Armatuurlau"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Logi sisse",
+      "hour": "Sisenemine...",
+      "minute": "Logi välja",
+      "second": "Väljumine...",
+      "millisecond": "Viga väljumisel",
+      "days": "Tundmatu viga",
+      "hours": "Lülita heledasse režiimi",
+      "minutes": "Hele teema aktiivne",
+      "seconds": "Lülita pimedasse režiimi",
+      "milliseconds": "Tume teema aktiivne"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Vali keel",
+      "minlength": "Vaata juhtpaneeli",
+      "minbytes": "Vaata allika koodi",
+      "max": "Vaata eelvaadet",
+      "maxlength": "HTML allika kood (ainult lugemiseks)",
+      "maxbytes": "Allika koodi sektsioon",
+      "required": "Renderdatud sisu sektsioon",
+      "unique": "Renderdatud HTML sisu"
+    }
+  },
+  "messages": {
+    "noData": "Allika koodi režiim aktiivne"
+  },
+  "pages": {
+    "Home": "Avaleht"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

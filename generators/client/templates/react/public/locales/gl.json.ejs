@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Accións",
+      "back": "Voltar",
+      "cancel": "Cancelar",
+      "confirmDelete": "Confirmar borrado",
+      "create": "Crear",
+      "delete": "Borrar",
+      "edit": "Editar",
+      "save": "Gardar",
+      "saving": "Gardando...",
+      "update": "Actualizar",
+      "view": "Ver",
+      "file": {
+        "markedForDeletion": "Arquivo marcado para borrado (Gardar para confirmar)",
+        "viewOrDownload": "Ver/Descargar",
+        "replaceWarning": "Seleccionar un novo arquivo substituírase polo existente"
+      },
+      "successfullyCreated": "ID de rexistro {{id}} creado con éxito",
+      "successfullyUpdated": "ID de rexistro {{id}} actualizado con éxito",
+      "successfullyDeleted": "ID de rexistro {{id}} borrado con éxito"
+    },
+    "hidePassword": "Ocultar contrasinal",
+    "showPassword": "Amosar contrasinal",
+    "generateUUID": "Xerar un UUID de versión 4"
+  },
+  "common": {
+    "back": "Voltar",
+    "cancel": "Cancelar",
+    "opensInNewWindow": "Ábrese nunha nova xanela",
+    "undo": "Desfacer",
+    "search": "Buscar...",
+    "select": {
+      "collapse": "Colapsar lista",
+      "expand": "Expander lista",
+      "oneElementSelected": "Un elemento seleccionado",
+      "nElementsSelected": "{{count}} elementos seleccionados",
+      "placeholder": "Seleccionar unha opción",
+      "noOptions": "Sen opcións",
+      "noValue": "Sen valor",
+      "loading": "Cargando opcións...",
+      "searchMultiple": "Selecciona ou busca un ou máis valores",
+      "searchSingle": "Selecciona ou busca un valor",
+      "selectMultiple": "Selecciona un ou máis valores",
+      "selectSingle": "Selecciona un valor"
+    },
+    "show": {
+      "more": "Amosar máis",
+      "less": "Amosar menos"
+    },
+    "sortBy": {
+      "ascending": "Ordenar por {{field}} ascendente",
+      "descending": "Ordenar por {{field}} descendente"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paxinación",
+    "summary": "{{entity}}: rexistros de {{from}} a {{to}} de {{total}}",
+    "previous": "Páxina anterior",
+    "next": "Páxina seguinte",
+    "goto": "Ir á páxina {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entidades",
+  "password": {
+    "strengthLabel": "Forza da contrasinal",
+    "generate": "Xerar contrasinal seguro",
+    "copy": "Copiar contrasinal",
+    "copied": "Contrasinal copiado!",
+    "strength": {
+      "weak": "Contrasinal débil",
+      "medium": "Contrasinal médio",
+      "strong": "Contrasinal forte"
+    },
+    "criteria": {
+      "minLength": "Polo menos {{count}} caracteres",
+      "uppercase": "Unha letra maiúscula (A-Z)",
+      "lowercase": "Unha letra minúscula (a-z)",
+      "numbers": "Un número (0-9)",
+      "specialChars": "Un carácter especial (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Error 401 – Non autorizado",
+      "message": "Necesitas iniciar sesión para acceder a esta páxina. Por favor, verifica as túas credenciais e intenta de novo."
+    },
+    "403": {
+      "title": "¡Ups! Error 403 – Sentímolo, {{username}}",
+      "message": "Ola <1>{{username}}</1>, recoñecémoste, pero non tes os permisos adecuados para acceder a esta páxina. Se pensas que isto é un erro, contacta con nós!"
+    },
+    "404": {
+      "title": "¡Ups! Error 404 – Páxina non atopada",
+      "message": "Parece que a páxina que buscas xa non existe. Pode que foi movida ou borrada. Verifica a URL ou volta á páxina de inicio!"
+    },
+    "entities": {
+      "create": "Erro ao crear",
+      "read": "Erro ao ler",
+      "update": "Erro ao actualizar",
+      "delete": "Erro ao borrar"
+    },
+    "options": {
+      "load": "Erro ao cargar opcións para"
+    },
+    "validations": {
+      "email": "Formato de email non válido",
+      "file": {
+        "minSize": "O arquivo debe ter ao menos {{accepted}}. Tamaño actual: {{actual}}",
+        "maxSize": "O arquivo non pode exceder {{accepted}}. Tamaño actual: {{actual}}",
+        "invalidType": "O tipo de arquivo debe ser {{accepted}}. Tipo actual: {{actual}}",
+        "typeImage": "O arquivo debe ser unha imaxe",
+        "required": "O arquivo é obligatorio"
+      },
+      "min": "Seleccionar idioma",
+      "minlength": "Ver controles",
+      "minbytes": "Ver código fonte",
+      "max": "Ver previsualización",
+      "maxlength": "Código fonte HTML (só lectura)",
+      "maxbytes": "Sección de código fonte",
+      "password": {
+        "weakPassword": "Obxectivo"
+      },
+      "pattern": "O valor debe ser único",
+      "required": "Sección de contido renderizado",
+      "url": "Taboleiro de mando"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Iniciar sesión",
+      "hour": "Iniciando sesión...",
+      "minute": "Pechar sesión",
+      "second": "Pechando sesión...",
+      "millisecond": "Erro ao pechar sesión",
+      "days": "Erro descoñecido",
+      "hours": "Cambiar a modo claro",
+      "minutes": "Tema claro activo",
+      "seconds": "Cambiar a modo escuro",
+      "milliseconds": "Tema escuro activo"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Seleccionar idioma",
+      "minlength": "Ver controles",
+      "minbytes": "Ver código fonte",
+      "max": "Ver previsualización",
+      "maxlength": "Código fonte HTML (só lectura)",
+      "maxbytes": "Sección de código fonte",
+      "required": "Sección de contido renderizado",
+      "unique": "Contido HTML renderizado"
+    }
+  },
+  "messages": {
+    "noData": "Modo de código fonte activo"
+  },
+  "pages": {
+    "Home": "Páxina principal"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

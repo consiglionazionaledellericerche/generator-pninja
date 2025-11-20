@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Tākoha",
+      "back": "Hoki",
+      "cancel": "Kāhoko",
+      "confirmDelete": "Whakau korero mō te mukunga",
+      "create": "Kāhua",
+      "delete": "Muku",
+      "edit": "Whakarereke",
+      "save": "Kāti",
+      "saving": "E tiakina ana...",
+      "update": "Whakatika",
+      "view": "Tirohia",
+      "file": {
+        "markedForDeletion": "Kaihoko e tohu ana mō te mukunga (Tiakina hei whakaū)",
+        "viewOrDownload": "Tirohia/Download",
+        "replaceWarning": "Ka whakakī i te kōnae kei te wātea, ka whakakī i te mea i mua"
+      },
+      "successfullyCreated": "I te angitu te ID tuhinga {{id}} i hangaia",
+      "successfullyUpdated": "I te angitu te ID tuhinga {{id}} i whakahouhia",
+      "successfullyDeleted": "I te angitu te ID tuhinga {{id}} i mukua"
+    },
+    "hidePassword": "Huna te kupu noho",
+    "showPassword": "Whakakite te kupu noho",
+    "generateUUID": "Hangaia he putanga 4 UUID"
+  },
+  "common": {
+    "back": "Hoki",
+    "cancel": "Kāhoko",
+    "opensInNewWindow": "Ka whakatuwherahia i tetahi tirohanga hou",
+    "undo": "Whakaora",
+    "search": "Tirohia...",
+    "select": {
+      "collapse": "Taukiri pātea",
+      "expand": "Tēnā, whakanui i te rārangi",
+      "oneElementSelected": "Kia whakatārewatia te rārangi",
+      "nElementsSelected": "Kotahi te whai pūkete i tohua",
+      "placeholder": "{{count}} ngā mea i tohua",
+      "noOptions": "Tīpakonga he kōwhiringa",
+      "noValue": "Kāore he kōwhiringa",
+      "loading": "Kāore he uara",
+      "searchMultiple": "Ka tải i ngā kōwhiringa...",
+      "searchSingle": "Tīpakohia, rapu rānei i ngā uara kotahi, e rua",
+      "selectMultiple": "Tīpakohia, rapu rānei i tētahi uara",
+      "selectSingle": "Tīpakohia kotahi, e rua rānei ngā uara"
+    },
+    "show": {
+      "more": "Tīpakohia tētahi uara",
+      "less": "Whakakitehia te nui ake"
+    },
+    "sortBy": {
+      "ascending": "Whakakitehia te iti ake",
+      "descending": "Huri i runga i te {{field}} ki te pikinga"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "SQL Server",
+    "summary": "Pāhakari",
+    "previous": "{{entity}}: ngā tuhinga mai i {{from}} ki {{to}} o {{total}}",
+    "next": "Whakatika atu ki te whārangi ki mua",
+    "goto": "Whakatika atu ki te whārangi ā muri"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Solr",
+  "password": {
+    "strengthLabel": "Ngā kōrero",
+    "generate": "Te taumata o te kupu noho",
+    "copy": "Hangaia he kupu noho parepare",
+    "copied": "Kōwhiria te kupu noho",
+    "strength": {
+      "weak": "Kupu noho kua kīia!",
+      "medium": "Kupu noho pātea",
+      "strong": "Kupu noho waenganui"
+    },
+    "criteria": {
+      "minLength": "Kupu noho kaha",
+      "uppercase": "I te iti rawa {{count}} pūāhua",
+      "lowercase": "He reta matua (A-Z)",
+      "numbers": "He reta iti (a-z)",
+      "specialChars": "He tau (0-9)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "He tohu motuhake (!@#$%&*...)",
+      "message": "Hapa 401 – Kāore e whakaaetia"
+    },
+    "403": {
+      "title": "Me rehita koe ki te uru ki tēnei whārangi. Tēnā tirohia ō mōhiohio, ā, whakamātauhia anō.",
+      "message": "Ōpū! Hapa 403 – Aroha mai, {{username}}"
+    },
+    "404": {
+      "title": "Kia ora <1>{{username}}</1>, e mōhio ana mātou ki a koe, engari kāore e taea e koe te uru ki tēnei whārangi. Ki te whakaaro ko tēnei he hapa, tukuna mai ki a mātou!",
+      "message": "Ōpū! Hapa 404 – Kāore e kitea te whārangi"
+    },
+    "entities": {
+      "create": "Tērā pea kāore te whārangi e rapu ana e koe i reira. Tērā pea kua neke, kua mukua rānei. Tirohia te URL, kātahi ka hoki ki te whārangi kāinga!",
+      "read": "Hapa i te hanga",
+      "update": "Hapa i te pānui",
+      "delete": "Hapa i te whakahou"
+    },
+    "options": {
+      "load": "Hapa i te muku"
+    },
+    "validations": {
+      "email": "Hapa i te tuku kōwhiringa mō",
+      "file": {
+        "minSize": "He tārua īmēra kāore e tika",
+        "maxSize": "Ko te kōnae me kī ake i te {{accepted}}. Ngā rahi o nāianei: {{actual}}",
+        "invalidType": "Kāore te kōnae e arotahi ki te {{accepted}}. Ngā rahi o nāianei: {{actual}}",
+        "typeImage": "Ko te mōhio o te kōnae me kī ake i te {{accepted}}. Ko te momo i nāianei: {{actual}}",
+        "required": "Mehemea he whakaahua te kōnae"
+      },
+      "min": "Tūtohu tāmau pouri",
+      "minlength": "Tīpakohia te reo",
+      "minbytes": "Tirohia ngā whakahaere",
+      "max": "Tirohia te waehere puna",
+      "maxlength": "Tirohia te pārongo",
+      "maxbytes": "Waehere puna HTML (kāore e tākina)",
+      "password": {
+        "weakPassword": "Kāore te kōnae e taea te arotahi ki te {{accepted}}"
+      },
+      "pattern": "Me hiahiatia",
+      "required": "Wāhanga waehere puna",
+      "url": "Kāore he tuhinga i kitea"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Papamahi",
+      "hour": "Uru",
+      "minute": "E rehita ana...",
+      "second": "Putuwai",
+      "millisecond": "E putua ana...",
+      "days": "Hapa i te putanga",
+      "hours": "Hapa kāore e mōhiotia",
+      "minutes": "Huri ki te ahua māmā",
+      "seconds": "Tūtohu tāmau māmā",
+      "milliseconds": "Huri ki te ahua pouri"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Tūtohu tāmau pouri",
+      "minlength": "Tīpakohia te reo",
+      "minbytes": "Tirohia ngā whakahaere",
+      "max": "Tirohia te waehere puna",
+      "maxlength": "Tirohia te pārongo",
+      "maxbytes": "Waehere puna HTML (kāore e tākina)",
+      "required": "Wāhanga waehere puna",
+      "unique": "Wāhanga pānuitanga"
+    }
+  },
+  "messages": {
+    "noData": "Pānuitanga HTML kua whakatikahia"
+  },
+  "pages": {
+    "Home": "Pātea matua"
+  },
+  "ui": {
+    "account": {
+      "login": "Tūmau pānuitanga e noho ana",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

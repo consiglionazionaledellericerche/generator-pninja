@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Veprime",
+      "back": "Kthehu",
+      "cancel": "Anulo",
+      "confirmDelete": "Konfirmo fshirjen",
+      "create": "Krijo",
+      "delete": "Fshi",
+      "edit": "Redakto",
+      "save": "Ruaj",
+      "saving": "Duke ruajtur...",
+      "update": "Përditëso",
+      "view": "Shiko",
+      "file": {
+        "markedForDeletion": "Skedari i shënuar për fshirje (Ruaj për të konfirmuar)",
+        "viewOrDownload": "Shiko/Shkarko",
+        "replaceWarning": "Zgjedhja e një skedari të ri do të zëvendësojë të tanishmin"
+      },
+      "successfullyCreated": "ID e regjistrimit {{id}} e krijuar me sukses",
+      "successfullyUpdated": "ID e regjistrimit {{id}} e përditësuar me sukses",
+      "successfullyDeleted": "ID e regjistrimit {{id}} e fshirë me sukses"
+    },
+    "hidePassword": "Fsheh fjalëkalimin",
+    "showPassword": "Shfaq fjalëkalimin",
+    "generateUUID": "Gjenero një UUID version 4"
+  },
+  "common": {
+    "back": "Kthehu",
+    "cancel": "Anulo",
+    "opensInNewWindow": "Hap në një dritare të re",
+    "undo": "Kthe pas",
+    "search": "Kërko...",
+    "select": {
+      "collapse": "Kollapso listën",
+      "expand": "Zgjero listën",
+      "oneElementSelected": "Një element i zgjedhur",
+      "nElementsSelected": "{{count}} elemente të zgjedhura",
+      "placeholder": "Zgjidh një opsion",
+      "noOptions": "Asnjë opsion",
+      "noValue": "Asnjë vlerë",
+      "loading": "Duke ngarkuar opsionet...",
+      "searchMultiple": "Zgjidh ose kërko një ose më shumë vlera",
+      "searchSingle": "Zgjidh ose kërko një vlerë",
+      "selectMultiple": "Zgjidh një ose më shumë vlera",
+      "selectSingle": "Zgjidh një vlerë"
+    },
+    "show": {
+      "more": "Shfaq më shumë",
+      "less": "Shfaq më pak"
+    },
+    "sortBy": {
+      "ascending": "Rendu sipas {{field}} rritës",
+      "descending": "Rendu sipas {{field}} zbritës"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginimi",
+    "summary": "{{entity}}: regjistrime nga {{from}} te {{to}} nga {{total}}",
+    "previous": "Faqja e mëparshme",
+    "next": "Faqja tjetër",
+    "goto": "Shko në faqen {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entitetet",
+  "password": {
+    "strengthLabel": "Forca e fjalëkalimit",
+    "generate": "Gjenero fjalëkalim të sigurt",
+    "copy": "Kopjo fjalëkalimin",
+    "copied": "Fjalëkalimi është kopjuar!",
+    "strength": {
+      "weak": "Fjalëkalim i dobët",
+      "medium": "Fjalëkalim mesatar",
+      "strong": "Fjalëkalim i fortë"
+    },
+    "criteria": {
+      "minLength": "Të paktën {{count}} karaktere",
+      "uppercase": "Një shkronjë të madhe (A-Z)",
+      "lowercase": "Një shkronjë të vogël (a-z)",
+      "numbers": "Një numër (0-9)",
+      "specialChars": "Një karakter të veçantë (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Gabim 401 – Nuk je autorizuar",
+      "message": "Duhet të hysh për të aksesuar këtë faqe. Kontrollo kredencialet e tua dhe provoje përsëri."
+    },
+    "403": {
+      "title": "Oups! Gabim 403 – Na vjen keq, {{username}}",
+      "message": "Hej <1>{{username}}</1>, të njohim, por nuk ke lejet e duhura për të aksesuar këtë faqe. Nëse mendon se është një gabim, kontakto me ne!"
+    },
+    "404": {
+      "title": "Oups! Gabim 404 – Faqja nuk u gjet",
+      "message": "Duket se faqja që po kërkon nuk ekziston më. Mund të jetë transferuar ose fshirë. Kontrollo URL-në ose kthehu në faqen kryesore!"
+    },
+    "entities": {
+      "create": "Gabim në krijim",
+      "read": "Gabim në lexim",
+      "update": "Gabim në përditësim",
+      "delete": "Gabim në fshirje"
+    },
+    "options": {
+      "load": "Gabim në ngarkimin e opsioneve për"
+    },
+    "validations": {
+      "email": "Formati i email-it është i pavlefshëm",
+      "file": {
+        "minSize": "Skedari duhet të jetë të paktën {{accepted}}. Madhësia aktuale: {{actual}}",
+        "maxSize": "Skedari nuk mund të kalojë {{accepted}}. Madhësia aktuale: {{actual}}",
+        "invalidType": "Lloji i skedarit duhet të jetë {{accepted}}. Lloji aktual: {{actual}}",
+        "typeImage": "Skedari duhet të jetë një imazh",
+        "required": "Skedari është i detyrueshëm"
+      },
+      "min": "Numri duhet të jetë më i madh ose i barabartë me {{accepted}}",
+      "minlength": "Stringu duhet të përmbajë të paktën {{accepted}} karakter(e)",
+      "minbytes": "Skedari duhet të jetë të paktën {{accepted}}",
+      "max": "Numri duhet të jetë më i vogël ose i barabartë me {{accepted}}",
+      "maxlength": "Stringu duhet të përmbajë maksimumi {{accepted}} karakter(e)",
+      "maxbytes": "Skedari nuk mund të kalojë {{accepted}}",
+      "password": {
+        "weakPassword": "Fjalëkalimi është shumë i dobët"
+      },
+      "pattern": "Format i pavlefshëm",
+      "required": "I detyrueshëm",
+      "url": "Formati i URL-së është i pavlefshëm"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dita",
+      "hour": "Ora",
+      "minute": "Minuta",
+      "second": "Sekonda",
+      "millisecond": "Milisekonda",
+      "days": "Ditë",
+      "hours": "Orë",
+      "minutes": "Minuta",
+      "seconds": "Sekonda",
+      "milliseconds": "Milisekonda"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Numri duhet të jetë më i madh ose i barabartë me {{accepted}}",
+      "minlength": "Stringu duhet të përmbajë të paktën {{accepted}} karakter(e)",
+      "minbytes": "Skedari duhet të jetë të paktën {{accepted}}",
+      "max": "Numri duhet të jetë më i vogël ose i barabartë me {{accepted}}",
+      "maxlength": "Stringu duhet të përmbajë maksimumi {{accepted}} karakter(e)",
+      "maxbytes": "Skedari nuk mund të kalojë {{accepted}}",
+      "required": "I detyrueshëm",
+      "unique": "Vlera duhet të jetë unike"
+    }
+  },
+  "messages": {
+    "noData": "Nuk u gjetën regjistrime"
+  },
+  "pages": {
+    "Home": "Faqja Kryesore"
+  },
+  "ui": {
+    "account": {
+      "login": "Kyçu",
+      "loggingIn": "Duke u kyçur...",
+      "logout": "Çkyçu",
+      "loggingOut": "Duke u çkyçur...",
+      "logoutError": "Gabim në çkyçje",
+      "unknownError": "Gabim i panjohur"
+    },
+    "darkmode": {
+      "light": "Kaloni në modin e dritës",
+      "lightOn": "Tema e lehtësisë aktive",
+      "dark": "Kaloni në modin e errët",
+      "darkOn": "Tema e errësirës aktive"
+    },
+    "langSelect": "Zgjidh gjuhën",
+    "htmlViewer": {
+      "controls": "Shiko kontrollat",
+      "viewSource": "Shiko kodin burimor",
+      "viewRendering": "Shiko parashikimin",
+      "source": "Kodi burimor HTML (lexim vetëm)",
+      "sourceSection": "Sekcioni i kodit burimor",
+      "renderedSection": "Sekcioni i përmbajtjes së renditur",
+      "renderedContent": "Përmbajtja e renderuar HTML",
+      "sourceActive": "Njësi e kodit burimor aktive",
+      "renderingActive": "Modaliteti i parashikimit aktiv"
+    }
+  }
+}

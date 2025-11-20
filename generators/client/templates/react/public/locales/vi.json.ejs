@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Hành động",
+      "back": "Quay lại",
+      "cancel": "Hủy",
+      "confirmDelete": "Xác nhận xóa",
+      "create": "Tạo",
+      "delete": "Xóa",
+      "edit": "Chỉnh sửa",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "update": "Cập nhật",
+      "view": "Xem",
+      "file": {
+        "markedForDeletion": "Tập tin đã được đánh dấu để xóa (Lưu để xác nhận)",
+        "viewOrDownload": "Xem/Tải xuống",
+        "replaceWarning": "Chọn tệp mới sẽ thay thế tệp hiện tại"
+      },
+      "successfullyCreated": "ID bản ghi {{id}} đã được tạo thành công",
+      "successfullyUpdated": "ID bản ghi {{id}} đã được cập nhật thành công",
+      "successfullyDeleted": "ID bản ghi {{id}} đã được xóa thành công"
+    },
+    "hidePassword": "Ẩn mật khẩu",
+    "showPassword": "Hiện mật khẩu",
+    "generateUUID": "Tạo một UUID phiên bản 4"
+  },
+  "common": {
+    "back": "Quay lại",
+    "cancel": "Hủy",
+    "opensInNewWindow": "Mở trong cửa sổ mới",
+    "undo": "Hoàn tác",
+    "search": "Tìm kiếm...",
+    "select": {
+      "collapse": "Thu gọn danh sách",
+      "expand": "Mở rộng danh sách",
+      "oneElementSelected": "Một phần tử đã được chọn",
+      "nElementsSelected": "{{count}} phần tử đã được chọn",
+      "placeholder": "Chọn một tùy chọn",
+      "noOptions": "Không có tùy chọn",
+      "noValue": "Không có giá trị",
+      "loading": "Đang tải tùy chọn...",
+      "searchMultiple": "Chọn hoặc tìm kiếm một hoặc nhiều giá trị",
+      "searchSingle": "Chọn hoặc tìm kiếm một giá trị",
+      "selectMultiple": "Chọn một hoặc nhiều giá trị",
+      "selectSingle": "Chọn một giá trị"
+    },
+    "show": {
+      "more": "Hiện thêm",
+      "less": "Hiện ít"
+    },
+    "sortBy": {
+      "ascending": "Sắp xếp theo {{field}} tăng dần",
+      "descending": "Sắp xếp theo {{field}} giảm dần"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Phân trang",
+    "summary": "{{entity}}: bản ghi từ {{from}} đến {{to}} của {{total}}",
+    "previous": "Trang trước",
+    "next": "Trang tiếp theo",
+    "goto": "Đi tới trang {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Thực thể",
+  "password": {
+    "strengthLabel": "Sức mạnh mật khẩu",
+    "generate": "Tạo mật khẩu an toàn",
+    "copy": "Sao chép mật khẩu",
+    "copied": "Mật khẩu đã được sao chép!",
+    "strength": {
+      "weak": "Mật khẩu yếu",
+      "medium": "Mật khẩu trung bình",
+      "strong": "Mật khẩu mạnh"
+    },
+    "criteria": {
+      "minLength": "Ít nhất {{count}} ký tự",
+      "uppercase": "Một chữ cái in hoa (A-Z)",
+      "lowercase": "Một chữ cái thường (a-z)",
+      "numbers": "Một số (0-9)",
+      "specialChars": "Một ký tự đặc biệt (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Lỗi 401 – Không được ủy quyền",
+      "message": "Bạn cần đăng nhập để truy cập trang này. Vui lòng kiểm tra thông tin xác thực của bạn và thử lại."
+    },
+    "403": {
+      "title": "Ôi! Lỗi 403 – Xin lỗi, {{username}}",
+      "message": "Chào <1>{{username}}</1>, chúng tôi nhận ra bạn, nhưng bạn không có quyền truy cập vào trang này. Nếu bạn nghĩ đây là một sai sót, hãy liên hệ với chúng tôi!"
+    },
+    "404": {
+      "title": "Ôi! Lỗi 404 – Trang không tìm thấy",
+      "message": "Có vẻ như trang bạn đang tìm kiếm không còn tồn tại nữa. Nó có thể đã bị di chuyển hoặc xóa. Kiểm tra URL hoặc quay lại trang chủ!"
+    },
+    "entities": {
+      "create": "Lỗi tạo",
+      "read": "Lỗi đọc",
+      "update": "Lỗi cập nhật",
+      "delete": "Lỗi xóa"
+    },
+    "options": {
+      "load": "Lỗi tải tùy chọn cho"
+    },
+    "validations": {
+      "email": "Định dạng email không hợp lệ",
+      "file": {
+        "minSize": "Tập tin phải ít nhất {{accepted}}. Kích thước hiện tại: {{actual}}",
+        "maxSize": "Tập tin không được vượt quá {{accepted}}. Kích thước hiện tại: {{actual}}",
+        "invalidType": "Loại tập tin phải là {{accepted}}. Loại hiện tại: {{actual}}",
+        "typeImage": "Tập tin phải là hình ảnh",
+        "required": "Tập tin là bắt buộc"
+      },
+      "min": "Chọn ngôn ngữ",
+      "minlength": "Xem điều khiển",
+      "minbytes": "Xem mã nguồn",
+      "max": "Xem bản xem trước",
+      "maxlength": "Mã nguồn HTML (chế độ chỉ đọc)",
+      "maxbytes": "Phần mã nguồn",
+      "password": {
+        "weakPassword": "Bắt buộc"
+      },
+      "pattern": "Giá trị phải duy nhất",
+      "required": "Phần nội dung đã được hiển thị",
+      "url": "Bảng điều khiển"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Đăng nhập",
+      "hour": "Đang đăng nhập...",
+      "minute": "Đăng xuất",
+      "second": "Đang đăng xuất...",
+      "millisecond": "Lỗi đăng xuất",
+      "days": "Lỗi không rõ",
+      "hours": "Chuyển sang chế độ sáng",
+      "minutes": "Chủ đề sáng đang hoạt động",
+      "seconds": "Chuyển sang chế độ tối",
+      "milliseconds": "Chủ đề tối đang hoạt động"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Chọn ngôn ngữ",
+      "minlength": "Xem điều khiển",
+      "minbytes": "Xem mã nguồn",
+      "max": "Xem bản xem trước",
+      "maxlength": "Mã nguồn HTML (chế độ chỉ đọc)",
+      "maxbytes": "Phần mã nguồn",
+      "required": "Phần nội dung đã được hiển thị",
+      "unique": "Nội dung HTML đã được hiển thị"
+    }
+  },
+  "messages": {
+    "noData": "Chế độ mã nguồn đang hoạt động"
+  },
+  "pages": {
+    "Home": "Trang chính"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

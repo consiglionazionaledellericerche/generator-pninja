@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Darbības",
+      "back": "Atpakaļ",
+      "cancel": "Atcelt",
+      "confirmDelete": "Apstiprināt dzēšanu",
+      "create": "Izveidot",
+      "delete": "Dzēst",
+      "edit": "Rediģēt",
+      "save": "Saglabāt",
+      "saving": "Saglabā...",
+      "update": "Atjaunināt",
+      "view": "Skatīt",
+      "file": {
+        "markedForDeletion": "Fails atzīmēts dzēšanai (Saglabājiet, lai apstiprinātu)",
+        "viewOrDownload": "Skatīt/Ielādēt",
+        "replaceWarning": "Izvēloties jaunu failu, tiks aizvietots esošais"
+      },
+      "successfullyCreated": "Reģistra ID {{id}} veiksmīgi izveidots",
+      "successfullyUpdated": "Reģistra ID {{id}} veiksmīgi atjaunināts",
+      "successfullyDeleted": "Reģistra ID {{id}} veiksmīgi dzēsts"
+    },
+    "hidePassword": "Paslēpt paroli",
+    "showPassword": "Rādīt paroli",
+    "generateUUID": "ģenerēt versiju 4 UUID"
+  },
+  "common": {
+    "back": "Atpakaļ",
+    "cancel": "Atcelt",
+    "opensInNewWindow": "Atver jaunā logā",
+    "undo": "Atsaukt",
+    "search": "Meklēt...",
+    "select": {
+      "collapse": "Sabrukt saraksts",
+      "expand": "Izvērst sarakstu",
+      "oneElementSelected": "Izvēlēts viens elements",
+      "nElementsSelected": "Izvēlēti {{count}} elementi",
+      "placeholder": "Izvēlieties opciju",
+      "noOptions": "Nav iespēju",
+      "noValue": "Nav vērtības",
+      "loading": "Ielādē iespējas...",
+      "searchMultiple": "Izvēlieties vai meklējiet vienu vai vairākas vērtības",
+      "searchSingle": "Izvēlieties vai meklējiet vērtību",
+      "selectMultiple": "Izvēlieties vienu vai vairākas vērtības",
+      "selectSingle": "Izvēlieties vērtību"
+    },
+    "show": {
+      "more": "Rādīt vairāk",
+      "less": "Rādīt mazāk"
+    },
+    "sortBy": {
+      "ascending": "Kārtot pēc {{field}} augoši",
+      "descending": "Kārtot pēc {{field}} dilstoši"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginācija",
+    "summary": "{{entity}}: ieraksti no {{from}} līdz {{to}} no {{total}}",
+    "previous": "Iepriekšējā lapa",
+    "next": "Nākamā lapa",
+    "goto": "Iet uz lapu {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Meklētāji",
+  "password": {
+    "strengthLabel": "Paroles stiprums",
+    "generate": "ģenerēt drošu paroli",
+    "copy": "Kopēt paroli",
+    "copied": "Parole kopēta!",
+    "strength": {
+      "weak": "Vāja parole",
+      "medium": "Vidēja parole",
+      "strong": "Spēcīga parole"
+    },
+    "criteria": {
+      "minLength": "Vismaz {{count}} rakstzīmes",
+      "uppercase": "Liela burta (A-Z)",
+      "lowercase": "Mazā burta (a-z)",
+      "numbers": "Skaitļa (0-9)",
+      "specialChars": "īpašās rakstzīmes (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Kļūda 401 – Nepietiekami autentifikēts",
+      "message": "Jums jāielogojas, lai piekļūtu šai lapai. Lūdzu, pārbaudiet savus akreditīvus un mēģiniet vēlreiz."
+    },
+    "403": {
+      "title": "Ups! Kļūda 403 – Atvainojiet, {{username}}",
+      "message": "Sveiks <1>{{username}}</1>, mēs jūs atpazīstam, bet jums nav pareizo atļauju, lai piekļūtu šai lapai. Ja domājat, ka tas ir kļūda, sazinieties ar mums!"
+    },
+    "404": {
+      "title": "Ups! Kļūda 404 – Lapa netika atrasta",
+      "message": "Izskatās, ka lapa, kuru meklējat, vairs neeksistē. Tā varētu būt pārvietota vai dzēsta. Pārbaudiet URL vai atgriezieties sākumlapā!"
+    },
+    "entities": {
+      "create": "Kļūda veidojot",
+      "read": "Kļūda lasot",
+      "update": "Kļūda atjauninot",
+      "delete": "Kļūda dzēšot"
+    },
+    "options": {
+      "load": "Kļūda ielādējot iespējas par"
+    },
+    "validations": {
+      "email": "Nederīgs e-pasta formāts",
+      "file": {
+        "minSize": "Failam jābūt vismaz {{accepted}}. Pašreizējais izmērs: {{actual}}",
+        "maxSize": "Fails nedrīkst pārsniegt {{accepted}}. Pašreizējais izmērs: {{actual}}",
+        "invalidType": "Faila tipam jābūt {{accepted}}. Pašreizējais tips: {{actual}}",
+        "typeImage": "Fails jābūt attēlam",
+        "required": "Fails ir obligāts"
+      },
+      "min": "Skaitlisam jābūt lielākam par vai vienādam ar {{accepted}}",
+      "minlength": "Vārds jāietver vismaz {{accepted}} rakstzīmes",
+      "minbytes": "Fails jābūt vismaz {{accepted}}",
+      "max": "Skaitlisam jābūt mazākam par vai vienādam ar {{accepted}}",
+      "maxlength": "Vārds jāietver ne vairāk kā {{accepted}} rakstzīmes",
+      "maxbytes": "Fails nedrīkst pārsniegt {{accepted}}",
+      "password": {
+        "weakPassword": "Parole ir pārāk vāja"
+      },
+      "pattern": "Nederīgs formāts",
+      "required": "Obligāts",
+      "url": "Nederīgs URL formāts"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Diena",
+      "hour": "Stunda",
+      "minute": "Minūte",
+      "second": "Sekunde",
+      "millisecond": "Milisekunde",
+      "days": "Dienas",
+      "hours": "Stundas",
+      "minutes": "Minūtes",
+      "seconds": "Sekundes",
+      "milliseconds": "Milisekundes"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Skaitlisam jābūt lielākam par vai vienādam ar {{accepted}}",
+      "minlength": "Vārds jāietver vismaz {{accepted}} rakstzīmes",
+      "minbytes": "Fails jābūt vismaz {{accepted}}",
+      "max": "Skaitlisam jābūt mazākam par vai vienādam ar {{accepted}}",
+      "maxlength": "Vārds jāietver ne vairāk kā {{accepted}} rakstzīmes",
+      "maxbytes": "Fails nedrīkst pārsniegt {{accepted}}",
+      "required": "Obligāts",
+      "unique": "Vērtībai jābūt unikālai"
+    }
+  },
+  "messages": {
+    "noData": "Nav atrasti ieraksti"
+  },
+  "pages": {
+    "Home": "Apgāds"
+  },
+  "ui": {
+    "account": {
+      "login": "Pieteikšanās",
+      "loggingIn": "Ielogošanās...",
+      "logout": "Iziet",
+      "loggingOut": "Izrakstīšanās...",
+      "logoutError": "Kļūda izrakstoties",
+      "unknownError": "Nezināma kļūda"
+    },
+    "darkmode": {
+      "light": "Pāriet uz gaismas režīmu",
+      "lightOn": "Gaismas tēma aktīva",
+      "dark": "Pāriet uz tumšā režīma",
+      "darkOn": "Tumšā tēma aktīva"
+    },
+    "langSelect": "Izvēlieties valodu",
+    "htmlViewer": {
+      "controls": "Skatīt vadības elementus",
+      "viewSource": "Skatīt avota kodu",
+      "viewRendering": "Skatīt priekšskatījumu",
+      "source": "HTML avota kods (tikai lasāms)",
+      "sourceSection": "Avota koda sekcija",
+      "renderedSection": "Rendēts satura sekcija",
+      "renderedContent": "Rendēts HTML saturs",
+      "sourceActive": "Avota koda režīms aktīvs",
+      "renderingActive": "Priekšskatījuma režīms aktīvs"
+    }
+  }
+}

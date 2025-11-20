@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Ekintzak",
+      "back": "Atzera",
+      "cancel": "Ezeztatu",
+      "confirmDelete": "Ezabatzeko berretsi",
+      "create": "Sortu",
+      "delete": "Ezabatu",
+      "edit": "Editatu",
+      "save": "Gorde",
+      "saving": "Gordetzen...",
+      "update": "Eguneratu",
+      "view": "Ikusi",
+      "file": {
+        "markedForDeletion": "Fitxategia ezabatzeko markatuta (Berresteko gorde)",
+        "viewOrDownload": "Ikusi/Deskargatu",
+        "replaceWarning": "Fitxategi berri bat hautatzeak existitzen dena ordezkatuko du"
+      },
+      "successfullyCreated": "Errecord ID {{id}} arrakastaz sortu da",
+      "successfullyUpdated": "Errecord ID {{id}} arrakastaz eguneratu da",
+      "successfullyDeleted": "Errecord ID {{id}} arrakastaz ezabatu da"
+    },
+    "hidePassword": "Pasahitza ezkutatu",
+    "showPassword": "Pasahitza erakutsi",
+    "generateUUID": "Bertsio 4 UUID bat sortu"
+  },
+  "common": {
+    "back": "Atzera",
+    "cancel": "Ezeztatu",
+    "opensInNewWindow": "Leiho berrian ireki",
+    "undo": "Irten",
+    "search": "Bilatu...",
+    "select": {
+      "collapse": "Zerrenda murriztu",
+      "expand": "Zerrenda handitu",
+      "oneElementSelected": "Elementu bat hautatuta",
+      "nElementsSelected": "{{count}} elementu hautatuta",
+      "placeholder": "Aukera bat hautatu",
+      "noOptions": "Ez dago aukerarik",
+      "noValue": "Ez dago baliorik",
+      "loading": "Aukerak kargatzen...",
+      "searchMultiple": "Batzuetan bat edo gehiago balio hautatu edo bilatu",
+      "searchSingle": "Bat edo gehiagotan balio bat hautatu edo bilatu",
+      "selectMultiple": "Batzuk edo gehiagok balio bat hautatu",
+      "selectSingle": "Balio bat hautatu"
+    },
+    "show": {
+      "more": "Gehiago erakutsi",
+      "less": "Gutxiago erakutsi"
+    },
+    "sortBy": {
+      "ascending": "Antolatu {{field}} igotzen",
+      "descending": "Antolatu {{field}} jaitziz"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Orriak",
+    "summary": "{{entity}}: {{from}} eta {{to}} arteko errecord-ak {{total}}-en",
+    "previous": "Aurprevious orria",
+    "next": "Hurrengo orria",
+    "goto": "Joan orri {{page}}ra"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entitateak",
+  "password": {
+    "strengthLabel": "Pasahitz indarra",
+    "generate": "Seguru pasahitza sortu",
+    "copy": "Pasahitza kopiatu",
+    "copied": "Pasahitza kopiatuta!",
+    "strength": {
+      "weak": "Ahul pasahitza",
+      "medium": "Erdiko pasahitza",
+      "strong": "Indartsu pasahitza"
+    },
+    "criteria": {
+      "minLength": "Gutxienez {{count}} karaktere",
+      "uppercase": "Letra handia (A-Z)",
+      "lowercase": "Letra txikia (a-z)",
+      "numbers": "Zenbaki bat (0-9)",
+      "specialChars": "Karaktere berezi bat (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Errorea 401 – Ez Baimentzen",
+      "message": "Sartu behar duzu orri hau atzitzeko. Mesedez, egiaztatu zure kredentzialak eta saiatu berriro."
+    },
+    "403": {
+      "title": "Hau! Errorea 403 – Barkatu, {{username}}",
+      "message": "Kaixo <1>{{username}}</1>, aitortzen zaitugu, baina ez duzu orri hau atzitzeko baimen egokirik. Hori akats bat iruditzen bazaizu, jar zaitez harremanetan gurekin!"
+    },
+    "404": {
+      "title": "Hau! Errorea 404 – Orri Ez Da Aurkitu",
+      "message": "Itxura ematen du bilatzen ari zaren orria jada ez dela existitzen. Mugitu edo ezabatu daiteke. Egin klik URL-an edo itzuli hasierako orrira!"
+    },
+    "entities": {
+      "create": "Errorea sortzen",
+      "read": "Errorea irakurtzen",
+      "update": "Errorea eguneratzen",
+      "delete": "Errorea ezabatzen"
+    },
+    "options": {
+      "load": "Errorea aukerak kargatzen"
+    },
+    "validations": {
+      "email": "Email formatu baliogabea",
+      "file": {
+        "minSize": "Fitxategiak gutxienez {{accepted}} izan behar du. Oraingo tamaina: {{actual}}",
+        "maxSize": "Fitxategiak {{accepted}} gainditu ezin du. Oraingo tamaina: {{actual}}",
+        "invalidType": "Fitxategi mota {{accepted}} izan behar du. Oraingo mota: {{actual}}",
+        "typeImage": "Fitxategia irudia izan behar da",
+        "required": "Fitxategia beharrezkoa da"
+      },
+      "min": "Zenbakiak {{accepted}} baino handiagoa izan behar du",
+      "minlength": "Stringak gutxienez {{accepted}} karaktere izan behar ditu",
+      "minbytes": "Fitxategiak gutxienez {{accepted}} izan behar du",
+      "max": "Zenbakiak {{accepted}} baino txikiagoa izan behar du",
+      "maxlength": "Stringak gehienez {{accepted}} karaktere izan behar ditu",
+      "maxbytes": "Fitxategiak {{accepted}} gainditu ezin du",
+      "password": {
+        "weakPassword": "Pasahitza oso ahula da"
+      },
+      "pattern": "Formatua baliogabea",
+      "required": "Beharrezkoa",
+      "url": "URL formatua baliogabea"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Eguna",
+      "hour": "Ordua",
+      "minute": "Minutu",
+      "second": "Bigarren",
+      "millisecond": "Milisegundo",
+      "days": "Egunak",
+      "hours": "Orduak",
+      "minutes": "Minutuak",
+      "seconds": "Bigarrenak",
+      "milliseconds": "Milisegunduak"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Zenbakiak {{accepted}} baino handiagoa izan behar du",
+      "minlength": "Stringak gutxienez {{accepted}} karaktere izan behar ditu",
+      "minbytes": "Fitxategiak gutxienez {{accepted}} izan behar du",
+      "max": "Zenbakiak {{accepted}} baino txikiagoa izan behar du",
+      "maxlength": "Stringak gehienez {{accepted}} karaktere izan behar ditu",
+      "maxbytes": "Fitxategiak {{accepted}} gainditu ezin du",
+      "required": "Beharrezkoa",
+      "unique": "Balioa bakarra izan behar da"
+    }
+  },
+  "messages": {
+    "noData": "Ez da errecordrik aurkitu"
+  },
+  "pages": {
+    "Home": "Hasiera orria"
+  },
+  "ui": {
+    "account": {
+      "login": "Sartu",
+      "loggingIn": "Sartzen...",
+      "logout": "Irten",
+      "loggingOut": "Irten...",
+      "logoutError": "Irten ezazu errorea",
+      "unknownError": "Errore ezezaguna"
+    },
+    "darkmode": {
+      "light": "Argi modura aldatu",
+      "lightOn": "Argi gaia aktiboa",
+      "dark": "Ilun modura aldatu",
+      "darkOn": "Ilun gaia aktiboa"
+    },
+    "langSelect": "Hizkuntza hautatu",
+    "htmlViewer": {
+      "controls": "Kontrolak ikusi",
+      "viewSource": "Iturri kodea ikusi",
+      "viewRendering": "Aurkezpena ikusi",
+      "source": "HTML iturri kodea (irakurtzeko bakarrik)",
+      "sourceSection": "Iturri kode atala",
+      "renderedSection": "Ekoiztutako eduki atala",
+      "renderedContent": "Ekoiztutako HTML eduki",
+      "sourceActive": "Iturri kode modu aktiboa",
+      "renderingActive": "Aurkezpen modu aktiboa"
+    }
+  }
+}

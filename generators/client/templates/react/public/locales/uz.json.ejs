@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Harakatlar",
+      "back": "Orqaga",
+      "cancel": "Bekor qilmoq",
+      "confirmDelete": "O'chirishni tasdiqlash",
+      "create": "Yaratmoq",
+      "delete": "O'chirmoq",
+      "edit": "Tahrirlash",
+      "save": "Saqlamoq",
+      "saving": "Saqlanmoqda...",
+      "update": "Yangilash",
+      "view": "Ko'rish",
+      "file": {
+        "markedForDeletion": "Fayl o'chirish uchun belgilandi (tasdiqlash uchun saqlang)",
+        "viewOrDownload": "Ko'rish/Yuklab olish",
+        "replaceWarning": "Yangi fayl tanlanishi mavjud faylni almashtiradi"
+      },
+      "successfullyCreated": "Yozuv ID {{id}} muvaffaqiyatli yaratildi",
+      "successfullyUpdated": "Yozuv ID {{id}} muvaffaqiyatli yangilandi",
+      "successfullyDeleted": "Yozuv ID {{id}} muvaffaqiyatli o'chirildi"
+    },
+    "hidePassword": "Parolni yashirish",
+    "showPassword": "Parolni ko'rsatish",
+    "generateUUID": "4-versiya UUID hosil qilish"
+  },
+  "common": {
+    "back": "Orqaga",
+    "cancel": "Bekor qilmoq",
+    "opensInNewWindow": "Yangi oynada ochiladi",
+    "undo": "Qaytarish",
+    "search": "Qidirish...",
+    "select": {
+      "collapse": "Ro'yxatni qisqartirish",
+      "expand": "Ro'yxatni kengaytirish",
+      "oneElementSelected": "Bitta element tanlandi",
+      "nElementsSelected": "{{count}} element tanlandi",
+      "placeholder": "Birinchi o'zgaruvchini tanlang",
+      "noOptions": "Hech qanday variant yo'q",
+      "noValue": "Hech qanday qiymat yo'q",
+      "loading": "Variantlar yuklanmoqda...",
+      "searchMultiple": "Bitta yoki bir nechta qiymat tanlang yoki qidiring",
+      "searchSingle": "Bitta qiymat tanlang yoki qidiring",
+      "selectMultiple": "Bitta yoki bir nechta qiymat tanlang",
+      "selectSingle": "Bitta qiymat tanlang"
+    },
+    "show": {
+      "more": "Ko'proq ko'rsat",
+      "less": "Kamroq ko'rsat"
+    },
+    "sortBy": {
+      "ascending": "{{field}} bo'yicha tartiblash o'sish",
+      "descending": "{{field}} bo'yicha tartiblash kamayish"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Sahifalash",
+    "summary": "{{entity}}: yozuvlar {{from}} dan {{to}} gacha {{total}}",
+    "previous": "Oldingi sahifa",
+    "next": "Keyingi sahifa",
+    "goto": "{{page}} sahifasiga o'ting"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Jabhalar",
+  "password": {
+    "strengthLabel": "Parol kuchi",
+    "generate": "Xavfsiz parol hosil qilish",
+    "copy": "Parolni nusxalash",
+    "copied": "Parol nusxalandi!",
+    "strength": {
+      "weak": "Zaif parol",
+      "medium": "O'rtacha parol",
+      "strong": "Kuchli parol"
+    },
+    "criteria": {
+      "minLength": "Kamida {{count}} belgilar",
+      "uppercase": "Bitta katta harf (A-Z)",
+      "lowercase": "Bitta kichik harf (a-z)",
+      "numbers": "Bitta raqam (0-9)",
+      "specialChars": "Bitta maxsus belgisi (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Xato 401 – Ruxsatsiz",
+      "message": "Ushbu sahifaga kirish uchun tizimga kirishingiz kerak. Iltimos, shaxsiy ma'lumotlaringizni tekshiring va qaytadan sinab ko'ring."
+    },
+    "403": {
+      "title": "Voy! Xato 403 – Kechirasiz, {{username}}",
+      "message": "Salom <1>{{username}}</1>, biz sizni tanidik, lekin ushbu sahifaga kirish uchun to'g'ri ruxsatlaringiz yo'q. Agar bu xato deb o'ylasangiz, biz bilan bog'laning!"
+    },
+    "404": {
+      "title": "Voy! Xato 404 – Sahifa topilmadi",
+      "message": "Qidirayotgan sahifangiz endi mavjud emas. U ko'chirilishi yoki o'chirilishi mumkin. URL-ni tekshiring yoki asosiy sahifaga qayting!"
+    },
+    "entities": {
+      "create": "Yozuv yaratishda xato",
+      "read": "O'qishda xato",
+      "update": "Yangilashda xato",
+      "delete": "O'chirishda xato"
+    },
+    "options": {
+      "load": "Variantlar yuklanayotganida xato"
+    },
+    "validations": {
+      "email": "Noto'g'ri elektron pochta formati",
+      "file": {
+        "minSize": "Fayl kamida {{accepted}} bo'lishi kerak. Joriy o'lcham: {{actual}}",
+        "maxSize": "Fayl {{accepted}} dan ko'proq bo'lishi mumkin emas. Joriy o'lcham: {{actual}}",
+        "invalidType": "Fayl turi {{accepted}} bo'lishi kerak. Joriy turi: {{actual}}",
+        "typeImage": "Fayl rasm bo'lishi kerak",
+        "required": "Fayl kerak"
+      },
+      "min": "Tilni tanlash",
+      "minlength": "Boshqaruvlarni ko'rish",
+      "minbytes": "Manba kodini ko'rish",
+      "max": "Oldindan ko'rishni ko'rish",
+      "maxlength": "HTML manba kodi (faqat o'qish uchun)",
+      "maxbytes": "Manba kodi bo'limi",
+      "password": {
+        "weakPassword": "Zarur"
+      },
+      "pattern": "Qiymat unik bo'lishi kerak",
+      "required": "Chop etilgan kontent bo'limi",
+      "url": "Boshqaruv paneli"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Kirish",
+      "hour": "Kirishda...",
+      "minute": "Chiqish",
+      "second": "Chiqishda...",
+      "millisecond": "Chiqishda xato",
+      "days": "Noma'lum xato",
+      "hours": "Yengil rejimga o'tish",
+      "minutes": "Yengil mavzu faol",
+      "seconds": "Qorong'u rejimga o'tish",
+      "milliseconds": "Qorong'u mavzu faol"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Tilni tanlash",
+      "minlength": "Boshqaruvlarni ko'rish",
+      "minbytes": "Manba kodini ko'rish",
+      "max": "Oldindan ko'rishni ko'rish",
+      "maxlength": "HTML manba kodi (faqat o'qish uchun)",
+      "maxbytes": "Manba kodi bo'limi",
+      "required": "Chop etilgan kontent bo'limi",
+      "unique": "Chop etilgan HTML kontenti"
+    }
+  },
+  "messages": {
+    "noData": "Manba kodi rejimi faol"
+  },
+  "pages": {
+    "Home": "Bosh sahifa"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

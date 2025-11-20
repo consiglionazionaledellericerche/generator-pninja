@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Azzjonijiet",
+      "back": "Irritorna",
+      "cancel": "Ikkancellaw",
+      "confirmDelete": "Ikkonferma t-tħassir",
+      "create": "Oħloq",
+      "delete": "Ikkunsina",
+      "edit": "Editja",
+      "save": "Issejvja",
+      "saving": "Qed iseħħ is-sejv",
+      "update": "Aġġorna",
+      "view": "View",
+      "file": {
+        "markedForDeletion": "Il-fajl iffraħ għall-kunsinna (Issejvja biex tikkonferma)",
+        "viewOrDownload": "Ara/Tniżżel",
+        "replaceWarning": "L-għażla ta' fajl ġdid se tissostitwixxi l-eżistenti"
+      },
+      "successfullyCreated": "ID tal-rekord {{id}} ġie maħluq b'suċċess",
+      "successfullyUpdated": "ID tal-rekord {{id}} ġie aġġornat b'suċċess",
+      "successfullyDeleted": "ID tal-rekord {{id}} ġie kkunsinat b'suċċess"
+    },
+    "hidePassword": "Ipprova l-password",
+    "showPassword": "Uri l-password",
+    "generateUUID": "Ħoloq UUID ta' verżjoni 4"
+  },
+  "common": {
+    "back": "Irritorna",
+    "cancel": "Ikkancellaw",
+    "opensInNewWindow": "Jiftaħ f'nofsinhar ġdid",
+    "undo": "Irreġistra",
+    "search": "Ikteb...",
+    "select": {
+      "collapse": "Aħfir lista",
+      "expand": "Ikkawża lista",
+      "oneElementSelected": "Element wieħed magħżul",
+      "nElementsSelected": "{{count}} elementi magħżula",
+      "placeholder": "Agħżel għażla",
+      "noOptions": "Ebda għażliet",
+      "noValue": "Ebda valur",
+      "loading": "Qed titlesta l-għażliet...",
+      "searchMultiple": "Agħżel jew ifittex għal waħda jew aktar valuri",
+      "searchSingle": "Agħżel jew ifittex għal valur",
+      "selectMultiple": "Agħżel waħda jew aktar valuri",
+      "selectSingle": "Agħżel valur"
+    },
+    "show": {
+      "more": "Uri aktar",
+      "less": "Uri inqas"
+    },
+    "sortBy": {
+      "ascending": "Sortja skont {{field}} għolja",
+      "descending": "Sortja skont {{field}} baxxa"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginar",
+    "summary": "{{entity}}: ir-rekords minn {{from}} għal {{to}} ta' {{total}}",
+    "previous": "Paġna preċedenti",
+    "next": "Paġna li jmiss",
+    "goto": "Mur lejn il-paġna {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entitajiet",
+  "password": {
+    "strengthLabel": "Saħħa tal-password",
+    "generate": "Ħoloq password sigura",
+    "copy": "Kopja tal-password",
+    "copied": "Password ikkupjata!",
+    "strength": {
+      "weak": "Password dgħajfa",
+      "medium": "Password medja",
+      "strong": "Password qawwija"
+    },
+    "criteria": {
+      "minLength": "Almenu {{count}} karattri",
+      "uppercase": "Ittra b'mayus (A-Z)",
+      "lowercase": "Ittra b'minuskola (a-z)",
+      "numbers": "Numru (0-9)",
+      "specialChars": "Karattru speċjali (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Żball 401 – Mhux Awtorizzat",
+      "message": "Għandek bżonn tidħol biex aċċessa din il-paġna. Iċċekkja l-kredenzjali tiegħek u ipprova minn ġdid."
+    },
+    "403": {
+      "title": "Ops! Żball 403 – Skużani, {{username}}",
+      "message": "Hey <1>{{username}}</1>, nafu min int, iżda m'għandekx il-permessi xierqa biex aċċessa din il-paġna. Jekk taħseb li dan hu żball, ikkuntattjana!"
+    },
+    "404": {
+      "title": "Ops! Żball 404 – Paġna Mhux Sibu",
+      "message": "Jidher li l-paġna li qed tfittex ma teżistix aktar. Għandha tkun għaddiet jew tħassret. Iċċekkja l-URL jew mur lura lejn il-paġna ewlenija!"
+    },
+    "entities": {
+      "create": "Żball li qed toħloq",
+      "read": "Żball li qed taqra",
+      "update": "Żball li qed tagħmel aġġornament",
+      "delete": "Żball li qed tokkumplix"
+    },
+    "options": {
+      "load": "Żball li qed tgħaqqad l-għażliet għal"
+    },
+    "validations": {
+      "email": "Format ta' email invalidu",
+      "file": {
+        "minSize": "Il-fajl irid ikun almenu {{accepted}}. Id-daqs attwali: {{actual}}",
+        "maxSize": "Il-fajl m'għandux jeċċedi {{accepted}}. Id-daqs attwali: {{actual}}",
+        "invalidType": "Il-lott tal-fajl irid ikun {{accepted}}. It-tip attwali: {{actual}}",
+        "typeImage": "Il-fajl irid ikun immaġni",
+        "required": "Il-fajl huwa meħtieġ"
+      },
+      "min": "Agħżel il-lingwa",
+      "minlength": "Ara l-kontrolli",
+      "minbytes": "Ara l-kodiċi ta' sors",
+      "max": "Ara l-previżjoni",
+      "maxlength": "Kodiċi HTML ta' sors (qarrej biss)",
+      "maxbytes": "Sezzjoni tal-kodiċi ta' sors",
+      "password": {
+        "weakPassword": "Meħtieġ"
+      },
+      "pattern": "Il-valur irid jkun uniku",
+      "required": "Sezzjoni ta' kontenut ippubblikat",
+      "url": "Dashboard"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Login",
+      "hour": "Qed tidħol...",
+      "minute": "Irtira",
+      "second": "Qed toħroġ...",
+      "millisecond": "Żball waqt li toħroġ",
+      "days": "Żball mhux magħruf",
+      "hours": "Iġġedded għal mod ħafif",
+      "minutes": "Tema ħafifa attiva",
+      "seconds": "Iġġedded għal mod skur",
+      "milliseconds": "Tema skura attiva"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Agħżel il-lingwa",
+      "minlength": "Ara l-kontrolli",
+      "minbytes": "Ara l-kodiċi ta' sors",
+      "max": "Ara l-previżjoni",
+      "maxlength": "Kodiċi HTML ta' sors (qarrej biss)",
+      "maxbytes": "Sezzjoni tal-kodiċi ta' sors",
+      "required": "Sezzjoni ta' kontenut ippubblikat",
+      "unique": "Kontenut HTML ippubblikat"
+    }
+  },
+  "messages": {
+    "noData": "Moda tal-kodiċi ta' sors attiva"
+  },
+  "pages": {
+    "Home": "Paġni prinċipali"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}

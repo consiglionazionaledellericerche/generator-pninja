@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Aksjes",
+      "back": "Achter",
+      "cancel": "Annulearje",
+      "confirmDelete": "Bevestig wiskjen",
+      "create": "Makke",
+      "delete": "Wiskje",
+      "edit": "Bewerkje",
+      "save": "Bewarje",
+      "saving": "Sparje...",
+      "update": "Update",
+      "view": "Sjen",
+      "file": {
+        "markedForDeletion": "Bestân markearre foar wiskjen (Sparje om te befêstigjen)",
+        "viewOrDownload": "Sjen/Downloads",
+        "replaceWarning": "In nijs bestân selektearje sil it besteande ferfange"
+      },
+      "successfullyCreated": "Record ID {{id}} suksesfol makke",
+      "successfullyUpdated": "Record ID {{id}} suksesfol bywurke",
+      "successfullyDeleted": "Record ID {{id}} suksesfol wiskje"
+    },
+    "hidePassword": "Ferbergje wachtwurd",
+    "showPassword": "Tón wachtwurd",
+    "generateUUID": "Generearje in ferzje 4 UUID"
+  },
+  "common": {
+    "back": "Achter",
+    "cancel": "Annulearje",
+    "opensInNewWindow": "Iepenet yn in nije finster",
+    "undo": "Untdó",
+    "search": "Sykje...",
+    "select": {
+      "collapse": "Falt list yn",
+      "expand": "Falt list út",
+      "oneElementSelected": "Ien elemint selektearre",
+      "nElementsSelected": "{{count}} eleminten selektearre",
+      "placeholder": "Selectearje in opsje",
+      "noOptions": "Gjin opsjes",
+      "noValue": "Gjin wearde",
+      "loading": "Options laden...",
+      "searchMultiple": "Selectearje of sykje foar ien of mear wearden",
+      "searchSingle": "Selectearje of sykje foar in wearde",
+      "selectMultiple": "Selectearje ien of mear wearden",
+      "selectSingle": "Selectearje in wearde"
+    },
+    "show": {
+      "more": "Tón mear",
+      "less": "Tón minder"
+    },
+    "sortBy": {
+      "ascending": "Sortearje op {{field}} yn 'e ferheging",
+      "descending": "Sortearje op {{field}} yn 'e fermindering"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Paginearring",
+    "summary": "{{entity}}: records fan {{from}} oant {{to}} fan {{total}}",
+    "previous": "Foarige pagina",
+    "next": "Volgjende pagina",
+    "goto": "Gean nei pagina {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Entiteiten",
+  "password": {
+    "strengthLabel": "Wachtwurdsterkte",
+    "generate": "Generearje feilich wachtwurd",
+    "copy": "Kopiearje wachtwurd",
+    "copied": "Wachtwurd kopiearre!",
+    "strength": {
+      "weak": "Swak wachtwurd",
+      "medium": "Medium wachtwurd",
+      "strong": "Sterk wachtwurd"
+    },
+    "criteria": {
+      "minLength": "Op syn minst {{count}} karakters",
+      "uppercase": "In grutte letter (A-Z)",
+      "lowercase": "In lyts letter (a-z)",
+      "numbers": "In nûmer (0-9)",
+      "specialChars": "In spesjaal symboal (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Fout 401 – Net autorisearre",
+      "message": "Jo moatte ynlogge om tagong te krijen ta dizze pagina. Kontrolearje jo fertrouwen en besykje it opneist."
+    },
+    "403": {
+      "title": "Oops! Fout 403 – Sorry, {{username}}",
+      "message": "Hey <1>{{username}}</1>, wy erkenne dy, mar jo hawwe net de juste machtigingen om tagong te krijen ta dizze pagina. As jo tinke dat dit in flatferkeap is, berik dan út nei ús!"
+    },
+    "404": {
+      "title": "Oops! Fout 404 – Side net fûn",
+      "message": "It liket derop dat de pagina dêr't jo nei sykje net mear bestiet. It kin ferhuze of wiskje wêze. Kontrolearje de URL of gean werom nei de thússide!"
+    },
+    "entities": {
+      "create": "Fout by it meitsjen",
+      "read": "Fout by it lêzen",
+      "update": "Fout by it bywurkje",
+      "delete": "Fout by it wiskjen"
+    },
+    "options": {
+      "load": "Fout by it laden fan opsjes foar"
+    },
+    "validations": {
+      "email": "Ongeldige e-postformat",
+      "file": {
+        "minSize": "It bestân moat op syn minst {{accepted}} wêze. Hjoeddeistige grutte: {{actual}}",
+        "maxSize": "It bestân kin net mear as {{accepted}} wêze. Hjoeddeistige grutte: {{actual}}",
+        "invalidType": "It bestânssoarte moat {{accepted}} wêze. Hjoeddeistige soarte: {{actual}}",
+        "typeImage": "It bestân moat in ôfbylding wêze",
+        "required": "It bestân is fereaske"
+      },
+      "min": "Nûmer moat grutter as of gelyk wêze oan {{accepted}}",
+      "minlength": "String moat op syn minst {{accepted}} karakter(s) befetsje",
+      "minbytes": "It bestân moat op syn minst {{accepted}} wêze",
+      "max": "Nûmer moat minder as of gelyk wêze oan {{accepted}}",
+      "maxlength": "String moat op syn meast {{accepted}} karakter(s) befetsje",
+      "maxbytes": "It bestân kin net mear as {{accepted}} wêze",
+      "password": {
+        "weakPassword": "Wachtwurd is te swak"
+      },
+      "pattern": "Ongeldich formaat",
+      "required": "Fereaske",
+      "url": "Ongeldig URL-formaat"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Dei",
+      "hour": "Oere",
+      "minute": "Minute",
+      "second": "Seconde",
+      "millisecond": "Millisekunde",
+      "days": "Days",
+      "hours": "Oeren",
+      "minutes": "Minuten",
+      "seconds": "Sekonden",
+      "milliseconds": "Millisekonden"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Nûmer moat grutter as of gelyk wêze oan {{accepted}}",
+      "minlength": "String moat op syn minst {{accepted}} karakter(s) befetsje",
+      "minbytes": "It bestân moat op syn minst {{accepted}} wêze",
+      "max": "Nûmer moat minder as of gelyk wêze oan {{accepted}}",
+      "maxlength": "String moat op syn meast {{accepted}} karakter(s) befetsje",
+      "maxbytes": "It bestân kin net mear as {{accepted}} wêze",
+      "required": "Fereaske",
+      "unique": "Wearde moat unyk wêze"
+    }
+  },
+  "messages": {
+    "noData": "Gjin records fûn"
+  },
+  "pages": {
+    "Home": "Thússide"
+  },
+  "ui": {
+    "account": {
+      "login": "Ynlogge",
+      "loggingIn": "Ynloggearje...",
+      "logout": "Utlogge",
+      "loggingOut": "Utloggearje...",
+      "logoutError": "Fout by it utloggen",
+      "unknownError": "Unbekende fout"
+    },
+    "darkmode": {
+      "light": "Feroarje nei ljocht modus",
+      "lightOn": "Ljocht tema aktyf",
+      "dark": "Feroarje nei tsjirre modus",
+      "darkOn": "Tsjuster tema aktyf"
+    },
+    "langSelect": "Selectearje taal",
+    "htmlViewer": {
+      "controls": "Sjen kontroles",
+      "viewSource": "Sjen source code",
+      "viewRendering": "Sjen preview",
+      "source": "HTML source code (lês-allinne)",
+      "sourceSection": "Source code seksje",
+      "renderedSection": "Rendered content seksje",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code modus aktyf",
+      "renderingActive": "Preview modus aktyf"
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "appName": "<%= appName %>",
+  "actions": {
+    "crud": {
+      "actions": "Aðgerðir",
+      "back": "Til baka",
+      "cancel": "Afturkalla",
+      "confirmDelete": "Staðfesta eyðingu",
+      "create": "Búa til",
+      "delete": "Eyða",
+      "edit": "Breyta",
+      "save": "Vista",
+      "saving": "Vista...",
+      "update": "Uppfæra",
+      "view": "Skoða",
+      "file": {
+        "markedForDeletion": "Skjal merkt til eyðingar (Vista til að staðfesta)",
+        "viewOrDownload": "Skoða/ niðurhala",
+        "replaceWarning": "Val á nýju skjali mun skipta út því núverandi"
+      },
+      "successfullyCreated": "Skjal ID {{id}} búið til með góðum árangri",
+      "successfullyUpdated": "Skjal ID {{id}} uppfært með góðum árangri",
+      "successfullyDeleted": "Skjal ID {{id}} eytt með góðum árangri"
+    },
+    "hidePassword": "Falið lykilorð",
+    "showPassword": "Sýna lykilorð",
+    "generateUUID": "Búa til útgáfu 4 UUID"
+  },
+  "common": {
+    "back": "Til baka",
+    "cancel": "Afturkalla",
+    "opensInNewWindow": "Opnast í nýju glugga",
+    "undo": "Afturkalla",
+    "search": "Leita...",
+    "select": {
+      "collapse": "Hnúta lista",
+      "expand": "Stækka lista",
+      "oneElementSelected": "Einn hluti valinn",
+      "nElementsSelected": "{{count}} hlutir valdir",
+      "placeholder": "Veldu valkost",
+      "noOptions": "Engir valkostir",
+      "noValue": "Engin gildi",
+      "loading": "Hlaða valkostum...",
+      "searchMultiple": "Veldu eða leitaðu að einum eða fleiri gildum",
+      "searchSingle": "Veldu eða leitaðu að gildi",
+      "selectMultiple": "Veldu eitt eða fleiri gildi",
+      "selectSingle": "Veldu gildi"
+    },
+    "show": {
+      "more": "Sýna meira",
+      "less": "Sýna minna"
+    },
+    "sortBy": {
+      "ascending": "Skráðu eftir {{field}} vaxandi",
+      "descending": "Skráðu eftir {{field}} minnkandi"
+    }
+  },
+  "dbms": {
+    "sqlite": "SQLite",
+    "mysql": "MySQL",
+    "mariadb": "MariaDB",
+    "pgsql": "PostgreSQL",
+    "sqlsrv": "SQL Server"
+  },
+  "pagination": {
+    "pagination": "Síðuskipting",
+    "summary": "{{entity}}: skjal frá {{from}} til {{to}} af {{total}}",
+    "previous": "Fyrri síða",
+    "next": "Næsta síða",
+    "goto": "Farðu á síðu {{page}}"
+  },
+  "searchEngine": {
+    "algolia": "Algolia",
+    "elastic": "Elasticsearch",
+    "meilisearch": "Meilisearch",
+    "typesense": "Typesense",
+    "solr": "Solr"
+  },
+  "entities": "Vísar",
+  "password": {
+    "strengthLabel": "Styrkur lykilorðs",
+    "generate": "Búa til öruggt lykilorð",
+    "copy": "Afrita lykilorð",
+    "copied": "Lykilorð afritað!",
+    "strength": {
+      "weak": "Veikt lykilorð",
+      "medium": "Meðalt lag",
+      "strong": "Sterkt lykilorð"
+    },
+    "criteria": {
+      "minLength": "Að minnsta kosti {{count}} stafir",
+      "uppercase": "Stór stafur (A-Z)",
+      "lowercase": "Lítill stafur (a-z)",
+      "numbers": "Tala (0-9)",
+      "specialChars": "Sérstæður stafur (!@#$%&*...)"
+    }
+  },
+  "errors": {
+    "401": {
+      "title": "Villa 401 – Ekki heimilað",
+      "message": "Þú þarft að skrá þig inn til að nálgast þessa síðu. Vinsamlegast athugaðu aðgangsheimildirnar þínar og reyndu aftur."
+    },
+    "403": {
+      "title": "Oops! Villa 403 – Fyrirgefðu, {{username}}",
+      "message": "Halló <1>{{username}}</1>, við þekkjum þig, en þú hefur ekki réttar heimildir til að nálgast þessa síðu. Ef þú heldur að þetta sé mistök, hafðu samband við okkur!"
+    },
+    "404": {
+      "title": "Oops! Villa 404 – Síða fannst ekki",
+      "message": "Það lítur út fyrir að síðan sem þú ert að leita að sé ekki lengur til. Hún gæti hafa verið flutt eða eytt. Athugaðu URL eða farðu aftur á forsíðuna!"
+    },
+    "entities": {
+      "create": "Villa við að búa til",
+      "read": "Villa við að lesa",
+      "update": "Villa við að uppfæra",
+      "delete": "Villa við að eyða"
+    },
+    "options": {
+      "load": "Villa við að hlaða valkostum fyrir"
+    },
+    "validations": {
+      "email": "Ógild tölvupóstsform",
+      "file": {
+        "minSize": "Skjalið verður að vera að minnsta kosti {{accepted}}. Núverandi stærð: {{actual}}",
+        "maxSize": "Skjalið má ekki fara yfir {{accepted}}. Núverandi stærð: {{actual}}",
+        "invalidType": "Skjalgerðin verður að vera {{accepted}}. Núverandi gerð: {{actual}}",
+        "typeImage": "Skjalið verður að vera mynd",
+        "required": "Skjalið er nauðsynlegt"
+      },
+      "min": "Veldu tungumál",
+      "minlength": "Skoða stjórntæki",
+      "minbytes": "Skoða uppspretta",
+      "max": "Skoða forskoðun",
+      "maxlength": "HTML uppspretta (bara til að lesa)",
+      "maxbytes": "Uppspretta hluti",
+      "password": {
+        "weakPassword": "Nauðsynlegt"
+      },
+      "pattern": "Gildið verður að vera einstakt",
+      "required": "Ræktað efni hluti",
+      "url": "Stýringaskjár"
+    }
+  },
+  "fields": {
+    "duration": {
+      "day": "Skrá inn",
+      "hour": "Skrá inn...",
+      "minute": "Skrá út",
+      "second": "Skrá út...",
+      "millisecond": "Villa við skráningu út",
+      "days": "Óþekkt villa",
+      "hours": "Skiptu yfir í ljósan hátt",
+      "minutes": "Létt yfirfari virkt",
+      "seconds": "Skiptu yfir í dimman hátt",
+      "milliseconds": "Dökkt yfirfari virkt"
+    }
+  },
+  "info": {
+    "validations": {
+      "min": "Veldu tungumál",
+      "minlength": "Skoða stjórntæki",
+      "minbytes": "Skoða uppspretta",
+      "max": "Skoða forskoðun",
+      "maxlength": "HTML uppspretta (bara til að lesa)",
+      "maxbytes": "Uppspretta hluti",
+      "required": "Ræktað efni hluti",
+      "unique": "Ræktað HTML efni"
+    }
+  },
+  "messages": {
+    "noData": "Uppspretta er virkur"
+  },
+  "pages": {
+    "Home": "Heimasíða"
+  },
+  "ui": {
+    "account": {
+      "login": "Login",
+      "loggingIn": "Logging in...",
+      "logout": "Logout",
+      "loggingOut": "Logging out...",
+      "logoutError": "Error logging out",
+      "unknownError": "Unknown error"
+    },
+    "darkmode": {
+      "light": "Switch to light mode",
+      "lightOn": "Light theme active",
+      "dark": "Switch to dark mode",
+      "darkOn": "Dark theme active"
+    },
+    "langSelect": "Select language",
+    "htmlViewer": {
+      "controls": "View controls",
+      "viewSource": "View source code",
+      "viewRendering": "View preview",
+      "source": "HTML source code (read-only)",
+      "sourceSection": "Source code section",
+      "renderedSection": "Rendered content section",
+      "renderedContent": "Rendered HTML content",
+      "sourceActive": "Source code mode active",
+      "renderingActive": "Preview mode active"
+    }
+  }
+}
