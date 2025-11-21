@@ -13,10 +13,10 @@ export default class FinalGenerator extends Generator {
   }
 
   end() {
-    this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name') });
     this.log(colors.bold.green(`\nApplication generated successfully with `) + colors.bold.red('♥️') + colors.bold.green(`  & `) + colors.bold.blueBright(`PNinja`) + '!\n');
     this.log(`${colors.green(`Set database in server/.env and create tables with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run migrate`)}  # or npm run migrate:fresh or npm run migrate:fresh:seed\n`);
     this.log(`${colors.green(`Start your development server with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run server`)}\n`);
     this.log(`${colors.green(`Start your development client with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run client`)}\n`);
+    this.log(colors.bold.blueBright(`Leggi il file **README.md** per ulteriori dettagli`) + '\n\n');
   }
 }

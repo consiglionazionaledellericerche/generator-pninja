@@ -16,13 +16,13 @@ Start your **development client** (http://localhost:5173/) with:
 npm run client
 ```
 
-Per **inizializzare** il database:
+To **initialize** the database:
 
 ```sh
 npm run migrate:fresh # or npm run migrate:fresh
 ```
 
-Per inizializzare il motore di ricerca
+To initialize the **search engine**:
 
 ```sh
 npm run elastic:migrate                                # Elasticsearch
@@ -32,13 +32,13 @@ php artisan scout:index "App\Models\EntityName"        # Solr
 php artisan scout:index "App\Models\AnotherEntityName" # Solr
 ```
 
-Per popolare il database con record di prova
+To populate the database with **test records**:
 
 ```sh
 npm run db:seed
 ```
 
-Il numero di entità generate dipende dalla risposta data in fase di generazione del progetto alla domanda
+The number of entities generated depends on the answer provided during the project generation phase to the question:
 
 ```
 ? How many entities to generate for each entity (factories)? (30)

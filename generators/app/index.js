@@ -174,6 +174,7 @@ export default class extends Generator {
   }
 
   writing() {
+    this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name') });
     this.spawnCommandSync('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.6.1', 'server']);
     // this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
     this.spawnCommandSync('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
