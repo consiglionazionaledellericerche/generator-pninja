@@ -1,25 +1,32 @@
 {
   "name": "generator-pninja",
   "version": "0.4.0",
-  "description": "Generator for PHP/SQL/Vite/React applications",
+  "description": "Generator for PHP/Laravel + SQL + Vite + React applications",
   "type": "module",
   "files": [
     "generators"
   ],
+  "main": "generators/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "yeoman-generator",
-    "php",
-    "laravel",
-    "sql",
-    "vite",
-    "react"
+    "Php",
+    "Laravel",
+    "Sql",
+    "Vite",
+    "React",
+    "Tailwind",
+    "Docker"
   ],
   "homepage": "https://www.pninja.tech/",
-  "author": "Gianluca Troiani",
-  "license": "AGPL-3.0-or-later",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Gianluca Troiani",
+    "email": "",
+    "url": "https://github.com/giatro"
+  },
   "devDependencies": {
     "yeoman-generator": "^5.x.x"
   },
