@@ -7,6 +7,13 @@ use App\Http\Controllers\SessionAuthController;
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String()
+    ]);
+});
+
 Route::prefix('auth')->group(function () {
     Route::get('/check-session', [SessionAuthController::class, 'checkSession']);
     Route::post('/initiate-login', [SessionAuthController::class, 'initiateLogin']);
