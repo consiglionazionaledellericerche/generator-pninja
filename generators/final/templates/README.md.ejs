@@ -1,0 +1,56 @@
+# <%= appName %>
+
+**Application generated successfully with ♥️ & [PNinja][pninja-url]!**
+
+Set up the **database**, the **Keycloak server**, and any required **search engine** in `server/.env` before starting the server and client.
+
+Start your **development REST API server** (http://127.0.0.1:8000/api/health) with:
+
+```sh
+npm run server
+```
+
+Start your **development client** (http://localhost:5173/) with:
+
+```sh
+npm run client
+```
+
+Per **inizializzare** il database:
+
+```sh
+npm run migrate:fresh # or npm run migrate:fresh
+```
+
+Per inizializzare il motore di ricerca
+
+```sh
+npm run elastic:migrate                                # Elasticsearch
+npm run scout:sync-index-settings                      # Meilisearch
+cd server                                              # Solr
+php artisan scout:index "App\Models\EntityName"        # Solr
+php artisan scout:index "App\Models\AnotherEntityName" # Solr
+```
+
+Per popolare il database con record di prova
+
+```sh
+npm run db:seed
+```
+
+Il numero di entità generate dipende dalla risposta data in fase di generazione del progetto alla domanda
+
+```
+? How many entities to generate for each entity (factories)? (30)
+```
+
+To start the **Docker composition**:
+
+```sh
+cd ./docker/
+docker compose up --build
+```
+
+If you don't have the databases or search engines required for development, you can refer to the `docker/docker-compose.yml` file to start development containers.
+
+[pninja-url]: https://pninja.tech
