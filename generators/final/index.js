@@ -17,6 +17,6 @@ export default class FinalGenerator extends Generator {
     this.log(`${colors.green(`Set database in server/.env and create tables with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run migrate`)}  # or npm run migrate:fresh or npm run migrate:fresh:seed\n`);
     this.log(`${colors.green(`Start your development server with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run server`)}\n`);
     this.log(`${colors.green(`Start your development client with:`)}\n  ${colors.yellowBright(`${this.config.get('packageManager')} run client`)}\n`);
-    this.log(colors.bold.blueBright(`Leggi il file **README.md** per ulteriori dettagli`) + '\n\n');
+    this.log(`${colors.bold.greenBright(`Check out the `)}${colors.bold.blueBright(`README.md`)}${colors.bold.greenBright(` file for more details`)}\n\n`);
   }
 }
