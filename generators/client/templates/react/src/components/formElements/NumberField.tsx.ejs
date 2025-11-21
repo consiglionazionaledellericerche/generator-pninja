@@ -7,7 +7,8 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface TextFieldProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -18,7 +19,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequi
   };
 }
 
-const NumberField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+const NumberField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...props }) => {
   const { required, min, max } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {
@@ -51,12 +52,7 @@ const NumberField: React.FC<TextFieldProps> = ({ fieldName, label, validations, 
   });
 
   return (
-    <TextFieldAria
-      isInvalid={!!error}
-      isRequired={validations?.required}
-      {...ariaProps}
-      type="number"
-    >
+    <TextFieldAria {...props} isInvalid={!!error} isRequired={validations?.required} type="number">
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value ?? ''} className="form-field" />
       {!error && <FormFieldInfo validations={validations || {}} />}

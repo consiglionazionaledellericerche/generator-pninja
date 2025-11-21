@@ -19,7 +19,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequi
   };
 }
 
-const UrlField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+const UrlField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...props }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
@@ -62,7 +62,7 @@ const UrlField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...
   });
 
   return (
-    <TextFieldAria isInvalid={!!error} isRequired={validations?.required} {...ariaProps} type="url">
+    <TextFieldAria {...props} isInvalid={!!error} isRequired={validations?.required} type="url">
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value || ''} className="form-field" />
       {!error && <FormFieldInfo validations={validations || {}} />}

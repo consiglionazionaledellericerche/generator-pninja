@@ -58,7 +58,7 @@ interface ISelectFieldOptionsLoad {
 }
 
 interface SelectFieldBase
-  extends Omit<SearchFieldPropsAria, 'isInvalid' | 'onChange' | 'onFocus' | 'children'> {
+  extends Omit<SearchFieldPropsAria, 'type' | 'isInvalid' | 'onChange' | 'onFocus' | 'children'> {
   fieldName: string;
   label: string;
   multiple?: boolean;
@@ -101,7 +101,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   initialValue,
   sortDirection = 'asc',
   placeholder,
-  ...ariaProps // Tutte le altre props di SearchField
+  ...props
 }) => {
   const { fetch } = useApi();
   const { t } = useTranslation();
@@ -333,7 +333,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   return (
     <div {...focusWithinProps}>
       <SearchField
-        {...ariaProps}
+        {...props}
         isInvalid={!!error}
         onChange={setSearchTerm}
         onFocus={() => setListIsOpen(true)}

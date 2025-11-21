@@ -7,7 +7,8 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface TextFieldProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -19,7 +20,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequi
   };
 }
 
-const EmailField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+const EmailField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...props }) => {
   const { required, minlength, maxlength, pattern } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
@@ -62,9 +63,9 @@ const EmailField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
 
   return (
     <TextFieldAria
+      {...props}
       isInvalid={!!error}
       isRequired={validations?.required}
-      {...ariaProps}
       type="email"
       autoComplete="email"
     >

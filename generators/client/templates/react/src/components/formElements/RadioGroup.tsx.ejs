@@ -31,7 +31,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   loadingOptions,
   options,
   validations,
-  ...ariaProps
+  ...props
 }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
@@ -51,12 +51,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   });
 
   return (
-    <RadioGroupAria
-      {...field}
-      isInvalid={!!error}
-      isRequired={validations?.required}
-      {...ariaProps}
-    >
+    <RadioGroupAria {...props} {...field} isInvalid={!!error} isRequired={validations?.required}>
       <FormLabel validations={validations}>{label}</FormLabel>
       <div className={error ? 'form-field-error' : 'form-field'}>
         {loadingOptions ? (

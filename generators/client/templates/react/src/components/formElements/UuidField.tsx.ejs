@@ -11,7 +11,8 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface UuidFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface UuidFieldProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   autoGenerate?: boolean;
   fieldName: string;
   label: string;
@@ -26,7 +27,7 @@ const UuidField: React.FC<UuidFieldProps> = ({
   fieldName,
   label,
   validations,
-  ...ariaProps
+  ...props
 }) => {
   const { t } = useTranslation();
   const { required } = validations || {};
@@ -48,15 +49,16 @@ const UuidField: React.FC<UuidFieldProps> = ({
     name: fieldName,
     control,
     rules,
-    defaultValue: getValues(fieldName) || (autoGenerate ? uuidv4() : ''),
+    defaultValue: getValues(fieldName) || (autoGenerate && !props.isDisabled ? uuidv4() : ''),
   });
 
   return (
     <TextFieldAria
+      {...props}
+      type={'text'}
       isInvalid={!!error}
       isRequired={validations?.required}
-      {...ariaProps}
-      className="group"
+      className={`group${props.className ? ` ${props.className}` : ''}`}
     >
       <FormLabel validations={validations}>{label}</FormLabel>
       <div
@@ -72,7 +74,7 @@ const UuidField: React.FC<UuidFieldProps> = ({
           value={field.value || ''}
           className="outline-0 flex-1 border-none placeholder-slate-600 dark:placeholder-slate-300 font-[inherit]"
         />
-        {!ariaProps.isDisabled && !ariaProps.isReadOnly && (
+        {!props.isDisabled && !props.isReadOnly && (
           <Button
             onClick={() => {
               setValue(fieldName, uuidv4(), { shouldValidate: true, shouldDirty: true });

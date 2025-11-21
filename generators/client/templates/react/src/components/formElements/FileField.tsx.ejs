@@ -16,6 +16,7 @@ type TransformedFileData = {
 
 interface FileFieldProps {
   accept?: string;
+  className?: string;
   entity?: unknown;
   fieldName: string;
   label: string;
@@ -24,6 +25,7 @@ interface FileFieldProps {
     minbytes?: number;
     maxbytes?: number;
   };
+  isDisabled?: boolean;
 }
 
 function fileToBase64(file: File): Promise<string> {
@@ -44,7 +46,15 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label, validations }) => {
+const FileField: React.FC<FileFieldProps> = ({
+  accept,
+  className,
+  entity,
+  fieldName,
+  label,
+  validations,
+  ...props
+}) => {
   const { t } = useTranslation();
   const entityData = entity as Record<string, unknown>;
   const hasFile = entityData?.[`${fieldName}_name`] || false;
@@ -148,7 +158,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
   const descriptionId = useId();
 
   return (
-    <>
+    <div className={className}>
       <FormLabel id={labelId} validations={validations}>
         {label}
       </FormLabel>
@@ -237,6 +247,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
           )}
           <input
             type="file"
+            disabled={props.isDisabled}
             required={required && !hasFile && !isMarkedForDeletion}
             aria-invalid={!!error}
             aria-labelledby={labelId}
@@ -254,7 +265,7 @@ const FileField: React.FC<FileFieldProps> = ({ accept, entity, fieldName, label,
       </div>
       {!error && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
       {error && <Error id={errorId} error={error} />}
-    </>
+    </div>
   );
 };
 

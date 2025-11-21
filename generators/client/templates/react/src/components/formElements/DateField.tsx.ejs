@@ -7,7 +7,8 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface TextFieldProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   step?: number;
@@ -16,13 +17,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequi
   };
 }
 
-const DateField: React.FC<TextFieldProps> = ({
-  fieldName,
-  label,
-  step,
-  validations,
-  ...ariaProps
-}) => {
+const DateField: React.FC<TextFieldProps> = ({ fieldName, label, step, validations, ...props }) => {
   const { required } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
@@ -41,12 +36,7 @@ const DateField: React.FC<TextFieldProps> = ({
   });
 
   return (
-    <TextFieldAria
-      isInvalid={!!error}
-      isRequired={validations?.required}
-      {...ariaProps}
-      type="date"
-    >
+    <TextFieldAria {...props} isInvalid={!!error} isRequired={validations?.required} type="date">
       <FormLabel validations={validations}>{label}</FormLabel>
       <Input {...field} value={field.value ?? undefined} className="form-field" step={step ?? 1} />
       {!error && <FormFieldInfo validations={validations || {}} />}

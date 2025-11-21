@@ -8,7 +8,7 @@ import {
 } from 'react-aria-components';
 import { useId } from 'react-aria';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'children'> {
+interface TextFieldProps extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'children'> {
   fieldName: string;
   label: string;
   validations?: {
@@ -16,7 +16,7 @@ interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'childre
   };
 }
 
-const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, ...props }) => {
   const { required } = validations || {};
   const { control } = useFormContext();
   const rules: RegisterOptions<FieldValues, string> | undefined = {};
@@ -39,7 +39,7 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
   });
   const describedById = useId().replace(/:/g, '--');
   return (
-    <TextFieldAria type="color" isInvalid={!!error} {...ariaProps}>
+    <TextFieldAria {...props} type="color" isInvalid={!!error}>
       <FormLabel validations={validations}>{label}</FormLabel>
 
       <div
@@ -68,14 +68,14 @@ const ColorField: React.FC<TextFieldProps> = ({ fieldName, label, validations, .
             <Input
               {...field}
               value={field.value || undefined}
-              className={`h-10 w-10 p-0! -m-2 ${ariaProps.isReadOnly ? ' pointer-events-none' : ''}`}
+              className={`h-10 w-10 p-0! -m-2 ${props.isReadOnly ? ' pointer-events-none' : ''}`}
             />
           </div>
 
           <input
             required={required}
-            disabled={ariaProps.isDisabled}
-            readOnly={ariaProps.isReadOnly}
+            disabled={props.isDisabled}
+            readOnly={props.isReadOnly}
             aria-invalid={!!error}
             type="text"
             value={field.value || ''}

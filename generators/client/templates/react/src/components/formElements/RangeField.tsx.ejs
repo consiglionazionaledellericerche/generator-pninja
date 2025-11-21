@@ -10,11 +10,9 @@ import {
 } from 'react-aria-components';
 import { useId } from 'react-aria';
 
-interface RangeFieldProps extends Omit<SliderProps, 'minValue' | 'maxValue' | 'children'> {
+interface RangeFieldProps extends Omit<SliderProps, 'children'> {
   fieldName: string;
   label: string;
-  minValue: number;
-  maxValue: number;
 }
 
 const RangeField: React.FC<RangeFieldProps> = ({
@@ -22,7 +20,7 @@ const RangeField: React.FC<RangeFieldProps> = ({
   label,
   minValue,
   maxValue,
-  ...ariaProps
+  ...props
 }) => {
   const { control } = useFormContext();
   const { field } = useController({
@@ -36,13 +34,13 @@ const RangeField: React.FC<RangeFieldProps> = ({
   return (
     <SliderContext.Provider value={{ 'aria-describedby': descriptionId }}>
       <Slider
-        {...ariaProps}
+        {...props}
         {...field}
         value={field.value}
-        step={ariaProps.step ? Number(ariaProps.step) : 1}
+        step={props.step ? Number(props.step) : 1}
         minValue={minValue}
         maxValue={maxValue}
-        className={'has-[>[data-orientation=horizontal]]:grid grid-cols-2 gap-0 w-full pb-2'}
+        className={`has-[>[data-orientation=horizontal]]:grid grid-cols-2 gap-0 w-full pb-2${props.className ? ` ${props.className}` : ''}`}
       >
         <FormLabel
           validations={{

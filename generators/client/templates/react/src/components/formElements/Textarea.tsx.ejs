@@ -13,7 +13,8 @@ import type { IJodit } from 'jodit/types/types';
 import { useTranslation, getI18n } from 'react-i18next';
 import './Textarea.css';
 
-interface TextareaProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface TextareaProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   placeholder?: string;
@@ -30,7 +31,7 @@ const Textarea: React.FC<TextareaProps> = ({
   rows,
   editor,
   validations,
-  ...ariaProps
+  ...props
 }) => {
   const { required } = validations || {};
   const { control, setValue } = useFormContext();
@@ -118,8 +119,8 @@ const Textarea: React.FC<TextareaProps> = ({
   const joditConfig = useMemo(
     () => ({
       aria: true,
-      readonly: ariaProps.isReadOnly || false,
-      disabled: ariaProps.isDisabled || false,
+      readonly: props.isReadOnly || false,
+      disabled: props.isDisabled || false,
       tabIndex: 0,
       allowTabNavigation: true,
       hidePoweredByJodit: true,
@@ -170,7 +171,7 @@ const Textarea: React.FC<TextareaProps> = ({
   const [message, accepted, actual] = error?.message?.split(':') || [];
 
   return editor ? (
-    <div>
+    <div {...(props?.className ? { className: String(props?.className) } : {})}>
       <FormLabel id={labelId} validations={validations}>
         {label}
       </FormLabel>
@@ -203,12 +204,12 @@ const Textarea: React.FC<TextareaProps> = ({
       )}
       {!error?.message && validations && Object.keys(validations).length > 0 && (
         <p className="text-sm" id={descriptionId}>
-          <FormFieldInfoContents validations={validations} {...ariaProps} />
+          <FormFieldInfoContents validations={validations} />
         </p>
       )}
     </div>
   ) : (
-    <TextFieldAria isInvalid={!!error} {...ariaProps}>
+    <TextFieldAria {...props} isInvalid={!!error}>
       <FormLabel validations={validations}>{label}</FormLabel>
       <TextAreaAria rows={rows || 10} {...field} value={field.value || ''} className="form-field" />
       {!error && <FormFieldInfo validations={validations || {}} />}

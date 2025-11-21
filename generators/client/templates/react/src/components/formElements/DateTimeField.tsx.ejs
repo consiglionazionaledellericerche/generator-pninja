@@ -7,7 +7,8 @@ import {
   TextFieldProps as TextFieldPropsAria,
 } from 'react-aria-components';
 
-interface TextFieldProps extends Omit<TextFieldPropsAria, 'isInvalid' | 'isRequired' | 'children'> {
+interface TextFieldProps
+  extends Omit<TextFieldPropsAria, 'type' | 'isInvalid' | 'isRequired' | 'children'> {
   fieldName: string;
   label: string;
   step?: number;
@@ -42,9 +43,9 @@ const DateTimeField: React.FC<TextFieldProps> = ({
 
   return (
     <TextFieldAria
+      {...ariaProps}
       isInvalid={!!error}
       isRequired={validations?.required}
-      {...ariaProps}
       type="datetime-local"
     >
       <FormLabel validations={validations}>{label}</FormLabel>

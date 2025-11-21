@@ -10,7 +10,10 @@ import { useId } from 'react-aria';
 import { useTranslation } from 'react-i18next';
 
 interface CheckboxProps
-  extends Omit<CheckboxPropsAria, 'isInvalid' | 'isSelected' | 'isRequired' | 'children'> {
+  extends Omit<
+    CheckboxPropsAria,
+    'isInvalid' | 'isSelected' | 'isRequired' | 'children' | 'onChange' | 'aria-describedby'
+  > {
   fieldName: string;
   label: string;
   validations?: {
@@ -18,7 +21,7 @@ interface CheckboxProps
   };
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...ariaProps }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...props }) => {
   const { t } = useTranslation();
   const descriptionId = useId();
   const errorId = useId();
@@ -43,8 +46,8 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
     <>
       <div>
         <CheckboxAria
+          {...props}
           aria-describedby={error ? errorId : validations ? descriptionId : undefined}
-          {...ariaProps}
           {...field}
           isInvalid={!!error}
           isRequired={required}
@@ -52,7 +55,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...a
           onChange={() =>
             setValue(fieldName, !field.value, { shouldValidate: true, shouldDirty: true })
           }
-          className="group"
+          className={`group block${props.className ? ` ${props.className}` : ''}`}
         >
           <div className="text-sm font-medium mb-1">
             {label}
