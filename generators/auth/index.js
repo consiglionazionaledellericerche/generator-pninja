@@ -46,8 +46,8 @@ export default class AuthGenerator extends Generator {
       return;
     }
     if (this.answers.authentication === 'keycloak') {
-      this.spawnCommandSync('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
-      this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
+      await this.spawn('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
 
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       this.fs.write(this.destinationPath('server/.env'), envContent + `

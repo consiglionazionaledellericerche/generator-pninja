@@ -50,25 +50,25 @@ export default class SearchGenerator extends Generator {
     const snakeName = to.snake(appName);
     const searchEngine = this.answers.searchEngine;
     if (searchEngine !== 'null') {
-      this.spawnCommandSync('composer', ['require', 'laravel/scout'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'laravel/scout'], { cwd: 'server' });
     }
     if (searchEngine === 'elastic') {
-      this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
-      this.spawnCommandSync('composer', ['require', 'babenkoivan/elastic-scout-driver'], { cwd: 'server' });
-      this.spawnCommandSync('php', ['artisan', 'vendor:publish', '--provider="Elastic\Migrations\ServiceProvider"'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'babenkoivan/elastic-scout-driver'], { cwd: 'server' });
+      await this.spawn('php', ['artisan', 'vendor:publish', '--provider="Elastic\Migrations\ServiceProvider"'], { cwd: 'server' });
     }
     if (searchEngine === 'meilisearch') {
-      this.spawnCommandSync('composer', ['require', 'meilisearch/meilisearch-php'], { cwd: 'server' });
-      this.spawnCommandSync('composer', ['require', 'http-interop/http-factory-guzzle'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'meilisearch/meilisearch-php'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'http-interop/http-factory-guzzle'], { cwd: 'server' });
     }
     if (searchEngine === 'typesense') {
-      this.spawnCommandSync('composer', ['require', 'typesense/typesense-php'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'typesense/typesense-php'], { cwd: 'server' });
     }
     if (searchEngine === 'algolia') {
-      this.spawnCommandSync('composer', ['require', 'algolia/algoliasearch-client-php'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'algolia/algoliasearch-client-php'], { cwd: 'server' });
     }
     if (searchEngine === 'solr') {
-      this.spawnCommandSync('composer', ['require', 'klaasie/scout-solr-engine'], { cwd: 'server' });
+      await this.spawn('composer', ['require', 'klaasie/scout-solr-engine'], { cwd: 'server' });
     }
     let searchEngineConfig = `
 SCOUT_DRIVER=${searchEngine}
