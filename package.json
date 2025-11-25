@@ -28,7 +28,7 @@
     "url": "https://github.com/giatro"
   },
   "devDependencies": {
-    "yeoman-generator": "^5.x.x"
+    "yeoman-generator": "^7.5.1"
   },
   "dependencies": {
     "ansi-colors": "^4.1.3",
