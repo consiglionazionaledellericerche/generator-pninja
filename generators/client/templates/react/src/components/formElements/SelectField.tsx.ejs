@@ -251,7 +251,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
       try {
         const url = new URL(String(optionsLoad?.url), window.location.origin);
         url.searchParams.set('ids', values.join(','));
-        url.searchParams.set('per_page', '100');
+        url.searchParams.set('per_page', values.length.toString());
 
         const response = await fetch(url.toString());
         const result: PaginatedResponse = await response.json();
