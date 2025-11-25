@@ -126,6 +126,9 @@ const SelectField: React.FC<SelectFieldProps> = ({
               current_page < last_page ? buildApiUrl(filterText, current_page + 1) : undefined,
           };
         } catch (error: unknown) {
+          if (error instanceof DOMException && error.name === 'AbortError') {
+            return { items: [], cursor: undefined };
+          }
           console.error('Error fetching options:', error);
           addNotification({
             type: 'error',
