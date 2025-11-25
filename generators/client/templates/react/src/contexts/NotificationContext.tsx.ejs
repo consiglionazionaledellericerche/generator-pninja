@@ -159,7 +159,6 @@ export function NotificationProvider({
   );
 
   useEffect(() => {
-    console.log('Added notification', notifications.length + 1);
     if (notifications.length === 0) return;
     if (!maxNotifications) return;
     if (notifications.length > maxNotifications) {
