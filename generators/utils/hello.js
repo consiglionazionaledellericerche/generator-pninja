@@ -1,4 +1,7 @@
 import colors from 'ansi-colors';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const packageJson = require('../../package.json');
 export function hello(log) {
   log(colors.whiteBright(`
                &&&&&&&&&&$$$x+;;              
@@ -36,5 +39,5 @@ PPP       NNN  NNNNN III NNN  NNNN JJJ AAA  AA
 PPP       NNN   NNNN III NNN  NNNN JJJ  AAAAAA
 //pninja.tech                    JJJJJ        
 `));
-  log(`\n${colors.bold.whiteBright(`PNinja`)} ${colors.yellow(`v.0.4.0`)} | Yeoman generator for ${colors.whiteBright(`PHP`)}, ${colors.whiteBright(`SQL`)}, ${colors.whiteBright(`JavaScript`)} modern web applications`);
+  log(`\n${colors.bold.whiteBright(`PNinja`)} ${colors.yellow(`${packageJson.version}`)} | Yeoman generator for ${colors.whiteBright(`PHP`)}, ${colors.whiteBright(`SQL`)}, ${colors.whiteBright(`JavaScript`)} modern web applications`);
 }
