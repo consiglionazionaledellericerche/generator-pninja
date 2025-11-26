@@ -4,21 +4,14 @@
 
 # generator-pninja
 
-<p align="center">
-  Generate a full <strong>Laravel + React + Vite</strong> application from a single <strong>JDL model</strong>.
-  <br>
-  Backend + Frontend + Docker + Database — ready in seconds ⚡
-</p>
+Generate a full **Laravel + React + Vite** application from a single **JDL model**.
+Backend + Frontend + Docker + Database — ready in seconds ⚡
 
-<p align="center">
-  <a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
-  <a href="https://github.com/giatro/generator-pninja"><img alt="GitHub Repo" src="https://img.shields.io/github/stars/giatro/generator-pninja?style=social"></a>
-  <a href="https://badge.fury.io/js/generator-pninja"><img alt="npm version" src="https://badge.fury.io/js/generator-pninja.svg"></a>
-  <a href="https://npm.chart.dev/generator-pninja?primary=sky&gray=cool&theme=dark"><img alt="Downloads" src="https://img.shields.io/npm/dm/generator-pninja.svg?label=Downloads"></a>
-  <img alt="Node Support" src="https://img.shields.io/badge/node-%3E%3D22-green">
-  <a href="https://snyk.io/test/npm/generator-pninja"><img alt="Known Vulnerabilities" src="https://snyk.io/test/npm/generator-pninja/badge.svg"></a>
-  <a href="https://snyk.io/advisor/npm-package/generator-pninja"><img alt="Package Health" src="https://snyk.io/advisor/npm-package/generator-pninja/badge.svg"></a>
-</p>
+[![License][license-badge]][license-url]
+[![npm version][npm-version-badge]][npm-version-url]
+[![Downloads][npmcharts-image]][npmcharts-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
+[![GitHub version][gh-image]][gh-url]
 
 ## License
 
@@ -105,6 +98,12 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 - Authentication improvements ([Laravel Sanctum][sanctum-url] / [OAuth2][oauth2-url])
 - GitHub CI
 
+## GitHub Repository
+
+The source code for **generator-pninja** is hosted on GitHub. You can access the official repository at the following link:
+
+[Generator PNinja GitHub Repository](https://github.com/consiglionazionaledellericerche/generator-pninja)
+
 [laravel-url]: https://laravel.com/
 [sqlite-url]: https://www.sqlite.org/
 [mysql-url]: https://www.mysql.com/
@@ -132,8 +131,6 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 [docker-compose-url]: https://docs.docker.com/compose/
 [license-badge]: https://img.shields.io/badge/License-Apache_2.0-blue.svg
 [license-url]: https://opensource.org/licenses/Apache-2.0
-[github-badge]: https://img.shields.io/badge/GitHub-giatro-181717?logo=github
-[github-url]: https://github.com/giatro
 [npm-version-badge]: https://badge.fury.io/js/generator-pninja.svg
 [npm-version-url]: https://badge.fury.io/js/generator-pninja
 [pninja-logo]: https://www.pninja.tech/assets/pninja_logo.svg
@@ -144,3 +141,5 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 [health-image]: https://snyk.io/advisor/npm-package/generator-pninja/badge.svg
 [health-url]: https://snyk.io/advisor/npm-package/generator-pninja
 [vite-url]: https://vite.dev/
+[gh-image]: https://badge.fury.io/gh/consiglionazionaledellericerche%2Fgenerator-pninja.svg
+[gh-url]: https://badge.fury.io/gh/consiglionazionaledellericerche%2Fgenerator-pninja

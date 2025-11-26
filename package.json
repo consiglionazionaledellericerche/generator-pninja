@@ -21,10 +21,14 @@
     "Docker"
   ],
   "homepage": "https://www.pninja.tech/",
+  "bugs": "https://github.com/consiglionazionaledellericerche/generator-pninja/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/consiglionazionaledellericerche/generator-pninja.git"
+  },
   "license": "Apache-2.0",
   "author": {
     "name": "Gianluca Troiani",
-    "email": "",
     "url": "https://github.com/giatro"
   },
   "dependencies": {
