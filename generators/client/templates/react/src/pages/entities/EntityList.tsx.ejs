@@ -190,7 +190,7 @@ export default function <%= entity.name %>List() {
 <%  for(column of columns) { -%>
                   <SortHeader field="<%-column%>" label={t('entities:<%-to.snake(entity.name)%>.<%-column%>')} />
 <%  } -%>
-<%                if (false) for(r of relatedEntities) { -%>
+<%                for(r of relatedEntities) { -%>
                   <th scope="col">{t('entities:<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
 <%                } -%>
                   <th scope="col">{t('actions.crud.actions')}</th>
@@ -220,7 +220,7 @@ export default function <%= entity.name %>List() {
                     </td>
 <%                    } -%>
 <%                  } -%>
-<%                  if (false) for(r of relatedEntities) { -%>
+<%                  for(r of relatedEntities) { -%>
                     <td>
 <%                  if(r.isArray) { -%>
                       {row?.<%-r.field%>?.map((row, index) => (<Fragment key={index}>{index !== 0 ? ', ': ''}<Link className="text-link" to={`/entities/<%=to.slug(pluralize(r.related))%>/view/${row?.id}`}>{row?.<%-to.snake(r.labelField)%>}</Link></Fragment>))}
