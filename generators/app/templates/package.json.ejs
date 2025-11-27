@@ -7,6 +7,7 @@
     "dependencies": {
     },
     "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
         "client": "cd client && npm i --loglevel=error && npm run dev",
         "dump-server": "cd server && php artisan dump-server",
         "migrate": "cd server && php artisan migrate",
@@ -24,5 +25,8 @@
 <%  } -%>
         "seed": "cd server && php artisan db:seed",
         "server": "cd server && php artisan serve"
-    }
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
