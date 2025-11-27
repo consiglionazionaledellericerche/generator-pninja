@@ -27,11 +27,12 @@ class <%- className %>Controller extends Controller
     // use HandlesUserRoles;
 
     // private $viewerRole = 'viewer';
+    // private $editorRole = 'editor';
 
     public function index(Request $request)
     {
         try {
-            // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
+            if (!$this->canViewData()) return response()->json(['error' => 'Forbidden'], 403);
 <%  if (searchEngine !== 'null') {-%>
             $search = $request->has('search') ? ScoutQuerySanitizer::sanitize($request->get('search')) : null;
 <%  } -%>
@@ -112,6 +113,7 @@ class <%- className %>Controller extends Controller
     public function show($id)
     {
         try {
+            if (!$this->canViewData()) return response()->json(['error' => 'Forbidden'], 403);
 <%          if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
 <%          } else { -%>
@@ -126,6 +128,7 @@ class <%- className %>Controller extends Controller
     public function store(Request $request)
     {
         try {
+            if (!$this->canCreateData()) return response()->json(['error' => 'Forbidden'], 403);
 <%  if(isEmpty(validationsStore)) {-%>
             $data = $request->all();
 <%  } else {-%>
@@ -184,6 +187,8 @@ class <%- className %>Controller extends Controller
     public function update($id, Request $request)
     {
         try {
+            if (!$this->canModifyData()) return response()->json(['error' => 'Forbidden'], 403);
+
 <%  if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
 <%  } else { -%>
@@ -257,6 +262,7 @@ class <%- className %>Controller extends Controller
     public function destroy($id)
     {
         try {
+            if (!$this->canDeleteData()) return response()->json(['error' => 'Forbidden'], 403);
             $<%- entityName %> = <%- className %>::findOrFail($id);
             $<%- entityName %>->delete();
             return response(null, 200);
@@ -292,4 +298,32 @@ class <%- className %>Controller extends Controller
         }
     }
 <%  }-%>
+
+    private function canViewData()
+    {
+        // Implement role checking logic here
+        // return $this->userHasRole($this->viewerRole);
+        return true;
+    }
+
+    private function canCreateData()
+    {
+        // Implement role checking logic here
+        // return $this->userHasRole($this->editorRole);
+        return true;
+    }
+
+    private function canModifyData()
+    {
+        // Implement role checking logic here
+        // return $this->userHasRole($this->editorRole);
+        return true;
+    }
+
+    private function canDeleteData()
+    {
+        // Implement role checking logic here
+        // return $this->userHasRole($this->editorRole);
+        return true;
+    }
 }

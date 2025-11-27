@@ -181,6 +181,8 @@ interface <%= entity.name %>FormProps {
   onCancel: () => void;
 }
 
+const canDelete = () => true; // Placeholder for permission logic
+
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
   useAutoShortcuts();
@@ -392,7 +394,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
             <kbd className="kdb-shortcut">↵</kbd>
           </button>
-          {<%= to.camel(entity.name)-%>?.id && <<%= entity.name %>DeleteButton id={<%= to.camel(entity.name)-%>.id} />}
+          {<%= to.camel(entity.name)-%>?.id && canDelete() && <<%= entity.name %>DeleteButton id={<%= to.camel(entity.name)-%>.id} />}
         </div>
       </form>
     </FormProvider>

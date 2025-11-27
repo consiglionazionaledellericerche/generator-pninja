@@ -148,6 +148,9 @@ export default function <%= entity.name %>List() {
     document.title = t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
+  const canEdit = () => true; // Placeholder for permission logic
+  const canView = () => true; // Placeholder for permission logic
+
   return (
     <>
       <h1 className="text-2xl mb-4">{t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
@@ -231,8 +234,8 @@ export default function <%= entity.name %>List() {
 <%                  } -%>
                     <td className="text-nowrap w-0 uppercase">
                       <div className="flex space-x-2">
-                        <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>
-                        <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>
+                        {canView() && <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>}
+                        {canEdit() && <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>}
                       </div>
                     </td>
                   </tr>

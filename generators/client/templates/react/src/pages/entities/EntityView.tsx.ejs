@@ -27,6 +27,8 @@ interface <%= entity.name %>ViewParams extends Record<string, string | undefined
   id: string;
 }
 
+const canDelete = () => true; // Placeholder for permission logic
+
 export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
   if (!data) return '';
@@ -163,7 +165,7 @@ export default function <%= entity.name %>View() {
         <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
           {t('actions.crud.edit')}
         </Link>
-        <<%= entity.name %>DeleteButton id={id} />
+        {canDelete() && <<%= entity.name %>DeleteButton id={id} />}
       </div>
       )}
     </>
