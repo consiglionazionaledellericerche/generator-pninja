@@ -43,6 +43,7 @@ export default class AuthGenerator extends Generator {
                 type: 'checkbox',
                 name: 'languages',
                 message: 'Please choose additional languages to install',
+                default: this.config.get('languages') || [],
                 choices: (answers) => {
                     return getAvailableLanguages(answers.nativeLanguage);
                 },

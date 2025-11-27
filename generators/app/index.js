@@ -116,7 +116,7 @@ export default class extends Generator {
         type: "list",
         name: "dbms",
         message: "Your DBMS",
-        default: "sqlite",
+        default: this.config.get('dbms') || 'sqlite',
         choices: [
           {
             name: `SQLite ${colors.dim('(Lightweight, serverless, file-based)')}`,
