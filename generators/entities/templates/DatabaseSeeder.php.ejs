@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 <% entities.forEach(function(entity) { %>
 use App\Models\<%= entity.name %>;<% }); %>
 class DatabaseSeeder extends Seeder
@@ -12,12 +13,103 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-<% entities.forEach(function(entity) { %>        while(<%= entity.name %>::count() < <%= n %>) <%= entity.name %>::factory()->create();<%= "\n"%><% }); %>
-        // Many-to-many
-<% manyToMany.forEach(function(rel) { %>        <%= rel.fromEntity %>::all()->each(function ($entity) {
-            $entity-><%= rel.relPropery %>()->attach(
-                <%= rel.toEntity %>::all()->random(<%= Math.round(n/2) %>)->pluck('id')->toArray()
-            );
-        });
-<% }); %>    }
+<% entities.forEach(function(entity) { -%>
+        $this->seedModel(<%= entity.name %>::class, '<%= entity.name %>.csv', <%= n %>);
+<% }); -%>
+
+        // Many-to-many relationships
+<% manyToMany.forEach(function(rel) { -%>
+        $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %><%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
+<% }); -%>
+    }
+
+    /**
+     * Seed from CSV or factory
+     */
+    private function seedModel(string $modelClass, string $csvFilename, int $minCount): void
+    {
+        $csvPath = database_path("seeders/csv/{$csvFilename}");
+
+        if (File::exists($csvPath)) {
+            $this->seedFromCsv($modelClass, $csvPath);
+        } else {
+            // Use the factory
+            while ($modelClass::count() < $minCount) {
+                $modelClass::factory()->create();
+            }
+        }
+    }
+
+    /**
+     * Load data from a CSV file
+     */
+    private function seedFromCsv(string $modelClass, string $csvPath): void
+    {
+        $csv = array_map('str_getcsv', file($csvPath));
+        $headers = array_shift($csv);
+
+        foreach ($csv as $row) {
+            $data = array_combine($headers, $row);
+
+            // Rimuovi campi vuoti o null
+            $data = array_filter($data, function($value) {
+                return $value !== '' && $value !== null;
+            });
+
+            $modelClass::create($data);
+        }
+    }
+
+    /**
+     * Seed many-to-many relationships
+     */
+    private function seedManyToMany(
+        string $modelClass,
+        string $relationName,
+        string $relatedClass,
+        string $csvFilename,
+        int $randomCount
+    ): void {
+        $csvPath = database_path("seeders/csv/{$csvFilename}");
+
+        if (File::exists($csvPath)) {
+            $this->seedManyToManyFromCsv($modelClass, $relationName, $csvPath);
+        } else {
+            // Use random associations
+            $modelClass::all()->each(function ($entity) use ($relationName, $relatedClass, $randomCount) {
+                $entity->$relationName()->attach(
+                    $relatedClass::all()->random($randomCount)->pluck('id')->toArray()
+                );
+            });
+        }
+    }
+
+    /**
+     * Load many-to-many relationships from CSV
+     * The CSV must have columns: model_id, related_id
+     */
+    private function seedManyToManyFromCsv(string $modelClass, string $relationName, string $csvPath): void
+    {
+        $csv = array_map('str_getcsv', file($csvPath));
+        $headers = array_shift($csv);
+
+        $grouped = [];
+        foreach ($csv as $row) {
+            $data = array_combine($headers, $row);
+            $modelId = $data['model_id'];
+            $relatedId = $data['related_id'];
+
+            if (!isset($grouped[$modelId])) {
+                $grouped[$modelId] = [];
+            }
+            $grouped[$modelId][] = $relatedId;
+        }
+
+        foreach ($grouped as $modelId => $relatedIds) {
+            $model = $modelClass::find($modelId);
+            if ($model) {
+                $model->$relationName()->attach($relatedIds);
+            }
+        }
+    }
 }
