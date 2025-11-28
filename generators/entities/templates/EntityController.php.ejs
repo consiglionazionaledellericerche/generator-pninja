@@ -1,5 +1,8 @@
 <?php
 <%
+function isAdminOnly() {
+    return ['AppUser','AppRole'].includes(className);
+}
 function isEmpty(obj) {
   for (let key in obj) {
     return false;
@@ -16,18 +19,17 @@ use App\Models\<%- name %>;
 <%      })-%>
 <%  }-%>
 use App\Traits\HandlesApiErrors;
-// use App\Traits\HandlesUserRoles;
+<%- isAdminOnly() ? '': '// ' %>use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class <%- className %>Controller extends Controller
 {
     use HandlesApiErrors;
-    // use HandlesUserRoles;
+    <%- isAdminOnly() ? '': '// ' %>use HandlesUserRoles;
 
-    // private $viewerRole = 'viewer';
-    // private $editorRole = 'editor';
+    <%- isAdminOnly() ? '': '// ' %>private $viewerRole = 'admin';
+    <%- isAdminOnly() ? '': '// ' %>private $editorRole = 'admin';
 
     public function index(Request $request)
     {
@@ -301,29 +303,37 @@ class <%- className %>Controller extends Controller
 
     private function canViewData()
     {
-        // Implement role checking logic here
-        // return $this->userHasRole($this->viewerRole);
+<%  if(isAdminOnly()) { -%>
+        return $this->userHasRole($this->viewerRole);
+<%  } else { -%>
         return true;
+<%  } -%>
     }
 
     private function canCreateData()
     {
-        // Implement role checking logic here
-        // return $this->userHasRole($this->editorRole);
+<%  if(isAdminOnly()) { -%>
+        return $this->userHasRole($this->editorRole);
+<%  } else { -%>
         return true;
+<%  } -%>
     }
 
     private function canModifyData()
     {
-        // Implement role checking logic here
-        // return $this->userHasRole($this->editorRole);
+<%  if(isAdminOnly()) { -%>
+        return $this->userHasRole($this->editorRole);
+<%  } else { -%>
         return true;
+<%  } -%>
     }
 
     private function canDeleteData()
     {
-        // Implement role checking logic here
-        // return $this->userHasRole($this->editorRole);
+<%  if(isAdminOnly()) { -%>
+        return $this->userHasRole($this->editorRole);
+<%  } else { -%>
         return true;
+<%  } -%>
     }
 }

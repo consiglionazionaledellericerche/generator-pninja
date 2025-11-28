@@ -15,9 +15,8 @@ export default class SearchGenerator extends Generator {
   }
 
   async prompting() {
-    let prompts = [];
-    if (this.options["fromMain"] || true) {
-      prompts = [...prompts, ...[{
+    this.answers = await this.prompt([
+      {
         store: true,
         type: "list",
         name: "searchEngine",
@@ -32,9 +31,8 @@ export default class SearchGenerator extends Generator {
           { name: `Solr ${colors.dim('(Self-hosted, mature, enterprise-ready, rich feature set)')}`, value: 'solr' },
           { name: `None ${colors.dim('(No search/filtering features - sure about that? 🤔)')}`, value: "null" },
         ]
-      }]]
-    }
-    this.answers = await this.prompt(prompts);
+      }
+    ]);
   }
 
   configuring() {

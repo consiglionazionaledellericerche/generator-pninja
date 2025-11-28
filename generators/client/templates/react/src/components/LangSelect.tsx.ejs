@@ -19,13 +19,13 @@ export function LangSelect() {
     <MenuTrigger>
       <Button
         aria-label={t('ui.langSelect')}
-        className="w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
+        className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
         <Languages aria-hidden size={16} />
         {languagesData.find(
           (lang) => lang.value === i18n.language || lang.value === i18n.language.split('-')[0]
         )?.name || i18n.language}
-        <ChevronDown aria-hidden size={16} />
+        <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
         <Menu

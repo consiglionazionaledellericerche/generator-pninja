@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Session;
+use App\Models\AppUser;
 
 trait HandlesUserRoles
 {
@@ -17,26 +18,8 @@ trait HandlesUserRoles
     {
         $userInfo = Session::get('authenticated_user');
         if (!$userInfo) return false;
-
-        if (!array_key_exists('resource_access', $userInfo)) return false;
-
-        $resourceAccess = $userInfo['resource_access'] ?? [];
-        if (empty($resourceAccess)) return false;
-
-        $clientId = env('KEYCLOAK_CLIENT_ID') ?? '';
-
-        // Lancia un errore se non trova il clientId
-        if (empty($clientId)) {
-            throw new \Exception('Client ID not configured in environment variables');
-        }
-
-        if (!array_key_exists($clientId, $resourceAccess)) return false;
-
-        if (!array_key_exists('roles', $resourceAccess[$clientId])) return false;
-
-        $roles = ($resourceAccess[$clientId] ?? [])['roles'];
+        $roles = AppUser::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
         if (empty($roles)) return false;
-
         return in_array($role, $roles);
     }
 

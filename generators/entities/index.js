@@ -79,6 +79,103 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = parseJDL(entitiesFilePath);
 
+    // Adding AppUser
+    parsedJDL.entities.push({
+      "annotations": [],
+      "name": "AppUser",
+      "tableName": "AppUser",
+      "body": [
+        {
+          "name": "login",
+          "type": "String",
+          "validations": [
+            {
+              "key": "required",
+              "value": ""
+            },
+            {
+              "key": "unique",
+              "value": ""
+            }
+          ],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "validations": [
+            {
+              "key": "required",
+              "value": ""
+            }
+          ],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        }
+      ],
+      "javadoc": null
+    });
+
+    // Adding AppRole
+    parsedJDL.entities.push({
+      "annotations": [],
+      "name": "AppRole",
+      "tableName": "AppRole",
+      "body": [
+        {
+          "name": "name",
+          "type": "String",
+          "validations": [
+            {
+              "key": "required",
+              "value": ""
+            },
+            {
+              "key": "unique",
+              "value": ""
+            }
+          ],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "description",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        }
+      ],
+      "javadoc": null
+    });
+    // Adding relationship between AppUser and AppRole
+    parsedJDL.relationships.push({
+      "from": {
+        "name": "AppUser",
+        "injectedField": "roles",
+        "javadoc": null,
+        "required": false,
+        "injectedFieldLabel": "name"
+      },
+      "to": {
+        "name": "AppRole",
+        "injectedField": "users",
+        "javadoc": null,
+        "required": false,
+        "injectedFieldLabel": "name"
+      },
+      "options": [],
+      "cardinality": "ManyToMany"
+    },);
+
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
         throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
@@ -144,7 +241,9 @@ export default class EntityGenerator extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
-    this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/database/seeders/csv/.gitkeep`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppUser.csv"), this.destinationPath(`server/database/seeders/csv/AppUser.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppRole.csv"), this.destinationPath(`server/database/seeders/csv/AppRole.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppUser_AppRole.csv"), this.destinationPath(`server/database/seeders/csv/AppUser_AppRole.csv`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));

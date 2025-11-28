@@ -46,19 +46,22 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
-<%  for (const entity of entities) {-%>
+<%  for (const entity of entities.filter(entity => !['AppRole','AppUser'].includes(entity.name))) {-%>
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%>List />} />
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
 <%  }-%>
             </Route>
-            <Route
-              element={
-                <ProtectedRoute requiredRoles={['admin', 'superuser', 'master']} requireAll={false} />
-              }
-            >
-              <Route path="/admin" element={<div>ADMIN EXAMPLE</div>} />
+            <Route element={<ProtectedRoute requiredRoles={['admin']} requireAll={false} />}>
+              <Route path="/entities/app-users" element={<AppUserList />} />
+              <Route path="/entities/app-users/view/:id" element={<AppUserView />} />
+              <Route path="/entities/app-users/edit/:id" element={<AppUserEdit />} />
+              <Route path="/entities/app-users/new" element={<AppUserEdit />} />
+              <Route path="/entities/app-roles" element={<AppRoleList />} />
+              <Route path="/entities/app-roles/view/:id" element={<AppRoleView />} />
+              <Route path="/entities/app-roles/edit/:id" element={<AppRoleEdit />} />
+              <Route path="/entities/app-roles/new" element={<AppRoleEdit />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

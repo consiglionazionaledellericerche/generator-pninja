@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-const KEYCLOAK_CLIENT_ID = import.meta.env.VITE_KEYCLOAK_CLIENT_ID || '';
-
 const getRolesFromSession = (): string[] => {
   console.info('Retrieving roles from session');
   try {
@@ -12,7 +10,7 @@ const getRolesFromSession = (): string[] => {
 
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      return response?.user?.resource_access[KEYCLOAK_CLIENT_ID]?.roles || [];
+      return response?.app_roles || [];
     }
 
     return [];

@@ -9,6 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('<%-pivotName%>', function (Blueprint $table) {
+            $table->id();
             $table->unique(['<%- fromForeignId %>_id', '<%- toForeignId %>_id']);
             $table->foreignId('<%- fromForeignId %>_id')->nullable()->constrained('<%-toTabName%>')->cascadeOnDelete();
             $table->foreignId('<%- toForeignId %>_id')->nullable()->constrained('<%-fromTabName%>')->cascadeOnDelete();
