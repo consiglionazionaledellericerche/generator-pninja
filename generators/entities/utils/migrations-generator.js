@@ -1,13 +1,12 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import { parseJDL } from '../../utils/jdlParser.js';
 const tab = (n) => (Array(n)).fill('    ').join('');
 
 export class MigrationsGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseJDL(this.entitiesFilePath);
+        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
         this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     }
     convertFieldType(jhipsterType, enums) {

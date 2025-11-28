@@ -1,6 +1,5 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import { parseJDL } from '../../utils/jdlParser.js';
 import { getWits } from '../../utils/getWiths.js';
 
 const getValidations = (e, relationships, op) => {
@@ -150,7 +149,7 @@ export class ControllersGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseJDL(this.entitiesFilePath);
+        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
     }
     generateControllers() {
         const { enums, entities, relationships } = this.parsedJDL;

@@ -1,6 +1,5 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-import { parseJDL } from '../../utils/jdlParser.js';
 
 const entityHasBlob = (entity) => entity.body.reduce((acc, prop) => {
     if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
@@ -14,7 +13,7 @@ export class RoutersGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseJDL(this.entitiesFilePath);
+        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
     }
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 

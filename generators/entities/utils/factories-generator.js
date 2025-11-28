@@ -1,5 +1,4 @@
 import to from 'to-case';
-import { parseJDL } from '../../utils/jdlParser.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
 
@@ -7,7 +6,7 @@ export class FactoriesGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = parseJDL(this.entitiesFilePath);
+        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
     }
 
     generateFactories(n = 5) {

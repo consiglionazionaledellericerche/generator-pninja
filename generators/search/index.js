@@ -2,7 +2,6 @@ import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
-import { parseJDL } from '../utils/jdlParser.js';
 
 export default class SearchGenerator extends Generator {
   static namespace = 'pninja:search';
@@ -109,7 +108,7 @@ SOLR_PATH=/`;
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
     }
-    const { entities } = parseJDL(this.config.get('entitiesFilePath'));
+    const { entities } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
     const mailiserachIndexSettings = searchEngine === 'meilisearch' ? entities.reduce((res, entity) => {
       const indexName = `${to.snake(pluralize(entity.tableName))}`;
       res += `
@@ -145,7 +144,7 @@ SOLR_PATH=/`;
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }
     if (searchEngine === 'elastic') {
-      const { entities } = parseJDL(this.config.get('entitiesFilePath'));
+      const { entities } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
       for (const entity of entities) {
         const indexName = to.snake(pluralize(entity.tableName));

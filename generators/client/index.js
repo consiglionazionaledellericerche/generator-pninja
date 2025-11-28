@@ -2,7 +2,6 @@ import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import { createReactClient } from './react.inc.js';
 import { hello } from '../utils/hello.js';
-import { parseJDL } from '../utils/jdlParser.js';
 import { LANGUAGES, DEFAULT_LANGUAGE, getAvailableLanguages } from './config/languages.js';
 const tab = '    ';
 export default class AuthGenerator extends Generator {
@@ -60,7 +59,7 @@ export default class AuthGenerator extends Generator {
     }
 
     async writing() {
-        const parsedJDL = parseJDL(this.config.get('entitiesFilePath'));
+        const parsedJDL = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
         if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
     }
 };

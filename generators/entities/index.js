@@ -85,7 +85,7 @@ export default class EntityGenerator extends Generator {
       }
     });
 
-    this.fs.writeJSON(this.destinationPath(`.pninja/Entities.json`), parsedJDL);
+    this.fs.writeJSON(this.destinationPath('.pninja/Entities.json'), parsedJDL);
 
     // JDL > Migrations
     try {
