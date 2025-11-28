@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 
         // Many-to-many relationships
 <% manyToMany.forEach(function(rel) { -%>
-        $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %><%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
+        $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %>_<%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
 <% }); -%>
     }
 
