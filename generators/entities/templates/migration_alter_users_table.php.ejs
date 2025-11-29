@@ -12,16 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            // Aggiungi nuove colonne
+            $table->string('login')->unique()->after('name');
+            $table->string('description')->nullable()->after('login');
+        });
+
+        // Rimuovi indici/constraints prima di droppare le colonne
+        Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['email']);
         });
+
         Schema::table('users', function (Blueprint $table) {
-            $table->string('login')->nullable()->after('id');
-            $table->string('description')->nullable()->after('name');
-            
-            $table->string('email')->nullable()->change();
-            $table->timestamp('email_verified_at')->nullable()->change();
-            $table->string('password')->nullable()->change();
-            $table->rememberToken()->nullable()->change();
+            $table->dropColumn([
+                'email',
+                'email_verified_at',
+                'password',
+                'remember_token'
+            ]);
         });
     }
 
@@ -31,12 +38,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['login', 'description']);
-            
-            $table->string('email')->nullable(false)->change();
-            $table->timestamp('email_verified_at')->nullable()->change(); // questa rimane nullable
-            $table->string('password')->nullable(false)->change();
-            $table->rememberToken()->nullable(false)->change();
         });
     }
 };
