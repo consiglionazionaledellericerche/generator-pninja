@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropUnique(['email']);
+        });
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('login')->nullable()->after('id');
+            $table->string('description')->nullable()->after('name');
+            
+            $table->string('email')->nullable()->change();
+            $table->timestamp('email_verified_at')->nullable()->change();
+            $table->string('password')->nullable()->change();
+            $table->rememberToken()->nullable()->change();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['login', 'description']);
+            
+            $table->string('email')->nullable(false)->change();
+            $table->timestamp('email_verified_at')->nullable()->change(); // questa rimane nullable
+            $table->string('password')->nullable(false)->change();
+            $table->rememberToken()->nullable(false)->change();
+        });
+    }
+};

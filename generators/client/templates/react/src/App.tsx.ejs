@@ -46,7 +46,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route element={<ProtectedRoute />}>
-<%  for (const entity of entities.filter(entity => !['AppRole','AppUser'].includes(entity.name))) {-%>
+<%  for (const entity of entities.filter(entity => !['Role','User'].includes(entity.name))) {-%>
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%>List />} />
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
               <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
@@ -54,14 +54,14 @@ function App() {
 <%  }-%>
             </Route>
             <Route element={<ProtectedRoute requiredRoles={['admin']} requireAll={false} />}>
-              <Route path="/entities/app-users" element={<AppUserList />} />
-              <Route path="/entities/app-users/view/:id" element={<AppUserView />} />
-              <Route path="/entities/app-users/edit/:id" element={<AppUserEdit />} />
-              <Route path="/entities/app-users/new" element={<AppUserEdit />} />
-              <Route path="/entities/app-roles" element={<AppRoleList />} />
-              <Route path="/entities/app-roles/view/:id" element={<AppRoleView />} />
-              <Route path="/entities/app-roles/edit/:id" element={<AppRoleEdit />} />
-              <Route path="/entities/app-roles/new" element={<AppRoleEdit />} />
+              <Route path="/entities/users" element={<UserList />} />
+              <Route path="/entities/users/view/:id" element={<UserView />} />
+              <Route path="/entities/users/edit/:id" element={<UserEdit />} />
+              <Route path="/entities/users/new" element={<UserEdit />} />
+              <Route path="/entities/roles" element={<RoleList />} />
+              <Route path="/entities/roles/view/:id" element={<RoleView />} />
+              <Route path="/entities/roles/edit/:id" element={<RoleEdit />} />
+              <Route path="/entities/roles/new" element={<RoleEdit />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />

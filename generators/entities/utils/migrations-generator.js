@@ -74,11 +74,15 @@ export class MigrationsGenerator {
         for (const entity of entities) {
             const tabName = to.snake(pluralize(entity.tableName));
             const columns = this.convertFields(entity.body, enums);
-            this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
-                {
-                    tabName: tabName,
-                    columns: columns.join(`\n${tab(3)}`),
-                });
+            if (tabName !== 'users') {
+                this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
+                    {
+                        tabName: tabName,
+                        columns: columns.join(`\n${tab(3)}`),
+                    });
+            } else {
+                this.that.fs.copyTpl(this.that.templatePath("migration_alter_users_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_alter_${tabName}_table.php`))
+            }
         }
     }
     createRelations() {

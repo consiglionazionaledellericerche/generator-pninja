@@ -10,7 +10,7 @@ const getRolesFromSession = (): string[] => {
 
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.responseText);
-      return response?.app_roles || [];
+      return response?.roles || [];
     }
 
     return [];

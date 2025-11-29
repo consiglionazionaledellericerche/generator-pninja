@@ -1,7 +1,7 @@
 <?php
 <%
 function isAdminOnly() {
-    return ['AppUser','AppRole'].includes(className);
+    return ['User','Role'].includes(className);
 }
 function isEmpty(obj) {
   for (let key in obj) {

@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Session;
-use App\Models\AppUser;
+use App\Models\User;
 
 trait HandlesUserRoles
 {
@@ -18,7 +18,7 @@ trait HandlesUserRoles
     {
         $userInfo = Session::get('authenticated_user');
         if (!$userInfo) return false;
-        $roles = AppUser::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
+        $roles = User::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
         if (empty($roles)) return false;
         return in_array($role, $roles);
     }

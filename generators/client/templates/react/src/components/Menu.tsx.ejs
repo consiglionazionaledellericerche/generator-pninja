@@ -116,7 +116,7 @@ const Menu: React.FC = () => {
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
                 <MenuItems className="outline-0">
-<%    entities.filter(entity => !['AppRole','AppUser'].includes(entity.name)).forEach((entity, index) => {-%>
+<%    entities.filter(entity => !['Role','User'].includes(entity.name)).forEach((entity, index) => {-%>
                   <MenuItem
                     href="/entities/<%- to.slug(pluralize(entity.name)) %>"
                     id="<%- to.slug(pluralize(entity.name)) %>"
@@ -149,18 +149,18 @@ const Menu: React.FC = () => {
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
                 <MenuItems className="outline-0">
                   <MenuItem
-                    href="/entities/app-users"
-                    id="app-users"
-                    className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/app-users') ? menuItemIsActiveClass : ''}`}
+                    href="/entities/users"
+                    id="users"
+                    className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/users') ? menuItemIsActiveClass : ''}`}
                   >
-                    {t('entities:app_user.AppUsers')}
+                    {t('entities:user.Users')}
                   </MenuItem>
                   <MenuItem
-                    href="/entities/app-roles"
-                    id="app-roles"
-                    className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/app-roles') ? menuItemIsActiveClass : ''}`}
+                    href="/entities/roles"
+                    id="roles"
+                    className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/roles') ? menuItemIsActiveClass : ''}`}
                   >
-                    {t('entities:app_role.AppRoles')}
+                    {t('entities:role.Roles')}
                   </MenuItem>
                 </MenuItems>
               </Popover>

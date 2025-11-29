@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
-use App\Models\AppUser;
+use App\Models\User;
 
 class SessionAuthController extends Controller
 {
@@ -23,7 +23,7 @@ class SessionAuthController extends Controller
 
             return response()->json([
                 'isAuthenticated' => true,
-                'app_roles' => AppUser::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name') ?? [],
+                'roles' => User::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name') ?? [],
                 'user' => $userInfo,
                 'session' => [
                     'id' => Session::getId(),

@@ -79,11 +79,11 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = parseJDL(entitiesFilePath);
 
-    // Adding AppUser
+    // Adding User
     parsedJDL.entities.push({
       "annotations": [],
-      "name": "AppUser",
-      "tableName": "AppUser",
+      "name": "User",
+      "tableName": "User",
       "body": [
         {
           "name": "login",
@@ -124,11 +124,11 @@ export default class EntityGenerator extends Generator {
       "javadoc": null
     });
 
-    // Adding AppRole
+    // Adding Role
     parsedJDL.entities.push({
       "annotations": [],
-      "name": "AppRole",
-      "tableName": "AppRole",
+      "name": "Role",
+      "tableName": "Role",
       "body": [
         {
           "name": "name",
@@ -156,17 +156,17 @@ export default class EntityGenerator extends Generator {
       ],
       "javadoc": null
     });
-    // Adding relationship between AppUser and AppRole
+    // Adding relationship between User and Role
     parsedJDL.relationships.push({
       "from": {
-        "name": "AppUser",
+        "name": "User",
         "injectedField": "roles",
         "javadoc": null,
         "required": false,
         "injectedFieldLabel": "name"
       },
       "to": {
-        "name": "AppRole",
+        "name": "Role",
         "injectedField": "users",
         "javadoc": null,
         "required": false,
@@ -241,9 +241,9 @@ export default class EntityGenerator extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppUser.csv"), this.destinationPath(`server/database/seeders/csv/AppUser.csv`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppRole.csv"), this.destinationPath(`server/database/seeders/csv/AppRole.csv`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AppUser_AppRole.csv"), this.destinationPath(`server/database/seeders/csv/AppUser_AppRole.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/User.csv"), this.destinationPath(`server/database/seeders/csv/User.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/Role.csv"), this.destinationPath(`server/database/seeders/csv/Role.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/User_Role.csv"), this.destinationPath(`server/database/seeders/csv/User_Role.csv`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
