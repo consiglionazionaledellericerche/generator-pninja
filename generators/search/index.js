@@ -97,7 +97,7 @@ ALGOLIA_SECRET=your-admin-api-key`;
     }
     if (searchEngine === 'solr') {
       searchEngineConfig += `
-SOLR_HOST=127.0.0.1
+SOLR_HOST=localhost
 SOLR_PORT=8983
 SOLR_PATH=/`;
     }

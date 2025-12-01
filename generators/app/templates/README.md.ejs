@@ -27,22 +27,56 @@ Alternatively, you can start both the **development client and server** with:
 npm run dev
 ```
 
-To **initialize** the database:
+To **initialize** the **database**:
 
 ```sh
 npm run migrate # or npm run migrate:fresh or npm run migrate:fresh:seed
 ```
 
-To initialize the **search engine**:
+<%  if (['solr','meilisearch','elastic','algolia','typesense'].includes(searchEngine)) { -%>
+To **initialize** the **search engine**:
 
 ```sh
-npm run elastic:migrate                                # Elasticsearch
-npm run scout:sync-index-settings                      # Meilisearch
-cd server                                              # Solr
-php artisan scout:index "App\Models\EntityName"        # Solr
-php artisan scout:index "App\Models\AnotherEntityName" # Solr
+# server/.env
+<%      if (searchEngine === 'algolia') { -%>
+ALGOLIA_APP_ID=YOUR_ALGOLIA_APP_ID
+ALGOLIA_SECRET=YOUR_ALGOLIA_SECRET
+<%      } -%>
+<%      if (searchEngine === 'elastic') { -%>
+ELASTIC_HOST=http://localhost:9200
+<%      } -%>
+<%      if (searchEngine === 'meilisearch') { -%>
+MEILISEARCH_HOST=http://localhost:7700
+MEILISEARCH_KEY=meilisearch-master-key
+<%      } -%>
+<%      if (searchEngine === 'typesense') { -%>
+TYPESENSE_API_KEY=xyz
+TYPESENSE_HOST=localhost
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http
+<%      } -%>
+<%      if (searchEngine === 'solr') { -%>
+SOLR_HOST=localhost
+SOLR_PORT=8983
+SOLR_PATH=/
+<%      } -%>
 ```
+<%      if (['solr','meilisearch','elastic'].includes(searchEngine)) { -%>
 
+```sh
+<%          if (searchEngine === 'elastic') { -%>
+npm run elastic:migrate
+<%          } -%>
+<%          if (searchEngine === 'meilisearch') { -%>
+npm run scout:sync-index-settings
+<%          } -%>
+<%          if (searchEngine === 'solr') { -%>
+cd server
+<%- entities.map(({name}) => `php artisan scout:index "App\\Models\\${name}"`).join('\n');%>
+<%          } -%>
+```
+<%      } -%>
+<%  } -%>
 ### Database Seeding: CSV vs Factory
 
 To populate the database with **test records**:
