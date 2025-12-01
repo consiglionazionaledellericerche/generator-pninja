@@ -12,12 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // Aggiungi nuove colonne
             $table->string('login')->unique()->after('name');
             $table->string('description')->nullable()->after('login');
         });
 
-        // Rimuovi indici/constraints prima di droppare le colonne
         Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['email']);
         });
