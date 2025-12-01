@@ -1,3 +1,8 @@
+<%
+const csvsE = entities.map(({name}) => `${name}.csv # Data for ${name} entity`);
+const csvsR = relationships?.filter(({ cardinality }) => cardinality === 'ManyToMany').map(({from, to}) => `${from.name}_${to.name}.csv # Many-to-many relationship from ${from.name} to ${to.name}`) || [];
+const csvs = [...csvsE, ...csvsR];
+-%>
 # <%= appName %>
 
 **Application generated successfully with ♥️ & [PNinja][pninja-url]!**
@@ -25,7 +30,7 @@ npm run dev
 To **initialize** the database:
 
 ```sh
-npm run migrate:fresh # or npm run migrate:fresh
+npm run migrate # or npm run migrate:fresh or npm run migrate:fresh:seed
 ```
 
 To initialize the **search engine**:
@@ -38,17 +43,63 @@ php artisan scout:index "App\Models\EntityName"        # Solr
 php artisan scout:index "App\Models\AnotherEntityName" # Solr
 ```
 
+### Database Seeding: CSV vs Factory
+
 To populate the database with **test records**:
 
 ```sh
 npm run db:seed
 ```
 
+Seeding supports two modes, **mutually exclusive** for each entity:
+
+#### 1. **CSV Mode** (controlled and reproducible data)
+
+If a CSV file exists in `server/database/seeders/csv/`, **only** data from the CSV is loaded:
+
+```sh
+server/database/seeders/csv/
+<% csvs.map((row, i) => {-%>
+<%- i < (csvs.length - 1) ? '├──' : '└──' %> <%- row %>
+<%}); -%>
+```
+
+**CSV format for entities:**
+```csv
+column_a,column_b,column_c,column_d,related_id
+colA001,colB001,colC001,colD001,1
+colA002,colB002,colC002,colD002,2
+colA003,colB003,colC003,colD003,3
+```
+
+**CSV format for many-to-many relationships:**
+```csv
+model_id,related_id
+1,1
+1,2
+2,3
+```
+
+- First row contains database column names
+- Empty fields are ignored
+- Completely empty rows are skipped
+- Foreign keys must reference existing IDs
+
+#### 2. **Factory Mode** (random data)
+
+If the CSV file **does not exist**, random data is generated using Laravel factories.
+
 The number of entities generated depends on the answer provided during the project generation phase to the question:
 
 ```
 ? How many entities to generate for each entity (factories)? (30)
 ```
+
+#### Which mode to use?
+
+- **CSV**: for stable test data, demos, or when full control over data is needed
+- **Factory**: for rapid development with random but realistic data
+- **Mix**: some entities from CSV, others from factory (each entity chooses independently)
 
 To start the **Docker composition**:
 
