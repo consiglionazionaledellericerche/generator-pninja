@@ -31,9 +31,10 @@ class DatabaseSeeder extends Seeder
         $csvPath = database_path("seeders/csv/{$csvFilename}");
 
         if (File::exists($csvPath)) {
+            // If CSV exists, load ONLY from CSV
             $this->seedFromCsv($modelClass, $csvPath);
         } else {
-            // Use the factory
+            // Otherwise, use ONLY the factory
             while ($modelClass::count() < $minCount) {
                 $modelClass::factory()->create();
             }
@@ -42,6 +43,10 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Load data from a CSV file
+     * 
+     * @param string $modelClass Fully qualified name of the model class
+     * @param string $csvPath Full path to the CSV file
+     * @return int Number of records loaded
      */
     private function seedFromCsv(string $modelClass, string $csvPath): void
     {
@@ -49,9 +54,14 @@ class DatabaseSeeder extends Seeder
         $headers = array_shift($csv);
 
         foreach ($csv as $row) {
+            // Skip empty rows
+            if (empty(array_filter($row))) {
+                continue;
+            }
+            
             $data = array_combine($headers, $row);
-
-            // Rimuovi campi vuoti o null
+            
+            // Remove empty or null fields
             $data = array_filter($data, function($value) {
                 return $value !== '' && $value !== null;
             });
@@ -64,10 +74,10 @@ class DatabaseSeeder extends Seeder
      * Seed many-to-many relationships
      */
     private function seedManyToMany(
-        string $modelClass,
-        string $relationName,
-        string $relatedClass,
-        string $csvFilename,
+        string $modelClass, 
+        string $relationName, 
+        string $relatedClass, 
+        string $csvFilename, 
         int $randomCount
     ): void {
         $csvPath = database_path("seeders/csv/{$csvFilename}");
@@ -85,8 +95,8 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Load many-to-many relationships from CSV
-     * The CSV must have columns: model_id, related_id
+     * Load many-to-many relationships from a CSV file.
+     * The CSV must have the columns: model_id, related_id.
      */
     private function seedManyToManyFromCsv(string $modelClass, string $relationName, string $csvPath): void
     {
@@ -95,10 +105,15 @@ class DatabaseSeeder extends Seeder
 
         $grouped = [];
         foreach ($csv as $row) {
+            // Salta righe vuote
+            if (empty(array_filter($row))) {
+                continue;
+            }
+            
             $data = array_combine($headers, $row);
             $modelId = $data['model_id'];
             $relatedId = $data['related_id'];
-
+            
             if (!isset($grouped[$modelId])) {
                 $grouped[$modelId] = [];
             }
