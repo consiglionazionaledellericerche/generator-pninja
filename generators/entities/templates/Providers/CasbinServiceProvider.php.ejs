@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Providers;
+
+use Casbin\Enforcer;
+use Illuminate\Support\ServiceProvider;
+
+class CasbinServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $this->app->singleton(Enforcer::class, function ($app) {
+            return new Enforcer(
+                storage_path('casbin/model.conf'),
+                storage_path('casbin/policy.csv')
+            );
+        });
+    }
+}

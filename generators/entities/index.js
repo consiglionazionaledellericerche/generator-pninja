@@ -33,25 +33,35 @@ export default class EntityGenerator extends Generator {
         name: "build",
         message: "Build all entities from entities definition file?",
         default: true
-      }]]
-    }
-    this.answers = await this.prompt(prompts);
-    if (this.answers.build && this.options.fromMain) {
-      const answers = await this.prompt([{
+      }, {
         store: true,
         type: "input",
         name: "entitiesFilePath",
         message: "Entities definition file path",
-        default: this.config.get('entitiesFilePath') || 'entities.jdl'
+        default: this.config.get('entitiesFilePath') || 'entities.jdl',
+        when: answers => answers.build
       }, {
         store: true,
         type: "number",
         name: "howManyToGenerate",
         message: "How many entities to generate for each entity (factories)?",
-        default: this.config.get('howManyToGenerate') || 10
-      }]);
-      this.answers = { ...this.answers, ...answers };
+        default: this.config.get('howManyToGenerate') ?? 10,
+        when: answers => answers.build
+      }, {
+        type: 'confirm',
+        name: 'useCasbin',
+        message: 'Use Casbin for ACL?',
+        default: this.config.get('useCasbin') ?? true
+      },
+      {
+        type: 'input',
+        name: 'casbinPolicy',
+        message: 'Path to Casbin policy file:',
+        default: 'casbin-policy.csv',
+        when: answers => answers.useCasbin
+      }]]
     }
+    this.answers = await this.prompt(prompts);
   }
 
   configuring() {
@@ -247,8 +257,16 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
-    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
+    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`), {
+      useCasbin: this.answers.useCasbin
+    });
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
+
+    if (this.answers.useCasbin) {
+      this.fs.copyTpl(this.templatePath("storage/casbin/model.conf"), this.destinationPath('server/storage/casbin/model.conf'));
+      this.fs.copyTpl(this.templatePath("storage/casbin/policy.csv.ejs"), this.destinationPath('server/storage/casbin/policy.csv'), { entities: parsedJDL.entities });
+      this.fs.copyTpl(this.templatePath("Providers/CasbinServiceProvider.php.ejs"), this.destinationPath('server/Providers/CasbinServiceProvider.php'));
+    }
   }
   end() { }
 };

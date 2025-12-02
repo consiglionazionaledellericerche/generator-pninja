@@ -8,26 +8,41 @@ use App\Models\User;
 trait HandlesUserRoles
 {
     /**
-     * Verifica se l'utente autenticato ha il ruolo specificato
+     * Retrieve the roles associated with the currently authenticated user.
      *
-     * @param string $role Il ruolo da verificare
-     * @return bool True se l'utente ha il ruolo, false altrimenti
-     * @throws \Exception Se il Client ID non è configurato
+     * This method fetches the authenticated user's information from the session.
+     * If the user is not authenticated, it returns an empty array. Otherwise, it
+     * queries the database for the user's roles and returns them as an array of
+     * role names.
+     *
+     * @return array The list of role names assigned to the authenticated user.
+     */
+    protected function getUserRoles(): array
+    {
+        $userInfo = Session::get('authenticated_user');
+        if (!$userInfo) return [];
+        return User::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
+    }
+
+    /**
+     * Checks if the authenticated user has the specified role.
+     *
+     * @param string $role The role to check.
+     * @return bool True if the user has the role, false otherwise.
+     * @throws \Exception If the Client ID is not configured.
      */
     protected function userHasRole($role)
     {
-        $userInfo = Session::get('authenticated_user');
-        if (!$userInfo) return false;
-        $roles = User::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
+        $roles = $this->getUserRoles();
         if (empty($roles)) return false;
         return in_array($role, $roles);
     }
 
     /**
-     * Verifica se l'utente ha uno qualsiasi dei ruoli specificati
+     * Checks if the user has any of the specified roles.
      *
-     * @param array $roles Array di ruoli da verificare
-     * @return bool True se l'utente ha almeno uno dei ruoli
+     * @param array $roles Array of roles to check.
+     * @return bool True if the user has at least one of the roles.
      */
     protected function userHasAnyRole(array $roles)
     {
@@ -40,10 +55,10 @@ trait HandlesUserRoles
     }
 
     /**
-     * Verifica se l'utente ha tutti i ruoli specificati
+     * Checks if the user has all the specified roles.
      *
-     * @param array $roles Array di ruoli da verificare
-     * @return bool True se l'utente ha tutti i ruoli
+     * @param array $roles Array of roles to check.
+     * @return bool True if the user has all the roles.
      */
     protected function userHasAllRoles(array $roles)
     {
@@ -53,5 +68,36 @@ trait HandlesUserRoles
             }
         }
         return true;
+    }
+
+
+    /**
+     * Checks if the user has permission to perform a specific action on a given resource.
+     *
+     * This method retrieves the authenticated user's roles from the session and verifies
+     * if any of the roles have the required permission for the specified resource and action.
+     * It uses the Casbin Enforcer for permission enforcement.
+     *
+     * @param string $resource The resource to check permissions for.
+     * @param string $action The action to check permissions for.
+     * @return bool Returns true if the user has the required permission, false otherwise.
+     */
+
+    protected function userHasPermission(string $resource, string $action): bool
+    {
+<%  if (useCasbin) { -%>
+        $enforcer = app(\Casbin\Enforcer::class);
+        $roles = $this->getUserRoles();
+        if (empty($roles)) return false;
+        foreach ($roles as $role) {
+            if ($enforcer->enforce($role, $resource, $action)) {
+                return true;
+            }
+        }
+        return false;
+<%  } else {-%>
+        if ($resource === "User" || $resource === "Role") return $this->userHasRole('admin');
+        return $this->userHasRole('authenticated_user');
+<%  }-%>
     }
 }
