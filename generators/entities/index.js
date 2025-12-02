@@ -52,12 +52,22 @@ export default class EntityGenerator extends Generator {
         name: 'useCasbin',
         message: 'Use Casbin for ACL?',
         default: this.config.get('useCasbin') ?? true
-      },
-      {
-        type: 'input',
-        name: 'casbinPolicy',
-        message: 'Path to Casbin policy file:',
-        default: 'casbin-policy.csv',
+      }, {
+        store: true,
+        type: 'list',
+        name: 'casbinApproach',
+        message: 'Casbin role management:',
+        default: this.config.get('casbinApproach') ?? 'casbin',
+        choices: [
+          {
+            name: 'Full Casbin (permissions + assignments)',
+            value: 'casbin'
+          },
+          {
+            name: 'Hybrid (Casbin permissions + Laravel assignments)',
+            value: 'laravel'
+          }
+        ],
         when: answers => answers.useCasbin
       }]]
     }
@@ -185,6 +195,70 @@ export default class EntityGenerator extends Generator {
       "options": [],
       "cardinality": "ManyToMany"
     },);
+    if (this.answers.useCasbin && this.answers.casbinApproach === 'casbin') {
+      parsedJDL.entities.push({
+        "annotations": [],
+        "name": "AclRule",
+        "tableName": "AclRule",
+        "body": [
+          {
+            "name": "ptype",
+            "type": "String",
+            "validations": [
+              {
+                "key": "required",
+                "value": ""
+              }
+            ],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v0",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v1",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v2",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v3",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v4",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          },
+          {
+            "name": "v5",
+            "type": "String",
+            "validations": [],
+            "javadoc": null,
+            "annotations": []
+          }
+        ],
+        "javadoc": null
+      });
+    }
 
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
@@ -263,9 +337,14 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
 
     if (this.answers.useCasbin) {
-      this.fs.copyTpl(this.templatePath("storage/casbin/model.conf"), this.destinationPath('server/storage/casbin/model.conf'));
-      this.fs.copyTpl(this.templatePath("storage/casbin/policy.csv.ejs"), this.destinationPath('server/storage/casbin/policy.csv'), { entities: parsedJDL.entities });
-      this.fs.copyTpl(this.templatePath("Providers/CasbinServiceProvider.php.ejs"), this.destinationPath('server/Providers/CasbinServiceProvider.php'));
+      if (this.answers.casbinApproach === 'casbin') {
+        this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
+        this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
+      }
+      if (this.answers.casbinApproach === 'laravel') {
+        this.fs.copyTpl(this.templatePath("storage/casbin/model.conf"), this.destinationPath('server/storage/casbin/model.conf'));
+        this.fs.copyTpl(this.templatePath("storage/casbin/policy.csv.ejs"), this.destinationPath('server/storage/casbin/policy.csv'), { entities: parsedJDL.entities });
+      }
     }
   }
   end() { }

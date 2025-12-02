@@ -4,6 +4,9 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+<%  if (useCasbin && casbinApproach === 'casbin') { -%>
+use Lauthz\Facades\Enforcer;
+<% } -%>
 
 trait HandlesUserRoles
 {
@@ -86,6 +89,12 @@ trait HandlesUserRoles
     protected function userHasPermission(string $resource, string $action): bool
     {
 <%  if (useCasbin) { -%>
+<%      if (casbinApproach === 'casbin') { -%>
+        \Log::info("Checking permission for user {" . auth()->user()->username . "} on resource '{$resource}' with action '{$action}'");
+        $result = Enforcer::enforce(auth()->user()->username, $resource, $action);
+        \Log::info("Permission check result: " . ($result ? 'ALLOWED' : 'DENIED'));
+        return $result;
+<%      } else { -%>
         $enforcer = app(\Casbin\Enforcer::class);
         $roles = $this->getUserRoles();
         if (empty($roles)) return false;
@@ -95,9 +104,12 @@ trait HandlesUserRoles
             }
         }
         return false;
+<%      }-%>
 <%  } else {-%>
-        if ($resource === "User" || $resource === "Role") return $this->userHasRole('admin');
-        return $this->userHasRole('authenticated_user');
+    // If the resource is "User" or "Role", check if the user has the "admin" role.
+    // Otherwise, return true as the API is already authenticated at the routing level.
+    if ($resource === "User" || $resource === "Role") return $this->userHasRole('admin');
+    return true;
 <%  }-%>
     }
 }
