@@ -180,12 +180,7 @@ export default class extends Generator {
     await this.spawn('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     await this.spawn('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
     if (this.config.get('useCasbin')) {
-      if (this.config.get('casbinApproach') === 'casbin') {
-        await this.spawn('composer', ['require', 'casbin/laravel-authz'], { cwd: 'server' });
-      }
-      if (this.config.get('casbinApproach') === 'laravel') {
-        await this.spawn('composer', ['require', 'casbin/casbin'], { cwd: 'server' });
-      }
+      await this.spawn('composer', ['require', 'casbin/laravel-authz'], { cwd: 'server' });
     }
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);

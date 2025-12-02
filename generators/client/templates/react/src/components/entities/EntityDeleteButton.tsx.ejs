@@ -26,6 +26,7 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
           message: t(`actions.crud.successfullyDeleted`, { id }),
           duration: 3000,
         });
+        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       })
       .catch((error: HttpError) => {
         addNotification({
@@ -34,9 +35,6 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
           details: error?.details || '',
           duration: 5000,
         });
-      })
-      .finally(() => {
-        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       });
   };
 

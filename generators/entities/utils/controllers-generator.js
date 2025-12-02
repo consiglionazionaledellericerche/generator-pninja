@@ -155,21 +155,17 @@ export class ControllersGenerator {
         const { enums, entities, relationships } = this.parsedJDL;
         const searchEngine = this.that.config.get('searchEngine');
         const useCasbin = this.that.config.get('useCasbin');
-        const casbinApproach = this.that.config.get('casbinApproach');
 
         this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Providers/AppServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
-        if (useCasbin) {
-            this.that.fs.copyTpl(this.that.templatePath("Providers/CasbinServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/CasbinServiceProvider.php`), { casbinApproach });
-        }
         this.that.fs.copyTpl(this.that.templatePath("Casts/Base64BinaryCast.php.ejs"), this.that.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), { useCasbin, casbinApproach });
+        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), { useCasbin });
 
         for (const entity of entities) {
             const withs = getWits(entity, relationships);

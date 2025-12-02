@@ -52,23 +52,6 @@ export default class EntityGenerator extends Generator {
         name: 'useCasbin',
         message: 'Use Casbin for ACL?',
         default: this.config.get('useCasbin') ?? true
-      }, {
-        store: true,
-        type: 'list',
-        name: 'casbinApproach',
-        message: 'Casbin role management:',
-        default: this.config.get('casbinApproach') ?? 'casbin',
-        choices: [
-          {
-            name: 'Full Casbin (permissions + assignments)',
-            value: 'casbin'
-          },
-          {
-            name: 'Hybrid (Casbin permissions + Laravel assignments)',
-            value: 'laravel'
-          }
-        ],
-        when: answers => answers.useCasbin
       }]]
     }
     this.answers = await this.prompt(prompts);
@@ -195,7 +178,7 @@ export default class EntityGenerator extends Generator {
       "options": [],
       "cardinality": "ManyToMany"
     },);
-    if (this.answers.useCasbin && this.answers.casbinApproach === 'casbin') {
+    if (this.answers.useCasbin) {
       parsedJDL.entities.push({
         "annotations": [],
         "name": "AclRule",
@@ -331,20 +314,11 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
-    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`), {
-      useCasbin: this.answers.useCasbin
-    });
+    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
-
     if (this.answers.useCasbin) {
-      if (this.answers.casbinApproach === 'casbin') {
-        this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
-        this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
-      }
-      if (this.answers.casbinApproach === 'laravel') {
-        this.fs.copyTpl(this.templatePath("storage/casbin/model.conf"), this.destinationPath('server/storage/casbin/model.conf'));
-        this.fs.copyTpl(this.templatePath("storage/casbin/policy.csv.ejs"), this.destinationPath('server/storage/casbin/policy.csv'), { entities: parsedJDL.entities });
-      }
+      this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
+      this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
     }
   }
   end() { }
