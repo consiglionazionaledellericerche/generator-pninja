@@ -89,9 +89,7 @@ trait HandlesUserRoles
     protected function userHasPermission(string $resource, string $action): bool
     {
 <%  if (useCasbin) { -%>
-        \Log::info("Checking permission for user {" . auth()->user()->username . "} on resource '{$resource}' with action '{$action}'");
         $result = Enforcer::enforce(auth()->user()->username, $resource, $action);
-        \Log::info("Permission check result: " . ($result ? 'ALLOWED' : 'DENIED'));
         return $result;
 <%  } else {-%>
         // If the resource is "User" or "Role", check if the user has the "admin" role.

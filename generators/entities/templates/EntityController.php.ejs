@@ -28,9 +28,6 @@ class <%- className %>Controller extends Controller
     public function index(Request $request)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'read')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
 <%  if (searchEngine !== 'null') {-%>
             $search = $request->has('search') ? ScoutQuerySanitizer::sanitize($request->get('search')) : null;
 <%  } -%>
@@ -111,9 +108,6 @@ class <%- className %>Controller extends Controller
     public function show($id)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'read')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
 <%          if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
 <%          } else { -%>
@@ -128,9 +122,6 @@ class <%- className %>Controller extends Controller
     public function store(Request $request)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'create')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
 <%  if(isEmpty(validationsStore)) {-%>
             $data = $request->all();
 <%  } else {-%>
@@ -189,10 +180,6 @@ class <%- className %>Controller extends Controller
     public function update($id, Request $request)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'update')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
-
 <%  if (withs) { -%>
             $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
 <%  } else { -%>
@@ -266,9 +253,6 @@ class <%- className %>Controller extends Controller
     public function destroy($id)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'delete')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
             $<%- entityName %> = <%- className %>::findOrFail($id);
             $<%- entityName %>->delete();
             return response(null, 200);
@@ -281,9 +265,6 @@ class <%- className %>Controller extends Controller
     public function serveBlob($id, string $field)
     {
         try {
-            if (!$this->userHasPermission('<%- className %>', 'read')) {
-                return response()->json(['error' => 'Forbidden'], 403);
-            }
             $<%- entityName %> = <%- className %>::findOrFail($id);
 
             $blobField = $field . '_blob';

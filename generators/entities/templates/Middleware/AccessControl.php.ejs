@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use App\Traits\HandlesUserRoles;
+class AccessControl
+{
+    use HandlesUserRoles;
+    public function handle(Request $request, Closure $next)
+    {
+        $resource = str_replace('Controller', '', class_basename(get_class($request->route()->getController())));
+        $method = strtolower($request->method());
+        $action = match($method) {
+            'get' => 'read',
+            'post' => 'create',
+            'put','patch' => 'update',
+            'delete' => 'delete'
+        };
+        $result = $this->userHasPermission($resource, $action);
+        \Log::info("[MIDDLEWARE]\tChecking permission for user {" . auth()->user()->username . "} on resource '{$resource}' with action '{$action}' " . ($result ? 'ALLOWED' : 'DENIED'));
+        if (!$result) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+        return $next($request);
+    }
+}

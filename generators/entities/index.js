@@ -313,7 +313,10 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("database/seeders/csv/User_Role.csv"), this.destinationPath(`server/database/seeders/csv/User_Role.csv`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
-    this.fs.copyTpl(this.templatePath("SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
+    if (this.answers.useCasbin) {
+      this.fs.copyTpl(this.templatePath("Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
+    }
+    this.fs.copyTpl(this.templatePath("Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
     if (this.answers.useCasbin) {
