@@ -27,7 +27,7 @@ Route::get('/files/public/{path}', [FileController::class, 'serveFile'])
     ->defaults('disk', 'public')
     ->name('files.serve.public');
 
-Route::middleware(['session.auth','access.control'])->group(function () {
+Route::middleware(['session.auth', 'access.control'])->group(function () {
 <% eRoutes.forEach(({className, rootPath, hasBlob}) => {-%>
     Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
 <%  if (hasBlob) { -%>
