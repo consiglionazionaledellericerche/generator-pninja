@@ -47,11 +47,6 @@ export default class EntityGenerator extends Generator {
         message: "How many entities to generate for each entity (factories)?",
         default: this.config.get('howManyToGenerate') ?? 10,
         when: answers => answers.build
-      }, {
-        type: 'confirm',
-        name: 'useCasbin',
-        message: 'Use Casbin for ACL?',
-        default: this.config.get('useCasbin') ?? true
       }]]
     }
     this.answers = await this.prompt(prompts);
@@ -82,30 +77,13 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = parseJDL(entitiesFilePath);
 
-    // Adding User
     parsedJDL.entities.push({
       "annotations": [],
-      "name": "User",
-      "tableName": "User",
+      "name": "AclRule",
+      "tableName": "AclRule",
       "body": [
         {
-          "name": "login",
-          "type": "String",
-          "validations": [
-            {
-              "key": "required",
-              "value": ""
-            },
-            {
-              "key": "unique",
-              "value": ""
-            }
-          ],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "name",
+          "name": "ptype",
           "type": "String",
           "validations": [
             {
@@ -117,7 +95,42 @@ export default class EntityGenerator extends Generator {
           "annotations": []
         },
         {
-          "name": "description",
+          "name": "v0",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "v1",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "v2",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "v3",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "v4",
+          "type": "String",
+          "validations": [],
+          "javadoc": null,
+          "annotations": []
+        },
+        {
+          "name": "v5",
           "type": "String",
           "validations": [],
           "javadoc": null,
@@ -126,122 +139,6 @@ export default class EntityGenerator extends Generator {
       ],
       "javadoc": null
     });
-
-    // Adding Role
-    parsedJDL.entities.push({
-      "annotations": [],
-      "name": "Role",
-      "tableName": "Role",
-      "body": [
-        {
-          "name": "name",
-          "type": "String",
-          "validations": [
-            {
-              "key": "required",
-              "value": ""
-            },
-            {
-              "key": "unique",
-              "value": ""
-            }
-          ],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "description",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        }
-      ],
-      "javadoc": null
-    });
-    // Adding relationship between User and Role
-    parsedJDL.relationships.push({
-      "from": {
-        "name": "User",
-        "injectedField": "roles",
-        "javadoc": null,
-        "required": false,
-        "injectedFieldLabel": "name"
-      },
-      "to": {
-        "name": "Role",
-        "injectedField": "users",
-        "javadoc": null,
-        "required": false,
-        "injectedFieldLabel": "name"
-      },
-      "options": [],
-      "cardinality": "ManyToMany"
-    },);
-    if (this.answers.useCasbin) {
-      parsedJDL.entities.push({
-        "annotations": [],
-        "name": "AclRule",
-        "tableName": "AclRule",
-        "body": [
-          {
-            "name": "ptype",
-            "type": "String",
-            "validations": [
-              {
-                "key": "required",
-                "value": ""
-              }
-            ],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v0",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v1",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v2",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v3",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v4",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          },
-          {
-            "name": "v5",
-            "type": "String",
-            "validations": [],
-            "javadoc": null,
-            "annotations": []
-          }
-        ],
-        "javadoc": null
-      });
-    }
 
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
@@ -308,21 +205,15 @@ export default class EntityGenerator extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/User.csv"), this.destinationPath(`server/database/seeders/csv/User.csv`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/Role.csv"), this.destinationPath(`server/database/seeders/csv/Role.csv`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/User_Role.csv"), this.destinationPath(`server/database/seeders/csv/User_Role.csv`));
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AclRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AclRule.csv`), { entities: parsedJDL.entities });
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
-    if (this.answers.useCasbin) {
-      this.fs.copyTpl(this.templatePath("Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
-    }
+    this.fs.copyTpl(this.templatePath("Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
     this.fs.copyTpl(this.templatePath("Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
-    if (this.answers.useCasbin) {
-      this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
-      this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
-    }
+    this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
+    this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
   }
   end() { }
 };

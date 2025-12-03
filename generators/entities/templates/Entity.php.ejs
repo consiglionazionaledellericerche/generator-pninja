@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Models;
-<% if (className === 'User') { -%>
-use Illuminate\Foundation\Auth\User as Authenticatable;
-<% } -%>
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 <% relationsType.forEach(function(rel) { %>use Illuminate\Database\Eloquent\Relations\<%- rel %>;
@@ -16,7 +13,7 @@ use App\Casts\Base64BinaryCast;
 <% }; -%>
 <% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
 <% }); %>
-class <%- className %> extends <%- className === 'User' ? 'Authenticatable' : 'Model' %>
+class <%- className %> extends Model
 {
     use HasFactory;
 <% if (searchEngine !== 'null') { -%>

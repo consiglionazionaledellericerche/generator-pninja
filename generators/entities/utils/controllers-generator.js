@@ -154,7 +154,6 @@ export class ControllersGenerator {
     generateControllers() {
         const { enums, entities, relationships } = this.parsedJDL;
         const searchEngine = this.that.config.get('searchEngine');
-        const useCasbin = this.that.config.get('useCasbin');
 
         this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
@@ -165,7 +164,7 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`), { useCasbin });
+        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
 
         for (const entity of entities) {
             const withs = getWits(entity, relationships);

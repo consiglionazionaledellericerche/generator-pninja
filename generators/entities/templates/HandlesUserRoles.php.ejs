@@ -3,10 +3,8 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Session;
-use App\Models\User;
-<%  if (useCasbin) { -%>
+use App\Models\AclRule;
 use Lauthz\Facades\Enforcer;
-<% } -%>
 
 trait HandlesUserRoles
 {
@@ -24,7 +22,10 @@ trait HandlesUserRoles
     {
         $userInfo = Session::get('authenticated_user');
         if (!$userInfo) return [];
-        return User::where('login', $userInfo['preferred_username'] ?? '')->first()?->roles()->pluck('name')->toArray() ?? [];
+        $roles = AclRule::where('ptype', 'g')
+        ->where('v0', $userInfo['preferred_username'])
+        ->pluck('v1');
+        return $roles->toArray() ?? [];
     }
 
     /**
@@ -88,14 +89,7 @@ trait HandlesUserRoles
 
     protected function userHasPermission(string $resource, string $action): bool
     {
-<%  if (useCasbin) { -%>
         $result = Enforcer::enforce(auth()->user()->username, $resource, $action);
         return $result;
-<%  } else {-%>
-        // If the resource is "User" or "Role", check if the user has the "admin" role.
-        // Otherwise, return true as the API is already authenticated at the routing level.
-        if ($resource === "User" || $resource === "Role") return $this->userHasRole('admin');
-        return true;
-<%  }-%>
     }
 }
