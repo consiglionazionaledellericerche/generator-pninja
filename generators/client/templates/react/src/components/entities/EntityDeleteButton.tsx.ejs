@@ -30,7 +30,7 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
       .catch((error: HttpError) => {
         addNotification({
           type: 'error',
-          message: `${t('errors.entities.delete')} ${t('entities:data_manager.DataManager')}${id ? ` ID ${id}` : ''}`,
+          message: `${t('errors.entities.delete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           details: error?.details || '',
         });
       });
