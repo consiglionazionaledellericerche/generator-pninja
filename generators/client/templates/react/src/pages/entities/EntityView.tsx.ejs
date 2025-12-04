@@ -139,7 +139,6 @@ export default function <%= entity.name %>View() {
           message: `${t('errors.entities.read')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           details: error?.message,
           techDetails: error?.details,
-          duration: 10000,
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       });

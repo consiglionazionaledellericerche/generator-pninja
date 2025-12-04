@@ -35,7 +35,6 @@ export default function <%= entity.name %>Edit() {
             message: `${t('errors.entities.read')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
             details: error?.message,
             techDetails: error?.details,
-            duration: 10000,
           });
           navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
         })
@@ -78,7 +77,6 @@ export default function <%= entity.name %>Edit() {
         message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
         details,
         techDetails,
-        duration: 10000,
       });
     }
   };

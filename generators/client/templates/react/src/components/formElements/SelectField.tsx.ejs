@@ -135,7 +135,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
             message: `${t('errors.options.load')}`,
             details: error instanceof Error ? error.message : undefined,
             techDetails: error instanceof HttpError ? error.details : undefined,
-            duration: 10000,
           });
           return {
             items: [],
@@ -270,7 +269,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
           message: `${t('errors.options.load')}`,
           details: error instanceof Error ? error.message : undefined,
           techDetails: error instanceof HttpError ? error.details : undefined,
-          duration: 10000,
         });
         return [];
       }

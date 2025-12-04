@@ -22,7 +22,7 @@ export function Toast({ notification }: { notification: INotification }) {
     hasAutoClose,
   } = useNotifications();
 
-  const duration = notification.duration || 5000;
+  const duration = notification.duration;
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
   const [showTechDetails, setShowTechDetails] = useState(false);
@@ -90,31 +90,31 @@ export function Toast({ notification }: { notification: INotification }) {
   const detailsId = useId();
   const showmoreRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
+  // const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    // Salva focus precedente solo per toast urgenti
-    if (notification.type === 'warning' || notification.type === 'error') {
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      if (['error', 'warning'].includes(notification.type)) {
-        if (showmoreRef.current) {
-          showmoreRef.current?.focus();
-        } else {
-          closeRef.current?.focus();
-        }
-      }
-    }
+  // useEffect(() => {
+  //   // Salva focus precedente solo per toast urgenti
+  //   if (notification.type === 'warning' || notification.type === 'error') {
+  //     previousFocusRef.current = document.activeElement as HTMLElement;
+  //     if (['error', 'warning'].includes(notification.type)) {
+  //       if (showmoreRef.current) {
+  //         showmoreRef.current?.focus();
+  //       } else {
+  //         closeRef.current?.focus();
+  //       }
+  //     }
+  //   }
 
-    // Cleanup: ripristina focus quando toast si chiude
-    return () => {
-      if (
-        previousFocusRef.current &&
-        (notification.type === 'warning' || notification.type === 'error')
-      ) {
-        previousFocusRef.current.focus();
-      }
-    };
-  }, [notification.type]);
+  //   // Cleanup: ripristina focus quando toast si chiude
+  //   return () => {
+  //     if (
+  //       previousFocusRef.current &&
+  //       (notification.type === 'warning' || notification.type === 'error')
+  //     ) {
+  //       previousFocusRef.current.focus();
+  //     }
+  //   };
+  // }, [notification.type]);
 
   return (
     <div

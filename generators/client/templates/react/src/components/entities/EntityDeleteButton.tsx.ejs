@@ -24,7 +24,6 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
         addNotification({
           type: 'success',
           message: t(`actions.crud.successfullyDeleted`, { id }),
-          duration: 3000,
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       })
@@ -33,7 +32,6 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
           type: 'error',
           message: error.message || `Error deleting record ID ${id}`,
           details: error?.details || '',
-          duration: 5000,
         });
       });
   };
