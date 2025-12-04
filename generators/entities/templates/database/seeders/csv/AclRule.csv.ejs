@@ -1,3 +1,0 @@
-ptype,v0,v1,v2,v3,v4,v5
-p,admin,*,*,,,
-<%- entities.filter(({ name }) => !['AclRule'].includes(name)).map(({name}) => `p,*,${name},*,,,`).join('\n');%>

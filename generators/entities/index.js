@@ -79,8 +79,8 @@ export default class EntityGenerator extends Generator {
 
     parsedJDL.entities.push({
       "annotations": [],
-      "name": "AclRule",
-      "tableName": "AclRule",
+      "name": "AcRule",
+      "tableName": "AcRule",
       "body": [
         {
           "name": "ptype",
@@ -205,7 +205,7 @@ export default class EntityGenerator extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AclRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AclRule.csv`), { entities: parsedJDL.entities });
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: parsedJDL.entities });
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));

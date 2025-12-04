@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Session;
-use App\Models\AclRule;
+use App\Models\AcRule;
 use Lauthz\Facades\Enforcer;
 
 trait HandlesUserRoles
@@ -22,7 +22,7 @@ trait HandlesUserRoles
     {
         $userInfo = Session::get('authenticated_user');
         if (!$userInfo) return [];
-        $roles = AclRule::where('ptype', 'g')
+        $roles = AcRule::where('ptype', 'g')
         ->where('v0', $userInfo['preferred_username'])
         ->pluck('v1');
         return $roles->toArray() ?? [];

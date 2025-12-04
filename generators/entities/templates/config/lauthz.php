@@ -42,7 +42,7 @@ return [
             'connection' => '',
 
             // Rule table name.
-            'rules_table' => 'acl_rules',
+            'rules_table' => 'ac_rules',
         ],
 
         'log' => [
