@@ -16,6 +16,7 @@ import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)
 import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
+import { Can } from '../../components/Can';
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
 type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includes(column)) { %> | '<%=column%>'<% } %><% } %>;
@@ -147,9 +148,6 @@ export default function <%= entity.name %>List() {
     document.title = t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
-  const canEdit = () => true; // Placeholder for permission logic
-  const canView = () => true; // Placeholder for permission logic
-
   return (
     <>
       <h1 className="text-2xl mb-4">{t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
@@ -157,16 +155,18 @@ export default function <%= entity.name %>List() {
 <% if (searchEngine !== 'null' ) { -%>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
 <% } -%>
-        <Link
-          to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
-          className="primary-button whitespace-nowrap"
-          data-shortcut="ctrl+enter"
-        >
-          <Plus size={16} />
-          {t('actions.crud.create')} {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')}
-          <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
-          <kbd className="kdb-shortcut">↵</kbd>
-        </Link>
+        <Can resource="<%= entity.name %>" action="create">
+          <Link
+            to="/entities/<%=to.slug(pluralize(entity.name))%>/new"
+            className="primary-button whitespace-nowrap"
+            data-shortcut="ctrl+enter"
+          >
+            <Plus size={16} />
+            {t('actions.crud.create')} {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')}
+            <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+            <kbd className="kdb-shortcut">↵</kbd>
+          </Link>
+        </Can>
       </div>
       <Fragment>
         <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
@@ -233,8 +233,16 @@ export default function <%= entity.name %>List() {
 <%                  } -%>
                     <td className="text-nowrap w-0 uppercase">
                       <div className="flex space-x-2">
-                        {canView() && <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">{t('actions.crud.view')}</Link>}
-                        {canEdit() && <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">{t('actions.crud.edit')}</Link>}
+                        <Can resource="<%= entity.name %>" action="read">
+                          <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${row.id}`} className="text-link">
+                            {t('actions.crud.view')}
+                          </Link>
+                        </Can>
+                        <Can resource="<%= entity.name %>" action="update">
+                          <Link to={`/entities/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">
+                            {t('actions.crud.edit')}
+                          </Link>
+                        </Can>
                       </div>
                     </td>
                   </tr>

@@ -117,7 +117,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
-
+import { Can } from '../../components/Can';
 import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
 
 <%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") + "\n\n" -%>
@@ -180,8 +180,6 @@ interface <%= entity.name %>FormProps {
   onSubmit: (data: I<%= entity.name %>) => void | Promise<void>;
   onCancel: () => void;
 }
-
-const canDelete = () => true; // Placeholder for permission logic
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
   const { t } = useTranslation();
@@ -384,17 +382,19 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <button type="button" onClick={onCancel} className="cancel-button">
             {t('actions.crud.cancel')}
           </button>
-          <button
-            data-shortcut="ctrl+enter"
-            type="submit"
-            disabled={isSubmitting}
-            className="primary-button"
-          >
-            {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
-            <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
-            <kbd className="kdb-shortcut">↵</kbd>
-          </button>
-          {<%= to.camel(entity.name)-%>?.id && canDelete() && <<%= entity.name %>DeleteButton id={<%= to.camel(entity.name)-%>.id} />}
+          <Can resource="<%= entity.name %>" action="update">
+            <button
+              data-shortcut="ctrl+enter"
+              type="submit"
+              disabled={isSubmitting}
+              className="primary-button"
+            >
+              {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
+              <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+              <kbd className="kdb-shortcut">↵</kbd>
+            </button>
+          </Can>
+          {<%= to.camel(entity.name)-%>?.id && <Can resource="<%= entity.name %>" action="delete"><<%= entity.name %>DeleteButton id={<%= to.camel(entity.name)-%>.id} /></Can>}
         </div>
       </form>
     </FormProvider>

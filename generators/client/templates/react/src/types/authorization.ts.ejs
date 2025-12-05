@@ -1,0 +1,8 @@
+export interface Permission {
+  [key: number]: string;
+}
+
+export interface AuthorizationContextType {
+  can: (resource: string, action: string) => boolean;
+  loading: boolean;
+}

@@ -79,6 +79,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
     that.fs.copyTpl(that.templatePath("react/src/components/ApiResponsePagination.tsx.ejs"), that.destinationPath(`client/src/components/ApiResponsePagination.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/Can.tsx.ejs"), that.destinationPath(`client/src/components/Can.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/Footer.tsx.ejs"), that.destinationPath(`client/src/components/Footer.tsx`), {});
@@ -126,6 +127,7 @@ export async function createReactClient(that, parsedJDL) {
     });
 
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthContext.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/contexts/AuthorizationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthorizationContext.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/contexts/NotificationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/NotificationContext.tsx`), {});
 
@@ -232,8 +234,7 @@ export async function createReactClient(that, parsedJDL) {
         );
     }
 
-    that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`), {});
-    that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`), {});
-
-    // await that.spawn('npm', ['i'], { cwd: 'client' });
+    that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
+    that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`));
+    that.fs.copyTpl(that.templatePath("react/src/types/authorization.ts.ejs"), that.destinationPath(`client/src/types/authorization.ts`));
 }

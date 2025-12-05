@@ -1,0 +1,26 @@
+import React, { ReactNode, useEffect, useState } from 'react';
+import { useAuthorization } from '../contexts/AuthorizationContext';
+
+interface CanProps {
+  resource: string;
+  action: string;
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+export const Can: React.FC<CanProps> = ({ resource, action, children, fallback = null }) => {
+  const { can } = useAuthorization();
+  const [allowed, setAllowed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    can(resource, action)
+      .then(setAllowed)
+      .finally(() => setLoading(false));
+  }, [resource, action, can]);
+
+  if (loading) return null;
+  if (!allowed) return <>{fallback}</>;
+
+  return <>{children}</>;
+};

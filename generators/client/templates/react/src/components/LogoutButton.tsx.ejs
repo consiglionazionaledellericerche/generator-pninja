@@ -1,12 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import { useAuthorization } from '../contexts/AuthorizationContext';
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-
+  const { refresh } = useAuthorization();
   const handleLogout = async () => {
+    refresh();
     navigate('/logout', { state: { from: location.pathname } });
   };
 

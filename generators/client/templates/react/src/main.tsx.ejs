@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthProvider.tsx';
+import { AuthorizationProvider } from './contexts/AuthorizationContext.tsx';
 import App from './App.tsx';
 import './i18n';
 import './index.css';
@@ -10,7 +11,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <AuthorizationProvider cacheDuration={5 * 60 * 1000}>
+          <App />
+        </AuthorizationProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

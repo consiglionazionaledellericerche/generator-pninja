@@ -7,6 +7,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import { useApi } from '../../hooks/useApi';
 import { HttpError } from '../../hooks/useApi';
 import { SimpleLoader } from '../../components/SimpleLoader';
+import { Can } from '../../components/Can';
 <% if(durationColumns.length) {-%>
 import { DurationFieldViewer } from '../../components/formElements/DurationField';
 <% } -%>
@@ -26,8 +27,6 @@ interface <%= entity.name %>DataViewParams {
 interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
 }
-
-const canDelete = () => true; // Placeholder for permission logic
 
 export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewParams) {
   const { t } = useTranslation();
@@ -161,10 +160,14 @@ export default function <%= entity.name %>View() {
           <ArrowLeft size={20} />
           {t('actions.crud.back')}
         </Link>
-        <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
-          {t('actions.crud.edit')}
-        </Link>
-        {canDelete() && <<%= entity.name %>DeleteButton id={id} />}
+        <Can resource="<%= entity.name %>" action="update">
+          <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
+            {t('actions.crud.edit')}
+          </Link>
+        </Can>
+        <Can resource="<%= entity.name %>" action="delete">
+          <<%= entity.name %>DeleteButton id={id} />
+        </Can>
       </div>
       )}
     </>
