@@ -19,7 +19,6 @@ class AccessControl
             'delete' => 'delete'
         };
         $result = $this->userHasPermission($resource, $action);
-        \Log::info("[MIDDLEWARE]\tChecking permission for user {" . auth()->user()->username . "} on resource '{$resource}' with action '{$action}' " . ($result ? 'ALLOWED' : 'DENIED'));
         if (!$result) {
             return response()->json(['error' => 'Forbidden'], 403);
         }
