@@ -1,14 +1,26 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useAuthorization } from '../contexts/AuthorizationContext';
+import { Navigate } from 'react-router-dom';
+import { useAuthState } from '../hooks/useAuthState';
 
 interface CanProps {
   resource: string;
   action: string;
   children: ReactNode;
+  loader?: ReactNode;
   fallback?: ReactNode;
+  force_login?: boolean;
 }
 
-export const Can: React.FC<CanProps> = ({ resource, action, children, fallback = null }) => {
+export const Can: React.FC<CanProps> = ({
+  resource,
+  action,
+  children,
+  loader = null,
+  fallback = null,
+  force_login = false,
+}) => {
+  const { isAuthenticated } = useAuthState();
   const { can } = useAuthorization();
   const [allowed, setAllowed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -19,8 +31,13 @@ export const Can: React.FC<CanProps> = ({ resource, action, children, fallback =
       .finally(() => setLoading(false));
   }, [resource, action, can]);
 
-  if (loading) return null;
-  if (!allowed) return <>{fallback}</>;
-
+  if (loading) return <>{loader}</>;
+  if (!allowed) {
+    return force_login && !isAuthenticated ? (
+      <Navigate to="/login" state={{ from: location.pathname }} />
+    ) : (
+      <>{fallback}</>
+    );
+  }
   return <>{children}</>;
 };

@@ -1,11 +1,11 @@
 import { Routes, Route, type NavigateOptions, useHref, useNavigate } from 'react-router-dom';
 import { RouterProvider } from 'react-aria-components';
 import { NotificationProvider } from './contexts/NotificationContext';
-import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer';
 import Menu from './components/Menu';
 import Home from './pages/Home';
 import Err404 from './pages/errors/Err404';
+import Err403 from './pages/errors/Err403';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 <% for (const entity of entities) {%>
@@ -16,6 +16,7 @@ import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
 
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
+import { Can } from './components/Can';
 
 import './App.css';
 
@@ -45,22 +46,40 @@ function App() {
         <div className="p-8 min-h-[50vh]">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route element={<ProtectedRoute />}>
-<%  for (const entity of entities.filter(entity => !['AcRule'].includes(entity.name))) {-%>
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%>List />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
+<%  for (const entity of entities) {-%>
+            <Route
+              path="/entities/<%=to.slug(pluralize(entity.name))%>"
+              element={
+                <Can resource="<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
+                  <<%=entity.name%>List />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id"
+              element={
+                <Can resource="<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
+                  <<%=entity.name%>View />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id"
+              element={
+                <Can resource="<%=entity.name%>" action="update" fallback={<Err403 />} force_login={true}>
+                  <<%=entity.name%>Edit />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/<%=to.slug(pluralize(entity.name))%>/new"
+              element={
+                <Can resource="<%=entity.name%>" action="create" fallback={<Err403 />} force_login={true}>
+                  <<%=entity.name%>Edit />
+                </Can>
+              }
+            />
 <%  }-%>
-            </Route>
-            <Route element={<ProtectedRoute requiredRoles={['admin']} requireAll={false} />}>
-<%  for (const entity of entities.filter(entity => ['AcRule'].includes(entity.name))) {-%>
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>" element={<<%=entity.name%>List />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id" element={<<%=entity.name%>View />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id" element={<<%=entity.name%>Edit />} />
-              <Route path="/entities/<%=to.slug(pluralize(entity.name))%>/new" element={<<%=entity.name%>Edit />} />
-<%  }-%>
-            </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<Err404 />} />
