@@ -20,7 +20,7 @@ interface AuthorizationProviderProps {
 
 export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({
   children,
-  cacheDuration = 5 * 60 * 1000,
+  cacheDuration = 1 * 1000,
 }) => {
   const [cache, setCache] = useState<Map<string, CacheEntry>>(new Map());
   const pendingRequestsRef = useRef<Map<string, Promise<boolean>>>(new Map());
