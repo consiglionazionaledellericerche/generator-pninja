@@ -3,18 +3,29 @@ import { useAuthorization } from '../contexts/AuthorizationContext';
 import { Navigate } from 'react-router-dom';
 import { useAuthState } from '../hooks/useAuthState';
 
-interface CanProps {
+interface PermissionCheck {
   resource: string;
   action: string;
+}
+
+interface BaseCanProps {
   children: ReactNode;
   loader?: ReactNode;
   fallback?: ReactNode;
   force_login?: boolean;
 }
 
+type CanProps = BaseCanProps & (
+  | { resource: string; action: string; any?: never; all?: never }
+  | { any: PermissionCheck[]; resource?: never; action?: never; all?: never }
+  | { all: PermissionCheck[]; resource?: never; action?: never; any?: never }
+);
+
 export const Can: React.FC<CanProps> = ({
   resource,
   action,
+  any,
+  all,
   children,
   loader = null,
   fallback = null,
@@ -26,10 +37,38 @@ export const Can: React.FC<CanProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    can(resource, action)
-      .then(setAllowed)
-      .finally(() => setLoading(false));
-  }, [resource, action, can]);
+    const checkPermissions = async () => {
+      // Single resource/action check
+      if (resource && action) {
+        const result = await can(resource, action);
+        setAllowed(result);
+        return;
+      }
+
+      // ANY check: at least one must be allowed
+      if (any && any.length > 0) {
+        const results = await Promise.all(
+          any.map(check => can(check.resource, check.action))
+        );
+        setAllowed(results.some(result => result));
+        return;
+      }
+
+      // ALL check: all must be allowed
+      if (all && all.length > 0) {
+        const results = await Promise.all(
+          all.map(check => can(check.resource, check.action))
+        );
+        setAllowed(results.every(result => result));
+        return;
+      }
+
+      // No specific check
+      setAllowed(false);
+    };
+
+    checkPermissions().finally(() => setLoading(false));
+  }, [resource, action, any, all, can]);
 
   if (loading) return <>{loader}</>;
   if (!allowed) {
