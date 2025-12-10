@@ -4,7 +4,7 @@ const getRolesFromSession = (): string[] => {
   console.info('Retrieving roles from session');
   try {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/user/permissions', false);
+    xhr.open('GET', '/api/user/roles', false);
     xhr.withCredentials = true;
     xhr.send();
 

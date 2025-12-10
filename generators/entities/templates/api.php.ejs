@@ -24,8 +24,8 @@ Route::prefix('auth')->group(function () {
     Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
 });
 
-Route::middleware(['session.auth'])->get('/user/permissions', function (Request $request) {
-    $username = auth()->user()->username ?? '';
+Route::middleware(['session.auth'])->get('/user/roles', function (Request $request) {
+    $username = auth()->user()->username ?? '__GUEST__';
     return response()->json([
         'roles' => Enforcer::getRolesForUser($username),
     ]);
@@ -34,9 +34,8 @@ Route::middleware(['session.auth'])->get('/user/permissions', function (Request 
 Route::middleware(['session.auth'])->post('/user/can', function (Request $request) {
     $resource = $request->resource ?? null;
     $action = $request->action ?? null;
-    $username = auth()->user()->username ?? '';
+    $username = auth()->user()->username ?? '__GUEST__';
     $allowed = Enforcer::enforce($username, $resource, $action);
-
     return response()->json(['allowed' => $allowed]);
 });
 

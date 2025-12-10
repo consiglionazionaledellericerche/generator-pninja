@@ -19,7 +19,7 @@ trait HandlesUserRoles
      */
     protected function getUserRoles(): array
     {
-        $username = auth()->user()->username ?? '';
+        $username = auth()->user()->username ?? '__GUEST__';
         return Enforcer::getRolesForUser($username);
     }
 
@@ -84,7 +84,7 @@ trait HandlesUserRoles
 
     protected function userHasPermission(string $resource, string $action): bool
     {
-        $username = auth()->user()->username ?? '';
+        $username = auth()->user()->username ?? '__GUEST__';
         return Enforcer::enforce($username, $resource, $action);
     }
 }
