@@ -37,7 +37,7 @@ switch (searchEngine) {
 }
 
 -%>
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { JsonPrint } from '../components/JsonPrint';
 import { useAuthState } from '../hooks/useAuthState';
@@ -56,6 +56,17 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const { user, loading } = useAuthState();
   const { getRoles } = useRoles();
+  const [roles, setRoles] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const fetchedRoles = await getRoles();
+      setRoles(fetchedRoles);
+    };
+
+    fetchRoles();
+  }, [getRoles]);
+
   useEffect(() => {
     document.title = t('appName');
   }, [t, i18n.language]);
@@ -103,7 +114,7 @@ export default function Home() {
       {!loading && (
         <>
           <JsonPrint data={user} className="max-h-64 overflow-y-auto" />
-          <JsonPrint className="mt-4" data={{ roles: getRoles() }} />
+          <JsonPrint className="mt-4" data={{ roles }} />
         </>
       )}
     </div>

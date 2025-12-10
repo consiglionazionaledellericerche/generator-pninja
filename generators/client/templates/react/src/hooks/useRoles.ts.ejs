@@ -1,19 +1,10 @@
 import { useCallback } from 'react';
+import axios from 'axios'; // Importa axios
 
-const getRolesFromSession = (): string[] => {
-  console.info('Retrieving roles from session');
+const getRolesFromSession = async (): Promise<string[]> => {
   try {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/api/user/roles', false);
-    xhr.withCredentials = true;
-    xhr.send();
-
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      return response?.roles || [];
-    }
-
-    return [];
+    const response = await axios.get('/api/user/roles', { withCredentials: true });
+    return response.data?.roles || [];
   } catch (error) {
     console.error('Error getting roles from session:', error);
     return [];
@@ -21,25 +12,13 @@ const getRolesFromSession = (): string[] => {
 };
 
 export const useRoles = () => {
-  const getRoles = useCallback((): string[] => {
-    const userRoles = getRolesFromSession();
+  const getRoles = useCallback(async (): Promise<string[]> => {
+    const userRoles = await getRolesFromSession();
     if (!userRoles) return [];
     return userRoles;
   }, []);
 
-  const hasAnyRole = useCallback(
-    (testRoles: string[]): boolean => testRoles.some((role) => getRoles().includes(role)),
-    [getRoles]
-  );
-
-  const hasAllRoles = useCallback(
-    (testRoles: string[]): boolean => testRoles.every((role) => getRoles().includes(role)),
-    [getRoles]
-  );
-
   return {
     getRoles,
-    hasAnyRole,
-    hasAllRoles,
   };
 };
