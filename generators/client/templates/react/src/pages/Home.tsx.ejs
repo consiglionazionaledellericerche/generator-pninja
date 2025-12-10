@@ -103,12 +103,7 @@ export default function Home() {
       {!loading && (
         <>
           <JsonPrint data={user} className="max-h-64 overflow-y-auto" />
-          <JsonPrint
-            className="mt-4"
-            data={{
-              roles: getRoles(),
-            }}
-          />
+          <JsonPrint className="mt-4" data={{ roles: getRoles() }} />
         </>
       )}
     </div>
