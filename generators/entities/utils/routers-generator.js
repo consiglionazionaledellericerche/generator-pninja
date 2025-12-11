@@ -29,10 +29,7 @@ export class RoutersGenerator {
                 hasBlob,
             };
         });
-        this.that.fs.copyTpl(
-            this.that.templatePath("api.php.ejs"),
-            this.that.destinationPath(`server/routes/api.php`),
-            { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) },
-        );
+        this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) });
+        this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`), { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) });
     }
 }

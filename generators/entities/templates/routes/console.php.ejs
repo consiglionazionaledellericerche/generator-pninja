@@ -1,0 +1,13 @@
+<?php
+
+use Illuminate\Support\Facades\Artisan;
+use Lauthz\Facades\Enforcer;
+
+Artisan::command('add-admin {username}', function ($username) {
+    Enforcer::addRoleForUser($username, 'admin');
+    $this->info("Admin role added to user: $username");
+})->purpose('Add admin role to a user');
+Artisan::command('add-role {role} {username}', function ($role, $username) {
+    Enforcer::addRoleForUser($username, $role);
+    $this->info("$role role added to user: $username");
+})->purpose('Add a role to a user');
