@@ -17,8 +17,7 @@ import {
   Tag,
 } from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
-import { useApi } from '../../hooks/useApi';
-import { HttpError } from '../../hooks/useApi';
+import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
@@ -96,14 +95,59 @@ const SelectField: React.FC<SelectFieldProps> = ({
   label,
   multiple = false,
   options,
-  optionsLoad,
   validations,
   initialValue,
   sortDirection = 'asc',
   placeholder,
   ...props
 }) => {
-  const { fetch } = useApi();
+  const optionsLoad = useMemo(() => {
+    if (
+      !(
+        props.optionsLoad?.url ||
+        props.optionsLoad?.valueAttribute ||
+        props.optionsLoad?.getValue ||
+        props.optionsLoad?.labelAttribute ||
+        props.optionsLoad?.getLabel ||
+        props.optionsLoad?.searchParam ||
+        props.optionsLoad?.perPageParam ||
+        props.optionsLoad?.pageParam ||
+        props.optionsLoad?.sortByParam ||
+        props.optionsLoad?.sortDirectionParam ||
+        props.optionsLoad?.perPage ||
+        props.optionsLoad?.searchable
+      )
+    )
+      return null;
+
+    return {
+      url: props.optionsLoad.url,
+      valueAttribute: props.optionsLoad.valueAttribute,
+      getValue: props.optionsLoad.getValue,
+      labelAttribute: props.optionsLoad.labelAttribute,
+      getLabel: props.optionsLoad.getLabel,
+      searchParam: props.optionsLoad.searchParam,
+      perPageParam: props.optionsLoad.perPageParam,
+      pageParam: props.optionsLoad.pageParam,
+      sortByParam: props.optionsLoad.sortByParam,
+      sortDirectionParam: props.optionsLoad.sortDirectionParam,
+      perPage: props.optionsLoad.perPage,
+      searchable: props.optionsLoad.searchable,
+    };
+  }, [
+    props.optionsLoad?.url,
+    props.optionsLoad?.valueAttribute,
+    props.optionsLoad?.getValue,
+    props.optionsLoad?.labelAttribute,
+    props.optionsLoad?.getLabel,
+    props.optionsLoad?.searchParam,
+    props.optionsLoad?.perPageParam,
+    props.optionsLoad?.pageParam,
+    props.optionsLoad?.sortByParam,
+    props.optionsLoad?.sortDirectionParam,
+    props.optionsLoad?.perPage,
+    props.optionsLoad?.searchable,
+  ]);
   const { t } = useTranslation();
   const { required } = validations || {};
   const perPage = optionsLoad?.perPage ?? 10;
@@ -116,10 +160,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
     async load({ signal, cursor, filterText }) {
       if (optionsLoad?.url) {
         try {
-          const res = await fetch(cursor || buildApiUrl(filterText, 1), {
+          const res = await axiosInstance.get(cursor || buildApiUrl(filterText, 1), {
             signal,
           });
-          const { data, current_page, last_page } = await res.json();
+          const { data = [], current_page = 1, last_page = 1 } = res?.data ?? {};
           return {
             items: data,
             cursor:
@@ -255,8 +299,8 @@ const SelectField: React.FC<SelectFieldProps> = ({
         url.searchParams.set('ids', values.join(','));
         url.searchParams.set('per_page', values.length.toString());
 
-        const response = await fetch(url.toString());
-        const result: PaginatedResponse = await response.json();
+        const response = await axiosInstance.get(url.toString());
+        const result: PaginatedResponse = await response?.data;
 
         return result.data.map((item) => ({
           name: getLabel(item),
@@ -273,7 +317,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
         return [];
       }
     },
-    [optionsLoad?.url, fetch, getLabel, getValue, addNotification, t]
+    [optionsLoad?.url, getLabel, getValue, addNotification, t]
   );
 
   // Handler per rimuovere tag
