@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 <%  if (entities.length > 1) { -%>
 import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { ChevronDown, UserCog } from 'lucide-react';
+import { ChevronDown, Settings2 } from 'lucide-react';
 <% } -%>
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -147,8 +147,8 @@ const Menu: React.FC = () => {
                 aria-label={t('entities')}
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
-                <UserCog aria-hidden size={16} />
-                <span className="w-0 overflow-hidden">{t('Admin')}</span>
+                <Settings2 aria-hidden size={16} />
+                <span className="w-0 overflow-hidden">{t('common.settings')}</span>
                 <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
