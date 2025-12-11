@@ -1,0 +1,51 @@
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { HttpError, useApi } from '../../hooks/useApi';
+import ConfirmButton from '../ConfirmButton';
+
+interface DeleteButtonProps {
+  id: string | number | null | undefined;
+}
+
+const AcRuleDeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
+  const { t } = useTranslation();
+
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+  const { fetch } = useApi();
+
+  const deleteRecord = (id: string | number | null | undefined) => {
+    if (!id) return;
+    fetch(`/api/ac-rules/${id}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t(`actions.crud.successfullyDeleted`, { id }),
+        });
+        navigate('/entities/ac-rules');
+      })
+      .catch((error: HttpError) => {
+        addNotification({
+          type: 'error',
+          message: `${t('errors.entities.delete')} ${t('entities:ac_rule.AcRule')} ID ${id}`,
+          details: error?.details || '',
+        });
+      });
+  };
+
+  return (
+    <ConfirmButton
+      onConfirm={() => deleteRecord(Number(id))}
+      className="danger-button"
+      pendingClassName="danger-button"
+      label={t('actions.crud.delete')}
+      pendingLabel={
+        <span className="flex items-center gap-2">{t('actions.crud.confirmDelete')}</span>
+      }
+    />
+  );
+}
+export default AcRuleDeleteButton;

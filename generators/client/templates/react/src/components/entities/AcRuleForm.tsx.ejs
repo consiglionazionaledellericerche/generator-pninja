@@ -1,0 +1,126 @@
+import { useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { IAcRule } from '../../shared/model/ac-rule.model';
+import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+import { Can } from '../../components/Can';
+import AcRuleDeleteButton from './AcRuleDeleteButton';
+
+
+
+import {
+  TextField,
+} from '../formElements';
+import { detect } from 'detect-browser';
+
+const isMac = detect()?.os?.toLowerCase().includes('mac');
+
+interface AcRuleFormProps {
+  acRule: IAcRule;
+  onSubmit: (data: IAcRule) => void | Promise<void>;
+  onCancel: () => void;
+}
+
+export function AcRuleForm({ acRule, onSubmit, onCancel }: AcRuleFormProps) {
+  const { t } = useTranslation();
+  useAutoShortcuts();
+
+  const formMethods = useForm();
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+    reset,
+  } = formMethods;
+
+  const handleFormSubmit = async (data: IAcRule) => {
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (acRule) {
+      reset({
+        ptype: acRule?.ptype,
+        v0: acRule?.v0 ?? undefined,
+        v1: acRule?.v1 ?? undefined,
+        v2: acRule?.v2 ?? undefined,
+        v3: acRule?.v3 ?? undefined,
+        v4: acRule?.v4 ?? undefined,
+        v5: acRule?.v5 ?? undefined,
+      });
+    }
+  }, [acRule, reset]);
+
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+        <div className="max-w-5xl mx-auto space-y-4">
+          <div>
+            <TextField
+              fieldName="ptype"
+              label={t('entities:ac_rule.ptype')}
+              validations={{"required":true}}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v0"
+              label={t('entities:ac_rule.v0')}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v1"
+              label={t('entities:ac_rule.v1')}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v2"
+              label={t('entities:ac_rule.v2')}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v3"
+              label={t('entities:ac_rule.v3')}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v4"
+              label={t('entities:ac_rule.v4')}
+            />
+          </div>
+          <div>
+            <TextField
+              fieldName="v5"
+              label={t('entities:ac_rule.v5')}
+            />
+          </div>
+        </div>
+        <div className="flex justify-center gap-4 my-8">
+          <button type="button" onClick={onCancel} className="cancel-button">
+            {t('actions.crud.cancel')}
+          </button>
+          <Can resource="AcRule" action="update">
+            <button
+              data-shortcut="ctrl+enter"
+              type="submit"
+              disabled={isSubmitting}
+              className="primary-button"
+            >
+              {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
+              <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+              <kbd className="kdb-shortcut">↵</kbd>
+            </button>
+          </Can>
+          {acRule?.id && <Can resource="AcRule" action="delete"><AcRuleDeleteButton id={acRule.id} /></Can>}
+        </div>
+      </form>
+    </FormProvider>
+  );
+}

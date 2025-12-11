@@ -14,6 +14,10 @@ import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
 import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
 <%}-%>
 
+import AcRuleList from './pages/entities/AcRuleList';
+import AcRuleView from './pages/entities/AcRuleView';
+import AcRuleEdit from './pages/entities/AcRuleEdit';
+
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
 import { Can } from './components/Can';
@@ -80,6 +84,38 @@ function App() {
               }
             />
 <%  }-%>
+            <Route
+              path="/entities/ac-rules"
+              element={
+                <Can resource="AcRule" action="read" fallback={<Err403 />} force_login={true}>
+                  <AcRuleList />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/ac-rules/view/:id"
+              element={
+                <Can resource="AcRule" action="read" fallback={<Err403 />} force_login={true}>
+                  <AcRuleView />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/ac-rules/edit/:id"
+              element={
+                <Can resource="AcRule" action="update" fallback={<Err403 />} force_login={true}>
+                  <AcRuleEdit />
+                </Can>
+              }
+            />
+            <Route
+              path="/entities/ac-rules/new"
+              element={
+                <Can resource="AcRule" action="create" fallback={<Err403 />} force_login={true}>
+                  <AcRuleEdit />
+                </Can>
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<Err404 />} />

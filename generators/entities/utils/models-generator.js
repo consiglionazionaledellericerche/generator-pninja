@@ -11,6 +11,7 @@ export class ModelsGenerator {
     generateModels() {
         const { enums, entities, relationships } = this.parsedJDL;
         const searchEngine = this.that.config.get('searchEngine');
+        this.that.fs.copyTpl(this.that.templatePath("app/Models/AcRule.php.ejs"), this.that.destinationPath(`server/app/Models/AcRule.php`));
         for (const entity of entities) {
             const className = entity.name;
             const tableName = to.snake(pluralize(entity.tableName));
@@ -193,7 +194,7 @@ export class ModelsGenerator {
             'infix' => '${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'always' : 'off').join(",")}',
         ];
     }` : '';
-            this.that.fs.copyTpl(this.that.templatePath("Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
+            this.that.fs.copyTpl(this.that.templatePath("app/Models/Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
                 {
                     className,
                     tableName,

@@ -1,0 +1,104 @@
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useApi } from '../../hooks/useApi';
+import { HttpError } from '../../hooks/useApi';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { IAcRule } from '../../shared/model/ac-rule.model';
+import { AcRuleForm } from '../../components/entities/AcRuleForm';
+
+interface AcRuleViewParams extends Record<string, string | undefined> {
+  id: string;
+}
+
+export default function AcRuleEdit() {
+  const { t, i18n } = useTranslation();
+  const { id } = useParams<AcRuleViewParams>();
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+  const { fetch } = useApi();
+  const [acRule, setAcRule] = useState<IAcRule>({} as IAcRule);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      setLoading(true);
+      fetch(`/api/ac-rules/${id}`)
+        .then((response) => response.json())
+        .then((data: IAcRule) => {
+          setAcRule(data);
+        })
+        .catch((error: HttpError) => {
+          addNotification({
+            type: 'error',
+            message: `${t('errors.entities.read')} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`,
+            details: error?.message,
+            techDetails: error?.details,
+          });
+          navigate('/entities/ac-rules');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [id, fetch, addNotification, navigate, t]);
+
+  const handleSubmit = async (data: IAcRule) => {
+    try {
+      const response = await fetch(`/api/ac-rules${id ? `/${id}` : ''}`, {
+        method: id ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const responseData = await (await response).json();
+
+      addNotification({
+        type: 'success',
+        message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
+          id: id || responseData.id,
+        }),
+      });
+      navigate('/entities/ac-rules');
+    } catch (error) {
+      let details = undefined;
+      let techDetails = undefined;
+      if (error instanceof Error) {
+        details = error.message;
+      }
+      if (error instanceof HttpError) {
+        details = error?.message;
+        techDetails = error?.details;
+      }
+      addNotification({
+        type: 'error',
+        message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`,
+        details,
+        techDetails,
+      });
+    }
+  };
+
+  useEffect(() => {
+    document.title = `${t(`actions.crud.${id ? 'update' : 'create'}`)} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`;
+  }, [id, i18n.language, t]);
+
+  return (
+    <div className="max-w-5xl mx-auto">
+      <h1 className="text-2xl my-8">
+        {t(`actions.crud.${id ? 'update' : 'create'}`)} {t('entities:ac_rule.AcRule')}
+        {id ? ` ID ${id}` : ''}
+      </h1>
+      <SimpleLoader loading={loading} />
+      {!loading && (
+        <AcRuleForm
+          acRule={acRule}
+          onSubmit={handleSubmit}
+          onCancel={() => navigate('/entities/ac-rules')}
+        />
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,229 @@
+import { Link } from 'react-router-dom';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ChevronDown, ChevronUp, ChevronsUpDown, Plus } from 'lucide-react';
+import { useApi } from '../../hooks/useApi';
+import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
+import { ApiResponsePagination } from '../../components/ApiResponsePagination';
+import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
+import { SearchInput } from '../../components/SearchInput';
+import { IAcRule } from '../../shared/model/ac-rule.model';
+import { useNotifications } from '../../contexts/NotificationContext';
+import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+import { detect } from 'detect-browser';
+import { Can } from '../../components/Can';
+const isMac = detect()?.os?.toLowerCase().includes('mac');
+
+type SortableField = 'id' | 'ptype' | 'v0' | 'v1' | 'v2' | 'v3' | 'v4' | 'v5';
+
+export default function AcRuleList() {
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+  const { fetch } = useApi();
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
+    field: 'id',
+    direction: 'asc',
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState<ApiResponsePage<IAcRule> | null>(null);
+  useAutoShortcuts();
+  const sortableColumns: SortableField[] = [
+    'id',
+    'ptype',
+    'v0',
+    'v1',
+    'v2',
+    'v3',
+    'v4',
+    'v5',
+  ];
+
+  const loadRecords = useCallback(() => {
+    setLoading(true);
+    fetch(`/api/ac-rules?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}`)
+      .then((response) => response.json())
+      .then((page: ApiResponsePage<IAcRule>) => {
+        setPage(page);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        addNotification({
+          type: 'error',
+          message: error.message,
+        });
+      });
+  }, [fetch, addNotification, sortConfig, currentPage, debouncedSearchTerm]);
+
+  const handleSort = (field: SortableField) => {
+    setSortConfig((currentConfig) => ({
+      field,
+      direction:
+        currentConfig.field === field && currentConfig.direction === 'asc' ? 'desc' : 'asc',
+    }));
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
+  interface SortHeaderProps extends React.HTMLAttributes<HTMLTableCellElement> {
+    field: string;
+    label: string;
+    className?: string;
+  }
+
+  const SortHeader: React.FC<SortHeaderProps> = ({ field, label, className, ...props }) => {
+    const isSorted = sortConfig.field === field;
+    const isSortable = sortableColumns.includes(field as SortableField);
+    if (!isSortable) {
+      return (
+        <th scope="col" className={className ? className : ''} {...props}>
+          {label}
+        </th>
+      );
+    }
+    return (
+      <th
+        scope="col"
+        className={`${isSortable ? 'cursor-pointer select-none py-0! px-0!' : ''}${className ? ' ' + className : ''}`}
+        onClick={() => isSortable && handleSort(field as SortableField)}
+        {...props}
+      >
+        <button
+          className="cursor-pointer flex items-center gap-4 w-full ps-6 py-3 text-nowrap truncate"
+          aria-label={t(
+            `common.sortBy.${isSorted && sortConfig.direction === 'asc' ? 'descending' : 'ascending'}`,
+            {
+              field: label,
+            }
+          )}
+        >
+          <div className="grow text-left">{label}</div>
+          {isSorted &&
+            (sortConfig.direction === 'asc' ? (
+              <ChevronDown
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ) : (
+              <ChevronUp
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ))}
+          {!isSorted && (
+            <ChevronsUpDown
+              aria-hidden
+              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+            />
+          )}
+        </button>
+      </th>
+    );
+  };
+
+  useEffect(() => loadRecords(), [loadRecords]);
+
+  useEffect(() => {
+    document.title = t('entities:ac_rule.AcRules');
+  }, [i18n.language, t]);
+
+  return (
+    <>
+      <h1 className="text-2xl mb-4">{t('entities:ac_rule.AcRules')}</h1>
+      <div className={`flex gap-4 mb-4`}>
+        <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
+        <Can resource="AcRule" action="create">
+          <Link
+            to="/entities/ac-rules/new"
+            className="primary-button whitespace-nowrap"
+            data-shortcut="ctrl+enter"
+          >
+            <Plus size={16} />
+            {t('actions.crud.create')} {t('entities:ac_rule.AcRule')}
+            <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+            <kbd className="kdb-shortcut">↵</kbd>
+          </Link>
+        </Can>
+      </div>
+      <Fragment>
+        <TableSkeletonLoader loading={loading} rows={10} cols={7} />
+      </Fragment>
+      {!loading && page?.data && page?.data.length === 0 && (
+        <p className="mb-4 text-2xl">{t('messages.noData')}</p>
+      )}
+      {!loading && page?.data && page?.data.length > 0 && (
+        <>
+          <div className="relative overflow-x-auto mb-4">
+            <table className="data-table">
+              <caption className="w-full text-left mb-2 text-sm font-normal">
+                {t('pagination.summary', {
+                  entity: t('entities:ac_rule.AcRules'),
+                  from: page?.from,
+                  to: page?.to,
+                  total: page?.total,
+                })}
+              </caption>
+              <thead>
+                <tr>
+                  <SortHeader className="w-0" field="id" label={t('entities:ac_rule.id')} />
+                  <SortHeader field="ptype" label={t('entities:ac_rule.ptype')} />
+                  <SortHeader field="v0" label={t('entities:ac_rule.v0')} />
+                  <SortHeader field="v1" label={t('entities:ac_rule.v1')} />
+                  <SortHeader field="v2" label={t('entities:ac_rule.v2')} />
+                  <SortHeader field="v3" label={t('entities:ac_rule.v3')} />
+                  <SortHeader field="v4" label={t('entities:ac_rule.v4')} />
+                  <SortHeader field="v5" label={t('entities:ac_rule.v5')} />
+                  <th scope="col">{t('actions.crud.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {page?.data.map((row, key) => (
+                  <tr key={key}>
+                    <td className="w-0">
+                      <Link className="text-link" to={`/entities/ac-rules/view/${row.id}`}>
+                        {row.id}
+                      </Link>
+                    </td>
+                    <td>{row.ptype?.toString()}</td>
+                    <td>{row.v0?.toString()}</td>
+                    <td>{row.v1?.toString()}</td>
+                    <td>{row.v2?.toString()}</td>
+                    <td>{row.v3?.toString()}</td>
+                    <td>{row.v4?.toString()}</td>
+                    <td>{row.v5?.toString()}</td>
+                    <td className="text-nowrap w-0 uppercase">
+                      <div className="flex space-x-2">
+                        <Can resource="AcRule" action="read">
+                          <Link to={`/entities/ac-rules/view/${row.id}`} className="text-link">
+                            {t('actions.crud.view')}
+                          </Link>
+                        </Can>
+                        <Can resource="AcRule" action="update">
+                          <Link to={`/entities/ac-rules/edit/${row.id}`} className="text-link">
+                            {t('actions.crud.edit')}
+                          </Link>
+                        </Can>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ApiResponsePagination pageLinks={page.links || []} onSelectPage={setCurrentPage} />
+        </>
+      )}
+    </>
+  );
+}

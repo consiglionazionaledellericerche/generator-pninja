@@ -77,69 +77,6 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = parseJDL(entitiesFilePath);
 
-    parsedJDL.entities.push({
-      "annotations": [],
-      "name": "AcRule",
-      "tableName": "AcRule",
-      "body": [
-        {
-          "name": "ptype",
-          "type": "String",
-          "validations": [
-            {
-              "key": "required",
-              "value": ""
-            }
-          ],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v0",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v1",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v2",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v3",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v4",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        },
-        {
-          "name": "v5",
-          "type": "String",
-          "validations": [],
-          "javadoc": null,
-          "annotations": []
-        }
-      ],
-      "javadoc": null
-    });
-
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
         throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
@@ -208,8 +145,8 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: parsedJDL.entities });
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
-    this.fs.copyTpl(this.templatePath("Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
-    this.fs.copyTpl(this.templatePath("Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
     this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));

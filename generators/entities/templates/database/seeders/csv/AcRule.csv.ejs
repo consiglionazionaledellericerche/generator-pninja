@@ -2,4 +2,4 @@ ptype,v0,v1,v2,v3,v4,v5
 p,admin,*,*,,,
 <%- entities.filter(({ name }) => !['AcRule'].includes(name)).map(({name}) => `p,__USER__,${name},*,,,`).join('\n');%>
 <%- entities.filter(({ name }) => !['AcRule'].includes(name)).map(({name}) => `p,__GUEST__,${name},read,,,`).join('\n');%>
-p,__USER__,File,Read
+p,__USER__,File,read,,,

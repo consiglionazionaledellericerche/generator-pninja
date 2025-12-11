@@ -93,6 +93,7 @@ If a CSV file exists in `server/database/seeders/csv/`, **only** data from the C
 
 ```sh
 server/database/seeders/csv/
+├── AcRule.csv # Rules for access control
 <% csvs.map((row, i) => {-%>
 <%- i < (csvs.length - 1) ? '├──' : '└──' %> <%- row %>
 <%}); -%>

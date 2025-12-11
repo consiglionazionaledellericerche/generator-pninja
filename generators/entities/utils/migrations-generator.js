@@ -80,6 +80,7 @@ export class MigrationsGenerator {
                     columns: columns.join(`\n${tab(3)}`),
                 });
         }
+        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_ac_rules_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_ac_rules_table.php`));
     }
     createRelations() {
         const { entities, relationships } = this.parsedJDL;

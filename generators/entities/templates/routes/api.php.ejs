@@ -8,6 +8,7 @@ use App\Http\Controllers\SessionAuthController;
 <% eRoutes.forEach(({className}) => {-%>
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
+use App\Http\Controllers\AcRuleController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -51,6 +52,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
     Route::get('<%- rootPath %>/{id}/{field}/{filename?}', [<%- className %>Controller::class, 'serveBlob']);
 <%  }; -%>
 <% }); -%>
+    Route::apiResource('ac-rules', AcRuleController::class);
 
     Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
         ->where('path', '.*')

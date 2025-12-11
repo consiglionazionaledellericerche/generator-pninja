@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
-<% entities.forEach(function(entity) { %>
+use App\Models\AcRule;
+<% entities.forEach(function(entity) { -%>
 use App\Models\<%= entity.name %>;<% }); %>
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->seedModel(AcRule::class, 'AcRule.csv', 5);
 <% entities.forEach(function(entity) { -%>
         $this->seedModel(<%= entity.name %>::class, '<%= entity.name %>.csv', <%= n %>);
 <% }); -%>

@@ -1,10 +1,22 @@
 {
+  "ac_rule": {
+    "AcRule": "AcRule",
+    "AcRules": "AcRules",
+    "id": "ID",
+    "ptype": "ptype",
+    "v0": "v0",
+    "v1": "v1",
+    "v2": "v2",
+    "v3": "v3",
+    "v4": "v4",
+    "v5": "v5"
+  },
   <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
-    `\n      "${entity.name}": "${to.capital(entity.name)}"`,
+    `\n    "${entity.name}": "${to.capital(entity.name)}"`,
     `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,
     `"id": "ID"`,
     ...(entity.body.map(r => `"${to.snake(r.name)}": "${to.capital(r.name)}"`)),
     ...(getModelForeignIds(entity, relationships).map(r => `"${to.snake(r.foreignId)}": "${to.capital(r.foreignId)}"`)),
     ...(getModelRelatedEntities(entity, relationships).map(r => `"${to.snake(r.field)}": "${to.capital(r.field)}"`))
-  ].join(`,\n      `)}\n    }`).join(`,\n    `)%>
+  ].join(`,\n    `)}\n  }`).join(`,\n  `)%>
 }

@@ -145,6 +145,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useRoles.ts.ejs"), that.destinationPath(`client/src/hooks/useRoles.ts`), {});
 
+    that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
+
     for (const entity of entities) {
         that.fs.copyTpl(
             that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
@@ -162,6 +164,12 @@ export async function createReactClient(that, parsedJDL) {
     for (const enumeration of enums) {
         that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
     }
+
+    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleList.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleList.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleView.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleView.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleEdit.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleEdit.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleForm.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleForm.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleDeleteButton.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleDeleteButton.tsx`));
 
     for (const entity of entities) {
         that.fs.copyTpl(
