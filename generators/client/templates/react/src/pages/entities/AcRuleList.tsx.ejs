@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, ChevronsUpDown, Plus } from 'lucide-react';
-import { useApi } from '../../hooks/useApi';
+import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
@@ -19,7 +19,6 @@ type SortableField = 'id' | 'ptype' | 'v0' | 'v1' | 'v2' | 'v3' | 'v4' | 'v5';
 export default function AcRuleList() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
@@ -30,21 +29,15 @@ export default function AcRuleList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState<ApiResponsePage<IAcRule> | null>(null);
   useAutoShortcuts();
-  const sortableColumns: SortableField[] = [
-    'id',
-    'ptype',
-    'v0',
-    'v1',
-    'v2',
-    'v3',
-    'v4',
-    'v5',
-  ];
+  const sortableColumns: SortableField[] = ['id', 'ptype', 'v0', 'v1', 'v2', 'v3', 'v4', 'v5'];
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    fetch(`/api/ac-rules?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}`)
-      .then((response) => response.json())
+    axiosInstance
+      .get(
+        `/api/ac-rules?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}`
+      )
+      .then((response) => response?.data)
       .then((page: ApiResponsePage<IAcRule>) => {
         setPage(page);
         setLoading(false);
@@ -57,7 +50,7 @@ export default function AcRuleList() {
           message: error.message,
         });
       });
-  }, [fetch, addNotification, sortConfig, currentPage, debouncedSearchTerm]);
+  }, [addNotification, sortConfig, currentPage, debouncedSearchTerm]);
 
   const handleSort = (field: SortableField) => {
     setSortConfig((currentConfig) => ({

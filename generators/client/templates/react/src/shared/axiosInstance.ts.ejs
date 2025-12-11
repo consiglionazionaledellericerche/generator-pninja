@@ -1,0 +1,33 @@
+import axios from 'axios';
+import setupInterceptors from './axiosInterceptors';
+export class HttpError extends Error {
+  status: number;
+  data: unknown;
+  details?: string | undefined | null;
+
+  constructor(
+    status: number,
+    message: string,
+    details?: string | null | undefined,
+    data?: unknown
+  ) {
+    super(message);
+    this.status = status;
+    this.data = data;
+    this.details = details;
+    this.name = 'HttpError';
+  }
+}
+const axiosInstance = axios.create({
+  // baseURL: '/api',
+  withCredentials: true, // Include session cookies
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+  },
+});
+
+setupInterceptors(axiosInstance);
+
+export default axiosInstance;

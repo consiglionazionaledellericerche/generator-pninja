@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, ChevronsUpDown, Plus } from 'lucide-react';
-import { useApi } from '../../hooks/useApi';
+import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 <% if(durationColumns.length) {-%>
@@ -24,7 +24,6 @@ type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includ
 export default function <%= entity.name %>List() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [loading, setLoading] = useState(false);
 <% if (searchEngine !== 'null' ) { -%>
   const [searchTerm, setSearchTerm] = useState('');
@@ -48,8 +47,11 @@ export default function <%= entity.name %>List() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    fetch(`/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}<% if (searchEngine !== 'null' ) { -%>${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}<% } -%>`)
-      .then((response) => response.json())
+    axiosInstance
+      .get(
+        `/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}<% if (searchEngine !== 'null' ) { -%>${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}<% } -%>`
+      )
+      .then((response) => response?.data)
       .then((page: ApiResponsePage<I<%= entity.name %>>) => {
         setPage(page);
         setLoading(false);
@@ -62,7 +64,7 @@ export default function <%= entity.name %>List() {
           message: error.message,
         });
       });
-  }, [fetch, addNotification, sortConfig, currentPage<% if (searchEngine !== 'null' ) { -%>, debouncedSearchTerm<% } -%>]);
+  }, [addNotification, sortConfig, currentPage<% if (searchEngine !== 'null' ) { -%>, debouncedSearchTerm<% } -%>]);
 
   const handleSort = (field: SortableField) => {
     setSortConfig((currentConfig) => ({

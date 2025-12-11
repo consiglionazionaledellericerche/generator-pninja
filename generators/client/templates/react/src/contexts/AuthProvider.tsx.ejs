@@ -1,6 +1,7 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import { User, AuthContextType } from '../types/auth';
 import { AuthContext } from './AuthContext';
+import axiosInstance from '../shared/axiosInstance';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -26,13 +27,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         console.log('🔍 Checking server session...');
 
-        // Check for auth_success parameter in URL
         const urlParams = new URLSearchParams(window.location.search);
         const authSuccess = urlParams.get('auth_success');
 
         if (authSuccess === 'true') {
           console.log('✅ Auth success detected in URL');
-          // Remove the parameter without refreshing the page
           const newUrl =
             window.location.pathname +
             (window.location.search
@@ -42,37 +41,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           window.history.replaceState({}, document.title, newUrl);
         }
 
-        // Check if there's an active session on the server
-        const response = await fetch('/api/auth/check-session', {
-          credentials: 'include', // IMPORTANTE: include cookies di sessione
+        const response = await axiosInstance.get('/api/auth/check-session', {
+          withCredentials: true, // Include i cookie di sessione
         });
 
-        if (response.ok) {
-          const data = await response.json();
+        if (response.status === 200 && response.data.isAuthenticated) {
+          console.log('✅ Active session found:', response.data.user.name);
 
-          if (data.isAuthenticated) {
-            console.log('✅ Active session found:', data.user.name);
-
-            setAuthState({
-              isAuthenticated: true,
-              user: data.user,
-              loading: false,
-              error: null,
-            });
-
-            return;
-          }
+          setAuthState({
+            isAuthenticated: true,
+            user: response.data.user,
+            loading: false,
+            error: null,
+          });
+        } else {
+          console.log('❌ No active session found');
+          setAuthState({
+            isAuthenticated: false,
+            user: null,
+            loading: false,
+            error: null,
+          });
         }
-
-        console.log('❌ No active session found');
-
-        // No valid session found
-        setAuthState({
-          isAuthenticated: false,
-          user: null,
-          loading: false,
-          error: null,
-        });
       } catch (error) {
         console.error('❌ Session check error:', error);
         setAuthState({
@@ -87,36 +77,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkSession();
   }, []);
 
-  // Login function (molto più semplice!)
   const login = async (): Promise<{ success: boolean; error?: string }> => {
     try {
       console.log('🚀 Starting login process...');
-
-      // Save current URL for redirect after login
       const currentUrl = window.location.href;
 
-      // Request authorization URL from backend
-      const response = await fetch('/api/auth/initiate-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          redirect_url: currentUrl,
-        }),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error('Login initialization error');
-      }
-
-      const data = await response.json();
+      const response = await axiosInstance.post(
+        '/api/auth/initiate-login',
+        { redirect_url: currentUrl },
+        { withCredentials: true }
+      );
 
       console.log('🔗 Redirecting to Keycloak...');
-
-      // Redirect user to Keycloak authorization URL
-      window.location.href = data.authUrl;
+      window.location.href = response.data.authUrl;
 
       return { success: true };
     } catch (error) {
@@ -135,21 +108,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Logout function (anche questo più semplice!)
   const logout = async (): Promise<void> => {
     try {
       console.log('👋 Logging out...');
 
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': await getCsrfToken(),
-        },
-        credentials: 'include',
-      });
+      const response = await axiosInstance.post(
+        '/api/auth/logout',
+        {},
+        {
+          headers: {
+            'X-CSRF-TOKEN': await getCsrfToken(),
+          },
+          withCredentials: true,
+        }
+      );
 
-      // Update state immediately
       setAuthState({
         isAuthenticated: false,
         user: null,
@@ -157,19 +130,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         error: null,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-
-        // If we have a logout URL for SSO, redirect
-        if (data.logoutUrl) {
-          console.log('🔗 Redirecting to Keycloak logout...');
-          window.location.href = data.logoutUrl;
-        }
+      if (response.status === 200 && response.data.logoutUrl) {
+        console.log('🔗 Redirecting to Keycloak logout...');
+        window.location.href = response.data.logoutUrl;
       }
     } catch (error) {
       console.error('❌ Logout error:', error);
 
-      // Clear state even on error
       setAuthState({
         isAuthenticated: false,
         user: null,
@@ -179,15 +146,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  // Helper function to get CSRF token
   const getCsrfToken = async (): Promise<string> => {
     try {
-      const response = await fetch('/api/auth/csrf-token', {
-        credentials: 'include',
+      const response = await axiosInstance.get('/api/auth/csrf-token', {
+        withCredentials: true,
       });
-      if (response.ok) {
-        const data = await response.json();
-        return data.csrf_token;
+
+      if (response.status === 200) {
+        return response.data.csrf_token;
       }
     } catch (error) {
       console.warn('Failed to get CSRF token:', error);
@@ -195,14 +161,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return '';
   };
 
-  // Combine all auth state and functions
   const contextValue: AuthContextType = {
     ...authState,
-    tokens: null, // Non abbiamo più token!
+    tokens: null,
     login,
     logout,
     refreshTokens: async () => {
-      // Non necessario con le sessioni!
       throw new Error('Token refresh not needed with session auth');
     },
   };

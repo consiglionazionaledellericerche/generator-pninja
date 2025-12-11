@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { useApi } from '../../hooks/useApi';
-import { HttpError } from '../../hooks/useApi';
+import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Can } from '../../components/Can';
 <% if(durationColumns.length) {-%>
@@ -119,15 +118,15 @@ export default function <%= entity.name %>View() {
 
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
-      .then((response) => response.json())
+    axiosInstance
+      .get(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+      .then((response) => response?.data)
       .then((data: I<%= entity.name %>) => {
         <%=to.camel(`set${entity.name}`)%>(data);
         setLoading(false);
@@ -141,7 +140,7 @@ export default function <%= entity.name %>View() {
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       });
-  }, [fetch, id, navigate, t, addNotification]);
+  }, [id, navigate, t, addNotification]);
 
   useEffect(() => {
     document.title = `${t('entities:<%-to.snake(entity.name)%>.<%-entity.name%>')} ID ${id}`;

@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useApi } from '../../hooks/useApi';
-import { HttpError } from '../../hooks/useApi';
+import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { IAcRule } from '../../shared/model/ac-rule.model';
@@ -17,15 +16,15 @@ export default function AcRuleEdit() {
   const { id } = useParams<AcRuleViewParams>();
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [acRule, setAcRule] = useState<IAcRule>({} as IAcRule);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
-      fetch(`/api/ac-rules/${id}`)
-        .then((response) => response.json())
+      axiosInstance
+        .get(`/api/ac-rules/${id}`)
+        .then((response) => response?.data)
         .then((data: IAcRule) => {
           setAcRule(data);
         })
@@ -42,18 +41,13 @@ export default function AcRuleEdit() {
           setLoading(false);
         });
     }
-  }, [id, fetch, addNotification, navigate, t]);
+  }, [id, addNotification, navigate, t]);
 
   const handleSubmit = async (data: IAcRule) => {
     try {
-      const response = await fetch(`/api/ac-rules${id ? `/${id}` : ''}`, {
-        method: id ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      const responseData = await (await response).json();
+      const responseData = id
+        ? (await axiosInstance.put(`/api/ac-rules/${id}`, data))?.data
+        : (await axiosInstance.post('/api/ac-rules', data))?.data;
 
       addNotification({
         type: 'success',

@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useApi } from '../../hooks/useApi';
-import { HttpError } from '../../hooks/useApi';
+import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -17,15 +16,15 @@ export default function <%= entity.name %>Edit() {
   const { id } = useParams<<%= entity.name %>ViewParams>();
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>({} as I<%= entity.name %>);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
       setLoading(true);
-      fetch(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
-        .then((response) => response.json())
+      axiosInstance
+        .get(`/api/pilots/${id}`)
+        .then((response) => response?.data)
         .then((data: I<%= entity.name %>) => {
           set<%= entity.name %>(data);
         })
@@ -42,18 +41,13 @@ export default function <%= entity.name %>Edit() {
           setLoading(false);
         });
     }
-  }, [id, fetch, addNotification, navigate, t]);
+  }, [id, addNotification, navigate, t]);
 
   const handleSubmit = async (data: I<%= entity.name %>) => {
     try {
-      const response = await fetch(`/api/<%=to.slug(pluralize(entity.name))%>${id ? `/${id}` : ''}`, {
-        method: id ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      const responseData = await (await response).json();
+      const responseData = id
+        ? (await axiosInstance.put(`/api/pilots/${id}`, data))?.data
+        : (await axiosInstance.post('/api/pilots', data))?.data;
 
       addNotification({
         type: 'success',

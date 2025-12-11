@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { useApi } from '../../hooks/useApi';
-import { HttpError } from '../../hooks/useApi';
+import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Can } from '../../components/Can';
 import { IAcRule } from '../../shared/model/ac-rule.model';
@@ -72,15 +71,15 @@ export default function AcRuleView() {
 
   const navigate = useNavigate();
   const { addNotification } = useNotifications();
-  const { fetch } = useApi();
   const [acRule, setAcRule] = useState<IAcRule>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    fetch(`/api/ac-rules/${id}`)
-      .then((response) => response.json())
+    axiosInstance
+      .get(`/api/ac-rules/${id}`)
+      .then((response) => response?.data)
       .then((data: IAcRule) => {
         setAcRule(data);
         setLoading(false);
@@ -94,7 +93,7 @@ export default function AcRuleView() {
         });
         navigate('/entities/ac-rules');
       });
-  }, [fetch, id, navigate, t, addNotification]);
+  }, [id, navigate, t, addNotification]);
 
   useEffect(() => {
     document.title = `${t('entities:ac_rule.AcRule')} ID ${id}`;
@@ -108,20 +107,20 @@ export default function AcRuleView() {
       <SimpleLoader loading={loading} />
       {!loading && <AcRuleDataView data={acRule} />}
       {!loading && (
-      <div className="flex justify-center gap-4 mt-4">
-        <Link to={`/entities/ac-rules`} className="cancel-button">
-          <ArrowLeft size={20} />
-          {t('actions.crud.back')}
-        </Link>
-        <Can resource="AcRule" action="update">
-          <Link to={`/entities/ac-rules/edit/${id}`} className="primary-button">
-            {t('actions.crud.edit')}
+        <div className="flex justify-center gap-4 mt-4">
+          <Link to={`/entities/ac-rules`} className="cancel-button">
+            <ArrowLeft size={20} />
+            {t('actions.crud.back')}
           </Link>
-        </Can>
-        <Can resource="AcRule" action="delete">
-          <AcRuleDeleteButton id={id} />
-        </Can>
-      </div>
+          <Can resource="AcRule" action="update">
+            <Link to={`/entities/ac-rules/edit/${id}`} className="primary-button">
+              {t('actions.crud.edit')}
+            </Link>
+          </Can>
+          <Can resource="AcRule" action="delete">
+            <AcRuleDeleteButton id={id} />
+          </Can>
+        </div>
       )}
     </>
   );
