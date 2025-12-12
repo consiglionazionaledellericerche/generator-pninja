@@ -22,9 +22,8 @@ export function Toast({ notification }: { notification: INotification }) {
     hasAutoClose,
   } = useNotifications();
 
-  const duration =
-    notification.duration ??
-    (hasAutoClose(notification.id) ? (notification.type === 'success' ? 3000 : 10000) : 0);
+  const duration = notification.duration;
+
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
   const [showMore, setShowMore] = useState(false);
