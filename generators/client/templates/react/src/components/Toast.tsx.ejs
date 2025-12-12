@@ -1,6 +1,14 @@
-import { X, CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react';
+import {
+  X,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Info,
+  CirclePlay,
+  CirclePause,
+} from 'lucide-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
-import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useId } from 'react-aria';
 
@@ -14,16 +22,9 @@ const toastIcons: Record<ToastVariant, React.ElementType> = {
 
 export function Toast({ notification }: { notification: INotification }) {
   const { t } = useTranslation();
-  const {
-    removeNotification,
-    pauseNotification,
-    resumeNotification,
-    getRemainingTime,
-    hasAutoClose,
-  } = useNotifications();
+  const { removeNotification, getRemainingTime, hasAutoClose } = useNotifications();
 
-  const duration = notification.duration;
-
+  const duration = notification.duration ?? 0;
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
   const [showMore, setShowMore] = useState(false);
@@ -67,18 +68,6 @@ export function Toast({ notification }: { notification: INotification }) {
     return () => clearInterval(timer);
   }, [isPaused, notification.id, getRemainingTime, hasTimer]);
 
-  const handleMouseEnter = useCallback(() => {
-    if (!hasTimer) return;
-    setIsPaused(true);
-    pauseNotification(notification.id);
-  }, [notification.id, pauseNotification, hasTimer]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!hasTimer) return;
-    setIsPaused(false);
-    resumeNotification(notification.id);
-  }, [notification.id, resumeNotification, hasTimer]);
-
   const progressStyle = useMemo(
     () => ({
       width: hasTimer ? `${(remainingTime / duration) * 100}%` : '100%',
@@ -91,40 +80,33 @@ export function Toast({ notification }: { notification: INotification }) {
   const detailsId = useId();
   const showmoreRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  // const previousFocusRef = useRef<HTMLElement | null>(null);
+  const playRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // useEffect(() => {
-  //   // Salva focus precedente solo per toast urgenti
-  //   if (notification.type === 'warning' || notification.type === 'error') {
-  //     previousFocusRef.current = document.activeElement as HTMLElement;
-  //     if (['error', 'warning'].includes(notification.type)) {
-  //       if (showmoreRef.current) {
-  //         showmoreRef.current?.focus();
-  //       } else {
-  //         closeRef.current?.focus();
-  //       }
-  //     }
-  //   }
+  useEffect(() => {
+    // Save previous focus only for urgent toasts
+    if (notification.type === 'warning' || notification.type === 'error') {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      if (['error', 'warning'].includes(notification.type)) {
+        playRef.current?.focus();
+      }
+    }
 
-  //   // Cleanup: ripristina focus quando toast si chiude
-  //   return () => {
-  //     if (
-  //       previousFocusRef.current &&
-  //       (notification.type === 'warning' || notification.type === 'error')
-  //     ) {
-  //       previousFocusRef.current.focus();
-  //     }
-  //   };
-  // }, [notification.type]);
+    // Cleanup: restore focus when toast closes
+    return () => {
+      if (
+        previousFocusRef.current &&
+        (notification.type === 'warning' || notification.type === 'error')
+      ) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [notification.type]);
 
   return (
     <div
       role={['error', 'warning'].includes(notification.type) ? 'alert' : 'status'}
       className={`${colors.main} rounded-lg shadow-lg dark:shadow-lg/70 min-w-[300px] max-w-[50vw] overflow-hidden`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleMouseEnter}
-      onAbort={handleMouseLeave}
     >
       <div className="p-4 flex justify-between items-start">
         <div className="flex-1">
@@ -192,9 +174,25 @@ export function Toast({ notification }: { notification: INotification }) {
         <div className="flex items-center ms-2 gap-2 shrink-0">
           &nbsp;
           {hasTimer && (
-            <span aria-hidden className="text-sm opacity-75">
-              ({Math.ceil(remainingTime / 1000)}s)
-            </span>
+            <>
+              <span aria-hidden className="text-sm opacity-75">
+                ({Math.ceil(remainingTime / 1000)}s)
+              </span>
+              <button
+                ref={playRef}
+                aria-label={isPaused ? t('actions.resumeTimer') : t('actions.pauseTimer')}
+                onClick={() => {
+                  if (isPaused) {
+                    setIsPaused(false);
+                  } else {
+                    setIsPaused(true);
+                  }
+                }}
+                className="cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
+              >
+                {isPaused ? <CirclePlay size={18} /> : <CirclePause size={18} />}
+              </button>
+            </>
           )}
           <button
             ref={closeRef}
