@@ -37,7 +37,7 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-const DEFAULT_OK_DURATION = 3000;
+const DEFAULT_OK_DURATION = 5000;
 const DEFAULT_KO_DURATION = 10000;
 
 function ToastContainer({ position = 'bottom-right' }: { position: ToastPosition }) {
