@@ -176,7 +176,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
           }
           addNotification({
             type: 'error',
-            message: `${t('errors.options.load')} ${label}`,
+            message: `${t('errors.options.load', { entity: label })}`,
             error: error as AxiosError<ErrorResponseData>,
           });
           return {
@@ -308,13 +308,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
       } catch (error) {
         addNotification({
           type: 'error',
-          message: `${t('errors.options.load')}`,
+          message: `${t('errors.options.load', { entity: label })}`,
           error: error as AxiosError<ErrorResponseData>,
         });
         return [];
       }
     },
-    [optionsLoad?.url, getLabel, getValue, addNotification, t]
+    [optionsLoad?.url, getLabel, getValue, addNotification, t, label]
   );
 
   // Handler per rimuovere tag

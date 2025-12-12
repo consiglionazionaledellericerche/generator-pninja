@@ -23,7 +23,7 @@ class AccessControl
         if (!$result) {
             return response()->json([
                 'error' => 'Forbidden',
-                'message' => "Permission denied for {$action} on {$resource}."
+                'message' => "Permission denied for {$action} on {$resource}"
             ], 403);
         }
         return $next($request);
