@@ -32,6 +32,7 @@ interface NotificationContextType {
   pauseNotification: (id: string) => void;
   resumeNotification: (id: string) => void;
   getRemainingTime: (id: string) => number;
+  getRemainingPercentage: (id: string) => number;
   hasAutoClose: (id: string) => boolean;
 }
 
@@ -86,6 +87,7 @@ export function NotificationProvider({
     [key: string]: {
       timeoutId: NodeJS.Timeout;
       startTime: number;
+      initialDuration: number;
       remainingTime: number;
       isPaused: boolean;
     };
@@ -112,6 +114,19 @@ export function NotificationProvider({
     return Math.max(0, timeoutInfo.remainingTime - elapsed);
   }, []);
 
+  const getRemainingPercentage = useCallback(
+    (id: string) => {
+      const timeoutInfo = timeoutsRef.current[id];
+      if (!timeoutInfo) return 0;
+
+      const remainingTime = getRemainingTime(id);
+      const initialDuration = timeoutInfo.initialDuration; // Usa la durata iniziale salvata
+
+      return initialDuration > 0 ? (remainingTime / initialDuration) * 100 : 0;
+    },
+    [getRemainingTime]
+  );
+
   const hasAutoClose = useCallback((id: string) => {
     return id in timeoutsRef.current;
   }, []);
@@ -134,6 +149,7 @@ export function NotificationProvider({
           timeoutId,
           startTime: Date.now(),
           remainingTime: duration,
+          initialDuration: duration, // Salva la durata iniziale
           isPaused: false,
         };
       }
@@ -188,6 +204,7 @@ export function NotificationProvider({
         pauseNotification,
         resumeNotification,
         getRemainingTime,
+        getRemainingPercentage,
         hasAutoClose,
       }}
     >
