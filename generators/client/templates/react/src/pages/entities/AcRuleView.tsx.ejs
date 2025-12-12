@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft } from 'lucide-react';
-import { useNotifications } from '../../contexts/NotificationContext';
-import axiosInstance, { HttpError } from '../../shared/axiosInstance';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Can } from '../../components/Can';
 import { IAcRule } from '../../shared/model/ac-rule.model';
@@ -84,12 +85,11 @@ export default function AcRuleView() {
         setAcRule(data);
         setLoading(false);
       })
-      .catch((error: HttpError) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
           type: 'error',
           message: `${t('errors.entities.read')} ${t('entities:ac_rule.AcRule')} ID ${id}`,
-          details: error?.message,
-          techDetails: error?.details,
+          error,
         });
         navigate('/entities/ac-rules');
       });

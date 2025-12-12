@@ -5,12 +5,7 @@ import { IAcRule } from '../../shared/model/ac-rule.model';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { Can } from '../../components/Can';
 import AcRuleDeleteButton from './AcRuleDeleteButton';
-
-
-
-import {
-  TextField,
-} from '../formElements';
+import { TextField } from '../formElements';
 import { detect } from 'detect-browser';
 
 const isMac = detect()?.os?.toLowerCase().includes('mac');
@@ -62,44 +57,26 @@ export function AcRuleForm({ acRule, onSubmit, onCancel }: AcRuleFormProps) {
             <TextField
               fieldName="ptype"
               label={t('entities:ac_rule.ptype')}
-              validations={{"required":true}}
+              validations={{ required: true }}
             />
           </div>
           <div>
-            <TextField
-              fieldName="v0"
-              label={t('entities:ac_rule.v0')}
-            />
+            <TextField fieldName="v0" label={t('entities:ac_rule.v0')} />
           </div>
           <div>
-            <TextField
-              fieldName="v1"
-              label={t('entities:ac_rule.v1')}
-            />
+            <TextField fieldName="v1" label={t('entities:ac_rule.v1')} />
           </div>
           <div>
-            <TextField
-              fieldName="v2"
-              label={t('entities:ac_rule.v2')}
-            />
+            <TextField fieldName="v2" label={t('entities:ac_rule.v2')} />
           </div>
           <div>
-            <TextField
-              fieldName="v3"
-              label={t('entities:ac_rule.v3')}
-            />
+            <TextField fieldName="v3" label={t('entities:ac_rule.v3')} />
           </div>
           <div>
-            <TextField
-              fieldName="v4"
-              label={t('entities:ac_rule.v4')}
-            />
+            <TextField fieldName="v4" label={t('entities:ac_rule.v4')} />
           </div>
           <div>
-            <TextField
-              fieldName="v5"
-              label={t('entities:ac_rule.v5')}
-            />
+            <TextField fieldName="v5" label={t('entities:ac_rule.v5')} />
           </div>
         </div>
         <div className="flex justify-center gap-4 my-8">
@@ -118,7 +95,11 @@ export function AcRuleForm({ acRule, onSubmit, onCancel }: AcRuleFormProps) {
               <kbd className="kdb-shortcut">↵</kbd>
             </button>
           </Can>
-          {acRule?.id && <Can resource="AcRule" action="delete"><AcRuleDeleteButton id={acRule.id} /></Can>}
+          {acRule?.id && (
+            <Can resource="AcRule" action="delete">
+              <AcRuleDeleteButton id={acRule.id} />
+            </Can>
+          )}
         </div>
       </form>
     </FormProvider>

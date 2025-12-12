@@ -21,7 +21,10 @@ class AccessControl
         };
         $result = $this->userHasPermission($resource, $action);
         if (!$result) {
-            return response()->json(['error' => 'Forbidden'], 403);
+            return response()->json([
+                'error' => 'Forbidden',
+                'message' => "Permission denied for {$action} on {$resource}."
+            ], 403);
         }
         return $next($request);
     }

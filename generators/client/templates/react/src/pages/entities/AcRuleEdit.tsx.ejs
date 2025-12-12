@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import axiosInstance, { HttpError } from '../../shared/axiosInstance';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { IAcRule } from '../../shared/model/ac-rule.model';
 import { AcRuleForm } from '../../components/entities/AcRuleForm';
@@ -28,12 +29,11 @@ export default function AcRuleEdit() {
         .then((data: IAcRule) => {
           setAcRule(data);
         })
-        .catch((error: HttpError) => {
+        .catch((error: AxiosError<ErrorResponseData>) => {
           addNotification({
             type: 'error',
             message: `${t('errors.entities.read')} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`,
-            details: error?.message,
-            techDetails: error?.details,
+            error,
           });
           navigate('/entities/ac-rules');
         })
@@ -43,36 +43,25 @@ export default function AcRuleEdit() {
     }
   }, [id, addNotification, navigate, t]);
 
-  const handleSubmit = async (data: IAcRule) => {
-    try {
-      const responseData = id
-        ? (await axiosInstance.put(`/api/ac-rules/${id}`, data))?.data
-        : (await axiosInstance.post('/api/ac-rules', data))?.data;
-
-      addNotification({
-        type: 'success',
-        message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
-          id: id || responseData.id,
-        }),
-      });
-      navigate('/entities/ac-rules');
-    } catch (error) {
-      let details = undefined;
-      let techDetails = undefined;
-      if (error instanceof Error) {
-        details = error.message;
-      }
-      if (error instanceof HttpError) {
-        details = error?.message;
-        techDetails = error?.details;
-      }
-      addNotification({
-        type: 'error',
-        message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`,
-        details,
-        techDetails,
-      });
-    }
+  const handleSubmit = (data: IAcRule) => {
+    (id ? axiosInstance.put(`/api/ac-rules/${id}`, data) : axiosInstance.post('/api/ac-rules', data))
+      .then((response) => response?.data)
+      .then((data: IAcRule) => {
+        addNotification({
+          type: 'success',
+          message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
+            id: id || data.id,
+          }),
+        });
+        navigate('/entities/ac-rules');
+      })
+      .catch((error: AxiosError<ErrorResponseData>) =>
+        addNotification({
+          type: 'error',
+          message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:ac_rule.AcRule')}${id ? ` ID ${id}` : ''}`,
+          error,
+        })
+      );
   };
 
   useEffect(() => {

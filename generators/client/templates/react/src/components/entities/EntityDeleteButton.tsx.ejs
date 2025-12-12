@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import ConfirmButton from '../ConfirmButton';
-import axiosInstance, { HttpError } from '../../shared/axiosInstance';
 
 interface DeleteButtonProps {
   id: string | number | null | undefined;
@@ -25,11 +26,11 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       })
-      .catch((error: HttpError) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
           type: 'error',
           message: `${t('errors.entities.delete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
-          details: error?.details || '',
+          error,
         });
       });
   };
@@ -45,5 +46,5 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
       }
     />
   );
-}
+};
 export default <%= entity.name %>DeleteButton;

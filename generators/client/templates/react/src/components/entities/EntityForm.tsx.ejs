@@ -119,8 +119,7 @@ import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { Can } from '../../components/Can';
 import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
-
-<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") + "\n\n" -%>
+<%- [...new Set(enumsToImport)].map(enm => `import { ${enm} } from '../../shared/model/enumerations/${to.slug(enm)}.model';`).join("\n") + (enumsToImport.length ? "\n\n" : "") -%>
 import {
 <% if (hasCheckbox) {-%>
   Checkbox,

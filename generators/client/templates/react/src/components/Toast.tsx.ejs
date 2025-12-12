@@ -22,10 +22,12 @@ export function Toast({ notification }: { notification: INotification }) {
     hasAutoClose,
   } = useNotifications();
 
-  const duration = notification.duration;
+  const duration =
+    notification.duration ??
+    (hasAutoClose(notification.id) ? (notification.type === 'success' ? 3000 : 10000) : 0);
   const [remainingTime, setRemainingTime] = useState(duration);
   const [isPaused, setIsPaused] = useState(false);
-  const [showTechDetails, setShowTechDetails] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const hasTimer = hasAutoClose(notification.id);
 
   const colors = useMemo(
@@ -131,54 +133,60 @@ export function Toast({ notification }: { notification: INotification }) {
             <Icon aria-hidden className="w-8 h-8 me-2" />
             <div>{notification.message}</div>
           </div>
-          {notification.details && (
+          {notification?.error?.response?.data?.message && (
             <div className={`${colors.details} mt-2 text-sm p-2 rounded`}>
               <div>
-                {notification.details}
-                {notification.techDetails && !showTechDetails && (
-                  <span className="text-xs">
-                    {' '}
-                    (
-                    <button
-                      ref={showmoreRef}
-                      aria-expanded={showTechDetails}
-                      aria-controls={detailsId}
-                      onClick={() => setShowTechDetails(!showTechDetails)}
-                      className="hover:underline cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-md"
-                    >
-                      {t('common.show.more')} ...
-                    </button>
-                    )
-                  </span>
-                )}
-              </div>
-              {showTechDetails && notification.techDetails && (
-                <>
-                  <div
-                    id={detailsId}
-                    role="region"
-                    aria-label={t('common.errorDetails')}
-                    className="mt-2 text-xs whitespace-pre-wrap font-mono"
-                  >
-                    {notification.techDetails}
-                  </div>
-                  {notification.techDetails && showTechDetails && (
+                {notification?.error?.response?.data?.message}
+                {notification?.error?.response?.data?.details &&
+                  notification?.error?.response?.data?.details !==
+                    notification?.error?.response?.data?.message &&
+                  !showMore && (
                     <span className="text-xs">
                       {' '}
                       (
                       <button
-                        aria-expanded={showTechDetails}
+                        ref={showmoreRef}
+                        aria-expanded={showMore}
                         aria-controls={detailsId}
-                        onClick={() => setShowTechDetails(!showTechDetails)}
+                        onClick={() => setShowMore(!showMore)}
                         className="hover:underline cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-md"
                       >
-                        {t('common.show.less')}
+                        {t('common.show.more')} ...
                       </button>
                       )
                     </span>
                   )}
-                </>
-              )}
+              </div>
+              {showMore &&
+                notification?.error?.response?.data?.details &&
+                notification?.error?.response?.data?.details !==
+                  notification?.error?.response?.data?.message && (
+                  <>
+                    <div
+                      id={detailsId}
+                      role="region"
+                      aria-label={t('common.errorDetails')}
+                      className="mt-2 text-xs whitespace-pre-wrap font-mono"
+                    >
+                      {notification?.error?.response?.data?.details}
+                    </div>
+                    {notification?.error?.response?.data?.details && showMore && (
+                      <span className="text-xs">
+                        {' '}
+                        (
+                        <button
+                          aria-expanded={showMore}
+                          aria-controls={detailsId}
+                          onClick={() => setShowMore(!showMore)}
+                          className="hover:underline cursor-pointer focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-md"
+                        >
+                          {t('common.show.less')}
+                        </button>
+                        )
+                      </span>
+                    )}
+                  </>
+                )}
             </div>
           )}
         </div>

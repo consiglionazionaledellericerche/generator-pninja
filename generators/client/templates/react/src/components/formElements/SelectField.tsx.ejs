@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useFocusWithin } from 'react-aria';
 import type { Selection } from 'react-aria-components';
 
-import { useNotifications } from '../../contexts/NotificationContext';
 import {
   Button,
   Input,
@@ -17,7 +16,9 @@ import {
   Tag,
 } from 'react-aria-components';
 import { SearchIcon, XIcon, LoaderCircle, ChevronsUpDownIcon } from 'lucide-react';
-import axiosInstance, { HttpError } from '../../shared/axiosInstance';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { useFormContext, useController } from 'react-hook-form';
 import { useAsyncList } from 'react-stately';
 import { Collection, ListBoxLoadMoreItem } from 'react-aria-components';
@@ -169,16 +170,14 @@ const SelectField: React.FC<SelectFieldProps> = ({
             cursor:
               current_page < last_page ? buildApiUrl(filterText, current_page + 1) : undefined,
           };
-        } catch (error: unknown) {
+        } catch (error) {
           if (error instanceof DOMException && error.name === 'AbortError') {
             return { items: [], cursor: undefined };
           }
-          console.error('Error fetching options:', error);
           addNotification({
             type: 'error',
-            message: `${t('errors.options.load')}`,
-            details: error instanceof Error ? error.message : undefined,
-            techDetails: error instanceof HttpError ? error.details : undefined,
+            message: `${t('errors.options.load')} ${label}`,
+            error: error as AxiosError<ErrorResponseData>,
           });
           return {
             items: [],
@@ -307,12 +306,10 @@ const SelectField: React.FC<SelectFieldProps> = ({
           id: getValue(item),
         }));
       } catch (error) {
-        console.error('Error loading selected values:', error);
         addNotification({
           type: 'error',
           message: `${t('errors.options.load')}`,
-          details: error instanceof Error ? error.message : undefined,
-          techDetails: error instanceof HttpError ? error.details : undefined,
+          error: error as AxiosError<ErrorResponseData>,
         });
         return [];
       }
@@ -430,7 +427,6 @@ const SelectField: React.FC<SelectFieldProps> = ({
           {selectedOptions.length > 0 && (
             <TagGroup
               onRemove={(keys) => {
-                console.log('Remove tag with key:', [...keys][0]);
                 handleRemoveTag([...keys][0]);
               }}
             >

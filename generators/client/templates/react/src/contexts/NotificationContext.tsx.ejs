@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { Toast } from '../components/Toast';
+import { AxiosError } from 'axios';
 
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 export type ToastPosition =
@@ -10,13 +11,18 @@ export type ToastPosition =
   | 'top-center'
   | 'bottom-center';
 
+export interface ErrorResponseData {
+  error?: string;
+  message?: string;
+  details?: string;
+}
+
 export interface INotification {
   id: string;
   type: NotificationType;
   message: string;
-  details?: string;
-  techDetails?: string | undefined | null;
   duration?: number | null;
+  error?: AxiosError<ErrorResponseData>;
 }
 
 interface NotificationContextType {
