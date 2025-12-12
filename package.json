@@ -1,6 +1,6 @@
 {
   "name": "generator-pninja",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Generator for PHP/Laravel + SQL + Vite + React applications",
   "type": "module",
   "files": [
