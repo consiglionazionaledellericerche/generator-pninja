@@ -1,14 +1,13 @@
 <?php
 
-use Lauthz\Facades\Enforcer;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
 <% eRoutes.forEach(({className}) => {-%>
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 use App\Http\Controllers\AcRuleController;
+use App\Http\Controllers\UserRoleController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -25,19 +24,12 @@ Route::prefix('auth')->group(function () {
     Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
 });
 
-Route::middleware(['session.auth'])->get('/user/roles', function (Request $request) {
-    $username = auth()->user()->username ?? '__GUEST__';
-    return response()->json([
-        'roles' => Enforcer::getRolesForUser($username),
-    ]);
-});
-
-Route::middleware(['session.auth'])->post('/user/can', function (Request $request) {
-    $resource = $request->resource ?? null;
-    $action = $request->action ?? null;
-    $username = auth()->user()->username ?? '__GUEST__';
-    $allowed = Enforcer::enforce($username, $resource, $action);
-    return response()->json(['allowed' => $allowed]);
+Route::middleware(['session.auth'])->prefix('user')->group(function () {
+    Route::get('/roles', [UserRoleController::class, 'getRoles']);
+    Route::post('/has-role', [UserRoleController::class, 'hasRole']);
+    Route::post('/has-any-role', [UserRoleController::class, 'hasAnyRole']);
+    Route::post('/has-all-roles', [UserRoleController::class, 'hasAllRoles']);
+    Route::post('/can', [UserRoleController::class, 'canPerformAction']);
 });
 
 Route::get('/files/public/{path}', [FileController::class, 'serveFile'])

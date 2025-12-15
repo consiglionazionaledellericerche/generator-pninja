@@ -1,0 +1,109 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Traits\HandlesUserRoles;
+
+class UserRoleController extends Controller
+{
+    use HandlesUserRoles;
+
+    /**
+     * Get all roles for the authenticated user
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getRoles(Request $request)
+    {
+        return response()->json([
+            'roles' => $this->getUserRoles(),
+        ]);
+    }
+
+    /**
+     * Check if the user has a specific role
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function hasRole(Request $request)
+    {
+        $role = $request->input('role');
+
+        if (!$role) {
+            return response()->json([
+                'error' => 'Role parameter is required'
+            ], 400);
+        }
+
+        return response()->json([
+            'hasRole' => $this->userHasRole($role),
+        ]);
+    }
+
+    /**
+     * Check if the user has any of the specified roles
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function hasAnyRole(Request $request)
+    {
+        $roles = $request->input('roles', []);
+
+        if (empty($roles) || !is_array($roles)) {
+            return response()->json([
+                'error' => 'Roles parameter must be a non-empty array'
+            ], 400);
+        }
+
+        return response()->json([
+            'hasAnyRole' => $this->userHasAnyRole($roles),
+        ]);
+    }
+
+    /**
+     * Check if the user has all the specified roles
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function hasAllRoles(Request $request)
+    {
+        $roles = $request->input('roles', []);
+
+        if (empty($roles) || !is_array($roles)) {
+            return response()->json([
+                'error' => 'Roles parameter must be a non-empty array'
+            ], 400);
+        }
+
+        return response()->json([
+            'hasAllRoles' => $this->userHasAllRoles($roles),
+        ]);
+    }
+
+    /**
+     * Check if the user has permission to perform an action on a resource
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function canPerformAction(Request $request)
+    {
+        $resource = $request->input('resource');
+        $action = $request->input('action');
+
+        if (!$resource || !$action) {
+            return response()->json([
+                'error' => 'Both resource and action parameters are required'
+            ], 400);
+        }
+
+        return response()->json([
+            'allowed' => $this->userHasPermission($resource, $action),
+        ]);
+    }
+}
