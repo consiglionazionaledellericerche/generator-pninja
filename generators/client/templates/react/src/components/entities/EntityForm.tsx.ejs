@@ -381,7 +381,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
           <button type="button" onClick={onCancel} className="cancel-button">
             {t('actions.crud.cancel')}
           </button>
-          <Can resource="<%= entity.name %>" action="update">
+          <Can resource="<%= entity.name %>" action={<%= to.camel(entity.name)-%>?.id ? 'update' : 'create'}>
             <button
               data-shortcut="ctrl+enter"
               type="submit"
