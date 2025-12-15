@@ -77,7 +77,7 @@ cd server
 ```
 <%      } -%>
 <%  } -%>
-### Database Seeding: CSV vs Factory
+## Database Seeding: CSV vs Factory
 
 To populate the database with **test records**:
 
@@ -87,7 +87,7 @@ npm run db:seed
 
 Seeding supports two modes, **mutually exclusive** for each entity:
 
-#### 1. **CSV Mode** (controlled and reproducible data)
+### 1. **CSV Mode** (controlled and reproducible data)
 
 If a CSV file exists in `server/database/seeders/csv/`, **only** data from the CSV is loaded:
 
@@ -120,7 +120,7 @@ model_id,related_id
 - Completely empty rows are skipped
 - Foreign keys must reference existing IDs
 
-#### 2. **Factory Mode** (random data)
+### 2. **Factory Mode** (random data)
 
 If the CSV file **does not exist**, random data is generated using Laravel factories.
 
@@ -130,11 +130,80 @@ The number of entities generated depends on the answer provided during the proje
 ? How many entities to generate for each entity (factories)? (30)
 ```
 
-#### Which mode to use?
+### Which mode to use?
 
 - **CSV**: for stable test data, demos, or when full control over data is needed
 - **Factory**: for rapid development with random but realistic data
 - **Mix**: some entities from CSV, others from factory (each entity chooses independently)
+
+## Access Control with Casbin
+
+The application uses **[Casbin](https://casbin.org/)** for **role-based access control (RBAC)**. Casbin enforces authorization policies that determine which users can perform specific actions on resources.
+
+**How it works:**
+
+- **Policies** are stored in the `ac_rules` database table
+- **Model** is defined in `server/config/lauthz-rbac-model.conf`
+- **Enforcement** happens automatically via middleware on both backend and frontend
+
+**Default roles and permissions:**
+
+- **`superadmin`**: Full access to all resources and does not require policies based on the model in `server/config/lauthz-rbac-model.conf`
+- **`__AUTHUSER__`**: Authenticated users can perform all actions on generated entities
+- **`__GUEST__`**: Unauthenticated users have read-only access to generated entities
+
+**Policy format:**
+```csv
+ptype,v0,v1,v2
+p,role,resource,action
+g,username,role
+```
+
+Where:
+- `p` = permission rule (role can perform action on resource)
+- `g` = role assignment (user has role)
+
+**Examples:**
+```csv
+<% if (entities.length > 0) { -%>
+p,__AUTHUSER__,<%- entities[0].name %>,create
+p,__AUTHUSER__,<%- entities[0].name %>,read
+p,__AUTHUSER__,<%- entities[0].name %>,update
+p,__AUTHUSER__,<%- entities[0].name %>,delete
+<% } -%>
+<% if (entities.length > 1) { -%>
+p,__AUTHUSER__,<%- entities[1].name %>,create
+p,__AUTHUSER__,<%- entities[1].name %>,read
+p,__AUTHUSER__,<%- entities[1].name %>,update
+p,__AUTHUSER__,<%- entities[1].name %>,delete
+<% } -%>
+<% if (entities.length > 0) { -%>
+p,__GUEST__,<%- entities[0].name %>,read
+<% } -%>
+<% if (entities.length > 1) { -%>
+p,__GUEST__,<%- entities[1].name %>,read
+<% } -%>
+p,admin,AcRule,create
+p,admin,AcRule,read
+p,admin,AcRule,update
+p,admin,AcRule,delete
+g,john.doe,superadmin
+g,emma.johnson,admin
+```
+
+**Custom roles and permissions:**
+
+To modify permissions, edit the `ac_rules` table or use the admin interface at `/entities/ac-rules`.
+
+To assign the first role `superadmin`, or any other role, to a user, you can use:
+
+```sh
+cd ./server/\
+php artisan add-role superadmin <username>
+php artisan add-role admin <another_username>
+```
+
+## Docker composition
 
 To start the **Docker composition**:
 
