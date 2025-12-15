@@ -1,16 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-// use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    // use HandlesUserRoles;
-
-    // private $viewerRole = 'viewer';
-
     public function serveFile(Request $request, $path, $disk)
     {
         // Decode the file path
@@ -30,8 +25,6 @@ class FileController extends Controller
         if (!Storage::disk($disk)->exists($decodedPath)) {
             return response()->json(['error' => 'File not found'], 404);
         }
-
-        // if (!$this->userHasRole($this->viewerRole)) return response()->json(['error' => 'Forbidden'], 403);
 
         // Get file details
         $mimeType = Storage::disk($disk)->mimeType($decodedPath);

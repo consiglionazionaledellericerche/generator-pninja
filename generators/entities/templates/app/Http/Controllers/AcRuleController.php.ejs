@@ -3,14 +3,12 @@ namespace App\Http\Controllers;
 
 use App\Models\AcRule;
 use App\Traits\HandlesApiErrors;
-use App\Traits\HandlesUserRoles;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class AcRuleController extends Controller
 {
     use HandlesApiErrors;
-    use HandlesUserRoles;
 
     public function index(Request $request)
     {
