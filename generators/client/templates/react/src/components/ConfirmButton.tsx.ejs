@@ -70,7 +70,10 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
         <span className="flex">
           <button
             type="button"
-            onClick={onConfirm}
+            onClick={() => {
+              setPendingLaunch(false);
+              onConfirm();
+            }}
             className={`${pendingClassName} rounded-none! rounded-l-md!`}
           >
             <span className="flex gap-2">{pendingLabel}</span>
