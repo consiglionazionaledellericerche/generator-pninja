@@ -149,6 +149,9 @@ export default class EntityGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
+    this.fs.copyTpl(this.templatePath("config/audit.php.ejs"), this.destinationPath('server/config/audit.php'), {
+      authenticationProvider: this.config.get('authentication')
+    });
     this.fs.copyTpl(this.templatePath("config/lauthz-rbac-model.conf"), this.destinationPath('server/config/lauthz-rbac-model.conf'));
     this.fs.copyTpl(this.templatePath("config/lauthz.php"), this.destinationPath('server/config/lauthz.php'));
   }

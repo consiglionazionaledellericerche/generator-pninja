@@ -180,6 +180,7 @@ export default class extends Generator {
     await this.spawn('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     await this.spawn('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
     await this.spawn('composer', ['require', 'casbin/laravel-authz'], { cwd: 'server' });
+    await this.spawn('composer', ['require', 'owen-it/laravel-auditing'], { cwd: 'server' });
     let envFileContents = fs.readFileSync(`${this.destinationPath('server')}/.env`, { encoding: 'utf8', flag: 'r' });
     envFileContents = envFileContents.replace(/^APP_NAME=.*$/m, `APP_NAME=${to.constant(this.answers.name)}`);
     envFileContents = envFileContents.replace(/^APP_KEY=.*$/m, `APP_KEY=${randomstring.generate()}`);

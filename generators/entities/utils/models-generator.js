@@ -11,6 +11,9 @@ export class ModelsGenerator {
     generateModels() {
         const { enums, entities, relationships } = this.parsedJDL;
         const searchEngine = this.that.config.get('searchEngine');
+        if (this.that.config.get('authentication') === 'keycloak') {
+            this.that.fs.copyTpl(this.that.templatePath("app/Resolvers/Keycloack__UserResolver.php.ejs"), this.that.destinationPath(`server/app/Resolvers/UserResolver.php`));
+        }
         this.that.fs.copyTpl(this.that.templatePath("app/Models/AcRule.php.ejs"), this.that.destinationPath(`server/app/Models/AcRule.php`));
         for (const entity of entities) {
             const className = entity.name;

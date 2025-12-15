@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 <% relationsType.forEach(function(rel) { %>use Illuminate\Database\Eloquent\Relations\<%- rel %>;
 <% }); %>
+use OwenIt\Auditing\Contracts\Auditable;
 <% if (searchEngine !== 'null') { -%>
 use Laravel\Scout\Searchable;
 <% }; -%>
@@ -13,12 +14,13 @@ use App\Casts\Base64BinaryCast;
 <% }; -%>
 <% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
 <% }); %>
-class <%- className %> extends Model
+class <%- className %> extends Model implements Auditable
 {
     use HasFactory;
 <% if (searchEngine !== 'null') { -%>
     use Searchable;
 <% }; -%>
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = '<%- tableName %>';
 <%  if(hidden) {-%>
