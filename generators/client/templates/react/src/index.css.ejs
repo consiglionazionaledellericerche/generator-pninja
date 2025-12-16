@@ -82,7 +82,7 @@
     }
   }
   .data-table {
-    @apply w-full table-auto text-sm text-left rtl:text-right mb-5;
+    @apply w-full table-auto text-sm text-left rtl:text-right mb-5 tabular-nums;
     thead {
       @apply text-xs uppercase bg-slate-300 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
       th {
@@ -91,7 +91,7 @@
     }
     tbody {
       td {
-        @apply px-6 py-4 tabular-nums;
+        @apply px-6 py-4;
         &.truncate {
           @apply truncate max-w-50;
         }
