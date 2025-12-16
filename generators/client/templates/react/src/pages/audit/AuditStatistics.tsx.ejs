@@ -172,11 +172,13 @@ export default function AuditStatistics() {
     const period = String(periodString);
 
     switch (gran) {
-      case 'minute': { // "2025-12-15 10:30" -> "10:30"
+      case 'minute': {
+        // "2025-12-15 10:30" -> "10:30"
         const minuteParts = period.split(' ');
         return minuteParts.length > 1 ? minuteParts[1] : period;
       }
-      case 'hour': { // "2025-12-15 10:00" -> "10:00"
+      case 'hour': {
+        // "2025-12-15 10:00" -> "10:00"
         const hourParts = period.split(' ');
         return hourParts.length > 1 ? hourParts[1].substring(0, 5) : period;
       }
@@ -248,8 +250,6 @@ export default function AuditStatistics() {
   return (
     <>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-4">{t('audit:statistics')}</h1>
-
         {/* Date Range Filter */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-4">

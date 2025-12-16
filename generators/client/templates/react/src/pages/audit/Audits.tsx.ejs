@@ -1,0 +1,56 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
+import AuditList from './AuditList';
+import AuditStatistics from './AuditStatistics';
+import { BarChart3, LogsIcon } from 'lucide-react';
+
+export default function Audits() {
+  const { t } = useTranslation();
+  const [selectedTab, setSelectedTab] = useState<string>('logs');
+
+  return (
+    <div className="w-full">
+      <h1 className="text-2xl font-bold mb-6">{t('audit:system')}</h1>
+
+      <Tabs selectedKey={selectedTab} onSelectionChange={(key) => setSelectedTab(key as string)}>
+        <TabList className="flex gap-2 border-b border-gray-200 dark:border-gray-700 mb-6">
+          <Tab
+            id="logs"
+            className={({ isSelected }) =>
+              `inline-flex items-center gap-1 whitespace-nowrap px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
+                isSelected
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`
+            }
+          >
+            <LogsIcon size={16} />
+            {t('audit:title')}
+          </Tab>
+          <Tab
+            id="statistics"
+            className={({ isSelected }) =>
+              `inline-flex items-center gap-1 whitespace-nowrap px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
+                isSelected
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`
+            }
+          >
+            <BarChart3 size={16} />
+            {t('audit:statistics')}
+          </Tab>
+        </TabList>
+
+        <TabPanel id="logs">
+          <AuditList />
+        </TabPanel>
+
+        <TabPanel id="statistics">
+          <AuditStatistics />
+        </TabPanel>
+      </Tabs>
+    </div>
+  );
+}

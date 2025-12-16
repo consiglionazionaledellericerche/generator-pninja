@@ -1,5 +1,6 @@
 {
-  "title": "Auditprotokolle",
+  "title": "Audit-Protokolle",
+  "system": "Audit-System",
   "statistics": "Statistiken",
   "filters": "Filter",
   "all": "Alle",

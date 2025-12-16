@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BarChart3, ChevronDown, ChevronUp, ChevronsUpDown, Filter } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown, Filter } from 'lucide-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -214,17 +214,9 @@ export default function AuditList() {
 
   return (
     <>
-      <h1 className="text-2xl mb-4">{t('audit:title')}</h1>
       <div className={`flex gap-4 mb-4`}>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
-        <Link to="/audits/statistics" className="secondary-button whitespace-nowrap">
-          <BarChart3 size={16} />
-          {t('audit:statistics')}
-        </Link>
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="secondary-button whitespace-nowrap"
-        >
+        <button onClick={() => setShowFilters(!showFilters)} className="secondary-button">
           <Filter size={16} />
           {t('audit:filters')}
         </button>

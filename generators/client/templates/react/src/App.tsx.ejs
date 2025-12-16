@@ -18,11 +18,10 @@ import AcRuleList from './pages/ac-rule/AcRuleList';
 import AcRuleView from './pages/ac-rule/AcRuleView';
 import AcRuleEdit from './pages/ac-rule/AcRuleEdit';
 
-import AuditList from './pages/audit/AuditList';
+import Audits from './pages/audit/Audits';
 import AuditView from './pages/audit/AuditView';
 import AuditCompare from './pages/audit/AuditCompare';
 import AuditHistory from './pages/audit/AuditHistory';
-import AuditStatistics from './pages/audit/AuditStatistics';
 
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
@@ -126,7 +125,7 @@ function App() {
               path="/audits"
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
-                  <AuditList />
+                  <Audits />
                 </Can>
               }
             />
@@ -151,14 +150,6 @@ function App() {
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <AuditHistory />
-                </Can>
-              }
-            />
-            <Route
-              path="/audits/statistics"
-              element={
-                <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
-                  <AuditStatistics />
                 </Can>
               }
             />
