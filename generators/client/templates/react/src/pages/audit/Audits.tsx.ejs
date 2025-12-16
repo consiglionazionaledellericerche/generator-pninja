@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
 import AuditList from './AuditList';
 import AuditStatistics from './AuditStatistics';
-import { BarChart3, LogsIcon } from 'lucide-react';
 
 export default function Audits() {
   const { t } = useTranslation();
@@ -18,27 +17,25 @@ export default function Audits() {
           <Tab
             id="logs"
             className={({ isSelected }) =>
-              `inline-flex items-center gap-1 whitespace-nowrap px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
+              `px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
                 isSelected
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  ? 'border-sky-600 dark:border-sky-400 text-sky-600 dark:text-sky-400'
                   : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`
             }
           >
-            <LogsIcon size={16} />
             {t('audit:title')}
           </Tab>
           <Tab
             id="statistics"
             className={({ isSelected }) =>
-              `inline-flex items-center gap-1 whitespace-nowrap px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
+              `px-4 py-2 text-sm font-medium transition-colors cursor-pointer border-b-2 -mb-px ${
                 isSelected
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  ? 'border-sky-600 dark:border-sky-400 text-sky-600 dark:text-sky-400'
                   : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
               }`
             }
           >
-            <BarChart3 size={16} />
             {t('audit:statistics')}
           </Tab>
         </TabList>

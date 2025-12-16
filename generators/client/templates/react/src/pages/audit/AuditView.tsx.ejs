@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, User, Globe, Monitor, Tag } from 'lucide-react';
+import { ArrowLeft, Clock, User, Globe, Monitor, Tag, GitCompare, History } from 'lucide-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -14,15 +14,15 @@ interface IAudit {
   auditable_id: number;
   user_id: string | null;
   user_type: string | null;
-  old_values: Record<string, any> | null;
-  new_values: Record<string, any> | null;
+  old_values: Record<string, unknown> | null;
+  new_values: Record<string, unknown> | null;
   url: string | null;
   ip_address: string | null;
   user_agent: string | null;
   tags: string | null;
   created_at: string;
   updated_at: string;
-  auditable?: any;
+  auditable?: unknown;
 }
 
 export default function AuditView() {
@@ -54,10 +54,10 @@ export default function AuditView() {
 
   const getEventBadgeClass = (event: string) => {
     const classes = {
-      created: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      updated: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      deleted: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      restored: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+      created: 'bg-green-300 text-green-950 dark:bg-green-700 dark:text-green-100',
+      updated: 'bg-blue-300 text-blue-950 dark:bg-blue-700 dark:text-blue-100',
+      deleted: 'bg-red-300 text-red-950 dark:bg-red-700 dark:text-red-100',
+      restored: 'bg-purple-300 text-purple-950 dark:bg-purple-700 dark:text-purple-100',
     };
     return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
   };
@@ -67,7 +67,7 @@ export default function AuditView() {
     return parts[parts.length - 1];
   };
 
-  const formatValue = (value: any): string => {
+  const formatValue = (value: unknown): string => {
     if (value === null || value === undefined) return '-';
     if (typeof value === 'boolean') return value ? 'true' : 'false';
     if (typeof value === 'object') return JSON.stringify(value, null, 2);
@@ -101,13 +101,15 @@ export default function AuditView() {
             {t('audit:logTitle')} #{audit.id}
           </h1>
           <div className="flex gap-2">
-            <Link to={`/audits/compare/${audit.id}`} className="primary-button">
+            <Link to={`/audits/compare/${audit.id}`} className="secondary-button">
+              <GitCompare size={16} />
               {t('audit:compareChanges')}
             </Link>
             <Link
               to={`/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
-              className="primary-button"
+              className="secondary-button"
             >
+              <History size={16} />
               {t('audit:allChanges')}
             </Link>
           </div>
@@ -148,9 +150,6 @@ export default function AuditView() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
               <p className="font-medium">{audit.user_id || '-'}</p>
-              {audit.user_type && (
-                <p className="text-xs text-gray-500">{formatModelName(audit.user_type)}</p>
-              )}
             </div>
           </div>
 

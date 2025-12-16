@@ -117,7 +117,8 @@ const Menu: React.FC = () => {
                 aria-label={t('entities')}
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
-                {t('entities')} <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
+                {t('entities')}{' '}
+                <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
                 <MenuItems className="outline-0">
@@ -140,6 +141,7 @@ const Menu: React.FC = () => {
           <Can
             any={[
               { resource: 'AcRule', action: 'read' },
+              { resource: 'Audit', action: 'read' },
             ]}
           >
             <MenuTrigger>
@@ -148,7 +150,7 @@ const Menu: React.FC = () => {
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
                 <Settings2 aria-hidden size={16} />
-                <span className="w-0 overflow-hidden">{t('common.settings')}</span>
+                {t('common.settings')}
                 <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">

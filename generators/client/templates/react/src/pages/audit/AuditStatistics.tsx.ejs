@@ -154,10 +154,10 @@ export default function AuditStatistics() {
 
   const getEventBadgeClass = (event: string) => {
     const classes = {
-      created: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      updated: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      deleted: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      restored: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+      created: 'bg-green-300 text-green-950 dark:bg-green-700 dark:text-green-100',
+      updated: 'bg-blue-300 text-blue-950 dark:bg-blue-700 dark:text-blue-100',
+      deleted: 'bg-red-300 text-red-950 dark:bg-red-700 dark:text-red-100',
+      restored: 'bg-purple-300 text-purple-950 dark:bg-purple-700 dark:text-purple-100',
     };
     return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
   };
@@ -273,7 +273,7 @@ export default function AuditStatistics() {
                   className="p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
                 />
               </div>
-              <button onClick={loadData} className="primary-button mt-6">
+              <button onClick={loadData} className="secondary-button mt-6">
                 {t('audit:refresh')}
               </button>
             </div>
