@@ -203,6 +203,62 @@ php artisan add-role superadmin <username>
 php artisan add-role admin <another_username>
 ```
 
+## Audit Logging
+
+The application includes **comprehensive audit logging** powered by **[Laravel Auditing](https://laravel-auditing.com/)**. All CRUD operations (create, update, delete, restore) on Eloquent models are automatically tracked and stored in the `audits` table.
+
+**Features:**
+
+- **Automatic tracking**: All changes to auditable models are logged without additional code
+- **Complete history**: Old and new values are stored for every change
+- **User attribution**: Each audit record includes the username from Keycloak
+- **Metadata**: IP address, user agent, URL, and timestamp are captured
+- **Multi-database support**: Works with MySQL, PostgreSQL, and SQLite
+
+**Audit Dashboard:**
+
+Access the audit interface at `/audits` with two tabs:
+
+1. **Audit Logs**: Browse, search, and filter all audit records
+   - Search by model, event, user, date range
+   - View detailed changes (old vs new values)
+   - Compare specific changes side-by-side
+   - View complete history for any entity
+
+2. **Statistics**: Visual analytics and insights
+   - Activity timeline with automatic granularity (hours/days/months/years)
+   - Events breakdown (created/updated/deleted/restored)
+   - Most modified models
+   - Top active users
+
+**Access control:**
+
+By default, **only `superadmin` role** can access the audit system. To grant access to other users, add policies to the `ac_rules` table:
+
+```csv
+p,admin,Audit,read
+p,auditor,Audit,read
+g,jane.smith,auditor
+```
+
+**Available resources and actions:**
+- Resource: `Audit`
+- Actions: `read` (view logs and statistics)
+
+**Technical details:**
+
+- All timestamps are stored in **UTC** for global consistency
+- Audit data is never automatically deleted (retention policy must be implemented manually if needed)
+- The `user_id` field stores the Keycloak username (not a database ID)
+- Audit records are immutable once created
+
+**Performance considerations:**
+
+For high-traffic applications, consider:
+- Periodic archival of old audit records
+- Indexing the `audits` table on frequently queried columns
+- Using a separate database for audit data
+
 ## Docker composition
 
 To start the **Docker composition**:
