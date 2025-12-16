@@ -166,9 +166,14 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
     }
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleList.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleList.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleView.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleView.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/entities/AcRuleEdit.tsx.ejs"), that.destinationPath(`client/src/pages/entities/AcRuleEdit.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleList.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleList.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleView.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleView.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleEdit.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleEdit.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditCompare.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditCompare.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditList.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditStatistics.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleForm.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleForm.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleDeleteButton.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleDeleteButton.tsx`));
 

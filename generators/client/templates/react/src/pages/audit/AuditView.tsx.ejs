@@ -1,0 +1,276 @@
+// AuditView.tsx
+import { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Clock, User, Globe, Monitor, Tag } from 'lucide-react';
+import axiosInstance from '../../shared/axiosInstance';
+import { useNotifications } from '../../contexts/NotificationContext';
+
+interface IAudit {
+  id: number;
+  event: string;
+  auditable_type: string;
+  auditable_id: number;
+  user_id: string | null;
+  user_type: string | null;
+  old_values: Record<string, any> | null;
+  new_values: Record<string, any> | null;
+  url: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  tags: string | null;
+  created_at: string;
+  updated_at: string;
+  auditable?: any;
+}
+
+export default function AuditView() {
+  const { id } = useParams<{ id: string }>();
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { addNotification } = useNotifications();
+  const [loading, setLoading] = useState(true);
+  const [audit, setAudit] = useState<IAudit | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    axiosInstance
+      .get(`/api/audits/${id}`)
+      .then((response) => {
+        setAudit(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        addNotification({
+          type: 'error',
+          message: error.message,
+        });
+      });
+  }, [id, addNotification]);
+
+  const getEventBadgeClass = (event: string) => {
+    const classes = {
+      created: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+      updated: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+      deleted: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+      restored: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+    };
+    return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
+  };
+
+  const formatModelName = (fullName: string) => {
+    const parts = fullName.split('\\');
+    return parts[parts.length - 1];
+  };
+
+  const formatValue = (value: any): string => {
+    if (value === null || value === undefined) return '-';
+    if (typeof value === 'boolean') return value ? 'true' : 'false';
+    if (typeof value === 'object') return JSON.stringify(value, null, 2);
+    return String(value);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!audit) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-xl text-gray-600 dark:text-gray-400">{t('Audit not found')}</p>
+        <Link to="/audits" className="text-link mt-4 inline-block">
+          {t('Back to list')}
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className="mb-6">
+        <button onClick={() => navigate(-1)} className="secondary-button mb-4">
+          <ArrowLeft size={16} />
+          {t('actions.back')}
+        </button>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">
+            {t('Audit Log')} #{audit.id}
+          </h1>
+          <div className="flex gap-2">
+            <Link to={`/audits/compare/${audit.id}`} className="primary-button">
+              {t('Compare Changes')}
+            </Link>
+            <Link
+              to={`/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
+              className="primary-button"
+            >
+              {t('All Changes')}
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Event Info Card */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+        <h2 className="text-lg font-semibold mb-4">{t('Event Information')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex items-start gap-3">
+            <Tag className="text-gray-500 mt-1" size={20} />
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('Event Type')}</p>
+              <span
+                className={`inline-block px-3 py-1 text-sm font-semibold rounded-full mt-1 ${getEventBadgeClass(audit.event)}`}
+              >
+                {t(audit.event)}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Clock className="text-gray-500 mt-1" size={20} />
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('Date & Time')}</p>
+              <p className="font-medium">
+                {new Date(audit.created_at).toLocaleString(i18n.language, {
+                  dateStyle: 'long',
+                  timeStyle: 'medium',
+                })}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <User className="text-gray-500 mt-1" size={20} />
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('User')}</p>
+              <p className="font-medium">{audit.user_id || '-'}</p>
+              {audit.user_type && (
+                <p className="text-xs text-gray-500">{formatModelName(audit.user_type)}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <Globe className="text-gray-500 mt-1" size={20} />
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('IP Address')}</p>
+              <p className="font-medium">{audit.ip_address || '-'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Auditable Model Card */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+        <h2 className="text-lg font-semibold mb-4">{t('Affected Record')}</h2>
+        <div className="space-y-2">
+          <div>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{t('Model Type')}:</span>
+            <span className="ml-2 font-medium">{formatModelName(audit.auditable_type)}</span>
+          </div>
+          <div>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{t('Record ID')}:</span>
+            <span className="ml-2 font-medium">{audit.auditable_id}</span>
+          </div>
+          {audit.url && (
+            <div>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{t('URL')}:</span>
+              <span className="ml-2 font-mono text-sm break-all">{audit.url}</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Request Info Card */}
+      {audit.user_agent && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Monitor size={20} />
+            {t('Request Information')}
+          </h2>
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('User Agent')}</p>
+            <p className="font-mono text-sm break-all">{audit.user_agent}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Old Values */}
+      {audit.old_values && Object.keys(audit.old_values).length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4 text-red-600 dark:text-red-400">
+            {t('Old Values')}
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Field')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Value')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {Object.entries(audit.old_values).map(([key, value]) => (
+                  <tr key={key}>
+                    <td className="px-4 py-2 font-medium text-sm">{key}</td>
+                    <td className="px-4 py-2 text-sm">
+                      <pre className="whitespace-pre-wrap break-all font-mono text-xs">
+                        {formatValue(value)}
+                      </pre>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* New Values */}
+      {audit.new_values && Object.keys(audit.new_values).length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4 text-green-600 dark:text-green-400">
+            {t('New Values')}
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Field')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Value')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {Object.entries(audit.new_values).map(([key, value]) => (
+                  <tr key={key}>
+                    <td className="px-4 py-2 font-medium text-sm">{key}</td>
+                    <td className="px-4 py-2 text-sm">
+                      <pre className="whitespace-pre-wrap break-all font-mono text-xs">
+                        {formatValue(value)}
+                      </pre>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Tags */}
+      {audit.tags && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">{t('Tags')}</h2>
+          <p className="font-mono text-sm">{audit.tags}</p>
+        </div>
+      )}
+    </>
+  );
+}

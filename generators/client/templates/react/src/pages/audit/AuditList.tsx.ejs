@@ -1,0 +1,383 @@
+import { Link } from 'react-router-dom';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { BarChart3, ChevronDown, ChevronUp, ChevronsUpDown, Filter } from 'lucide-react';
+import axiosInstance from '../../shared/axiosInstance';
+import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
+import { ApiResponsePagination } from '../../components/ApiResponsePagination';
+import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
+import { SearchInput } from '../../components/SearchInput';
+import { useNotifications } from '../../contexts/NotificationContext';
+import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+
+type SortableField = 'id' | 'event' | 'auditable_type' | 'user_id' | 'created_at';
+
+interface IAudit {
+  id: number;
+  event: string;
+  auditable_type: string;
+  auditable_id: number;
+  user_id: string | null;
+  user_type: string | null;
+  old_values: Record<string, any> | null;
+  new_values: Record<string, any> | null;
+  url: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+interface AuditFilters {
+  auditable_type?: string;
+  event?: string;
+  user_id?: string;
+  date_from?: string;
+  date_to?: string;
+}
+
+export default function AuditList() {
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<AuditFilters>({});
+  const [models, setModels] = useState<string[]>([]);
+  const [users, setUsers] = useState<Array<{ user_id: string; user_type: string }>>([]);
+  const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
+    field: 'created_at',
+    direction: 'desc',
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState<ApiResponsePage<IAudit> | null>(null);
+  useAutoShortcuts();
+
+  const sortableColumns: SortableField[] = [
+    'id',
+    'event',
+    'auditable_type',
+    'user_id',
+    'created_at',
+  ];
+
+  const eventTypes = ['created', 'updated', 'deleted', 'restored'];
+
+  // Carica liste per filtri
+  useEffect(() => {
+    axiosInstance.get('/api/audits/models').then((response) => setModels(response.data));
+    axiosInstance.get('/api/audits/users').then((response) => setUsers(response.data));
+  }, []);
+
+  const loadRecords = useCallback(() => {
+    setLoading(true);
+
+    const params = new URLSearchParams({
+      page: currentPage.toString(),
+      sort_by: sortConfig.field,
+      sort_order: sortConfig.direction,
+    });
+
+    if (debouncedSearchTerm) {
+      params.append('search', debouncedSearchTerm);
+    }
+
+    // Aggiungi filtri
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value);
+    });
+
+    axiosInstance
+      .get(`/api/audits?${params.toString()}`)
+      .then((response) => response?.data)
+      .then((page: ApiResponsePage<IAudit>) => {
+        setPage(page);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        addNotification({
+          type: 'error',
+          message: error.message,
+        });
+      });
+  }, [addNotification, sortConfig, currentPage, debouncedSearchTerm, filters]);
+
+  const handleSort = (field: SortableField) => {
+    setSortConfig((currentConfig) => ({
+      field,
+      direction:
+        currentConfig.field === field && currentConfig.direction === 'asc' ? 'desc' : 'asc',
+    }));
+    setCurrentPage(1);
+  };
+
+  const handleFilterChange = (key: keyof AuditFilters, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value || undefined,
+    }));
+    setCurrentPage(1);
+  };
+
+  const clearFilters = () => {
+    setFilters({});
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+      setCurrentPage(1);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
+
+  interface SortHeaderProps extends React.HTMLAttributes<HTMLTableCellElement> {
+    field: string;
+    label: string;
+    className?: string;
+  }
+
+  const SortHeader: React.FC<SortHeaderProps> = ({ field, label, className, ...props }) => {
+    const isSorted = sortConfig.field === field;
+    const isSortable = sortableColumns.includes(field as SortableField);
+    if (!isSortable) {
+      return (
+        <th scope="col" className={className ? className : ''} {...props}>
+          {label}
+        </th>
+      );
+    }
+    return (
+      <th
+        scope="col"
+        className={`${isSortable ? 'cursor-pointer select-none py-0! px-0!' : ''}${className ? ' ' + className : ''}`}
+        onClick={() => isSortable && handleSort(field as SortableField)}
+        {...props}
+      >
+        <button
+          className="cursor-pointer flex items-center gap-4 w-full ps-6 py-3 text-nowrap truncate"
+          aria-label={t(
+            `common.sortBy.${isSorted && sortConfig.direction === 'asc' ? 'descending' : 'ascending'}`,
+            {
+              field: label,
+            }
+          )}
+        >
+          <div className="grow text-left">{label}</div>
+          {isSorted &&
+            (sortConfig.direction === 'asc' ? (
+              <ChevronDown
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ) : (
+              <ChevronUp
+                aria-hidden
+                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+              />
+            ))}
+          {!isSorted && (
+            <ChevronsUpDown
+              aria-hidden
+              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+            />
+          )}
+        </button>
+      </th>
+    );
+  };
+
+  const getEventBadgeClass = (event: string) => {
+    const classes = {
+      created: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+      updated: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+      deleted: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+      restored: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+    };
+    return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
+  };
+
+  const formatModelName = (fullName: string) => {
+    const parts = fullName.split('\\');
+    return parts[parts.length - 1];
+  };
+
+  useEffect(() => loadRecords(), [loadRecords]);
+
+  useEffect(() => {
+    document.title = t('Audit Logs');
+  }, [i18n.language, t]);
+
+  return (
+    <>
+      <h1 className="text-2xl mb-4">{t('Audit Logs')}</h1>
+      <div className={`flex gap-4 mb-4`}>
+        <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
+        <Link to="/audits/statistics" className="secondary-button whitespace-nowrap">
+          <BarChart3 size={16} />
+          {t('Statistics')}
+        </Link>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="secondary-button whitespace-nowrap"
+        >
+          <Filter size={16} />
+          {t('Filters')}
+        </button>
+      </div>
+
+      {showFilters && (
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('Model Type')}</label>
+              <select
+                className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                value={filters.auditable_type || ''}
+                onChange={(e) => handleFilterChange('auditable_type', e.target.value)}
+              >
+                <option value="">{t('All')}</option>
+                {models.map((model) => (
+                  <option key={model} value={model}>
+                    {formatModelName(model)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('Event Type')}</label>
+              <select
+                className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                value={filters.event || ''}
+                onChange={(e) => handleFilterChange('event', e.target.value)}
+              >
+                <option value="">{t('All')}</option>
+                {eventTypes.map((event) => (
+                  <option key={event} value={event}>
+                    {t(event)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('User')}</label>
+              <select
+                className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                value={filters.user_id || ''}
+                onChange={(e) => handleFilterChange('user_id', e.target.value)}
+              >
+                <option value="">{t('All')}</option>
+                {users.map((user, idx) => (
+                  <option key={idx} value={user.user_id}>
+                    {user.user_id}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('Date From')}</label>
+              <input
+                type="date"
+                className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                value={filters.date_from || ''}
+                onChange={(e) => handleFilterChange('date_from', e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('Date To')}</label>
+              <input
+                type="date"
+                className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                value={filters.date_to || ''}
+                onChange={(e) => handleFilterChange('date_to', e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-end">
+              <button onClick={clearFilters} className="secondary-button w-full">
+                {t('Clear Filters')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Fragment>
+        <TableSkeletonLoader loading={loading} rows={10} cols={6} />
+      </Fragment>
+      {!loading && page?.data && page?.data.length === 0 && (
+        <p className="mb-4 text-2xl">{t('messages.noData')}</p>
+      )}
+      {!loading && page?.data && page?.data.length > 0 && (
+        <>
+          <div className="relative overflow-x-auto mb-4">
+            <table className="data-table">
+              <caption className="w-full text-left mb-2 text-sm font-normal">
+                {t('pagination.summary', {
+                  entity: t('Audit Logs'),
+                  from: page?.from,
+                  to: page?.to,
+                  total: page?.total,
+                })}
+              </caption>
+              <thead>
+                <tr>
+                  <SortHeader className="w-0" field="id" label={t('ID')} />
+                  <SortHeader field="event" label={t('Event')} />
+                  <SortHeader field="auditable_type" label={t('Model')} />
+                  <th scope="col">{t('Record ID')}</th>
+                  <SortHeader field="user_id" label={t('User')} />
+                  <SortHeader field="created_at" label={t('Date')} />
+                  <th scope="col">{t('actions.crud.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {page?.data.map((row, key) => (
+                  <tr key={key}>
+                    <td className="w-0">
+                      <Link className="text-link" to={`/audits/view/${row.id}`}>
+                        {row.id}
+                      </Link>
+                    </td>
+                    <td>
+                      <span
+                        className={`px-2 py-1 text-xs font-semibold rounded-full ${getEventBadgeClass(row.event)}`}
+                      >
+                        {t(row.event)}
+                      </span>
+                    </td>
+                    <td className="text-sm">{formatModelName(row.auditable_type)}</td>
+                    <td>{row.auditable_id}</td>
+                    <td>{row.user_id || '-'}</td>
+                    <td className="text-sm">
+                      {new Date(row.created_at).toLocaleString(i18n.language)}
+                    </td>
+                    <td className="text-nowrap w-0 uppercase">
+                      <div className="flex space-x-2">
+                        <Link to={`/audits/view/${row.id}`} className="text-link">
+                          {t('actions.crud.view')}
+                        </Link>
+                        <Link to={`/audits/compare/${row.id}`} className="text-link">
+                          {t('Compare')}
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <ApiResponsePagination pageLinks={page.links || []} onSelectPage={setCurrentPage} />
+        </>
+      )}
+    </>
+  );
+}
