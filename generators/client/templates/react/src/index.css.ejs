@@ -52,13 +52,16 @@
     @apply -ms-0.5;
   }
   .primary-button {
-    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 text-slate-50 dark:bg-sky-300 hover:dark:bg-sky-500 dark:text-slate-900 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
+    @apply whitespace-nowrap shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-blue-600 hover:bg-blue-700 text-slate-50 dark:bg-sky-300 hover:dark:bg-sky-500 dark:text-slate-900 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
+  }
+  .secondary-button {
+    @apply whitespace-nowrap shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-slate-600 hover:bg-slate-700 text-slate-50 dark:bg-slate-300 hover:dark:bg-slate-400 dark:text-slate-900 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
   }
   .danger-button {
-    @apply shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-red-600 hover:bg-red-700 text-slate-50 dark:bg-red-300 hover:dark:bg-red-400 dark:text-slate-900 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
+    @apply whitespace-nowrap shadow-sm dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-red-600 hover:bg-red-700 text-slate-50 dark:bg-red-300 hover:dark:bg-red-400 dark:text-slate-900 py-1.5 px-4 text-sm font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
   }
   .cancel-button {
-    @apply hover:shadow-sm hover:dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-transparent dark:bg-transparent py-1.5 px-4 text-sm font-medium hover:bg-slate-300 hover:dark:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
+    @apply whitespace-nowrap hover:shadow-sm hover:dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-transparent dark:bg-transparent py-1.5 px-4 text-sm font-medium hover:bg-slate-300 hover:dark:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50;
   }
   .text-link {
     @apply rounded-md text-sky-600 dark:text-sky-400 hover:underline active:underline decoration-2 focus-visible:outline-2 focus-visible:outline-offset-4 outline-inherit;
