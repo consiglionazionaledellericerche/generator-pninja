@@ -259,6 +259,7 @@ export class ControllersGenerator {
                 return acc;
             }, {});
 
+            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AcRuleController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AcRuleController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {

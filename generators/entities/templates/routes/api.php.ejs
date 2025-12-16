@@ -7,6 +7,7 @@ use App\Http\Controllers\SessionAuthController;
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 use App\Http\Controllers\AcRuleController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
 
 Route::get('/health', function () {
@@ -45,6 +46,17 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
 <%  }; -%>
 <% }); -%>
     Route::apiResource('ac-rules', AcRuleController::class);
+
+    Route::prefix('audits')->group(function () {
+        Route::get('/', [AuditController::class, 'index']);
+        Route::get('/statistics', [AuditController::class, 'statistics']);
+        Route::get('/timeline', [AuditController::class, 'timeline']);
+        Route::get('/models', [AuditController::class, 'models']);
+        Route::get('/users', [AuditController::class, 'users']);
+        Route::get('/{id}', [AuditController::class, 'show']);
+        Route::get('/{id}/compare', [AuditController::class, 'compare']);
+        Route::get('/entity/{type}/{id}', [AuditController::class, 'entity']);
+    });
 
     Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
         ->where('path', '.*')
