@@ -81,9 +81,9 @@ export default function AuditView() {
   if (!audit) {
     return (
       <div className="text-center py-12">
-        <p className="text-xl text-gray-600 dark:text-gray-400">{t('Audit not found')}</p>
+        <p className="text-xl text-gray-600 dark:text-gray-400">{t('audit:notFound')}</p>
         <Link to="/audits" className="text-link mt-4 inline-block">
-          {t('Back to list')}
+          {t('audit:backToList')}
         </Link>
       </div>
     );
@@ -98,17 +98,17 @@ export default function AuditView() {
         </button>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">
-            {t('Audit Log')} #{audit.id}
+            {t('audit:logTitle')} #{audit.id}
           </h1>
           <div className="flex gap-2">
             <Link to={`/audits/compare/${audit.id}`} className="primary-button">
-              {t('Compare Changes')}
+              {t('audit:compareChanges')}
             </Link>
             <Link
               to={`/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
               className="primary-button"
             >
-              {t('All Changes')}
+              {t('audit:allChanges')}
             </Link>
           </div>
         </div>
@@ -116,16 +116,16 @@ export default function AuditView() {
 
       {/* Event Info Card */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">{t('Event Information')}</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('audit:eventInformation')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             <Tag className="text-gray-500 mt-1" size={20} />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{t('Event Type')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:eventType')}</p>
               <span
                 className={`inline-block px-3 py-1 text-sm font-semibold rounded-full mt-1 ${getEventBadgeClass(audit.event)}`}
               >
-                {t(audit.event)}
+                {t(`audit:events.${audit.event}`)}
               </span>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function AuditView() {
           <div className="flex items-start gap-3">
             <Clock className="text-gray-500 mt-1" size={20} />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{t('Date & Time')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:dateTime')}</p>
               <p className="font-medium">
                 {new Date(audit.created_at).toLocaleString(i18n.language, {
                   dateStyle: 'long',
@@ -146,7 +146,7 @@ export default function AuditView() {
           <div className="flex items-start gap-3">
             <User className="text-gray-500 mt-1" size={20} />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{t('User')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
               <p className="font-medium">{audit.user_id || '-'}</p>
               {audit.user_type && (
                 <p className="text-xs text-gray-500">{formatModelName(audit.user_type)}</p>
@@ -157,7 +157,7 @@ export default function AuditView() {
           <div className="flex items-start gap-3">
             <Globe className="text-gray-500 mt-1" size={20} />
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{t('IP Address')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:ipAddress')}</p>
               <p className="font-medium">{audit.ip_address || '-'}</p>
             </div>
           </div>
@@ -166,19 +166,23 @@ export default function AuditView() {
 
       {/* Auditable Model Card */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
-        <h2 className="text-lg font-semibold mb-4">{t('Affected Record')}</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('audit:affectedRecord')}</h2>
         <div className="space-y-2">
           <div>
-            <span className="text-sm text-gray-600 dark:text-gray-400">{t('Model Type')}:</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {t('audit:modelType')}:
+            </span>
             <span className="ml-2 font-medium">{formatModelName(audit.auditable_type)}</span>
           </div>
           <div>
-            <span className="text-sm text-gray-600 dark:text-gray-400">{t('Record ID')}:</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {t('audit:columns.recordId')}:
+            </span>
             <span className="ml-2 font-medium">{audit.auditable_id}</span>
           </div>
           {audit.url && (
             <div>
-              <span className="text-sm text-gray-600 dark:text-gray-400">{t('URL')}:</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">{t('audit:url')}:</span>
               <span className="ml-2 font-mono text-sm break-all">{audit.url}</span>
             </div>
           )}
@@ -190,10 +194,10 @@ export default function AuditView() {
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <Monitor size={20} />
-            {t('Request Information')}
+            {t('audit:requestInformation')}
           </h2>
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('User Agent')}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('audit:userAgent')}</p>
             <p className="font-mono text-sm break-all">{audit.user_agent}</p>
           </div>
         </div>
@@ -203,14 +207,14 @@ export default function AuditView() {
       {audit.old_values && Object.keys(audit.old_values).length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 text-red-600 dark:text-red-400">
-            {t('Old Values')}
+            {t('audit:oldValues')}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Field')}</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Value')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('audit:field')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('audit:value')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -234,14 +238,14 @@ export default function AuditView() {
       {audit.new_values && Object.keys(audit.new_values).length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 text-green-600 dark:text-green-400">
-            {t('New Values')}
+            {t('audit:newValues')}
           </h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Field')}</th>
-                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('Value')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('audit:field')}</th>
+                  <th className="px-4 py-2 text-left text-sm font-semibold">{t('audit:value')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -264,7 +268,7 @@ export default function AuditView() {
       {/* Tags */}
       {audit.tags && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">{t('Tags')}</h2>
+          <h2 className="text-lg font-semibold mb-4">{t('audit:tags')}</h2>
           <p className="font-mono text-sm">{audit.tags}</p>
         </div>
       )}

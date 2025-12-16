@@ -64,7 +64,7 @@ export default function AuditList() {
 
   const eventTypes = ['created', 'updated', 'deleted', 'restored'];
 
-  // Carica liste per filtri
+  // Load lists for filters
   useEffect(() => {
     axiosInstance.get('/api/audits/models').then((response) => setModels(response.data));
     axiosInstance.get('/api/audits/users').then((response) => setUsers(response.data));
@@ -83,7 +83,7 @@ export default function AuditList() {
       params.append('search', debouncedSearchTerm);
     }
 
-    // Aggiungi filtri
+    // Add filters
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params.append(key, value);
     });
@@ -209,24 +209,24 @@ export default function AuditList() {
   useEffect(() => loadRecords(), [loadRecords]);
 
   useEffect(() => {
-    document.title = t('Audit Logs');
+    document.title = t('audit:title');
   }, [i18n.language, t]);
 
   return (
     <>
-      <h1 className="text-2xl mb-4">{t('Audit Logs')}</h1>
+      <h1 className="text-2xl mb-4">{t('audit:title')}</h1>
       <div className={`flex gap-4 mb-4`}>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
         <Link to="/audits/statistics" className="secondary-button whitespace-nowrap">
           <BarChart3 size={16} />
-          {t('Statistics')}
+          {t('audit:statistics')}
         </Link>
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="secondary-button whitespace-nowrap"
         >
           <Filter size={16} />
-          {t('Filters')}
+          {t('audit:filters')}
         </button>
       </div>
 
@@ -234,13 +234,13 @@ export default function AuditList() {
         <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">{t('Model Type')}</label>
+              <label className="block text-sm font-medium mb-1">{t('audit:modelType')}</label>
               <select
                 className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
                 value={filters.auditable_type || ''}
                 onChange={(e) => handleFilterChange('auditable_type', e.target.value)}
               >
-                <option value="">{t('All')}</option>
+                <option value="">{t('audit:all')}</option>
                 {models.map((model) => (
                   <option key={model} value={model}>
                     {formatModelName(model)}
@@ -250,29 +250,29 @@ export default function AuditList() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">{t('Event Type')}</label>
+              <label className="block text-sm font-medium mb-1">{t('audit:eventType')}</label>
               <select
                 className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
                 value={filters.event || ''}
                 onChange={(e) => handleFilterChange('event', e.target.value)}
               >
-                <option value="">{t('All')}</option>
+                <option value="">{t('audit:all')}</option>
                 {eventTypes.map((event) => (
                   <option key={event} value={event}>
-                    {t(event)}
+                    {t(`audit:events.${event}`)}
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">{t('User')}</label>
+              <label className="block text-sm font-medium mb-1">{t('audit:user')}</label>
               <select
                 className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
                 value={filters.user_id || ''}
                 onChange={(e) => handleFilterChange('user_id', e.target.value)}
               >
-                <option value="">{t('All')}</option>
+                <option value="">{t('audit:all')}</option>
                 {users.map((user, idx) => (
                   <option key={idx} value={user.user_id}>
                     {user.user_id}
@@ -282,7 +282,7 @@ export default function AuditList() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">{t('Date From')}</label>
+              <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
               <input
                 type="date"
                 className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
@@ -292,7 +292,7 @@ export default function AuditList() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">{t('Date To')}</label>
+              <label className="block text-sm font-medium mb-1">{t('audit:dateTo')}</label>
               <input
                 type="date"
                 className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
@@ -303,7 +303,7 @@ export default function AuditList() {
 
             <div className="flex items-end">
               <button onClick={clearFilters} className="secondary-button w-full">
-                {t('Clear Filters')}
+                {t('audit:clearFilters')}
               </button>
             </div>
           </div>
@@ -322,7 +322,7 @@ export default function AuditList() {
             <table className="data-table">
               <caption className="w-full text-left mb-2 text-sm font-normal">
                 {t('pagination.summary', {
-                  entity: t('Audit Logs'),
+                  entity: t('audit:title'),
                   from: page?.from,
                   to: page?.to,
                   total: page?.total,
@@ -330,12 +330,12 @@ export default function AuditList() {
               </caption>
               <thead>
                 <tr>
-                  <SortHeader className="w-0" field="id" label={t('ID')} />
-                  <SortHeader field="event" label={t('Event')} />
-                  <SortHeader field="auditable_type" label={t('Model')} />
-                  <th scope="col">{t('Record ID')}</th>
-                  <SortHeader field="user_id" label={t('User')} />
-                  <SortHeader field="created_at" label={t('Date')} />
+                  <SortHeader className="w-0" field="id" label={t('audit:columns.id')} />
+                  <SortHeader field="event" label={t('audit:columns.event')} />
+                  <SortHeader field="auditable_type" label={t('audit:columns.model')} />
+                  <th scope="col">{t('audit:columns.recordId')}</th>
+                  <SortHeader field="user_id" label={t('audit:columns.user')} />
+                  <SortHeader field="created_at" label={t('audit:columns.date')} />
                   <th scope="col">{t('actions.crud.actions')}</th>
                 </tr>
               </thead>
@@ -351,7 +351,7 @@ export default function AuditList() {
                       <span
                         className={`px-2 py-1 text-xs font-semibold rounded-full ${getEventBadgeClass(row.event)}`}
                       >
-                        {t(row.event)}
+                        {t(`audit:events.${row.event}`)}
                       </span>
                     </td>
                     <td className="text-sm">{formatModelName(row.auditable_type)}</td>
@@ -366,7 +366,7 @@ export default function AuditList() {
                           {t('actions.crud.view')}
                         </Link>
                         <Link to={`/audits/compare/${row.id}`} className="text-link">
-                          {t('Compare')}
+                          {t('audit:compare')}
                         </Link>
                       </div>
                     </td>
