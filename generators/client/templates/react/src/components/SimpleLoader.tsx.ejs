@@ -1,6 +1,7 @@
-import { LoaderCircle as Loader } from 'lucide-react';
-export function SimpleLoader({ loading = true, size = 48 }) {
+export function SimpleLoader({ loading = true }) {
   return loading ? (
-    <Loader size={size} className={`animate-spin text-blue-600 dark:text-sky-300`} />
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+    </div>
   ) : null;
 }

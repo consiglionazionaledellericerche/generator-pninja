@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, Clock, User } from 'lucide-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
 
 interface IComparison {
   audit_id: number;
@@ -75,11 +76,7 @@ export default function AuditCompare() {
   const changedCount = changesArray.filter(([_, change]) => change.changed).length;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <SimpleLoader />;
   }
 
   if (!comparison) {
