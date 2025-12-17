@@ -1,0 +1,584 @@
+import { useEffect, useState, useCallback } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import {
+  User,
+  Calendar,
+  Activity,
+  Clock,
+  TrendingUp,
+  FileText,
+  BarChart3,
+  ArrowLeft,
+} from 'lucide-react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
+import axiosInstance from '../../shared/axiosInstance';
+import { useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+
+interface UserProfile {
+  user_id: string;
+  total_actions: number;
+  first_activity: string;
+  last_activity: string;
+  by_event: Array<{ event: string; total: number }>;
+  by_model: Array<{ auditable_type: string; total: number }>;
+  most_active_day: { date: string; total: number } | null;
+}
+
+interface TimelineItem {
+  id: number;
+  event: string;
+  auditable_type: string;
+  auditable_id: number;
+  created_at: string;
+  url: string;
+}
+
+interface HourlyPattern {
+  hour: number;
+  total: number;
+}
+
+interface WeeklyPattern {
+  day_of_week: number;
+  day_name: string;
+  total: number;
+}
+
+interface Session {
+  start: string;
+  end: string;
+  duration_minutes: number;
+  actions: number;
+  events: Record<string, number>;
+  models: Record<string, number>;
+}
+
+interface SessionsData {
+  total_sessions: number;
+  avg_duration_minutes: number;
+  avg_actions_per_session: number;
+  sessions: Session[];
+}
+
+const COLORS = {
+  created: '#10b981',
+  updated: '#3b82f6',
+  deleted: '#ef4444',
+  restored: '#a855f7',
+};
+
+export default function AuditUserActivity() {
+  const { userId } = useParams<{ userId: string }>();
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [timeline, setTimeline] = useState<TimelineItem[]>([]);
+  const [hourlyPattern, setHourlyPattern] = useState<HourlyPattern[]>([]);
+  const [weeklyPattern, setWeeklyPattern] = useState<WeeklyPattern[]>([]);
+  const [sessions, setSessions] = useState<SessionsData | null>(null);
+
+  const [dateFrom, setDateFrom] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 90);
+    return date.toISOString().split('T')[0];
+  });
+  const [dateTo, setDateTo] = useState(() => {
+    return new Date().toISOString().split('T')[0];
+  });
+
+  const loadData = useCallback(() => {
+    if (!userId) return;
+
+    setLoading(true);
+
+    Promise.all([
+      axiosInstance.get(
+        `/api/audits/user/${userId}/profile?date_from=${dateFrom}&date_to=${dateTo}`
+      ),
+      axiosInstance.get(
+        `/api/audits/user/${userId}/timeline?date_from=${dateFrom}&date_to=${dateTo}&per_page=10`
+      ),
+      axiosInstance.get(
+        `/api/audits/user/${userId}/hourly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
+      ),
+      axiosInstance.get(
+        `/api/audits/user/${userId}/weekly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
+      ),
+      axiosInstance.get(
+        `/api/audits/user/${userId}/sessions?date_from=${dateFrom}&date_to=${dateTo}`
+      ),
+    ])
+      .then(([profileRes, timelineRes, hourlyRes, weeklyRes, sessionsRes]) => {
+        setProfile(profileRes.data);
+        setTimeline(timelineRes.data.data || []);
+        setHourlyPattern(hourlyRes.data);
+        setWeeklyPattern(weeklyRes.data);
+        setSessions(sessionsRes.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('ERR:', error);
+        setLoading(false);
+        addNotification({
+          type: 'error',
+          message: error.message,
+        });
+      });
+  }, [userId, dateFrom, dateTo, addNotification]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const formatModelName = (fullName: string) => {
+    const parts = fullName.split('\\');
+    return parts[parts.length - 1];
+  };
+
+  const getEventBadgeClass = (event: string) => {
+    const classes = {
+      created: 'bg-green-300 text-green-950 dark:bg-green-700 dark:text-green-100',
+      updated: 'bg-blue-300 text-blue-950 dark:bg-blue-700 dark:text-blue-100',
+      deleted: 'bg-red-300 text-red-950 dark:bg-red-700 dark:text-red-100',
+      restored: 'bg-purple-300 text-purple-950 dark:bg-purple-700 dark:text-purple-100',
+    };
+    return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
+  };
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: { name: string; value: number }[];
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+          <p className="font-semibold mb-1">{payload[0].name}</p>
+          <p className="text-sm">
+            {t('audit:total')}: {payload[0].value}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  if (loading) {
+    return <SimpleLoader />;
+  }
+
+  if (!profile) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-xl text-gray-600 dark:text-gray-400">{t('audit:userNotFound')}</p>
+      </div>
+    );
+  }
+
+  // Prepara dati per grafici
+  const eventChartData = profile.by_event.map((item) => ({
+    name: t(`audit:events.${item.event}`),
+    value: item.total,
+    color: COLORS[item.event as keyof typeof COLORS] || '#6b7280',
+  }));
+
+  const hourlyChartData = hourlyPattern.map((item) => ({
+    name: `${String(item.hour).padStart(2, '0')}:00`,
+    value: item.total,
+  }));
+
+  const weeklyChartData = weeklyPattern.map((item) => ({
+    name: t(`audit:weekdays.${item.day_name.toLowerCase()}`),
+    value: item.total,
+  }));
+
+  return (
+    <>
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/audits" className="secondary-button">
+            <ArrowLeft size={20} />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <User size={28} />
+              {t('audit:userActivity')}: {profile.user_id}
+            </h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              {t('audit:activityPeriod')}: {new Date(dateFrom).toLocaleDateString(i18n.language)} -{' '}
+              {new Date(dateTo).toLocaleDateString(i18n.language)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Date Range Filter */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+          <Calendar className="text-gray-500" size={20} />
+          <div className="flex flex-wrap items-center gap-4 flex-1">
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('audit:dateTo')}</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+              />
+            </div>
+            <button onClick={loadData} className="secondary-button mt-6">
+              {t('audit:refresh')}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:totalActions')}</p>
+              <p className="text-2xl font-bold mt-1">{profile.total_actions.toLocaleString()}</p>
+            </div>
+            <Activity className="text-blue-500" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:firstActivity')}</p>
+              <p className="text-sm font-semibold mt-1">
+                {new Date(profile.first_activity).toLocaleDateString(i18n.language)}
+              </p>
+            </div>
+            <Clock className="text-green-500" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:lastActivity')}</p>
+              <p className="text-sm font-semibold mt-1">
+                {new Date(profile.last_activity).toLocaleDateString(i18n.language)}
+              </p>
+            </div>
+            <TrendingUp className="text-purple-500" size={32} />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:mostActiveDay')}</p>
+              <p className="text-sm font-semibold mt-1">
+                {profile.most_active_day
+                  ? new Date(profile.most_active_day.date).toLocaleDateString(i18n.language)
+                  : t('audit:noData')}
+              </p>
+              {profile.most_active_day && (
+                <p className="text-xs text-gray-500 mt-1">
+                  {profile.most_active_day.total} {t('audit:actions')}
+                </p>
+              )}
+            </div>
+            <BarChart3 className="text-orange-500" size={32} />
+          </div>
+        </div>
+      </div>
+
+      {/* Sessions Summary */}
+      {sessions && sessions.total_sessions > 0 && (
+        <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg shadow-lg p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4">{t('audit:workSessions')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <p className="text-indigo-100 text-sm">{t('audit:totalSessions')}</p>
+              <p className="text-3xl font-bold mt-1">{sessions.total_sessions}</p>
+            </div>
+            <div>
+              <p className="text-indigo-100 text-sm">{t('audit:avgDuration')}</p>
+              <p className="text-3xl font-bold mt-1">
+                {Math.round(sessions.avg_duration_minutes)} {t('audit:minutes')}
+              </p>
+            </div>
+            <div>
+              <p className="text-indigo-100 text-sm">{t('audit:avgActionsPerSession')}</p>
+              <p className="text-3xl font-bold mt-1">
+                {Math.round(sessions.avg_actions_per_session)}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Events Distribution */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <FileText size={20} />
+            {t('audit:actionsByType')}
+          </h2>
+          {eventChartData.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center py-4">{t('audit:noData')}</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={eventChartData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {eventChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+
+        {/* Top Models */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">{t('audit:topModelsModified')}</h2>
+          {profile.by_model.length === 0 ? (
+            <p className="text-sm text-gray-500 text-center py-4">{t('audit:noData')}</p>
+          ) : (
+            <div className="space-y-3">
+              {profile.by_model.slice(0, 8).map((item) => {
+                const maxCount = Math.max(...profile.by_model.map((m) => m.total));
+                const percentage = (item.total / maxCount) * 100;
+                return (
+                  <div key={item.auditable_type}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium truncate" title={item.auditable_type}>
+                        {formatModelName(item.auditable_type)}
+                      </span>
+                      <span className="text-sm font-medium">{item.total}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div
+                        className="bg-blue-500 h-2 rounded-full transition-all"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Hourly Pattern */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">{t('audit:activityByHour')}</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={hourlyChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" className="text-xs" />
+              <YAxis className="text-xs" />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="value" fill="#3b82f6" name={t('audit:actions')} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Weekly Pattern */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+          <h2 className="text-lg font-semibold mb-4">{t('audit:activityByWeekday')}</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={weeklyChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" className="text-xs" />
+              <YAxis className="text-xs" />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar dataKey="value" fill="#10b981" name={t('audit:actions')} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Detailed Sessions List */}
+      {sessions && sessions.sessions && sessions.sessions.length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">{t('audit:recentSessions')}</h2>
+            <p className="text-sm text-gray-500">{t('audit:clickSessionToView')}</p>
+          </div>
+          <div className="space-y-4">
+            {sessions.sessions.slice(0, 10).map((session, index) => {
+              const startDate = new Date(session.start);
+              const endDate = new Date(session.end);
+              const topModels = Object.entries(session.models)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 3);
+
+              // Formatta durata in minuti e secondi
+              const totalMinutes = Math.floor(session.duration_minutes);
+              const seconds = Math.round((session.duration_minutes - totalMinutes) * 60);
+              const durationText = seconds > 0 ? `${totalMinutes}m${seconds}s` : `${totalMinutes}m`;
+
+              // Costruisci URL per filtrare gli audit di questa sessione
+              const sessionParams = new URLSearchParams({
+                user_id: profile.user_id,
+                date_from: startDate.toISOString().split('T')[0],
+                date_to: endDate.toISOString().split('T')[0],
+              });
+
+              return (
+                <Link
+                  key={index}
+                  to={`/audits?${sessionParams.toString()}`}
+                  className="block p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 hover:border-blue-500 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <Calendar size={20} className="text-blue-500" />
+                      <div>
+                        <p className="font-semibold">
+                          {startDate.toLocaleDateString(i18n.language, {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {startDate.toLocaleTimeString(i18n.language, {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}{' '}
+                          -{' '}
+                          {endDate.toLocaleTimeString(i18n.language, {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Clock size={16} className="text-gray-500" />
+                      <span className="font-medium">{durationText}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Actions Summary */}
+                    <div>
+                      <p className="text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">
+                        {t('audit:actionsBreakdown')}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(session.events).map(([event, count]) => (
+                          <span
+                            key={event}
+                            className={`px-2 py-1 text-xs font-semibold rounded ${getEventBadgeClass(event)}`}
+                          >
+                            {t(`audit:events.${event}`)}: {count}
+                          </span>
+                        ))}
+                        <span className="px-2 py-1 text-xs font-semibold rounded bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+                          {t('audit:total')}: {session.actions}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Top Models */}
+                    <div>
+                      <p className="text-sm font-medium mb-2 text-gray-600 dark:text-gray-400">
+                        {t('audit:topModels')}
+                      </p>
+                      <div className="space-y-1">
+                        {topModels.map(([model, count]) => (
+                          <div key={model} className="flex items-center justify-between text-sm">
+                            <span className="truncate" title={model}>
+                              {formatModelName(model)}
+                            </span>
+                            <span className="font-medium ml-2">{count}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Recent Activity Timeline */}
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
+        <h2 className="text-lg font-semibold mb-4">{t('audit:recentActivity')}</h2>
+        {timeline.length === 0 ? (
+          <p className="text-sm text-gray-500 text-center py-4">{t('audit:noData')}</p>
+        ) : (
+          <div className="space-y-3">
+            {timeline.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+              >
+                <div className="flex items-center gap-3 flex-1">
+                  <span
+                    className={`px-2 py-1 text-xs font-semibold rounded ${getEventBadgeClass(item.event)}`}
+                  >
+                    {t(`audit:events.${item.event}`)}
+                  </span>
+                  <span className="text-sm font-medium">
+                    {formatModelName(item.auditable_type)}
+                  </span>
+                  <span className="text-sm text-gray-500">#{item.auditable_id}</span>
+                </div>
+                <div className="text-sm text-gray-500">
+                  {new Date(item.created_at).toLocaleString(i18n.language)}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {timeline.length > 0 && (
+          <div className="mt-4 text-center">
+            <Link to={`/audits?user_id=${profile.user_id}`} className="secondary-button">
+              {t('audit:viewAllActivity')}
+            </Link>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

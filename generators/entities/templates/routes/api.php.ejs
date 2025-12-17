@@ -56,6 +56,11 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{id}', [AuditController::class, 'show']);
         Route::get('/{id}/compare', [AuditController::class, 'compare']);
         Route::get('/entity/{type}/{id}', [AuditController::class, 'entity']);
+        Route::get('/user/{userId}/profile', [AuditController::class, 'userProfile']);
+        Route::get('/user/{userId}/timeline', [AuditController::class, 'userTimeline']);
+        Route::get('/user/{userId}/hourly-pattern', [AuditController::class, 'userHourlyPattern']);
+        Route::get('/user/{userId}/weekly-pattern', [AuditController::class, 'userWeeklyPattern']);
+        Route::get('/user/{userId}/sessions', [AuditController::class, 'userSessions']);
     });
 
     Route::get('/files/private/{path}', [FileController::class, 'serveFile'])

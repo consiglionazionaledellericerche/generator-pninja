@@ -357,7 +357,15 @@ export default function AuditList() {
                     </td>
                     <td className="text-sm">{formatModelName(row.auditable_type)}</td>
                     <td className="w-0">{row.auditable_id}</td>
-                    <td>{row.user_id || '-'}</td>
+                    <td>
+                      {row.user_id ? (
+                        <Link to={`/audits/user/${row.user_id}`} className="text-link">
+                          {row.user_id}
+                        </Link>
+                      ) : (
+                        <span>--</span>
+                      )}
+                    </td>
                     <td className="text-sm">
                       {new Date(row.created_at).toLocaleString(i18n.language)}
                     </td>

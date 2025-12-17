@@ -1,5 +1,5 @@
-// AuditStatistics.tsx
 import { useEffect, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BarChart3, Calendar, FileText, Users, TrendingUp } from 'lucide-react';
 import {
@@ -80,7 +80,7 @@ export default function AuditStatistics() {
       const start = new Date(yearFrom, monthFrom - 1, dayFrom, 0, 0, 0);
       const end = new Date(yearTo, monthTo - 1, dayTo, 23, 59, 59);
 
-      let current = new Date(start);
+      const current = new Date(start);
 
       while (current <= end) {
         let periodKey: string;
@@ -169,16 +169,6 @@ export default function AuditStatistics() {
     loadData();
   }, [loadData]);
 
-  const getEventBadgeClass = (event: string) => {
-    const classes = {
-      created: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
-      updated: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-      deleted: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-      restored: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-    };
-    return classes[event as keyof typeof classes] || 'bg-gray-100 text-gray-800';
-  };
-
   const formatModelName = (fullName: string) => {
     const parts = fullName.split('\\');
     return parts[parts.length - 1];
@@ -188,12 +178,14 @@ export default function AuditStatistics() {
     const period = String(periodString);
 
     switch (gran) {
-      case 'minute':
+      case 'minute': {
         const minuteParts = period.split(' ');
         return minuteParts.length > 1 ? minuteParts[1] : period;
-      case 'hour':
+      }
+      case 'hour': {
         const hourParts = period.split(' ');
         return hourParts.length > 1 ? hourParts[1].substring(0, 5) : period;
+      }
       case 'day':
         try {
           const dayDate = new Date(period + 'T00:00:00');
@@ -410,7 +402,7 @@ export default function AuditStatistics() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -477,7 +469,11 @@ export default function AuditStatistics() {
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-gray-500">#{index + 1}</span>
-                        <span className="text-sm font-medium truncate">{item.user_id}</span>
+                        <span className="text-sm font-medium truncate">
+                          <Link to={`/audits/user/${item.user_id}`} className="text-link">
+                            {item.user_id}
+                          </Link>
+                        </span>
                       </div>
                       <span className="text-sm font-medium">{item.total}</span>
                     </div>

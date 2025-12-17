@@ -175,6 +175,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditList.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditStatistics.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditUserActivity.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleForm.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleForm.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleDeleteButton.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleDeleteButton.tsx`));

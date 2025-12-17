@@ -22,6 +22,7 @@ import Audits from './pages/audit/Audits';
 import AuditView from './pages/audit/AuditView';
 import AuditCompare from './pages/audit/AuditCompare';
 import AuditHistory from './pages/audit/AuditHistory';
+import AuditUserActivity from './pages/audit/AuditUserActivity';
 
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
@@ -150,6 +151,14 @@ function App() {
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <AuditHistory />
+                </Can>
+              }
+            />
+            <Route
+              path="/audits/user/:userId"
+              element={
+                <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
+                  <AuditUserActivity />
                 </Can>
               }
             />
