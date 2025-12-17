@@ -81,7 +81,9 @@ export class MigrationsGenerator {
                 });
         }
         this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_ac_rules_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_ac_rules_table.php`));
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_audits_table.php`));
+        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_audits_table.php`), {
+            authentication: this.that.config.get('authentication'),
+        });
     }
     createRelations() {
         const { entities, relationships } = this.parsedJDL;
