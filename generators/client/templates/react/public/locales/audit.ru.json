@@ -2,6 +2,7 @@
   "title": "Журнал аудита",
   "system": "Аудит системы",
   "statistics": "Статистика",
+  "exportCSV": "Экспорт CSV",
   "filters": "Фильтры",
   "all": "Все",
   "modelType": "Тип модели",

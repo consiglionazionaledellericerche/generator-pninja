@@ -2,6 +2,7 @@
   "title": "監査ログ",
   "system": "監査システム",
   "statistics": "統計",
+  "exportCSV": "CSVをエクスポート",
   "filters": "フィルター",
   "all": "すべて",
   "modelType": "モデルタイプ",

@@ -2,6 +2,7 @@
   "title": "감사 로그",
   "system": "감사 시스템",
   "statistics": "통계",
+  "exportCSV": "CSV 내보내기",
   "filters": "필터",
   "all": "모두",
   "modelType": "모델 유형",

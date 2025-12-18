@@ -2,6 +2,7 @@
   "title": "Audit Logs",
   "system": "Sistèm Odit",
   "statistics": "Statistik",
+  "exportCSV": "Eksport CSV",
   "filters": "Filtè",
   "all": "Tout",
   "modelType": "Tip Modèl",

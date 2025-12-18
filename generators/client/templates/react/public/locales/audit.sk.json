@@ -2,6 +2,7 @@
   "title": "Auditné záznamy",
   "system": "Audit systém",
   "statistics": "Štatistika",
+  "exportCSV": "Exportovať CSV",
   "filters": "Filtre",
   "all": "Všetko",
   "modelType": "Typ modelu",

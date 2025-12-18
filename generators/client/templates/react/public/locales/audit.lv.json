@@ -2,6 +2,7 @@
   "title": "Audit žurnāli",
   "system": "Audita sistēma",
   "statistics": "Statistika",
+  "exportCSV": "Eksportēt CSV",
   "filters": "Filtri",
   "all": "Visi",
   "modelType": "Modeļa veids",

@@ -2,6 +2,7 @@
   "title": "Revisjonslogger",
   "system": "Revisjonssystem",
   "statistics": "Statistikk",
+  "exportCSV": "Eksporter CSV",
   "filters": "Filtre",
   "all": "Alle",
   "modelType": "Modelltype",

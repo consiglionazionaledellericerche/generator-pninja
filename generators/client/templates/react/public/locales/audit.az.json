@@ -2,6 +2,7 @@
   "title": "Audit Qeydləri",
   "system": "Audit Sistemi",
   "statistics": "Statistika",
+  "exportCSV": "CSV-nin ixracı",
   "filters": "Filtrlər",
   "all": "Hamısı",
   "modelType": "Model Növü",

@@ -2,6 +2,7 @@
   "title": "سجلات التدقيق",
   "system": "نظام التدقيق",
   "statistics": "الإحصائيات",
+  "exportCSV": "تصدير CSV",
   "filters": "المرشحات",
   "all": "الكل",
   "modelType": "نوع النموذج",

@@ -2,6 +2,7 @@
   "title": "Denetim Günlükleri",
   "system": "Denetim Sistemi",
   "statistics": "İstatistikler",
+  "exportCSV": "CSV Dışa Aktar",
   "filters": "Filtreler",
   "all": "Tümü",
   "modelType": "Model Türü",

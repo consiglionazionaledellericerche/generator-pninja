@@ -2,6 +2,7 @@
   "title": "Journaux d'audit",
   "system": "Système d'audit",
   "statistics": "Statistiques",
+  "exportCSV": "Exporter CSV",
   "filters": "Filtres",
   "all": "Tout",
   "modelType": "Type de modèle",

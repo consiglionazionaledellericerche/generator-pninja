@@ -2,6 +2,7 @@
   "title": "Audit Lokit",
   "system": "Audit-järjestelmä",
   "statistics": "Tilastot",
+  "exportCSV": "Vie CSV",
   "filters": "Suodattimet",
   "all": "Kaikki",
   "modelType": "Mallityyppi",

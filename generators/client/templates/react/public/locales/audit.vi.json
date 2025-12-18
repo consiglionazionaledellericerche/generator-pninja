@@ -2,6 +2,7 @@
   "title": "Nhật ký kiểm toán",
   "system": "Hệ thống Kiểm toán",
   "statistics": "Thống kê",
+  "exportCSV": "Xuất CSV",
   "filters": "Bộ lọc",
   "all": "Tất cả",
   "modelType": "Loại mô hình",

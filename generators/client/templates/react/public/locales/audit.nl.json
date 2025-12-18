@@ -2,6 +2,7 @@
   "title": "Auditlogs",
   "system": "Auditsysteem",
   "statistics": "Statistieken",
+  "exportCSV": "Exporteer CSV",
   "filters": "Filters",
   "all": "Alles",
   "modelType": "Modeltype",

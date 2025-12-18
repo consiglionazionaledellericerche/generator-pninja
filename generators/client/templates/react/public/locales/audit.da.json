@@ -2,6 +2,7 @@
   "title": "Revisionslogge",
   "system": "Revisionssystem",
   "statistics": "Statistik",
+  "exportCSV": "Eksporter CSV",
   "filters": "Filtre",
   "all": "Alle",
   "modelType": "Modeltype",

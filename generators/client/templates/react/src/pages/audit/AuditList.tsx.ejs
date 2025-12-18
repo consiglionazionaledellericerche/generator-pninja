@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, ChevronsUpDown, Filter } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown, Download, Filter } from 'lucide-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -213,6 +213,19 @@ export default function AuditList() {
     document.title = t('audit:title');
   }, [i18n.language, t]);
 
+  const handleExport = () => {
+    const params = new URLSearchParams({
+      sort_by: sortConfig.field,
+      sort_order: sortConfig.direction,
+    });
+    if (debouncedSearchTerm) params.append('search', debouncedSearchTerm);
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value);
+    });
+    const url = `/api/audits/export?${params.toString()}`;
+    window.location.href = url;
+  };
+
   return (
     <>
       <div className={`flex gap-4 mb-4`}>
@@ -220,6 +233,10 @@ export default function AuditList() {
         <button onClick={() => setShowFilters(!showFilters)} className="secondary-button">
           <Filter size={16} />
           {t('audit:filters')}
+        </button>
+        <button onClick={handleExport} className="secondary-button flex items-center gap-2">
+          <Download size={16} />
+          {t('audit:exportCSV')}
         </button>
       </div>
 

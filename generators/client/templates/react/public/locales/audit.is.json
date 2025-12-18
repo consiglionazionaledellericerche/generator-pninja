@@ -2,6 +2,7 @@
   "title": "Skoðunarskrá",
   "system": "Endurskoðunarkerfi",
   "statistics": "Statisitkar",
+  "exportCSV": "Flytja út CSV",
   "filters": "Sía",
   "all": "Allt",
   "modelType": "Gerð líkan",

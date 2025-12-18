@@ -2,6 +2,7 @@
   "title": "Auditori Logs",
   "system": "Audit Sistema",
   "statistics": "Estatistikak",
+  "exportCSV": "CSV esportatu",
   "filters": "Ihadurak",
   "all": "Guztiak",
   "modelType": "Model mota",

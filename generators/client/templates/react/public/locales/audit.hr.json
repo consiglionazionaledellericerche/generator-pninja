@@ -2,6 +2,7 @@
   "title": "Zapisnici audita",
   "system": "Sustav revizije",
   "statistics": "Statistika",
+  "exportCSV": "Izvoz CSV",
   "filters": "Filtri",
   "all": "Sve",
   "modelType": "Tip modela",

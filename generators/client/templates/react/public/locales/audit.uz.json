@@ -2,6 +2,7 @@
   "title": "Audit qol yozuvlari",
   "system": "Audit tizimi",
   "statistics": "Statistika",
+  "exportCSV": "CSV-ni eksport qilish",
   "filters": "Filtrlar",
   "all": "Hammasi",
   "modelType": "Model turi",

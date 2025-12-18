@@ -2,6 +2,7 @@
   "title": "Jurnale de audit",
   "system": "Sistem de Audit",
   "statistics": "Statistici",
+  "exportCSV": "Export CSV",
   "filters": "Filtre",
   "all": "Toate",
   "modelType": "Tip model",

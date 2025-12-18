@@ -2,6 +2,7 @@
   "title": "Audit Logs",
   "system": "Sistemi i Auditit",
   "statistics": "Statistikat",
+  "exportCSV": "Eksporto CSV",
   "filters": "Filtrat",
   "all": "Të gjitha",
   "modelType": "Lloji i Modelit",

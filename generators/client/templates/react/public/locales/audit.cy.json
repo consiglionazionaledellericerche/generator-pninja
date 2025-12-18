@@ -2,6 +2,7 @@
   "title": "Coed Audit",
   "system": "System Archwilio",
   "statistics": "Ystadegau",
+  "exportCSV": "Allforio CSV",
   "filters": "Ffiltrau",
   "all": "Pob",
   "modelType": "Math Model",

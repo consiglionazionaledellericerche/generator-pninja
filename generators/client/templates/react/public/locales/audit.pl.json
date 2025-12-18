@@ -2,6 +2,7 @@
   "title": "Dzienniki audytu",
   "system": "System audytowy",
   "statistics": "Statystyki",
+  "exportCSV": "Eksportuj CSV",
   "filters": "Filtry",
   "all": "Wszystko",
   "modelType": "Typ modelu",

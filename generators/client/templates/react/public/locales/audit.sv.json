@@ -2,6 +2,7 @@
   "title": "Auditloggar",
   "system": "Revisionssystem",
   "statistics": "Statistik",
+  "exportCSV": "Exportera CSV",
   "filters": "Filter",
   "all": "Alla",
   "modelType": "Modelltyp",

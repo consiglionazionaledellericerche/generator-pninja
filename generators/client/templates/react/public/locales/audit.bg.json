@@ -2,6 +2,7 @@
   "title": "Логове на одита",
   "system": "Система за одит",
   "statistics": "Статистика",
+  "exportCSV": "Експорт на CSV",
   "filters": "Филтри",
   "all": "Всички",
   "modelType": "Тип модел",

@@ -2,6 +2,7 @@
   "title": "Audit-Protokolle",
   "system": "Audit-System",
   "statistics": "Statistiken",
+  "exportCSV": "CSV exportieren",
   "filters": "Filter",
   "all": "Alle",
   "modelType": "Modelltyp",

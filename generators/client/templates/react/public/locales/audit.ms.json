@@ -2,6 +2,7 @@
   "title": "Log Audit",
   "system": "Sistem Audit",
   "statistics": "Statistik",
+  "exportCSV": "Eksport CSV",
   "filters": "Penapis",
   "all": "Semua",
   "modelType": "Jenis Model",

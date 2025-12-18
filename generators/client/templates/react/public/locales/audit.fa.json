@@ -2,6 +2,7 @@
   "title": "گزارش‌گیری حسابرسی",
   "system": "سیستم حسابرسی",
   "statistics": "آمار",
+  "exportCSV": "صادرات CSV",
   "filters": "فیلترها",
   "all": "همه",
   "modelType": "نوع مدل",

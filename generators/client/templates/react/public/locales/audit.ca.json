@@ -2,6 +2,7 @@
   "title": "Registres d'auditoria",
   "system": "Sistema d'Auditoria",
   "statistics": "Estadístiques",
+  "exportCSV": "Exportar CSV",
   "filters": "Filtre",
   "all": "Tot",
   "modelType": "Tipus de model",

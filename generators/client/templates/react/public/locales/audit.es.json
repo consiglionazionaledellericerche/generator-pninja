@@ -2,6 +2,7 @@
   "title": "Registros de auditoría",
   "system": "Sistema de Auditoría",
   "statistics": "Estadísticas",
+  "exportCSV": "Exportar CSV",
   "filters": "Filtros",
   "all": "Todo",
   "modelType": "Tipo de modelo",

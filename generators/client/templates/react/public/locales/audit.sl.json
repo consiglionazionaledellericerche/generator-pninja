@@ -2,6 +2,7 @@
   "title": "Dnevnik revizij",
   "system": "Revizijski sistem",
   "statistics": "Statistika",
+  "exportCSV": "Izvozi CSV",
   "filters": "Filtrov",
   "all": "Vse",
   "modelType": "Tip modela",

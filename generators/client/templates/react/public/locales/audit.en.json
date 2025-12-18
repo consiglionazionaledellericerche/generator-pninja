@@ -2,6 +2,7 @@
   "title": "Audit Logs",
   "system": "Audit System",
   "statistics": "Statistics",
+  "exportCSV": "Export CSV",
   "filters": "Filters",
   "all": "All",
   "modelType": "Model Type",

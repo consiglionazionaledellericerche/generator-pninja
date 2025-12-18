@@ -2,6 +2,7 @@
   "title": "Audit Logs",
   "system": "Sistem Audit",
   "statistics": "Statistik",
+  "exportCSV": "Ekspor CSV",
   "filters": "Filter",
   "all": "Semua",
   "modelType": "Tipe Model",

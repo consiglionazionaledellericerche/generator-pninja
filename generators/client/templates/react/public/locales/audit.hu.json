@@ -2,6 +2,7 @@
   "title": "Audit naplók",
   "system": "Audit Rendszer",
   "statistics": "Statisztikák",
+  "exportCSV": "CSV exportálása",
   "filters": "Szűrők",
   "all": "Összes",
   "modelType": "Modelltípus",

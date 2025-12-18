@@ -566,4 +566,137 @@ class AuditController extends Controller
             'sessions' => $formattedSessions,
         ]);
     }
+
+    /**
+     * Esporta audit logs in CSV
+     */
+    public function export(Request $request)
+    {
+        $query = Audit::query();
+
+        // Applica gli stessi filtri della lista
+        if ($request->has('search') && $request->search) {
+            $searchTerm = $request->search;
+            $driver = config('database.default');
+            $connection = config("database.connections.{$driver}.driver");
+
+            $query->where(function($q) use ($searchTerm, $connection) {
+                $q->where('user_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('auditable_type', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('auditable_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('event', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('ip_address', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('url', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
+
+                match ($connection) {
+                    'mysql' => $q->orWhereRaw("JSON_SEARCH(old_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"])
+                                ->orWhereRaw("JSON_SEARCH(new_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"]),
+
+                    'pgsql' => $q->orWhereRaw("old_values::text ILIKE ?", ["%{$searchTerm}%"])
+                                ->orWhereRaw("new_values::text ILIKE ?", ["%{$searchTerm}%"]),
+
+                    'sqlite', 'sqlsrv' => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                            ->orWhere('new_values', 'LIKE', "%{$searchTerm}%"),
+
+                    default => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                ->orWhere('new_values', 'LIKE', "%{$searchTerm}%")
+                };
+            });
+        }
+
+        if ($request->has('auditable_type') && $request->auditable_type) {
+            $query->where('auditable_type', $request->auditable_type);
+        }
+
+        if ($request->has('auditable_id') && $request->auditable_id) {
+            $query->where('auditable_id', $request->auditable_id);
+        }
+
+        if ($request->has('event') && $request->event) {
+            $query->where('event', $request->event);
+        }
+
+        if ($request->has('user_id') && $request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Ordinamento
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        $allowedSortFields = ['id', 'event', 'auditable_type', 'auditable_id', 'user_id', 'created_at', 'updated_at'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        // Limita a 10000 record per sicurezza
+        $audits = $query->limit(10000)->get();
+
+        // Genera CSV
+        $filename = 'audit_logs_' . now()->format('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function() use ($audits) {
+            $file = fopen('php://output', 'w');
+
+            // BOM per UTF-8 (per Excel)
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Header CSV
+            fputcsv($file, [
+                'ID',
+                'Event',
+                'Model Type',
+                'Record ID',
+                'User ID',
+                'IP Address',
+                'URL',
+                'User Agent',
+                'Tags',
+                'Old Values',
+                'New Values',
+                'Created At',
+            ]);
+
+            // Dati
+            foreach ($audits as $audit) {
+                fputcsv($file, [
+                    $audit->id,
+                    $audit->event,
+                    $audit->auditable_type,
+                    $audit->auditable_id,
+                    $audit->user_id,
+                    $audit->ip_address,
+                    $audit->url,
+                    $audit->user_agent,
+                    $audit->tags,
+                    json_encode($audit->old_values, JSON_UNESCAPED_UNICODE),
+                    json_encode($audit->new_values, JSON_UNESCAPED_UNICODE),
+                    $audit->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
