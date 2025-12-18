@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Ṣàkóso àkọsílẹ̀ nípasẹ̀ ìpele",
+    "errors": "Àsìṣe",
+    "warnings": "Ìkìlọ̀",
+    "info": "Alaye",
+    "debug": "Ìmọ̀ràn",
+    "show": "Fihàn {{level}}",
+    "hide": "Tẹ̀jú {{level}}"
+  },
+  "actions": {
+    "pause": "Dákẹ́",
+    "resume": "Tún bẹ̀rẹ̀",
+    "pauseStreaming": "Dákẹ́ ikanni àkọsílẹ̀",
+    "resumeStreaming": "Tún bẹ̀rẹ̀ ikanni àkọsílẹ̀",
+    "autoScroll": "Tí ó ṣe àtúnyẹ̀wò",
+    "autoScrollEnabled": "Tí ó dawọ́ duro",
+    "autoScrollDisabled": "Kò sí àkọsílẹ̀ ra ló: {{levels}}"
+  },
+  "status": {
+    "live": "Yan kíkọ́kan ìpele àkọsílẹ̀",
+    "paused": "Paused",
+    "noLogs": "No logs yet for: {{levels}}",
+    "selectLevel": "Select at least one log level",
+    "logEntries": "Log entries"
+  }
+}

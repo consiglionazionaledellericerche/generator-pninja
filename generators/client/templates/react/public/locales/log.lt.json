@@ -1,0 +1,28 @@
+{
+  "title": "Laravel žurnalai",
+  "filters": {
+    "label": "Filtruoti žurnalus pagal lygį",
+    "errors": "Klaidos",
+    "warnings": "Įspėjimai",
+    "info": "Informacija",
+    "debug": "Derinimas",
+    "show": "Rodyti {{level}}",
+    "hide": "Slėpti {{level}}"
+  },
+  "actions": {
+    "pause": "Sustabdyti",
+    "resume": "Atnaujinti",
+    "pauseStreaming": "Sustabdyti žurnalų srautą",
+    "resumeStreaming": "Atnaujinti žurnalų srautą",
+    "autoScroll": "Automatinis slinkimas",
+    "autoScrollEnabled": "Automatinis slinkimas įjungtas. Spustelėkite, kad išjungtumėte",
+    "autoScrollDisabled": "Automatinis slinkimas išjungtas. Spustelėkite, kad įjungtumėte"
+  },
+  "status": {
+    "live": "Gyvai",
+    "paused": "Sustabdytas",
+    "noLogs": "Dar nėra žurnalų: {{levels}}",
+    "selectLevel": "Pasirinkite bent vieną žurnalų lygį",
+    "logEntries": "Žurnalų įrašai"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filtroni log-un sipas nivelit",
+    "errors": "Gabimet",
+    "warnings": "Kërcënimet",
+    "info": "Informacioni",
+    "debug": "Debug",
+    "show": "Trego {{level}}",
+    "hide": "Fshih {{level}}"
+  },
+  "actions": {
+    "pause": "Pauzë",
+    "resume": "Rivazhdoni",
+    "pauseStreaming": "Pauzoni transmetimin e log-eve",
+    "resumeStreaming": "Rivazhdoni transmetimin e log-eve",
+    "autoScroll": "Rrëshqitje automatik",
+    "autoScrollEnabled": "Rrëshqitja automatik është e aktivizuar. Klikoni për ta çaktivizuar",
+    "autoScrollDisabled": "Rrëshqitja automatik është e çaktivizuar. Klikoni për ta aktivizuar"
+  },
+  "status": {
+    "live": "Në jetë",
+    "paused": "E pauzuar",
+    "noLogs": "Nuk ka log-e akoma për: {{levels}}",
+    "selectLevel": "Zgjidhni të paktën një nivel log-u",
+    "logEntries": "Shënimet e log-ut"
+  }
+}

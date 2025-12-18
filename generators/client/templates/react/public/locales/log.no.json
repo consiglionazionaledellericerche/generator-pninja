@@ -1,0 +1,28 @@
+{
+  "title": "Laravel logger",
+  "filters": {
+    "label": "Filtrer logger etter nivå",
+    "errors": "Feil",
+    "warnings": "Advarsler",
+    "info": "Informasjon",
+    "debug": "Feilsøking",
+    "show": "Vis {{level}}",
+    "hide": "Skjul {{level}}"
+  },
+  "actions": {
+    "pause": "Pause",
+    "resume": "Gjenoppta",
+    "pauseStreaming": "Pause loggstrøm",
+    "resumeStreaming": "Gjenoppta loggstrøm",
+    "autoScroll": "Automatisk rulling",
+    "autoScrollEnabled": "Automatisk rulling er aktivert. Klikk for å deaktivere",
+    "autoScrollDisabled": "Automatisk rulling er deaktivert. Klikk for å aktivere"
+  },
+  "status": {
+    "live": "Direkte",
+    "paused": "Pause",
+    "noLogs": "Ingen logger ennå for: {{levels}}",
+    "selectLevel": "Velg minst ett loggnivå",
+    "logEntries": "Loggoppføringer"
+  }
+}

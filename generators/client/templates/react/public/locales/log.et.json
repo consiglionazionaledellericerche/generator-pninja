@@ -1,0 +1,28 @@
+{
+  "title": "Laraveli logid",
+  "filters": {
+    "label": "Filtreerige logisid taseme järgi",
+    "errors": "Vead",
+    "warnings": "Hoiatused",
+    "info": "Teave",
+    "debug": "Silumine",
+    "show": "Kuva {{level}}",
+    "hide": "Peida {{level}}"
+  },
+  "actions": {
+    "pause": "Paus",
+    "resume": "Jätka",
+    "pauseStreaming": "Peata logide voog",
+    "resumeStreaming": "Jätka logide voogu",
+    "autoScroll": "Automaatne kerimine",
+    "autoScrollEnabled": "Automaatne kerimine on lubatud. Klõpsake keelamiseks",
+    "autoScrollDisabled": "Automaatne kerimine on keelatud. Klõpsake lubamiseks"
+  },
+  "status": {
+    "live": "Reaalajas",
+    "paused": "Pausis",
+    "noLogs": "Logisid ei ole veel: {{levels}}",
+    "selectLevel": "Valige vähemalt üks logitaseme",
+    "logEntries": "Logikirjed"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Nhật ký Laravel",
+  "filters": {
+    "label": "Lọc nhật ký theo cấp độ",
+    "errors": "Lỗi",
+    "warnings": "Cảnh báo",
+    "info": "Thông tin",
+    "debug": "Gỡ lỗi",
+    "show": "Hiển thị {{level}}",
+    "hide": "Ẩn {{level}}"
+  },
+  "actions": {
+    "pause": "Tạm dừng",
+    "resume": "Tiếp tục",
+    "pauseStreaming": "Tạm dừng luồng nhật ký",
+    "resumeStreaming": "Tiếp tục luồng nhật ký",
+    "autoScroll": "Cuộn tự động",
+    "autoScrollEnabled": "Cuộn tự động đã được bật. Nhấp để tắt",
+    "autoScrollDisabled": "Cuộn tự động đã được tắt. Nhấp để bật"
+  },
+  "status": {
+    "live": "Trực tiếp",
+    "paused": "Đã tạm dừng",
+    "noLogs": "Chưa có nhật ký nào cho: {{levels}}",
+    "selectLevel": "Chọn ít nhất một cấp độ nhật ký",
+    "logEntries": "Mục nhật ký"
+  }
+}

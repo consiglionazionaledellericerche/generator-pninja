@@ -1,0 +1,28 @@
+{
+  "title": "Laravel-lokit",
+  "filters": {
+    "label": "Suodata lokit tasoittain",
+    "errors": "Virheet",
+    "warnings": "Varoitukset",
+    "info": "Tietoa",
+    "debug": "Vianetsintä",
+    "show": "Näytä {{level}}",
+    "hide": "Piilota {{level}}"
+  },
+  "actions": {
+    "pause": "Pysäytä",
+    "resume": "Jatka",
+    "pauseStreaming": "Pysäytä lokivirtojen suoratoisto",
+    "resumeStreaming": "Jatka lokivirtojen suoratoisto",
+    "autoScroll": "Automaattinen vieritys",
+    "autoScrollEnabled": "Automaattinen vieritys on käytössä. Napsauta poistaaksesi käytöstä",
+    "autoScrollDisabled": "Automaattinen vieritys ei ole käytössä. Napsauta ottaaksesi käyttöön"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pysäytetty",
+    "noLogs": "Ei lokitietoja vielä: {{levels}}",
+    "selectLevel": "Valitse vähintään yksi lokitaso",
+    "logEntries": "Lokimerkit"
+  }
+}

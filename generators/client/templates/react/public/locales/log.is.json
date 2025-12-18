@@ -1,0 +1,28 @@
+{
+  "title": "Laravel skrá",
+  "filters": {
+    "label": "Sía skrá eftir stigi",
+    "errors": "Villur",
+    "warnings": "Aðvörun",
+    "info": "Upplýsingar",
+    "debug": "Villurýsing",
+    "show": "Sýna {{level}}",
+    "hide": "Fela {{level}}"
+  },
+  "actions": {
+    "pause": "Pausa",
+    "resume": "Endurheimta",
+    "pauseStreaming": "Pausa skráarstraum",
+    "resumeStreaming": "Endurheimta skráarstraum",
+    "autoScroll": "Sjálfvirk skroll",
+    "autoScrollEnabled": "Sjálfvirk skroll er virk. Smelltu til að slökkva",
+    "autoScrollDisabled": "Sjálfvirk skroll er óvirk. Smelltu til að kveikja"
+  },
+  "status": {
+    "live": "Lifandi",
+    "paused": "Pausað",
+    "noLogs": "Engar skrár enn fyrir: {{levels}}",
+    "selectLevel": "Veldu að minnsta kosti eitt skráarstig",
+    "logEntries": "Skráningarpunkta"
+  }
+}

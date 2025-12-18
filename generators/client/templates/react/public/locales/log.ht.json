@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filtre dosye pa nivo",
+    "errors": "Erè",
+    "warnings": "Avètisman",
+    "info": "Enfòmasyon",
+    "debug": "Debogaj",
+    "show": "Montre {{level}}",
+    "hide": "Kache {{level}}"
+  },
+  "actions": {
+    "pause": "Pòze",
+    "resume": "Reprann",
+    "pauseStreaming": "Pòze difizyon dosye",
+    "resumeStreaming": "Reprann difizyon dosye",
+    "autoScroll": "Defile otomatik",
+    "autoScrollEnabled": "Defile otomatik aktive. Klike pou dezaktive",
+    "autoScrollDisabled": "Defile otomatik dezaktive. Klike pou aktive"
+  },
+  "status": {
+    "live": "Viv",
+    "paused": "Pòze",
+    "noLogs": "Pa gen okenn dosye ankò pou: {{levels}}",
+    "selectLevel": "Chwazi omwen yon nivo dosye",
+    "logEntries": "Antre dosye"
+  }
+}

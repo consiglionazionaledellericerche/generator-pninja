@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Haalota tarreeffama filadhu",
+    "errors": "Dogoggora",
+    "warnings": "Hawwi",
+    "info": "Ogeessa",
+    "debug": "Duub-deebii",
+    "show": "Mul'isi {{level}}",
+    "hide": "Dhoksaa {{level}}"
+  },
+  "actions": {
+    "pause": "Bahu",
+    "resume": "Deebisuu",
+    "pauseStreaming": "Dhaabachuu tarreeffama",
+    "resumeStreaming": "Deebisuu tarreeffama",
+    "autoScroll": "Otuu hin taane",
+    "autoScrollEnabled": "Otuu hin taanee. Dhiibbaa gochuu",
+    "autoScrollDisabled": "Otuu hin taanee. Dhiibbaa gochuu"
+  },
+  "status": {
+    "live": "Kallatti",
+    "paused": "Dhaabate",
+    "noLogs": "Haalota tarreeffama hin jiru: {{levels}}",
+    "selectLevel": "Haalota tarreeffama tokko filadhu",
+    "logEntries": "Log entries"
+  }
+}

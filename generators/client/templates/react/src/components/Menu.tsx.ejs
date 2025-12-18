@@ -170,7 +170,16 @@ const Menu: React.FC = () => {
                       id="audits"
                       className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
                     >
-                      {t('audit:title')}
+                      {t('audit:system')}
+                    </MenuItem>
+                  </Can>
+                  <Can action="read" resource="Log">
+                    <MenuItem
+                      href="/logs/stream"
+                      id="logs"
+                      className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
+                    >
+                      {t('log:title')}
                     </MenuItem>
                   </Can>
                 </MenuItems>

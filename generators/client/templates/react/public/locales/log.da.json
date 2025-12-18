@@ -1,0 +1,28 @@
+{
+  "title": "Laravel-logfiler",
+  "filters": {
+    "label": "Filtrer logfiler efter niveau",
+    "errors": "Fejl",
+    "warnings": "Advarsler",
+    "info": "Info",
+    "debug": "Fejlfinding",
+    "show": "Vis {{level}}",
+    "hide": "Skjul {{level}}"
+  },
+  "actions": {
+    "pause": "Pause",
+    "resume": "Genoptag",
+    "pauseStreaming": "Pause log streaming",
+    "resumeStreaming": "Genoptag log streaming",
+    "autoScroll": "Auto-scroll",
+    "autoScrollEnabled": "Auto-scroll er aktiveret. Klik for at deaktivere",
+    "autoScrollDisabled": "Auto-scroll er deaktiveret. Klik for at aktivere"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pausede",
+    "noLogs": "Ingen logfiler endnu for: {{levels}}",
+    "selectLevel": "Vælg mindst ét logniveau",
+    "logEntries": "Logposteringer"
+  }
+}

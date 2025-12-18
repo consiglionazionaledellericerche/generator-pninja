@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Hōtaka",
+  "filters": {
+    "label": "Tārua ngā hōtaka i runga i te taumata",
+    "errors": "Heke",
+    "warnings": "Whakatūpato",
+    "info": "Pātea",
+    "debug": "Whakatūpato",
+    "show": "Whakaatu i te {{level}}",
+    "hide": "Huna i te {{level}}"
+  },
+  "actions": {
+    "pause": "Moori",
+    "resume": "Tīmata anō",
+    "pauseStreaming": "Tūpono te whakapā",
+    "resumeStreaming": "Tīmata anō te whakapā",
+    "autoScroll": "Aunoa-pātea",
+    "autoScrollEnabled": "Kua whakaaetia te aunoa-pātea. Pāwhiri ki te whakakore",
+    "autoScrollDisabled": "Kāore e whakaaetia te aunoa-pātea. Pāwhiri ki te whakahohe"
+  },
+  "status": {
+    "live": "Ora",
+    "paused": "Kua tārai",
+    "noLogs": "Kāore he hōtaka mō: {{levels}}",
+    "selectLevel": "Tīpakohia he taumata hōtaka iti rawa atu",
+    "logEntries": "Log entries"
+  }
+}

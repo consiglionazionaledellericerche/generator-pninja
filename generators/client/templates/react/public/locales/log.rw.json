@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Fungura logs hakurikijwe urwego",
+    "errors": "Amakosa",
+    "warnings": "Amabwiriza",
+    "info": "Amakuru",
+    "debug": "Gukosora",
+    "show": "Erekana {{level}}",
+    "hide": "Fisha {{level}}"
+  },
+  "actions": {
+    "pause": "Hagarika",
+    "resume": "Subukura",
+    "pauseStreaming": "Hagarika gukurura logs",
+    "resumeStreaming": "Subukura gukurura logs",
+    "autoScroll": "Guhita",
+    "autoScrollEnabled": "Hagaritswe",
+    "autoScrollDisabled": "Nta logs ziboneka kuri: {{levels}}"
+  },
+  "status": {
+    "live": "Hitamo nibura urwego rumwe rwa log",
+    "paused": "Ingingo za log",
+    "noLogs": "No logs yet for: {{levels}}",
+    "selectLevel": "Select at least one log level",
+    "logEntries": "Log entries"
+  }
+}

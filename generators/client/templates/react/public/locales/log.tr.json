@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Günlükleri",
+  "filters": {
+    "label": "Günlükleri seviyeye göre filtrele",
+    "errors": "Hatalar",
+    "warnings": "Uyarılar",
+    "info": "Bilgi",
+    "debug": "Hata ayıklama",
+    "show": "Göster {{level}}",
+    "hide": "Gizle {{level}}"
+  },
+  "actions": {
+    "pause": "Durdur",
+    "resume": "Devam et",
+    "pauseStreaming": "Günlük akışını duraklat",
+    "resumeStreaming": "Günlük akışını devam ettir",
+    "autoScroll": "Otomatik kaydırma",
+    "autoScrollEnabled": "Otomatik kaydırma etkin. Devre dışı bırakmak için tıklayın",
+    "autoScrollDisabled": "Otomatik kaydırma devre dışı. Etkinleştirmek için tıklayın"
+  },
+  "status": {
+    "live": "Canlı",
+    "paused": "Durduruldu",
+    "noLogs": "Henüz {{levels}} için günlük yok",
+    "selectLevel": "En az bir günlük seviyesi seçin",
+    "logEntries": "Günlük girişleri"
+  }
+}

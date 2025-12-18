@@ -1,0 +1,28 @@
+{
+  "title": "سجلات لارفيل",
+  "filters": {
+    "label": "تصفية السجلات حسب المستوى",
+    "errors": "أخطاء",
+    "warnings": "تحذيرات",
+    "info": "معلومات",
+    "debug": "تصحيح",
+    "show": "عرض {{level}}",
+    "hide": "إخفاء {{level}}"
+  },
+  "actions": {
+    "pause": "توقف",
+    "resume": "استئناف",
+    "pauseStreaming": "توقف عن تدفق السجلات",
+    "resumeStreaming": "استئناف تدفق السجلات",
+    "autoScroll": "تمرير تلقائي",
+    "autoScrollEnabled": "تم تفعيل التمرير التلقائي. انقر لتعطيل",
+    "autoScrollDisabled": "تم تعطيل التمرير التلقائي. انقر للتفعيل"
+  },
+  "status": {
+    "live": "حي",
+    "paused": "متوقف",
+    "noLogs": "لا توجد سجلات حتى الآن لـ: {{levels}}",
+    "selectLevel": "اختر مستوى سجل واحد على الأقل",
+    "logEntries": "مدخلات السجل"
+  }
+}

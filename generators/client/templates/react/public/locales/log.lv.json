@@ -1,0 +1,28 @@
+{
+  "title": "Laravel žurnāli",
+  "filters": {
+    "label": "Filtrēt žurnālus pēc līmeņa",
+    "errors": "Kļūdas",
+    "warnings": "Brīdinājumi",
+    "info": "Informācija",
+    "debug": "Dibināšana",
+    "show": "Rādīt {{level}}",
+    "hide": "Slēpt {{level}}"
+  },
+  "actions": {
+    "pause": "Pauze",
+    "resume": "Atjaunot",
+    "pauseStreaming": "Pauzēt žurnālu straumēšanu",
+    "resumeStreaming": "Atjaunot žurnālu straumēšanu",
+    "autoScroll": "Automātiskā ritināšana",
+    "autoScrollEnabled": "Automātiskā ritināšana ir iespējota. Noklikšķiniet, lai atspējotu",
+    "autoScrollDisabled": "Automātiskā ritināšana ir atspējota. Noklikšķiniet, lai iespējotu"
+  },
+  "status": {
+    "live": "Dziļi",
+    "paused": "Pauzēts",
+    "noLogs": "Nav žurnālu par: {{levels}}",
+    "selectLevel": "Izvēlieties vismaz vienu žurnāla līmeni",
+    "logEntries": "Žurnāla ieraksti"
+  }
+}

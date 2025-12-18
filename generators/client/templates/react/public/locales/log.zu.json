@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "S筛选i izinkomba ngezigaba",
+    "errors": "Amagqwetha",
+    "warnings": "Izexwayiso",
+    "info": "Ulwazi",
+    "debug": "I-debug",
+    "show": "Bonisa {{level}}",
+    "hide": "Fihla {{level}}"
+  },
+  "actions": {
+    "pause": "Misa",
+    "resume": "Qhubeka",
+    "pauseStreaming": "Misa ukugijima kokubhala",
+    "resumeStreaming": "Qhubeka nokubhala",
+    "autoScroll": "Ukuzifaka ngokuzenzakalelayo",
+    "autoScrollEnabled": "Ukuzifaka ngokuzenzakalelayo kuvuliwe. Chofoza ukuze ukuvale",
+    "autoScrollDisabled": "Ukuzifaka ngokuzenzakalelayo kuvaliwe. Chofoza ukuze uvule"
+  },
+  "status": {
+    "live": "Bukhoma",
+    "paused": "Misiwe",
+    "noLogs": "Akukho zinkomba okwamanje zokuthi: {{levels}}",
+    "selectLevel": "Khetha okungenani isigaba esisodwa sokubhala",
+    "logEntries": "Izimpawu zokubhala"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "لاگ‌های لاراول",
+  "filters": {
+    "label": "فیلتر لاگ‌ها بر اساس سطح",
+    "errors": "خطاها",
+    "warnings": "اخطارها",
+    "info": "اطلاعات",
+    "debug": "اشکال‌زدایی",
+    "show": "نمایش {{level}}",
+    "hide": "پنهان کردن {{level}}"
+  },
+  "actions": {
+    "pause": "توقف",
+    "resume": "ادامه",
+    "pauseStreaming": "توقف استریم لاگ",
+    "resumeStreaming": "ادامه استریم لاگ",
+    "autoScroll": "حرکت خودکار",
+    "autoScrollEnabled": "حرکت خودکار فعال است. کلیک کنید تا غیرفعال شود",
+    "autoScrollDisabled": "حرکت خودکار غیرفعال است. کلیک کنید تا فعال شود"
+  },
+  "status": {
+    "live": "زنده",
+    "paused": "متوقف",
+    "noLogs": "برای {{levels}} هنوز هیچ لاگی وجود ندارد",
+    "selectLevel": "حداقل یک سطح لاگ را انتخاب کنید",
+    "logEntries": "ورودهای لاگ"
+  }
+}

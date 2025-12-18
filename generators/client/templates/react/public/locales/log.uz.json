@@ -1,0 +1,28 @@
+{
+  "title": "Laravel jurnallari",
+  "filters": {
+    "label": "Jurnallarni daraja bo'yicha filtrlang",
+    "errors": "Xatolar",
+    "warnings": "Ogohlantirishlar",
+    "info": "Ma'lumot",
+    "debug": "Sizni xabardor qilish",
+    "show": "Ko'rsatish {{level}}",
+    "hide": "Yashirish {{level}}"
+  },
+  "actions": {
+    "pause": "Turar",
+    "resume": "Qayta davom ettirish",
+    "pauseStreaming": "Jurnal joriy etish vaqtincha to'xtatilgan",
+    "resumeStreaming": "Jurnal joriy etish qayta davom ettirildi",
+    "autoScroll": "Avtomatik aylanish",
+    "autoScrollEnabled": "Avtomatik aylanish faollashtirildi. O'chirish uchun bosing",
+    "autoScrollDisabled": "Avtomatik aylanish o'chirilgan. Faollashtirish uchun bosing"
+  },
+  "status": {
+    "live": "Jonli",
+    "paused": "Vaqtincha to'xtatilgan",
+    "noLogs": "Hali biror jurnal yo'q: {{levels}}",
+    "selectLevel": "Kamida bitta jurnal darajasini tanlang",
+    "logEntries": "Jurnal yozuvlari"
+  }
+}

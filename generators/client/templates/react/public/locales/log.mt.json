@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filtra l-logs skont il-livell",
+    "errors": "Żbalji",
+    "warnings": "Twissijiet",
+    "info": "Inforrazzjoni",
+    "debug": "Debug",
+    "show": "Uri {{level}}",
+    "hide": "Moħbi {{level}}"
+  },
+  "actions": {
+    "pause": "Ikkesa",
+    "resume": "Irrisisti",
+    "pauseStreaming": "Waqqaf il-fluss tal-logs",
+    "resumeStreaming": "Irrisisti il-fluss tal-logs",
+    "autoScroll": "Auto-scroll",
+    "autoScrollEnabled": "L-auto-scroll huwa attivat. Ikklikkja biex tiswaħ",
+    "autoScrollDisabled": "L-auto-scroll huwa mitfi. Ikklikkja biex tattiva"
+  },
+  "status": {
+    "live": "Ħaj",
+    "paused": "Mwaqqaf",
+    "noLogs": "M'hemmx logs għal: {{levels}}",
+    "selectLevel": "Agħżel mill-inqas livell wieħed ta' log",
+    "logEntries": "Tidjiet tal-log"
+  }
+}

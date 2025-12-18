@@ -1,0 +1,28 @@
+{
+  "title": "라라벨 로그",
+  "filters": {
+    "label": "로그를 수준별로 필터링",
+    "errors": "오류",
+    "warnings": "경고",
+    "info": "정보",
+    "debug": "디버그",
+    "show": "{{level}} 표시",
+    "hide": "{{level}} 숨기기"
+  },
+  "actions": {
+    "pause": "일시 정지",
+    "resume": "다시 시작",
+    "pauseStreaming": "로그 스트리밍 일시 정지",
+    "resumeStreaming": "로그 스트리밍 다시 시작",
+    "autoScroll": "자동 스크롤",
+    "autoScrollEnabled": "자동 스크롤이 활성화되었습니다. 클릭하여 비활성화",
+    "autoScrollDisabled": "자동 스크롤이 비활성화되었습니다. 클릭하여 활성화"
+  },
+  "status": {
+    "live": "실시간",
+    "paused": "일시 정지됨",
+    "noLogs": "{{levels}}에 대한 로그가 아직 없습니다.",
+    "selectLevel": "최소한 하나의 로그 수준을 선택하세요",
+    "logEntries": "로그 항목"
+  }
+}

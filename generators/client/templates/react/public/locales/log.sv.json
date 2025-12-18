@@ -1,0 +1,28 @@
+{
+  "title": "Laravel-loggar",
+  "filters": {
+    "label": "Filtrera loggar efter nivå",
+    "errors": "Fel",
+    "warnings": "Varningar",
+    "info": "Information",
+    "debug": "Debugga",
+    "show": "Visa {{level}}",
+    "hide": "Dölj {{level}}"
+  },
+  "actions": {
+    "pause": "Pausa",
+    "resume": "Återuppta",
+    "pauseStreaming": "Pausa loggströmning",
+    "resumeStreaming": "Återuppta loggströmning",
+    "autoScroll": "Automatisk rullning",
+    "autoScrollEnabled": "Automatisk rullning är aktiverad. Klicka för att inaktivera",
+    "autoScrollDisabled": "Automatisk rullning är inaktiverad. Klicka för att aktivera"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pausad",
+    "noLogs": "Inga loggar än för: {{levels}}",
+    "selectLevel": "Välj minst en loggnivå",
+    "logEntries": "Loggposter"
+  }
+}

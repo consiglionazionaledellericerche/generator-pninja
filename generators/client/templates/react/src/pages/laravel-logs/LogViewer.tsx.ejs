@@ -1,0 +1,272 @@
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { ShieldAlert, AlertTriangle, Info, Bug, Pause, Play, ScrollText } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+interface LogViewerProps {
+  maxLines?: number;
+  pollInterval?: number;
+}
+
+export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerProps) {
+  const { t } = useTranslation('log');
+  const [logs, setLogs] = useState<string[]>([]);
+  const [isPolling, setIsPolling] = useState(true);
+  const [autoScroll, setAutoScroll] = useState(true);
+  const [selectedLevels, setSelectedLevels] = useState<string[]>([
+    'error',
+    'warning',
+    'info',
+    'debug',
+  ]);
+  const fileOffsetRef = useRef<number>(0);
+  const logContainerRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  const fetchLogs = async () => {
+    try {
+      const response = await axios.get('/api/logs/tail', {
+        params: {
+          offset: fileOffsetRef.current,
+          lines: fileOffsetRef.current === 0 ? 100 : undefined,
+          levels: selectedLevels.join(','),
+        },
+      });
+
+      const { lines, size } = response.data;
+
+      if (lines.length > 0) {
+        setLogs((prev) => {
+          const updated = [...prev, ...lines];
+          return updated.slice(-maxLines);
+        });
+      }
+
+      fileOffsetRef.current = size;
+    } catch (error) {
+      console.error('Error fetching logs:', error);
+    }
+  };
+
+  const stopPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  const handleScroll = () => {
+    if (!logContainerRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = logContainerRef.current;
+    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+
+    if (distanceFromBottom < 100) {
+      if (!autoScroll) setAutoScroll(true);
+    } else {
+      if (autoScroll) setAutoScroll(false);
+    }
+  };
+
+  const handleLevelToggle = (level: string) => {
+    setSelectedLevels((prev) => {
+      return prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level];
+    });
+
+    setLogs([]);
+    fileOffsetRef.current = 0;
+  };
+
+  useEffect(() => {
+    if (!isPolling) return;
+
+    stopPolling();
+    fetchLogs();
+
+    intervalRef.current = setInterval(() => {
+      fetchLogs();
+    }, pollInterval);
+
+    return () => stopPolling();
+  }, [isPolling, selectedLevels]);
+
+  useEffect(() => {
+    if (autoScroll && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [logs, autoScroll]);
+
+  const logLevels = [
+    {
+      value: 'error',
+      label: t('filters.errors'),
+      icon: ShieldAlert,
+      colorOn: 'bg-red-500/20 border-red-500 text-red-500',
+      colorOff: 'border-gray-600 text-gray-500',
+    },
+    {
+      value: 'warning',
+      label: t('filters.warnings'),
+      icon: AlertTriangle,
+      colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
+      colorOff: 'border-gray-600 text-gray-500',
+    },
+    {
+      value: 'info',
+      label: t('filters.info'),
+      icon: Info,
+      colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
+      colorOff: 'border-gray-600 text-gray-500',
+    },
+    {
+      value: 'debug',
+      label: t('filters.debug'),
+      icon: Bug,
+      colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
+      colorOff: 'border-gray-600 text-gray-500',
+    },
+  ];
+
+  return (
+    <div className="flex flex-col h-full">
+      <header className="flex flex-col gap-3 p-4 border-b lg:flex-row lg:items-center lg:justify-between">
+        <h1 className="text-lg font-semibold">{t('title')}</h1>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:gap-4">
+          {/* Filtri livello log */}
+          <div
+            role="group"
+            aria-label={t('filters.label')}
+            className="flex items-center gap-2 flex-wrap"
+          >
+            {logLevels.map((level) => {
+              const Icon = level.icon;
+              const isActive = selectedLevels.includes(level.value);
+
+              return (
+                <button
+                  key={level.value}
+                  onClick={() => handleLevelToggle(level.value)}
+                  className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg border-2 transition-all ${
+                    isActive ? level.colorOn : level.colorOff
+                  } hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+                    isActive
+                      ? level.value === 'error'
+                        ? 'focus:ring-red-500'
+                        : level.value === 'warning'
+                          ? 'focus:ring-yellow-500'
+                          : level.value === 'info'
+                            ? 'focus:ring-blue-500'
+                            : 'focus:ring-gray-400'
+                      : 'focus:ring-gray-500'
+                  }`}
+                  aria-pressed={isActive}
+                  aria-label={t(isActive ? 'filters.hide' : 'filters.show', { level: level.label })}
+                  title={level.label}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  <span className="font-medium lg:hidden xl:inline">{level.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Controlli */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => setIsPolling(!isPolling)}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              aria-label={t(isPolling ? 'actions.pauseStreaming' : 'actions.resumeStreaming')}
+              aria-pressed={isPolling}
+              title={t(isPolling ? 'actions.pause' : 'actions.resume')}
+            >
+              {isPolling ? (
+                <Pause size={16} aria-hidden="true" />
+              ) : (
+                <Play size={16} aria-hidden="true" />
+              )}
+              <span className="lg:hidden xl:inline">
+                {t(isPolling ? 'actions.pause' : 'actions.resume')}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setAutoScroll(!autoScroll);
+                if (!autoScroll && bottomRef.current) {
+                  bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded ${
+                autoScroll
+                  ? 'bg-green-500 hover:bg-green-600 focus:ring-green-500'
+                  : 'bg-gray-500 hover:bg-gray-600 focus:ring-gray-500'
+              } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900`}
+              aria-label={t(
+                autoScroll ? 'actions.autoScrollEnabled' : 'actions.autoScrollDisabled'
+              )}
+              aria-pressed={autoScroll}
+              title={`${t('actions.autoScroll')}: ${autoScroll ? 'ON' : 'OFF'}`}
+            >
+              <ScrollText size={16} aria-hidden="true" />
+              <span className="lg:hidden xl:inline">
+                {t('actions.autoScroll')}: {autoScroll ? 'ON' : 'OFF'}
+              </span>
+            </button>
+
+            <div className="flex items-center gap-2 px-3 py-1.5" role="status" aria-live="polite">
+              <span
+                className={`h-2 w-2 rounded-full ${isPolling ? 'bg-green-500' : 'bg-gray-400'}`}
+                aria-hidden="true"
+              />
+              <span className="text-sm lg:hidden xl:inline">
+                {t(isPolling ? 'status.live' : 'status.paused')}
+              </span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div
+        ref={logContainerRef}
+        onScroll={handleScroll}
+        className="overflow-y-auto bg-black text-gray-100 mt-4 py-4 font-mono text-md h-[70vh] rounded-lg whitespace-nowrap"
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+        aria-label={t('status.logEntries')}
+        tabIndex={0}
+      >
+        {logs.length === 0 ? (
+          <div className="text-gray-500 px-4" role="status">
+            {selectedLevels.length === 0
+              ? t('status.selectLevel')
+              : t('status.noLogs', { levels: selectedLevels.join(', ') })}
+          </div>
+        ) : (
+          logs.map((log, index) => (
+            <div
+              key={index}
+              className={`mb-1 px-4 ${
+                /\.(error|emergency|alert|critical):/i.test(log)
+                  ? 'text-red-400'
+                  : /\.warning:/i.test(log)
+                    ? 'text-yellow-400'
+                    : /\.info:/i.test(log)
+                      ? 'text-blue-400'
+                      : /\.debug:/i.test(log)
+                        ? 'text-gray-400'
+                        : ''
+              }`}
+              role="listitem"
+            >
+              {log}
+            </div>
+          ))
+        )}
+        <div ref={bottomRef} />
+      </div>
+    </div>
+  );
+}

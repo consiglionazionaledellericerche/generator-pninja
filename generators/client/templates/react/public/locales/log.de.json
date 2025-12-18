@@ -1,0 +1,28 @@
+{
+  "title": "Laravel-Protokolle",
+  "filters": {
+    "label": "Protokolle nach Ebene filtern",
+    "errors": "Fehler",
+    "warnings": "Warnungen",
+    "info": "Informationen",
+    "debug": "Debug",
+    "show": "Zeige {{level}}",
+    "hide": "Verstecke {{level}}"
+  },
+  "actions": {
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "pauseStreaming": "Protokoll-Streaming pausieren",
+    "resumeStreaming": "Protokoll-Streaming fortsetzen",
+    "autoScroll": "Automatisches Scrollen",
+    "autoScrollEnabled": "Automatisches Scrollen ist aktiviert. Klicken Sie, um zu deaktivieren",
+    "autoScrollDisabled": "Automatisches Scrollen ist deaktiviert. Klicken Sie, um zu aktivieren"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pausiert",
+    "noLogs": "Noch keine Protokolle für: {{levels}}",
+    "selectLevel": "Wählen Sie mindestens eine Protokollebene aus",
+    "logEntries": "Protokolleinträge"
+  }
+}

@@ -1,0 +1,119 @@
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+
+class LogController extends Controller
+{
+    public function tail(Request $request)
+    {
+        $logFile = storage_path('logs/laravel.log');
+        $lines = (int) $request->input('lines', 50);
+        $offset = (int) $request->input('offset', 0);
+        $levels = $request->input('levels'); // Stringa comma-separated: "error,warning,info"
+
+        if (!file_exists($logFile)) {
+            return response()->json(['lines' => [], 'size' => 0]);
+        }
+
+        $fileSize = filesize($logFile);
+
+        // Converti la stringa in array
+        $levelsArray = $levels ? explode(',', $levels) : [];
+
+        // Se l'offset è 0, leggi le ultime N righe
+        if ($offset === 0) {
+            $content = $this->readLastLines($logFile, $lines, $levelsArray);
+            return response()->json([
+                'lines' => $content,
+                'size' => $fileSize,
+            ]);
+        }
+
+        // Se il file è cresciuto, leggi solo le nuove righe
+        if ($fileSize > $offset) {
+            $handle = fopen($logFile, 'r');
+            fseek($handle, $offset);
+            $newContent = [];
+
+            while (($line = fgets($handle)) !== false) {
+                $trimmedLine = rtrim($line);
+
+                // Filtra per livelli se specificati
+                if (!empty($levelsArray) && !$this->matchesLevels($trimmedLine, $levelsArray)) {
+                    continue;
+                }
+
+                $newContent[] = $trimmedLine;
+            }
+
+            fclose($handle);
+
+            return response()->json([
+                'lines' => $newContent,
+                'size' => $fileSize,
+            ]);
+        }
+
+        return response()->json([
+            'lines' => [],
+            'size' => $fileSize,
+        ]);
+    }
+
+    private function readLastLines(string $file, int $lines, array $levels = []): array
+    {
+        $handle = fopen($file, 'r');
+        $linecounter = $lines;
+        $pos = -2;
+        $beginning = false;
+        $text = [];
+
+        fseek($handle, 0, SEEK_END);
+        $filesize = ftell($handle);
+
+        while ($linecounter > 0) {
+            if (fseek($handle, $pos, SEEK_END) == -1) {
+                $beginning = true;
+                break;
+            }
+
+            $char = fgetc($handle);
+
+            if ($char == "\n") {
+                $linecounter--;
+            }
+
+            $pos--;
+        }
+
+        if ($beginning) {
+            rewind($handle);
+        }
+
+        while (($line = fgets($handle)) !== false) {
+            $trimmedLine = rtrim($line);
+
+            // Filtra per livelli se specificati
+            if (!empty($levels) && !$this->matchesLevels($trimmedLine, $levels)) {
+                continue;
+            }
+
+            $text[] = $trimmedLine;
+        }
+
+        fclose($handle);
+        return $text;
+    }
+
+    private function matchesLevels(string $line, array $levels): bool
+    {
+        // Pattern: [2025-12-18 12:43:09] local.INFO:
+        foreach ($levels as $level) {
+            $pattern = '/\] \w+\.' . strtoupper(trim($level)) . ':/';
+            if (preg_match($pattern, $line) === 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+}

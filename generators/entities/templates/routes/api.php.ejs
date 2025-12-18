@@ -15,6 +15,7 @@ use App\Http\Controllers\DataManagerController;
 use App\Http\Controllers\AcRuleController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\LogController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -75,6 +76,8 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{id}/compare', [AuditController::class, 'compare']);
         Route::get('/{id}', [AuditController::class, 'show']);
     });
+
+    Route::get('/logs/tail', [LogController::class, 'tail']);
 
     Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
         ->where('path', '.*')

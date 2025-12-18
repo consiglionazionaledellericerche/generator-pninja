@@ -43,6 +43,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath('react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
 
     for (const lang of languages) {
+        that.fs.copyTpl(that.templatePath(`react/public/locales/log.${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/audit.${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
@@ -140,6 +141,8 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
+
+    that.fs.copyTpl(that.templatePath("react/src/pages/laravel-logs/LogViewer.tsx.ejs"), that.destinationPath(`client/src/pages/laravel-logs/LogViewer.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});

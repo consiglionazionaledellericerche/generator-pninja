@@ -1,0 +1,28 @@
+{
+  "title": "Laravel protokoly",
+  "filters": {
+    "label": "Filtrujte protokoly podle úrovně",
+    "errors": "Chyby",
+    "warnings": "Varování",
+    "info": "Info",
+    "debug": "Ladění",
+    "show": "Zobrazit {{level}}",
+    "hide": "Skrýt {{level}}"
+  },
+  "actions": {
+    "pause": "Pauza",
+    "resume": "Pokračovat",
+    "pauseStreaming": "Pozastavit streamování protokolů",
+    "resumeStreaming": "Obnovit streamování protokolů",
+    "autoScroll": "Automatické posouvání",
+    "autoScrollEnabled": "Automatické posouvání je povoleno. Klikněte pro zakázání",
+    "autoScrollDisabled": "Automatické posouvání je zakázáno. Klikněte pro povolení"
+  },
+  "status": {
+    "live": "Živě",
+    "paused": "Pozastaveno",
+    "noLogs": "Žádné protokoly zatím pro: {{levels}}",
+    "selectLevel": "Vyberte alespoň jednu úroveň protokolu",
+    "logEntries": "Záznamy protokolů"
+  }
+}

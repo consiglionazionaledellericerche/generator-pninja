@@ -1,0 +1,28 @@
+{
+  "title": "Lóganna Laravel",
+  "filters": {
+    "label": "Sórtáil lóganna de réir leibhéal",
+    "errors": "Earráidí",
+    "warnings": "Rabhadh",
+    "info": "Eolas",
+    "debug": "Déanfaidh",
+    "show": "Taispeáin {{level}}",
+    "hide": "Folaigh {{level}}"
+  },
+  "actions": {
+    "pause": "Léigh",
+    "resume": "Nocht",
+    "pauseStreaming": "Leathnóidh sruth lóg",
+    "resumeStreaming": "Léigh sruth lóg",
+    "autoScroll": "Scrolláil uathoibríoch",
+    "autoScrollEnabled": "Tá scrolláil uathoibríoch gníomhachtaithe. Cliceáil chun é a dhúnadh",
+    "autoScrollDisabled": "Tá scrolláil uathoibríoch dúnta. Cliceáil chun é a gníomhachtú"
+  },
+  "status": {
+    "live": "Beo",
+    "paused": "Coimeádta",
+    "noLogs": "Níl lóganna ann fós do: {{levels}}",
+    "selectLevel": "Roghnaigh ar a laghad leibhéal loga amháin",
+    "logEntries": "Iontrálacha loga"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Jurnalele Laravel",
+  "filters": {
+    "label": "Filtrați jurnalele după nivel",
+    "errors": "Erori",
+    "warnings": "Avertismente",
+    "info": "Informații",
+    "debug": "Debug",
+    "show": "Arată {{level}}",
+    "hide": "Ascunde {{level}}"
+  },
+  "actions": {
+    "pause": "Pauză",
+    "resume": "Reluare",
+    "pauseStreaming": "Pauza fluxului de jurnale",
+    "resumeStreaming": "Reluarea fluxului de jurnale",
+    "autoScroll": "Derulare automată",
+    "autoScrollEnabled": "Derularea automată este activată. Faceți clic pentru a dezactiva",
+    "autoScrollDisabled": "Derularea automată este dezactivată. Faceți clic pentru a activa"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pauză",
+    "noLogs": "Nu sunt încă jurnale pentru: {{levels}}",
+    "selectLevel": "Selectați cel puțin un nivel de jurnal",
+    "logEntries": "Intrări de jurnal"
+  }
+}

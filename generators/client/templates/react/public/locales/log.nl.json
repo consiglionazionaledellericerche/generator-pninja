@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filter logs op niveau",
+    "errors": "Fouten",
+    "warnings": "Waarschuwingen",
+    "info": "Informatie",
+    "debug": "Debug",
+    "show": "Toon {{level}}",
+    "hide": "Verberg {{level}}"
+  },
+  "actions": {
+    "pause": "Pauze",
+    "resume": "Hervatten",
+    "pauseStreaming": "Pauzeer logstreaming",
+    "resumeStreaming": "Hervat logstreaming",
+    "autoScroll": "Automatisch scrollen",
+    "autoScrollEnabled": "Automatisch scrollen is ingeschakeld. Klik om uit te schakelen",
+    "autoScrollDisabled": "Automatisch scrollen is uitgeschakeld. Klik om in te schakelen"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Gepauseerd",
+    "noLogs": "Nog geen logs voor: {{levels}}",
+    "selectLevel": "Selecteer minimaal één logniveau",
+    "logEntries": "Loggegevens"
+  }
+}

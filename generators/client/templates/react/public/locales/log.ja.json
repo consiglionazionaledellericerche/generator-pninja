@@ -1,0 +1,28 @@
+{
+  "title": "Laravelログ",
+  "filters": {
+    "label": "レベルでログをフィルタ",
+    "errors": "エラー",
+    "warnings": "警告",
+    "info": "情報",
+    "debug": "デバッグ",
+    "show": "{{level}}を表示",
+    "hide": "{{level}}を非表示"
+  },
+  "actions": {
+    "pause": "一時停止",
+    "resume": "再開",
+    "pauseStreaming": "ログストリーミングを一時停止",
+    "resumeStreaming": "ログストリーミングを再開",
+    "autoScroll": "自動スクロール",
+    "autoScrollEnabled": "自動スクロールが有効です。無効にするにはクリック",
+    "autoScrollDisabled": "自動スクロールが無効です。有効にするにはクリック"
+  },
+  "status": {
+    "live": "ライブ",
+    "paused": "一時停止",
+    "noLogs": "まだログはありません: {{levels}}",
+    "selectLevel": "少なくとも1つのログレベルを選択してください",
+    "logEntries": "ログエントリー"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Laravel 日志",
+  "filters": {
+    "label": "按级别过滤日志",
+    "errors": "错误",
+    "warnings": "警告",
+    "info": "信息",
+    "debug": "调试",
+    "show": "显示 {{level}}",
+    "hide": "隐藏 {{level}}"
+  },
+  "actions": {
+    "pause": "暂停",
+    "resume": "恢复",
+    "pauseStreaming": "暂停日志流",
+    "resumeStreaming": "恢复日志流",
+    "autoScroll": "自动滚动",
+    "autoScrollEnabled": "自动滚动已启用。点击以禁用",
+    "autoScrollDisabled": "自动滚动已禁用。点击以启用"
+  },
+  "status": {
+    "live": "实时",
+    "paused": "已暂停",
+    "noLogs": "尚未有日志：{{levels}}",
+    "selectLevel": "至少选择一个日志级别",
+    "logEntries": "日志条目"
+  }
+}

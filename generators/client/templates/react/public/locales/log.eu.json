@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logak",
+  "filters": {
+    "label": "Iragazi logak mailaren arabera",
+    "errors": "Erroreak",
+    "warnings": "Abisuenak",
+    "info": "Informazioa",
+    "debug": "Debug",
+    "show": "Erakutsi {{level}}",
+    "hide": "Ezkutatu {{level}}"
+  },
+  "actions": {
+    "pause": "Gelditu",
+    "resume": "Jarraitu",
+    "pauseStreaming": "Gelditu logen streaming-a",
+    "resumeStreaming": "Jarraitu logen streaming-a",
+    "autoScroll": "Automatikoki irristatu",
+    "autoScrollEnabled": "Automatikoki irristatzea aktibatuta dago. Desaktibatzeko sakatu",
+    "autoScrollDisabled": "Automatikoki irristatzea desaktibatuta dago. Aktibatzeko sakatu"
+  },
+  "status": {
+    "live": "Mugimenduan",
+    "paused": "Geldituta",
+    "noLogs": "Oraindik ez dago logik: {{levels}}",
+    "selectLevel": "Hautatu behintzat log maila bat",
+    "logEntries": "Log sarrerak"
+  }
+}

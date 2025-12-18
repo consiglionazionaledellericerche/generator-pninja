@@ -1,0 +1,28 @@
+{
+  "title": "Journal Laravel",
+  "filters": {
+    "label": "Filtrer les journaux par niveau",
+    "errors": "Erreurs",
+    "warnings": "Avertissements",
+    "info": "Informations",
+    "debug": "Débogage",
+    "show": "Afficher {{level}}",
+    "hide": "Masquer {{level}}"
+  },
+  "actions": {
+    "pause": "Mettre en pause",
+    "resume": "reprendre",
+    "pauseStreaming": "Mettre en pause le streaming des journaux",
+    "resumeStreaming": "Reprendre le streaming des journaux",
+    "autoScroll": "Défilement automatique",
+    "autoScrollEnabled": "Le défilement automatique est activé. Cliquez pour désactiver",
+    "autoScrollDisabled": "Le défilement automatique est désactivé. Cliquez pour activer"
+  },
+  "status": {
+    "live": "En direct",
+    "paused": "En pause",
+    "noLogs": "Pas encore de journaux pour : {{levels}}",
+    "selectLevel": "Sélectionnez au moins un niveau de journal",
+    "logEntries": "Entrées de journal"
+  }
+}

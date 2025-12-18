@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filter log berdasarkan level",
+    "errors": "Kesalahan",
+    "warnings": "Peringatan",
+    "info": "Info",
+    "debug": "Debug",
+    "show": "Tampilkan {{level}}",
+    "hide": "Sembunyikan {{level}}"
+  },
+  "actions": {
+    "pause": "Jeda",
+    "resume": "Lanjutkan",
+    "pauseStreaming": "Jeda streaming log",
+    "resumeStreaming": "Lanjutkan streaming log",
+    "autoScroll": "Gulir otomatis",
+    "autoScrollEnabled": "Gulir otomatis diaktifkan. Klik untuk menonaktifkan",
+    "autoScrollDisabled": "Gulir otomatis dinonaktifkan. Klik untuk mengaktifkan"
+  },
+  "status": {
+    "live": "Langsung",
+    "paused": "Dijeda",
+    "noLogs": "Belum ada log untuk: {{levels}}",
+    "selectLevel": "Pilih setidaknya satu level log",
+    "logEntries": "Entri log"
+  }
+}

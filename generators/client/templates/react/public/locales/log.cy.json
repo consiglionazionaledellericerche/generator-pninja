@@ -1,0 +1,28 @@
+{
+  "title": "Logiau Laravel",
+  "filters": {
+    "label": "Ffiltri logiau yn ôl lefel",
+    "errors": "Gwallau",
+    "warnings": "Rhybuddion",
+    "info": "Gwybodaeth",
+    "debug": "Debug",
+    "show": "Dangos {{level}}",
+    "hide": "Cuddio {{level}}"
+  },
+  "actions": {
+    "pause": "Arafu",
+    "resume": "Ail-fynd",
+    "pauseStreaming": "Arafu llif logiau",
+    "resumeStreaming": "Ail-fynd llif logiau",
+    "autoScroll": "Rolio yn awtomatig",
+    "autoScrollEnabled": "Mae rolio yn awtomatig wedi ei actifadu. Cliciwch i ei ddadactifadu",
+    "autoScrollDisabled": "Mae rolio yn awtomatig wedi ei ddadactifadu. Cliciwch i ei actifadu"
+  },
+  "status": {
+    "live": "Byw",
+    "paused": "Arafwyd",
+    "noLogs": "Dim logiau eto ar gyfer: {{levels}}",
+    "selectLevel": "Dewiswch o leiaf un lefel log",
+    "logEntries": "Log entries"
+  }
+}

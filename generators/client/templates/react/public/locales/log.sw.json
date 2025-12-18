@@ -1,0 +1,28 @@
+{
+  "title": "Marekebisho ya Laravel",
+  "filters": {
+    "label": "Chuja marekebisho kwa kiwango",
+    "errors": "Makosa",
+    "warnings": "Onyo",
+    "info": "Taarifa",
+    "debug": "Ufuatiliaji",
+    "show": "Onyesha {{level}}",
+    "hide": "Ficha {{level}}"
+  },
+  "actions": {
+    "pause": "Acha",
+    "resume": "Anza tena",
+    "pauseStreaming": "Acha kusambaza marekebisho",
+    "resumeStreaming": "Anza tena kusambaza marekebisho",
+    "autoScroll": "Kujikwamua kiotomatiki",
+    "autoScrollEnabled": "Kujikwamua kiotomatiki kumewezeshwa. Bonyeza kuzima",
+    "autoScrollDisabled": "Kujikwamua kiotomatiki kumekatishwa. Bonyeza kuwezesha"
+  },
+  "status": {
+    "live": "Moja kwa moja",
+    "paused": "Ili kusitishwa",
+    "noLogs": "Hakuna marekebisho bado kwa: {{levels}}",
+    "selectLevel": "Chagua angalau kiwango kimoja cha marekebisho",
+    "logEntries": "Log entries"
+  }
+}

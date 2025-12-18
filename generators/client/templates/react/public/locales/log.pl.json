@@ -1,0 +1,28 @@
+{
+  "title": "Logi Laravel",
+  "filters": {
+    "label": "Filtruj logi według poziomu",
+    "errors": "Błędy",
+    "warnings": "Ostrzeżenia",
+    "info": "Informacje",
+    "debug": "Debug",
+    "show": "Pokaż {{level}}",
+    "hide": "Ukryj {{level}}"
+  },
+  "actions": {
+    "pause": "Pauza",
+    "resume": "Wznów",
+    "pauseStreaming": "Wstrzymaj przesyłanie logów",
+    "resumeStreaming": "Wznów przesyłanie logów",
+    "autoScroll": "Automatyczne przewijanie",
+    "autoScrollEnabled": "Automatyczne przewijanie jest włączone. Kliknij, aby wyłączyć",
+    "autoScrollDisabled": "Automatyczne przewijanie jest wyłączone. Kliknij, aby włączyć"
+  },
+  "status": {
+    "live": "Na żywo",
+    "paused": "Wstrzymane",
+    "noLogs": "Brak logów dla: {{levels}}",
+    "selectLevel": "Wybierz co najmniej jeden poziom logu",
+    "logEntries": "Wpisy logów"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Laravel ሎግ መዝገቦች",
+  "filters": {
+    "label": "ዎርቅ በደረጃ እንደ ይቅርታ",
+    "errors": "ተደርጃዎች",
+    "warnings": "ወንበር እንዲኖር",
+    "info": "መረጃ",
+    "debug": "መደበኛ",
+    "show": "ይህን ይዘም",
+    "hide": "እንዲሁም ይምረጡ"
+  },
+  "actions": {
+    "pause": "ዝውውር",
+    "resume": "እንደ አይነት ይወገድ",
+    "pauseStreaming": "ዝውውር ተጣል ነው። ማቀናበር ይህን እንዴት ይችላሉ",
+    "resumeStreaming": "ዝውውር ወይቅ ነው። ማድረግ ይችላሉ",
+    "autoScroll": "ዕውቀት",
+    "autoScrollEnabled": "ተቋም",
+    "autoScrollDisabled": "አሁን የሎግ መዝገቦች የለም እንዴት: {{levels}}"
+  },
+  "status": {
+    "live": "አንድ የሎግ ደረጃ ይምረጡ",
+    "paused": "የሎግ ቅጽበቶች",
+    "noLogs": "No logs yet for: {{levels}}",
+    "selectLevel": "Select at least one log level",
+    "logEntries": "Log entries"
+  }
+}

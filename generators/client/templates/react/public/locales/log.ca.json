@@ -1,0 +1,28 @@
+{
+  "title": "Registres de Laravel",
+  "filters": {
+    "label": "Filtrar registres per nivell",
+    "errors": "Errors",
+    "warnings": "Advertències",
+    "info": "Informació",
+    "debug": "Depuració",
+    "show": "Mostrar {{level}}",
+    "hide": "Amagar {{level}}"
+  },
+  "actions": {
+    "pause": "Pausa",
+    "resume": "Reprendre",
+    "pauseStreaming": "Pausar la reproducció de registres",
+    "resumeStreaming": "Reprendre la reproducció de registres",
+    "autoScroll": "Desplaçament automàtic",
+    "autoScrollEnabled": "El desplaçament automàtic està habilitat. Feu clic per deshabilitar",
+    "autoScrollDisabled": "El desplaçament automàtic està deshabilitat. Feu clic per habilitar"
+  },
+  "status": {
+    "live": "En directe",
+    "paused": "Pausat",
+    "noLogs": "No hi ha registres encara per: {{levels}}",
+    "selectLevel": "Seleccioneu almenys un nivell de registre",
+    "logEntries": "Entrades de registre"
+  }
+}

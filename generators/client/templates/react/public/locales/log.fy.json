@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filtrere logs op nivo",
+    "errors": "Fouten",
+    "warnings": "Warskôgings",
+    "info": "Ynformaasje",
+    "debug": "Debug",
+    "show": "Toon {{level}}",
+    "hide": "Ferburgen {{level}}"
+  },
+  "actions": {
+    "pause": "Pauze",
+    "resume": "Folgje",
+    "pauseStreaming": "Pauze logstreaming",
+    "resumeStreaming": "Folgje logstreaming",
+    "autoScroll": "Auto-scroll",
+    "autoScrollEnabled": "Auto-scroll is ynskeakele. Klik om te deaktivearjen",
+    "autoScrollDisabled": "Auto-scroll is deaktivearre. Klik om te aktivearjen"
+  },
+  "status": {
+    "live": "Live",
+    "paused": "Pauze",
+    "noLogs": "Noch gjin logs foar: {{levels}}",
+    "selectLevel": "Selectearje teminsten ien log nivo",
+    "logEntries": "Log entries"
+  }
+}

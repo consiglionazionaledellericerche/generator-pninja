@@ -1,0 +1,28 @@
+{
+  "title": "Laravel dnevnici",
+  "filters": {
+    "label": "Filtriraj dnevnike prema razini",
+    "errors": "Greške",
+    "warnings": "Upozorenja",
+    "info": "Informacije",
+    "debug": "Debug",
+    "show": "Prikaži {{level}}",
+    "hide": "Sakrij {{level}}"
+  },
+  "actions": {
+    "pause": "Pauza",
+    "resume": "Nastavi",
+    "pauseStreaming": "Pauziraj prijenos dnevnika",
+    "resumeStreaming": "Nastavi prijenos dnevnika",
+    "autoScroll": "Automatsko pomicanje",
+    "autoScrollEnabled": "Automatsko pomicanje je omogućeno. Kliknite za onemogućavanje",
+    "autoScrollDisabled": "Automatsko pomicanje je onemogućeno. Kliknite za omogućavanje"
+  },
+  "status": {
+    "live": "Uživo",
+    "paused": "Pauzirano",
+    "noLogs": "Još nema dnevnika za: {{levels}}",
+    "selectLevel": "Odaberite barem jednu razinu dnevnika",
+    "logEntries": "Unosi u dnevnik"
+  }
+}

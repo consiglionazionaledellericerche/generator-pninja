@@ -1,0 +1,28 @@
+{
+  "title": "Laravel naplók",
+  "filters": {
+    "label": "Naplók szűrése szint szerint",
+    "errors": "Hibák",
+    "warnings": "Figyelmeztetések",
+    "info": "Info",
+    "debug": "Hibakeresés",
+    "show": "Megjelenítés {{level}}",
+    "hide": "Elrejtés {{level}}"
+  },
+  "actions": {
+    "pause": "Szünet",
+    "resume": "Folytatás",
+    "pauseStreaming": "A naplófolyam szüneteltetve van",
+    "resumeStreaming": "A naplófolyam folytatva van",
+    "autoScroll": "Automatikus görgetés",
+    "autoScrollEnabled": "Az automatikus görgetés engedélyezve van. Kattintson a letiltáshoz",
+    "autoScrollDisabled": "Az automatikus görgetés letiltva van. Kattintson a engedélyezéshez"
+  },
+  "status": {
+    "live": "Élő",
+    "paused": "Szüneteltetve",
+    "noLogs": "Még nincs napló: {{levels}}",
+    "selectLevel": "Válasszon ki legalább egy naplószintet",
+    "logEntries": "Naplóbejegyzések"
+  }
+}

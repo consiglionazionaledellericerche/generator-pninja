@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Tsara ayyukan bisa mataki",
+    "errors": "Kurakurai",
+    "warnings": "Gargadi",
+    "info": "Bayani",
+    "debug": "Bincike",
+    "show": "Nuna {{level}}",
+    "hide": "Rufe {{level}}"
+  },
+  "actions": {
+    "pause": "Kare",
+    "resume": "Ci gaba",
+    "pauseStreaming": "Dakatar da yawo na rajistan",
+    "resumeStreaming": "Ci gaba da yawo na rajistan",
+    "autoScroll": "Auto-scroll",
+    "autoScrollEnabled": "Auto-scroll an kunna. Danna don kashe",
+    "autoScrollDisabled": "Auto-scroll an kashe. Danna don kunna"
+  },
+  "status": {
+    "live": "Rayuwa",
+    "paused": "An dakatar",
+    "noLogs": "Babu rajista tukuna don: {{levels}}",
+    "selectLevel": "Zabi akalla mataki guda na rajista",
+    "logEntries": "Shiga rajista"
+  }
+}

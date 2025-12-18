@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Logs",
+  "filters": {
+    "label": "Filtra i log per livello",
+    "errors": "Errori",
+    "warnings": "Avvertenze",
+    "info": "Informazioni",
+    "debug": "Debug",
+    "show": "Mostra {{level}}",
+    "hide": "Nascondi {{level}}"
+  },
+  "actions": {
+    "pause": "Pausa",
+    "resume": "Riprendi",
+    "pauseStreaming": "Pausa lo streaming dei log",
+    "resumeStreaming": "Riprendi lo streaming dei log",
+    "autoScroll": "Scorrimento automatico",
+    "autoScrollEnabled": "Lo scorrimento automatico è attivato. Clicca per disattivarlo",
+    "autoScrollDisabled": "Lo scorrimento automatico è disattivato. Clicca per attivarlo"
+  },
+  "status": {
+    "live": "Dal vivo",
+    "paused": "In pausa",
+    "noLogs": "Nessun log ancora per: {{levels}}",
+    "selectLevel": "Seleziona almeno un livello di log",
+    "logEntries": "Voci di log"
+  }
+}

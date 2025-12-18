@@ -1,0 +1,28 @@
+{
+  "title": "יומני Laravel",
+  "filters": {
+    "label": "סנן יומנים לפי רמה",
+    "errors": "שגיאות",
+    "warnings": "אזהרות",
+    "info": "מידע",
+    "debug": "דיבוג",
+    "show": "הצג {{level}}",
+    "hide": "החבא {{level}}"
+  },
+  "actions": {
+    "pause": "עצור",
+    "resume": "המשך",
+    "pauseStreaming": "הפסיק את הזרמת היומנים",
+    "resumeStreaming": "המשך את הזרמת היומנים",
+    "autoScroll": "גלילה אוטומטית",
+    "autoScrollEnabled": "גלילה אוטומטית מופעלת. לחץ כדי להשבית",
+    "autoScrollDisabled": "גלילה אוטומטית מושבתת. לחץ כדי להפעיל"
+  },
+  "status": {
+    "live": "חי",
+    "paused": "מושעה",
+    "noLogs": "אין עדיין יומנים עבור: {{levels}}",
+    "selectLevel": "בחר לפחות רמת יומן אחת",
+    "logEntries": "כניסות יומן"
+  }
+}

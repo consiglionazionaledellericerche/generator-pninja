@@ -1,0 +1,28 @@
+{
+  "title": "Laravel Qeydləri",
+  "filters": {
+    "label": "Qeydləri səviyyəyə görə filtr edin",
+    "errors": "Xətalar",
+    "warnings": "Xəbərdarlıqlar",
+    "info": "Məlumat",
+    "debug": "Debug",
+    "show": "Göstər {{level}}",
+    "hide": "Gizlət {{level}}"
+  },
+  "actions": {
+    "pause": "Dayandır",
+    "resume": "Bərpa et",
+    "pauseStreaming": "Qeydlərin axınına dayandır",
+    "resumeStreaming": "Qeydlərin axınına bərpa et",
+    "autoScroll": "Avtomatik sürüşdürmə",
+    "autoScrollEnabled": "Avtomatik sürüşdürmə aktivdir. Deaktiv etmək üçün klikləyin",
+    "autoScrollDisabled": "Avtomatik sürüşdürmə deaktivdir. Aktiv etmək üçün klikləyin"
+  },
+  "status": {
+    "live": "Canlı",
+    "paused": "Dayandırılıb",
+    "noLogs": "Hələ də bu səviyyələr üçün qeydlər yoxdur: {{levels}}",
+    "selectLevel": "Ən azı bir qeydlərin səviyyəsini seçin",
+    "logEntries": "Qeyd yazıları"
+  }
+}
