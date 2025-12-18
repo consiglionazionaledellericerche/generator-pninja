@@ -149,7 +149,15 @@ export default function AuditView() {
             <User className="text-gray-500 mt-1" size={20} />
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
-              <p className="font-medium">{audit.user_id || '-'}</p>
+              <p className="font-medium">
+                {audit.user_id ? (
+                  <Link to={`/audits/user/${audit.user_id}`} className="text-link">
+                    {audit.user_id}
+                  </Link>
+                ) : (
+                  <span>--</span>
+                )}
+              </p>
             </div>
           </div>
 
