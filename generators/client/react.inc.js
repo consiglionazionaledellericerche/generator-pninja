@@ -184,6 +184,9 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleDeleteButton.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleDeleteButton.tsx`));
 
     for (const entity of entities) {
+        const hasSoftDelete = entity.annotations?.some(
+            ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+        );
         that.fs.copyTpl(
             that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
             that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
@@ -198,6 +201,22 @@ export async function createReactClient(that, parsedJDL) {
                 relatedEntities: getModelRelatedEntities(entity, relationships),
                 searchEngine,
             });
+        if (hasSoftDelete) {
+            that.fs.copyTpl(
+                that.templatePath("react/src/pages/entities/EntityTrash.tsx.ejs"),
+                that.destinationPath(`client/src/pages/entities/${entity.name}Trash.tsx`),
+                {
+                    entity,
+                    to,
+                    pluralize,
+                    columns: entity.body.map(c => to.snake(c.name)),
+                    durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                    fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                    foreignIds: getModelForeignIds(entity, relationships),
+                    relatedEntities: getModelRelatedEntities(entity, relationships),
+                    searchEngine,
+                });
+        }
         that.fs.copyTpl(
             that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
             that.destinationPath(`client/src/pages/entities/${entity.name}View.tsx`),

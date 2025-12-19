@@ -281,8 +281,27 @@ export class ControllersGenerator {
                     getSolrSuffix,
                     toSearchableArray,
                     toSearchableArrayTypes,
-                    hasSoftDelete,
                 });
+            if (hasSoftDelete) {
+                this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/TrashedEntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/Trashed${entity.name}Controller.php`),
+                    {
+                        className: entity.name,
+                        entityName: to.camel(entity.name),
+                        validationsStore: getValidations(entity, relationships, 'store'),
+                        validationsUpdate: getValidations(entity, relationships, 'update'),
+                        fileFields: entity.body.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                        imageFields: entity.body.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                        booleanFields: entity.body.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),
+                        withs: withs.length ? `[${withs.join(', ')}]` : null,
+                        createRelated: createRelated.join(''),
+                        relatedEntitiesForFilters,
+                        searchEngine,
+                        to,
+                        getSolrSuffix,
+                        toSearchableArray,
+                        toSearchableArrayTypes,
+                    });
+            }
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/LogController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/LogController.php`), {});

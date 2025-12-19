@@ -3,15 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
-use App\Http\Controllers\StructureController;
-use App\Http\Controllers\PilotController;
-use App\Http\Controllers\CertificationTypeController;
-use App\Http\Controllers\CertificationController;
-use App\Http\Controllers\AuthorizationController;
-use App\Http\Controllers\UasController;
-use App\Http\Controllers\PayloadController;
-use App\Http\Controllers\MissionController;
-use App\Http\Controllers\DataManagerController;
+<% eRoutes.forEach(({className}) => {-%>
+use App\Http\Controllers\<%- className %>Controller;
+<% }); -%>
 use App\Http\Controllers\AcRuleController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
@@ -46,18 +40,12 @@ Route::get('/files/public/{path}', [FileController::class, 'serveFile'])
     ->name('files.serve.public');
 
 Route::middleware(['session.auth', 'access.control'])->group(function () {
-    Route::apiResource('structures', StructureController::class);
-    Route::apiResource('pilots', PilotController::class);
-    Route::get('pilots/{id}/{field}/{filename?}', [PilotController::class, 'serveBlob']);
-    Route::apiResource('certification-types', CertificationTypeController::class);
-    Route::apiResource('certifications', CertificationController::class);
-    Route::get('certifications/{id}/{field}/{filename?}', [CertificationController::class, 'serveBlob']);
-    Route::apiResource('authorizations', AuthorizationController::class);
-    Route::apiResource('uas', UasController::class);
-    Route::get('uas/{id}/{field}/{filename?}', [UasController::class, 'serveBlob']);
-    Route::apiResource('payloads', PayloadController::class);
-    Route::apiResource('missions', MissionController::class);
-    Route::apiResource('data-managers', DataManagerController::class);
+<% eRoutes.forEach(({className, rootPath, hasBlob}) => {-%>
+    Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
+<%  if (hasBlob) { -%>
+    Route::get('<%- rootPath %>/{id}/{field}/{filename?}', [<%- className %>Controller::class, 'serveBlob']);
+<%  }; -%>
+<% }); -%>
     Route::apiResource('ac-rules', AcRuleController::class);
 
     Route::prefix('audits')->group(function () {

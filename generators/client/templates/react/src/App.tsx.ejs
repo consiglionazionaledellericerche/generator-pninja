@@ -1,3 +1,8 @@
+<%
+const hasSoftDelete = (entity) => entity.annotations?.some(
+  ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+);
+-%>
 import { Routes, Route, type NavigateOptions, useHref, useNavigate } from 'react-router-dom';
 import { RouterProvider } from 'react-aria-components';
 import { NotificationProvider } from './contexts/NotificationContext';
@@ -8,11 +13,14 @@ import Err404 from './pages/errors/Err404';
 import Err403 from './pages/errors/Err403';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
-<% for (const entity of entities) {%>
+<%  for (const entity of entities) {%>
 import <%=entity.name%>List from './pages/entities/<%=entity.name%>List';
 import <%=entity.name%>View from './pages/entities/<%=entity.name%>View';
 import <%=entity.name%>Edit from './pages/entities/<%=entity.name%>Edit';
-<%}-%>
+<%    if (hasSoftDelete(entity)) { -%>
+import <%=entity.name%>Trash from './pages/entities/<%=entity.name%>Trash';
+<%    }-%>
+<%  }-%>
 
 import AcRuleList from './pages/ac-rule/AcRuleList';
 import AcRuleView from './pages/ac-rule/AcRuleView';
@@ -67,6 +75,16 @@ function App() {
                 </Can>
               }
             />
+<%    if (hasSoftDelete(entity)) {-%>
+            <Route
+              path="/entities/<%=to.slug(pluralize(entity.name))%>/trash"
+              element={
+                <Can resource="Trashed<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
+                  <<%=entity.name%>Trash />
+                </Can>
+              }
+            />
+<%    }-%>
             <Route
               path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id"
               element={

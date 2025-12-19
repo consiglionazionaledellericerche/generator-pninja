@@ -286,12 +286,4 @@ class <%- className %>Controller extends Controller
         }
     }
 <%  }-%>
-<% if (hasSoftDelete) { -%>
-    public function trashed()
-    {
-        $perPage = min($request->get('per_page', 10), 100);
-        $result = <%- className %>::onlyTrashed()->paginate($perPage);
-        return response()->json($result);
-    }
-<%  }-%>
 }

@@ -19,7 +19,7 @@ export class RoutersGenerator {
 
     generateRouters() {
         const { entities } = this.parsedJDL;
-        const eRoutes = entities.map(entity => {
+        const eRoutesEntities = entities.map(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));
             const hasBlob = entityHasBlob(entity);
@@ -29,7 +29,20 @@ export class RoutersGenerator {
                 hasBlob,
             };
         });
+        const eRoutesTrash = entities.filter(entity => entity.annotations?.some(
+            ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+        )).map(entity => {
+            const className = `Trashed${entity.name}`;
+            const rootPath = `trashed-${to.slug(pluralize(entity.name))}`;
+            const hasBlob = false;
+            return {
+                className,
+                rootPath,
+                hasBlob,
+            };
+        });
+        const eRoutes = [...eRoutesEntities, ...eRoutesTrash];
         this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) });
-        this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`), { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) });
+        this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`));
     }
 }
