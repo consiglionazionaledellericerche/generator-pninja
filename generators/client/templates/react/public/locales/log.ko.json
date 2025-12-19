@@ -1,5 +1,5 @@
 {
-  "title": "라라벨 로그",
+  "title": "서버 로그",
   "filters": {
     "label": "로그를 수준별로 필터링",
     "errors": "오류",

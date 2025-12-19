@@ -231,7 +231,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
       <div
         ref={logContainerRef}
         onScroll={handleScroll}
-        className="overflow-y-auto bg-black text-gray-100 mt-4 py-4 font-mono text-md h-[70vh] rounded-lg whitespace-nowrap"
+        className="overflow-y-auto bg-black text-gray-100 mt-4 py-4 font-mono text-sm h-[70vh] rounded-lg whitespace-nowrap"
         role="log"
         aria-live="polite"
         aria-atomic="false"

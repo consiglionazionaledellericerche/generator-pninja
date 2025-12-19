@@ -1,5 +1,5 @@
 {
-  "title": "Laravel Logs",
+  "title": "Registros do Servidor",
   "filters": {
     "label": "Filtrar logs por nível",
     "errors": "Erros",

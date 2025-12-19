@@ -1,5 +1,5 @@
 {
-  "title": "Laravel 日志",
+  "title": "服务器日志",
   "filters": {
     "label": "按级别过滤日志",
     "errors": "错误",

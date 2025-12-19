@@ -1,5 +1,5 @@
 {
-  "title": "Laravel dnevnici",
+  "title": "Логови сервера",
   "filters": {
     "label": "Filtrirajte dnevnike po nivou",
     "errors": "Greške",

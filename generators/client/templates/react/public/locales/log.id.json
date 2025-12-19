@@ -1,5 +1,5 @@
 {
-  "title": "Laravel Logs",
+  "title": "Log Server",
   "filters": {
     "label": "Filter log berdasarkan level",
     "errors": "Kesalahan",

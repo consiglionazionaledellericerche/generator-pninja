@@ -1,5 +1,5 @@
 {
-  "title": "Laravel-loggar",
+  "title": "Serverloggar",
   "filters": {
     "label": "Filtrera loggar efter nivå",
     "errors": "Fel",
