@@ -12,25 +12,56 @@ interface LogEntryProps {
   log: string;
 }
 
+const logLevels = [
+  {
+    value: 'error',
+    label: 'filters.errors',
+    icon: ShieldAlert,
+    colorOn: 'bg-red-500/20 border-red-500 text-red-500',
+    colorOff: 'border-gray-600 text-gray-500',
+  },
+  {
+    value: 'warning',
+    label: 'filters.warnings',
+    icon: AlertTriangle,
+    colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
+    colorOff: 'border-gray-600 text-gray-500',
+  },
+  {
+    value: 'info',
+    label: 'filters.info',
+    icon: Info,
+    colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
+    colorOff: 'border-gray-600 text-gray-500',
+  },
+  {
+    value: 'debug',
+    label: 'filters.debug',
+    icon: Bug,
+    colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
+    colorOff: 'border-gray-600 text-gray-500',
+  },
+];
+
 const LogEntry: React.FC<LogEntryProps> = ({ log }) => {
   const getLogLevelClass = (): string => {
     if (/\.(error|emergency|alert|critical):/i.test(log)) {
-      return 'text-red-400';
+      return logLevels[0].colorOn;
     }
     if (/\.warning:/i.test(log)) {
-      return 'text-yellow-400';
+      return logLevels[1].colorOn;
     }
     if (/\.info:/i.test(log)) {
-      return 'text-blue-400';
+      return logLevels[2].colorOn;
     }
     if (/\.debug:/i.test(log)) {
-      return 'text-gray-400';
+      return logLevels[3].colorOn;
     }
     return '';
   };
 
   return (
-    <div className={`mb-1 px-4 ${getLogLevelClass()}`} role="listitem">
+    <div className={`mb-1 px-1 ${getLogLevelClass()}`} role="listitem">
       {log}
     </div>
   );
@@ -125,37 +156,6 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
     }
   }, [logs, autoScroll]);
 
-  const logLevels = [
-    {
-      value: 'error',
-      label: t('filters.errors'),
-      icon: ShieldAlert,
-      colorOn: 'bg-red-500/20 border-red-500 text-red-500',
-      colorOff: 'border-gray-600 text-gray-500',
-    },
-    {
-      value: 'warning',
-      label: t('filters.warnings'),
-      icon: AlertTriangle,
-      colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
-      colorOff: 'border-gray-600 text-gray-500',
-    },
-    {
-      value: 'info',
-      label: t('filters.info'),
-      icon: Info,
-      colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
-      colorOff: 'border-gray-600 text-gray-500',
-    },
-    {
-      value: 'debug',
-      label: t('filters.debug'),
-      icon: Bug,
-      colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
-      colorOff: 'border-gray-600 text-gray-500',
-    },
-  ];
-
   return (
     <div className="flex flex-col h-full">
       <header className="flex flex-col gap-3 p-4 border-b lg:flex-row lg:items-center lg:justify-between">
@@ -194,7 +194,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
                   title={level.label}
                 >
                   <Icon size={16} aria-hidden="true" />
-                  <span className="font-medium lg:hidden xl:inline">{level.label}</span>
+                  <span className="font-medium lg:hidden xl:inline">{t(level.label)}</span>
                 </button>
               );
             })}
@@ -259,7 +259,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
       <div
         ref={logContainerRef}
         onScroll={handleScroll}
-        className="overflow-y-auto bg-black text-gray-100 mt-4 py-4 font-mono text-sm h-[70vh] rounded-lg whitespace-nowrap"
+        className="overflow-y-auto bg-black text-gray-100 mt-4 border-4 border-black rounded-md font-mono text-sm h-[70vh] whitespace-pre-wrap"
         role="log"
         aria-live="polite"
         aria-atomic="false"
@@ -267,7 +267,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
         tabIndex={0}
       >
         {logs.length === 0 ? (
-          <div className="text-gray-500 px-4" role="status">
+          <div className="text-gray-500 p-4" role="status">
             {selectedLevels.length === 0
               ? t('status.selectLevel')
               : t('status.noLogs', { levels: selectedLevels.join(', ') })}
