@@ -74,10 +74,14 @@ export class MigrationsGenerator {
         for (const entity of entities) {
             const tabName = to.snake(pluralize(entity.tableName));
             const columns = this.convertFields(entity.body, enums);
+            const hasSoftDelete = entity.annotations?.some(
+                ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+            );
             this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
                 {
                     tabName: tabName,
                     columns: columns.join(`\n${tab(3)}`),
+                    hasSoftDelete,
                 });
         }
         this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_ac_rules_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_ac_rules_table.php`));

@@ -16,6 +16,9 @@ export class ModelsGenerator {
         }
         this.that.fs.copyTpl(this.that.templatePath("app/Models/AcRule.php.ejs"), this.that.destinationPath(`server/app/Models/AcRule.php`));
         for (const entity of entities) {
+            const hasSoftDelete = entity.annotations?.some(
+                ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+            );
             const className = entity.name;
             const tableName = to.snake(pluralize(entity.tableName));
             // fillable from entity property
@@ -215,6 +218,7 @@ export class ModelsGenerator {
                     searchEngine,
                     typesenseSearchParameters,
                     getSolrSuffix,
+                    hasSoftDelete,
                 });
         }
         for (const enm of enums) {
