@@ -8,6 +8,34 @@ interface LogViewerProps {
   pollInterval?: number;
 }
 
+interface LogEntryProps {
+  log: string;
+}
+
+const LogEntry: React.FC<LogEntryProps> = ({ log }) => {
+  const getLogLevelClass = (): string => {
+    if (/\.(error|emergency|alert|critical):/i.test(log)) {
+      return 'text-red-400';
+    }
+    if (/\.warning:/i.test(log)) {
+      return 'text-yellow-400';
+    }
+    if (/\.info:/i.test(log)) {
+      return 'text-blue-400';
+    }
+    if (/\.debug:/i.test(log)) {
+      return 'text-gray-400';
+    }
+    return '';
+  };
+
+  return (
+    <div className={`mb-1 px-4 ${getLogLevelClass()}`} role="listitem">
+      {log}
+    </div>
+  );
+};
+
 export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerProps) {
   const { t } = useTranslation('log');
   const [logs, setLogs] = useState<string[]>([]);
@@ -245,25 +273,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               : t('status.noLogs', { levels: selectedLevels.join(', ') })}
           </div>
         ) : (
-          logs.map((log, index) => (
-            <div
-              key={index}
-              className={`mb-1 px-4 ${
-                /\.(error|emergency|alert|critical):/i.test(log)
-                  ? 'text-red-400'
-                  : /\.warning:/i.test(log)
-                    ? 'text-yellow-400'
-                    : /\.info:/i.test(log)
-                      ? 'text-blue-400'
-                      : /\.debug:/i.test(log)
-                        ? 'text-gray-400'
-                        : ''
-              }`}
-              role="listitem"
-            >
-              {log}
-            </div>
-          ))
+          logs.map((log, index) => <LogEntry key={index} log={log} />)
         )}
         <div ref={bottomRef} />
       </div>
