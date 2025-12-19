@@ -167,6 +167,9 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
 
         for (const entity of entities) {
+            const hasSoftDelete = entity.annotations?.some(
+                ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+            );
             const withs = getWits(entity, relationships);
             const createRelated = [];
             relationships.forEach(relation => {
@@ -278,6 +281,7 @@ export class ControllersGenerator {
                     getSolrSuffix,
                     toSearchableArray,
                     toSearchableArrayTypes,
+                    hasSoftDelete,
                 });
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
