@@ -6,7 +6,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use App\Models\AcRule;
 <% entities.forEach(function(entity) { -%>
-use App\Models\<%= entity.name %>;<% }); %>
+use App\Models\<%= entity.name %>;
+<% }); -%>
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -14,15 +15,64 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->seedModel(AcRule::class, 'AcRule.csv', 5);
+        $this->withoutScout(function () {
+            $this->seedModel(AcRule::class, 'AcRule.csv', 5);
 <% entities.forEach(function(entity) { -%>
-        $this->seedModel(<%= entity.name %>::class, '<%= entity.name %>.csv', <%= n %>);
+            $this->seedModel(<%= entity.name %>::class, '<%= entity.name %>.csv', <%= n %>);
 <% }); -%>
 
-        // Many-to-many relationships
+            // Many-to-many relationships
 <% manyToMany.forEach(function(rel) { -%>
-        $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %>_<%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
+            $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %>_<%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
 <% }); -%>
+        });
+        $this->indexModels();
+    }
+
+    /**
+     * Seed without synchronizing with Scout
+     */
+    private function withoutScout(callable $callback): void
+    {
+        $originalDriver = config('scout.driver');
+        config(['scout.driver' => null]);
+        try {
+            $callback();
+        } finally {
+            config(['scout.driver' => $originalDriver]);
+        }
+    }
+
+    /**
+     * Index all searchable models
+     */
+    private function indexModels(): void
+    {
+        $searchableModels = [
+            AcRule::class,
+<% entities.forEach(function(entity) { -%>
+            <%= entity.name %>::class,
+<% }); -%>
+        ];
+
+        $this->command->newLine();
+        $this->command->info('🔍 Indexing all searchable models...');
+
+        foreach ($searchableModels as $model) {
+            $modelName = class_basename($model);
+            $this->command->info("  → Indexing {$modelName}...");
+
+            try {
+                \Artisan::call('scout:import', ['model' => $model]);
+                $count = $model::count();
+                $this->command->info("    ✓ {$count} records indexed");
+            } catch (\Exception $e) {
+                $this->command->error("    ✗ Failed: {$e->getMessage()}");
+            }
+        }
+
+        $this->command->newLine();
+        $this->command->info('✓ Seeding and indexing completed!');
     }
 
     /**

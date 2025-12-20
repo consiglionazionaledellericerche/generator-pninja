@@ -174,8 +174,6 @@ export default class extends Generator {
   }
 
   async writing() {
-    const { entities, relationships } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
-    this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
     await this.spawn('composer', ['create-project', '--prefer-dist', 'laravel/laravel=~11.6.1', 'server']);
     await this.spawn('composer', ['require', '--dev', 'beyondcode/laravel-dump-server'], { cwd: 'server' });
     await this.spawn('php', ['artisan', 'install:api', '--without-migration-prompt'], { cwd: 'server' });
