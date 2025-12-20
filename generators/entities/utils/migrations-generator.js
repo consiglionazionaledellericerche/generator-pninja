@@ -1,5 +1,6 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
+import { AcRule } from '../../utils/AcRule.js';
 const tab = (n) => (Array(n)).fill('    ').join('');
 
 export class MigrationsGenerator {
@@ -71,7 +72,7 @@ export class MigrationsGenerator {
     createTables() {
         const { enums, entities } = this.parsedJDL;
         const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
-        for (const entity of entities) {
+        for (const entity of [AcRule, ...entities]) {
             const tabName = to.snake(pluralize(entity.tableName));
             const columns = this.convertFields(entity.body, enums);
             const hasSoftDelete = entity.annotations?.some(
@@ -84,7 +85,6 @@ export class MigrationsGenerator {
                     hasSoftDelete,
                 });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_ac_rules_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_ac_rules_table.php`));
         this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_audits_table.php`), {
             authentication: this.that.config.get('authentication'),
         });

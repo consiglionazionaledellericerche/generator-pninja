@@ -3,7 +3,7 @@ import pluralize from 'pluralize';
 import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
 import { getLanguageData } from './config/languages.js';
-
+import { AcRule } from '../utils/AcRule.js';
 const colors = [
     "lime",
     "green",
@@ -46,14 +46,14 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
-        that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities, relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
+        that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities: [AcRule, ...entities], relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
     };
     that.fs.copyTpl(that.templatePath("react/public/fonts/IBMPlexMono-Regular.ttf"), that.destinationPath(`client/public/fonts/IBMPlexMono-Regular.ttf`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
 
     that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities, to, pluralize });
+    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {
         supportedLngs: JSON.stringify(languages).replaceAll(`"`, `'`),
         fallbackLng: nativeLanguage
@@ -170,9 +170,6 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
     }
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleList.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleList.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleView.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleView.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/ac-rule/AcRuleEdit.tsx.ejs"), that.destinationPath(`client/src/pages/ac-rule/AcRuleEdit.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/audit/Audits.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditCompare.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditCompare.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
@@ -180,10 +177,8 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditStatistics.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditUserActivity.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleForm.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleForm.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/components/entities/AcRuleDeleteButton.tsx.ejs"), that.destinationPath(`client/src/components/entities/AcRuleDeleteButton.tsx`));
 
-    for (const entity of entities) {
+    for (const entity of [AcRule, ...entities]) {
         const hasSoftDelete = entity.annotations?.some(
             ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
         );

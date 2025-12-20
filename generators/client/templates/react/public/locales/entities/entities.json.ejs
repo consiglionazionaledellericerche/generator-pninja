@@ -1,16 +1,4 @@
 {
-  "ac_rule": {
-    "AcRule": "AcRule",
-    "AcRules": "AcRules",
-    "id": "ID",
-    "ptype": "ptype",
-    "v0": "v0",
-    "v1": "v1",
-    "v2": "v2",
-    "v3": "v3",
-    "v4": "v4",
-    "v5": "v5"
-  },
   <%- entities.map(entity => `"${to.snake(entity.name)}": {${[
     `\n    "${entity.name}": "${to.capital(entity.name)}"`,
     `"${pluralize(entity.name)}": "${to.capital(pluralize(entity.name))}"`,

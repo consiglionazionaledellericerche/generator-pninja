@@ -1,4 +1,5 @@
 import to from 'to-case';
+import { AcRule } from '../../utils/AcRule.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
 
@@ -93,7 +94,7 @@ export class FactoriesGenerator {
         }
         this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
-                entities,
+                entities: [AcRule, ...entities],
                 manyToMany,
                 n,
             });

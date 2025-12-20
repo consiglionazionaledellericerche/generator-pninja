@@ -6,7 +6,6 @@ use App\Http\Controllers\SessionAuthController;
 <% eRoutes.forEach(({className}) => {-%>
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
-use App\Http\Controllers\AcRuleController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\LogController;
@@ -46,7 +45,6 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
     Route::get('<%- rootPath %>/{id}/{field}/{filename?}', [<%- className %>Controller::class, 'serveBlob']);
 <%  }; -%>
 <% }); -%>
-    Route::apiResource('ac-rules', AcRuleController::class);
 
     Route::prefix('audits')->group(function () {
         Route::get('/', [AuditController::class, 'index']);

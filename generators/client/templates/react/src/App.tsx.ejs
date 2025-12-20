@@ -22,10 +22,6 @@ import <%=entity.name%>Trash from './pages/entities/<%=entity.name%>Trash';
 <%    }-%>
 <%  }-%>
 
-import AcRuleList from './pages/ac-rule/AcRuleList';
-import AcRuleView from './pages/ac-rule/AcRuleView';
-import AcRuleEdit from './pages/ac-rule/AcRuleEdit';
-
 import Audits from './pages/audit/Audits';
 import AuditView from './pages/audit/AuditView';
 import AuditCompare from './pages/audit/AuditCompare';
@@ -110,38 +106,6 @@ function App() {
               }
             />
 <%  }-%>
-            <Route
-              path="/entities/ac-rules"
-              element={
-                <Can resource="AcRule" action="read" fallback={<Err403 />} force_login={true}>
-                  <AcRuleList />
-                </Can>
-              }
-            />
-            <Route
-              path="/entities/ac-rules/view/:id"
-              element={
-                <Can resource="AcRule" action="read" fallback={<Err403 />} force_login={true}>
-                  <AcRuleView />
-                </Can>
-              }
-            />
-            <Route
-              path="/entities/ac-rules/edit/:id"
-              element={
-                <Can resource="AcRule" action="update" fallback={<Err403 />} force_login={true}>
-                  <AcRuleEdit />
-                </Can>
-              }
-            />
-            <Route
-              path="/entities/ac-rules/new"
-              element={
-                <Can resource="AcRule" action="create" fallback={<Err403 />} force_login={true}>
-                  <AcRuleEdit />
-                </Can>
-              }
-            />
             <Route
               path="/audits"
               element={

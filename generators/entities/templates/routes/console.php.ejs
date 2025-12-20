@@ -2,8 +2,10 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Lauthz\Facades\Enforcer;
+use App\Models\AcRule;
 
 Artisan::command('add-role {role} {username}', function ($role, $username) {
     Enforcer::addRoleForUser($username, $role);
     $this->info("$role role added to user: $username");
+    \Artisan::call('scout:import', ['model' => AcRule::class]);
 })->purpose('Add a role to a user');

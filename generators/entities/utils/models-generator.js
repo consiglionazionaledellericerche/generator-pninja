@@ -1,5 +1,6 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
+import { AcRule } from '../../utils/AcRule.js';
 export class ModelsGenerator {
     constructor(that, entitiesFilePath) {
         this.that = that;
@@ -14,8 +15,7 @@ export class ModelsGenerator {
         if (this.that.config.get('authentication') === 'keycloak') {
             this.that.fs.copyTpl(this.that.templatePath("app/Resolvers/Keycloak__UserResolver.php.ejs"), this.that.destinationPath(`server/app/Resolvers/UserResolver.php`));
         }
-        this.that.fs.copyTpl(this.that.templatePath("app/Models/AcRule.php.ejs"), this.that.destinationPath(`server/app/Models/AcRule.php`));
-        for (const entity of entities) {
+        for (const entity of [AcRule, ...entities]) {
             const hasSoftDelete = entity.annotations?.some(
                 ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
             );

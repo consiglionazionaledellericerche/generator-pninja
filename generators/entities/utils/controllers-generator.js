@@ -1,6 +1,7 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { getWits } from '../../utils/getWiths.js';
+import { AcRule } from '../../utils/AcRule.js';
 
 const getValidations = (e, relationships, op) => {
     const entity = structuredClone(e);
@@ -166,7 +167,7 @@ export class ControllersGenerator {
         this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
 
-        for (const entity of entities) {
+        for (const entity of [AcRule, ...entities]) {
             const hasSoftDelete = entity.annotations?.some(
                 ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
             );
@@ -263,7 +264,6 @@ export class ControllersGenerator {
             }, {});
 
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AcRuleController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AcRuleController.php`), {});
             this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
                 {
                     className: entity.name,

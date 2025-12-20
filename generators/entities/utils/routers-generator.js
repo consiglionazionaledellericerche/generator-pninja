@@ -1,5 +1,6 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
+import { AcRule } from '../../utils/AcRule.js';
 
 const entityHasBlob = (entity) => entity.body.reduce((acc, prop) => {
     if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
@@ -19,7 +20,7 @@ export class RoutersGenerator {
 
     generateRouters() {
         const { entities } = this.parsedJDL;
-        const eRoutesEntities = entities.map(entity => {
+        const eRoutesEntities = [AcRule, ...entities].map(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));
             const hasBlob = entityHasBlob(entity);
@@ -42,7 +43,7 @@ export class RoutersGenerator {
             };
         });
         const eRoutes = [...eRoutesEntities, ...eRoutesTrash];
-        this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: entities.map(entity => to.slug(pluralize(entity.name))) });
+        this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: [...entities, AcRule].map(entity => to.slug(pluralize(entity.name))) });
         this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`));
     }
 }
