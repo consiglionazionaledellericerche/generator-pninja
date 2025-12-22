@@ -1,8 +1,23 @@
+<%
+const hasSoftDelete = (entity) => entity.annotations?.some(
+  ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
+);
+const hasTrashMenu = entities.filter(entity => hasSoftDelete(entity)).length > 0;
+-%>
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 <%  if (entities.length > 1) { -%>
-import { Button, Menu as MenuItems, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { ChevronDown, Settings2 } from 'lucide-react';
+import {
+  Button,
+  Menu as MenuItems,
+  MenuItem,
+  MenuTrigger,
+<% if (hasTrashMenu) { -%>
+  SubmenuTrigger,
+<% } -%>
+  Popover,
+} from 'react-aria-components';
+import { ChevronDown, Settings2, Trash2, Logs, DatabaseBackup, ShieldEllipsis } from 'lucide-react';
 <% } -%>
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
@@ -118,7 +133,11 @@ const Menu: React.FC = () => {
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
                 {t('entities')}{' '}
-                <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
+                <ChevronDown
+                  aria-hidden
+                  size={16}
+                  className="group-aria-expanded:rotate-180 duration-100"
+                />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
                 <MenuItems className="outline-0">
@@ -142,6 +161,9 @@ const Menu: React.FC = () => {
             any={[
               { resource: 'AcRule', action: 'read' },
               { resource: 'Audit', action: 'read' },
+<%  entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
+              { resource: 'Trashed<%- entity.name %>', action: 'read' },
+<%  });-%>
             ]}
           >
             <MenuTrigger>
@@ -151,7 +173,11 @@ const Menu: React.FC = () => {
               >
                 <Settings2 aria-hidden size={16} />
                 {t('common.settings')}
-                <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
+                <ChevronDown
+                  aria-hidden
+                  size={16}
+                  className="group-aria-expanded:rotate-180 duration-100"
+                />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
                 <MenuItems className="outline-0">
@@ -159,8 +185,9 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/entities/ac-rules"
                       id="ac-rules"
-                      className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
                     >
+                      <ShieldEllipsis aria-hidden size={16} />
                       {t('entities:ac_rule.AcRules')}
                     </MenuItem>
                   </Can>
@@ -168,20 +195,58 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/audits"
                       id="audits"
-                      className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
                     >
-                      {t('audit:system')}
+                      <DatabaseBackup aria-hidden size={16} /> {t('audit:system')}
                     </MenuItem>
                   </Can>
                   <Can action="read" resource="Log">
                     <MenuItem
                       href="/logs/stream"
                       id="logs"
-                      className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
                     >
-                      {t('log:title')}
+                      <Logs aria-hidden size={16} /> {t('log:title')}
                     </MenuItem>
                   </Can>
+<%    if (hasTrashMenu) { -%>
+                  <Can
+                    any={[
+<%      entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
+                      { resource: 'Trashed<%- entity.name %>', action: 'read' },
+<%      });-%>
+                    ]}
+                  >
+                    <SubmenuTrigger>
+                      <MenuItem
+                        className={`group flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2`}
+                      >
+                        <Trash2 aria-hidden size={16} />
+                        <span className="flex-1">Trash</span>
+                        <ChevronDown
+                          aria-hidden
+                          size={16}
+                          className="group-aria-expanded:rotate-180 duration-100"
+                        />
+                      </MenuItem>
+                      <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
+                        <MenuItems className="outline-0">
+<%      entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
+                          <Can action="read" resource="Trashed<%- entity.name %>">
+                            <MenuItem
+                              href="/entities/<%- to.slug(pluralize(entity.name)) %>/trash"
+                              id="<%- to.slug(pluralize(entity.name)) %>"
+                              className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
+                            >
+                              {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
+                            </MenuItem>
+                          </Can>
+<%      }) -%>
+                        </MenuItems>
+                      </Popover>
+                    </SubmenuTrigger>
+                  </Can>
+<%    } -%>
                 </MenuItems>
               </Popover>
             </MenuTrigger>
