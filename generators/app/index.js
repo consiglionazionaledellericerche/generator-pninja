@@ -145,23 +145,6 @@ export default class extends Generator {
             disabled: "Not implemented yet"
           }
         ]
-      }, {
-        store: true,
-        type: "list",
-        name: "packageManager",
-        message: "Your package manager",
-        default: "npm",
-        choices: [
-          {
-            name: "Npm",
-            value: "npm"
-          },
-          {
-            name: "Yarn",
-            value: "yarn",
-            disabled: "Not implemented yet"
-          }
-        ]
       },
     ]);
   }

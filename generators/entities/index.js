@@ -39,7 +39,14 @@ export default class EntityGenerator extends Generator {
         name: "entitiesFilePath",
         message: "Entities definition file path",
         default: this.config.get('entitiesFilePath') || 'entities.jdl',
-        when: answers => answers.build
+        when: answers => answers.build,
+        validate: (input) => {
+          const filePath = input[0] === '/' ? input : this.destinationPath(input);
+          if (!this.fs.exists(filePath)) {
+            return `File '${input}' does not exist. Please provide a valid file path.`;
+          }
+          return true;
+        }
       }, {
         store: true,
         type: "number",
