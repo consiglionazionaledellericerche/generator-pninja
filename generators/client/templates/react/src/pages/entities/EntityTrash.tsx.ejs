@@ -254,7 +254,7 @@ export default function <%= entity.name %>Trash() {
                             }
                           />
                         </Can>
-                        <Can resource="Trashed<%= entity.name %>" action="create">
+                        <Can resource="Trashed<%= entity.name %>" action="delete">
                           <ConfirmButton
                             onConfirm={() => handleForceDelete(row?.id)}
                             className="danger-button"
