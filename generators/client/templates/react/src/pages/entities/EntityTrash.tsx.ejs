@@ -23,6 +23,7 @@ export default function <%= entity.name %>Trash() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
   const [loading, setLoading] = useState(false);
+  const [disableButtons, setDisableButtons] = useState(false);
   const [sortConfig, setSortConfig] = useState<SortConfig<SortableField>>({
     field: 'id',
     direction: 'asc',
@@ -71,6 +72,7 @@ export default function <%= entity.name %>Trash() {
 
   const handleRestore = async (id: number | undefined | null) => {
     if (!id) return;
+    setDisableButtons(true);
     axiosInstance
       .post(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/`, { id })
       .then(() => {
@@ -86,11 +88,13 @@ export default function <%= entity.name %>Trash() {
           message: `${t('errors.entities.delete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
-      });
+      })
+      .finally(() => setDisableButtons(false));
   };
 
   const handleForceDelete = async (id: number | undefined | null) => {
     if (!id) return;
+    setDisableButtons(true);
     axiosInstance
       .delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`)
       .then(() => {
@@ -106,13 +110,14 @@ export default function <%= entity.name %>Trash() {
           message: `${t('errors.entities.forceDelete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
-      });
+      })
+      .finally(() => setDisableButtons(false));
   };
 
   const handleBulkRestore = async () => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
-
+    setDisableButtons(true);
     try {
       await Promise.all(ids.map((id) => axiosInstance.post(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/`, { id })));
       addNotification({
@@ -128,12 +133,13 @@ export default function <%= entity.name %>Trash() {
         error: error as AxiosError<ErrorResponseData>,
       });
     }
+    setDisableButtons(false);
   };
 
   const handleBulkForceDelete = async () => {
     const ids = Array.from(selectedIds);
     if (ids.length === 0) return;
-
+    setDisableButtons(true);
     try {
       await Promise.all(ids.map((id) => axiosInstance.delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`)));
       addNotification({
@@ -149,6 +155,7 @@ export default function <%= entity.name %>Trash() {
         error: error as AxiosError<ErrorResponseData>,
       });
     }
+    setDisableButtons(false);
   };
 
   const handleSelectAll = (checked: boolean) => {
@@ -263,6 +270,7 @@ export default function <%= entity.name %>Trash() {
             <div className="flex gap-2">
               <Can resource="Trashed<%= entity.name %>" action="create">
                 <ConfirmButton
+                  disabled={disableButtons}
                   onConfirm={handleBulkRestore}
                   className="primary-button"
                   pendingClassName="primary-button"
@@ -282,6 +290,7 @@ export default function <%= entity.name %>Trash() {
               </Can>
               <Can resource="Trashed<%= entity.name %>" action="delete">
                 <ConfirmButton
+                  disabled={disableButtons}
                   onConfirm={handleBulkForceDelete}
                   className="danger-button"
                   pendingClassName="danger-button"
@@ -358,7 +367,10 @@ export default function <%= entity.name %>Trash() {
                       />
                     </td>
                     <td className="w-0">
-                      <Link className="text-link" to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}>
+                      <Link
+                        className="text-link"
+                        to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
+                      >
                         {row.id}
                       </Link>
                     </td>
@@ -391,6 +403,7 @@ export default function <%= entity.name %>Trash() {
                         </Can>
                         <Can resource="Trashed<%= entity.name %>" action="create">
                           <ConfirmButton
+                            disabled={disableButtons}
                             onConfirm={() => handleRestore(row?.id)}
                             className="primary-button"
                             pendingClassName="primary-button"
@@ -410,6 +423,7 @@ export default function <%= entity.name %>Trash() {
                         </Can>
                         <Can resource="Trashed<%= entity.name %>" action="delete">
                           <ConfirmButton
+                            disabled={disableButtons}
                             onConfirm={() => handleForceDelete(row?.id)}
                             className="danger-button"
                             pendingClassName="danger-button"

@@ -8,6 +8,7 @@ interface ConfirmButtonProps {
   className?: string;
   pendingClassName?: string;
   timeout?: number;
+  disabled?: boolean;
   onConfirm: () => void | Promise<void>;
 }
 
@@ -17,6 +18,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   className,
   pendingClassName,
   timeout = 5000,
+  disabled = false,
   onConfirm,
 }) => {
   const [pendingLaunch, setPendingLaunch] = useState(false);
@@ -69,13 +71,19 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   return (
     <>
       {!pendingLaunch && (
-        <button type="button" className={className} onClick={() => setPendingLaunch(true)}>
+        <button
+          disabled={disabled}
+          type="button"
+          className={className}
+          onClick={() => setPendingLaunch(true)}
+        >
           {label}
         </button>
       )}
       {pendingLaunch && (
         <span className="flex">
           <button
+            disabled={disabled}
             type="button"
             onClick={() => {
               setPendingLaunch(false);
@@ -89,6 +97,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
             </span>
           </button>
           <button
+            disabled={disabled}
             title={t('common.cancel')}
             onClick={(event) => {
               event.preventDefault();

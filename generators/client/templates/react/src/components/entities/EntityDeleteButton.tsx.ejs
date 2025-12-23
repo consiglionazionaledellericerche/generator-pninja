@@ -7,9 +7,15 @@ import ConfirmButton from '../ConfirmButton';
 
 interface DeleteButtonProps {
   id: string | number | null | undefined;
+  disabled?: boolean;
+  onConfirm?: () => void;
 }
 
-const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
+const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({
+  id,
+  disabled = false,
+  onConfirm = () => {},
+}) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -37,7 +43,11 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({ id }) => 
 
   return (
     <ConfirmButton
-      onConfirm={() => deleteRecord(Number(id))}
+      disabled={disabled}
+      onConfirm={() => {
+        onConfirm();
+        deleteRecord(Number(id));
+      }}
       className="danger-button"
       pendingClassName="danger-button"
       label={t('actions.crud.delete')}

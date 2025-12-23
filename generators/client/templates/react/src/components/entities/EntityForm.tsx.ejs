@@ -112,7 +112,7 @@ getValidationsFromValidations = (validations) => {
   return JSON.stringify(v) !== '{}' ? JSON.stringify(v) : null;
 }
 -%>
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -181,9 +181,9 @@ interface <%= entity.name %>FormProps {
 }
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
-  const { t } = useTranslation();
   useAutoShortcuts();
-
+  const [disableButtons, setDisableButtons] = useState(false);
+  const { t } = useTranslation();
   const formMethods = useForm();
   const {
     handleSubmit,
@@ -192,11 +192,13 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   } = formMethods;
 
   const handleFormSubmit = async (data: I<%= entity.name %>) => {
+    setDisableButtons(true);
     try {
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
     }
+    setDisableButtons(false);
   };
 
   useEffect(() => {
@@ -385,7 +387,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             <button
               data-shortcut="ctrl+enter"
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || disableButtons}
               className="primary-button"
             >
               {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
@@ -393,7 +395,15 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
               <kbd className="kdb-shortcut">↵</kbd>
             </button>
           </Can>
-          {<%= to.camel(entity.name)-%>?.id && <Can resource="<%= entity.name %>" action="delete"><<%= entity.name %>DeleteButton id={<%= to.camel(entity.name)-%>.id} /></Can>}
+          {<%= to.camel(entity.name)-%>?.id && (
+            <Can resource="<%= entity.name %>" action="delete">
+              <<%= entity.name %>DeleteButton
+                id={<%= to.camel(entity.name)-%>.id}
+                disabled={isSubmitting || disableButtons}
+                onConfirm={() => setDisableButtons(true)}
+              />
+            </Can>
+          )}
         </div>
       </form>
     </FormProvider>
