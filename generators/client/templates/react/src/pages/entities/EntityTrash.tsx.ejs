@@ -19,6 +19,7 @@ import ConfirmButton from '../../components/ConfirmButton';
 type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includes(column)) { %> | '<%=column%>'<% } %><% } %>;
 
 export default function <%= entity.name %>Trash() {
+  useAutoShortcuts();
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export default function <%= entity.name %>Trash() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState<ApiResponsePage<I<%= entity.name %>> | null>(null);
-  useAutoShortcuts();
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const sortableColumns: SortableField[] = [
     'id',
 <%for(column of columns) { -%>
@@ -108,6 +109,77 @@ export default function <%= entity.name %>Trash() {
       });
   };
 
+  const handleBulkRestore = async () => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+
+    try {
+      await Promise.all(ids.map((id) => axiosInstance.post(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/`, { id })));
+      addNotification({
+        type: 'success',
+        message: t('actions.crud.successfullyRestoredCount', { count: ids.length }),
+      });
+      setSelectedIds(new Set());
+      loadRecords();
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        message: t('errors.entities.bulkRestore'),
+        error: error as AxiosError<ErrorResponseData>,
+      });
+    }
+  };
+
+  const handleBulkForceDelete = async () => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+
+    try {
+      await Promise.all(ids.map((id) => axiosInstance.delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`)));
+      addNotification({
+        type: 'success',
+        message: t('actions.crud.successfullyForceDeletedCount', { count: ids.length }),
+      });
+      setSelectedIds(new Set());
+      loadRecords();
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        message: t('errors.entities.bulkForceDelete'),
+        error: error as AxiosError<ErrorResponseData>,
+      });
+    }
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked && page?.data) {
+      const allIds = page.data.map((row) => row.id).filter((id): id is number => id != null);
+      setSelectedIds(new Set(allIds));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectRow = (id: number | undefined | null, checked: boolean) => {
+    if (!id) return;
+    setSelectedIds((prev) => {
+      const newSet = new Set(prev);
+      if (checked) {
+        newSet.add(id);
+      } else {
+        newSet.delete(id);
+      }
+      return newSet;
+    });
+  };
+
+  const isAllSelected =
+    page?.data &&
+    page.data.length > 0 &&
+    page.data.every((row) => row.id != null && selectedIds.has(row.id));
+
+  const isSomeSelected = selectedIds.size > 0 && !isAllSelected;
+
   interface SortHeaderProps extends React.HTMLAttributes<HTMLTableCellElement> {
     field: string;
     label: string;
@@ -170,11 +242,72 @@ export default function <%= entity.name %>Trash() {
     document.title = t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
 
+  // Reset selection when page changes
+  useEffect(() => {
+    setSelectedIds(new Set());
+  }, [currentPage]);
+
   return (
     <>
-      <h1 className="text-2xl mb-4">{t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <Trash2 size={32} />
+        {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
+      </h1>
+
+      {selectedIds.size > 0 && (
+        <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm font-medium">
+              {t('common.select.selectedCount', { count: selectedIds.size })}
+            </span>
+            <div className="flex gap-2">
+              <Can resource="Trashed<%= entity.name %>" action="create">
+                <ConfirmButton
+                  onConfirm={handleBulkRestore}
+                  className="primary-button"
+                  pendingClassName="primary-button"
+                  label={
+                    <span className="flex items-center gap-2">
+                      <RotateCcw className="size-4" aria-hidden />
+                      {t('actions.crud.restoreSelected', { count: selectedIds.size })}
+                    </span>
+                  }
+                  pendingLabel={
+                    <span className="flex items-center gap-2">
+                      <RotateCcw className="size-4" aria-hidden />
+                      {t('actions.crud.confirmRestoreSelected', { count: selectedIds.size })}
+                    </span>
+                  }
+                />
+              </Can>
+              <Can resource="Trashed<%= entity.name %>" action="delete">
+                <ConfirmButton
+                  onConfirm={handleBulkForceDelete}
+                  className="danger-button"
+                  pendingClassName="danger-button"
+                  label={
+                    <span className="flex items-center gap-2">
+                      <Trash2 className="size-4" aria-hidden />
+                      {t('actions.crud.deletePermanentlySelected', { count: selectedIds.size })}
+                    </span>
+                  }
+                  pendingLabel={
+                    <span className="flex items-center gap-2">
+                      <Trash2 className="size-4" aria-hidden />
+                      {t('actions.crud.confirmDeletePermanentlySelected', {
+                        count: selectedIds.size,
+                      })}
+                    </span>
+                  }
+                />
+              </Can>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Fragment>
-        <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length%>} />
+        <TableSkeletonLoader loading={loading} rows={10} cols={<%=columns.length - fileColumns.length + relatedEntities.length + 1%>} />
       </Fragment>
       {!loading && page?.data && page?.data.length === 0 && (
         <p className="mb-4 text-2xl">{t('messages.noData')}</p>
@@ -193,6 +326,18 @@ export default function <%= entity.name %>Trash() {
               </caption>
               <thead>
                 <tr>
+                  <th scope="col" className="w-0">
+                    <input
+                      type="checkbox"
+                      checked={isAllSelected}
+                      ref={(input) => {
+                        if (input) input.indeterminate = isSomeSelected;
+                      }}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      aria-label={t('common.select.selectAll')}
+                      className="cursor-pointer"
+                    />
+                  </th>
                   <SortHeader className="w-0" field="id" label={t('entities:<%-to.snake(entity.name)%>.id')} />
 <%  for(column of columns) { -%>
                   <SortHeader field="<%-column%>" label={t('entities:<%-to.snake(entity.name)%>.<%-column%>')} />
@@ -203,6 +348,15 @@ export default function <%= entity.name %>Trash() {
               <tbody>
                 {page?.data.map((row, key) => (
                   <tr key={key}>
+                    <td className="w-0">
+                      <input
+                        type="checkbox"
+                        checked={row.id != null && selectedIds.has(row.id)}
+                        onChange={(e) => handleSelectRow(row.id, e.target.checked)}
+                        aria-label={t('common.select.selectRow', { id: row.id })}
+                        className="cursor-pointer"
+                      />
+                    </td>
                     <td className="w-0">
                       <Link className="text-link" to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}>
                         {row.id}
