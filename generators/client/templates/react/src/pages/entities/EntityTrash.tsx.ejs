@@ -83,7 +83,7 @@ export default function <%= entity.name %>Trash() {
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
           type: 'error',
-          message: `${t('errors.entities.delete')} ${t('entities:pilot.Pilot')} ID ${id}`,
+          message: `${t('errors.entities.delete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
       });
@@ -103,7 +103,7 @@ export default function <%= entity.name %>Trash() {
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
           type: 'error',
-          message: `${t('errors.entities.forceDelete')} ${t('entities:pilot.Pilot')} ID ${id}`,
+          message: `${t('errors.entities.forceDelete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
       });
