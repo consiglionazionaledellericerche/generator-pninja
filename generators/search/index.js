@@ -2,6 +2,7 @@ import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
+import { AcRule } from '../utils/AcRule.js';
 
 export default class SearchGenerator extends Generator {
   static namespace = 'pninja:search';
@@ -107,7 +108,7 @@ SOLR_PATH=/`;
       this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
     }
     const { entities } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
-    const mailiserachIndexSettings = searchEngine === 'meilisearch' ? entities.reduce((res, entity) => {
+    const mailiserachIndexSettings = searchEngine === 'meilisearch' ? [...entities, AcRule].reduce((res, entity) => {
       const indexName = `${to.snake(pluralize(entity.tableName))}`;
       res += `
             '${indexName}' => [
@@ -119,7 +120,7 @@ SOLR_PATH=/`;
       , '') : '';
 
     const typesenseModelSettings = searchEngine === 'typesense' ? `
-        'model-settings' => [${entities.map(entity => `
+        'model-settings' => [${[...entities, AcRule].map(entity => `
             ${entity.name}::class => [
                 'collection-schema' => [
                     'fields' => [
@@ -132,7 +133,7 @@ SOLR_PATH=/`;
 
     if (searchEngine !== 'null') {
       this.fs.copyTpl(this.templatePath('server/config/scout.php.ejs'), this.destinationPath('server/config/scout.php'), {
-        entities,
+        entities: [...entities, AcRule],
         searchEngine: searchEngine,
         mailiserachIndexSettings,
         typesenseModelSettings
@@ -142,9 +143,8 @@ SOLR_PATH=/`;
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }
     if (searchEngine === 'elastic') {
-      const { entities } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
-      for (const entity of entities) {
+      for (const entity of [...entities, AcRule]) {
         const indexName = to.snake(pluralize(entity.tableName));
         this.fs.copyTpl(this.templatePath("elastic/migrations/create_entity_index.php.ejs"), this.destinationPath(`server/elastic/migrations/${baseTimestamp}_create_${indexName}_index.php`),
           {
