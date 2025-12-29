@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Eye, CodeXml, Lightbulb, LightbulbOff } from 'lucide-react';
+import { EyeIcon, CodeBracketIcon, LightBulbIcon } from '@heroicons/react/24/solid';
+import { LightBulbIcon as LightBulbOffIcon } from '@heroicons/react/24/outline';
 import { Button } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
 import { useId } from 'react-aria';
@@ -28,15 +29,13 @@ const HtmlViewer: React.FC<TextareaProps> = ({ content }) => {
           aria-pressed={showSource}
           className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors focus:outline-2 focus:outline-offset-2 focus:outline-blue-600 focus:dark:outline-sky-300"
         >
-          <Eye
+          <EyeIcon
             aria-hidden="true"
-            size={28}
-            className={`rounded-full ${!showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
+            className={`h-7 rounded-full ${!showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
           />
-          <CodeXml
+          <CodeBracketIcon
             aria-hidden="true"
-            size={28}
-            className={`rounded-full ${showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
+            className={`h-7 rounded-full ${showSource ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
           />
         </Button>
         {!showSource && (
@@ -46,15 +45,13 @@ const HtmlViewer: React.FC<TextareaProps> = ({ content }) => {
             aria-pressed={dark}
             className="inline-flex gap-1 p-0.5 bg-slate-300 hover:bg-slate-400 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 mb-2 rounded-full cursor-pointer transition-colors  focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 focus-within:dark:outline-sky-300"
           >
-            <Lightbulb
+            <LightBulbIcon
               aria-hidden="true"
-              size={28}
-              className={`rounded-full ${!dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
+              className={`h-7 rounded-full ${!dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
             />
-            <LightbulbOff
+            <LightBulbOffIcon
               aria-hidden="true"
-              size={28}
-              className={`rounded-full ${dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
+              className={`h-7 rounded-full ${dark ? 'bg-white text-neutral-800 dark:bg-black' : ''} dark:text-neutral-200 hover:text-black hover:dark:text-white p-1`}
             />
             <span className="sr-only">
               {t(dark ? 'ui.darkmode.darkOn' : 'ui.darkmode.lightOn')}

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { LogIn, LoaderCircle } from 'lucide-react';
+import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/20/solid';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const LoginButton: React.FC = () => {
@@ -20,12 +20,12 @@ const LoginButton: React.FC = () => {
       aria-label={t('ui.account.login')}
       onClick={handleLogin}
       disabled={loading}
-      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {loading ? (
-        <LoaderCircle aria-hidden="true" size={20} className="animate-spin" />
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2"></div>
       ) : (
-        <LogIn aria-hidden="true" size={20} />
+        <ArrowRightEndOnRectangleIcon aria-hidden="true" className="h-5" />
       )}
     </button>
   );

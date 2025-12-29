@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, ChevronsUpDown, Download, Filter } from 'lucide-react';
+import {
+  ArrowDownTrayIcon,
+  FunnelIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+  ChevronUpDownIcon,
+} from '@heroicons/react/16/solid';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -171,18 +177,18 @@ export default function AuditList() {
           <div className="grow text-left">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ChevronDown
+              <ChevronDownIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ) : (
-              <ChevronUp
+              <ChevronUpIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ))}
           {!isSorted && (
-            <ChevronsUpDown
+            <ChevronUpDownIcon
               aria-hidden
               className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
             />
@@ -231,11 +237,11 @@ export default function AuditList() {
       <div className={`flex gap-4 mb-4`}>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
         <button onClick={() => setShowFilters(!showFilters)} className="secondary-button">
-          <Filter size={16} />
+          <FunnelIcon className="h-4" />
           {t('audit:filters')}
         </button>
         <button onClick={handleExport} className="secondary-button flex items-center gap-2">
-          <Download size={16} />
+          <ArrowDownTrayIcon className="h-4" />
           {t('audit:exportCSV')}
         </button>
       </div>

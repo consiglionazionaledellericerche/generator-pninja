@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { LogOut } from 'lucide-react';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid';
 import { useAuthorization } from '../contexts/AuthorizationContext';
 
 const LogoutButton: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { refresh } = useAuthorization();
   const handleLogout = async () => {
+    setLoading(true);
     refresh();
     navigate('/logout', { state: { from: location.pathname } });
   };
@@ -17,9 +20,14 @@ const LogoutButton: React.FC = () => {
       onClick={handleLogout}
       title={t('ui.account.logout')}
       aria-label={t('ui.account.logout')}
-      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full cursor-pointer`}
+      disabled={loading}
+      className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
-      <LogOut aria-hidden="true" size={20} />
+      {loading ? (
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2"></div>
+      ) : (
+        <ArrowRightStartOnRectangleIcon aria-hidden="true" className="h-5" />
+      )}
     </button>
   );
 };

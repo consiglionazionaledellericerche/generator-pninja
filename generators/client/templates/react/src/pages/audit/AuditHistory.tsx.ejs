@@ -1,8 +1,8 @@
-// AuditHistory.tsx
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, User, GitCompare } from 'lucide-react';
+import { ArrowLeftIcon, ClockIcon, UserIcon } from '@heroicons/react/16/solid';
+import { GitCompareIcon } from '../../shared/addedIcons';
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -67,7 +67,7 @@ export default function AuditHistory() {
     <>
       <div className="mb-6">
         <button onClick={() => navigate(-1)} className="secondary-button mb-4">
-          <ArrowLeft size={16} />
+          <ArrowLeftIcon className="h-4" />
           {t('actions.back')}
         </button>
         <h1 className="text-2xl font-bold">
@@ -102,7 +102,7 @@ export default function AuditHistory() {
                 </div>
                 <div className="flex gap-2">
                   <Link to={`/audits/view/${audit.id}`} className="secondary-button">
-                    <GitCompare size={16} />
+                    <GitCompareIcon className="h-4" />
                     {t('audit:viewDetails')}
                   </Link>
                 </div>
@@ -110,7 +110,7 @@ export default function AuditHistory() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-start gap-2">
-                  <Clock className="text-gray-500 mt-0.5" size={16} />
+                  <ClockIcon className="text-gray-500 mt-0.5 h-4" />
                   <div>
                     <p className="text-gray-600 dark:text-gray-400">{t('audit:dateTime')}</p>
                     <p className="font-medium">
@@ -123,7 +123,7 @@ export default function AuditHistory() {
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <User className="text-gray-500 mt-0.5" size={16} />
+                  <UserIcon className="text-gray-500 mt-0.5 h-4" />
                   <div>
                     <p className="text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
                     <p className="font-medium">

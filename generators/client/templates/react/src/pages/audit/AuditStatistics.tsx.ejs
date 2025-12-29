@@ -1,7 +1,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { BarChart3, Calendar, FileText, Users, TrendingUp } from 'lucide-react';
+import {
+  ArrowTrendingUpIcon,
+  CalendarDateRangeIcon,
+  ChartBarIcon,
+  ChartPieIcon,
+  CubeIcon,
+  UsersIcon,
+} from '@heroicons/react/24/solid';
 import {
   BarChart,
   Bar,
@@ -19,6 +26,20 @@ import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 
+interface TooltipPayload {
+  name: string;
+  value: number;
+  color: string;
+  payload: {
+    period: string;
+    total: number;
+  };
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayload[] | undefined;
+}
 interface AuditStatistics {
   total: number;
   by_event: Array<{ event: string; total: number }>;
@@ -229,12 +250,12 @@ export default function AuditStatistics() {
     return labels[gran];
   };
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
           <p className="font-semibold mb-2">{payload[0].payload.period}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry, index) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {entry.value}
             </p>
@@ -274,7 +295,7 @@ export default function AuditStatistics() {
       {/* Date Range Filter */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <Calendar className="text-gray-500" size={20} />
+          <CalendarDateRangeIcon className="text-gray-500 h-16" />
           <div className="flex flex-wrap items-center gap-4 flex-1">
             <div>
               <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
@@ -315,7 +336,7 @@ export default function AuditStatistics() {
               {new Date(dateTo + 'T00:00:00').toLocaleDateString(i18n.language)}
             </p>
           </div>
-          <BarChart3 size={64} className="text-blue-200" />
+          <ChartBarIcon className="h-16 text-blue-200" />
         </div>
       </div>
 
@@ -323,7 +344,7 @@ export default function AuditStatistics() {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            <TrendingUp size={20} />
+            <ArrowTrendingUpIcon className="h-5" />
             {t('audit:activityTimeline')}
           </h2>
           <span className="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
@@ -389,7 +410,7 @@ export default function AuditStatistics() {
         {/* By Event - PieChart */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <FileText size={20} />
+            <ChartPieIcon className="h-5" />
             {t('audit:byEventType')}
           </h2>
           {stats.by_event.length === 0 ? (
@@ -420,7 +441,7 @@ export default function AuditStatistics() {
         {/* By Model - Horizontal Bar */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <FileText size={20} />
+            <CubeIcon className="h-5" />
             {t('audit:byModel')}
           </h2>
           {stats.by_model.length === 0 ? (
@@ -454,7 +475,7 @@ export default function AuditStatistics() {
         {/* By User - Horizontal Bar */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <Users size={20} />
+            <UsersIcon className="h-5" />
             {t('audit:topUsers')}
           </h2>
           {stats.by_user.length === 0 ? (

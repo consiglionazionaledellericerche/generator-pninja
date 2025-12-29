@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
-import { Languages, ChevronDown, Check } from 'lucide-react';
+import { LanguageIcon, ChevronDownIcon, CheckIcon } from '@heroicons/react/16/solid';
 import { languages, languagesData } from '../config/languages.ts';
 
 export function LangSelect() {
@@ -21,11 +21,11 @@ export function LangSelect() {
         aria-label={t('ui.langSelect')}
         className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
-        <Languages aria-hidden size={16} />
+        <LanguageIcon aria-hidden className="h-4" />
         {languagesData.find(
           (lang) => lang.value === i18n.language || lang.value === i18n.language.split('-')[0]
         )?.name || i18n.language}
-        <ChevronDown size={16} className="group-aria-expanded:rotate-180 duration-100" />
+        <ChevronDownIcon className="h-4 group-aria-expanded:rotate-180 duration-100" />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
         <Menu
@@ -45,7 +45,7 @@ export function LangSelect() {
             >
               {({ isSelected }) => (
                 <>
-                  {isSelected && <Check aria-hidden size={16} className="inline me-1" />}
+                  {isSelected && <CheckIcon aria-hidden className="h-4 inline me-1" />}
                   {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
                 </>
               )}

@@ -2,15 +2,17 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  User,
-  Calendar,
-  Activity,
-  Clock,
-  TrendingUp,
-  FileText,
-  BarChart3,
-  ArrowLeft,
-} from 'lucide-react';
+  ArrowLeftIcon,
+  ArrowTrendingUpIcon,
+  CursorArrowRaysIcon,
+  CalendarIcon,
+  CalendarDateRangeIcon,
+  ChartBarIcon,
+  ChartPieIcon,
+  ClockIcon,
+  CubeIcon,
+  UserIcon,
+} from '@heroicons/react/24/solid';
 import {
   BarChart,
   Bar,
@@ -214,11 +216,11 @@ export default function AuditUserActivity() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/audits" className="secondary-button">
-            <ArrowLeft size={20} />
+            <ArrowLeftIcon className="h-5" />
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <User size={28} />
+              <UserIcon className="h-7" />
               {t('audit:userActivity')}: {profile.user_id}
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -232,7 +234,7 @@ export default function AuditUserActivity() {
       {/* Date Range Filter */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <Calendar className="text-gray-500" size={20} />
+          <CalendarDateRangeIcon className="text-gray-500 h-16" />
           <div className="flex flex-wrap items-center gap-4 flex-1">
             <div>
               <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
@@ -267,7 +269,7 @@ export default function AuditUserActivity() {
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:totalActions')}</p>
               <p className="text-2xl font-bold mt-1">{profile.total_actions.toLocaleString()}</p>
             </div>
-            <Activity className="text-blue-500" size={32} />
+            <CursorArrowRaysIcon className="text-blue-500 h-8" />
           </div>
         </div>
 
@@ -279,7 +281,7 @@ export default function AuditUserActivity() {
                 {new Date(profile.first_activity).toLocaleDateString(i18n.language)}
               </p>
             </div>
-            <Clock className="text-green-500" size={32} />
+            <ClockIcon className="text-green-500 h-8" />
           </div>
         </div>
 
@@ -291,7 +293,7 @@ export default function AuditUserActivity() {
                 {new Date(profile.last_activity).toLocaleDateString(i18n.language)}
               </p>
             </div>
-            <TrendingUp className="text-purple-500" size={32} />
+            <ArrowTrendingUpIcon className="text-purple-500 h-8" />
           </div>
         </div>
 
@@ -310,7 +312,7 @@ export default function AuditUserActivity() {
                 </p>
               )}
             </div>
-            <BarChart3 className="text-orange-500" size={32} />
+            <ChartBarIcon className="text-orange-500 h-8" />
           </div>
         </div>
       </div>
@@ -345,7 +347,7 @@ export default function AuditUserActivity() {
         {/* Events Distribution */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <FileText size={20} />
+            <ChartPieIcon className="h-5" />
             {t('audit:actionsByType')}
           </h2>
           {eventChartData.length === 0 ? (
@@ -375,7 +377,10 @@ export default function AuditUserActivity() {
 
         {/* Top Models */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">{t('audit:topModelsModified')}</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CubeIcon className="h-5" />
+            {t('audit:topModelsModified')}
+          </h2>
           {profile.by_model.length === 0 ? (
             <p className="text-sm text-gray-500 text-center py-4">{t('audit:noData')}</p>
           ) : (
@@ -406,7 +411,10 @@ export default function AuditUserActivity() {
 
         {/* Hourly Pattern */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">{t('audit:activityByHour')}</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <ClockIcon className="h-5" />
+            {t('audit:activityByHour')}
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={hourlyChartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -420,7 +428,10 @@ export default function AuditUserActivity() {
 
         {/* Weekly Pattern */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-4">{t('audit:activityByWeekday')}</h2>
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <CalendarIcon className="h-5" />
+            {t('audit:activityByWeekday')}
+          </h2>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={weeklyChartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -468,7 +479,7 @@ export default function AuditUserActivity() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <Calendar size={20} className="text-blue-500" />
+                      <CalendarIcon className="h-5 text-blue-500" />
                       <div>
                         <p className="font-semibold">
                           {startDate.toLocaleDateString(i18n.language, {
@@ -491,7 +502,7 @@ export default function AuditUserActivity() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Clock size={16} className="text-gray-500" />
+                      <ClockIcon className="text-gray-500 h-4" />
                       <span className="font-medium">{durationText}</span>
                     </div>
                   </div>

@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { ShieldAlert, AlertTriangle, Info, Bug, Pause, Play, ScrollText } from 'lucide-react';
+import {
+  BarsArrowDownIcon,
+  BugAntIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  PauseIcon,
+  PlayIcon,
+  ShieldExclamationIcon,
+} from '@heroicons/react/16/solid';
 import { useTranslation } from 'react-i18next';
 
 interface LogViewerProps {
@@ -16,28 +24,28 @@ const logLevels = [
   {
     value: 'error',
     label: 'filters.errors',
-    icon: ShieldAlert,
+    icon: ShieldExclamationIcon,
     colorOn: 'bg-red-500/20 border-red-500 text-red-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'warning',
     label: 'filters.warnings',
-    icon: AlertTriangle,
+    icon: ExclamationTriangleIcon,
     colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'info',
     label: 'filters.info',
-    icon: Info,
+    icon: InformationCircleIcon,
     colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'debug',
     label: 'filters.debug',
-    icon: Bug,
+    icon: BugAntIcon,
     colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
     colorOff: 'border-gray-600 text-gray-500',
   },
@@ -193,7 +201,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
                   aria-label={t(isActive ? 'filters.hide' : 'filters.show', { level: level.label })}
                   title={level.label}
                 >
-                  <Icon size={16} aria-hidden="true" />
+                  <Icon className="h-4" aria-hidden="true" />
                   <span className="font-medium lg:hidden xl:inline">{t(level.label)}</span>
                 </button>
               );
@@ -210,9 +218,9 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               title={t(isPolling ? 'actions.pause' : 'actions.resume')}
             >
               {isPolling ? (
-                <Pause size={16} aria-hidden="true" />
+                <PauseIcon className="h-4" aria-hidden="true" />
               ) : (
-                <Play size={16} aria-hidden="true" />
+                <PlayIcon className="h-4" aria-hidden="true" />
               )}
               <span className="lg:hidden xl:inline">
                 {t(isPolling ? 'actions.pause' : 'actions.resume')}
@@ -237,7 +245,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               aria-pressed={autoScroll}
               title={`${t('actions.autoScroll')}: ${autoScroll ? 'ON' : 'OFF'}`}
             >
-              <ScrollText size={16} aria-hidden="true" />
+              <BarsArrowDownIcon className="h-4" aria-hidden="true" />
               <span className="lg:hidden xl:inline">
                 {t('actions.autoScroll')}: {autoScroll ? 'ON' : 'OFF'}
               </span>

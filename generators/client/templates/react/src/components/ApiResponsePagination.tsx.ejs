@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
 import { PageLink } from '../types/api-response.types';
 interface ApiResponsePaginationProps {
   pageLinks: PageLink[];
@@ -47,8 +47,8 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
                   onSelectPage(link.url.split('page=')[1].split('&')[0] as unknown as number)
                 }
               >
-                {index === 0 && <ChevronLeft aria-hidden size={16} />}
-                {index === array.length - 1 && <ChevronRight aria-hidden size={16} />}
+                {index === 0 && <ChevronLeftIcon aria-hidden className="h-4" />}
+                {index === array.length - 1 && <ChevronRightIcon aria-hidden className="h-4" />}
                 {index > 0 && index < array.length - 1 && link.label}
               </button>
             ))}
