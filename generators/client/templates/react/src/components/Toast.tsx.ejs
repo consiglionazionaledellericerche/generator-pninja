@@ -1,12 +1,11 @@
+import { PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
 import {
-  X,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Info,
-  CirclePause,
-  CirclePlay,
-} from 'lucide-react';
+  CheckCircleIcon,
+  InformationCircleIcon,
+  ExclamationTriangleIcon,
+  XCircleIcon,
+  XMarkIcon as X,
+} from '@heroicons/react/24/outline';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,10 +13,10 @@ import { useId } from 'react-aria';
 
 type ToastVariant = 'success' | 'error' | 'warning' | 'info';
 const toastIcons: Record<ToastVariant, React.ElementType> = {
-  success: CheckCircle,
-  error: XCircle,
-  warning: AlertTriangle,
-  info: Info,
+  success: CheckCircleIcon,
+  error: XCircleIcon,
+  warning: ExclamationTriangleIcon,
+  info: InformationCircleIcon,
 };
 
 export function Toast({ notification }: { notification: INotification }) {
@@ -123,7 +122,7 @@ export function Toast({ notification }: { notification: INotification }) {
             onClick={() => removeNotification(notification.id)}
             className="cursor-pointer rounded-full focus:outline-2 focus:-outline-offset-1 focus:outline-inherit focus:rounded-full p-1 -m-1"
           >
-            <X aria-hidden size={18} />
+            <X aria-hidden className="h-6" />
           </button>
         </div>
         <div className="flex-1">
@@ -214,19 +213,25 @@ export function Toast({ notification }: { notification: INotification }) {
               }}
               className="relative cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
             >
-              {isPaused ? <CirclePlay size={24} /> : <CirclePause size={24} />}
-              <div
-                aria-hidden
-                className={`absolute inset-0 border-3 ${colors.progress} rounded-full`}
-              ></div>
-              <div
-                aria-hidden
-                className="absolute inset-0 border-3 border-white rounded-full -scale-x-100"
-                style={{
-                  mask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
-                  WebkitMask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
-                }}
-              ></div>
+              <div className="relative">
+                {isPaused ? (
+                  <PlayIcon className="h-4 p-1 box-content" />
+                ) : (
+                  <PauseIcon className="h-4 p-1 box-content" />
+                )}
+                <div
+                  aria-hidden
+                  className={`h-6 w-6 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}
+                ></div>
+                <div
+                  aria-hidden
+                  className="h-6 w-6 absolute inset-0 border-3 border-inherit rounded-full -scale-x-100"
+                  style={{
+                    mask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
+                    WebkitMask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
+                  }}
+                ></div>
+              </div>
             </button>
           </div>
         </div>
