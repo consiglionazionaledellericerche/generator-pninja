@@ -44,6 +44,8 @@ export class RoutersGenerator {
         });
         const eRoutes = [...eRoutesEntities, ...eRoutesTrash];
         this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: [...entities, AcRule].map(entity => to.slug(pluralize(entity.name))) });
-        this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`));
+        this.that.fs.copyTpl(this.that.templatePath("routes/console.php.ejs"), this.that.destinationPath(`server/routes/console.php`), {
+            searchEngine: this.that.config.get('searchEngine'),
+        });
     }
 }
