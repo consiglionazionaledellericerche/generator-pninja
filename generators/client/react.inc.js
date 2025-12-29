@@ -171,7 +171,6 @@ export async function createReactClient(that, parsedJDL) {
     }
 
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/audit/Audits.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditCompare.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditCompare.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditList.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditStatistics.tsx`));

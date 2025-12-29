@@ -2,7 +2,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Clock, User, Eye, GitCompare } from 'lucide-react';
+import { ArrowLeft, Clock, User, GitCompare } from 'lucide-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -102,12 +102,8 @@ export default function AuditHistory() {
                 </div>
                 <div className="flex gap-2">
                   <Link to={`/audits/view/${audit.id}`} className="secondary-button">
-                    <Eye size={16} />
-                    {t('audit:viewDetails')}
-                  </Link>
-                  <Link to={`/audits/compare/${audit.id}`} className="secondary-button">
                     <GitCompare size={16} />
-                    {t('audit:compare')}
+                    {t('audit:viewDetails')}
                   </Link>
                 </div>
               </div>
