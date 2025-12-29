@@ -1,6 +1,6 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { SquareIcon, SquareCheckBigIcon, AsteriskIcon } from 'lucide-react';
+import { IconAsterisk, IconSquare, IconSquareCheckFilled } from '@tabler/icons-react';
 import { FormFieldInfo } from './index';
 import {
   Checkbox as CheckboxAria,
@@ -60,7 +60,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...p
           <div className="text-sm font-medium mb-1">
             {label}
             {validations?.required && (
-              <AsteriskIcon aria-hidden="true" className="inline align-top size-5 sm:size-4" />
+              <IconAsterisk aria-hidden="true" className="inline align-top size-3" />
             )}
           </div>
           <div
@@ -85,12 +85,12 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...p
         `}
           >
             {field.value ? (
-              <SquareCheckBigIcon
+              <IconSquareCheckFilled
                 className="mx-auto h-7 w-7 rounded-md outline-0"
                 aria-hidden="true"
               />
             ) : (
-              <SquareIcon className="mx-auto h-7 w-7 rounded-md outline-0" aria-hidden="true" />
+              <IconSquare className="mx-auto h-7 w-7 rounded-md outline-0" aria-hidden="true" />
             )}
           </div>
         </CheckboxAria>
