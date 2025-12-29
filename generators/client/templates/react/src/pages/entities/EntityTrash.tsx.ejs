@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, ChevronsUpDown, History, RotateCcw, Trash2 } from 'lucide-react';
+import { TrashIcon as TrashLargeIcon } from '@heroicons/react/24/solid';
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  ChevronUpDownIcon,
+  ArrowUturnLeftIcon,
+  TrashIcon,
+} from '@heroicons/react/16/solid';
+import { HistoryIcon } from '../../shared/addedIcons';
 import axiosInstance from '../../shared/axiosInstance';
 import { AxiosError } from 'axios';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
@@ -222,18 +230,18 @@ export default function <%= entity.name %>Trash() {
           <div className="grow text-left">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ChevronDown
+              <ChevronDownIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ) : (
-              <ChevronUp
+              <ChevronUpIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ))}
           {!isSorted && (
-            <ChevronsUpDown
+            <ChevronUpDownIcon
               aria-hidden
               className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
             />
@@ -257,7 +265,7 @@ export default function <%= entity.name %>Trash() {
   return (
     <>
       <h1 className="flex items-center gap-2 text-2xl mb-4">
-        <Trash2 size={32} />
+        <TrashLargeIcon className="h-8" aria-hidden />
         {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
       </h1>
 
@@ -276,13 +284,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="primary-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <RotateCcw className="size-4" aria-hidden />
+                      <ArrowUturnLeftIcon className="size-4" aria-hidden />
                       {t('actions.crud.restoreSelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <RotateCcw className="size-4" aria-hidden />
+                      <ArrowUturnLeftIcon className="size-4" aria-hidden />
                       {t('actions.crud.confirmRestoreSelected', { count: selectedIds.size })}
                     </span>
                   }
@@ -296,13 +304,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="danger-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <Trash2 className="size-4" aria-hidden />
+                      <TrashIcon className="size-4" aria-hidden />
                       {t('actions.crud.deletePermanentlySelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <Trash2 className="size-4" aria-hidden />
+                      <TrashIcon className="size-4" aria-hidden />
                       {t('actions.crud.confirmDeletePermanentlySelected', {
                         count: selectedIds.size,
                       })}
@@ -397,7 +405,7 @@ export default function <%= entity.name %>Trash() {
                             to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
                             className="secondary-button"
                           >
-                            <History size={16} />
+                            <HistoryIcon className="size-4" />
                             {t('audit:allChanges')}
                           </Link>
                         </Can>
@@ -409,13 +417,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="primary-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <RotateCcw className="size-4" aria-hidden />
+                                <ArrowUturnLeftIcon className="size-4" aria-hidden />
                                 {t('actions.crud.restore')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <RotateCcw className="size-4" aria-hidden />
+                                <ArrowUturnLeftIcon className="size-4" aria-hidden />
                                 {t('actions.crud.confirmRestore')}
                               </span>
                             }
@@ -429,13 +437,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="danger-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <Trash2 className="size-4" aria-hidden />
+                                <TrashIcon className="size-4" aria-hidden />
                                 {t('actions.crud.deletePermanently')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <Trash2 className="size-4" aria-hidden />
+                                <TrashIcon className="size-4" aria-hidden />
                                 {t('actions.crud.confirmDeletePermanently')}
                               </span>
                             }

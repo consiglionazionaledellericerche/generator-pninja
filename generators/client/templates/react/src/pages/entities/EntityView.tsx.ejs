@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import { AxiosError } from 'axios';
 import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
@@ -156,7 +156,7 @@ export default function <%= entity.name %>View() {
       {!loading && (
       <div className="flex justify-center gap-4 mt-4">
         <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>`} className="cancel-button">
-          <ArrowLeft size={20} />
+          <ArrowLeftIcon className="size-5" aria-hidden />
           {t('actions.crud.back')}
         </Link>
         <Can resource="<%= entity.name %>" action="update">

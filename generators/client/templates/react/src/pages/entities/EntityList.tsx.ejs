@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, ChevronUp, ChevronsUpDown, Plus } from 'lucide-react';
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronUpDownIcon,
+  PlusIcon,
+} from '@heroicons/react/20/solid';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -123,18 +128,18 @@ export default function <%= entity.name %>List() {
           <div className="grow text-left">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ChevronDown
+              <ChevronDownIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ) : (
-              <ChevronUp
+              <ChevronUpIcon
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ))}
           {!isSorted && (
-            <ChevronsUpDown
+            <ChevronUpDownIcon
               aria-hidden
               className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
             />
@@ -163,7 +168,7 @@ export default function <%= entity.name %>List() {
             className="primary-button whitespace-nowrap"
             data-shortcut="ctrl+enter"
           >
-            <Plus size={16} />
+            <PlusIcon className="size-5" />
             {t('actions.crud.create')} {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')}
             <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
             <kbd className="kdb-shortcut">↵</kbd>
