@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/20/solid';
+import { IconLogout } from '@tabler/icons-react';
 import { useAuthorization } from '../contexts/AuthorizationContext';
 
 const LogoutButton: React.FC = () => {
@@ -24,9 +24,9 @@ const LogoutButton: React.FC = () => {
       className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {loading ? (
-        <div className="animate-spin rounded-full h-5 w-5 border-b-2"></div>
+        <div className="animate-spin rounded-full size-5 border-b-2"></div>
       ) : (
-        <ArrowRightStartOnRectangleIcon aria-hidden="true" className="h-5" />
+        <IconLogout aria-hidden className="size-5" />
       )}
     </button>
   );

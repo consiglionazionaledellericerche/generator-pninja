@@ -1,6 +1,6 @@
 import { ReactElement, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { XMarkIcon as X } from '@heroicons/react/24/outline';
+import { IconX as X } from '@tabler/icons-react';
 
 interface ConfirmButtonProps {
   label: string | ReactElement;
@@ -107,14 +107,14 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
             className={`${pendingClassName} rounded-none! rounded-r-md!`}
           >
             <div className="relative">
-              <X className="h-3 p-1 box-content" />
+              <X className="size-3 p-1 box-content" aria-hidden />
               <div
                 aria-hidden
-                className={`h-5 w-5 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}
+                className={`size-5 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}
               ></div>
               <div
                 aria-hidden
-                className="h-5 w-5 absolute inset-0 border-3 border-inherit rounded-full -scale-x-100"
+                className="size-5 absolute inset-0 border-3 border-inherit rounded-full -scale-x-100"
                 style={{
                   mask: `conic-gradient(transparent ${100 - perc}%, black 0)`,
                   WebkitMask: `conic-gradient(transparent ${100 - perc}%, black 0)`,

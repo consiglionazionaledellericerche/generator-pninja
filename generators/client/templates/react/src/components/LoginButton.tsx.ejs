@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/20/solid';
+import { IconLogin } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const LoginButton: React.FC = () => {
@@ -23,9 +23,9 @@ const LoginButton: React.FC = () => {
       className={`inline-flex items-center gap-1 nav-bar-link p-2! rounded-full ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
       {loading ? (
-        <div className="animate-spin rounded-full h-5 w-5 border-b-2"></div>
+        <div className="animate-spin rounded-full size-5 border-b-2"></div>
       ) : (
-        <ArrowRightEndOnRectangleIcon aria-hidden="true" className="h-5" />
+        <IconLogin aria-hidden className="size-5" />
       )}
     </button>
   );

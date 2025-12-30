@@ -1,11 +1,12 @@
-import { PauseIcon, PlayIcon } from '@heroicons/react/16/solid';
 import {
-  CheckCircleIcon,
-  InformationCircleIcon,
-  ExclamationTriangleIcon,
-  XCircleIcon,
-  XMarkIcon as X,
-} from '@heroicons/react/24/outline';
+  IconAlertHexagon,
+  IconAlertTriangle,
+  IconCircleCheck,
+  IconInfoCircle,
+  IconPlayerPauseFilled,
+  IconPlayerPlayFilled,
+  IconX as X,
+} from '@tabler/icons-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,10 +14,10 @@ import { useId } from 'react-aria';
 
 type ToastVariant = 'success' | 'error' | 'warning' | 'info';
 const toastIcons: Record<ToastVariant, React.ElementType> = {
-  success: CheckCircleIcon,
-  error: XCircleIcon,
-  warning: ExclamationTriangleIcon,
-  info: InformationCircleIcon,
+  info: IconInfoCircle,
+  error: IconAlertHexagon,
+  success: IconCircleCheck,
+  warning: IconAlertTriangle,
 };
 
 export function Toast({ notification }: { notification: INotification }) {
@@ -127,7 +128,7 @@ export function Toast({ notification }: { notification: INotification }) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <Icon aria-hidden className="w-8 h-8 me-2" />
+            <Icon aria-hidden className="size-8 me-2" />
             <div>{notification.message}</div>
           </div>
           {notification?.error?.response?.data?.message && (
@@ -215,9 +216,9 @@ export function Toast({ notification }: { notification: INotification }) {
             >
               <div className="relative">
                 {isPaused ? (
-                  <PlayIcon className="h-4 p-1 box-content" />
+                  <IconPlayerPlayFilled size={16} className="size-4 p-1 box-content" />
                 ) : (
-                  <PauseIcon className="h-4 p-1 box-content" />
+                  <IconPlayerPauseFilled size={16} className="size-4 p-1 box-content" />
                 )}
                 <div
                   aria-hidden

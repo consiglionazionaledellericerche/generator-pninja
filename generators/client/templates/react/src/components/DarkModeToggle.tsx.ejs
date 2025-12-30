@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
+import { IconMoonFilled, IconSunFilled } from '@tabler/icons-react';
 export function DarkModeToggle() {
   const { t } = useTranslation();
   const [dark, setDark] = useState(!!JSON.parse(localStorage.getItem('dark-mode') || 'false'));
@@ -16,7 +16,7 @@ export function DarkModeToggle() {
       className={`inline-flex items-center gap-1 nav-bar-link p-1.5! rounded-full cursor-pointer`}
       onClick={() => darkModeHandler()}
     >
-      {dark ? <SunIcon className="h-6" /> : <MoonIcon className="h-6" />}
+      {dark ? <IconSunFilled className="size-6" /> : <IconMoonFilled className="size-6" />}
     </button>
   );
 }
