@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import {
-  BarsArrowDownIcon,
-  BugAntIcon,
-  ExclamationTriangleIcon,
-  InformationCircleIcon,
-  PauseIcon,
-  PlayIcon,
-  ShieldExclamationIcon,
-} from '@heroicons/react/16/solid';
+  IconAlertHexagon,
+  IconAlertHexagonFilled,
+  IconAlertTriangle,
+  IconAlertTriangleFilled,
+  IconArrowBigDownLines,
+  IconArrowBigDownLinesFilled,
+  IconBug,
+  IconBugFilled,
+  IconInfoCircle,
+  IconInfoCircleFilled,
+  IconPlayerPlayFilled,
+  IconPlayerPauseFilled,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 interface LogViewerProps {
@@ -24,28 +29,32 @@ const logLevels = [
   {
     value: 'error',
     label: 'filters.errors',
-    icon: ShieldExclamationIcon,
+    iconOn: IconAlertHexagonFilled,
+    iconOff: IconAlertHexagon,
     colorOn: 'bg-red-500/20 border-red-500 text-red-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'warning',
     label: 'filters.warnings',
-    icon: ExclamationTriangleIcon,
+    iconOn: IconAlertTriangleFilled,
+    iconOff: IconAlertTriangle,
     colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'info',
     label: 'filters.info',
-    icon: InformationCircleIcon,
+    iconOn: IconInfoCircleFilled,
+    iconOff: IconInfoCircle,
     colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'debug',
     label: 'filters.debug',
-    icon: BugAntIcon,
+    iconOn: IconBugFilled,
+    iconOff: IconBug,
     colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
     colorOff: 'border-gray-600 text-gray-500',
   },
@@ -177,8 +186,8 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
             className="flex items-center gap-2 flex-wrap"
           >
             {logLevels.map((level) => {
-              const Icon = level.icon;
               const isActive = selectedLevels.includes(level.value);
+              const Icon = isActive ? level.iconOn : level.iconOff;
 
               return (
                 <button
@@ -201,7 +210,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
                   aria-label={t(isActive ? 'filters.hide' : 'filters.show', { level: level.label })}
                   title={level.label}
                 >
-                  <Icon className="h-4" aria-hidden="true" />
+                  <Icon className="size-5" aria-hidden />
                   <span className="font-medium lg:hidden xl:inline">{t(level.label)}</span>
                 </button>
               );
@@ -218,9 +227,9 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               title={t(isPolling ? 'actions.pause' : 'actions.resume')}
             >
               {isPolling ? (
-                <PauseIcon className="h-4" aria-hidden="true" />
+                <IconPlayerPauseFilled className="size-5" aria-hidden="true" />
               ) : (
-                <PlayIcon className="h-4" aria-hidden="true" />
+                <IconPlayerPlayFilled className="size-5" aria-hidden="true" />
               )}
               <span className="lg:hidden xl:inline">
                 {t(isPolling ? 'actions.pause' : 'actions.resume')}
@@ -236,16 +245,20 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               }}
               className={`flex items-center gap-2 px-3 py-1.5 text-sm rounded ${
                 autoScroll
-                  ? 'bg-green-500 hover:bg-green-600 focus:ring-green-500'
-                  : 'bg-gray-500 hover:bg-gray-600 focus:ring-gray-500'
-              } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900`}
+                  ? 'bg-green-500 hover:bg-green-600 focus:ring-green-500 text-white'
+                  : 'border-gray-600 text-gray-500 rounded-lg border-2 transition-all'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900`}
               aria-label={t(
                 autoScroll ? 'actions.autoScrollEnabled' : 'actions.autoScrollDisabled'
               )}
               aria-pressed={autoScroll}
               title={`${t('actions.autoScroll')}: ${autoScroll ? 'ON' : 'OFF'}`}
             >
-              <BarsArrowDownIcon className="h-4" aria-hidden="true" />
+              {autoScroll ? (
+                <IconArrowBigDownLinesFilled className="size-5" aria-hidden="true" />
+              ) : (
+                <IconArrowBigDownLines className="size-5" aria-hidden="true" />
+              )}
               <span className="lg:hidden xl:inline">
                 {t('actions.autoScroll')}: {autoScroll ? 'ON' : 'OFF'}
               </span>
@@ -253,7 +266,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
 
             <div className="flex items-center gap-2 px-3 py-1.5" role="status" aria-live="polite">
               <span
-                className={`h-2 w-2 rounded-full ${isPolling ? 'bg-green-500' : 'bg-gray-400'}`}
+                className={`size-3 rounded-full ${isPolling ? 'bg-green-500' : 'bg-gray-400'}`}
                 aria-hidden="true"
               />
               <span className="text-sm lg:hidden xl:inline">

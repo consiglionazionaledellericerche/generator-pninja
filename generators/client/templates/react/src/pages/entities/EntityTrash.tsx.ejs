@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TrashIcon as TrashLargeIcon } from '@heroicons/react/24/solid';
 import {
-  ChevronUpIcon,
-  ChevronDownIcon,
-  ChevronUpDownIcon,
-  ArrowUturnLeftIcon,
-  TrashIcon,
-} from '@heroicons/react/16/solid';
-import { HistoryIcon } from '../../shared/addedIcons';
+  IconArrowBackUp,
+  IconChevronDown,
+  IconChevronUp,
+  IconHistory,
+  IconSelector,
+  IconTrash,
+  IconTrashXFilled,
+} from '@tabler/icons-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { AxiosError } from 'axios';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
@@ -230,18 +230,18 @@ export default function <%= entity.name %>Trash() {
           <div className="grow text-left">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ChevronDownIcon
+              <IconChevronDown
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ) : (
-              <ChevronUpIcon
+              <IconChevronUp
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ))}
           {!isSorted && (
-            <ChevronUpDownIcon
+            <IconSelector
               aria-hidden
               className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
             />
@@ -265,7 +265,7 @@ export default function <%= entity.name %>Trash() {
   return (
     <>
       <h1 className="flex items-center gap-2 text-2xl mb-4">
-        <TrashLargeIcon className="h-8" aria-hidden />
+        <IconTrash className="size-8" aria-hidden />
         {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
       </h1>
 
@@ -284,13 +284,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="primary-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <ArrowUturnLeftIcon className="size-4" aria-hidden />
+                      <IconArrowBackUp className="size-5" aria-hidden />
                       {t('actions.crud.restoreSelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <ArrowUturnLeftIcon className="size-4" aria-hidden />
+                      <IconArrowBackUp className="size-5" aria-hidden />
                       {t('actions.crud.confirmRestoreSelected', { count: selectedIds.size })}
                     </span>
                   }
@@ -304,13 +304,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="danger-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <TrashIcon className="size-4" aria-hidden />
+                      <IconTrashXFilled className="size-5" aria-hidden />
                       {t('actions.crud.deletePermanentlySelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <TrashIcon className="size-4" aria-hidden />
+                      <IconTrashXFilled className="size-5" aria-hidden />
                       {t('actions.crud.confirmDeletePermanentlySelected', {
                         count: selectedIds.size,
                       })}
@@ -405,7 +405,7 @@ export default function <%= entity.name %>Trash() {
                             to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
                             className="secondary-button"
                           >
-                            <HistoryIcon className="size-4" />
+                            <IconHistory className="size-5" />
                             {t('audit:allChanges')}
                           </Link>
                         </Can>
@@ -417,13 +417,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="primary-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <ArrowUturnLeftIcon className="size-4" aria-hidden />
+                                <IconArrowBackUp className="size-5" aria-hidden />
                                 {t('actions.crud.restore')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <ArrowUturnLeftIcon className="size-4" aria-hidden />
+                                <IconArrowBackUp className="size-5" aria-hidden />
                                 {t('actions.crud.confirmRestore')}
                               </span>
                             }
@@ -437,13 +437,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="danger-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <TrashIcon className="size-4" aria-hidden />
+                                <IconTrashXFilled className="size-5" aria-hidden />
                                 {t('actions.crud.deletePermanently')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <TrashIcon className="size-4" aria-hidden />
+                                <IconTrashXFilled className="size-5" aria-hidden />
                                 {t('actions.crud.confirmDeletePermanently')}
                               </span>
                             }

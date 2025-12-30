@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowDownTrayIcon,
-  FunnelIcon,
-  ChevronUpIcon,
-  ChevronDownIcon,
-  ChevronUpDownIcon,
-} from '@heroicons/react/16/solid';
+  IconFilterFilled,
+  IconFileTypeCsv,
+  IconChevronDown,
+  IconChevronUp,
+  IconSelector,
+} from '@tabler/icons-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -177,18 +177,18 @@ export default function AuditList() {
           <div className="grow text-left">{label}</div>
           {isSorted &&
             (sortConfig.direction === 'asc' ? (
-              <ChevronDownIcon
+              <IconChevronDown
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ) : (
-              <ChevronUpIcon
+              <IconChevronUp
                 aria-hidden
                 className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
               />
             ))}
           {!isSorted && (
-            <ChevronUpDownIcon
+            <IconSelector
               aria-hidden
               className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
             />
@@ -237,11 +237,11 @@ export default function AuditList() {
       <div className={`flex gap-4 mb-4`}>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
         <button onClick={() => setShowFilters(!showFilters)} className="secondary-button">
-          <FunnelIcon className="h-4" />
+          <IconFilterFilled className="size-5" />
           {t('audit:filters')}
         </button>
         <button onClick={handleExport} className="secondary-button flex items-center gap-2">
-          <ArrowDownTrayIcon className="h-4" />
+          <IconFileTypeCsv className="size-5" />
           {t('audit:exportCSV')}
         </button>
       </div>
