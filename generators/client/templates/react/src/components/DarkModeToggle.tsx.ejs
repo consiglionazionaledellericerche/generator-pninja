@@ -13,10 +13,18 @@ export function DarkModeToggle() {
     <button
       aria-label={t(dark ? 'ui.darkmode.light' : 'ui.darkmode.dark')}
       title={t(dark ? 'ui.darkmode.light' : 'ui.darkmode.dark')}
-      className={`inline-flex items-center gap-1 nav-bar-link p-1.5! rounded-full cursor-pointer`}
+      className={`relative nav-bar-link size-9 rounded-full cursor-pointer`}
       onClick={() => darkModeHandler()}
     >
-      {dark ? <IconSunFilled className="size-6" /> : <IconMoonFilled className="size-6" />}
+      <IconSunFilled
+        className={`size-6 absolute top-1.5 left-1.5 transition-transform duration-500 ease-in-out
+        ${dark ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'}`}
+      />
+      {/* Luna */}
+      <IconMoonFilled
+        className={`size-6 absolute top-1.5 left-1.5 transition-transform duration-500 ease-in-out
+        ${dark ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'}`}
+      />
     </button>
   );
 }
