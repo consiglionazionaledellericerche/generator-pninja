@@ -7,7 +7,7 @@ import {
   RadioGroupProps as RadioGroupPropsAria,
   Radio,
 } from 'react-aria-components';
-import { IconCircle, IconCircleDotFilled } from '@tabler/icons-react';
+import { IconCircle, IconPointFilled } from '@tabler/icons-react';
 
 interface IRadioGroupOption {
   name: number | string | React.ReactNode;
@@ -63,16 +63,20 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             <Radio value={''} className="flex gap-2 items-center group">
               {'' === String(field.value) ? (
                 <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                  <IconCircleDotFilled
+                  <IconCircle
                     aria-hidden
-                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                    className="absolute rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
+                  />
+                  <IconPointFilled
+                    aria-hidden
+                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
                   />
                 </div>
               ) : (
                 <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
                   <IconCircle
                     aria-hidden
-                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
                   />
                 </div>
               )}
@@ -82,16 +86,20 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               <Radio key={op.id} value={String(op.id)} className="flex gap-2 items-center group">
                 {String(op.id) === String(field.value) ? (
                   <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                    <IconCircleDotFilled
+                    <IconCircle
                       aria-hidden
-                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                      className="absolute rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
+                    />
+                    <IconPointFilled
+                      aria-hidden
+                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
                     />
                   </div>
                 ) : (
                   <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
                     <IconCircle
                       aria-hidden
-                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 w-6 h-6"
+                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
                     />
                   </div>
                 )}

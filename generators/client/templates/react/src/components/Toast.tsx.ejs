@@ -198,7 +198,7 @@ export function Toast({ notification }: { notification: INotification }) {
           <div className="text-sm tabular-nums w-1/2 text-end" role="timer" aria-live="polite">
             {Math.ceil(remainingTime / 1000)}s
           </div>
-          <div className="relative h-6 w-1/2">
+          <div className="relative w-1/2 leading-none">
             <button
               ref={playRef}
               aria-label={isPaused ? t('actions.resumeTimer') : t('actions.pauseTimer')}
@@ -212,21 +212,21 @@ export function Toast({ notification }: { notification: INotification }) {
                   pauseNotification(notification.id);
                 }
               }}
-              className="relative cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
+              className="size-6 relative cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
             >
               <div className="relative">
                 {isPaused ? (
-                  <IconPlayerPlayFilled size={16} className="size-4 p-1 box-content" />
+                  <IconPlayerPlayFilled className="size-4 p-1 box-content" />
                 ) : (
-                  <IconPlayerPauseFilled size={16} className="size-4 p-1 box-content" />
+                  <IconPlayerPauseFilled className="size-4 p-1 box-content" />
                 )}
                 <div
                   aria-hidden
-                  className={`h-6 w-6 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}
+                  className={`size-6 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}
                 ></div>
                 <div
                   aria-hidden
-                  className="h-6 w-6 absolute inset-0 border-3 border-inherit rounded-full -scale-x-100"
+                  className="size-6 absolute inset-0 border-3 border-inherit rounded-full -scale-x-100"
                   style={{
                     mask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
                     WebkitMask: `conic-gradient(transparent ${100 - remainingPercentage}%, black 0)`,
