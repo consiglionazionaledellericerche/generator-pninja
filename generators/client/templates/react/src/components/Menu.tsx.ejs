@@ -19,9 +19,9 @@ import {
 } from 'react-aria-components';
 <% } -%>
 import {
-  IconAdjustments,
+  IconAdjustmentsFilled,
   IconChevronDown,
-  IconDatabaseSearch,
+  IconClick,
   IconLogs,
   IconMenu2,
   IconShieldFilled,
@@ -66,7 +66,7 @@ const Menu: React.FC = () => {
         to="/"
         className="rounded-full focus:outline-none hover:ring-4 hover:ring-blue-600 hover:dark:ring-sky-300 focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300"
       >
-        <img className="h-8" src={appLogo} alt="" />
+        <img id="app-logo" className="h-8" src={appLogo} alt="" />
       </Link>
       <Link
         to="/"
@@ -152,7 +152,7 @@ const Menu: React.FC = () => {
                 aria-label={t('entities')}
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
-                <IconAdjustments aria-hidden className="size-5" />
+                <IconAdjustmentsFilled aria-hidden className="size-5" />
                 {t('common.settings')}
                 <IconChevronDown
                   aria-hidden
@@ -177,7 +177,7 @@ const Menu: React.FC = () => {
                       id="audits"
                       className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
                     >
-                      <IconDatabaseSearch aria-hidden className="size-5" /> {t('audit:system')}
+                      <IconClick aria-hidden className="size-5" /> {t('audit:system')}
                     </MenuItem>
                   </Can>
                   <Can action="read" resource="Log">

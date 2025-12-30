@@ -3,7 +3,14 @@ import prettyBytes from 'pretty-bytes';
 import {
   IconAlertTriangleFilled,
   IconArrowBackUp,
+  IconBrandYoutubeFilled,
   IconFileFilled,
+  IconFileMusicFilled,
+  IconFileTypeDoc,
+  IconFileTypePdf,
+  IconFileTypePpt,
+  IconFileTypeTxt,
+  IconFileTypeXls,
   IconInfoCircleFilled,
   IconPhotoFilled,
   IconReplaceFilled,
@@ -53,6 +60,46 @@ function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+
+const getFileIcon = (mimeType: string | undefined): JSX.Element => {
+  if (!mimeType) {
+    return <IconFileFilled aria-hidden className="me-2 size-6" />;
+  }
+  if (mimeType.startsWith('image/')) {
+    return <IconPhotoFilled aria-hidden className="me-2 size-6" />;
+  }
+  if (mimeType.startsWith('video/')) {
+    return <IconBrandYoutubeFilled aria-hidden className="me-2 size-6" />;
+  }
+  if (mimeType.startsWith('audio/')) {
+    return <IconFileMusicFilled aria-hidden className="me-2 size-6" />;
+  }
+  if (mimeType.startsWith('application/pdf')) {
+    return <IconFileTypePdf aria-hidden className="me-2 size-6" />;
+  }
+  if (mimeType === 'text/plain') {
+    return <IconFileTypeTxt aria-hidden className="me-2 size-6" />;
+  }
+  if (
+    mimeType === 'application/msword' || // .doc
+    mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+  ) {
+    return <IconFileTypeDoc aria-hidden className="me-2 size-6" />;
+  }
+  if (
+    mimeType === 'application/vnd.ms-excel' || // .xls
+    mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // .xlsx
+  ) {
+    return <IconFileTypeXls aria-hidden className="me-2 size-6" />;
+  }
+  if (
+    mimeType === 'application/vnd.ms-powerpoint' || // .ppt
+    mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' // .pptx
+  ) {
+    return <IconFileTypePpt aria-hidden className="me-2 size-6" />;
+  }
+  return <IconFileFilled aria-hidden className="me-2 size-6" />;
+};
 
 const FileField: React.FC<FileFieldProps> = ({
   accept,
@@ -181,11 +228,7 @@ const FileField: React.FC<FileFieldProps> = ({
                 rel="noopener noreferrer"
                 aria-label={`${t('actions.crud.file.viewOrDownload')} ${entityData?.[`${fieldName}_name`]} (${t('common.opensInNewWindow')})`}
               >
-                {(entityData?.[`${fieldName}_type`] as string)?.startsWith('image/') ? (
-                  <IconPhotoFilled aria-hidden className="me-2 size-6" />
-                ) : (
-                  <IconFileFilled aria-hidden className="me-2 size-6" />
-                )}
+                {getFileIcon(entityData?.[`${fieldName}_type`] as string)}
                 {t('actions.crud.file.viewOrDownload')}{' '}
                 {entityData?.[`${fieldName}_name`] as string} ({t('common.opensInNewWindow')})
               </a>
@@ -195,7 +238,7 @@ const FileField: React.FC<FileFieldProps> = ({
                   onClick={() => setShouldShowInput(true)}
                   className="flex items-center text-sm  cursor-pointer font-medium"
                 >
-                  <IconReplaceFilled aria-hidden className="me-1 size-4" />
+                  <IconReplaceFilled aria-hidden className="me-1 size-5" />
                   {t('actions.crud.edit')}
                 </button>
                 <button
@@ -203,7 +246,7 @@ const FileField: React.FC<FileFieldProps> = ({
                   onClick={() => markForDeletion(true)}
                   className="flex items-center text-sm  cursor-pointer font-medium"
                 >
-                  <IconTrashFilled aria-hidden className="me-1 size-4" />
+                  <IconTrashFilled aria-hidden className="me-1 size-5" />
                   {t('actions.crud.delete')}
                 </button>
               </div>
@@ -225,7 +268,7 @@ const FileField: React.FC<FileFieldProps> = ({
                 onClick={() => markForDeletion(false)}
                 className="flex items-center text-sm cursor-pointer font-medium"
               >
-                <IconArrowBackUp aria-hidden className="me-2 size-4" />
+                <IconArrowBackUp aria-hidden className="me-2 size-5" />
                 {t('common.undo')}
               </button>
             </div>
@@ -247,7 +290,7 @@ const FileField: React.FC<FileFieldProps> = ({
                   onClick={() => undoEdit()}
                   className="flex items-center text-sm cursor-pointer font-medium"
                 >
-                  <IconArrowBackUp aria-hidden className="me-2 size-4" />
+                  <IconArrowBackUp aria-hidden className="me-2 size-5" />
                   {t('common.cancel')}
                 </button>
               </div>

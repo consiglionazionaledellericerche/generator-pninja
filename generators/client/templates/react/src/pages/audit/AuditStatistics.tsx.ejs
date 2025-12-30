@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   IconCalendarMonth,
   IconChartBarPopular,
-  IconChartPieFilled,
+  IconChartPie4Filled,
   IconCube,
   IconTrendingUp,
   IconUsers,
@@ -410,7 +410,7 @@ export default function AuditStatistics() {
         {/* By Event - PieChart */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconChartPieFilled className="size-7" />
+            <IconChartPie4Filled className="size-7" />
             {t('audit:byEventType')}
           </h2>
           {stats.by_event.length === 0 ? (

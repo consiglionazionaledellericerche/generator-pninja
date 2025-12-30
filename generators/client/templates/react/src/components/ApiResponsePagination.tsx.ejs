@@ -47,8 +47,8 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
                   onSelectPage(link.url.split('page=')[1].split('&')[0] as unknown as number)
                 }
               >
-                {index === 0 && <IconChevronLeft aria-hidden className="h-4" />}
-                {index === array.length - 1 && <IconChevronRight aria-hidden className="h-4" />}
+                {index === 0 && <IconChevronLeft aria-hidden className="size-5" />}
+                {index === array.length - 1 && <IconChevronRight aria-hidden className="size-5" />}
                 {index > 0 && index < array.length - 1 && link.label}
               </button>
             ))}

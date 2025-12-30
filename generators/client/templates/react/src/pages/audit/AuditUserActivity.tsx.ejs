@@ -2,11 +2,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  IconActivity,
   IconArrowLeft,
   IconCalendarMonth,
   IconChartBarPopular,
-  IconChartPieFilled,
+  IconChartPie4Filled,
+  IconClick,
   IconClock,
   IconCube,
   IconStopwatch,
@@ -269,11 +269,11 @@ export default function AuditUserActivity() {
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:totalActions')}</p>
               <p className="text-2xl font-bold mt-1">{profile.total_actions.toLocaleString()}</p>
             </div>
-            <IconActivity className="text-blue-500 size-8" />
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <IconClick className="text-blue-500 size-8" />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:firstActivity')}</p>
@@ -347,7 +347,7 @@ export default function AuditUserActivity() {
         {/* Events Distribution */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconChartPieFilled className="size-7" />
+            <IconChartPie4Filled className="size-7" />
             {t('audit:actionsByType')}
           </h2>
           {eventChartData.length === 0 ? (
