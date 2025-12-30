@@ -150,6 +150,7 @@ export async function createReactClient(that, parsedJDL) {
 
     that.fs.copyTpl(that.templatePath("react/src/shared/axiosInstance.ts.ejs"), that.destinationPath(`client/src/shared/axiosInstance.ts`));
     that.fs.copyTpl(that.templatePath("react/src/shared/axiosInterceptors.ts.ejs"), that.destinationPath(`client/src/shared/axiosInterceptors.ts`));
+    that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
     that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
     for (const entity of entities) {

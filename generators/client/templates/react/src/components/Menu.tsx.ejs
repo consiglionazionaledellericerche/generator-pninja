@@ -28,6 +28,12 @@ import {
   IconTrashFilled,
   IconX as X,
 } from '@tabler/icons-react';
+import {
+  IconEntities,
+<%  for (const entity of entities) {-%>
+  IconEntity<%=entity.name%>,
+<%  } -%>
+} from '../shared/entitiesIcons';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 <% if (withLangSelect) { -%>
@@ -114,6 +120,7 @@ const Menu: React.FC = () => {
                 aria-label={t('entities')}
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
+                <IconEntities aria-hidden className="size-5" />
                 {t('entities')}{' '}
                 <IconChevronDown
                   aria-hidden
@@ -127,8 +134,9 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/entities/<%- to.slug(pluralize(entity.name)) %>"
                       id="<%- to.slug(pluralize(entity.name)) %>"
-                      className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
                     >
+                      <IconEntity<%- entity.name %> className="size-5" />
                       {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                     </MenuItem>
                   </Can>
@@ -165,7 +173,7 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/entities/ac-rules"
                       id="ac-rules"
-                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
                     >
                       <IconShieldFilled aria-hidden className="size-5" />
                       {t('entities:ac_rule.AcRules')}
@@ -175,7 +183,7 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/audits"
                       id="audits"
-                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
                     >
                       <IconClick aria-hidden className="size-5" /> {t('audit:system')}
                     </MenuItem>
@@ -184,7 +192,7 @@ const Menu: React.FC = () => {
                     <MenuItem
                       href="/logs/stream"
                       id="logs"
-                      className={`flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
                     >
                       <IconLogs aria-hidden className="size-5" /> {t('log:title')}
                     </MenuItem>
@@ -199,7 +207,7 @@ const Menu: React.FC = () => {
                   >
                     <SubmenuTrigger>
                       <MenuItem
-                        className={`group flex items-center gap-1 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2`}
+                        className={`group flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2`}
                       >
                         <IconTrashFilled aria-hidden className="size-5" />
                         <span className="flex-1">{t('ui.trash')}</span>

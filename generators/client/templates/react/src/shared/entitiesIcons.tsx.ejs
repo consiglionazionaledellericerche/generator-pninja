@@ -1,0 +1,17 @@
+<%
+const getIcon = (entity) => entity.annotations?.find(
+  ann => ann.optionName === "icon" && ann.type === "BINARY"
+)?.optionValue ?? "IconCube";
+-%>
+import {
+  IconCube,
+<%  for (const entity of entities) {%><%- getIcon(entity) !== "IconCube" ? `  ${getIcon(entity)},\n` : '' %><%}-%>
+} from '@tabler/icons-react';
+export function IconEntities(props: React.SVGProps<SVGSVGElement>) {
+  return <IconCube {...props} />;
+}
+<%  for (const entity of entities) {-%>
+export function IconEntity<%=entity.name%>(props: React.SVGProps<SVGSVGElement>) {
+  return <<%- getIcon(entity) %> {...props} />;
+}
+<%  }-%>
