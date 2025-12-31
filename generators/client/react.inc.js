@@ -48,6 +48,9 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities: [AcRule, ...entities], relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
     };
+    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-outlined.woff2"), that.destinationPath(`client/public/fonts/material-symbols-outlined.woff2`));
+    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-rounded.woff2"), that.destinationPath(`client/public/fonts/material-symbols-rounded.woff2`));
+    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-sharp.woff2"), that.destinationPath(`client/public/fonts/material-symbols-sharp.woff2`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/IBMPlexMono-Regular.ttf"), that.destinationPath(`client/public/fonts/IBMPlexMono-Regular.ttf`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
@@ -110,6 +113,7 @@ export async function createReactClient(that, parsedJDL) {
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UrlField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UrlField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/HtmlViewer.tsx.ejs"), that.destinationPath(`client/src/components/HtmlViewer.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/Icon.tsx.ejs"), that.destinationPath(`client/src/components/Icon.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});

@@ -1,0 +1,107 @@
+import React from 'react';
+
+type SymbolVariant = 'outlined' | 'rounded' | 'sharp';
+type SymbolWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700;
+type SymbolGrade = -25 | 0 | 200;
+type IconSize =
+  | 'xs'
+  | 'sm'
+  | 'base'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | '4xl'
+  | '5xl'
+  | '6xl'
+  | '7xl'
+  | '8xl'
+  | '9xl'
+  | number;
+
+export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
+  icon: string;
+  variant?: SymbolVariant;
+  weight?: SymbolWeight;
+  grade?: SymbolGrade;
+  fill?: boolean;
+  size?: IconSize;
+  opticalSize?: number;
+  className?: string;
+  'aria-hidden'?: boolean;
+  'aria-label'?: string;
+}
+
+const sizeMap: Record<string, number> = {
+  xs: 12, // 0.75rem
+  sm: 14, // 0.875rem
+  base: 16, // 1rem
+  lg: 18, // 1.125rem
+  xl: 20, // 1.25rem
+  '2xl': 24, // 1.5rem
+  '3xl': 30, // 1.875rem
+  '4xl': 36, // 2.25rem
+  '5xl': 48, // 3rem
+  '6xl': 60, // 3.75rem
+  '7xl': 72, // 4.5rem
+  '8xl': 96, // 6rem
+  '9xl': 128, // 8rem
+};
+
+export const Icon: React.FC<IconProps> = ({
+  icon,
+  variant = 'outlined',
+  weight = 400,
+  grade,
+  fill = false,
+  size = 'base',
+  opticalSize,
+  className = '',
+  'aria-hidden': ariaHidden,
+  'aria-label': ariaLabel,
+  ...restProps
+}) => {
+  const fontFamily = `Material Symbols ${variant.charAt(0).toUpperCase() + variant.slice(1)}`;
+
+  // Converti size in pixel
+  const pixelSize =
+    typeof size === 'number'
+      ? size * 4 // Se è un numero, usa multipli di 4px (unità Tailwind)
+      : sizeMap[size]; // Se è un preset, usa la mappa font-size
+
+  // Se opticalSize non è specificato, usa pixelSize
+  const effectiveOpticalSize = opticalSize ?? pixelSize;
+
+  const fontVariationSettings =
+    grade !== undefined
+      ? `'FILL' ${fill ? 1 : 0}, 'wght' ${weight}, 'GRAD' ${grade}, 'opsz' ${effectiveOpticalSize}`
+      : `'FILL' ${fill ? 1 : 0}, 'wght' ${weight}, 'opsz' ${effectiveOpticalSize}`;
+
+  return (
+    <span
+      className={`material-symbols select-none ${className}`}
+      style={{
+        fontFamily,
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        fontSize: `${pixelSize}px`,
+        lineHeight: 1,
+        letterSpacing: 'normal',
+        textTransform: 'none',
+        display: 'inline-block',
+        whiteSpace: 'nowrap',
+        wordWrap: 'normal',
+        direction: 'ltr',
+        WebkitFontSmoothing: 'antialiased',
+        fontVariationSettings,
+        transition: 'font-variation-settings 0.2s ease-in-out',
+      }}
+      aria-hidden={ariaHidden ?? (!ariaLabel ? true : undefined)}
+      aria-label={ariaLabel}
+      role={ariaLabel ? 'img' : undefined}
+      {...restProps}
+    >
+      {icon}
+    </span>
+  );
+};

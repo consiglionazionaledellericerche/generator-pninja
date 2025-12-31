@@ -1,5 +1,35 @@
 @import 'tailwindcss';
 @font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('/fonts/material-symbols-outlined.woff2') format('woff2-variations');
+  font-named-instance: 'Regular';
+}
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('/fonts/material-symbols-rounded.woff2') format('woff2-variations');
+  font-named-instance: 'Regular';
+}
+@font-face {
+  font-family: 'Material Symbols Sharp';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('/fonts/material-symbols-sharp.woff2') format('woff2-variations');
+  font-named-instance: 'Regular';
+}
+.material-symbols {
+  font-variation-settings: 'GRAD' 0;
+}
+.dark .material-symbols {
+  font-variation-settings: 'GRAD' -25;
+}
+@font-face {
   font-family: 'IBMPlexMono';
   font-style: normal;
   font-weight: 100 900;
@@ -26,6 +56,9 @@
   --font-mono: IBMPlexMono, monospace;
 }
 @layer base {
+  #app-logo {
+    @apply brightness-0 dark:brightness-100;
+  }
   * {
     @apply dark:scheme-dark;
   }
@@ -67,7 +100,7 @@
     @apply whitespace-nowrap hover:shadow-sm hover:dark:shadow-sm/70 inline-flex items-center gap-1 cursor-pointer rounded-md border border-transparent bg-transparent dark:bg-transparent py-1.5 px-4 text-sm font-medium hover:bg-slate-300 hover:dark:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300 disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .text-link {
-    @apply rounded-md text-sky-600 dark:text-sky-400 hover:underline active:underline decoration-2 focus-visible:outline-2 focus-visible:outline-offset-4 outline-inherit;
+    @apply cursor-pointer text-sky-600 dark:text-sky-400 hover:underline active:underline decoration-2 focus-visible:outline-2 focus-visible:outline-offset-4 outline-inherit;
   }
   footer {
     .text-link {
@@ -78,7 +111,7 @@
     @apply text-slate-400 dark:text-slate-500;
   }
   .nav-bar {
-    @apply relative z-9999 flex flex-wrap items-center justify-between gap-4 h-16 px-4 text-slate-800 dark:text-slate-200 bg-slate-300 dark:bg-slate-700 ltr:bg-linear-45 rtl:-bg-linear-45 from-20% from-<%- navbarStartcolor %>-400 dark:from-<%- navbarStartcolor %>-800 via-sky-500 dark:via-sky-800 via-40% to-indigo-700 dark:to-indigo-900 to-80%;
+    @apply relative z-9999 flex flex-wrap items-center justify-between gap-4 h-16 px-4 text-slate-800 dark:text-slate-200 bg-slate-300 dark:bg-slate-700 ltr:bg-linear-45 rtl:-bg-linear-45 from-20% from-sky-300 dark:from-sky-800 via-teal-400 dark:via-teal-800 via-40% to-green-300 dark:to-green-900 to-80%;
 
     .nav-bar-link {
       @apply inline-flex items-center justify-center gap-1 rounded-md px-3 py-2 text-sm font-medium bg-slate-50/70 text-slate-900 dark:bg-slate-900/70 dark:text-slate-100 hover:ring-4 hover:ring-blue-600 hover:dark:ring-sky-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-600 focus-visible:dark:ring-sky-300 cursor-pointer;
