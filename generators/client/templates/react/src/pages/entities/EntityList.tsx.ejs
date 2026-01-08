@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconChevronDown, IconChevronUp, IconSelector, IconPlus } from '@tabler/icons-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -17,6 +16,7 @@ import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
 import { Can } from '../../components/Can';
+import { Icon } from '../../components/Icon';
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
 type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includes(column)) { %> | '<%=column%>'<% } %><% } %>;
@@ -121,24 +121,14 @@ export default function <%= entity.name %>List() {
           )}
         >
           <div className="grow text-left">{label}</div>
-          {isSorted &&
-            (sortConfig.direction === 'asc' ? (
-              <IconChevronDown
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ) : (
-              <IconChevronUp
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ))}
-          {!isSorted && (
-            <IconSelector
-              aria-hidden
-              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+          {isSorted && (
+            <Icon
+              icon={'keyboard_arrow_down'}
+              size={5}
+              className={sortConfig.direction !== 'asc' ? 'rotate-180 duration-100' : ''}
             />
           )}
+          {!isSorted && <Icon icon="unfold_more" size={5} />}
         </button>
       </th>
     );
@@ -163,7 +153,7 @@ export default function <%= entity.name %>List() {
             className="primary-button whitespace-nowrap"
             data-shortcut="ctrl+enter"
           >
-            <IconPlus className="size-5" />
+            <Icon icon="add" size={5} />
             {t('actions.crud.create')} {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')}
             <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
             <kbd className="kdb-shortcut">↵</kbd>
