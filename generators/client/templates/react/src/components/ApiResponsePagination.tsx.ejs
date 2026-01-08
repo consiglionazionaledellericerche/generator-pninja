@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { PageLink } from '../types/api-response.types';
+import { Icon } from './Icon';
 interface ApiResponsePaginationProps {
   pageLinks: PageLink[];
   onSelectPage: (page: number) => void;
@@ -47,8 +47,8 @@ const ApiResponsePagination: React.FC<ApiResponsePaginationProps> = ({
                   onSelectPage(link.url.split('page=')[1].split('&')[0] as unknown as number)
                 }
               >
-                {index === 0 && <IconChevronLeft aria-hidden className="size-5" />}
-                {index === array.length - 1 && <IconChevronRight aria-hidden className="size-5" />}
+                {index === 0 && <Icon icon="keyboard_arrow_left" size={5} />}
+                {index === array.length - 1 && <Icon icon="keyboard_arrow_right" size={5} />}
                 {index > 0 && index < array.length - 1 && link.label}
               </button>
             ))}

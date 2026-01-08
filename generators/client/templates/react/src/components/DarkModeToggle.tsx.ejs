@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconMoonFilled, IconSunFilled } from '@tabler/icons-react';
+import { Icon } from './Icon';
 export function DarkModeToggle() {
   const { t } = useTranslation();
   const [dark, setDark] = useState(!!JSON.parse(localStorage.getItem('dark-mode') || 'false'));
@@ -16,14 +16,19 @@ export function DarkModeToggle() {
       className={`relative nav-bar-link size-9 rounded-full cursor-pointer`}
       onClick={() => darkModeHandler()}
     >
-      <IconSunFilled
-        className={`size-6 absolute top-1.5 left-1.5 transition-transform duration-500 ease-in-out
+      <Icon
+        icon="light_mode"
+        size={6}
+        fill
+        className={`absolute top-1.5 left-1.5 transition-transform! duration-500
         ${dark ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'}`}
       />
-      {/* Luna */}
-      <IconMoonFilled
-        className={`size-6 absolute top-1.5 left-1.5 transition-transform duration-500 ease-in-out
-        ${dark ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'}`}
+      <Icon
+        icon="dark_mode"
+        size={6}
+        fill
+        className={`absolute top-1.5 left-1.5 transition-transform! duration-500
+        ${dark ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100!'}`}
       />
     </button>
   );

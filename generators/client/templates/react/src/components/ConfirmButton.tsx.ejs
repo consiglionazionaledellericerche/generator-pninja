@@ -1,6 +1,6 @@
 import { ReactElement, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IconX as X } from '@tabler/icons-react';
+import { Icon } from './Icon';
 
 interface ConfirmButtonProps {
   label: string | ReactElement;
@@ -107,7 +107,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
             className={`${pendingClassName} rounded-none! rounded-r-md!`}
           >
             <div className="relative">
-              <X className="size-3 p-1 box-content" aria-hidden />
+              <Icon icon="close" size={3} className="block! p-1 box-content" />
               <div
                 aria-hidden
                 className={`size-5 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}

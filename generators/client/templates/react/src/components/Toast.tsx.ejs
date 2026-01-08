@@ -1,23 +1,15 @@
-import {
-  IconAlertHexagon,
-  IconAlertTriangle,
-  IconCircleCheck,
-  IconInfoCircle,
-  IconPlayerPauseFilled,
-  IconPlayerPlayFilled,
-  IconX as X,
-} from '@tabler/icons-react';
 import { INotification, useNotifications } from '../contexts/NotificationContext';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useId } from 'react-aria';
+import { Icon } from './Icon';
 
 type ToastVariant = 'success' | 'error' | 'warning' | 'info';
-const toastIcons: Record<ToastVariant, React.ElementType> = {
-  info: IconInfoCircle,
-  error: IconAlertHexagon,
-  success: IconCircleCheck,
-  warning: IconAlertTriangle,
+const toastIcons: Record<ToastVariant, string> = {
+  info: 'info',
+  error: 'error',
+  success: 'check_circle',
+  warning: 'warning',
 };
 
 export function Toast({ notification }: { notification: INotification }) {
@@ -78,7 +70,6 @@ export function Toast({ notification }: { notification: INotification }) {
     return () => clearInterval(timer);
   }, [isPaused, notification.id, getRemainingTime, hasTimer]);
 
-  const Icon = toastIcons[notification.type];
   const detailsId = useId();
   const showmoreRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -123,12 +114,12 @@ export function Toast({ notification }: { notification: INotification }) {
             onClick={() => removeNotification(notification.id)}
             className="cursor-pointer rounded-full focus:outline-2 focus:-outline-offset-1 focus:outline-inherit focus:rounded-full p-1 -m-1"
           >
-            <X aria-hidden className="size-6" />
+            <Icon icon="close" size={6} className="block!" />
           </button>
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <Icon aria-hidden className="size-8 me-2" />
+            <Icon icon={toastIcons[notification.type]} size={8} className="me-2" />
             <div>{notification.message}</div>
           </div>
           {notification?.error?.response?.data?.message && (
@@ -215,11 +206,12 @@ export function Toast({ notification }: { notification: INotification }) {
               className="size-6 relative cursor-pointer rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-inherit focus:rounded-full"
             >
               <div className="relative">
-                {isPaused ? (
-                  <IconPlayerPlayFilled className="size-4 p-1 box-content" />
-                ) : (
-                  <IconPlayerPauseFilled className="size-4 p-1 box-content" />
-                )}
+                <Icon
+                  icon={isPaused ? 'play_arrow' : 'pause'}
+                  fill
+                  size={4}
+                  className="p-1 box-content"
+                />
                 <div
                   aria-hidden
                   className={`size-6 absolute inset-0 border-3 border-inherit opacity-30 rounded-full`}

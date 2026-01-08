@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { IconLogout } from '@tabler/icons-react';
 import { useAuthorization } from '../contexts/AuthorizationContext';
+import { Icon } from './Icon';
 
 const LogoutButton: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ const LogoutButton: React.FC = () => {
       {loading ? (
         <div className="animate-spin rounded-full size-5 border-b-2"></div>
       ) : (
-        <IconLogout aria-hidden className="size-5" />
+        <Icon icon="logout" size={5} />
       )}
     </button>
   );
