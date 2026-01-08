@@ -19,21 +19,12 @@ import {
 } from 'react-aria-components';
 <% } -%>
 import {
-  IconAdjustmentsFilled,
-  IconChevronDown,
-  IconClick,
-  IconLogs,
-  IconMenu2,
-  IconShieldFilled,
-  IconTrashFilled,
-  IconX as X,
-} from '@tabler/icons-react';
-import {
   IconEntities,
 <%  for (const entity of entities) {-%>
   IconEntity<%=entity.name%>,
 <%  } -%>
 } from '../shared/entitiesIcons';
+import { Icon } from './Icon';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
 <% if (withLangSelect) { -%>
@@ -91,11 +82,7 @@ const Menu: React.FC = () => {
         }}
       >
         <span className="sr-only">{menuVisible ? 'Close main menu' : 'Open main menu'}</span>
-        {menuVisible ? (
-          <X className="size-9" aria-hidden="true" />
-        ) : (
-          <IconMenu2 className="size-9" aria-hidden="true" />
-        )}
+        {menuVisible ? <Icon icon="close" size={11} /> : <Icon icon="menu" size={11} />}
       </button>
       <div
         className={`w-auto absolute ${menuVisible ? 'block' : 'hidden'} md:block md:static top-16 left-4 right-4`}
@@ -122,9 +109,10 @@ const Menu: React.FC = () => {
               >
                 <IconEntities aria-hidden size={5} />
                 {t('entities')}{' '}
-                <IconChevronDown
-                  aria-hidden
-                  className="size-5 group-aria-expanded:rotate-180 duration-100"
+                <Icon
+                  icon="keyboard_arrow_down"
+                  size={5}
+                  className="group-aria-expanded:rotate-180 duration-100"
                 />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
@@ -160,11 +148,12 @@ const Menu: React.FC = () => {
                 aria-label={t('entities')}
                 className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
               >
-                <IconAdjustmentsFilled aria-hidden className="size-5" />
+                <Icon icon="settings" size={5} />
                 {t('common.settings')}
-                <IconChevronDown
-                  aria-hidden
-                  className="size-5 group-aria-expanded:rotate-180 duration-100"
+                <Icon
+                  icon="keyboard_arrow_down"
+                  size={5}
+                  className="group-aria-expanded:rotate-180 duration-100"
                 />
               </Button>
               <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
@@ -175,7 +164,7 @@ const Menu: React.FC = () => {
                       id="ac-rules"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
                     >
-                      <IconShieldFilled aria-hidden className="size-5" />
+                      <Icon icon="shield" size={5} />
                       {t('entities:ac_rule.AcRules')}
                     </MenuItem>
                   </Can>
@@ -185,7 +174,7 @@ const Menu: React.FC = () => {
                       id="audits"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/audits') ? menuItemIsActiveClass : ''}`}
                     >
-                      <IconClick aria-hidden className="size-5" /> {t('audit:system')}
+                      <Icon icon="browse_activity" size={5} /> {t('audit:system')}
                     </MenuItem>
                   </Can>
                   <Can action="read" resource="Log">
@@ -194,7 +183,7 @@ const Menu: React.FC = () => {
                       id="logs"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/logs/stream') ? menuItemIsActiveClass : ''}`}
                     >
-                      <IconLogs aria-hidden className="size-5" /> {t('log:title')}
+                      <Icon icon="notes" size={5} /> {t('log:title')}
                     </MenuItem>
                   </Can>
 <%    if (hasTrashMenu) { -%>
@@ -209,11 +198,12 @@ const Menu: React.FC = () => {
                       <MenuItem
                         className={`group flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2`}
                       >
-                        <IconTrashFilled aria-hidden className="size-5" />
+                        <Icon icon="delete" size={5} />
                         <span className="flex-1">{t('ui.trash')}</span>
-                        <IconChevronDown
-                          aria-hidden
-                          className="size-5 group-aria-expanded:rotate-180 duration-100"
+                        <Icon
+                          icon="keyboard_arrow_down"
+                          size={5}
+                          className="group-aria-expanded:rotate-180 duration-100"
                         />
                       </MenuItem>
                       <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">

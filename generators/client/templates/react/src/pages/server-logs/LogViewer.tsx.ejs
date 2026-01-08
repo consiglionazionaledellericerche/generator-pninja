@@ -1,20 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import {
-  IconAlertHexagon,
-  IconAlertHexagonFilled,
-  IconAlertTriangle,
-  IconAlertTriangleFilled,
-  IconArrowBigDownLines,
-  IconArrowBigDownLinesFilled,
-  IconBug,
-  IconBugFilled,
-  IconInfoCircle,
-  IconInfoCircleFilled,
-  IconPlayerPlayFilled,
-  IconPlayerPauseFilled,
-} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../../components/Icon';
 
 interface LogViewerProps {
   maxLines?: number;
@@ -29,32 +16,28 @@ const logLevels = [
   {
     value: 'error',
     label: 'filters.errors',
-    iconOn: IconAlertHexagonFilled,
-    iconOff: IconAlertHexagon,
+    icon: 'error',
     colorOn: 'bg-red-500/20 border-red-500 text-red-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'warning',
     label: 'filters.warnings',
-    iconOn: IconAlertTriangleFilled,
-    iconOff: IconAlertTriangle,
+    icon: 'warning',
     colorOn: 'bg-yellow-500/20 border-yellow-500 text-yellow-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'info',
     label: 'filters.info',
-    iconOn: IconInfoCircleFilled,
-    iconOff: IconInfoCircle,
+    icon: 'info',
     colorOn: 'bg-blue-500/20 border-blue-500 text-blue-500',
     colorOff: 'border-gray-600 text-gray-500',
   },
   {
     value: 'debug',
     label: 'filters.debug',
-    iconOn: IconBugFilled,
-    iconOff: IconBug,
+    icon: 'bug_report',
     colorOn: 'bg-gray-500/20 border-gray-400 text-gray-400',
     colorOff: 'border-gray-600 text-gray-500',
   },
@@ -187,7 +170,6 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
           >
             {logLevels.map((level) => {
               const isActive = selectedLevels.includes(level.value);
-              const Icon = isActive ? level.iconOn : level.iconOff;
 
               return (
                 <button
@@ -210,7 +192,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
                   aria-label={t(isActive ? 'filters.hide' : 'filters.show', { level: level.label })}
                   title={level.label}
                 >
-                  <Icon className="size-5" aria-hidden />
+                  <Icon icon={level.icon} size={5} fill={isActive} />
                   <span className="font-medium lg:hidden xl:inline">{t(level.label)}</span>
                 </button>
               );
@@ -226,11 +208,7 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               aria-pressed={isPolling}
               title={t(isPolling ? 'actions.pause' : 'actions.resume')}
             >
-              {isPolling ? (
-                <IconPlayerPauseFilled className="size-5" aria-hidden="true" />
-              ) : (
-                <IconPlayerPlayFilled className="size-5" aria-hidden="true" />
-              )}
+              <Icon icon={isPolling ? 'pause' : 'play_arrow'} size={5} fill />
               <span className="lg:hidden xl:inline">
                 {t(isPolling ? 'actions.pause' : 'actions.resume')}
               </span>
@@ -254,11 +232,12 @@ export function LogViewer({ maxLines = 1000, pollInterval = 1000 }: LogViewerPro
               aria-pressed={autoScroll}
               title={`${t('actions.autoScroll')}: ${autoScroll ? 'ON' : 'OFF'}`}
             >
-              {autoScroll ? (
-                <IconArrowBigDownLinesFilled className="size-5" aria-hidden="true" />
-              ) : (
-                <IconArrowBigDownLines className="size-5" aria-hidden="true" />
-              )}
+              <Icon
+                icon="arrow_shape_up_stack_2"
+                size={5}
+                fill={autoScroll}
+                className="rotate-180"
+              />
               <span className="lg:hidden xl:inline">
                 {t('actions.autoScroll')}: {autoScroll ? 'ON' : 'OFF'}
               </span>

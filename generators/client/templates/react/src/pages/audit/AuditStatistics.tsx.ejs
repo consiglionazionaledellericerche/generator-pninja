@@ -2,14 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  IconCalendarMonth,
-  IconChartBarPopular,
-  IconChartPie4Filled,
-  IconCube,
-  IconTrendingUp,
-  IconUsers,
-} from '@tabler/icons-react';
-import {
   BarChart,
   Bar,
   XAxis,
@@ -25,7 +17,7 @@ import {
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
-
+import { Icon } from '../../components/Icon';
 interface TooltipPayload {
   name: string;
   value: number;
@@ -295,7 +287,7 @@ export default function AuditStatistics() {
       {/* Date Range Filter */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <IconCalendarMonth className="text-gray-500 size-16" />
+          <Icon icon="calendar_month" size={16} className="text-gray-500" />
           <div className="flex flex-wrap items-center gap-4 flex-1">
             <div>
               <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
@@ -336,7 +328,7 @@ export default function AuditStatistics() {
               {new Date(dateTo + 'T00:00:00').toLocaleDateString(i18n.language)}
             </p>
           </div>
-          <IconChartBarPopular className="size-16 text-blue-200" />
+          <Icon icon="bar_chart" size={16} className="text-blue-200" />
         </div>
       </div>
 
@@ -344,7 +336,7 @@ export default function AuditStatistics() {
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            <IconTrendingUp className="size-7" />
+            <Icon icon="trending_up" size={7} />
             {t('audit:activityTimeline')}
           </h2>
           <span className="text-sm px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
@@ -410,7 +402,7 @@ export default function AuditStatistics() {
         {/* By Event - PieChart */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconChartPie4Filled className="size-7" />
+            <Icon icon="pie_chart" size={7} fill />
             {t('audit:byEventType')}
           </h2>
           {stats.by_event.length === 0 ? (
@@ -441,7 +433,7 @@ export default function AuditStatistics() {
         {/* By Model - Horizontal Bar */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconCube className="size-7" />
+            <Icon icon="deployed_code" size={7} />
             {t('audit:byModel')}
           </h2>
           {stats.by_model.length === 0 ? (
@@ -475,7 +467,7 @@ export default function AuditStatistics() {
         {/* By User - Horizontal Bar */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconUsers className="size-7" />
+            <Icon icon="group" size={7} />
             {t('audit:topUsers')}
           </h2>
           {stats.by_user.length === 0 ? (

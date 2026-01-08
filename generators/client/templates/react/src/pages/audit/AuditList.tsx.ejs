@@ -1,13 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  IconFilterFilled,
-  IconFileTypeCsv,
-  IconChevronDown,
-  IconChevronUp,
-  IconSelector,
-} from '@tabler/icons-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -15,6 +8,7 @@ import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { SearchInput } from '../../components/SearchInput';
 import { useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
+import { Icon } from '../../components/Icon';
 
 type SortableField = 'id' | 'event' | 'auditable_type' | 'auditable_id' | 'user_id' | 'created_at';
 
@@ -175,24 +169,14 @@ export default function AuditList() {
           )}
         >
           <div className="grow text-left">{label}</div>
-          {isSorted &&
-            (sortConfig.direction === 'asc' ? (
-              <IconChevronDown
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ) : (
-              <IconChevronUp
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ))}
-          {!isSorted && (
-            <IconSelector
-              aria-hidden
-              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+          {isSorted && (
+            <Icon
+              icon={'keyboard_arrow_down'}
+              size={5}
+              className={sortConfig.direction !== 'asc' ? 'rotate-180 duration-100' : ''}
             />
           )}
+          {!isSorted && <Icon icon="unfold_more" size={5} />}
         </button>
       </th>
     );
@@ -237,11 +221,11 @@ export default function AuditList() {
       <div className={`flex gap-4 mb-4`}>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />
         <button onClick={() => setShowFilters(!showFilters)} className="secondary-button">
-          <IconFilterFilled className="size-5" />
+          <Icon icon="filter_alt" size={5} />
           {t('audit:filters')}
         </button>
         <button onClick={handleExport} className="secondary-button flex items-center gap-2">
-          <IconFileTypeCsv className="size-5" />
+          <Icon icon="download" size={5} />
           {t('audit:exportCSV')}
         </button>
       </div>

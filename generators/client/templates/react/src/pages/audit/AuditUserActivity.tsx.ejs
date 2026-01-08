@@ -2,18 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  IconArrowLeft,
-  IconCalendarMonth,
-  IconChartBarPopular,
-  IconChartPie4Filled,
-  IconClick,
-  IconClock,
-  IconCube,
-  IconStopwatch,
-  IconTrendingUp,
-  IconUser,
-} from '@tabler/icons-react';
-import {
   BarChart,
   Bar,
   XAxis,
@@ -28,6 +16,7 @@ import {
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
 
 interface UserProfile {
   user_id: string;
@@ -216,11 +205,11 @@ export default function AuditUserActivity() {
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/audits" className="secondary-button">
-            <IconArrowLeft className="size-5" />
+            <Icon icon="arrow_left_alt" size={6} />
           </Link>
           <div>
             <h1 className="text-2xl font-bold flex items-center gap-2">
-              <IconUser className="size-8" />
+              <Icon icon="person" size={8} />
               {t('audit:userActivity')}: {profile.user_id}
             </h1>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -234,7 +223,7 @@ export default function AuditUserActivity() {
       {/* Date Range Filter */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <IconCalendarMonth className="text-gray-500 size-16" />
+          <Icon icon="Calendar_Month" size={16} className="text-gray-500" />
           <div className="flex flex-wrap items-center gap-4 flex-1">
             <div>
               <label className="block text-sm font-medium mb-1">{t('audit:dateFrom')}</label>
@@ -273,7 +262,7 @@ export default function AuditUserActivity() {
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <IconClick className="text-blue-500 size-8" />
+          <Icon icon="web_traffic" size={8} className="text-green-500" />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:firstActivity')}</p>
@@ -281,11 +270,12 @@ export default function AuditUserActivity() {
                 {new Date(profile.first_activity).toLocaleDateString(i18n.language)}
               </p>
             </div>
-            <IconClock className="text-green-500 size-8" />
+            <Icon icon="schedule" size={8} className="text-green-500" />
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
+          <Icon icon="web_traffic" size={8} className="text-blue-500" />
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:lastActivity')}</p>
@@ -293,7 +283,7 @@ export default function AuditUserActivity() {
                 {new Date(profile.last_activity).toLocaleDateString(i18n.language)}
               </p>
             </div>
-            <IconTrendingUp className="text-purple-500 size-8" />
+            <Icon icon="schedule" size={8} className="text-blue-500" />
           </div>
         </div>
 
@@ -312,7 +302,7 @@ export default function AuditUserActivity() {
                 </p>
               )}
             </div>
-            <IconChartBarPopular className="text-orange-500 size-8" />
+            <Icon icon="bar_chart" size={8} className="text-orange-500" />
           </div>
         </div>
       </div>
@@ -347,7 +337,7 @@ export default function AuditUserActivity() {
         {/* Events Distribution */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconChartPie4Filled className="size-7" />
+            <Icon icon="pie_chart" size={7} fill />
             {t('audit:actionsByType')}
           </h2>
           {eventChartData.length === 0 ? (
@@ -378,7 +368,7 @@ export default function AuditUserActivity() {
         {/* Top Models */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconCube className="size-7" />
+            <Icon icon="deployed_code" size={7} />
             {t('audit:topModelsModified')}
           </h2>
           {profile.by_model.length === 0 ? (
@@ -412,7 +402,7 @@ export default function AuditUserActivity() {
         {/* Hourly Pattern */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconClock className="size-7" />
+            <Icon icon="schedule" size={7} />
             {t('audit:activityByHour')}
           </h2>
           <ResponsiveContainer width="100%" height={250}>
@@ -429,7 +419,7 @@ export default function AuditUserActivity() {
         {/* Weekly Pattern */}
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconCalendarMonth className="size-7" />
+            <Icon icon="Calendar_Month" size={7} />
             {t('audit:activityByWeekday')}
           </h2>
           <ResponsiveContainer width="100%" height={250}>
@@ -479,7 +469,7 @@ export default function AuditUserActivity() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <IconCalendarMonth className="size-10 text-blue-500" />
+                      <Icon icon="Calendar_Month" size={10} />
                       <div>
                         <p className="font-semibold">
                           {startDate.toLocaleDateString(i18n.language, {
@@ -502,7 +492,7 @@ export default function AuditUserActivity() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <IconStopwatch className="text-gray-500 size-5" />
+                      <Icon icon="timer" size={5} className="text-gray-500" />
                       <span className="font-medium">{durationText}</span>
                     </div>
                   </div>

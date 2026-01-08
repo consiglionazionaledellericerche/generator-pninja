@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
-import { IconLanguage, IconChevronDown, IconCheck } from '@tabler/icons-react';
 import { languages, languagesData } from '../config/languages.ts';
+import { Icon } from './Icon.tsx';
 
 export function LangSelect() {
   const { i18n, t } = useTranslation();
@@ -21,11 +21,15 @@ export function LangSelect() {
         aria-label={t('ui.langSelect')}
         className="group w-full md:w-auto inline-flex gap-1 items-center justify-center nav-bar-link"
       >
-        <IconLanguage aria-hidden className="size-5" />
+        <Icon icon="translate" size={5} />
         {languagesData.find(
           (lang) => lang.value === i18n.language || lang.value === i18n.language.split('-')[0]
         )?.name || i18n.language}
-        <IconChevronDown className="size-5 group-aria-expanded:rotate-180 duration-100" />
+        <Icon
+          icon="keyboard_arrow_down"
+          size={5}
+          className="group-aria-expanded:rotate-180 duration-100"
+        />
       </Button>
       <Popover className="w-full md:w-auto max-w-[50%] md:min-w-30 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
         <Menu
@@ -45,7 +49,7 @@ export function LangSelect() {
             >
               {({ isSelected }) => (
                 <>
-                  {isSelected && <IconCheck aria-hidden className="size-5 inline me-1" />}
+                  {isSelected && <Icon icon="check" size={5} className="me-1" />}
                   {`${languagesData.find((lang) => lang.value === language)?.engName || language} (${languagesData.find((lang) => lang.value === language)?.name || language})`}
                 </>
               )}

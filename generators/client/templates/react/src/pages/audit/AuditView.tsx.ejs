@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  IconArrowLeft,
-  IconArrowRight,
-  IconClock,
-  IconDeviceDesktop,
-  IconGitCompare,
-  IconHistory,
-  IconTag,
-  IconUser,
-  IconWorld,
-} from '@tabler/icons-react';
 import axiosInstance from '../../shared/axiosInstance';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
 
 interface IAudit {
   id: number;
@@ -119,7 +109,7 @@ export default function AuditView() {
     <>
       <div className="mb-6">
         <button onClick={() => navigate(-1)} className="secondary-button mb-4">
-          <IconArrowLeft className="size-5" />
+          <Icon icon="arrow_left_alt" size={6} />
           {t('actions.back')}
         </button>
         <div className="flex items-center justify-between">
@@ -130,7 +120,7 @@ export default function AuditView() {
             to={`/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
             className="secondary-button"
           >
-            <IconHistory className="size-5" />
+            <Icon icon="history" size={6} />
             {t('audit:allChanges')}
           </Link>
         </div>
@@ -141,7 +131,7 @@ export default function AuditView() {
         <h2 className="text-lg font-semibold mb-4">{t('audit:eventInformation')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
-            <IconTag className="text-gray-500 mt-1 size-5" />
+            <Icon icon="sell" size={5} className="text-gray-500 mt-1" />
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:eventType')}</p>
               <span
@@ -153,7 +143,7 @@ export default function AuditView() {
           </div>
 
           <div className="flex items-start gap-3">
-            <IconClock className="text-gray-500 mt-1 size-5" />
+            <Icon icon="schedule" size={5} className="text-gray-500 mt-1" />
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:dateTime')}</p>
               <p className="font-medium">
@@ -166,7 +156,7 @@ export default function AuditView() {
           </div>
 
           <div className="flex items-start gap-3">
-            <IconUser className="text-gray-500 mt-1 size-5" />
+            <Icon icon="person" size={5} className="text-gray-500 mt-1" />
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
               <p className="font-medium">
@@ -182,7 +172,7 @@ export default function AuditView() {
           </div>
 
           <div className="flex items-start gap-3">
-            <IconWorld className="text-gray-500 mt-1 size-5" />
+            <Icon icon="language" size={5} className="text-gray-500 mt-1" />
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:ipAddress')}</p>
               <p className="font-medium">{audit.ip_address || '-'}</p>
@@ -218,7 +208,7 @@ export default function AuditView() {
 
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden mb-6 pt-6">
         <h2 className="text-lg font-semibold mb-4 px-6 flex items-center gap-2">
-          <IconGitCompare className="size-6" />
+          <Icon icon="difference" size={6} />
           {t('audit:compareChanges')}
         </h2>
         <div className="overflow-x-auto">
@@ -265,7 +255,11 @@ export default function AuditView() {
                       </pre>
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <IconArrowRight className="size-5 text-yellow-600 dark:text-yellow-400 mx-auto" />
+                      <Icon
+                        icon="arrow_right_alt"
+                        size={5}
+                        className="text-yellow-600 dark:text-yellow-400 mx-auto"
+                      />
                     </td>
                     <td className="px-6 py-4 text-sm bg-green-50/50 dark:bg-green-900/10">
                       <pre className="whitespace-pre-wrap break-all font-mono text-xs text-green-800 dark:text-green-300">
@@ -284,7 +278,7 @@ export default function AuditView() {
       {audit.user_agent && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <IconDeviceDesktop className="size-6" />
+            <Icon icon="browse_activity" size={6} />
             {t('audit:requestInformation')}
           </h2>
           <div>
