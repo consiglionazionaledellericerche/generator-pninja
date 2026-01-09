@@ -7,7 +7,7 @@ import {
   RadioGroupProps as RadioGroupPropsAria,
   Radio,
 } from 'react-aria-components';
-import { IconCircle, IconPointFilled } from '@tabler/icons-react';
+import { Icon } from '../Icon';
 
 interface IRadioGroupOption {
   name: number | string | React.ReactNode;
@@ -63,21 +63,11 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
             <Radio value={''} className="flex gap-2 items-center group">
               {'' === String(field.value) ? (
                 <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                  <IconCircle
-                    aria-hidden
-                    className="absolute rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                  />
-                  <IconPointFilled
-                    aria-hidden
-                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                  />
+                  <Icon icon="circle_circle" fill size={8} />
                 </div>
               ) : (
                 <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                  <IconCircle
-                    aria-hidden
-                    className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                  />
+                  <Icon icon="circle" variant="rounded" size={8} />
                 </div>
               )}
               {t('common.select.noValue')}
@@ -86,21 +76,11 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               <Radio key={op.id} value={String(op.id)} className="flex gap-2 items-center group">
                 {String(op.id) === String(field.value) ? (
                   <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                    <IconCircle
-                      aria-hidden
-                      className="absolute rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                    />
-                    <IconPointFilled
-                      aria-hidden
-                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                    />
+                    <Icon icon="circle_circle" fill size={8} />
                   </div>
                 ) : (
                   <div className="rounded-full group-focus-within:outline-2 group-focus-within:outline-offset-2 group-focus-within:outline-blue-500 group-focus-within:dark:outline-sky-300">
-                    <IconCircle
-                      aria-hidden
-                      className="rounded-full group-data-focused:outline-2 group-data-focused:outline-offset-2 group-data-focused:outline-blue-500 group-data-focused:dark:outline-sky-300 size-6"
-                    />
+                    <Icon icon="circle" variant="rounded" size={8} />
                   </div>
                 )}
                 {op.name}

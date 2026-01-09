@@ -1,4 +1,4 @@
-import { IconAsterisk } from '@tabler/icons-react';
+import { Icon } from '../Icon';
 import { IInfoValidations } from './InfoValidations';
 import { Label } from 'react-aria-components';
 
@@ -12,9 +12,7 @@ const FormLabel: React.FC<FormLabelProps> = ({ children, validations, id, ...ari
   return (
     <Label className="block text-sm font-medium mb-1" id={id ?? undefined} {...ariaProps}>
       {children}
-      {validations?.required && (
-        <IconAsterisk aria-hidden="true" className="inline align-top size-3" />
-      )}
+      {validations?.required && <Icon icon="asterisk" size={3} className="inline align-top" />}
     </Label>
   );
 };

@@ -50,7 +50,7 @@ const sizeMap: Record<string, number> = {
 
 export const Icon: React.FC<IconProps> = ({
   icon,
-  variant = 'outlined',
+  variant = 'sharp',
   weight = 400,
   grade,
   fill = false,
@@ -63,13 +63,11 @@ export const Icon: React.FC<IconProps> = ({
 }) => {
   const fontFamily = `Material Symbols ${variant.charAt(0).toUpperCase() + variant.slice(1)}`;
 
-  // Converti size in pixel
   const pixelSize =
     typeof size === 'number'
-      ? size * 4 // Se è un numero, usa multipli di 4px (unità Tailwind)
-      : sizeMap[size]; // Se è un preset, usa la mappa font-size
+      ? size * 4 // Tailwind units
+      : sizeMap[size];
 
-  // Se opticalSize non è specificato, usa pixelSize
   const effectiveOpticalSize = opticalSize ?? pixelSize;
 
   const fontVariationSettings =
@@ -79,7 +77,7 @@ export const Icon: React.FC<IconProps> = ({
 
   return (
     <span
-      className={`material-symbols select-none align-middle ${className}`}
+      className={`material-symbols block select-none align-middle ${className}`}
       style={{
         fontFamily,
         fontWeight: 'normal',
@@ -88,7 +86,6 @@ export const Icon: React.FC<IconProps> = ({
         lineHeight: 1,
         letterSpacing: 'normal',
         textTransform: 'none',
-        display: 'inline-block',
         whiteSpace: 'nowrap',
         wordWrap: 'normal',
         direction: 'ltr',

@@ -1,6 +1,6 @@
 import { RegisterOptions, FieldValues } from 'react-hook-form';
 import { useFormContext, useController } from 'react-hook-form';
-import { IconAsterisk, IconSquare, IconSquareCheckFilled } from '@tabler/icons-react';
+import { Icon } from '../Icon';
 import { FormFieldInfo } from './index';
 import {
   Checkbox as CheckboxAria,
@@ -60,12 +60,12 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...p
           <div className="text-sm font-medium mb-1">
             {label}
             {validations?.required && (
-              <IconAsterisk aria-hidden="true" className="inline align-top size-3" />
+              <Icon icon="asterisk" size={3} className="inline align-top" />
             )}
           </div>
           <div
             className={`
-        bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 p-2
+        bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 text-center p-2
         group-focus-within:outline-2
         group-focus-within:outline-offset-2 group-focus-within:outline-blue-600
         group-focus-within:dark:outline-sky-300 rounded-md block
@@ -85,12 +85,9 @@ const Checkbox: React.FC<CheckboxProps> = ({ fieldName, label, validations, ...p
         `}
           >
             {field.value ? (
-              <IconSquareCheckFilled
-                className="mx-auto size-7 rounded-md outline-0"
-                aria-hidden="true"
-              />
+              <Icon icon="check_box" size={8} fill />
             ) : (
-              <IconSquare className="mx-auto size-7 rounded-md outline-0" aria-hidden="true" />
+              <Icon icon="check_box_outline_blank" size={8} />
             )}
           </div>
         </CheckboxAria>
