@@ -1,15 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  IconArrowBackUp,
-  IconChevronDown,
-  IconChevronUp,
-  IconHistory,
-  IconSelector,
-  IconTrash,
-  IconTrashXFilled,
-} from '@tabler/icons-react';
+import { Icon } from '../../components/Icon';
 import axiosInstance from '../../shared/axiosInstance';
 import { AxiosError } from 'axios';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
@@ -228,24 +220,14 @@ export default function <%= entity.name %>Trash() {
           )}
         >
           <div className="grow text-left">{label}</div>
-          {isSorted &&
-            (sortConfig.direction === 'asc' ? (
-              <IconChevronDown
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ) : (
-              <IconChevronUp
-                aria-hidden
-                className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
-              />
-            ))}
-          {!isSorted && (
-            <IconSelector
-              aria-hidden
-              className="shrink-0 pointer-events-none size-5 text-slate-600 dark:text-slate-400 sm:size-4"
+          {isSorted && (
+            <Icon
+              icon={'keyboard_arrow_down'}
+              size={5}
+              className={sortConfig.direction !== 'asc' ? 'rotate-180 duration-100' : ''}
             />
           )}
+          {!isSorted && <Icon icon="unfold_more" size={5} />}
         </button>
       </th>
     );
@@ -265,7 +247,7 @@ export default function <%= entity.name %>Trash() {
   return (
     <>
       <h1 className="flex items-center gap-2 text-2xl mb-4">
-        <IconTrash className="size-8" aria-hidden />
+        <Icon icon="delete" size={8} />
         {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
       </h1>
 
@@ -284,13 +266,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="primary-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <IconArrowBackUp className="size-5" aria-hidden />
+                      <Icon icon="undo" size={5} />
                       {t('actions.crud.restoreSelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <IconArrowBackUp className="size-5" aria-hidden />
+                      <Icon icon="undo" size={5} />
                       {t('actions.crud.confirmRestoreSelected', { count: selectedIds.size })}
                     </span>
                   }
@@ -304,13 +286,13 @@ export default function <%= entity.name %>Trash() {
                   pendingClassName="danger-button"
                   label={
                     <span className="flex items-center gap-2">
-                      <IconTrashXFilled className="size-5" aria-hidden />
+                      <Icon icon="delete_forever" size={5} />
                       {t('actions.crud.deletePermanentlySelected', { count: selectedIds.size })}
                     </span>
                   }
                   pendingLabel={
                     <span className="flex items-center gap-2">
-                      <IconTrashXFilled className="size-5" aria-hidden />
+                      <Icon icon="delete_forever" size={5} />
                       {t('actions.crud.confirmDeletePermanentlySelected', {
                         count: selectedIds.size,
                       })}
@@ -405,7 +387,7 @@ export default function <%= entity.name %>Trash() {
                             to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
                             className="secondary-button"
                           >
-                            <IconHistory className="size-5" />
+                            <Icon icon="history" size={5} />
                             {t('audit:allChanges')}
                           </Link>
                         </Can>
@@ -417,13 +399,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="primary-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <IconArrowBackUp className="size-5" aria-hidden />
+                                <Icon icon="undo" size={5} />
                                 {t('actions.crud.restore')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <IconArrowBackUp className="size-5" aria-hidden />
+                                <Icon icon="undo" size={5} />
                                 {t('actions.crud.confirmRestore')}
                               </span>
                             }
@@ -437,13 +419,13 @@ export default function <%= entity.name %>Trash() {
                             pendingClassName="danger-button"
                             label={
                               <span className="flex items-center gap-2 uppercase">
-                                <IconTrashXFilled className="size-5" aria-hidden />
+                                <Icon icon="delete_forever" size={5} />
                                 {t('actions.crud.deletePermanently')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2 uppercase">
-                                <IconTrashXFilled className="size-5" aria-hidden />
+                                <Icon icon="delete_forever" size={5} />
                                 {t('actions.crud.confirmDeletePermanently')}
                               </span>
                             }
