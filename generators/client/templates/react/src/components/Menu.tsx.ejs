@@ -213,8 +213,9 @@ const Menu: React.FC = () => {
                             <MenuItem
                               href="/entities/<%- to.slug(pluralize(entity.name)) %>/trash"
                               id="<%- to.slug(pluralize(entity.name)) %>"
-                              className={`cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
+                              className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
                             >
+                              <IconEntity<%- entity.name %> size={5} />
                               {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
                             </MenuItem>
                           </Can>
