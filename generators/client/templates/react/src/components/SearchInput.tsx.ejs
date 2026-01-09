@@ -15,7 +15,7 @@ const SearchInput: React.FC<ISearchInput> = ({ onChange, onClear }) => {
   return (
     <SearchField className="grid grid-cols-1 w-full" aria-label={t('common.search')}>
       <div className="cursor-pointer col-start-1 row-start-1 ms-2 self-center justify-self-start size-5 relative">
-        <Icon icon="search" size={5} className="block" />
+        <Icon icon="search" size={5} />
       </div>
       <Input
         placeholder={t('common.search')}
@@ -37,7 +37,7 @@ const SearchInput: React.FC<ISearchInput> = ({ onChange, onClear }) => {
           }}
           className="cursor-pointer col-start-1 row-start-1 me-4 self-center justify-self-end size-5"
         >
-          <Icon icon="close" size={5} className="block" />
+          <Icon icon="close" size={5} />
         </Button>
       )}
     </SearchField>

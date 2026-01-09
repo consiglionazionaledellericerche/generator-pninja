@@ -1,21 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
-import {
-  IconAlertTriangleFilled,
-  IconArrowBackUp,
-  IconBrandYoutubeFilled,
-  IconFileFilled,
-  IconFileMusicFilled,
-  IconFileTypeDoc,
-  IconFileTypePdf,
-  IconFileTypePpt,
-  IconFileTypeTxt,
-  IconFileTypeXls,
-  IconInfoCircleFilled,
-  IconPhotoFilled,
-  IconReplaceFilled,
-  IconTrashFilled,
-} from '@tabler/icons-react';
+import { Icon } from '../Icon';
 import { useState, useRef } from 'react';
 import { useFormContext, useController, FieldError } from 'react-hook-form';
 import { FormLabel, FormFieldInfo } from './index';
@@ -63,42 +48,18 @@ function fileToBase64(file: File): Promise<string> {
 
 const getFileIcon = (mimeType: string | undefined): JSX.Element => {
   if (!mimeType) {
-    return <IconFileFilled aria-hidden className="me-2 size-6" />;
+    return <Icon icon="draft" size={6} fill />;
   }
   if (mimeType.startsWith('image/')) {
-    return <IconPhotoFilled aria-hidden className="me-2 size-6" />;
+    return <Icon icon="imagesmode" size={6} fill />;
   }
   if (mimeType.startsWith('video/')) {
-    return <IconBrandYoutubeFilled aria-hidden className="me-2 size-6" />;
+    return <Icon icon="video_file" size={6} fill />;
   }
   if (mimeType.startsWith('audio/')) {
-    return <IconFileMusicFilled aria-hidden className="me-2 size-6" />;
+    return <Icon icon="audio_file" size={6} fill />;
   }
-  if (mimeType.startsWith('application/pdf')) {
-    return <IconFileTypePdf aria-hidden className="me-2 size-6" />;
-  }
-  if (mimeType === 'text/plain') {
-    return <IconFileTypeTxt aria-hidden className="me-2 size-6" />;
-  }
-  if (
-    mimeType === 'application/msword' || // .doc
-    mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
-  ) {
-    return <IconFileTypeDoc aria-hidden className="me-2 size-6" />;
-  }
-  if (
-    mimeType === 'application/vnd.ms-excel' || // .xls
-    mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // .xlsx
-  ) {
-    return <IconFileTypeXls aria-hidden className="me-2 size-6" />;
-  }
-  if (
-    mimeType === 'application/vnd.ms-powerpoint' || // .ppt
-    mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' // .pptx
-  ) {
-    return <IconFileTypePpt aria-hidden className="me-2 size-6" />;
-  }
-  return <IconFileFilled aria-hidden className="me-2 size-6" />;
+  return <Icon icon="draft" size={6} fill />;
 };
 
 const FileField: React.FC<FileFieldProps> = ({
@@ -223,7 +184,7 @@ const FileField: React.FC<FileFieldProps> = ({
             <div className="flex items-center justify-between">
               <a
                 href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${entityData?.[`${fieldName}_name`]}`}
-                className="hover:underline flex items-center"
+                className="hover:underline flex items-center gap-2"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${t('actions.crud.file.viewOrDownload')} ${entityData?.[`${fieldName}_name`]} (${t('common.opensInNewWindow')})`}
@@ -236,17 +197,17 @@ const FileField: React.FC<FileFieldProps> = ({
                 <button
                   type="button"
                   onClick={() => setShouldShowInput(true)}
-                  className="flex items-center text-sm  cursor-pointer font-medium"
+                  className="flex items-center text-sm  cursor-pointer font-medium gap-1"
                 >
-                  <IconReplaceFilled aria-hidden className="me-1 size-5" />
+                  <Icon icon="swap_horiz" size={5} />
                   {t('actions.crud.edit')}
                 </button>
                 <button
                   type="button"
                   onClick={() => markForDeletion(true)}
-                  className="flex items-center text-sm  cursor-pointer font-medium"
+                  className="flex items-center text-sm  cursor-pointer font-medium gap-1"
                 >
-                  <IconTrashFilled aria-hidden className="me-1 size-5" />
+                  <Icon icon="delete" size={5} />
                   {t('actions.crud.delete')}
                 </button>
               </div>
@@ -257,8 +218,8 @@ const FileField: React.FC<FileFieldProps> = ({
         {isMarkedForDeletion && (
           <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
-              <div className="flex items-center text-red-800 dark:text-red-200">
-                <IconAlertTriangleFilled aria-hidden className="me-2 size-6" />
+              <div className="flex items-center text-red-800 dark:text-red-200 gap-2">
+                <Icon icon="warning" size={6} />
                 <span className="text-sm font-medium">
                   {t('actions.crud.file.markedForDeletion')}
                 </span>
@@ -266,9 +227,9 @@ const FileField: React.FC<FileFieldProps> = ({
               <button
                 type="button"
                 onClick={() => markForDeletion(false)}
-                className="flex items-center text-sm cursor-pointer font-medium"
+                className="flex items-center text-sm cursor-pointer font-medium gap-1"
               >
-                <IconArrowBackUp aria-hidden className="me-2 size-5" />
+                <Icon icon="undo" size={5} />
                 {t('common.undo')}
               </button>
             </div>
@@ -279,8 +240,8 @@ const FileField: React.FC<FileFieldProps> = ({
           {hasFile && shouldShowInput && (
             <div className="p-3 mb-1 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
               <div className="flex items-center justify-between">
-                <div className="flex items-center text-yellow-800 dark:text-yellow-200">
-                  <IconInfoCircleFilled aria-hidden className="me-2 size-6" />
+                <div className="flex items-center text-yellow-800 dark:text-yellow-200 gap-2">
+                  <Icon icon="info" size={6} />
                   <span className="text-sm font-medium">
                     {t('actions.crud.file.replaceWarning')}
                   </span>
@@ -288,9 +249,9 @@ const FileField: React.FC<FileFieldProps> = ({
                 <button
                   type="button"
                   onClick={() => undoEdit()}
-                  className="flex items-center text-sm cursor-pointer font-medium"
+                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
                 >
-                  <IconArrowBackUp aria-hidden className="me-2 size-5" />
+                  <Icon icon="undo" size={5} />
                   {t('common.cancel')}
                 </button>
               </div>
