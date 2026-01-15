@@ -60,14 +60,72 @@ yo pninja
 
 ```
 my-app/
-├── client/ # React + Vite app
-├── docker/ # Docker compose
-├── server/ # Laravel project
-├── package.json # With commands
+├── client/         # React + Vite app
+├── docker/         # Docker compose
+├── server/         # Laravel project
+├── package.json    # With commands
 └── README.md
 ```
 
 Fully wired together: auth, routing, forms, CRUD, migrations.
+
+## Core Features
+
+### Authentication & Authorization
+
+- **Keycloak Integration** - Enterprise-grade authentication
+- **ACL System (Casbin)** - Fine-grained access control with policies and roles
+- **Role-based Permissions** - Manage user permissions across entities
+
+### Data Management
+
+- **Soft Delete Support** - Logical deletion with `deleted_at` timestamps (use `@softDelete` annotation in JDL)
+  ```jdl
+  @softDelete
+  entity MyEntity {
+    name String required
+    description String
+  }
+  ```
+- **CSV Database Seeding** - Populate your database from CSV files
+- **Audit Logging** - Complete change tracking for all entity modifications
+
+### Search & Indexing
+
+- **Multiple Search Engines** - Choose from Database, Algolia, Elasticsearch, Meilisearch, Typesense, or Solr
+- **Laravel Scout Integration** - Seamless search engine configuration
+
+### Accessibility & UX
+
+- **WCAG 2.1 Level AA Compliance** - Built-in accessibility standards
+- **React Aria Components** - Accessible form components out-of-the-box
+- **Keyboard Navigation** - Full keyboard support for all interactions
+- **Screen Reader Support** - Optimized for assistive technologies
+
+### Internationalization
+
+- **i18next Integration** - Multi-language support ready to use
+- **RTL Support** - Right-to-left language compatibility
+
+### Modern UI/UX
+
+- **Responsive Design** - Mobile-first approach
+- **Tailwind CSS** - Utility-first styling
+- **Material Symbols Icons** - Associate icons to entities using `@icon` annotation in JDL
+  ```jdl
+  @icon("star")
+  entity MyEntity {
+    name String required
+    description String
+  }
+  ```
+- **Component Library** - Pre-built accessible components
+
+### DevOps Ready
+
+- **Docker Compose** - Full containerization support
+- **Environment Configuration** - Easy setup for different environments
+- **Database Migrations** - Version-controlled schema changes
 
 ## Supported Technologies and Limitations
 
@@ -87,22 +145,67 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 
 - [Keycloak][keycloak-url]
 
+### Authorization
+
+- [Casbin][casbin-url] - Policy-based access control
+
 ### Search Engines
 
 - [Algolia][algolia-url], [Elasticsearch][elasticsearch-url], [Meilisearch][meilisearch-url], [Typesense][typesense-url], [Solr][solr-url], Database
 
-### Roadmap
+### Frontend Libraries
 
-- [Vue][vue-url] & [Angular][angular-url] support
-- [SQL Server][sqlserver-url] & [Oracle][oracle-url] support
-- Authentication improvements ([Laravel Sanctum][sanctum-url] / [OAuth2][oauth2-url])
-- GitHub CI
+- [Tailwind CSS][tailwind-url]
+- [React Aria][react-aria-url] - Accessible component primitives
+- [Material Symbols][material-symbols-url] - Icon library
+
+### Internationalization
+
+- [i18next][i18next-url]
+
+## Roadmap
+
+### Frontend Frameworks
+
+- [Vue][vue-url] support
+- [Angular][angular-url] support
+
+### Database Support
+
+- [SQL Server][sqlserver-url] support
+- [Oracle][oracle-url] support
+
+### Features
+
+- **Multi-tenancy Support** - Isolated data per tenant
+- **API Versioning** - Version management for APIs
+- **Real-time Features** - WebSockets/Pusher integration
+- **GraphQL Support** - Alternative API layer
+- **Advanced Caching** - Redis integration with cache strategies
+
+### DevOps
+
+- **GitHub Actions CI/CD** - Automated testing and deployment
+- **Kubernetes Support** - Container orchestration configs
+
+### Authentication Enhancements
+
+- [Laravel Sanctum][sanctum-url] - SPA authentication option
+- Social Login (Google, GitHub, Facebook)
 
 ## GitHub Repository
 
 The source code for **generator-pninja** is hosted on GitHub. You can access the official repository at the following link:
 
 [Generator PNinja GitHub Repository](https://github.com/consiglionazionaledellericerche/generator-pninja)
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or pull requests on the [GitHub repository](https://github.com/consiglionazionaledellericerche/generator-pninja).
+
+## Support
+
+For issues, questions, or feature requests, please use the [GitHub Issues](https://github.com/consiglionazionaledellericerche/generator-pninja/issues) page.
 
 [laravel-url]: https://laravel.com/
 [sqlite-url]: https://www.sqlite.org/
@@ -114,6 +217,7 @@ The source code for **generator-pninja** is hosted on GitHub. You can access the
 [npm-url]: https://www.npmjs.com/
 [yarn-url]: https://yarnpkg.com/
 [keycloak-url]: https://www.keycloak.org/
+[casbin-url]: https://casbin.org/
 [session-auth-url]: https://laravel.com/docs/session
 [sanctum-url]: https://laravel.com/docs/sanctum
 [oauth2-url]: https://oauth.net/2/
@@ -129,6 +233,10 @@ The source code for **generator-pninja** is hosted on GitHub. You can access the
 [typesense-url]: https://typesense.org/
 [solr-url]: https://solr.apache.org/
 [docker-compose-url]: https://docs.docker.com/compose/
+[tailwind-url]: https://tailwindcss.com/
+[react-aria-url]: https://react-spectrum.adobe.com/react-aria/
+[material-symbols-url]: https://fonts.google.com/icons
+[i18next-url]: https://www.i18next.com/
 [license-badge]: https://img.shields.io/badge/License-Apache_2.0-blue.svg
 [license-url]: https://opensource.org/licenses/Apache-2.0
 [npm-version-badge]: https://badge.fury.io/js/generator-pninja.svg
