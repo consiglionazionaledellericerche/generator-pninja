@@ -2,7 +2,8 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
-const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+// const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+const baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
 
 function convertFieldType(jhipsterType, enums) {
     const typeMap = {

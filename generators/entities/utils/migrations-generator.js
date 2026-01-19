@@ -1,5 +1,3 @@
-import to from 'to-case';
-import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
 import { createTable } from './createTable.js';
 import { createRelation } from './createRelation.js';
@@ -10,16 +8,16 @@ export class MigrationsGenerator {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
         this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
-        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+        // this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+        this.baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
     }
 
     createTables() {
         const { enums, entities } = this.parsedJDL;
-        const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
         for (const entity of [AcRule, ...entities]) {
             createTable({ entity, enums, that: this.that });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_audits_table.php`), {
+        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_create_audits_table.php`), {
             authentication: this.that.config.get('authentication'),
         });
     }
