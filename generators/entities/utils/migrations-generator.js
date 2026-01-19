@@ -8,7 +8,8 @@ export class MigrationsGenerator {
         this.that = that;
         this.entitiesFilePath = entitiesFilePath;
         this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
-        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+        // this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+        this.baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
     }
     convertFieldType(jhipsterType, enums) {
         const typeMap = {
@@ -71,21 +72,20 @@ export class MigrationsGenerator {
     }
     createTables() {
         const { enums, entities } = this.parsedJDL;
-        const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
         for (const entity of [AcRule, ...entities]) {
             const tabName = to.snake(pluralize(entity.tableName));
             const columns = this.convertFields(entity.body, enums);
             const hasSoftDelete = entity.annotations?.some(
                 ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
             );
-            this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
+            this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_create_${tabName}_table.php`),
                 {
                     tabName: tabName,
                     columns: columns.join(`\n${tab(3)}`),
                     hasSoftDelete,
                 });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_audits_table.php`), {
+        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_create_audits_table.php`), {
             authentication: this.that.config.get('authentication'),
         });
     }
