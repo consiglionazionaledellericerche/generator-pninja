@@ -8,6 +8,7 @@ import { ModelsGenerator } from './utils/models-generator.js';
 import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
+import { splitEntitiesFile } from './utils/entity-splitter.js';
 export default class EntityGenerator extends Generator {
   static namespace = 'pninja:entities';
   constructor(args, opts) {
@@ -91,6 +92,7 @@ export default class EntityGenerator extends Generator {
     });
 
     this.fs.writeJSON(this.destinationPath('.pninja/Entities.json'), parsedJDL);
+    splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this));
 
     // JDL > Migrations
     try {

@@ -1,6 +1,8 @@
 // generators/entity/index.js
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
+import to from 'to-case';
+import pluralize from 'pluralize';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -13,6 +15,10 @@ export default class extends Generator {
         });
 
         this.entityConfig = {
+            name: undefined,
+            tableName: undefined,
+            softDelete: undefined,
+            icon: undefined,
             fields: [],
             relationships: []
         };
@@ -24,7 +30,6 @@ export default class extends Generator {
     async prompting() {
         this.log(colors.blue('\nGenerating a new entity\n'));
 
-        // Chiedi il nome se non passato come argomento
         if (!this.options.entityName) {
             const nameAnswer = await this.prompt([{
                 type: 'input',
@@ -37,7 +42,6 @@ export default class extends Generator {
             this.entityName = this.options.entityName;
         }
 
-        // Soft delete
         const softDeleteAnswer = await this.prompt([{
             type: 'confirm',
             name: 'softDelete',
@@ -46,22 +50,18 @@ export default class extends Generator {
         }]);
 
         this.entityConfig.name = this.entityName;
+        this.entityConfig.tableName = this.entityName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
 
-        // Carica entità esistenti per le relazioni
         this._loadExistingEntities();
 
-        // Loop campi
         await this._askForFields();
 
-        // Mostra riassunto finale prima delle relazioni
         this._printEntitySummary();
         this.log(colors.cyan('\nGenerating relationships to other entities\n'));
 
-        // Loop relazioni
         await this._askForRelationships();
 
-        // Mostra riassunto finale
         this._printEntitySummary();
     }
 
@@ -74,7 +74,6 @@ export default class extends Generator {
             this.existingEntities = entitiesData.entities.map(e => e.name);
         }
 
-        // Aggiungi l'entità corrente
         this.existingEntities.push(this.entityName);
     }
 
@@ -93,7 +92,6 @@ export default class extends Generator {
             return;
         }
 
-        // Chiedi info campo
         const fieldAnswers = await this.prompt([
             {
                 type: 'input',
@@ -133,7 +131,6 @@ export default class extends Generator {
             fieldValidateRules: []
         };
 
-        // Proponi validazioni
         const validationAnswer = await this.prompt([{
             type: 'checkbox',
             name: 'validationRules',
@@ -143,7 +140,7 @@ export default class extends Generator {
 
         field.fieldValidateRules = validationAnswer.validationRules;
 
-        // Chiedi i valori per le validazioni che ne richiedono
+        // Ask for validation rule values
         for (const rule of validationAnswer.validationRules) {
             if (['minlength', 'maxlength', 'min', 'max', 'minbytes', 'maxbytes', 'pattern'].includes(rule)) {
                 const valueAnswer = await this.prompt([{
@@ -158,10 +155,8 @@ export default class extends Generator {
 
         this.entityConfig.fields.push(field);
 
-        // Mostra riassunto dopo l'aggiunta del campo
         this._printEntitySummary();
 
-        // Ricorsione per aggiungere altri campi
         await this._askForFields();
     }
 
@@ -201,7 +196,12 @@ export default class extends Generator {
                 type: 'input',
                 name: 'relationshipName',
                 message: 'What is the name of the relationship?',
-                default: answers => answers.otherEntity.charAt(0).toLowerCase() + answers.otherEntity.slice(1)
+                default: answers => {
+                    const sentenceCase = to.sentence(answers.otherEntity);
+                    return answers.relationshipType.endsWith('to-many')
+                        ? to.camel(pluralize(sentenceCase))
+                        : to.camel(sentenceCase);
+                }
             }
         ]);
 
@@ -211,7 +211,6 @@ export default class extends Generator {
             relationshipType: relationshipAnswers.relationshipType
         };
 
-        // Prima domanda - campo da mostrare dell'altra entità
         const otherEntityFields = this._getEntityFields(relationshipAnswers.otherEntity);
 
         const displayFieldAnswer = await this.prompt([{
@@ -223,7 +222,6 @@ export default class extends Generator {
         }]);
         relationship.otherEntityField = displayFieldAnswer.otherEntityField;
 
-        // Domanda bidirezionalità
         const bidirectionalAnswer = await this.prompt([{
             type: 'confirm',
             name: 'bidirectional',
@@ -233,15 +231,20 @@ export default class extends Generator {
         relationship.bidirectional = bidirectionalAnswer.bidirectional;
 
         if (bidirectionalAnswer.bidirectional) {
+            const inverseRelationType = this._getInverseRelationType(relationshipAnswers.relationshipType);
             const bidirectionalAnswers = await this.prompt([{
                 type: 'input',
                 name: 'otherEntityRelationshipName',
                 message: 'What is the name of this relationship in the other entity?',
-                default: this.entityName.charAt(0).toLowerCase() + this.entityName.slice(1)
+                default: () => {
+                    const sentenceCase = to.sentence(this.entityName);
+                    return inverseRelationType.endsWith('to-many')
+                        ? to.camel(pluralize(sentenceCase))
+                        : to.camel(sentenceCase);
+                }
             }]);
             relationship.otherEntityRelationshipName = bidirectionalAnswers.otherEntityRelationshipName;
 
-            // Seconda domanda - campo da mostrare della nuova entità
             const currentEntityFields = this._getEntityFields(this.entityName);
 
             const inverseDisplayFieldAnswer = await this.prompt([{
@@ -269,19 +272,29 @@ export default class extends Generator {
 
         this.entityConfig.relationships.push(relationship);
 
-        // Mostra riassunto dopo l'aggiunta della relazione
         this.log(colors.cyan('\nGenerating relationships to other entities\n'));
         this._printEntitySummary();
 
-        // Ricorsione per aggiungere altre relazioni
         await this._askForRelationships();
+    }
+
+    _getInverseRelationType(relationType) {
+        const inverseMap = {
+            'many-to-one': 'one-to-many',
+            'one-to-many': 'many-to-one',
+            'many-to-many': 'many-to-many',
+            'one-to-one': 'one-to-one'
+        };
+        return inverseMap[relationType] || relationType;
     }
 
     _printEntitySummary() {
         this.log('\n' + '='.repeat(17) + ' ' + colors.bold(colors.cyan(this.entityName)) + ' ' + '='.repeat(17));
 
-        // Fields
-        this.log(colors.bold('Fields'));
+        const softDeleteStatus = this.entityConfig.softDelete ? 'enabled' : 'disabled';
+        this.log(`${colors.bold('Soft delete:')} ${colors.yellow(softDeleteStatus)}`);
+
+        this.log(colors.bold('Fields:'));
         if (this.entityConfig.fields.length === 0) {
             this.log('(no fields)');
         } else {
@@ -289,7 +302,6 @@ export default class extends Generator {
                 let fieldLine = `${colors.cyan(field.fieldName)} (${field.fieldType})`;
                 if (field.fieldValidateRules && field.fieldValidateRules.length > 0) {
                     const validationParts = field.fieldValidateRules.map(rule => {
-                        // Per le validazioni con valore, aggiungi il valore
                         const ruleWithValue = `fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`;
                         if (field[ruleWithValue] !== undefined) {
                             return `${rule}=${field[ruleWithValue]}`;
@@ -302,9 +314,8 @@ export default class extends Generator {
             });
         }
 
-        // Relationships
         if (this.entityConfig.relationships.length > 0) {
-            this.log(colors.bold('Relationships'));
+            this.log(colors.bold('Relationships:'));
             this.entityConfig.relationships.forEach(rel => {
                 let relLine = `${colors.cyan(rel.relationshipName)} (${rel.otherEntityName}) ${colors.green(rel.relationshipType)}`;
                 if (rel.relationshipValidateRules && rel.relationshipValidateRules.length > 0) {
@@ -362,7 +373,6 @@ export default class extends Generator {
     }
 
     _getEntityFields(entityName) {
-        // Se è l'entità corrente, usa i campi già definiti
         if (entityName === this.entityName) {
             const fields = this.entityConfig.fields
                 .filter(f => !f.fieldType.includes('Blob'))
@@ -371,7 +381,6 @@ export default class extends Generator {
             return ['id', ...fields];
         }
 
-        // Altrimenti cerca nell'Entities.json
         const entitiesPath = this.destinationPath('.pninja/Entities.json');
 
         if (!this.fs.exists(entitiesPath)) {
@@ -392,8 +401,13 @@ export default class extends Generator {
         return ['id', ...fields];
     }
 
-    configuring() {
+    writing() {
         this.log(colors.green('\nEntity configuration completed'));
-        this.log(JSON.stringify(this.entityConfig, null, 2));
+
+        // Save entity configuration to .pninja/<EntityName>.json
+        const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
+        this.fs.writeJSON(entityFilePath, this.entityConfig, null, 2);
+
+        this.log(colors.green(`Entity configuration saved to ${entityFilePath}`));
     }
 }

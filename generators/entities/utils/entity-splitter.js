@@ -1,0 +1,105 @@
+/**
+ * Splits Entities.json into individual entity files
+ * @param {Object} fs - Yeoman file system instance
+ * @param {Function} destinationPath - Function to resolve destination paths
+ * @returns {Array} Array of created entity file paths
+ */
+export function splitEntitiesFile(entitiesData, fs, destinationPath) {
+    // const entitiesPath = destinationPath('.pninja/Entities.json');
+
+    // if (!fs.exists(entitiesPath)) {
+    //     throw new Error('No Entities.json file found at ' + entitiesPath);
+    // }
+
+    // const entitiesData = fs.readJSON(entitiesPath);
+    const createdFiles = [];
+
+    // Process each entity
+    entitiesData.entities.forEach(entity => {
+        const entityConfig = {
+            name: entity.name,
+            tableName: entity.tableName,
+            softDelete: entity.annotations?.some(a => a.optionName === 'softDelete') || false,
+            icon: entity.annotations?.find(a => a.optionName === 'icon')?.optionValue || null,
+            fields: [],
+            relationships: []
+        };
+
+        // Convert body to fields
+        if (entity.body) {
+            entityConfig.fields = entity.body.map(field => {
+                const fieldConfig = {
+                    fieldName: field.name,
+                    fieldType: field.type,
+                    fieldValidateRules: []
+                };
+
+                // Convert validations
+                if (field.validations && field.validations.length > 0) {
+                    field.validations.forEach(validation => {
+                        fieldConfig.fieldValidateRules.push(validation.key);
+
+                        // Add validation value if present
+                        if (validation.value) {
+                            const ruleName = `fieldValidate${validation.key.charAt(0).toUpperCase() + validation.key.slice(1)}`;
+                            fieldConfig[ruleName] = validation.value;
+                        }
+                    });
+                }
+
+                return fieldConfig;
+            });
+        }
+
+        // Find relationships for this entity
+        if (entitiesData.relationships) {
+            entitiesData.relationships.forEach(rel => {
+                // Check if this entity is the 'from' side
+                if (rel.from.name === entity.name) {
+                    const relationship = {
+                        relationshipName: rel.from.injectedField,
+                        otherEntityName: rel.to.name,
+                        relationshipType: convertCardinality(rel.cardinality, true),
+                        otherEntityField: rel.from.injectedFieldLabel || 'id',
+                        bidirectional: !!rel.to.injectedField
+                    };
+
+                    if (relationship.bidirectional) {
+                        relationship.otherEntityRelationshipName = rel.to.injectedField;
+                        relationship.inverseEntityField = rel.to.injectedFieldLabel || 'id';
+                    }
+
+                    if (rel.from.required) {
+                        relationship.relationshipValidateRules = ['required'];
+                    }
+
+                    entityConfig.relationships.push(relationship);
+                }
+            });
+        }
+
+        // Save individual entity file
+        const entityFilePath = destinationPath(`.pninja/${entity.name}.json`);
+        fs.writeJSON(entityFilePath, entityConfig, null, 2);
+        createdFiles.push(entityFilePath);
+    });
+
+    return createdFiles;
+}
+
+/**
+ * Converts JDL cardinality format to relationship type
+ * @param {string} cardinality - Cardinality from JDL (e.g., 'ManyToOne')
+ * @param {boolean} isFromSide - Whether this is the 'from' side of the relationship
+ * @returns {string} Relationship type (e.g., 'many-to-one')
+ */
+function convertCardinality(cardinality, isFromSide) {
+    const cardinalityMap = {
+        'ManyToOne': 'many-to-one',
+        'OneToMany': isFromSide ? 'one-to-many' : 'many-to-one',
+        'ManyToMany': 'many-to-many',
+        'OneToOne': 'one-to-one'
+    };
+
+    return cardinalityMap[cardinality] || cardinality.toLowerCase();
+}
