@@ -1,4 +1,5 @@
 // generators/entity/index.js
+import fs from 'fs';
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
@@ -66,15 +67,18 @@ export default class extends Generator {
     }
 
     _loadExistingEntities() {
-        const entitiesPath = this.destinationPath('.pninja/Entities.json');
+        const pninjaDir = this.destinationPath('.pninja');
         this.existingEntities = [];
-
-        if (this.fs.exists(entitiesPath)) {
-            const entitiesData = this.fs.readJSON(entitiesPath);
-            this.existingEntities = entitiesData.entities.map(e => e.name);
+        if (fs.existsSync(pninjaDir)) {
+            const files = fs.readdirSync(pninjaDir);
+            // Filter only .json files (excluding Entities.json and current entity)
+            this.existingEntities = files
+                .filter(file =>
+                    file.endsWith('.json') &&
+                    file !== 'Entities.json'
+                )
+                .map(file => file.replace('.json', ''));
         }
-
-        this.existingEntities.push(this.entityName);
     }
 
     async _askForFields() {
@@ -381,22 +385,22 @@ export default class extends Generator {
             return ['id', ...fields];
         }
 
-        const entitiesPath = this.destinationPath('.pninja/Entities.json');
+        // Read from individual entity file
+        const entityFilePath = this.destinationPath(`.pninja/${entityName}.json`);
 
-        if (!this.fs.exists(entitiesPath)) {
+        if (!fs.existsSync(entityFilePath)) {
             return ['id'];
         }
 
-        const entitiesData = this.fs.readJSON(entitiesPath);
-        const entity = entitiesData.entities.find(e => e.name === entityName);
+        const entityData = JSON.parse(fs.readFileSync(entityFilePath, 'utf8'));
 
-        if (!entity || !entity.body) {
+        if (!entityData.fields) {
             return ['id'];
         }
 
-        const fields = entity.body
-            .filter(f => !f.type.includes('Blob'))
-            .map(f => f.name);
+        const fields = entityData.fields
+            .filter(f => !f.fieldType.includes('Blob'))
+            .map(f => f.fieldName);
 
         return ['id', ...fields];
     }
