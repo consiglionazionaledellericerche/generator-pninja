@@ -177,12 +177,6 @@ export default class extends Generator {
                 choices: this.existingEntities
             },
             {
-                type: 'input',
-                name: 'relationshipName',
-                message: 'What is the name of the relationship?',
-                default: answers => answers.otherEntity.charAt(0).toLowerCase() + answers.otherEntity.slice(1)
-            },
-            {
                 type: 'list',
                 name: 'relationshipType',
                 message: 'What is the type of the relationship?',
@@ -194,21 +188,41 @@ export default class extends Generator {
                 ]
             },
             {
-                type: 'confirm',
-                name: 'bidirectional',
-                message: 'Do you want to generate a bidirectional relationship?',
-                default: true
+                type: 'input',
+                name: 'relationshipName',
+                message: 'What is the name of the relationship?',
+                default: answers => answers.otherEntity.charAt(0).toLowerCase() + answers.otherEntity.slice(1)
             }
         ]);
 
         const relationship = {
             relationshipName: relationshipAnswers.relationshipName,
             otherEntityName: relationshipAnswers.otherEntity,
-            relationshipType: relationshipAnswers.relationshipType,
-            bidirectional: relationshipAnswers.bidirectional
+            relationshipType: relationshipAnswers.relationshipType
         };
 
-        if (relationshipAnswers.bidirectional) {
+        // Prima domanda - campo da mostrare dell'altra entità
+        const otherEntityFields = this._getEntityFields(relationshipAnswers.otherEntity);
+
+        const displayFieldAnswer = await this.prompt([{
+            type: 'list',
+            name: 'otherEntityField',
+            message: `When you display this relationship in '${this.entityName}', which field from '${relationshipAnswers.otherEntity}' do you want to use?`,
+            choices: otherEntityFields,
+            default: 'id'
+        }]);
+        relationship.otherEntityField = displayFieldAnswer.otherEntityField;
+
+        // Domanda bidirezionalità
+        const bidirectionalAnswer = await this.prompt([{
+            type: 'confirm',
+            name: 'bidirectional',
+            message: 'Do you want to generate a bidirectional relationship?',
+            default: true
+        }]);
+        relationship.bidirectional = bidirectionalAnswer.bidirectional;
+
+        if (bidirectionalAnswer.bidirectional) {
             const bidirectionalAnswers = await this.prompt([{
                 type: 'input',
                 name: 'otherEntityRelationshipName',
@@ -216,19 +230,19 @@ export default class extends Generator {
                 default: this.entityName.charAt(0).toLowerCase() + this.entityName.slice(1)
             }]);
             relationship.otherEntityRelationshipName = bidirectionalAnswers.otherEntityRelationshipName;
+
+            // Seconda domanda - campo da mostrare della nuova entità
+            const currentEntityFields = this._getEntityFields(this.entityName);
+
+            const inverseDisplayFieldAnswer = await this.prompt([{
+                type: 'list',
+                name: 'inverseEntityField',
+                message: `When you display this relationship in '${relationshipAnswers.otherEntity}', which field from '${this.entityName}' do you want to use?`,
+                choices: currentEntityFields,
+                default: 'id'
+            }]);
+            relationship.inverseEntityField = inverseDisplayFieldAnswer.inverseEntityField;
         }
-
-        // Recupera i campi dell'entità correlata
-        const otherEntityFields = this._getEntityFields(relationshipAnswers.otherEntity);
-
-        const displayFieldAnswer = await this.prompt([{
-            type: 'list',
-            name: 'otherEntityField',
-            message: `When you display this relationship on client-side, which field from '${relationshipAnswers.otherEntity}' do you want to use?`,
-            choices: otherEntityFields,
-            default: 'id'
-        }]);
-        relationship.otherEntityField = displayFieldAnswer.otherEntityField;
 
         const validationAnswer = await this.prompt([{
             type: 'confirm',
