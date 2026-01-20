@@ -64,7 +64,7 @@ export default class extends Generator {
             this.existingEntities = entitiesData.entities.map(e => e.name);
         }
 
-        // Add current entity to the list for relationships
+        // Aggiungi l'entità corrente
         this.existingEntities.push(this.entityName);
     }
 
@@ -111,12 +111,6 @@ export default class extends Generator {
                     'ImageBlob',
                     'TextBlob'
                 ]
-            },
-            {
-                type: 'confirm',
-                name: 'addValidation',
-                message: 'Do you want to add validation rules to your field?',
-                default: false
             }
         ]);
 
@@ -126,28 +120,26 @@ export default class extends Generator {
             fieldValidateRules: []
         };
 
-        // Se vuole validazioni
-        if (fieldAnswers.addValidation) {
-            const validationAnswer = await this.prompt([{
-                type: 'checkbox',
-                name: 'validationRules',
-                message: 'Which validation rules would you like to add?',
-                choices: this._getValidationChoices(fieldAnswers.fieldType)
-            }]);
+        // Proponi validazioni
+        const validationAnswer = await this.prompt([{
+            type: 'checkbox',
+            name: 'validationRules',
+            message: 'Which validation rules would you like to add?',
+            choices: this._getValidationChoices(fieldAnswers.fieldType)
+        }]);
 
-            field.fieldValidateRules = validationAnswer.validationRules;
+        field.fieldValidateRules = validationAnswer.validationRules;
 
-            // Chiedi i valori per le validazioni che ne richiedono
-            for (const rule of validationAnswer.validationRules) {
-                if (['minlength', 'maxlength', 'min', 'max', 'minbytes', 'maxbytes', 'pattern'].includes(rule)) {
-                    const valueAnswer = await this.prompt([{
-                        type: 'input',
-                        name: 'value',
-                        message: `What is the ${rule} value?`,
-                        default: this._getValidationDefault(rule)
-                    }]);
-                    field[`fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`] = valueAnswer.value;
-                }
+        // Chiedi i valori per le validazioni che ne richiedono
+        for (const rule of validationAnswer.validationRules) {
+            if (['minlength', 'maxlength', 'min', 'max', 'minbytes', 'maxbytes', 'pattern'].includes(rule)) {
+                const valueAnswer = await this.prompt([{
+                    type: 'input',
+                    name: 'value',
+                    message: `What is the ${rule} value?`,
+                    default: this._getValidationDefault(rule)
+                }]);
+                field[`fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`] = valueAnswer.value;
             }
         }
 
@@ -245,59 +237,22 @@ export default class extends Generator {
         }
 
         const validationAnswer = await this.prompt([{
-            type: 'confirm',
-            name: 'relationshipValidation',
-            message: 'Do you want to add any validation rules to this relationship?',
-            default: false
+            type: 'checkbox',
+            name: 'validationRules',
+            message: 'Which validation rules?',
+            choices: [
+                { name: 'Required', value: 'required' }
+            ]
         }]);
 
-        if (validationAnswer.relationshipValidation) {
-            const rulesAnswer = await this.prompt([{
-                type: 'checkbox',
-                name: 'validationRules',
-                message: 'Which validation rules?',
-                choices: [
-                    { name: 'Required', value: 'required' }
-                ]
-            }]);
-            relationship.relationshipValidateRules = rulesAnswer.validationRules;
+        if (validationAnswer.validationRules.length > 0) {
+            relationship.relationshipValidateRules = validationAnswer.validationRules;
         }
 
         this.entityConfig.relationships.push(relationship);
 
         // Ricorsione per aggiungere altre relazioni
         await this._askForRelationships();
-    }
-
-    _getEntityFields(entityName) {
-        // Se è l'entità corrente, usa i campi già definiti
-        if (entityName === this.entityName) {
-            const fields = this.entityConfig.fields
-                .filter(f => !f.fieldType.includes('Blob'))
-                .map(f => f.fieldName);
-
-            return ['id', ...fields];
-        }
-
-        // Altrimenti cerca nell'Entities.json
-        const entitiesPath = this.destinationPath('.pninja/Entities.json');
-
-        if (!this.fs.exists(entitiesPath)) {
-            return ['id'];
-        }
-
-        const entitiesData = this.fs.readJSON(entitiesPath);
-        const entity = entitiesData.entities.find(e => e.name === entityName);
-
-        if (!entity || !entity.body) {
-            return ['id'];
-        }
-
-        const fields = entity.body
-            .filter(f => !f.type.includes('Blob'))
-            .map(f => f.name);
-
-        return ['id', ...fields];
     }
 
     _getValidationChoices(fieldType) {
@@ -342,6 +297,37 @@ export default class extends Generator {
             maxbytes: '1000'
         };
         return defaults[rule] || '';
+    }
+
+    _getEntityFields(entityName) {
+        // Se è l'entità corrente, usa i campi già definiti
+        if (entityName === this.entityName) {
+            const fields = this.entityConfig.fields
+                .filter(f => !f.fieldType.includes('Blob'))
+                .map(f => f.fieldName);
+
+            return ['id', ...fields];
+        }
+
+        // Altrimenti cerca nell'Entities.json
+        const entitiesPath = this.destinationPath('.pninja/Entities.json');
+
+        if (!this.fs.exists(entitiesPath)) {
+            return ['id'];
+        }
+
+        const entitiesData = this.fs.readJSON(entitiesPath);
+        const entity = entitiesData.entities.find(e => e.name === entityName);
+
+        if (!entity || !entity.body) {
+            return ['id'];
+        }
+
+        const fields = entity.body
+            .filter(f => !f.type.includes('Blob'))
+            .map(f => f.name);
+
+        return ['id', ...fields];
     }
 
     configuring() {
