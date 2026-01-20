@@ -16,6 +16,9 @@ export default class extends Generator {
             fields: [],
             relationships: []
         };
+
+        this.fieldCounter = 0;
+        this.relationshipCounter = 0;
     }
 
     async prompting() {
@@ -51,8 +54,15 @@ export default class extends Generator {
         // Loop campi
         await this._askForFields();
 
+        // Mostra riassunto finale prima delle relazioni
+        this._printEntitySummary();
+        this.log(colors.cyan('\nGenerating relationships to other entities\n'));
+
         // Loop relazioni
         await this._askForRelationships();
+
+        // Mostra riassunto finale
+        this._printEntitySummary();
     }
 
     _loadExistingEntities() {
@@ -69,6 +79,9 @@ export default class extends Generator {
     }
 
     async _askForFields() {
+        this.fieldCounter++;
+        this.log(colors.cyan(`\nGenerating field #${this.fieldCounter}\n`));
+
         const addFieldAnswer = await this.prompt([{
             type: 'confirm',
             name: 'addField',
@@ -145,11 +158,16 @@ export default class extends Generator {
 
         this.entityConfig.fields.push(field);
 
+        // Mostra riassunto dopo l'aggiunta del campo
+        this._printEntitySummary();
+
         // Ricorsione per aggiungere altri campi
         await this._askForFields();
     }
 
     async _askForRelationships() {
+        this.relationshipCounter++;
+
         const addRelationshipAnswer = await this.prompt([{
             type: 'confirm',
             name: 'addRelationship',
@@ -251,8 +269,52 @@ export default class extends Generator {
 
         this.entityConfig.relationships.push(relationship);
 
+        // Mostra riassunto dopo l'aggiunta della relazione
+        this.log(colors.cyan('\nGenerating relationships to other entities\n'));
+        this._printEntitySummary();
+
         // Ricorsione per aggiungere altre relazioni
         await this._askForRelationships();
+    }
+
+    _printEntitySummary() {
+        this.log('\n' + '='.repeat(17) + ' ' + colors.bold(colors.cyan(this.entityName)) + ' ' + '='.repeat(17));
+
+        // Fields
+        this.log(colors.bold('Fields'));
+        if (this.entityConfig.fields.length === 0) {
+            this.log('(no fields)');
+        } else {
+            this.entityConfig.fields.forEach(field => {
+                let fieldLine = `${colors.cyan(field.fieldName)} (${field.fieldType})`;
+                if (field.fieldValidateRules && field.fieldValidateRules.length > 0) {
+                    const validationParts = field.fieldValidateRules.map(rule => {
+                        // Per le validazioni con valore, aggiungi il valore
+                        const ruleWithValue = `fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`;
+                        if (field[ruleWithValue] !== undefined) {
+                            return `${rule}=${field[ruleWithValue]}`;
+                        }
+                        return rule;
+                    });
+                    fieldLine += ' ' + colors.yellow(validationParts.join(' '));
+                }
+                this.log(fieldLine);
+            });
+        }
+
+        // Relationships
+        if (this.entityConfig.relationships.length > 0) {
+            this.log(colors.bold('Relationships'));
+            this.entityConfig.relationships.forEach(rel => {
+                let relLine = `${colors.cyan(rel.relationshipName)} (${rel.otherEntityName}) ${colors.green(rel.relationshipType)}`;
+                if (rel.relationshipValidateRules && rel.relationshipValidateRules.length > 0) {
+                    relLine += ' ' + colors.yellow(rel.relationshipValidateRules.join(' '));
+                }
+                this.log(relLine);
+            });
+        }
+
+        this.log('');
     }
 
     _getValidationChoices(fieldType) {
