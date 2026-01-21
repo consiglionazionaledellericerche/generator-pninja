@@ -50,9 +50,17 @@ export default class extends Generator {
             default: true
         }]);
 
+        const iconAnswer = await this.prompt([{
+            type: 'input',
+            name: 'icon',
+            message: 'Icon name:',
+            default: 'asterisk'
+        }]);
+
         this.entityConfig.name = this.entityName;
         this.entityConfig.tableName = this.entityName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
+        this.entityConfig.icon = iconAnswer.icon || null;
 
         this._loadExistingEntities();
 
@@ -130,9 +138,9 @@ export default class extends Generator {
         ]);
 
         const field = {
-            fieldName: fieldAnswers.fieldName,
-            fieldType: fieldAnswers.fieldType,
-            fieldValidateRules: []
+            name: fieldAnswers.fieldName,
+            type: fieldAnswers.fieldType,
+            validations: []
         };
 
         const validationAnswer = await this.prompt([{
@@ -142,10 +150,10 @@ export default class extends Generator {
             choices: this._getValidationChoices(fieldAnswers.fieldType)
         }]);
 
-        field.fieldValidateRules = validationAnswer.validationRules;
-
         // Ask for validation rule values
         for (const rule of validationAnswer.validationRules) {
+            const validation = { key: rule, value: '' };
+
             if (['minlength', 'maxlength', 'min', 'max', 'minbytes', 'maxbytes', 'pattern'].includes(rule)) {
                 const valueAnswer = await this.prompt([{
                     type: 'input',
@@ -153,8 +161,10 @@ export default class extends Generator {
                     message: `What is the ${rule} value?`,
                     default: this._getValidationDefault(rule)
                 }]);
-                field[`fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`] = valueAnswer.value;
+                validation.value = valueAnswer.value;
             }
+
+            field.validations.push(validation);
         }
 
         this.entityConfig.fields.push(field);
@@ -303,14 +313,10 @@ export default class extends Generator {
             this.log('(no fields)');
         } else {
             this.entityConfig.fields.forEach(field => {
-                let fieldLine = `${colors.cyan(field.fieldName)} (${field.fieldType})`;
-                if (field.fieldValidateRules && field.fieldValidateRules.length > 0) {
-                    const validationParts = field.fieldValidateRules.map(rule => {
-                        const ruleWithValue = `fieldValidate${rule.charAt(0).toUpperCase() + rule.slice(1)}`;
-                        if (field[ruleWithValue] !== undefined) {
-                            return `${rule}=${field[ruleWithValue]}`;
-                        }
-                        return rule;
+                let fieldLine = `${colors.cyan(field.name)} (${field.type})`;
+                if (field.validations && field.validations.length > 0) {
+                    const validationParts = field.validations.map(v => {
+                        return v.value ? `${v.key}=${v.value}` : v.key;
                     });
                     fieldLine += ' ' + colors.yellow(validationParts.join(' '));
                 }
@@ -379,8 +385,8 @@ export default class extends Generator {
     _getEntityFields(entityName) {
         if (entityName === this.entityName) {
             const fields = this.entityConfig.fields
-                .filter(f => !f.fieldType.includes('Blob'))
-                .map(f => f.fieldName);
+                .filter(f => !f.type.includes('Blob'))
+                .map(f => f.name);
 
             return ['id', ...fields];
         }
@@ -399,8 +405,8 @@ export default class extends Generator {
         }
 
         const fields = entityData.fields
-            .filter(f => !f.fieldType.includes('Blob'))
-            .map(f => f.fieldName);
+            .filter(f => !f.type.includes('Blob'))
+            .map(f => f.name);
 
         return ['id', ...fields];
     }

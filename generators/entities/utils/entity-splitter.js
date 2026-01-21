@@ -29,22 +29,17 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
         if (entity.body) {
             entityConfig.fields = entity.body.map(field => {
                 const fieldConfig = {
-                    fieldName: field.name,
-                    fieldType: field.type,
-                    fieldValidateRules: []
+                    name: field.name,
+                    type: field.type,
+                    validations: []
                 };
 
                 // Convert validations
                 if (field.validations && field.validations.length > 0) {
-                    field.validations.forEach(validation => {
-                        fieldConfig.fieldValidateRules.push(validation.key);
-
-                        // Add validation value if present
-                        if (validation.value) {
-                            const ruleName = `fieldValidate${validation.key.charAt(0).toUpperCase() + validation.key.slice(1)}`;
-                            fieldConfig[ruleName] = validation.value;
-                        }
-                    });
+                    fieldConfig.validations = field.validations.map(validation => ({
+                        key: validation.key,
+                        value: validation.value || ''
+                    }));
                 }
 
                 return fieldConfig;
