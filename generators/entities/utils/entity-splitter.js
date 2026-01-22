@@ -5,13 +5,6 @@
  * @returns {Array} Array of created entity file paths
  */
 export function splitEntitiesFile(entitiesData, fs, destinationPath) {
-    // const entitiesPath = destinationPath('.pninja/Entities.json');
-
-    // if (!fs.exists(entitiesPath)) {
-    //     throw new Error('No Entities.json file found at ' + entitiesPath);
-    // }
-
-    // const entitiesData = fs.readJSON(entitiesPath);
     const createdFiles = [];
 
     // Process each entity
@@ -78,6 +71,23 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
         fs.writeJSON(entityFilePath, entityConfig, null, 2);
         createdFiles.push(entityFilePath);
     });
+
+    // Process enums
+    if (entitiesData.enums) {
+        entitiesData.enums.forEach(enm => {
+            const enumConfig = {
+                name: enm.name,
+                values: enm.values.map(v => ({
+                    key: v.key,
+                    value: v.value || v.key
+                }))
+            };
+
+            const enumFilePath = destinationPath(`.pninja/${enm.name}.enum.json`);
+            fs.writeJSON(enumFilePath, enumConfig, null, 2);
+            createdFiles.push(enumFilePath);
+        });
+    }
 
     return createdFiles;
 }

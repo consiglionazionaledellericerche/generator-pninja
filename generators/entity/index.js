@@ -1,9 +1,11 @@
 // generators/entity/index.js
-import fs from 'fs';
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
+import fs from 'fs';
+import path from 'path';
+import { getEntitiesNames, getEnumsNames } from '../utils/getEntities.js';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -60,9 +62,10 @@ export default class extends Generator {
         this.entityConfig.name = this.entityName;
         this.entityConfig.tableName = this.entityName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
-        this.entityConfig.icon = iconAnswer.icon || null;
+        this.entityConfig.icon = iconAnswer.icon;
 
         this._loadExistingEntities();
+        this._loadExistingEnums();
 
         await this._askForFields();
 
@@ -75,18 +78,12 @@ export default class extends Generator {
     }
 
     _loadExistingEntities() {
-        const pninjaDir = this.destinationPath('.pninja');
-        this.existingEntities = [];
-        if (fs.existsSync(pninjaDir)) {
-            const files = fs.readdirSync(pninjaDir);
-            // Filter only .json files (excluding Entities.json and current entity)
-            this.existingEntities = files
-                .filter(file =>
-                    file.endsWith('.json') &&
-                    file !== 'Entities.json'
-                )
-                .map(file => file.replace('.json', ''));
-        }
+        this.existingEntities = getEntitiesNames(this);
+    }
+
+    _loadExistingEnums() {
+        console.log('Loading existing enums...', getEnumsNames(this));
+        this.existingEnums = getEnumsNames(this);
     }
 
     async _askForFields() {
@@ -132,7 +129,8 @@ export default class extends Generator {
                     'Blob',
                     'AnyBlob',
                     'ImageBlob',
-                    'TextBlob'
+                    'TextBlob',
+                    ...this.existingEnums
                 ]
             }
         ]);
@@ -246,6 +244,7 @@ export default class extends Generator {
 
         if (bidirectionalAnswer.bidirectional) {
             const inverseRelationType = this._getInverseRelationType(relationshipAnswers.relationshipType);
+
             const bidirectionalAnswers = await this.prompt([{
                 type: 'input',
                 name: 'otherEntityRelationshipName',
@@ -307,6 +306,7 @@ export default class extends Generator {
 
         const softDeleteStatus = this.entityConfig.softDelete ? 'enabled' : 'disabled';
         this.log(`${colors.bold('Soft delete:')} ${colors.yellow(softDeleteStatus)}`);
+        this.log(`${colors.bold('Icon:')} ${colors.yellow(this.entityConfig.icon)}`);
 
         this.log(colors.bold('Fields:'));
         if (this.entityConfig.fields.length === 0) {
@@ -339,6 +339,14 @@ export default class extends Generator {
     }
 
     _getValidationChoices(fieldType) {
+        // For enums, only required and unique are allowed
+        if (this.existingEnums.includes(fieldType)) {
+            return [
+                { name: 'required', value: 'required' },
+                { name: 'unique', value: 'unique' }
+            ];
+        }
+
         const choices = [
             { name: 'required', value: 'required' },
             { name: 'unique', value: 'unique' }
