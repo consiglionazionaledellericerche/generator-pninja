@@ -2,7 +2,7 @@ import { AcRule } from '../../utils/AcRule.js';
 import { createTable } from './createTable.js';
 import { createRelation } from './createRelation.js';
 import { generatePivotMigrations } from './generatePivotMigrations.js';
-import { getEntities, getEnums } from '../../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
 
 export class MigrationsGenerator {
     constructor(that, entitiesFilePath) {
@@ -24,7 +24,8 @@ export class MigrationsGenerator {
         });
     }
     createRelations() {
-        const { entities, relationships } = this.parsedJDL;
+        const entities = getEntities(this.that);
+        const relationships = getEntitiesRelationships(this.that);
         if (!relationships || relationships.length === 0) return;
 
         entities.forEach(entity => {

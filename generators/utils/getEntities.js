@@ -63,3 +63,13 @@ export function getEnumsNames(that) {
     return getEnumsFiles(that)
         .map(file => path.basename(file.path).replace('.enum.json', ''));
 }
+
+export function getEntitiesRelationships(that) {
+    return getEntities(that)
+        .flatMap(entity =>
+            (entity.relationships || []).map(rel => ({
+                entityName: entity.name,
+                ...rel
+            }))
+        );
+}

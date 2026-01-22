@@ -11,43 +11,34 @@ export function createRelation({ entity, relationships, that }) {
     const entityTable = pluralize(to.snake(entity.name))
     // OneToOne Relations
     relationships
-        .filter(relation => (relation.cardinality === 'OneToOne' && relation.from.name === entity.name))
+        .filter(relation => (relation.relationshipType === 'one-to-one' && relation.entityName === entity.name))
         .forEach(relation => {
-            const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
-            const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
-            const fromTabName = pluralize(to.snake(relation.from.name));
-            const toTabName = pluralize(to.snake(relation.to.name));
+            const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
+            const toTabName = pluralize(to.snake(relation.otherEntityName));
             const foreignId = `${fromInjectedField}_id`;
             const unique = true;
-            const nullable = !relation.from.required;
             up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
             down.push(`$table->dropForeign(['${foreignId}']);`);
         });
     // OneToMany Relations
     relationships
-        .filter(relation => (relation.cardinality === 'OneToMany' && relation.to.name === entity.name))
+        .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name))
         .forEach(relation => {
-            const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
-            const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
-            const fromTabName = pluralize(to.snake(relation.from.name));
-            const toTabName = pluralize(to.snake(relation.to.name));
+            const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+            const fromTabName = pluralize(to.snake(relation.entityName));
             const foreignId = `${toInjectedField}_id`;
             const unique = false;
-            const nullable = !relation.from.required;
             up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
             down.push(`$table->dropForeign(['${foreignId}']);`);
         });
     // ManyToOne Relations
     relationships
-        .filter(relation => (relation.cardinality === 'ManyToOne' && relation.from.name === entity.name))
+        .filter(relation => (relation.relationshipType === 'many-to-one' && relation.entityName === entity.name))
         .forEach(relation => {
-            const fromInjectedField = to.snake(relation.from.injectedField || relation.to.name);
-            const toInjectedField = to.snake(relation.to.injectedField || relation.from.name);
-            const fromTabName = pluralize(to.snake(relation.from.name));
-            const toTabName = pluralize(to.snake(relation.to.name));
+            const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
+            const toTabName = pluralize(to.snake(relation.otherEntityName));
             const foreignId = `${fromInjectedField}_id`;
             const unique = false;
-            const nullable = !relation.from.required;
             up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
             down.push(`$table->dropForeign(['${foreignId}']);`);
         });
