@@ -68,14 +68,12 @@ function convertFields(fields, enums) {
 
 export function createTable({ entity, enums, that }) {
     const tabName = to.snake(pluralize(entity.tableName));
-    const columns = convertFields(entity.body, enums);
-    const hasSoftDelete = entity.annotations?.some(
-        ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
-    );
+    const columns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
+    const softDelete = !!entity?.softDelete;
     that.fs.copyTpl(that.templatePath("migration_create_table.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),
         {
-            tabName: tabName,
-            columns: columns.join(`\n${tab(3)}`),
-            hasSoftDelete,
+            tabName,
+            columns,
+            softDelete,
         });
 }
