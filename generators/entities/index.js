@@ -97,7 +97,7 @@ export default class EntityGenerator extends Generator {
     // JDL > Migrations
     try {
       spinner = ora(`Generating migration files`).start();
-      (new MigrationsGenerator(this, entitiesFilePath)).generateMigrations();
+      (new MigrationsGenerator(this)).generateMigrations();
       spinner.succeed(`Migration files generated`);
     } catch (error) {
       spinner.fail();

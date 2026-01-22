@@ -5,10 +5,8 @@ import { generatePivotMigrations } from './generatePivotMigrations.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
 
 export class MigrationsGenerator {
-    constructor(that, entitiesFilePath) {
+    constructor(that) {
         this.that = that;
-        this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
         // this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
         this.baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
     }
