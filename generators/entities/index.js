@@ -108,7 +108,7 @@ export default class EntityGenerator extends Generator {
     // Generating models
     try {
       spinner = ora(`Generating Model files`);
-      (new ModelsGenerator(this, entitiesFilePath)).generateModels();
+      (new ModelsGenerator(this)).generateModels();
       spinner.succeed(`Model files generated`);
     } catch (error) {
       spinner.fail();
