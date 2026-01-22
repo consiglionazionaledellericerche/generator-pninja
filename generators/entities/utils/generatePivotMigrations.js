@@ -5,21 +5,19 @@ const baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
 
 export function generatePivotMigrations({ relationships, that }) {
     relationships
-        .filter(relationship => relationship.cardinality === 'ManyToMany')
+        .filter(relationship => relationship.relationshipType === 'many-to-many')
         .map(relation => {
-            const fromForeignId = to.snake(relation.from.injectedField || relation.to.name);
-            const toForeignId = to.snake(relation.to.injectedField || relation.from.name);
-            const fromTabName = pluralize(to.snake(relation.from.name));
-            const toTabName = pluralize(to.snake(relation.to.name));
-            const pivotName = [to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_');
-            const nullable = !relation.from.required;
+            const fromForeignId = to.snake(relation.relationshipName || relation.otherEntityName);
+            const toForeignId = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+            const fromTabName = pluralize(to.snake(relation.entityName));
+            const toTabName = pluralize(to.snake(relation.otherEntityName));
+            const pivotName = [to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_');
             return {
                 fromForeignId,
                 toForeignId,
                 fromTabName,
                 toTabName,
-                pivotName,
-                nullable
+                pivotName
             }
         }).map(migration => that.fs.copyTpl(that.templatePath("migration_create_pivot_table.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_003_create_${migration.pivotName}_table.php`),
             {
@@ -27,8 +25,7 @@ export function generatePivotMigrations({ relationships, that }) {
                 toForeignId: migration.toForeignId,
                 fromTabName: migration.fromTabName,
                 toTabName: migration.toTabName,
-                pivotName: migration.pivotName,
-                nullable: migration.nullable
+                pivotName: migration.pivotName
             }
         ));
 }

@@ -34,7 +34,8 @@ export class MigrationsGenerator {
     }
 
     createPivotMigrations() {
-        generatePivotMigrations({ relationships: this.parsedJDL.relationships, that: this.that });
+        const relationships = getEntitiesRelationships(this.that);
+        generatePivotMigrations({ relationships, that: this.that });
     }
 
     generateMigrations() {
