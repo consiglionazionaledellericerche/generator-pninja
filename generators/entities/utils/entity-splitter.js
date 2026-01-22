@@ -49,16 +49,14 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
                         otherEntityName: rel.to.name,
                         relationshipType: convertCardinality(rel.cardinality, true),
                         otherEntityField: rel.from.injectedFieldLabel || 'id',
+                        relationshipRequired: rel.from.required || false,
                         bidirectional: !!rel.to.injectedField
                     };
 
                     if (relationship.bidirectional) {
                         relationship.otherEntityRelationshipName = rel.to.injectedField;
                         relationship.inverseEntityField = rel.to.injectedFieldLabel || 'id';
-                    }
-
-                    if (rel.from.required) {
-                        relationship.relationshipValidateRules = ['required'];
+                        relationship.inverseRelationshipRequired = rel.to.required || false;
                     }
 
                     entityConfig.relationships.push(relationship);

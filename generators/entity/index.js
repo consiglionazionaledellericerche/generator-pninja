@@ -82,7 +82,6 @@ export default class extends Generator {
     }
 
     _loadExistingEnums() {
-        console.log('Loading existing enums...', getEnumsNames(this));
         this.existingEnums = getEnumsNames(this);
     }
 
@@ -234,6 +233,14 @@ export default class extends Generator {
         }]);
         relationship.otherEntityField = displayFieldAnswer.otherEntityField;
 
+        const requiredAnswer = await this.prompt([{
+            type: 'confirm',
+            name: 'relationshipRequired',
+            message: 'Is this relationship required?',
+            default: false
+        }]);
+        relationship.relationshipRequired = requiredAnswer.relationshipRequired;
+
         const bidirectionalAnswer = await this.prompt([{
             type: 'confirm',
             name: 'bidirectional',
@@ -268,19 +275,14 @@ export default class extends Generator {
                 default: 'id'
             }]);
             relationship.inverseEntityField = inverseDisplayFieldAnswer.inverseEntityField;
-        }
 
-        const validationAnswer = await this.prompt([{
-            type: 'checkbox',
-            name: 'validationRules',
-            message: 'Which validation rules?',
-            choices: [
-                { name: 'Required', value: 'required' }
-            ]
-        }]);
-
-        if (validationAnswer.validationRules.length > 0) {
-            relationship.relationshipValidateRules = validationAnswer.validationRules;
+            const inverseRequiredAnswer = await this.prompt([{
+                type: 'confirm',
+                name: 'inverseRelationshipRequired',
+                message: 'Is the inverse relationship required?',
+                default: false
+            }]);
+            relationship.inverseRelationshipRequired = inverseRequiredAnswer.inverseRelationshipRequired;
         }
 
         this.entityConfig.relationships.push(relationship);
@@ -328,8 +330,15 @@ export default class extends Generator {
             this.log(colors.bold('Relationships:'));
             this.entityConfig.relationships.forEach(rel => {
                 let relLine = `${colors.cyan(rel.relationshipName)} (${rel.otherEntityName}) ${colors.green(rel.relationshipType)}`;
-                if (rel.relationshipValidateRules && rel.relationshipValidateRules.length > 0) {
-                    relLine += ' ' + colors.yellow(rel.relationshipValidateRules.join(' '));
+                const validations = [];
+                if (rel.relationshipRequired) {
+                    validations.push('required');
+                }
+                if (rel.inverseRelationshipRequired) {
+                    validations.push('inverse-required');
+                }
+                if (validations.length > 0) {
+                    relLine += ' ' + colors.yellow(validations.join(' '));
                 }
                 this.log(relLine);
             });
