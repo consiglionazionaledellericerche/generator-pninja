@@ -31,45 +31,34 @@ function getPninjaFiles(that) {
 }
 
 export function getEntitiesFiles(that) {
-    return getPninjaFiles(that)
-        .filter(file =>
-            file.path.endsWith('.json') &&
-            !file.path.endsWith('.enum.json') &&
-            path.basename(file.path) !== 'Entities.json'
-        );
+    return getPninjaFiles(that).filter(file => file.path.endsWith('.json') && !file.path.endsWith('.enum.json'));
 }
 
 export function getEnumsFiles(that) {
-    return getPninjaFiles(that)
-        .filter(file => file.path.endsWith('.enum.json'));
+    return getPninjaFiles(that).filter(file => file.path.endsWith('.enum.json'));
 }
 
 export function getEntities(that) {
-    return getEntitiesFiles(that)
-        .map(file => JSON.parse(file.contents.toString('utf8')));
+    return getEntitiesFiles(that).map(file => JSON.parse(file.contents.toString('utf8')));
 }
 
 export function getEntitiesNames(that) {
-    return getEntitiesFiles(that)
-        .map(file => path.basename(file.path).replace('.json', ''));
+    return getEntitiesFiles(that).map(file => path.basename(file.path).replace('.json', ''));
 }
 
 export function getEnums(that) {
-    return getEnumsFiles(that)
-        .map(file => JSON.parse(file.contents.toString('utf8')));
+    return getEnumsFiles(that).map(file => JSON.parse(file.contents.toString('utf8')));
 }
 
 export function getEnumsNames(that) {
-    return getEnumsFiles(that)
-        .map(file => path.basename(file.path).replace('.enum.json', ''));
+    return getEnumsFiles(that).map(file => path.basename(file.path).replace('.enum.json', ''));
 }
 
 export function getEntitiesRelationships(that) {
-    return getEntities(that)
-        .flatMap(entity =>
-            (entity.relationships || []).map(rel => ({
-                entityName: entity.name,
-                ...rel
-            }))
-        );
+    return getEntities(that).flatMap(entity =>
+        (entity.relationships || []).map(rel => ({
+            entityName: entity.name,
+            ...rel
+        }))
+    );
 }
