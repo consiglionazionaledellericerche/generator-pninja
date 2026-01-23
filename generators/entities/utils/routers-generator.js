@@ -1,8 +1,9 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
+import { getEntities } from '../../utils/getEntities.js';
 
-const entityHasBlob = (entity) => entity.body.reduce((acc, prop) => {
+const entityHasBlob = (entity) => entity.fields.reduce((acc, prop) => {
     if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
         return true;
     }
@@ -11,15 +12,13 @@ const entityHasBlob = (entity) => entity.body.reduce((acc, prop) => {
 
 
 export class RoutersGenerator {
-    constructor(that, entitiesFilePath) {
+    constructor(that) {
         this.that = that;
-        this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
     }
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 
     generateRouters() {
-        const { entities } = this.parsedJDL;
+        const entities = getEntities(this.that);
         const eRoutesEntities = [AcRule, ...entities].map(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));
@@ -30,9 +29,7 @@ export class RoutersGenerator {
                 hasBlob,
             };
         });
-        const eRoutesTrash = entities.filter(entity => entity.annotations?.some(
-            ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
-        )).map(entity => {
+        const eRoutesTrash = entities.filter(entity => !!entity.softDelete).map(entity => {
             const className = `Trashed${entity.name}`;
             const rootPath = `trashed-${to.slug(pluralize(entity.name))}`;
             const hasBlob = false;

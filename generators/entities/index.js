@@ -130,7 +130,7 @@ export default class EntityGenerator extends Generator {
     // Generating Routers
     try {
       spinner = ora(`Generating Router files`);
-      (new RoutersGenerator(this, entitiesFilePath)).generateRouters();
+      (new RoutersGenerator(this)).generateRouters();
       spinner.succeed(`Router files generated`);
     } catch (error) {
       spinner.fail();
