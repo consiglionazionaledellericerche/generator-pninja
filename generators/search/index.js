@@ -3,6 +3,7 @@ import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../utils/AcRule.js';
+import { getEntities } from '../utils/getEntities.js';
 
 export default class SearchGenerator extends Generator {
   static namespace = 'pninja:search';
@@ -107,12 +108,12 @@ SOLR_PATH=/`;
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       this.fs.write(this.destinationPath('server/.env'), envContent + "\n" + searchEngineConfig, { encoding: 'utf8', flag: 'w' });
     }
-    const { entities } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
+    const entities = getEntities(this);
     const mailiserachIndexSettings = searchEngine === 'meilisearch' ? [...entities, AcRule].reduce((res, entity) => {
       const indexName = `${to.snake(pluralize(entity.tableName))}`;
       res += `
             '${indexName}' => [
-                'sortableAttributes' => ['id','${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
+                'sortableAttributes' => ['id','${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
                 'rankingRules' => ['sort', 'words', 'typo', 'proximity', 'attribute', 'exactness']
             ],`;
       return res;
@@ -125,7 +126,7 @@ SOLR_PATH=/`;
                 'collection-schema' => [
                     'fields' => [
                       ['name' => '__id', 'type' => 'int32', 'sort' => true],
-                      ${entity.body.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => `['name' => '${to.snake(f.name)}', 'type' => 'string', 'optional' => true, 'sort' => true, 'infix' => ${['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'true' : 'false'}]`).join(",\n                      ")}
+                      ${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => `['name' => '${to.snake(f.name)}', 'type' => 'string', 'optional' => true, 'sort' => true, 'infix' => ${['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'true' : 'false'}]`).join(",\n                      ")}
                     ],
                 ],
             ]`).join(",")}
@@ -150,7 +151,7 @@ SOLR_PATH=/`;
           {
             className: pluralize(entity.name),
             indexName: indexName,
-            columns: entity.body.reduce((res, field) => {
+            columns: entity.fields.reduce((res, field) => {
               if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(field.type)) {
                 res.push(to.snake(field.name));
               }
