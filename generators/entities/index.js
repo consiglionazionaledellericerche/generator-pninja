@@ -119,7 +119,7 @@ export default class EntityGenerator extends Generator {
     // Generating Controllers
     try {
       spinner = ora(`Generating Controller files`);
-      (new ControllersGenerator(this, entitiesFilePath)).generateControllers();
+      (new ControllersGenerator(this)).generateControllers();
       spinner.succeed(`Controller files generated`);
     } catch (error) {
       spinner.fail();

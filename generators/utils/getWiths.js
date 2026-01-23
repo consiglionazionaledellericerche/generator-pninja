@@ -3,46 +3,50 @@ import to from 'to-case';
 export function getWits(entity, relationships) {
     const withs = [];
     relationships.forEach(relation => {
-        if (!relation.from.injectedField && !relation.to.injectedField) {
-            relation.to.injectedField = relation.from.name;
-            relation.from.injectedField = relation.to.name;
+        if (!relation.relationshipName && !relation.otherEntityRelationshipName) {
+            relation.otherEntityRelationshipName = relation.entityName;
+            relation.relationshipName = relation.otherEntityName;
         }
         return relation;
     })
 
-    // OneToMany/ManyToMany direct relationships
+    // one-to-many/many-to-many direct relationships
     relationships.filter(relation => (
-        (relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.from.name === entity.name
-        && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
+        && relation.entityName === entity.name
+        && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
-        const fromField = to.snake(relation.from.injectedField || relation.to.name);
+        const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
         withs.push(`'${fromField}'`);
     });
 
-    // OneToMany/ManyToMany reverse relationships
+    // one-to-many/many-to-many reverse relationships
     relationships.filter(relation => (
-        (relation.cardinality === 'OneToMany' || relation.cardinality === 'ManyToMany') && relation.to.name === entity.name
-        && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
+        && relation.otherEntityName === entity.name
+        && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
-        const toField = to.snake(relation.to.injectedField || relation.from.name);
+        const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
         withs.push(`'${toField}'`);
     });
 
-    // OneToMany/ManyToOne direct relationships
+    // one-to-many/many-to-one direct relationships
     relationships.filter(relation => (
-        (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.from.name === entity.name
-        && (!!relation.from.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+        (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one')
+        && relation.entityName === entity.name
+        && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
-        const fromField = to.snake(relation.from.injectedField || relation.to.name);
+        const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
         withs.push(`'${fromField}'`);
     });
 
-    // ManyToOne reverse relationships
+    // many-to-one reverse relationships
     relationships.filter(relation => (
-        (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.to.name === entity.name
-        && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
+        (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one')
+        && relation.otherEntityName === entity.name
+        && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
-        const toField = to.snake(relation.to.injectedField || relation.from.name);
+        const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
         withs.push(`'${toField}'`);
     });
 
