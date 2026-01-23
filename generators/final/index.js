@@ -1,5 +1,6 @@
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
+import { getEntities, getEntitiesRelationships } from '../utils/getEntities.js';
 
 export default class FinalGenerator extends Generator {
   static namespace = 'pninja:final';
@@ -13,7 +14,8 @@ export default class FinalGenerator extends Generator {
   }
 
   end() {
-    const { entities, relationships } = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
+    const entities = getEntities(this);
+    const relationships = getEntitiesRelationships(this);
     this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
     this.log(colors.bold.green(`\nApplication generated successfully with `) + colors.bold.red('♥️') + colors.bold.green(`  & `) + colors.bold.blueBright(`PNinja`) + '!\n');
     this.log(`${colors.green(`Set database in server/.env and create tables with:`)}\n  ${colors.yellowBright(`npm run migrate`)}  # or npm run migrate:fresh or npm run migrate:fresh:seed\n`);

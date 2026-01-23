@@ -1,6 +1,6 @@
 <%
 const csvsE = entities.map(({name}) => `${name}.csv # Data for ${name} entity`);
-const csvsR = relationships?.filter(({ cardinality }) => cardinality === 'ManyToMany').map(({from, to}) => `${from.name}_${to.name}.csv # Many-to-many relationship from ${from.name} to ${to.name}`) || [];
+const csvsR = relationships?.filter(({ relationshipType }) => relationshipType === 'many-to-many').map((relation) => `${relation.entityName}_${relation.otherEntityName}.csv # Many to many relationship from ${relation.entityName} to ${relation.otherEntityName}`) || [];
 const csvs = [...csvsE, ...csvsR];
 -%>
 # <%= appName %>
