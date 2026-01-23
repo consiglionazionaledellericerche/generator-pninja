@@ -1,77 +1,76 @@
 import to from 'to-case';
 import { AcRule } from '../../utils/AcRule.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
-
 export class FactoriesGenerator {
-    constructor(that, entitiesFilePath) {
+    constructor(that) {
         this.that = that;
-        this.entitiesFilePath = entitiesFilePath;
-        this.parsedJDL = that.fs.readJSON(that.destinationPath('.pninja/Entities.json'));
     }
 
     generateFactories(n = 5) {
-        const { enums, entities, relationships } = this.parsedJDL;
+        const entities = getEntities(this.that);
+        const relationships = getEntitiesRelationships(this.that);
         let manyToMany = [];
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
-            const params = entity.body.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
-            const paramsBlobBlob = entity.body.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
-            const paramsBlobType = entity.body.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
-            const paramsBlobName = entity.body.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.pdf",`);
-            const paramsImageBlob = entity.body.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.png'),`);
-            const paramsImageType = entity.body.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`);
-            const paramsImageName = entity.body.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.png",`);
+            const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
+            const paramsBlobBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
+            const paramsBlobType = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
+            const paramsBlobName = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.pdf",`);
+            const paramsImageBlob = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.png'),`);
+            const paramsImageType = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`);
+            const paramsImageName = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.png",`);
             params.push(...([...paramsBlobBlob, ...paramsBlobType, ...paramsBlobName, ...paramsImageBlob, ...paramsImageType, ...paramsImageName].sort()));
 
-            // Relationships OneToOne
+            // Relationships one-to-one
             relationships.filter(relation => (
-                relation.cardinality === 'OneToOne'
-                && relation.from.name === entity.name
+                relation.relationshipType === 'one-to-one'
+                && relation.entityName === entity.name
             )).forEach(relation => {
-                if (relation.from.name !== relation.to.name) {
-                    models.push(`use App\\Models\\${relation.to.name};`)
+                if (relation.entityName !== relation.otherEntityName) {
+                    models.push(`use App\\Models\\${relation.otherEntityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
-                    if (${relation.to.name}::count() === 0) {
-                        ${relation.from.name !== relation.to.name ? `while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create()` : `return null`};
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => function() {
+                    if (${relation.otherEntityName}::count() === 0) {
+                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.otherEntityName}::count() < ${n}) ${relation.otherEntityName}::factory()->create()` : `return null`};
                     }
-                    $ids${relation.to.name} = array_map(function($e) { return $e['id']; }, (${relation.to.name}::all(['id']))->toArray());
-                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.from.injectedField || relation.to.name)}_id']; }, (${entity.name}::all(['${to.snake(relation.from.injectedField || relation.to.name)}_id']))->toArray());
-                    return $this->getRandomUniqueValue($ids${relation.to.name}, $ids${entity.name});
+                    $ids${relation.otherEntityName} = array_map(function($e) { return $e['id']; }, (${relation.otherEntityName}::all(['id']))->toArray());
+                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.relationshipName || relation.otherEntityName)}_id']; }, (${entity.name}::all(['${to.snake(relation.relationshipName || relation.otherEntityName)}_id']))->toArray());
+                    return $this->getRandomUniqueValue($ids${relation.otherEntityName}, $ids${entity.name});
                 },`);
             });
-            // Relationships OneToMany
+            // Relationships one-to-many
             relationships.filter(relation => (
-                relation.cardinality === 'OneToMany'
-                && relation.to.name === entity.name
-                && relation.from.name !== relation.to.name
+                relation.relationshipType === 'one-to-many'
+                && relation.otherEntityName === entity.name
+                && relation.entityName !== relation.otherEntityName
             )).forEach(relation => {
-                if (relation.from.name !== relation.to.name) {
-                    models.push(`use App\\Models\\${relation.from.name};`)
+                if (relation.entityName !== relation.otherEntityName) {
+                    models.push(`use App\\Models\\${relation.entityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.to.injectedField || relation.from.name)}_id' => function() {
-                    if (${relation.from.name}::count() === 0) {
-                        ${relation.from.name !== relation.to.name ? `while(${relation.from.name}::count() < ${n}) ${relation.from.name}::factory()->create()` : `return null`};
+                params.push(`${tab(3)}'${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id' => function() {
+                    if (${relation.entityName}::count() === 0) {
+                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.entityName}::count() < ${n}) ${relation.entityName}::factory()->create()` : `return null`};
                     }
-                    $ids${relation.from.name} = array_map(function($e) { return $e['id']; }, (${relation.from.name}::all(['id']))->toArray());
-                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.from.name}))[0];
+                    $ids${relation.entityName} = array_map(function($e) { return $e['id']; }, (${relation.entityName}::all(['id']))->toArray());
+                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.entityName}))[0];
                 },`);
             });
-            // Relationships ManyToOne
+            // Relationships many-to-one
             relationships.filter(relation => (
-                relation.cardinality === 'ManyToOne'
-                && relation.from.name === entity.name
+                relation.relationshipType === 'many-to-one'
+                && relation.entityName === entity.name
             )).forEach(relation => {
-                if (relation.from.name !== relation.to.name) {
-                    models.push(`use App\\Models\\${relation.to.name};`)
+                if (relation.entityName !== relation.otherEntityName) {
+                    models.push(`use App\\Models\\${relation.otherEntityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.from.injectedField || relation.to.name)}_id' => function() {
-                    if (${relation.to.name}::count() === 0) {
-                        ${relation.from.name !== relation.to.name ? `while(${relation.to.name}::count() < ${n}) ${relation.to.name}::factory()->create()` : `return null`};
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => function() {
+                    if (${relation.otherEntityName}::count() === 0) {
+                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.otherEntityName}::count() < ${n}) ${relation.otherEntityName}::factory()->create()` : `return null`};
                     }
-                    $ids${relation.to.name} = array_map(function($e) { return $e['id']; }, (${relation.to.name}::all(['id']))->toArray());
-                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.to.name}))[0];
+                    $ids${relation.otherEntityName} = array_map(function($e) { return $e['id']; }, (${relation.otherEntityName}::all(['id']))->toArray());
+                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.otherEntityName}))[0];
                 },`);
             });
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
@@ -80,15 +79,15 @@ export class FactoriesGenerator {
                     models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
                     params: params.join("\n"),
                 });
-            // Relationships ManyToMany
+            // Relationships many-to-many
             relationships.filter(relation => (
-                relation.cardinality === 'ManyToMany'
-                && relation.from.name === entity.name
+                relation.relationshipType === 'many-to-many'
+                && relation.entityName === entity.name
             )).forEach(relation => {
                 manyToMany.push({
-                    fromEntity: relation.from.name,
-                    toEntity: relation.to.name,
-                    relPropery: to.snake(relation.from.injectedField || relation.to.name)
+                    fromEntity: relation.entityName,
+                    toEntity: relation.otherEntityName,
+                    relPropery: to.snake(relation.relationshipName || relation.otherEntityName)
                 });
             });
         }
@@ -101,7 +100,7 @@ export class FactoriesGenerator {
     }
 
     _getFakerRule(field) {
-        const { enums } = this.parsedJDL;
+        const enums = getEnums(this.that);
         const { validations, name } = field;
 
         const min = Number(validations.reduce((min, validation) => validation.key === 'min' ? validation.value : min, undefined));

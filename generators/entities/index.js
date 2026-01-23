@@ -141,7 +141,7 @@ export default class EntityGenerator extends Generator {
     // Generating Factories and DatabaseSeeder
     try {
       spinner = ora(`Generating Factory files`);
-      (new FactoriesGenerator(this, entitiesFilePath)).generateFactories(this.config.get('howManyToGenerate') || 0);
+      (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
       spinner.succeed(`Factory files generated`);
     } catch (error) {
       spinner.fail();
