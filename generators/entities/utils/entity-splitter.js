@@ -1,5 +1,5 @@
 /**
- * Splits Entities.json into individual entity files
+ * Splits Entities JSON data (from JDL parser) into individual entity files
  * @param {Object} fs - Yeoman file system instance
  * @param {Function} destinationPath - Function to resolve destination paths
  * @returns {Array} Array of created entity file paths
