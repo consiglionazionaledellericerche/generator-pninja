@@ -4,6 +4,8 @@ import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
 import { getLanguageData } from './config/languages.js';
 import { AcRule } from '../utils/AcRule.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../utils/getEntities.js';
+
 const colors = [
     "lime",
     "green",
@@ -22,9 +24,11 @@ const colors = [
 
 const navbarStartcolor = colors[Math.floor(Math.random() * colors.length)];
 
-export async function createReactClient(that, parsedJDL) {
+export async function createReactClient(that) {
     const searchEngine = that.config.get('searchEngine');
-    const { entities, enums, relationships } = parsedJDL;
+    const entities = getEntities(that);
+    const enums = getEnums(that);
+    const relationships = getEntitiesRelationships(that);
     const appName = that.config.get('name');
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
     const languages = [nativeLanguage, ...that.config.get('languages')] || ['en', 'es', 'it', 'fr', 'de'];
@@ -46,7 +50,14 @@ export async function createReactClient(that, parsedJDL) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
-        that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), { entities: [AcRule, ...entities], relationships, to, pluralize, getModelForeignIds, getModelRelatedEntities });
+        that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
+            entities: [AcRule, ...entities],
+            relationships,
+            to,
+            pluralize,
+            getModelForeignIds,
+            getModelRelatedEntities
+        });
     };
     that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-outlined.woff2"), that.destinationPath(`client/public/fonts/material-symbols-outlined.woff2`));
     that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-rounded.woff2"), that.destinationPath(`client/public/fonts/material-symbols-rounded.woff2`));
@@ -193,9 +204,9 @@ export async function createReactClient(that, parsedJDL) {
                 entity,
                 to,
                 pluralize,
-                columns: entity.body.map(c => to.snake(c.name)),
-                durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                columns: entity.fields.map(c => to.snake(c.name)),
+                durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships),
                 searchEngine,
@@ -208,9 +219,9 @@ export async function createReactClient(that, parsedJDL) {
                     entity,
                     to,
                     pluralize,
-                    columns: entity.body.map(c => to.snake(c.name)),
-                    durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                    fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                    columns: entity.fields.map(c => to.snake(c.name)),
+                    durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                    fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                     foreignIds: getModelForeignIds(entity, relationships),
                     relatedEntities: getModelRelatedEntities(entity, relationships),
                     searchEngine,
@@ -223,9 +234,9 @@ export async function createReactClient(that, parsedJDL) {
                 entity,
                 to,
                 pluralize,
-                columns: entity.body.map(c => to.snake(c.name)),
-                durationColumns: entity.body.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                fileColumns: entity.body.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                columns: entity.fields.map(c => to.snake(c.name)),
+                durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
@@ -236,7 +247,7 @@ export async function createReactClient(that, parsedJDL) {
                 entity,
                 to,
                 pluralize,
-                columns: entity.body.map(c => to.snake(c.name)),
+                columns: entity.fields.map(c => to.snake(c.name)),
                 foreignIds: getModelForeignIds(entity, relationships),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
             });
@@ -247,14 +258,14 @@ export async function createReactClient(that, parsedJDL) {
                 entity,
                 enums,
                 relationships,
-                foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['OneToMany', 'ManyToOne'].includes(fi.cardinality)),
+                foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['one-to-many', 'many-to-one'].includes(fi.relationshipType)),
                 relatedEntities: getModelRelatedEntities(entity, relationships)
-                    .filter(re => ['OneToOne', 'ManyToMany'].includes(re.cardinality))
-                    .filter(re => !(re.cardinality === 'OneToOne' && re.reverse === true)),
+                    .filter(re => ['one-to-one', 'many-to-many'].includes(re.relationshipType))
+                    .filter(re => !(re.relationshipType === 'one-to-one' && re.reverse === true)),
                 relatedEntitiesForFilters: relationships.filter(relation =>
-                    relation.cardinality === 'OneToOne'
-                    && relation.from.name === entity.name
-                ).map(rel => to.snake(rel.from.injectedField || rel.to.name)),
+                    relation.relationshipType === 'one-to-one'
+                    && relation.entityName === entity.name
+                ).map(rel => to.snake(rel.relationshipName || rel.otherEntityName)),
                 to,
                 pluralize,
                 searchEngine

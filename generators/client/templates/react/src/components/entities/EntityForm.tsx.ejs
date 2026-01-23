@@ -1,6 +1,6 @@
 <%
 const enumsToImport = [];
-for({type} of entity.body) {
+for({type} of entity.fields) {
   if ((enums.filter(enm => enm.name === type)).length === 1) {
     enumsToImport.push(type);
   }
@@ -9,20 +9,20 @@ const isEmail = (name) => name.toLowerCase().includes('email');
 const isPassword = (name) => name.toLowerCase().includes('password');
 const isTel = (name) => /(phone|phonenumber)$/.test(name.toLowerCase());
 const isUrl = (name) => /url$/.test(name.toLowerCase());
-const hasEmail = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
-const hasPassword = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isPassword(name)), false);
-const hasTel = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isTel(name)), false);
-const hasUrl = entity?.body.reduce((res, {type,name}) => res || (type === 'String' && isUrl(name)), false);
-const hasText = entity?.body.reduce((res, {type}) => res || type === 'String', false);
-const hasTextarea = entity?.body.reduce((res, {type}) => res || type === 'TextBlob', false);
-const hasUUID = entity?.body.reduce((res, {type}) => res || type === 'UUID', false);
-const hasBlob = entity?.body.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
-const hasNumber = entity?.body.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
-const hasDuration = entity?.body.reduce((res, {type}) => res || type === 'Duration', false);
-const hasDate = entity?.body.reduce((res, {type}) => res || type === 'LocalDate', false);
-const hasDateTime = entity?.body.reduce((res, {type}) => res || type === 'ZonedDateTime' || type === 'Instant', false);
-const hasTime = entity?.body.reduce((res, {type}) => res || type === 'LocalTime', false);
-const hasRequiredBlob = entity?.body
+const hasEmail = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
+const hasPassword = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isPassword(name)), false);
+const hasTel = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isTel(name)), false);
+const hasUrl = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isUrl(name)), false);
+const hasText = entity?.fields.reduce((res, {type}) => res || type === 'String', false);
+const hasTextarea = entity?.fields.reduce((res, {type}) => res || type === 'TextBlob', false);
+const hasUUID = entity?.fields.reduce((res, {type}) => res || type === 'UUID', false);
+const hasBlob = entity?.fields.reduce((res, {type}) => res || type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob', false);
+const hasNumber = entity?.fields.reduce((res, {type}) => res || ['Integer','Long','BigDecimal','Float','Double'].includes(type), false);
+const hasDuration = entity?.fields.reduce((res, {type}) => res || type === 'Duration', false);
+const hasDate = entity?.fields.reduce((res, {type}) => res || type === 'LocalDate', false);
+const hasDateTime = entity?.fields.reduce((res, {type}) => res || type === 'ZonedDateTime' || type === 'Instant', false);
+const hasTime = entity?.fields.reduce((res, {type}) => res || type === 'LocalTime', false);
+const hasRequiredBlob = entity?.fields
   .filter(({ type }) => type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')
   .map(({ validations }) => validations)
   .reduce(
@@ -41,8 +41,8 @@ const getStringFieldType = (name) => {
   if (isUrl(name)) return 'UrlField';
   return 'TextField';
 }
-const blobFields = entity?.body.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
-const hasCheckbox = entity?.body.filter(({type}) => type === 'Boolean').length > 0;
+const blobFields = entity?.fields.filter(({type}) => (type === 'Blob' || type === 'AnyBlob' || type === 'ImageBlob')).map(({name}) => name);
+const hasCheckbox = entity?.fields.filter(({type}) => type === 'Boolean').length > 0;
 const hasSelect = (relatedEntities.length + foreignIds.length) > 0;
 const hasRadioGroup = enumsToImport.length > 0;
 const hasSelectNotMultiple = (enumsToImport.length + relatedEntities.filter(({isArray}) => !isArray).length + foreignIds.length) > 0;
@@ -204,7 +204,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   useEffect(() => {
     if (<%= to.camel(entity.name)-%>) {
       reset({
-<% for({name, type, validations} of entity.body) {-%>
+<% for({name, type, validations} of entity.fields) {-%>
 <%  if (type !== 'Blob' && type !== 'AnyBlob' && type !== 'ImageBlob') {-%>
         <%= to.snake(name) %>: <%= to.camel(entity.name)%>?.<%= to.snake(name) %><%= isOptional(validations) ? ' ?? undefined' : '' %>,
 <%  } -%>
@@ -217,7 +217,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <div className="max-w-5xl mx-auto space-y-4">
-<%      for({name, type, validations} of entity.body) {-%>
+<%      for({name, type, validations} of entity.fields) {-%>
           <div>
 <%        if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
             <RadioGroup
@@ -320,9 +320,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        }-%>
           </div>
 <%      }-%>
-<%      for({field, related, labelField, cardinality, isArray, nullable} of relatedEntities) {
+<%      for({field, related, labelField, relationshipType, isArray, nullable} of relatedEntities) {
           let filter = '';
-          if (cardinality === "OneToOne") {
+          if (relationshipType === "one-to-one") {
             filter += `?available_for_${to.snake(entity.name)}=\${${to.camel(entity.name)}?.id ?? ''}`;
           }  
 -%>

@@ -35,7 +35,7 @@ const isRequired = (prop) => {
     return false;
 }
 -%>
-<% if(entity.body.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>
+<% if(entity.fields.map(prop =>convertFieldType(prop, enums)).includes('dayjs.Dayjs')) {%>
 import dayjs from 'dayjs';
 <%}-%>
 <%relatedEntities
@@ -44,12 +44,12 @@ import dayjs from 'dayjs';
     .reduce((acc, current) => acc.includes(current) ? acc : [...acc, current], [])
     .forEach(e => {%>import { I<%=e%> } from './<%= to.slug(e) %>.model';
 <%});-%>
-<% for (prop of entity.body) {
+<% for (prop of entity.fields) {
     if ((enums.map(e => e.name)).includes(prop.type)) {%>import { <%= prop.type %> } from './enumerations/<%= to.slug(prop.type); %>.model';
 <%}}-%>
 export interface I<%= entity.name %> {
   id?: number;
-<%  for (prop of entity.body) {-%>
+<%  for (prop of entity.fields) {-%>
 <%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>?: <%= convertFieldType(prop, enums) %><%= !isRequired(prop) ? ' | null;' : ';'%>
 <%    } else {-%>
@@ -66,7 +66,7 @@ export interface I<%= entity.name %> {
 }
 
 export const defaultValue: Readonly<I<%= entity.name %>> = {
-<%  for (prop of entity.body) {-%>
+<%  for (prop of entity.fields) {-%>
 <%    if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(convertFieldType(prop, enums))) {-%>
   <%= to.snake(prop.name) %>: undefined,
 <%    } else {-%>

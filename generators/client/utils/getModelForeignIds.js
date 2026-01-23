@@ -4,29 +4,29 @@ export function getModelForeignIds(entity, relationships) {
     const foreignIds = [];
 
     relationships
-        .filter(relation => (relation.cardinality === 'OneToMany' && relation.to.name === entity.name))
+        .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name))
         .forEach(relation => {
-            const injectedField = to.snake(relation.to.injectedField || relation.from.name);
-            const foreignId = `${injectedField}_id`;
-            const nullable = !relation.to.required;
-            const related = relation.from.name;
-            const labelField = relation.to.injectedFieldLabel;
-            const cardinality = relation.cardinality;
-            foreignIds.push({ foreignId, injectedField, labelField, nullable, related, cardinality })
+            const relationshipName = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+            const foreignId = `${relationshipName}_id`;
+            const nullable = !relation.inverseRelationshipRequired;
+            const related = relation.entityName;
+            const labelField = relation.inverseEntityField;
+            const relationshipType = relation.relationshipType;
+            foreignIds.push({ foreignId, relationshipName, labelField, nullable, related, relationshipType })
         });
 
     relationships
         .filter(relation =>
-            (relation.cardinality === 'OneToOne' || relation.cardinality === 'ManyToOne') && relation.from.name === entity.name
+            (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') && relation.entityName === entity.name
         )
         .forEach(relation => {
-            const injectedField = to.snake(relation.from.injectedField || relation.to.name);
-            const foreignId = `${injectedField}_id`;
-            const nullable = !relation.from.required;
-            const related = relation.to.name;
-            const labelField = relation.from.injectedFieldLabel;
-            const cardinality = relation.cardinality;
-            foreignIds.push({ foreignId, injectedField, labelField, nullable, related, cardinality })
+            const relationshipName = to.snake(relation.relationshipName || relation.otherEntityName);
+            const foreignId = `${relationshipName}_id`;
+            const nullable = !relation.relationshipRequired;
+            const related = relation.otherEntityName;
+            const labelField = relation.otherEntityField;
+            const relationshipType = relation.relationshipType;
+            foreignIds.push({ foreignId, relationshipName, labelField, nullable, related, relationshipType })
         });
 
     return foreignIds;

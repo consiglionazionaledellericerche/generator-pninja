@@ -59,7 +59,6 @@ export default class AuthGenerator extends Generator {
     }
 
     async writing() {
-        const parsedJDL = this.fs.readJSON(this.destinationPath(`.pninja/Entities.json`));
-        if (this.config.get('clientType') === 'react') return await createReactClient(this, parsedJDL);
+        if (this.config.get('clientType') === 'react') return await createReactClient(this);
     }
 };
