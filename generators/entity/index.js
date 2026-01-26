@@ -5,10 +5,11 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
 import path from 'path';
-import { getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships } from '../utils/getEntities.js';
+import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
 import { createTable } from '../entities/utils/createTable.js';
 import { createRelation } from '../entities/utils/createRelation.js';
 import { generatePivotMigrations } from '../entities/utils/generatePivotMigrations.js';
+import { ModelsGenerator } from '../entities/utils/models-generator.js';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -434,6 +435,8 @@ export default class extends Generator {
 
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
+        const enums = getEnums(this);
+        const storedRelationships = getEntitiesRelationships(this);
 
         // Save entity configuration to .pninja/<EntityName>.json
         const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
@@ -441,9 +444,9 @@ export default class extends Generator {
 
         this.log(colors.green(`Entity configuration saved to ${entityFilePath}`));
 
-        // Generate migrations
-        const enums = getEnums(this);
         const relationships = this.entityConfig.relationships || [];
+
+        // Generate migrations
         createTable({ entity: this.entityConfig, enums, that: this });
         if (relationships.length > 0) {
             createRelation({ entity: this.entityConfig, relationships, that: this });
@@ -452,5 +455,22 @@ export default class extends Generator {
             })).forEach(relEntity => createRelation({ entity: relEntity, relationships, that: this }));
             generatePivotMigrations({ relationships, that: this })
         }
+        this.log(colors.green('Migrations generated successfully\n'));
+
+        // Generate models
+        const modelsGenerator = new ModelsGenerator(this);
+        modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+        modelsGenerator.generateModel(this.entityConfig, enums, relationships, this.config.get('searchEngine'));
+        relationships
+            .filter(rel => rel.relationshipType === 'many-to-one')
+            .map(rel => rel.otherEntityName)
+            .forEach(entityName => {
+                const entity = getEntity(this, entityName);
+                console.log('Generating relation for entity:', entityName, entity);
+                if (entity) {
+                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], this.config.get('searchEngine'));
+                }
+            });
+        this.log(colors.green('Models generated successfully\n'));
     }
 }

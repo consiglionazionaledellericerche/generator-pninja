@@ -2,10 +2,50 @@ import path from 'path';
 import fs from 'fs';
 
 /**
- * Get all files from .pninja directory (mem-fs with filesystem fallback)
+ * Get a specific file from .pninja directory (mem-fs with filesystem fallback)
  * @param {Object} that - Yeoman generator instance
- * @returns {Array} Array of file objects with path and contents
+ * @param {string} fileName - Name of the file to retrieve
+ * @returns {Object|null} File object with path and contents, or null if not found
  */
+function getPninjaFile(that, fileName) {
+    const pninjaDir = that.destinationPath('.pninja');
+    const filePath = path.join(pninjaDir, fileName);
+
+    // Try mem-fs first
+    const allFiles = that.fs.store.all();
+    const memFsFile = allFiles.find(file => file.path === filePath);
+
+    if (memFsFile) {
+        return memFsFile;
+    }
+
+    // Fallback to filesystem
+    if (fs.existsSync(filePath)) {
+        return {
+            path: filePath,
+            contents: fs.readFileSync(filePath)
+        };
+    }
+
+    return null;
+}
+
+/**
+ * Get a specific entity by name
+ * @param {Object} that - Yeoman generator instance
+ * @param {string} entityName - Name of the entity to retrieve
+ * @returns {Object|null} Entity object or null if not found
+ */
+export function getEntity(that, entityName) {
+    const file = getPninjaFile(that, `${entityName}.json`);
+
+    if (!file) {
+        return null;
+    }
+
+    return JSON.parse(file.contents.toString('utf8'));
+}
+
 function getPninjaFiles(that) {
     const pninjaDir = that.destinationPath('.pninja');
 
