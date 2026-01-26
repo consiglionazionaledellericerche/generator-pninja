@@ -7,8 +7,7 @@ import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/get
 export class MigrationsGenerator {
     constructor(that) {
         this.that = that;
-        // this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
-        this.baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
+        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     }
 
     createTables() {

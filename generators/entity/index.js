@@ -5,7 +5,10 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
 import path from 'path';
-import { getEntitiesNames, getEnumsNames } from '../utils/getEntities.js';
+import { getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships } from '../utils/getEntities.js';
+import { createTable } from '../entities/utils/createTable.js';
+import { createRelation } from '../entities/utils/createRelation.js';
+import { generatePivotMigrations } from '../entities/utils/generatePivotMigrations.js';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -217,6 +220,7 @@ export default class extends Generator {
         ]);
 
         const relationship = {
+            entityName: this.entityName,
             relationshipName: relationshipAnswers.relationshipName,
             otherEntityName: relationshipAnswers.otherEntity,
             relationshipType: relationshipAnswers.relationshipType
@@ -436,5 +440,17 @@ export default class extends Generator {
         this.fs.writeJSON(entityFilePath, this.entityConfig, null, 2);
 
         this.log(colors.green(`Entity configuration saved to ${entityFilePath}`));
+
+        // Generate migrations
+        const enums = getEnums(this);
+        const relationships = this.entityConfig.relationships || [];
+        createTable({ entity: this.entityConfig, enums, that: this });
+        if (relationships.length > 0) {
+            createRelation({ entity: this.entityConfig, relationships, that: this });
+            relationships.filter(rel => rel.relationshipType === 'one-to-many').map(rel => ({
+                name: rel.otherEntityName
+            })).forEach(relEntity => createRelation({ entity: relEntity, relationships, that: this }));
+            generatePivotMigrations({ relationships, that: this })
+        }
     }
 }

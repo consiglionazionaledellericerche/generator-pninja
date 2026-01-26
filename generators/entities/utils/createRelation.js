@@ -2,8 +2,7 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
-// const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
-const baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
+const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
 
 export function createRelation({ entity, relationships, that }) {
     const up = [];
@@ -42,7 +41,7 @@ export function createRelation({ entity, relationships, that }) {
             up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
             down.push(`$table->dropForeign(['${foreignId}']);`);
         });
-    that.fs.copyTpl(that.templatePath("migration_create_relations.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
+    that.fs.copyTpl(that.templatePath("../../entities/templates/migration_create_relations.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
         {
             entityTable: entityTable,
             up: up.join(`\n${tab(3)}`),

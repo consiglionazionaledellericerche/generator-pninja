@@ -45,6 +45,7 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
                 // Check if this entity is the 'from' side
                 if (rel.from.name === entity.name) {
                     const relationship = {
+                        entityName: rel.from.name,
                         relationshipName: rel.from.injectedField,
                         otherEntityName: rel.to.name,
                         relationshipType: convertCardinality(rel.cardinality, true),

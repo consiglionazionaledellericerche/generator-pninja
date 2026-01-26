@@ -1,7 +1,6 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
-// const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
-const baseTimestamp = '0001_01_01_235959' + '_pninja_entity';
+const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
 
 export function generatePivotMigrations({ relationships, that }) {
     relationships
@@ -19,7 +18,7 @@ export function generatePivotMigrations({ relationships, that }) {
                 toTabName,
                 pivotName
             }
-        }).map(migration => that.fs.copyTpl(that.templatePath("migration_create_pivot_table.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_003_create_${migration.pivotName}_table.php`),
+        }).map(migration => that.fs.copyTpl(that.templatePath("../../entities/templates/migration_create_pivot_table.php.ejs"), that.destinationPath(`server/database/migrations/${baseTimestamp}_003_create_${migration.pivotName}_table.php`),
             {
                 fromForeignId: migration.fromForeignId,
                 toForeignId: migration.toForeignId,
