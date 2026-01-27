@@ -141,6 +141,7 @@ export default class EntityGenerator extends Generator {
     try {
       spinner = ora(`Generating Factory files`);
       (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
+      this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: parsedJDL.entities });
       spinner.succeed(`Factory files generated`);
     } catch (error) {
       spinner.fail();
@@ -150,7 +151,6 @@ export default class EntityGenerator extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: parsedJDL.entities });
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
