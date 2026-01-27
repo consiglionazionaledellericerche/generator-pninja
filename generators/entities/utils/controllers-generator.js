@@ -151,118 +151,122 @@ export class ControllersGenerator {
     constructor(that) {
         this.that = that;
     }
-    generateControllers() {
-        const entities = getEntities(this.that);
-        const relationships = getEntitiesRelationships(this.that);
-        const searchEngine = this.that.config.get('searchEngine');
 
-        this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Providers/AppServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Casts/Base64BinaryCast.php.ejs"), this.that.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
+    generateEntityController(entity, relationships, searchEngine) {
+        const hasSoftDelete = !!entity.softDelete;
+        const withs = getWits(entity, relationships);
+        const createRelated = [];
+        relationships.forEach(relation => {
+            if (!relation.relationshipName && !relation.otherEntityRelationshipName) {
+                relation.otherEntityRelationshipName = relation.entityName;
+                relation.relationshipName = relation.otherEntityName;
+            }
+            return relation;
+        })
 
-        for (const entity of [AcRule, ...entities]) {
-            const hasSoftDelete = !!entity.softDelete;
-            const withs = getWits(entity, relationships);
-            const createRelated = [];
-            relationships.forEach(relation => {
-                if (!relation.relationshipName && !relation.otherEntityRelationshipName) {
-                    relation.otherEntityRelationshipName = relation.entityName;
-                    relation.relationshipName = relation.otherEntityName;
-                }
-                return relation;
-            })
-
-            // many-to-many direct relationships
-            relationships.filter(relation => (
-                relation.relationshipType === 'many-to-many'
-                && relation.entityName === entity.name
-                && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
-            )).forEach(relation => {
-                const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toEntity = relation.otherEntityName;
-                if (relation.relationshipType === 'many-to-many') {
-                    createRelated.push(`\n            if(array_key_exists("${fromField}", $validated)) {
+        // many-to-many direct relationships
+        relationships.filter(relation => (
+            relation.relationshipType === 'many-to-many'
+            && relation.entityName === entity.name
+            && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        )).forEach(relation => {
+            const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
+            const toEntity = relation.otherEntityName;
+            if (relation.relationshipType === 'many-to-many') {
+                createRelated.push(`\n            if(array_key_exists("${fromField}", $validated)) {
                 $${to.camel(entity.name)}->${fromField}()->sync($validated['${fromField}']);
             }\n`);
-                }
-            });
+            }
+        });
 
-            // many-to-many reverse relationships
-            relationships.filter(relation => (
-                relation.relationshipType === 'many-to-many'
-                && relation.otherEntityName === entity.name
-                && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
-            )).forEach(relation => {
-                const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromEntity = relation.entityName;
-                if (relation.relationshipType === 'many-to-many') {
-                    createRelated.push(`\n            if(array_key_exists("${toField}", $validated)) {
+        // many-to-many reverse relationships
+        relationships.filter(relation => (
+            relation.relationshipType === 'many-to-many'
+            && relation.otherEntityName === entity.name
+            && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        )).forEach(relation => {
+            const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+            const fromEntity = relation.entityName;
+            if (relation.relationshipType === 'many-to-many') {
+                createRelated.push(`\n            if(array_key_exists("${toField}", $validated)) {
                 $${to.camel(entity.name)}->${toField}()->sync($validated['${toField}']);
             }\n`);
-                }
-            });
-
-            const relatedEntitiesForFilters = relationships.filter(relation =>
-                relation.relationshipType === 'one-to-one'
-                && relation.otherEntityName === entity.name
-            ).map(rel => {
-                return {
-                    name: rel.entityName,
-                    injectedField: rel.relationshipName || rel.otherEntityName,
-                };
-            });
-
-            const getSolrSuffix = (type) => {
-                switch (type) {
-                    case 'String':
-                    case 'UUID':
-                        return '_s';
-                    case 'TextBlob':
-                        return '_t';
-                    case 'Integer':
-                    case 'Long':
-                        return '_i';
-                    case 'Float':
-                    case 'Double':
-                    case 'BigDecimal':
-                        return '_d';
-                    case 'LocalDate':
-                        return '_dt';
-                    case 'ZonedDateTime':
-                    case 'Instant':
-                        return '_dt';
-                    case 'Duration':
-                        return '_l';
-                    case 'LocalTime':
-                        return '_t';
-                    case 'Boolean':
-                        return '_b';
-                    default:
-                        return '_s';
-                }
             }
-            const toSearchableArray = entity.fields.reduce((acc, prop) => {
-                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
-                    acc.push(`${to.snake(prop.name)}`);
-                }
-                return acc;
-            }, []);
-            const toSearchableArrayTypes = entity.fields.reduce((acc, prop) => {
-                if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
-                    acc[`${to.snake(prop.name)}`] = prop.type;
-                }
-                return acc;
-            }, {});
+        });
 
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
+        const relatedEntitiesForFilters = relationships.filter(relation =>
+            relation.relationshipType === 'one-to-one'
+            && relation.otherEntityName === entity.name
+        ).map(rel => {
+            return {
+                name: rel.entityName,
+                injectedField: rel.relationshipName || rel.otherEntityName,
+            };
+        });
+
+        const getSolrSuffix = (type) => {
+            switch (type) {
+                case 'String':
+                case 'UUID':
+                    return '_s';
+                case 'TextBlob':
+                    return '_t';
+                case 'Integer':
+                case 'Long':
+                    return '_i';
+                case 'Float':
+                case 'Double':
+                case 'BigDecimal':
+                    return '_d';
+                case 'LocalDate':
+                    return '_dt';
+                case 'ZonedDateTime':
+                case 'Instant':
+                    return '_dt';
+                case 'Duration':
+                    return '_l';
+                case 'LocalTime':
+                    return '_t';
+                case 'Boolean':
+                    return '_b';
+                default:
+                    return '_s';
+            }
+        }
+        const toSearchableArray = entity.fields.reduce((acc, prop) => {
+            if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+                acc.push(`${to.snake(prop.name)}`);
+            }
+            return acc;
+        }, []);
+        const toSearchableArrayTypes = entity.fields.reduce((acc, prop) => {
+            if (!['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
+                acc[`${to.snake(prop.name)}`] = prop.type;
+            }
+            return acc;
+        }, {});
+
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
+            {
+                className: entity.name,
+                entityName: to.camel(entity.name),
+                validationsStore: getValidations(entity, relationships, 'store'),
+                validationsUpdate: getValidations(entity, relationships, 'update'),
+                fileFields: entity.fields.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                imageFields: entity.fields.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
+                booleanFields: entity.fields.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),
+                withs: withs.length ? `[${withs.join(', ')}]` : null,
+                createRelated: createRelated.join(''),
+                relatedEntitiesForFilters,
+                searchEngine,
+                to,
+                getSolrSuffix,
+                toSearchableArray,
+                toSearchableArrayTypes,
+            });
+        if (hasSoftDelete) {
+            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/TrashedEntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/Trashed${entity.name}Controller.php`),
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),
@@ -280,32 +284,33 @@ export class ControllersGenerator {
                     toSearchableArray,
                     toSearchableArrayTypes,
                 });
-            if (hasSoftDelete) {
-                this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/TrashedEntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/Trashed${entity.name}Controller.php`),
-                    {
-                        className: entity.name,
-                        entityName: to.camel(entity.name),
-                        validationsStore: getValidations(entity, relationships, 'store'),
-                        validationsUpdate: getValidations(entity, relationships, 'update'),
-                        fileFields: entity.fields.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
-                        imageFields: entity.fields.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
-                        booleanFields: entity.fields.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),
-                        withs: withs.length ? `[${withs.join(', ')}]` : null,
-                        createRelated: createRelated.join(''),
-                        relatedEntitiesForFilters,
-                        searchEngine,
-                        to,
-                        getSolrSuffix,
-                        toSearchableArray,
-                        toSearchableArrayTypes,
-                    });
-            }
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/LogController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/LogController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/UserRoleController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/UserRoleController.php`), {});
+        }
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/LogController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/LogController.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/UserRoleController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/UserRoleController.php`), {});
+    }
+
+    generateControllers() {
+        const entities = getEntities(this.that);
+        const relationships = getEntitiesRelationships(this.that);
+        const searchEngine = this.that.config.get('searchEngine');
+
+        this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("Providers/AppServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("Casts/Base64BinaryCast.php.ejs"), this.that.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
+        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
+
+        for (const entity of [AcRule, ...entities]) {
+            this.generateEntityController(entity, relationships, searchEngine);
         }
     }
 }

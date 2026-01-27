@@ -8,13 +8,14 @@ export class FactoriesGenerator {
         this.that = that;
     }
 
-    generateFactories(n = 5) {
-        const entities = getEntities(this.that);
-        const relationships = getEntitiesRelationships(this.that);
+    generateFactories(n = 5, entities = null, relationships = null, enums = null) {
+        entities = entities ?? getEntities(this.that);
+        relationships = relationships ?? getEntitiesRelationships(this.that);
+        enums = enums ?? getEnums(this.that);
         let manyToMany = [];
         for (const entity of entities) {
             const models = [`use App\\Models\\${entity.name};`];
-            const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop)},`);
+            const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop, enums)},`);
             const paramsBlobBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
             const paramsBlobType = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
             const paramsBlobName = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.pdf",`);
@@ -99,8 +100,7 @@ export class FactoriesGenerator {
             });
     }
 
-    _getFakerRule(field) {
-        const enums = getEnums(this.that);
+    _getFakerRule(field, enums) {
         const { validations, name } = field;
 
         const min = Number(validations.reduce((min, validation) => validation.key === 'min' ? validation.value : min, undefined));

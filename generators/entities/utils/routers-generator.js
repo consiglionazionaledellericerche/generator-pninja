@@ -17,8 +17,8 @@ export class RoutersGenerator {
     }
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 
-    generateRouters() {
-        const entities = getEntities(this.that);
+    generateRouters(entities = undefined) {
+        entities = entities ?? getEntities(this.that);
         const eRoutesEntities = [AcRule, ...entities].map(entity => {
             const className = entity.name;
             const rootPath = to.slug(pluralize(entity.name));

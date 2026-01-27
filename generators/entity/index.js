@@ -5,9 +5,12 @@ import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
-import { getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
+import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
+import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
+import { RoutersGenerator } from '../entities/utils/routers-generator.js';
+import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -434,7 +437,9 @@ export default class extends Generator {
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
         const enums = getEnums(this);
+        const storedEntities = getEntities(this);
         const storedRelationships = getEntitiesRelationships(this);
+        const searchEngine = this.config.get('searchEngine');
 
         // Save entity configuration to .pninja/<EntityName>.json
         const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
@@ -460,17 +465,51 @@ export default class extends Generator {
         // Generate models
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        modelsGenerator.generateModel(this.entityConfig, enums, relationships, this.config.get('searchEngine'));
+        modelsGenerator.generateModel(this.entityConfig, enums, relationships, searchEngine);
         relationships
             .filter(rel => rel.relationshipType === 'many-to-one')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const entity = getEntity(this, entityName);
-                console.log('Generating relation for entity:', entityName, entity);
                 if (entity) {
-                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], this.config.get('searchEngine'));
+                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
+                }
+            });
+        relationships
+            .filter(rel => rel.relationshipType === 'one-to-many')
+            .map(rel => rel.otherEntityName)
+            .forEach(entityName => {
+                const entity = getEntity(this, entityName);
+                if (entity) {
+                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
                 }
             });
         this.log(colors.green('Models generated successfully\n'));
+
+        // Generate controllers
+        const controllersGenerator = new ControllersGenerator(this);
+        controllersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+        controllersGenerator.generateEntityController(this.entityConfig, [...storedRelationships, ...relationships], searchEngine);
+        relationships
+            .filter(rel => rel.relationshipType === 'one-to-many')
+            .map(rel => rel.otherEntityName)
+            .forEach(entityName => {
+                const relEntity = storedEntities.find(entity => entity.name === entityName);
+                controllersGenerator.generateEntityController(relEntity, [...storedRelationships, ...relationships], searchEngine)
+            });
+        this.log(colors.green('Controllers generated successfully\n'));
+
+
+        // Generate routes
+        const routersGenerator = new RoutersGenerator(this);
+        routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+        routersGenerator.generateRouters([...storedEntities, this.entityConfig]);
+        this.log(colors.green('Routers generated successfully\n'));
+
+        // Generate Factories and DatabaseSeeder
+        const factoriesGenerator = new FactoriesGenerator(this);
+        factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+        factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, [...storedEntities, this.entityConfig], [...storedRelationships, ...relationships], enums);
+        this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
     }
 }
