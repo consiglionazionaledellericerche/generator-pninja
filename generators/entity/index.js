@@ -531,6 +531,7 @@ export default class extends Generator {
         const factoriesGenerator = new FactoriesGenerator(this);
         factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, [...storedEntities, this.entityConfig], [...storedRelationships, ...relationships], enums);
+        factoriesGenerator.that.fs.copyTpl(factoriesGenerator.that.templatePath("database/seeders/csv/AcRule.csv.ejs"), factoriesGenerator.that.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [...storedEntities, this.entityConfig] });
         this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
 
         // Generate client
