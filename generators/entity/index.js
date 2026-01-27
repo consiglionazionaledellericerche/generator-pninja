@@ -1,14 +1,12 @@
 // generators/entity/index.js
+import path from 'path';
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
-import path from 'path';
-import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
-import { createTable } from '../entities/utils/createTable.js';
-import { createRelation } from '../entities/utils/createRelation.js';
-import { generatePivotMigrations } from '../entities/utils/generatePivotMigrations.js';
+import { getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
+import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 
 export default class extends Generator {
@@ -447,13 +445,15 @@ export default class extends Generator {
         const relationships = this.entityConfig.relationships || [];
 
         // Generate migrations
-        createTable({ entity: this.entityConfig, enums, that: this });
+        const migrationsGenerator = new MigrationsGenerator(this);
+        migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+        migrationsGenerator.createTable({ entity: this.entityConfig, enums });
         if (relationships.length > 0) {
-            createRelation({ entity: this.entityConfig, relationships, that: this });
+            migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
             relationships.filter(rel => rel.relationshipType === 'one-to-many').map(rel => ({
                 name: rel.otherEntityName
-            })).forEach(relEntity => createRelation({ entity: relEntity, relationships, that: this }));
-            generatePivotMigrations({ relationships, that: this })
+            })).forEach(relEntity => migrationsGenerator.createRelation({ entity: relEntity, relationships }));
+            migrationsGenerator.generatePivotMigrations(relationships);
         }
         this.log(colors.green('Migrations generated successfully\n'));
 
