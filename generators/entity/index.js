@@ -476,7 +476,7 @@ export default class extends Generator {
         migrationsGenerator.createTable({ entity: this.entityConfig, enums });
         if (relationships.length > 0) {
             migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
-            relationships.filter(rel => rel.relationshipType === 'one-to-many').map(rel => ({
+            relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
                 name: rel.otherEntityName
             })).forEach(relEntity => migrationsGenerator.createRelation({ entity: relEntity, relationships }));
             migrationsGenerator.generatePivotMigrations(relationships);
@@ -488,7 +488,7 @@ export default class extends Generator {
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, relationships, searchEngine);
         relationships
-            .filter(rel => rel.relationshipType === 'many-to-one')
+            .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const entity = getEntity(this, entityName);
@@ -497,7 +497,7 @@ export default class extends Generator {
                 }
             });
         relationships
-            .filter(rel => rel.relationshipType === 'one-to-many')
+            .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const entity = getEntity(this, entityName);
@@ -512,7 +512,14 @@ export default class extends Generator {
         controllersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         controllersGenerator.generateEntityController(this.entityConfig, [...storedRelationships, ...relationships], searchEngine);
         relationships
-            .filter(rel => rel.relationshipType === 'one-to-many')
+            .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
+            .map(rel => rel.otherEntityName)
+            .forEach(entityName => {
+                const relEntity = storedEntities.find(entity => entity.name === entityName);
+                controllersGenerator.generateEntityController(relEntity, [...storedRelationships, ...relationships], searchEngine)
+            });
+        relationships
+            .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const relEntity = storedEntities.find(entity => entity.name === entityName);
@@ -565,7 +572,32 @@ export default class extends Generator {
                 relationships: [...storedRelationships, ...relationships],
                 searchEngine: searchEngine
             });
-
+            relationships
+                .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
+                .map(rel => rel.otherEntityName)
+                .forEach(entityName => {
+                    const relEntity = storedEntities.find(entity => entity.name === entityName);
+                    createEntityPages({
+                        that: this,
+                        entity: relEntity,
+                        enums: enums,
+                        relationships: [...storedRelationships, ...relationships],
+                        searchEngine: searchEngine
+                    });
+                });
+            relationships
+                .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
+                .map(rel => rel.otherEntityName)
+                .forEach(entityName => {
+                    const relEntity = storedEntities.find(entity => entity.name === entityName);
+                    createEntityPages({
+                        that: this,
+                        entity: relEntity,
+                        enums: enums,
+                        relationships: [...storedRelationships, ...relationships],
+                        searchEngine: searchEngine
+                    });
+                });
             // Update App.tsx
             this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, this.entityConfig, AcRule], to, pluralize });
         }
