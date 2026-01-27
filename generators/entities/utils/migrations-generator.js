@@ -133,7 +133,7 @@ export class MigrationsGenerator {
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
             });
-        this.that.fs.copyTpl(this.that.templatePath("`migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
             {
                 entityTable: entityTable,
                 up: up.join(`\n${tab(3)}`),
