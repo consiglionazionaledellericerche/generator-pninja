@@ -1,7 +1,5 @@
 <%
-const hasSoftDelete = (entity) => entity.annotations?.some(
-  ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
-);
+const hasSoftDelete = (entity) => entity.softDelete;
 const hasTrashMenu = entities.filter(entity => hasSoftDelete(entity)).length > 0;
 -%>
 import { useState, useEffect, useCallback } from 'react';

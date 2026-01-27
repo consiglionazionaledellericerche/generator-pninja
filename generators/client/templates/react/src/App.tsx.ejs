@@ -1,7 +1,5 @@
 <%
-const hasSoftDelete = (entity) => entity.annotations?.some(
-  ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
-);
+const hasSoftDelete = (entity) => entity.softDelete;
 -%>
 import { Routes, Route, type NavigateOptions, useHref, useNavigate } from 'react-router-dom';
 import { RouterProvider } from 'react-aria-components';

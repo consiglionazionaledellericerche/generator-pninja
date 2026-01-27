@@ -6,11 +6,15 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
 import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
+import { AcRule } from '../utils/AcRule.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
 import { RoutersGenerator } from '../entities/utils/routers-generator.js';
 import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
+import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
+import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
+import { createEntityPages } from '../client/react.inc.js';
 
 export default class extends Generator {
     constructor(args, opts) {
@@ -37,6 +41,22 @@ export default class extends Generator {
 
     async prompting() {
         this.log(colors.blue('\nGenerating a new entity\n'));
+
+        // Check for answers file
+        const answersFile = this.destinationPath('.entity-answers.json');
+        if (fs.existsSync(answersFile)) {
+            this.log(colors.yellow('Loading answers from .entity-answers.json\n'));
+            const answers = JSON.parse(fs.readFileSync(answersFile, 'utf8'));
+
+            this.entityConfig = JSON.parse(fs.readFileSync(answersFile, 'utf8'));
+            this.entityName = this.entityConfig.name;
+
+            this._loadExistingEntities();
+            this._loadExistingEnums();
+
+            this._printEntitySummary();
+            return;
+        }
 
         if (!this.options.entityName) {
             const nameAnswer = await this.prompt([{
@@ -436,6 +456,7 @@ export default class extends Generator {
 
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
+        // this.log(JSON.stringify(this.entityConfig, null, 2));
         const enums = getEnums(this);
         const storedEntities = getEntities(this);
         const storedRelationships = getEntitiesRelationships(this);
@@ -511,5 +532,41 @@ export default class extends Generator {
         factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, [...storedEntities, this.entityConfig], [...storedRelationships, ...relationships], enums);
         this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
+
+        // Generate client
+        this.sourceRoot(`${this.templatePath()}/../../client/templates`);
+        const appName = this.config.get('name');
+        const nativeLanguage = this.config.get('nativeLanguage') || 'en';
+        const languages = [nativeLanguage, ...this.config.get('languages')];
+        if (this.config.get('clientType') === 'react') {
+            // Copy locale files
+            for (const lang of languages) {
+                this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
+                    entities: [AcRule, ...storedEntities, this.entityConfig],
+                    relationships: [...storedRelationships, ...relationships],
+                    to,
+                    pluralize,
+                    getModelForeignIds,
+                    getModelRelatedEntities
+                });
+            };
+            // Update entity icons
+            this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: [...storedEntities, this.entityConfig] });
+
+            // Update Menu
+            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: [...storedEntities, this.entityConfig], to, pluralize, withLangSelect: languages.length > 1 });
+
+            // Create entity pages
+            createEntityPages({
+                that: this,
+                entity: this.entityConfig,
+                enums: enums,
+                relationships: [...storedRelationships, ...relationships],
+                searchEngine: searchEngine
+            });
+
+            // Update App.tsx
+            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, this.entityConfig, AcRule], to, pluralize });
+        }
     }
 }

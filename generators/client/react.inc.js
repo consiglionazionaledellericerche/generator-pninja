@@ -24,6 +24,99 @@ const colors = [
 
 const navbarStartcolor = colors[Math.floor(Math.random() * colors.length)];
 
+export async function createEntityPages({
+    that,
+    entity,
+    enums,
+    relationships,
+    searchEngine
+}) {
+    const hasSoftDelete = entity.softDelete;
+    that.fs.copyTpl(
+        that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
+        that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
+        {
+            entity,
+            to,
+            pluralize,
+            columns: entity.fields.map(c => to.snake(c.name)),
+            durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+            fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+            foreignIds: getModelForeignIds(entity, relationships),
+            relatedEntities: getModelRelatedEntities(entity, relationships),
+            searchEngine,
+        });
+    if (hasSoftDelete) {
+        that.fs.copyTpl(
+            that.templatePath("react/src/pages/entities/EntityTrash.tsx.ejs"),
+            that.destinationPath(`client/src/pages/entities/${entity.name}Trash.tsx`),
+            {
+                entity,
+                to,
+                pluralize,
+                columns: entity.fields.map(c => to.snake(c.name)),
+                durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+                fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+                foreignIds: getModelForeignIds(entity, relationships),
+                relatedEntities: getModelRelatedEntities(entity, relationships),
+                searchEngine,
+            });
+    }
+    that.fs.copyTpl(
+        that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
+        that.destinationPath(`client/src/pages/entities/${entity.name}View.tsx`),
+        {
+            entity,
+            to,
+            pluralize,
+            columns: entity.fields.map(c => to.snake(c.name)),
+            durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
+            fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
+            foreignIds: getModelForeignIds(entity, relationships),
+            relatedEntities: getModelRelatedEntities(entity, relationships)
+        });
+    that.fs.copyTpl(
+        that.templatePath("react/src/pages/entities/EntityEdit.tsx.ejs"),
+        that.destinationPath(`client/src/pages/entities/${entity.name}Edit.tsx`),
+        {
+            entity,
+            to,
+            pluralize,
+            columns: entity.fields.map(c => to.snake(c.name)),
+            foreignIds: getModelForeignIds(entity, relationships),
+            relatedEntities: getModelRelatedEntities(entity, relationships)
+        });
+    that.fs.copyTpl(
+        that.templatePath("react/src/components/entities/EntityForm.tsx.ejs"),
+        that.destinationPath(`client/src/components/entities/${entity.name}Form.tsx`),
+        {
+            entity,
+            enums,
+            relationships,
+            foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['one-to-many', 'many-to-one'].includes(fi.relationshipType)),
+            relatedEntities: getModelRelatedEntities(entity, relationships)
+                .filter(re => ['one-to-one', 'many-to-many'].includes(re.relationshipType))
+                .filter(re => !(re.relationshipType === 'one-to-one' && re.reverse === true)),
+            relatedEntitiesForFilters: relationships.filter(relation =>
+                relation.relationshipType === 'one-to-one'
+                && relation.entityName === entity.name
+            ).map(rel => to.snake(rel.relationshipName || rel.otherEntityName)),
+            to,
+            pluralize,
+            searchEngine
+        }
+    );
+    that.fs.copyTpl(
+        that.templatePath("react/src/components/entities/EntityDeleteButton.tsx.ejs"),
+        that.destinationPath(`client/src/components/entities/${entity.name}DeleteButton.tsx`),
+        {
+            entity,
+            to,
+            pluralize,
+        }
+    );
+}
+
 export async function createReactClient(that) {
     const searchEngine = that.config.get('searchEngine');
     const entities = getEntities(that);
@@ -31,7 +124,7 @@ export async function createReactClient(that) {
     const relationships = getEntitiesRelationships(that);
     const appName = that.config.get('name');
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
-    const languages = [nativeLanguage, ...that.config.get('languages')] || ['en', 'es', 'it', 'fr', 'de'];
+    const languages = [nativeLanguage, ...that.config.get('languages')];
 
     await that.spawn('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts', '--no-install']);
 
@@ -194,92 +287,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
 
     for (const entity of [AcRule, ...entities]) {
-        const hasSoftDelete = entity.annotations?.some(
-            ann => ann.optionName === 'softDelete' && ann.type === 'UNARY'
-        );
-        that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
-            that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
-            {
-                entity,
-                to,
-                pluralize,
-                columns: entity.fields.map(c => to.snake(c.name)),
-                durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
-                foreignIds: getModelForeignIds(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships),
-                searchEngine,
-            });
-        if (hasSoftDelete) {
-            that.fs.copyTpl(
-                that.templatePath("react/src/pages/entities/EntityTrash.tsx.ejs"),
-                that.destinationPath(`client/src/pages/entities/${entity.name}Trash.tsx`),
-                {
-                    entity,
-                    to,
-                    pluralize,
-                    columns: entity.fields.map(c => to.snake(c.name)),
-                    durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                    fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
-                    foreignIds: getModelForeignIds(entity, relationships),
-                    relatedEntities: getModelRelatedEntities(entity, relationships),
-                    searchEngine,
-                });
-        }
-        that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
-            that.destinationPath(`client/src/pages/entities/${entity.name}View.tsx`),
-            {
-                entity,
-                to,
-                pluralize,
-                columns: entity.fields.map(c => to.snake(c.name)),
-                durationColumns: entity.fields.filter(c => c.type === 'Duration').map(c => to.snake(c.name)),
-                fileColumns: entity.fields.filter(c => c.type === 'Blob' || c.type === 'AnyBlob' || c.type === 'ImageBlob').map(c => to.snake(c.name)),
-                foreignIds: getModelForeignIds(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
-            });
-        that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/EntityEdit.tsx.ejs"),
-            that.destinationPath(`client/src/pages/entities/${entity.name}Edit.tsx`),
-            {
-                entity,
-                to,
-                pluralize,
-                columns: entity.fields.map(c => to.snake(c.name)),
-                foreignIds: getModelForeignIds(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
-            });
-        that.fs.copyTpl(
-            that.templatePath("react/src/components/entities/EntityForm.tsx.ejs"),
-            that.destinationPath(`client/src/components/entities/${entity.name}Form.tsx`),
-            {
-                entity,
-                enums,
-                relationships,
-                foreignIds: getModelForeignIds(entity, relationships).filter(fi => ['one-to-many', 'many-to-one'].includes(fi.relationshipType)),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
-                    .filter(re => ['one-to-one', 'many-to-many'].includes(re.relationshipType))
-                    .filter(re => !(re.relationshipType === 'one-to-one' && re.reverse === true)),
-                relatedEntitiesForFilters: relationships.filter(relation =>
-                    relation.relationshipType === 'one-to-one'
-                    && relation.entityName === entity.name
-                ).map(rel => to.snake(rel.relationshipName || rel.otherEntityName)),
-                to,
-                pluralize,
-                searchEngine
-            }
-        );
-        that.fs.copyTpl(
-            that.templatePath("react/src/components/entities/EntityDeleteButton.tsx.ejs"),
-            that.destinationPath(`client/src/components/entities/${entity.name}DeleteButton.tsx`),
-            {
-                entity,
-                to,
-                pluralize,
-            }
-        );
+        createEntityPages({ that, entity, enums, relationships, searchEngine });
     }
 
     that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
