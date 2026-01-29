@@ -91,9 +91,6 @@ export default class EntityGenerator extends Generator {
       }
     });
 
-    // console.log(JSON.stringify(parsedJDL, null, 2));
-    // this.fs.writeJSON(this.destinationPath('.pninja/Entities.txt'), parsedJDL);
-
     splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this));
 
     // JDL > Migrations
