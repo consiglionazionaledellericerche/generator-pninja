@@ -1,3 +1,6 @@
+import to from 'to-case';
+import pluralize from "pluralize";
+
 /**
  * Splits Entities JSON data (from JDL parser) into individual entity files
  * @param {Object} fs - Yeoman file system instance
@@ -46,7 +49,7 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
                 if (rel.from.name === entity.name) {
                     const relationship = {
                         entityName: rel.from.name,
-                        relationshipName: rel.from.injectedField,
+                        relationshipName: rel.from.injectedField || convertCardinality(rel.cardinality, true).includes("-to-many") ? pluralize(to.snake(rel.to.name)) : to.snake(rel.to.name),
                         otherEntityName: rel.to.name,
                         relationshipType: convertCardinality(rel.cardinality, true),
                         otherEntityField: rel.from.injectedFieldLabel || 'id',
@@ -54,11 +57,11 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
                         bidirectional: !!rel.to.injectedField
                     };
 
-                    if (relationship.bidirectional) {
-                        relationship.otherEntityRelationshipName = rel.to.injectedField;
-                        relationship.inverseEntityField = rel.to.injectedFieldLabel || 'id';
-                        relationship.inverseRelationshipRequired = rel.to.required || false;
-                    }
+                    // if (relationship.bidirectional) {
+                    relationship.otherEntityRelationshipName = rel.to.injectedField || convertCardinality(rel.cardinality, true).includes("many-to-") ? pluralize(to.snake(rel.from.name)) : to.snake(rel.from.name);
+                    relationship.inverseEntityField = rel.to.injectedFieldLabel || 'id';
+                    relationship.inverseRelationshipRequired = rel.to.required || false;
+                    // }
 
                     entityConfig.relationships.push(relationship);
                 }
