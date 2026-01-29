@@ -14,7 +14,6 @@ export function getWits(entity, relationships) {
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
         && relation.entityName === entity.name
-        && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
         const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
         withs.push(`'${fromField}'`);
@@ -24,27 +23,26 @@ export function getWits(entity, relationships) {
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
         && relation.otherEntityName === entity.name
-        && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        && relation.bidirectional
     )).forEach(relation => {
         const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
         withs.push(`'${toField}'`);
     });
 
-    // one-to-many/many-to-one direct relationships
+    // one-to-one/many-to-one direct relationships
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one')
         && relation.entityName === entity.name
-        && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
     )).forEach(relation => {
         const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
         withs.push(`'${fromField}'`);
     });
 
-    // many-to-one reverse relationships
+    // one-to-one/many-to-one direct relationships
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one')
         && relation.otherEntityName === entity.name
-        && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        && relation.bidirectional
     )).forEach(relation => {
         const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
         withs.push(`'${toField}'`);

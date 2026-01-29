@@ -487,17 +487,17 @@ export default class extends Generator {
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, relationships, searchEngine);
+        // relationships
+        //     .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
+        //     .map(rel => rel.otherEntityName)
+        //     .forEach(entityName => {
+        //         const entity = getEntity(this, entityName);
+        //         if (entity) {
+        //             modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
+        //         }
+        //     });
         relationships
-            .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
-            .map(rel => rel.otherEntityName)
-            .forEach(entityName => {
-                const entity = getEntity(this, entityName);
-                if (entity) {
-                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
-                }
-            });
-        relationships
-            .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
+            .filter(rel => rel.bidirectional)
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const entity = getEntity(this, entityName);

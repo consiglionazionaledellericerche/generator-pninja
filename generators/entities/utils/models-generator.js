@@ -66,7 +66,6 @@ export class ModelsGenerator {
         // one-to-one direct relationships
         relationships.filter(relation => (
             relation.relationshipType === 'one-to-one' && relation.entityName === entity.name
-            && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
         )).forEach(relation => {
             relationsType.push('BelongsTo');
             relations.push(`public function ${to.snake(relation.relationshipName || relation.otherEntityName)}(): BelongsTo { return $this->belongsTo(${relation.otherEntityName}::class, '${to.snake(relation.relationshipName || relation.otherEntityName)}_id'); }`);
@@ -74,8 +73,7 @@ export class ModelsGenerator {
 
         // one-to-one reverse relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'one-to-one' && relation.otherEntityName === entity.name
-            && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.bidirectional && relation.relationshipType === 'one-to-one' && relation.otherEntityName === entity.name
         )).forEach(relation => {
             relationsType.push('HasOne');
             relations.push(`public function ${to.snake(relation.otherEntityRelationshipName || relation.entityName)}(): HasOne { return $this->hasOne(${relation.entityName}::class, '${to.snake(relation.relationshipName || relation.otherEntityName)}_id'); }`);
