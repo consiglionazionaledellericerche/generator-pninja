@@ -141,7 +141,7 @@ export class ModelsGenerator {
                 && (!!relation.to.injectedField || (!relation.from.injectedField && !relation.to.injectedField))
             )).forEach(relation => {
                 relationsType.push('BelongsToMany');
-                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsToMany { return $this->belongsToMany(${relation.from.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}', '${to.snake(relation.from.injectedField || relation.to.name)}_id', '${to.snake(relation.to.injectedField || relation.froom.name)}_id')->withTimestamps(); }`);
+                relations.push(`public function ${to.snake(relation.to.injectedField || relation.from.name)}(): BelongsToMany { return $this->belongsToMany(${relation.from.name}::class, '${[to.snake(relation.from.name), to.snake(relation.to.name)].sort().join('_')}', '${to.snake(relation.from.injectedField || relation.to.name)}_id', '${to.snake(relation.to.injectedField || relation.from.name)}_id')->withTimestamps(); }`);
             });
 
             const castsClasses = enums.filter(e => entity.body.map(f => f.type).includes(e.name)).map(e => {
