@@ -416,7 +416,7 @@ export default class extends Generator {
         const defaults = {
             minlength: '2',
             maxlength: '20',
-            pattern: '^[a-zA-Z0-9]*$',
+            pattern: '^[A-Za-zÀ-ÖØ-öø-ÿ0-9 \-\']+$',
             min: '0',
             max: '100',
             minbytes: '10',
@@ -573,7 +573,7 @@ export default class extends Generator {
                 searchEngine: searchEngine
             });
             relationships
-                .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
+                .filter(rel => (rel.relationshipType === 'one-to-many' && rel.bidirectional) || (rel.relationshipType === 'one-to-one' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
                 .forEach(entityName => {
                     const relEntity = storedEntities.find(entity => entity.name === entityName);
