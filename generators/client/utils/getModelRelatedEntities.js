@@ -28,6 +28,7 @@ export function getModelRelatedEntities(entity, relationships) {
   relationships
     .filter(
       (relation) =>
+        relation.bidirectional &&
         (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many') &&
         relation.otherEntityName === entity.name &&
         (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
@@ -66,6 +67,7 @@ export function getModelRelatedEntities(entity, relationships) {
   // one-to-one reverse relationships
   relationships
     .filter(relation => (
+      relation.bidirectional &&
       relation.relationshipType === 'one-to-one' && relation.otherEntityName === entity.name && !!relation.otherEntityRelationshipName
     ))
     .forEach(relation => {

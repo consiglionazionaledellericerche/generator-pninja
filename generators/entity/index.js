@@ -456,7 +456,7 @@ export default class extends Generator {
 
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
-        // this.log(JSON.stringify(this.entityConfig, null, 2));
+        this.log(JSON.stringify(this.entityConfig, null, 2));
         const enums = getEnums(this);
         const storedEntities = getEntities(this);
         const storedRelationships = getEntitiesRelationships(this);
@@ -586,10 +586,11 @@ export default class extends Generator {
                     });
                 });
             relationships
-                .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
+                .filter(rel => (rel.relationshipType === 'many-to-one' && rel.bidirectional) || (rel.relationshipType === 'many-to-many' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
                 .forEach(entityName => {
                     const relEntity = storedEntities.find(entity => entity.name === entityName);
+                    console.log('Generating pages for related entity:', relEntity.name);
                     createEntityPages({
                         that: this,
                         entity: relEntity,

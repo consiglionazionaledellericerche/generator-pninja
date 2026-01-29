@@ -49,16 +49,16 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
                 if (rel.from.name === entity.name) {
                     const relationship = {
                         entityName: rel.from.name,
-                        relationshipName: rel.from.injectedField || convertCardinality(rel.cardinality, true).includes("-to-many") ? pluralize(to.snake(rel.to.name)) : to.snake(rel.to.name),
+                        relationshipName: rel.from.injectedField || (convertCardinality(rel.cardinality).includes("-to-many") ? pluralize(to.snake(rel.to.name)) : to.snake(rel.to.name)),
                         otherEntityName: rel.to.name,
-                        relationshipType: convertCardinality(rel.cardinality, true),
+                        relationshipType: convertCardinality(rel.cardinality),
                         otherEntityField: rel.from.injectedFieldLabel || 'id',
                         relationshipRequired: rel.from.required || false,
-                        bidirectional: !!rel.to.injectedField
+                        bidirectional: !!rel.to.injectedField || (!rel.from.injectedField && !rel.to.injectedField)
                     };
 
                     // if (relationship.bidirectional) {
-                    relationship.otherEntityRelationshipName = rel.to.injectedField || convertCardinality(rel.cardinality, true).includes("many-to-") ? pluralize(to.snake(rel.from.name)) : to.snake(rel.from.name);
+                    relationship.otherEntityRelationshipName = rel.to.injectedField || (convertCardinality(rel.cardinality).includes("many-to-") ? pluralize(to.snake(rel.from.name)) : to.snake(rel.from.name));
                     relationship.inverseEntityField = rel.to.injectedFieldLabel || 'id';
                     relationship.inverseRelationshipRequired = rel.to.required || false;
                     // }
@@ -104,10 +104,10 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
  * @param {boolean} isFromSide - Whether this is the 'from' side of the relationship
  * @returns {string} Relationship type (e.g., 'many-to-one')
  */
-function convertCardinality(cardinality, isFromSide) {
+function convertCardinality(cardinality) {
     const cardinalityMap = {
         'ManyToOne': 'many-to-one',
-        'OneToMany': isFromSide ? 'one-to-many' : 'many-to-one',
+        'OneToMany': 'one-to-many',
         'ManyToMany': 'many-to-many',
         'OneToOne': 'one-to-one'
     };
