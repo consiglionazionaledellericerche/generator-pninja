@@ -1,7 +1,5 @@
 <%
-const getIcon = (entity) => entity.annotations?.find(
-  ann => ann.optionName === "icon" && ann.type === "BINARY"
-)?.optionValue ?? "deployed_code";
+const getIcon = (entity) => entity.icon ?? "deployed_code";
 -%>
 import { Icon, IconProps } from '../components/Icon';
 export function IconEntities(props: Omit<IconProps, 'icon'>) {
