@@ -74,10 +74,6 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath, log) {
 
         // Save individual entity file
         const entityFilePath = destinationPath(`.pninja/${entity.name}.json`);
-        // console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
-        // console.log(`===================== ${entity.name} ===========================`);
-        // console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
-        // console.log(JSON.stringify(entityConfig, null, 2));
         fs.writeJSON(entityFilePath, entityConfig, null, 2);
         createdFiles.push(entityFilePath);
     });

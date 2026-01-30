@@ -456,7 +456,6 @@ export default class extends Generator {
 
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
-        this.log(JSON.stringify(this.entityConfig, null, 2));
         const enums = getEnums(this);
         const storedEntities = getEntities(this);
         const storedRelationships = getEntitiesRelationships(this);
@@ -487,15 +486,6 @@ export default class extends Generator {
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, relationships, searchEngine);
-        // relationships
-        //     .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
-        //     .map(rel => rel.otherEntityName)
-        //     .forEach(entityName => {
-        //         const entity = getEntity(this, entityName);
-        //         if (entity) {
-        //             modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
-        //         }
-        //     });
         relationships
             .filter(rel => rel.bidirectional)
             .map(rel => rel.otherEntityName)
@@ -590,7 +580,6 @@ export default class extends Generator {
                 .map(rel => rel.otherEntityName)
                 .forEach(entityName => {
                     const relEntity = storedEntities.find(entity => entity.name === entityName);
-                    console.log('Generating pages for related entity:', relEntity.name);
                     createEntityPages({
                         that: this,
                         entity: relEntity,
