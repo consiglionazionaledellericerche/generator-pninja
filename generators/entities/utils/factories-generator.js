@@ -1,6 +1,7 @@
 import to from 'to-case';
 import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
+import colors from 'ansi-colors'
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
 export class FactoriesGenerator {
@@ -85,11 +86,19 @@ export class FactoriesGenerator {
                 relation.relationshipType === 'many-to-many'
                 && relation.entityName === entity.name
             )).forEach(relation => {
-                manyToMany.push({
-                    fromEntity: relation.entityName,
-                    toEntity: relation.otherEntityName,
-                    relPropery: to.snake(relation.relationshipName || relation.otherEntityName)
-                });
+                if (entity.name === relation.owner) {
+                    manyToMany.push({
+                        fromEntity: relation.entityName,
+                        toEntity: relation.otherEntityName,
+                        relPropery: to.snake(relation.relationshipName || relation.otherEntityName)
+                    });
+                } else {
+                    manyToMany.push({
+                        fromEntity: relation.owner,
+                        toEntity: relation.entityName,
+                        relPropery: relation.otherEntityRelationshipName
+                    });
+                }
             });
         }
         this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
