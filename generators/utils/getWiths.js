@@ -29,9 +29,6 @@ export function getWits(entity, relationships) {
         && relation.entityName === entity.name
         && relation.owner === entity.name
     )).forEach(relation => {
-        console.log('processing direct one-to-one/many-to-one direct relationship');
-        console.log('entity', entity.name);
-        console.log('relation', relation);
         const fromField = relation.relationshipName;
         withs.push(`'${fromField}'`);
     });
@@ -42,9 +39,6 @@ export function getWits(entity, relationships) {
         && relation.otherEntityName === entity.name
         && relation.bidirectional
     )).forEach(relation => {
-        console.log('processing reverse one-to-one/many-to-one inverse relationship');
-        console.log('entity', entity.name);
-        console.log('relation', relation);
         const toField = relation.otherEntityRelationshipName;
         withs.push(`'${toField}'`);
     });
