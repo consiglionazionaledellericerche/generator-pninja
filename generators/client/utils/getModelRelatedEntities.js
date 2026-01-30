@@ -7,9 +7,8 @@ export function getModelRelatedEntities(entity, relationships) {
   relationships
     .filter(
       (relation) =>
-        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many') &&
-        relation.entityName === entity.name &&
-        (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
+        && relation.entityName === entity.name && relation.owner === entity.name
     )
     .forEach((relation) => {
       relatedEntities.push({
@@ -28,10 +27,8 @@ export function getModelRelatedEntities(entity, relationships) {
   relationships
     .filter(
       (relation) =>
-        relation.bidirectional &&
-        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many') &&
-        relation.otherEntityName === entity.name &&
-        (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+        (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
+        && relation.otherEntityName === entity.name && relation.bidirectional
     )
     .forEach((relation) => {
       relatedEntities.push({
@@ -49,8 +46,7 @@ export function getModelRelatedEntities(entity, relationships) {
   relationships
     .filter(relation => (
       (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one')
-      && relation.entityName === entity.name
-      && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+      && relation.entityName === entity.name && relation.owner === entity.name
     ))
     .forEach(relation => {
       relatedEntities.push({
@@ -67,8 +63,7 @@ export function getModelRelatedEntities(entity, relationships) {
   // one-to-one reverse relationships
   relationships
     .filter(relation => (
-      relation.bidirectional &&
-      relation.relationshipType === 'one-to-one' && relation.otherEntityName === entity.name && !!relation.otherEntityRelationshipName
+      relation.relationshipType === 'one-to-one' && relation.otherEntityName === entity.name && relation.bidirectional
     ))
     .forEach(relation => {
       relatedEntities.push({
@@ -84,8 +79,7 @@ export function getModelRelatedEntities(entity, relationships) {
   // many-to-one reverse relationships
   relationships
     .filter(relation => (
-      relation.relationshipType === 'many-to-one' && relation.otherEntityName === entity.name
-      && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+      relation.relationshipType === 'many-to-one' && relation.otherEntityName === entity.name && relation.bidirectional
     ))
     .forEach(relation => {
       relatedEntities.push({

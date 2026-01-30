@@ -81,8 +81,7 @@ export class ModelsGenerator {
 
         // one-to-many direct relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'one-to-many' && relation.entityName === entity.name
-            && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'one-to-many' && relation.entityName === entity.name && relation.owner === entity.name
         )).forEach(relation => {
             relationsType.push('HasMany');
             relations.push(`public function ${to.snake(relation.relationshipName || relation.otherEntityName)}(): HasMany { return $this->hasMany(${relation.otherEntityName}::class, '${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id'); }`);
@@ -90,8 +89,7 @@ export class ModelsGenerator {
 
         // one-to-many reverse relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name
-            && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name && relation.bidirectional
         )).forEach(relation => {
             relationsType.push('BelongsTo');
             relations.push(`public function ${to.snake(relation.otherEntityRelationshipName || relation.entityName)}(): BelongsTo { return $this->belongsTo(${relation.entityName}::class, '${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id'); }`);
@@ -99,8 +97,7 @@ export class ModelsGenerator {
 
         // many-to-one direct relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'many-to-one' && relation.entityName === entity.name
-            && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'many-to-one' && relation.entityName === entity.name && relation.owner === entity.name
         )).forEach(relation => {
             relationsType.push('BelongsTo');
             relations.push(`public function ${to.snake(relation.relationshipName || relation.otherEntityName)}(): BelongsTo { return $this->belongsTo(${relation.otherEntityName}::class, '${to.snake(relation.relationshipName || relation.otherEntityName)}_id'); }`);
@@ -108,8 +105,7 @@ export class ModelsGenerator {
 
         // many-to-one reverse relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'many-to-one' && relation.otherEntityName === entity.name
-            && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'many-to-one' && relation.otherEntityName === entity.name && relation.bidirectional
         )).forEach(relation => {
             relationsType.push('HasMany');
             relations.push(`public function ${to.snake(relation.otherEntityRelationshipName || relation.entityName)}(): HasMany { return $this->hasMany(${relation.entityName}::class, '${to.snake(relation.relationshipName || relation.otherEntityName)}_id'); }`);
@@ -117,8 +113,7 @@ export class ModelsGenerator {
 
         // many-to-many direct relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'many-to-many' && relation.entityName === entity.name
-            && (!!relation.relationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'many-to-many' && relation.entityName === entity.name && relation.owner === entity.name
         )).forEach(relation => {
             relationsType.push('BelongsToMany');
             relations.push(`public function ${to.snake(relation.relationshipName || relation.otherEntityName)}(): BelongsToMany { return $this->belongsToMany(${relation.otherEntityName}::class, '${[to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_')}', '${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id', '${to.snake(relation.relationshipName || relation.otherEntityName)}_id')->withTimestamps(); }`);
@@ -126,8 +121,7 @@ export class ModelsGenerator {
 
         // many-to-many reverse relationships
         relationships.filter(relation => (
-            relation.relationshipType === 'many-to-many' && relation.otherEntityName === entity.name
-            && (!!relation.otherEntityRelationshipName || (!relation.relationshipName && !relation.otherEntityRelationshipName))
+            relation.relationshipType === 'many-to-many' && relation.otherEntityName === entity.name && relation.bidirectional
         )).forEach(relation => {
             relationsType.push('BelongsToMany');
             relations.push(`public function ${to.snake(relation.otherEntityRelationshipName || relation.entityName)}(): BelongsToMany { return $this->belongsToMany(${relation.entityName}::class, '${[to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_')}', '${to.snake(relation.relationshipName || relation.otherEntityName)}_id', '${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id')->withTimestamps(); }`);
