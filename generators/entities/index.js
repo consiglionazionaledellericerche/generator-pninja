@@ -91,10 +91,8 @@ export default class EntityGenerator extends Generator {
       }
     });
 
-    splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this));
+    splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this), this.log);
     this.fs.writeJSON(this.destinationPath('.pninja/Entities.txt'), parsedJDL);
-
-
 
     // JDL > Migrations
     try {

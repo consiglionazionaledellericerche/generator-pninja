@@ -7,7 +7,7 @@ import pluralize from "pluralize";
  * @param {Function} destinationPath - Function to resolve destination paths
  * @returns {Array} Array of created entity file paths
  */
-export function splitEntitiesFile(entitiesData, fs, destinationPath) {
+export function splitEntitiesFile(entitiesData, fs, destinationPath, log) {
     const createdFiles = [];
 
     // Process each entity
@@ -45,10 +45,14 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
         // Find relationships for this entity
         if (entitiesData.relationships) {
             entitiesData.relationships.forEach(rel => {
+                if (rel.cardinality === 'OneToOne' && !rel.from.injectedField && !!rel.to.injectedField) {
+                    throw new Error(`ERROR! In the One-to-One relship from ${rel.from.name} to ${rel.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`);
+                }
                 // Check if this entity is the 'from' side
                 if (rel.from.name === entity.name) {
                     const relationship = {
                         entityName: rel.from.name,
+                        owner: (rel.from.injectedField || (!rel.from.injectedField && !rel.to.injectedField)) ? rel.from.name : rel.to.name,
                         relationshipName: rel.from.injectedField || (convertCardinality(rel.cardinality).includes("-to-many") ? pluralize(to.snake(rel.to.name)) : to.snake(rel.to.name)),
                         otherEntityName: rel.to.name,
                         relationshipType: convertCardinality(rel.cardinality),
@@ -70,10 +74,10 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
 
         // Save individual entity file
         const entityFilePath = destinationPath(`.pninja/${entity.name}.json`);
-        console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
-        console.log(`===================== ${entity.name} ===========================`);
-        console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
-        console.log(JSON.stringify(entityConfig, null, 2));
+        // console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
+        // console.log(`===================== ${entity.name} ===========================`);
+        // console.log(`=====================${"=".repeat(entity.name.length + 2)}===========================`);
+        // console.log(JSON.stringify(entityConfig, null, 2));
         fs.writeJSON(entityFilePath, entityConfig, null, 2);
         createdFiles.push(entityFilePath);
     });
