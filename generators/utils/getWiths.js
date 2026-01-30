@@ -6,6 +6,7 @@ export function getWits(entity, relationships) {
     // one-to-many/many-to-many direct relationships
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
+        && relation.entityName === entity.name
         && relation.owner === entity.name
     )).forEach(relation => {
         const fromField = to.snake(relation.relationshipName || relation.otherEntityName);
@@ -15,7 +16,8 @@ export function getWits(entity, relationships) {
     // one-to-many/many-to-many reverse relationships
     relationships.filter(relation => (
         (relation.relationshipType === 'one-to-many' || relation.relationshipType === 'many-to-many')
-        && relation.owner === relation.otherEntityName
+        && relation.otherEntityName === entity.name
+        && relation.bidirectional
     )).forEach(relation => {
         const toField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
         withs.push(`'${toField}'`);
