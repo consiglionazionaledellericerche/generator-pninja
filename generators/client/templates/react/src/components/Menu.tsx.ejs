@@ -14,12 +14,14 @@ import {
 <% } -%>
   Popover,
 } from 'react-aria-components';
+<%  if (entities.length > 1) { -%>
 import {
   IconEntities,
-<%  for (const entity of entities) {-%>
+<%    for (const entity of entities) {-%>
   IconEntity<%=entity.name%>,
-<%  } -%>
+<%    } -%>
 } from '../shared/entitiesIcons';
+<%  } -%>
 import { Icon } from './Icon';
 import { useTranslation } from 'react-i18next';
 import { DarkModeToggle } from './DarkModeToggle';
