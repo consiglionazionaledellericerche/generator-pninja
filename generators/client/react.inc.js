@@ -115,6 +115,18 @@ export async function createEntityPages({
             pluralize,
         }
     );
+    that.fs.copyTpl(
+        that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
+        that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
+        {
+            entity,
+            enums,
+            relationships,
+            to,
+            foreignIds: getModelForeignIds(entity, relationships),
+            relatedEntities: getModelRelatedEntities(entity, relationships)
+        }
+    );
 }
 
 export async function createReactClient(that) {
@@ -261,19 +273,19 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
     that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
-    for (const entity of entities) {
-        that.fs.copyTpl(
-            that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
-            that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
-            {
-                entity,
-                enums,
-                relationships,
-                to,
-                foreignIds: getModelForeignIds(entity, relationships),
-                relatedEntities: getModelRelatedEntities(entity, relationships)
-            });
-    }
+    // for (const entity of entities) {
+    //     that.fs.copyTpl(
+    //         that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
+    //         that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
+    //         {
+    //             entity,
+    //             enums,
+    //             relationships,
+    //             to,
+    //             foreignIds: getModelForeignIds(entity, relationships),
+    //             relatedEntities: getModelRelatedEntities(entity, relationships)
+    //         });
+    // }
 
     for (const enumeration of enums) {
         that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });

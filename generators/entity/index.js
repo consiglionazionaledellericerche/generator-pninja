@@ -243,6 +243,7 @@ export default class extends Generator {
 
         const relationship = {
             entityName: this.entityName,
+            owner: this.entityName,
             relationshipName: relationshipAnswers.relationshipName,
             otherEntityName: relationshipAnswers.otherEntity,
             relationshipType: relationshipAnswers.relationshipType
