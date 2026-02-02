@@ -49,7 +49,7 @@ const getValidations = (e, relationships, op) => {
                         return `'base64_max_size:${value}'`;
                     }
                     if (key === 'pattern') {
-                        return `'regex:\/${value}\/'`;
+                        return `'regex:\/${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"')}\/'`;
                     }
                 });
                 return acc;
