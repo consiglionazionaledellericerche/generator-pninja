@@ -6,7 +6,6 @@ const hasTrashMenu = entities.filter(entity => hasSoftDelete(entity)).length > 0
 -%>
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-<%  if (entities.length > 1) { -%>
 import {
   Button,
   Menu as MenuItems,
@@ -17,7 +16,6 @@ import {
 <% } -%>
   Popover,
 } from 'react-aria-components';
-<% } -%>
 import {
   IconEntities,
 <%  for (const entity of entities) {-%>
@@ -40,10 +38,8 @@ const Menu: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const menuIsActiveClass = ' bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100';
-<%  if (entities.length > 1) { -%>
   const menuItemIsActiveClass =
     ' bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-slate-200';
-<%  } -%>
   const isActive = useCallback(
     (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`),
     [location.pathname]
