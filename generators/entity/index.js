@@ -85,7 +85,7 @@ export default class extends Generator {
         }]);
 
         this.entityConfig.name = this.entityName;
-        this.entityConfig.tableName = this.entityName;
+        this.entityConfig.tableName = to.snake(pluralize(this.entityName));
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
         this.entityConfig.icon = iconAnswer.icon;
 
@@ -416,7 +416,7 @@ export default class extends Generator {
         const defaults = {
             minlength: '2',
             maxlength: '20',
-            pattern: '^[A-Za-zÀ-ÖØ-öø-ÿ0-9 \-\']+$',
+            pattern: `^[-A-Za-zÀ-ÖØ-öø-ÿ0-9 ']+ $`,
             min: '0',
             max: '100',
             minbytes: '10',
