@@ -110,7 +110,7 @@ SOLR_PATH=/`;
     }
     const entities = getEntities(this);
     const mailiserachIndexSettings = searchEngine === 'meilisearch' ? [...entities, AcRule].reduce((res, entity) => {
-      const indexName = `${to.snake(pluralize(entity.tableName))}`;
+      const indexName = `${entity.tableName}`;
       res += `
             '${indexName}' => [
                 'sortableAttributes' => ['id','${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join("', '")}'],
@@ -146,7 +146,7 @@ SOLR_PATH=/`;
     if (searchEngine === 'elastic') {
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
       for (const entity of [...entities, AcRule]) {
-        const indexName = to.snake(pluralize(entity.tableName));
+        const indexName = entity.tableName;
         this.fs.copyTpl(this.templatePath("elastic/migrations/create_entity_index.php.ejs"), this.destinationPath(`server/elastic/migrations/${baseTimestamp}_create_${indexName}_index.php`),
           {
             className: pluralize(entity.name),

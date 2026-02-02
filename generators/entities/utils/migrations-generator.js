@@ -74,7 +74,7 @@ export class MigrationsGenerator {
     }
 
     createTable({ entity, enums }) {
-        const tabName = to.snake(pluralize(entity.tableName));
+        const tabName = entity.tableName;
         const columns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const softDelete = !!entity?.softDelete;
         this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_create_${tabName}_table.php`),

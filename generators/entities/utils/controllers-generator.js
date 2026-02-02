@@ -29,10 +29,10 @@ const getValidations = (e, relationships, op) => {
                         return `'nullable'`;
                     }
                     if (key === 'unique' && op === 'store') {
-                        return `'unique:${to.snake(pluralize(entity.tableName))},${to.snake(name)}'`;
+                        return `'unique:${entity.tableName},${to.snake(name)}'`;
                     }
                     if (key === 'unique' && op === 'update') {
-                        return `Rule::unique('${to.snake(pluralize(entity.tableName))}', '${to.snake(name)}')->ignore($${to.camel(entity.name)}->id)`;
+                        return `Rule::unique('${entity.tableName}', '${to.snake(name)}')->ignore($${to.camel(entity.name)}->id)`;
                     }
                     if (key === 'fieldType') {
                         return `'${value}'`;
@@ -72,7 +72,7 @@ const getValidations = (e, relationships, op) => {
                 acc[foreignId] = [`Rule::exists('${toTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${to.snake(pluralize(entity.tableName))},${foreignId}'`);
+                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
                 if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
@@ -89,7 +89,7 @@ const getValidations = (e, relationships, op) => {
                 acc[foreignId] = [`Rule::exists('${fromTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${to.snake(pluralize(entity.tableName))},${foreignId}'`);
+                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
                 if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
@@ -106,7 +106,7 @@ const getValidations = (e, relationships, op) => {
                 acc[foreignId] = [`Rule::exists('${toTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${to.snake(pluralize(entity.tableName))},${foreignId}'`);
+                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
                 if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),

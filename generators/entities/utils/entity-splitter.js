@@ -14,7 +14,7 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath, log) {
     entitiesData.entities.forEach(entity => {
         const entityConfig = {
             name: entity.name,
-            tableName: entity.tableName,
+            tableName: to.snake(pluralize(entity.name)),
             softDelete: entity.annotations?.some(a => a.optionName === 'softDelete') || false,
             icon: entity.annotations?.find(a => a.optionName === 'icon')?.optionValue || null,
             fields: [],

@@ -11,7 +11,7 @@ export class ModelsGenerator {
     generateModel(entity, enums, relationships, searchEngine) {
         const hasSoftDelete = !!entity.softDelete;
         const className = entity.name;
-        const tableName = to.snake(pluralize(entity.tableName));
+        const tableName = entity.tableName;
         // fillable from entity property
         const fillable = entity.fields.reduce((acc, prop) => {
             if (prop.type !== 'Blob' && prop.type !== 'AnyBlob' && prop.type !== 'ImageBlob') {

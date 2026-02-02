@@ -1,6 +1,6 @@
 export const AcRule = {
     "name": "AcRule",
-    "tableName": "AcRule",
+    "tableName": "ac_rules",
     "softDelete": false,
     "body": [
         {
