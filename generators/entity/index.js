@@ -5,7 +5,7 @@ import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
-import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/getEntities.js';
+import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/entities-utils.js';
 import { AcRule } from '../utils/AcRule.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';

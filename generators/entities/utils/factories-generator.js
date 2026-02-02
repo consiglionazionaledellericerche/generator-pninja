@@ -1,6 +1,6 @@
 import to from 'to-case';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 import colors from 'ansi-colors'
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 

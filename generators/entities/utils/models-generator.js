@@ -1,7 +1,7 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 export class ModelsGenerator {
     constructor(that) {
         this.that = that;

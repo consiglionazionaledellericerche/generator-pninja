@@ -2,7 +2,7 @@ import to from 'to-case';
 import pluralize from 'pluralize';
 import { getWits } from '../../utils/getWiths.js';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships } from '../../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships } from '../../utils/entities-utils.js';
 
 const getValidations = (e, relationships, op) => {
     const entity = structuredClone(e);

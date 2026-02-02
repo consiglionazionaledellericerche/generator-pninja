@@ -1,7 +1,7 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities } from '../../utils/getEntities.js';
+import { getEntities } from '../../utils/entities-utils.js';
 
 const entityHasBlob = (entity) => entity.fields.reduce((acc, prop) => {
     if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {

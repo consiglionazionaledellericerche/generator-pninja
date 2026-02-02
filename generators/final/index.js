@@ -1,6 +1,6 @@
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
-import { getEntities, getEntitiesRelationships } from '../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships } from '../utils/entities-utils.js';
 
 export default class FinalGenerator extends Generator {
   static namespace = 'pninja:final';

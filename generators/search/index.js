@@ -3,7 +3,7 @@ import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../utils/AcRule.js';
-import { getEntities } from '../utils/getEntities.js';
+import { getEntities } from '../utils/entities-utils.js';
 
 export default class SearchGenerator extends Generator {
   static namespace = 'pninja:search';

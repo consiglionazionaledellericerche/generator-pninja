@@ -1,7 +1,7 @@
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
 const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';

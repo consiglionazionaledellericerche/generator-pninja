@@ -4,7 +4,7 @@ import { getModelRelatedEntities } from './utils/getModelRelatedEntities.js';
 import { getModelForeignIds } from './utils/getModelForeignIds.js';
 import { getLanguageData } from './config/languages.js';
 import { AcRule } from '../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships, getEnums } from '../utils/getEntities.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
 
 const colors = [
     "lime",
