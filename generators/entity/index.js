@@ -416,7 +416,7 @@ export default class extends Generator {
     _getValidationDefault(rule) {
         const defaults = {
             minlength: '2',
-            maxlength: '20',
+            maxlength: '100',
             pattern: `^[-A-Za-zÀ-ÖØ-öø-ÿ0-9 ']+$`,
             min: '0',
             max: '100',
