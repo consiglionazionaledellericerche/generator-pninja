@@ -175,14 +175,14 @@ export class ModelsGenerator {
         const enumsInEntity = enums.filter(e => entity.fields.map(f => f.type).includes(e.name)).map(e => e.name);
         const enumColumns = entity.fields.filter(f => enumsInEntity.includes(f.type)).map(f => to.snake(f.name));
         const typesenseSearchParameters = searchEngine === 'typesense' ? `
-public function typesenseSearchParameters(): array
-{
-    return [
-        'query_by' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join(",")}',
-        'prefix' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'true' : 'false').join(",")}',
-        'infix' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'always' : 'off').join(",")}',
-    ];
-}` : '';
+    public function typesenseSearchParameters(): array
+    {
+        return [
+            'query_by' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => to.snake(f.name)).join(",")}',
+            'prefix' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'true' : 'false').join(",")}',
+            'infix' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'always' : 'off').join(",")}',
+        ];
+    }` : '';
         this.that.fs.copyTpl(this.that.templatePath("app/Models/Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
             {
                 className,
