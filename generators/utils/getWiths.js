@@ -29,7 +29,7 @@ export function getWits(entity, relationships) {
         && relation.entityName === entity.name
         && relation.owner === entity.name
     )).forEach(relation => {
-        const fromField = relation.relationshipName;
+        const fromField = to.snake(relation.relationshipName);
         withs.push(`'${fromField}'`);
     });
 
@@ -39,7 +39,7 @@ export function getWits(entity, relationships) {
         && relation.otherEntityName === entity.name
         && relation.bidirectional
     )).forEach(relation => {
-        const toField = relation.otherEntityRelationshipName;
+        const toField = to.snake(relation.otherEntityRelationshipName);
         withs.push(`'${toField}'`);
     });
 
