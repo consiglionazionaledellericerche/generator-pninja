@@ -115,7 +115,11 @@ class DatabaseSeeder extends Seeder
                 return $value !== '' && $value !== null;
             });
 
-            $modelClass::create($data);
+            try {
+                $modelClass::create($data);
+            } catch (\Throwable $th) {
+                $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
+            }
         }
     }
 
