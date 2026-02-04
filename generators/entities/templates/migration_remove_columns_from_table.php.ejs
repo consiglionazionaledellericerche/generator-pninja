@@ -9,8 +9,11 @@ return new class extends Migration
     public function up()
     {
         Schema::table('<%- tabName %>', function (Blueprint $table) {
-<% columnsNames.map(column => {-%>
-            $table->dropColumn('<%- column %>');
+<% uniqueFields.map(({name}) => {-%>
+            $table->dropUnique(['<%- name %>']);
+<% }); -%>
+<% columnsNames.map(name => {-%>
+            $table->dropColumn('<%- name %>');
 <% }); -%>
         });
     }

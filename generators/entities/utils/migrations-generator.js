@@ -89,14 +89,14 @@ export class MigrationsGenerator {
     }
 
     removeColumns({ entity, enums }) {
-        console.log(`Generating migration to remove columns from ${entity.name} entity...`);
-        console.log(JSON.stringify(entity, null, 2));
         const tabName = entity.tableName;
+        const uniqueFields = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false));
         const downColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_remove_columns_from_${tabName}_table.php`),
             {
                 tabName,
+                uniqueFields,
                 columnsNames,
                 downColumns,
             });
@@ -125,10 +125,61 @@ export class MigrationsGenerator {
         });
     }
 
-    createRelation({ entity, relationships }) {
+    removeRelation({ entity, relationships }) {
+        const dbms = this.that.config.get('dbms');
         const up = [];
         const down = [];
-        const entityTable = pluralize(to.snake(entity.name))
+        const entityTable = entity.tableName;
+        // OneToOne Relations
+        relationships
+            .filter(relation => (relation.relationshipType === 'one-to-one' && relation.entityName === entity.name))
+            .forEach(relation => {
+                const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
+                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const foreignId = `${fromInjectedField}_id`;
+                const unique = true;
+                down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
+                up.push(`$table->dropForeign(['${foreignId}']);`);
+                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+            });
+        // OneToMany Relations
+        relationships
+            .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name))
+            .forEach(relation => {
+                const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+                const fromTabName = pluralize(to.snake(relation.entityName));
+                const foreignId = `${toInjectedField}_id`;
+                const unique = false;
+                down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
+                up.push(`$table->dropForeign(['${foreignId}']);`);
+                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+            });
+        // ManyToOne Relations
+        relationships
+            .filter(relation => (relation.relationshipType === 'many-to-one' && relation.entityName === entity.name))
+            .forEach(relation => {
+                const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
+                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const foreignId = `${fromInjectedField}_id`;
+                const unique = false;
+                down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
+                up.push(`$table->dropForeign(['${foreignId}']);`);
+                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+            });
+        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_005_remove_relationships_from_${entityTable}_table.php`),
+            {
+                entityTable: entityTable,
+                up: up.join(`\n${tab(3)}`),
+                down: down.join(`\n${tab(3)}`),
+            }
+        )
+    }
+
+    createRelation({ entity, relationships }) {
+        const dbms = this.that.config.get('dbms');
+        const up = [];
+        const down = [];
+        const entityTable = entity.tableName;
         // OneToOne Relations
         relationships
             .filter(relation => (relation.relationshipType === 'one-to-one' && relation.entityName === entity.name))
@@ -139,6 +190,7 @@ export class MigrationsGenerator {
                 const unique = true;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
+                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
             });
         // OneToMany Relations
         relationships
@@ -150,6 +202,7 @@ export class MigrationsGenerator {
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
+                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
             });
         // ManyToOne Relations
         relationships
@@ -161,6 +214,7 @@ export class MigrationsGenerator {
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
+                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
             });
         this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
             {
