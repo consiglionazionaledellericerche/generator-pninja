@@ -16,6 +16,29 @@ import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
 import { createEntityPages } from '../client/react.inc.js';
 
+function replaceEntity(entitiesArray, updatedEntity) {
+    return entitiesArray.map(entity =>
+        entity.name === updatedEntity.name ? updatedEntity : entity
+    );
+}
+function replaceRelationships(relationshipsArray, updatedEntity) {
+    return relationshipsArray
+        .filter(rel => rel.entityName !== updatedEntity.name)
+        .concat(updatedEntity.relationships)
+        .sort((a, b) => {
+            // Prima confronta entityName
+            const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
+            if (entityNameCompare !== 0) return entityNameCompare;
+
+            // Se entityName è uguale, confronta relationshipType
+            const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
+            if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
+
+            // Se anche relationshipType è uguale, confronta otherEntityName
+            return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+        });
+}
+
 export default class extends Generator {
     constructor(args, opts) {
         super(args, opts);
@@ -41,6 +64,14 @@ export default class extends Generator {
 
     async prompting() {
         this.log(colors.blue('\nGenerating a new entity\n'));
+
+        this.isRegenerate = false;
+        this.isAdd = false;
+        this.isRemove = false;
+        this.fieldsToAdd = [];
+        this.fieldsToRemove = [];
+        this.relationshipsToAdd = [];
+        this.relationshipsToRemove = [];
 
         // Check for answers file
         const answersFile = this.destinationPath('.entity-answers.json');
@@ -70,6 +101,129 @@ export default class extends Generator {
             this.entityName = this.options.entityName;
         }
 
+        // Check if entity already exists
+        const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
+        if (fs.existsSync(entityFilePath)) {
+            const updateAnswer = await this.prompt([{
+                type: 'list',
+                name: 'updateMode',
+                message: 'Entity already exists. Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
+                choices: [
+                    { name: 'Yes, re generate the entity', value: 'regenerate' },
+                    { name: 'Yes, add more fields and relationships', value: 'add' },
+                    { name: 'Yes, remove fields and relationships', value: 'remove' },
+                    { name: 'No, exit', value: 'exit' }
+                ]
+            }]);
+
+            if (updateAnswer.updateMode === 'exit') {
+                this.log(colors.yellow('Entity generation cancelled'));
+                process.exit(0);
+            }
+
+            // Load existing entity
+            const existingEntity = JSON.parse(fs.readFileSync(entityFilePath, 'utf8'));
+
+            if (updateAnswer.updateMode === 'regenerate') {
+                // Load existing entity configuration and regenerate everything
+                this.entityConfig = existingEntity;
+                this.entityName = existingEntity.name;
+                this.isRegenerate = true;
+
+                this._loadExistingEntities();
+                this._loadExistingEnums();
+
+                this._printEntitySummary();
+
+                // Skip directly to writing phase
+                return;
+            } else if (updateAnswer.updateMode === 'add') {
+                // Load existing entity and add to it
+                this.entityConfig = existingEntity;
+                this.entityName = existingEntity.name;
+                this.isAdd = true;
+
+                this._loadExistingEntities();
+                this._loadExistingEnums();
+
+                this._printEntitySummary();
+
+                await this._askForFields();
+                this._printEntitySummary();
+
+                this.log(colors.cyan('\nAdding relationships to other entities\n'));
+                await this._askForRelationships();
+                this._printEntitySummary();
+
+                return;
+            } else if (updateAnswer.updateMode === 'remove') {
+                // Load existing entity and allow removal
+                this.entityConfig = existingEntity;
+                this.entityName = existingEntity.name;
+                this.isRemove = true;
+
+                this._loadExistingEntities();
+                this._loadExistingEnums();
+
+                this._printEntitySummary();
+
+                // Multi-select field removal
+                if (this.entityConfig.fields.length > 0) {
+                    const fieldsToRemove = await this.prompt([{
+                        type: 'checkbox',
+                        name: 'fields',
+                        message: 'Please choose the fields you want to remove',
+                        choices: this.entityConfig.fields.map(f => ({
+                            name: f.name,
+                            value: f.name
+                        }))
+                    }]);
+
+                    if (fieldsToRemove.fields.length > 0) {
+                        this.fieldsToRemove = this.entityConfig.fields.filter(
+                            f => fieldsToRemove.fields.includes(f.name)
+                        );
+                        this.entityConfig.fields = this.entityConfig.fields.filter(
+                            f => !fieldsToRemove.fields.includes(f.name)
+                        );
+                        this.log(colors.green(`Removed ${fieldsToRemove.fields.length} field(s)`));
+                    }
+                } else {
+                    this.log(colors.yellow('No fields to remove'));
+                }
+
+                // Multi-select relationship removal
+                if (this.entityConfig.relationships.length > 0) {
+                    const relationshipsToRemove = await this.prompt([{
+                        type: 'checkbox',
+                        name: 'relationships',
+                        message: 'Please choose the relationships you want to remove',
+                        choices: this.entityConfig.relationships.map(r => ({
+                            name: `${r.relationshipName}:${r.relationshipType}`,
+                            value: r.relationshipName
+                        }))
+                    }]);
+
+                    if (relationshipsToRemove.relationships.length > 0) {
+                        this.relationshipsToRemove = this.entityConfig.relationships.filter(
+                            r => relationshipsToRemove.relationships.includes(r.relationshipName)
+                        )
+                        this.entityConfig.relationships = this.entityConfig.relationships.filter(
+                            r => !relationshipsToRemove.relationships.includes(r.relationshipName)
+                        );
+                        this.log(colors.green(`Removed ${relationshipsToRemove.relationships.length} relationship(s)`));
+                    }
+                } else {
+                    this.log(colors.yellow('No relationships to remove'));
+                }
+
+                this._printEntitySummary();
+
+                return;
+            }
+        }
+
+        // Normal flow for new entity or regenerate
         const softDeleteAnswer = await this.prompt([{
             type: 'confirm',
             name: 'softDelete',
@@ -242,11 +396,11 @@ export default class extends Generator {
         ]);
 
         const relationship = {
-            entityName: this.entityName,
-            owner: this.entityName,
             relationshipName: relationshipAnswers.relationshipName,
             otherEntityName: relationshipAnswers.otherEntity,
-            relationshipType: relationshipAnswers.relationshipType
+            relationshipType: relationshipAnswers.relationshipType,
+            entityName: this.entityName,
+            owner: this.entityName
         };
 
         const otherEntityFields = this._getEntityFields(relationshipAnswers.otherEntity);
@@ -458,8 +612,8 @@ export default class extends Generator {
     writing() {
         this.log(colors.green('\nEntity configuration completed'));
         const enums = getEnums(this);
-        const storedEntities = getEntities(this);
-        const storedRelationships = getEntitiesRelationships(this);
+        const storedEntities = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceEntity(getEntities(this), this.entityConfig) : [...getEntities(this), this.entityConfig];
+        const storedRelationships = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceRelationships(getEntitiesRelationships(this), this.entityConfig) : [...getEntitiesRelationships(this), ...this.entityConfig.relationships];
         const searchEngine = this.config.get('searchEngine');
 
         // Save entity configuration to .pninja/<EntityName>.json
@@ -471,29 +625,52 @@ export default class extends Generator {
         const relationships = this.entityConfig.relationships || [];
 
         // Generate migrations
-        const migrationsGenerator = new MigrationsGenerator(this);
-        migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        migrationsGenerator.createTable({ entity: this.entityConfig, enums });
-        if (relationships.length > 0) {
-            migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
-            relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
-                name: rel.otherEntityName
-            })).forEach(relEntity => migrationsGenerator.createRelation({ entity: relEntity, relationships }));
-            migrationsGenerator.generatePivotMigrations(relationships);
+        if (!this.isRegenerate && !this.isAdd && !this.isRemove) {
+            const migrationsGenerator = new MigrationsGenerator(this);
+            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+            migrationsGenerator.createTable({ entity: this.entityConfig, enums });
+            if (relationships.length > 0) {
+                migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
+                relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
+                    name: rel.otherEntityName
+                })).forEach(relEntity => migrationsGenerator.createRelation({ entity: relEntity, relationships }));
+                migrationsGenerator.generatePivotMigrations(relationships);
+            }
+            this.log(colors.green('Migrations generated successfully\n'));
         }
-        this.log(colors.green('Migrations generated successfully\n'));
+        if (this.fieldsToRemove.length > 0) {
+            const migrationsGenerator = new MigrationsGenerator(this);
+            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+            migrationsGenerator.removeColumns({
+                entity: {
+                    name: this.entityConfig.name,
+                    tableName: this.entityConfig.tableName,
+                    fields: this.fieldsToRemove
+                },
+                enums
+            });
+            this.log(colors.green('Field removal migrations generated successfully\n'));
+        }
+        if (this.relationshipsToRemove.length > 0) {
+            const migrationsGenerator = new MigrationsGenerator(this);
+            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+            migrationsGenerator.removeRelation({
+                entity: this.entityConfig,
+                relationships: this.relationshipsToRemove
+            });
+        }
 
         // Generate models
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        modelsGenerator.generateModel(this.entityConfig, enums, relationships, searchEngine);
+        modelsGenerator.generateModel(this.entityConfig, enums, storedRelationships, searchEngine);
         relationships
             .filter(rel => rel.bidirectional)
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const entity = getEntity(this, entityName);
                 if (entity) {
-                    modelsGenerator.generateModel(entity, enums, [...storedRelationships, ...relationships], searchEngine);
+                    modelsGenerator.generateModel(entity, enums, storedRelationships, searchEngine);
                 }
             });
         this.log(colors.green('Models generated successfully\n'));
@@ -501,35 +678,34 @@ export default class extends Generator {
         // Generate controllers
         const controllersGenerator = new ControllersGenerator(this);
         controllersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        controllersGenerator.generateEntityController(this.entityConfig, [...storedRelationships, ...relationships], searchEngine);
+        controllersGenerator.generateEntityController(this.entityConfig, storedRelationships, searchEngine);
         relationships
             .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const relEntity = storedEntities.find(entity => entity.name === entityName);
-                controllersGenerator.generateEntityController(relEntity, [...storedRelationships, ...relationships], searchEngine)
+                controllersGenerator.generateEntityController(relEntity, storedRelationships, searchEngine)
             });
         relationships
             .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const relEntity = storedEntities.find(entity => entity.name === entityName);
-                controllersGenerator.generateEntityController(relEntity, [...storedRelationships, ...relationships], searchEngine)
+                controllersGenerator.generateEntityController(relEntity, storedRelationships, searchEngine)
             });
         this.log(colors.green('Controllers generated successfully\n'));
-
 
         // Generate routes
         const routersGenerator = new RoutersGenerator(this);
         routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        routersGenerator.generateRouters([...storedEntities, this.entityConfig]);
+        routersGenerator.generateRouters(storedEntities);
         this.log(colors.green('Routers generated successfully\n'));
 
         // Generate Factories and DatabaseSeeder
         const factoriesGenerator = new FactoriesGenerator(this);
         factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, [...storedEntities, this.entityConfig], [...storedRelationships, ...relationships], enums);
-        factoriesGenerator.that.fs.copyTpl(factoriesGenerator.that.templatePath("database/seeders/csv/AcRule.csv.ejs"), factoriesGenerator.that.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [...storedEntities, this.entityConfig] });
+        factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, storedEntities, storedRelationships, enums);
+        factoriesGenerator.that.fs.copyTpl(factoriesGenerator.that.templatePath("database/seeders/csv/AcRule.csv.ejs"), factoriesGenerator.that.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: storedEntities });
         this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
 
         // Generate client
@@ -541,8 +717,8 @@ export default class extends Generator {
             // Copy locale files
             for (const lang of languages) {
                 this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
-                    entities: [AcRule, ...storedEntities, this.entityConfig],
-                    relationships: [...storedRelationships, ...relationships],
+                    entities: [AcRule, ...storedEntities],
+                    relationships: storedRelationships,
                     to,
                     pluralize,
                     getModelForeignIds,
@@ -550,17 +726,17 @@ export default class extends Generator {
                 });
             };
             // Update entity icons
-            this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: [...storedEntities, this.entityConfig] });
+            this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
 
             // Update Menu
-            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: [...storedEntities, this.entityConfig], to, pluralize, withLangSelect: languages.length > 1 });
+            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1 });
 
             // Create entity pages
             createEntityPages({
                 that: this,
                 entity: this.entityConfig,
                 enums: enums,
-                relationships: [...storedRelationships, ...relationships],
+                relationships: storedRelationships,
                 searchEngine: searchEngine
             });
             relationships
@@ -572,7 +748,7 @@ export default class extends Generator {
                         that: this,
                         entity: relEntity,
                         enums: enums,
-                        relationships: [...storedRelationships, ...relationships],
+                        relationships: storedRelationships,
                         searchEngine: searchEngine
                     });
                 });
@@ -585,12 +761,12 @@ export default class extends Generator {
                         that: this,
                         entity: relEntity,
                         enums: enums,
-                        relationships: [...storedRelationships, ...relationships],
+                        relationships: storedRelationships,
                         searchEngine: searchEngine
                     });
                 });
             // Update App.tsx
-            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, this.entityConfig, AcRule], to, pluralize });
+            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize });
         }
     }
 }
