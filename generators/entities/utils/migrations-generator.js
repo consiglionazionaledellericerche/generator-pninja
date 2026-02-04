@@ -67,10 +67,39 @@ function convertFields(fields, enums) {
     }, []);
 }
 
+function getFieldsNames(fields, enums) {
+    return fields.reduce((res, field) => {
+        const fieldName = to.snake(field.name);
+        const fieldType = convertFieldType(field.type, enums);
+        if (fieldType !== 'binary') {
+            res.push(fieldName);
+        } else {
+            res.push(`${fieldName}_blob`);
+            res.push(`${fieldName}_type`);
+            res.push(`${fieldName}_name`);
+        }
+        return res;
+    }, []);
+}
+
 export class MigrationsGenerator {
     constructor(that) {
         this.that = that;
         this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+    }
+
+    removeColumns({ entity, enums }) {
+        console.log(`Generating migration to remove columns from ${entity.name} entity...`);
+        console.log(JSON.stringify(entity, null, 2));
+        const tabName = entity.tableName;
+        const downColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
+        const columnsNames = getFieldsNames(entity.fields, enums);
+        this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_remove_columns_from_${tabName}_table.php`),
+            {
+                tabName,
+                columnsNames,
+                downColumns,
+            });
     }
 
     createTable({ entity, enums }) {
