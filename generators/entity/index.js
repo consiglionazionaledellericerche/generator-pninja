@@ -15,6 +15,7 @@ import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
 import { createEntityPages } from '../client/react.inc.js';
+import ansiColors from 'ansi-colors';
 
 function replaceEntity(entitiesArray, updatedEntity) {
     return entitiesArray.map(entity =>
@@ -396,11 +397,17 @@ export default class extends Generator {
         ]);
 
         const relationship = {
+            entityName: this.entityName,
+            owner: this.entityName,
             relationshipName: relationshipAnswers.relationshipName,
             otherEntityName: relationshipAnswers.otherEntity,
             relationshipType: relationshipAnswers.relationshipType,
-            entityName: this.entityName,
-            owner: this.entityName
+            otherEntityField: undefined,
+            relationshipRequired: undefined,
+            bidirectional: undefined,
+            otherEntityRelationshipName: undefined,
+            inverseEntityField: undefined,
+            inverseRelationshipRequired: undefined,
         };
 
         const otherEntityFields = this._getEntityFields(relationshipAnswers.otherEntity);
@@ -610,6 +617,18 @@ export default class extends Generator {
     }
 
     writing() {
+        this.entityConfig.relationships.sort((a, b) => {
+            // Prima confronta entityName
+            const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
+            if (entityNameCompare !== 0) return entityNameCompare;
+
+            // Se entityName è uguale, confronta relationshipType
+            const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
+            if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
+
+            // Se anche relationshipType è uguale, confronta otherEntityName
+            return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+        });
         this.log(colors.green('\nEntity configuration completed'));
         const enums = getEnums(this);
         const storedEntities = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceEntity(getEntities(this), this.entityConfig) : [...getEntities(this), this.entityConfig];
@@ -632,8 +651,11 @@ export default class extends Generator {
             if (relationships.length > 0) {
                 migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
                 relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
-                    name: rel.otherEntityName
-                })).forEach(relEntity => migrationsGenerator.createRelation({ entity: relEntity, relationships }));
+                    name: rel.otherEntityName,
+                    tableName: pluralize(to.snake(rel.otherEntityName))
+                })).forEach(relEntity => {
+                    migrationsGenerator.createRelation({ entity: relEntity, relationships })
+                });
                 migrationsGenerator.generatePivotMigrations(relationships);
             }
             this.log(colors.green('Migrations generated successfully\n'));
@@ -656,16 +678,28 @@ export default class extends Generator {
             migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.removeRelation({
                 entity: this.entityConfig,
-                relationships: this.relationshipsToRemove
+                relationships: this.relationshipsToRemove.filter(rel => rel.relationshipType === 'one-to-one' || rel.relationshipType === 'many-to-one'),
             });
-            migrationsGenerator.removePivotMigrations(this.relationshipsToRemove);
+            this.relationshipsToRemove.filter(rel => rel.relationshipType === 'one-to-many').forEach(rel => {
+                migrationsGenerator.removeRelation({
+                    entity: {
+                        name: rel.otherEntityName,
+                        tableName: pluralize(to.snake(rel.otherEntityName))
+                    },
+                    relationships: [rel],
+                });
+            });
+            migrationsGenerator.removePivotMigrations(this.relationshipsToRemove.filter(rel => rel.relationshipType === 'many-to-many'));
         }
 
         // Generate models
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, storedRelationships, searchEngine);
-        relationships
+        console.log(ansiColors.bgYellowBright.black('relationships: ' + JSON.stringify(relationships, null, 2)));
+        console.log(ansiColors.bgYellowBright.black('relationshipsToRemove: ' + JSON.stringify(this.relationshipsToRemove, null, 2)));
+
+        [...relationships, ...this.relationshipsToRemove]
             .filter(rel => rel.bidirectional)
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
@@ -680,14 +714,14 @@ export default class extends Generator {
         const controllersGenerator = new ControllersGenerator(this);
         controllersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         controllersGenerator.generateEntityController(this.entityConfig, storedRelationships, searchEngine);
-        relationships
+        [...relationships, ...this.relationshipsToRemove]
             .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
                 const relEntity = storedEntities.find(entity => entity.name === entityName);
                 controllersGenerator.generateEntityController(relEntity, storedRelationships, searchEngine)
             });
-        relationships
+        [...relationships, ...this.relationshipsToRemove]
             .filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one')
             .map(rel => rel.otherEntityName)
             .forEach(entityName => {
@@ -740,7 +774,7 @@ export default class extends Generator {
                 relationships: storedRelationships,
                 searchEngine: searchEngine
             });
-            relationships
+            [...relationships, ...this.relationshipsToRemove]
                 .filter(rel => (rel.relationshipType === 'one-to-many' && rel.bidirectional) || (rel.relationshipType === 'one-to-one' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
                 .forEach(entityName => {
@@ -753,7 +787,7 @@ export default class extends Generator {
                         searchEngine: searchEngine
                     });
                 });
-            relationships
+            [...relationships, ...this.relationshipsToRemove]
                 .filter(rel => (rel.relationshipType === 'many-to-one' && rel.bidirectional) || (rel.relationshipType === 'many-to-many' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
                 .forEach(entityName => {
