@@ -126,7 +126,6 @@ export class MigrationsGenerator {
     }
 
     removeRelation({ entity, relationships }) {
-        const dbms = this.that.config.get('dbms');
         const up = [];
         const down = [];
         const entityTable = entity.tableName;
@@ -179,7 +178,6 @@ export class MigrationsGenerator {
     }
 
     createRelation({ entity, relationships }) {
-        const dbms = this.that.config.get('dbms');
         const up = [];
         const down = [];
         const entityTable = entity.tableName;
@@ -222,6 +220,7 @@ export class MigrationsGenerator {
                 if (unique) down.push(`$table->dropUnique(['${foreignId}']);`);
                 down.push(`$table->dropColumn('${foreignId}');`);
             });
+        if (up.length === 0) return;
         this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
             {
                 entityTable: entityTable,
