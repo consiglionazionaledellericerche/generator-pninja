@@ -90,13 +90,13 @@ export class MigrationsGenerator {
 
     removeColumns({ entity, enums }) {
         const tabName = entity.tableName;
-        const uniqueFields = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false));
+        const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
         const downColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_remove_columns_from_${tabName}_table.php`),
             {
                 tabName,
-                uniqueFields,
+                uniqueFieldsNames,
                 columnsNames,
                 downColumns,
             });
@@ -140,7 +140,8 @@ export class MigrationsGenerator {
                 const unique = true;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
-                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
+                up.push(`$table->dropColumn('${foreignId}');`);
             });
         // OneToMany Relations
         relationships
@@ -152,7 +153,8 @@ export class MigrationsGenerator {
                 const unique = false;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
-                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
+                up.push(`$table->dropColumn('${foreignId}');`);
             });
         // ManyToOne Relations
         relationships
@@ -164,7 +166,8 @@ export class MigrationsGenerator {
                 const unique = false;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
-                up.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
+                up.push(`$table->dropColumn('${foreignId}');`);
             });
         this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_005_remove_relationships_from_${entityTable}_table.php`),
             {
@@ -190,7 +193,7 @@ export class MigrationsGenerator {
                 const unique = true;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                down.push(`$table->dropColumn('${foreignId}');`);
             });
         // OneToMany Relations
         relationships
@@ -202,7 +205,7 @@ export class MigrationsGenerator {
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                down.push(`$table->dropColumn('${foreignId}');`);
             });
         // ManyToOne Relations
         relationships
@@ -214,7 +217,7 @@ export class MigrationsGenerator {
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                down.push(`if (config('database.default')) $table->dropColumn('${foreignId}');`);
+                down.push(`$table->dropColumn('${foreignId}');`);
             });
         this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_add_relationships_to_${entityTable}_table.php`),
             {
