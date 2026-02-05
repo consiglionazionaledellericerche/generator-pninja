@@ -268,6 +268,33 @@ export class MigrationsGenerator {
             ));
     }
 
+    removePivotMigrations(relationships) {
+        relationships
+            .filter(relationship => relationship.relationshipType === 'many-to-many')
+            .map(relation => {
+                const fromForeignId = to.snake(relation.relationshipName || relation.otherEntityName);
+                const toForeignId = to.snake(relation.otherEntityRelationshipName || relation.entityName);
+                const fromTabName = pluralize(to.snake(relation.entityName));
+                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const pivotName = [to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_');
+                return {
+                    fromForeignId,
+                    toForeignId,
+                    fromTabName,
+                    toTabName,
+                    pivotName
+                }
+            }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_remove_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_006_remove_${migration.pivotName}_table.php`),
+                {
+                    fromForeignId: migration.fromForeignId,
+                    toForeignId: migration.toForeignId,
+                    fromTabName: migration.fromTabName,
+                    toTabName: migration.toTabName,
+                    pivotName: migration.pivotName
+                }
+            ));
+    }
+
     createPivotMigrations() {
         const relationships = getEntitiesRelationships(this.that);
         this.generatePivotMigrations(relationships);

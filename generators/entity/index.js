@@ -658,6 +658,7 @@ export default class extends Generator {
                 entity: this.entityConfig,
                 relationships: this.relationshipsToRemove
             });
+            migrationsGenerator.removePivotMigrations(this.relationshipsToRemove);
         }
 
         // Generate models

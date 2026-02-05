@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::dropIfExists('<%-pivotName%>');
+    }
+
+    public function down()
+    {
+        Schema::create('<%-pivotName%>', function (Blueprint $table) {
+            $table->id();
+            $table->unique(['<%- fromForeignId %>_id', '<%- toForeignId %>_id']);
+            $table->foreignId('<%- fromForeignId %>_id')->nullable()->constrained('<%-toTabName%>')->cascadeOnDelete();
+            $table->foreignId('<%- toForeignId %>_id')->nullable()->constrained('<%-fromTabName%>')->cascadeOnDelete();
+            $table->timestamps();
+        });
+    }
+};
