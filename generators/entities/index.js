@@ -11,24 +11,24 @@ import { FactoriesGenerator } from './utils/factories-generator.js';
 import { splitEntitiesFile } from './utils/entity-splitter.js';
 
 function sortJdlStructure(jdl) {
-  // Crea una copia profonda per non modificare l'originale
+  // Create a deep copy to avoid modifying the original
   const sorted = JSON.parse(JSON.stringify(jdl));
 
-  // Ordina le entità per name
+  // Sort entities by name
   sorted.entities.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 
-  // Ordina le relazioni per from.name, poi cardinality, poi to.name
+  // Sort relationships by from.name, then to.name, then cardinality
   sorted.relationships.sort((a, b) => {
-    // Prima confronta from.name
+    // First compare from.name
     const fromCompare = a.from.name.localeCompare(b.from.name, undefined, { sensitivity: 'base' });
     if (fromCompare !== 0) return fromCompare;
 
-    // Se from.name è uguale, confronta cardinality
-    const cardinalityCompare = a.cardinality.localeCompare(b.cardinality, undefined, { sensitivity: 'base' });
-    if (cardinalityCompare !== 0) return cardinalityCompare;
+    // If from.name is equal, compare to.name
+    const toCompare = a.to.name.localeCompare(b.to.name, undefined, { sensitivity: 'base' });
+    if (toCompare !== 0) return toCompare;
 
-    // Se anche cardinality è uguale, confronta to.name
-    return a.to.name.localeCompare(b.to.name, undefined, { sensitivity: 'base' });
+    // If to.name is also equal, compare cardinality
+    return a.cardinality.localeCompare(b.cardinality, undefined, { sensitivity: 'base' });
   });
 
   return sorted;

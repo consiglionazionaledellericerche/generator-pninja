@@ -31,12 +31,12 @@ function replaceRelationships(relationshipsArray, updatedEntity) {
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
             if (entityNameCompare !== 0) return entityNameCompare;
 
-            // If entityName is equal, compare relationshipType
-            const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
-            if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
+            // If entityName is equal, compare otherEntityName
+            const otherEntityNameCompare = a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+            if (otherEntityNameCompare !== 0) return otherEntityNameCompare;
 
-            // If relationshipType is also equal, compare otherEntityName
-            return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+            // If otherEntityName is also equal, compare relationshipType
+            return a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
         });
 }
 
@@ -774,12 +774,12 @@ export default class extends Generator {
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
             if (entityNameCompare !== 0) return entityNameCompare;
 
-            // If entityName is equal, compare relationshipType
-            const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
-            if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
+            // If entityName is equal, compare otherEntityName
+            const otherEntityNameCompare = a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+            if (otherEntityNameCompare !== 0) return otherEntityNameCompare;
 
-            // If relationshipType is also equal, compare otherEntityName
-            return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
+            // If otherEntityName is also equal, compare relationshipType
+            return a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
         });
         this.log(colors.green('\nEntity configuration completed'));
         const enums = getEnums(this);
