@@ -15,7 +15,7 @@ import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
 import { createEntityPages } from '../client/react.inc.js';
-import ansiColors from 'ansi-colors';
+import { isReservedWord } from '../utils/reserved-words.js';
 
 function replaceEntity(entitiesArray, updatedEntity) {
     return entitiesArray.map(entity =>
@@ -288,21 +288,50 @@ export default class extends Generator {
                 name: 'fieldName',
                 message: 'What is the name of your field?',
                 validate: input => {
+                    // Only alphanumeric and underscore allowed
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your field name cannot contain special characters';
                     }
+
+                    // Cannot be empty
                     if (input === '') {
                         return 'Your field name cannot be empty';
                     }
+
+                    // Cannot start with a number
                     if (/[0-9]/.test(input.charAt(0))) {
                         return 'Your field name cannot start with a number';
                     }
+
+                    // Cannot start with uppercase
                     if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your field name cannot start with an upper case letter';
                     }
-                    if (input === 'id' || this.entityConfig.fields.map(field => to.snake(field.name)).includes(to.snake(input))) {
+
+                    const snakeCaseName = to.snake(input);
+
+                    // Check against reserved field 'id' and existing fields
+                    if (input === 'id' || this.entityConfig.fields.some(field => to.snake(field.name) === snakeCaseName)) {
                         return 'Your field name cannot use an already existing field name';
                     }
+
+                    // Check against current entity's relationships
+                    if (this.entityConfig.relationships.some(rel => to.snake(rel.relationshipName) === snakeCaseName)) {
+                        return 'Your field name cannot use an already existing relationship name';
+                    }
+
+                    // Check against inverse relationships from other entities
+                    if (getEntitiesRelationships(this)
+                        .filter(rel => rel.otherEntityName === this.entityConfig.name)
+                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        return 'Your field name cannot use an already existing relationship name from other entities';
+                    }
+
+                    // Check against database/framework reserved words
+                    if (isReservedWord(snakeCaseName)) {
+                        return `'${input}' is a reserved word and cannot be used as a field name`;
+                    }
+
                     return true;
                 },
             },
@@ -417,21 +446,50 @@ export default class extends Generator {
                         : to.camel(sentenceCase);
                 },
                 validate: input => {
+                    // Only alphanumeric and underscore allowed
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your relationship name cannot contain special characters';
                     }
+
+                    // Cannot be empty
                     if (input === '') {
                         return 'Your relationship name cannot be empty';
                     }
+
+                    // Cannot start with a number
                     if (/[0-9]/.test(input.charAt(0))) {
                         return 'Your relationship name cannot start with a number';
                     }
+
+                    // Cannot start with uppercase
                     if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your relationship name cannot start with an upper case letter';
                     }
-                    if (this.entityConfig.relationships.map(rel => to.snake(rel.relationshipName)).includes(to.snake(input))) {
+
+                    const snakeCaseName = to.snake(input);
+
+                    // Check against reserved field 'id' and existing fields
+                    if (input === 'id' || this.entityConfig.fields.some(field => to.snake(field.name) === snakeCaseName)) {
+                        return 'Your relationship name cannot use an already existing field name';
+                    }
+
+                    // Check against current entity's relationships
+                    if (this.entityConfig.relationships.some(rel => to.snake(rel.relationshipName) === snakeCaseName)) {
                         return 'Your relationship name cannot use an already existing relationship name';
                     }
+
+                    // Check against inverse relationships from other entities
+                    if (getEntitiesRelationships(this)
+                        .filter(rel => rel.otherEntityName === this.entityConfig.name)
+                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        return 'Your relationship name cannot use an already existing relationship name from other entities';
+                    }
+
+                    // Check against database/framework reserved words
+                    if (isReservedWord(snakeCaseName)) {
+                        return `'${input}' is a reserved word and cannot be used as a relationship name`;
+                    }
+
                     return true;
                 }
             }
@@ -490,6 +548,55 @@ export default class extends Generator {
                     return inverseRelationType.endsWith('to-many')
                         ? to.camel(pluralize(sentenceCase))
                         : to.camel(sentenceCase);
+                },
+                validate: input => {
+                    const otherEntity = getEntity(this, relationshipAnswers.otherEntity);
+
+                    // Only alphanumeric and underscore allowed
+                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                        return 'Your relationship name cannot contain special characters';
+                    }
+
+                    // Cannot be empty
+                    if (input === '') {
+                        return 'Your relationship name cannot be empty';
+                    }
+
+                    // Cannot start with a number
+                    if (/[0-9]/.test(input.charAt(0))) {
+                        return 'Your relationship name cannot start with a number';
+                    }
+
+                    // Cannot start with uppercase
+                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                        return 'Your relationship name cannot start with an upper case letter';
+                    }
+
+                    const snakeCaseName = to.snake(input);
+
+                    // Check against other entity's reserved field 'id' and existing fields
+                    if (otherEntity && (input === 'id' || otherEntity.fields.some(field => to.snake(field.name) === snakeCaseName))) {
+                        return 'Your relationship name cannot use an already existing field name in the other entity';
+                    }
+
+                    // Check against other entity's relationships
+                    if (otherEntity && otherEntity.relationships.some(rel => to.snake(rel.relationshipName) === snakeCaseName)) {
+                        return 'Your relationship name cannot use an already existing relationship name in the other entity';
+                    }
+
+                    // Check against inverse relationships pointing to the other entity
+                    if (getEntitiesRelationships(this)
+                        .filter(rel => rel.otherEntityName === relationshipAnswers.otherEntity)
+                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        return 'Your relationship name cannot use an already existing relationship name from other entities';
+                    }
+
+                    // Check against database/framework reserved words
+                    if (isReservedWord(snakeCaseName)) {
+                        return `'${input}' is a reserved word and cannot be used as a field/relationship name`;
+                    }
+
+                    return true;
                 }
             }]);
             relationship.otherEntityRelationshipName = bidirectionalAnswers.otherEntityRelationshipName;
