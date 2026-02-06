@@ -27,15 +27,15 @@ function replaceRelationships(relationshipsArray, updatedEntity) {
         .filter(rel => rel.entityName !== updatedEntity.name)
         .concat(updatedEntity.relationships)
         .sort((a, b) => {
-            // Prima confronta entityName
+            // First compare entityName
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
             if (entityNameCompare !== 0) return entityNameCompare;
 
-            // Se entityName è uguale, confronta relationshipType
+            // If entityName is equal, compare relationshipType
             const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
             if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
 
-            // Se anche relationshipType è uguale, confronta otherEntityName
+            // If relationshipType is also equal, compare otherEntityName
             return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
         });
 }
@@ -770,15 +770,15 @@ export default class extends Generator {
 
     writing() {
         this.entityConfig.relationships.sort((a, b) => {
-            // Prima confronta entityName
+            // First compare entityName
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
             if (entityNameCompare !== 0) return entityNameCompare;
 
-            // Se entityName è uguale, confronta relationshipType
+            // If entityName is equal, compare relationshipType
             const relationshipTypeCompare = a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
             if (relationshipTypeCompare !== 0) return relationshipTypeCompare;
 
-            // Se anche relationshipType è uguale, confronta otherEntityName
+            // If relationshipType is also equal, compare otherEntityName
             return a.otherEntityName.localeCompare(b.otherEntityName, undefined, { sensitivity: 'base' });
         });
         this.log(colors.green('\nEntity configuration completed'));
