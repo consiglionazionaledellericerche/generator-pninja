@@ -94,7 +94,7 @@ export class MigrationsGenerator {
         const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
         const upColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
-        this.that.fs.copyTpl(this.that.templatePath("migration_add_columns_to_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_add_columns_to_${tabName}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_add_columns_to_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_add_columns_to_${tabName}_table.php`),
             {
                 tabName,
                 upColumns,
@@ -108,7 +108,7 @@ export class MigrationsGenerator {
         const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
         const downColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
-        this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_remove_columns_from_${tabName}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_remove_columns_from_${tabName}_table.php`),
             {
                 tabName,
                 uniqueFieldsNames,
@@ -121,7 +121,7 @@ export class MigrationsGenerator {
         const tabName = entity.tableName;
         const columns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const softDelete = !!entity?.softDelete;
-        this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_create_${tabName}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_${randomstring.generate(5)}_create_${tabName}_table.php`),
             {
                 tabName,
                 columns,
@@ -135,7 +135,7 @@ export class MigrationsGenerator {
         for (const entity of [AcRule, ...entities]) {
             this.createTable({ entity, enums });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_create_audits_table.php`), {
+        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
             authentication: this.that.config.get('authentication'),
         });
     }
@@ -183,7 +183,7 @@ export class MigrationsGenerator {
                 if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
                 up.push(`$table->dropColumn('${foreignId}');`);
             });
-        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_005_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_remove_relationships_from_${entityTable}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_005_${randomstring.generate(5)}_remove_relationships_from_${entityTable}_table.php`),
             {
                 entityTable: entityTable,
                 up: up.join(`\n${tab(3)}`),
@@ -236,7 +236,7 @@ export class MigrationsGenerator {
                 down.push(`$table->dropColumn('${foreignId}');`);
             });
         if (up.length === 0) return;
-        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_add_relationships_to_${entityTable}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_002_${randomstring.generate(5)}_add_relationships_to_${entityTable}_table.php`),
             {
                 entityTable: entityTable,
                 up: up.join(`\n${tab(3)}`),
@@ -271,7 +271,7 @@ export class MigrationsGenerator {
                     toTabName,
                     pivotName
                 }
-            }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_create_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_003_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_create_${migration.pivotName}_table.php`),
+            }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_create_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_003_${randomstring.generate(5)}_create_${migration.pivotName}_table.php`),
                 {
                     fromForeignId: migration.fromForeignId,
                     toForeignId: migration.toForeignId,
@@ -298,7 +298,7 @@ export class MigrationsGenerator {
                     toTabName,
                     pivotName
                 }
-            }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_remove_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_006_${randomstring.generate({ length: 12, charset: 'alphabetic', capitalization: 'uppercase' })}_remove_${migration.pivotName}_table.php`),
+            }).map(migration => this.that.fs.copyTpl(this.that.templatePath("migration_remove_pivot_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_006_${randomstring.generate(5)}_remove_${migration.pivotName}_table.php`),
                 {
                     fromForeignId: migration.fromForeignId,
                     toForeignId: migration.toForeignId,
