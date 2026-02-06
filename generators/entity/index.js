@@ -287,7 +287,26 @@ export default class extends Generator {
                 type: 'input',
                 name: 'fieldName',
                 message: 'What is the name of your field?',
-                validate: input => input.length > 0 || 'Field name is required'
+                validate: input => {
+                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                        return 'Your field name cannot contain special characters';
+                    }
+                    if (input === '') {
+                        return 'Your field name cannot be empty';
+                    }
+                    if (/[0-9]/.test(input.charAt(0))) {
+                        return 'Your field name cannot start with a number';
+                    }
+                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                        return 'Your field name cannot start with an upper case letter';
+                    }
+                    console.log(this.entityConfig.fields.map(field => field.name));
+                    if (input === 'id' || this.entityConfig.fields.map(field => to.snake(field.name)).includes(to.snake(input))) {
+                        console.log('Existing field names!');
+                        return 'Your field name cannot use an already existing field name';
+                    }
+                    return true;
+                },
             },
             {
                 type: 'list',
