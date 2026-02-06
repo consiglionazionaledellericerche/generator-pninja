@@ -300,9 +300,7 @@ export default class extends Generator {
                     if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your field name cannot start with an upper case letter';
                     }
-                    console.log(this.entityConfig.fields.map(field => field.name));
                     if (input === 'id' || this.entityConfig.fields.map(field => to.snake(field.name)).includes(to.snake(input))) {
-                        console.log('Existing field names!');
                         return 'Your field name cannot use an already existing field name';
                     }
                     return true;
@@ -417,6 +415,24 @@ export default class extends Generator {
                     return answers.relationshipType.endsWith('to-many')
                         ? to.camel(pluralize(sentenceCase))
                         : to.camel(sentenceCase);
+                },
+                validate: input => {
+                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                        return 'Your relationship name cannot contain special characters';
+                    }
+                    if (input === '') {
+                        return 'Your relationship name cannot be empty';
+                    }
+                    if (/[0-9]/.test(input.charAt(0))) {
+                        return 'Your relationship name cannot start with a number';
+                    }
+                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                        return 'Your relationship name cannot start with an upper case letter';
+                    }
+                    if (this.entityConfig.relationships.map(rel => to.snake(rel.relationshipName)).includes(to.snake(input))) {
+                        return 'Your relationship name cannot use an already existing relationship name';
+                    }
+                    return true;
                 }
             }
         ]);
