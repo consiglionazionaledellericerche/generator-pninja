@@ -143,6 +143,8 @@ export default class extends Generator {
                 this.entityConfig = existingEntity;
                 this.entityName = existingEntity.name;
                 this.isAdd = true;
+                this.fieldCounter = this.entityConfig.fields.length;
+                this.relationshipCounter = this.entityConfig.relationships.length;
 
                 this._loadExistingEntities();
                 this._loadExistingEnums();
@@ -346,6 +348,10 @@ export default class extends Generator {
 
         this.entityConfig.fields.push(field);
 
+        if (this.isAdd) {
+            this.fieldsToAdd.push(field);
+        }
+
         this._printEntitySummary();
 
         await this._askForFields();
@@ -474,6 +480,10 @@ export default class extends Generator {
         }
 
         this.entityConfig.relationships.push(relationship);
+
+        if (this.isAdd) {
+            this.relationshipsToAdd.push(relationship);
+        }
 
         this.log(colors.cyan('\nGenerating relationships to other entities\n'));
         this._printEntitySummary();
@@ -660,6 +670,19 @@ export default class extends Generator {
             }
             this.log(colors.green('Migrations generated successfully\n'));
         }
+        if (this.fieldsToAdd.length > 0) {
+            const migrationsGenerator = new MigrationsGenerator(this);
+            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+            migrationsGenerator.addColumns({
+                entity: {
+                    name: this.entityConfig.name,
+                    tableName: this.entityConfig.tableName,
+                    fields: this.fieldsToAdd
+                },
+                enums
+            });
+            this.log(colors.green('Field addition migrations generated successfully\n'));
+        }
         if (this.fieldsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
             migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
@@ -672,6 +695,24 @@ export default class extends Generator {
                 enums
             });
             this.log(colors.green('Field removal migrations generated successfully\n'));
+        }
+        if (this.relationshipsToAdd.length > 0) {
+            const migrationsGenerator = new MigrationsGenerator(this);
+            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
+            migrationsGenerator.createRelation({
+                entity: this.entityConfig,
+                relationships: this.relationshipsToAdd.filter(rel => rel.relationshipType === 'one-to-one' || rel.relationshipType === 'many-to-one'),
+            });
+            this.relationshipsToAdd.filter(rel => rel.relationshipType === 'one-to-many').forEach(rel => {
+                migrationsGenerator.createRelation({
+                    entity: {
+                        name: rel.otherEntityName,
+                        tableName: pluralize(to.snake(rel.otherEntityName))
+                    },
+                    relationships: [rel],
+                });
+            });
+            migrationsGenerator.createPivotMigrations(this.relationshipsToAdd.filter(rel => rel.relationshipType === 'many-to-many'));
         }
         if (this.relationshipsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
@@ -696,8 +737,6 @@ export default class extends Generator {
         const modelsGenerator = new ModelsGenerator(this);
         modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, storedRelationships, searchEngine);
-        console.log(ansiColors.bgYellowBright.black('relationships: ' + JSON.stringify(relationships, null, 2)));
-        console.log(ansiColors.bgYellowBright.black('relationshipsToRemove: ' + JSON.stringify(this.relationshipsToRemove, null, 2)));
 
         [...relationships, ...this.relationshipsToRemove]
             .filter(rel => rel.bidirectional)
