@@ -93,7 +93,7 @@ export class MigrationsGenerator {
         const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
         const upColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
-        this.that.fs.copyTpl(this.that.templatePath("migration_add_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_add_columns_from_${tabName}_table.php`),
+        this.that.fs.copyTpl(this.that.templatePath("migration_add_columns_to_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_add_columns_to_${tabName}_table.php`),
             {
                 tabName,
                 upColumns,
