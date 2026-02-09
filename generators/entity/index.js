@@ -128,11 +128,6 @@ export default class extends Generator {
             }]);
             this.entityName = nameAnswer.entityName;
         } else {
-            // if (isReservedWord(pluralize(to.snake(this.options.entityName)))) {
-            //     console.log(colors.redBright(`ERROR! '${this.options.entityName}' is a reserved word and cannot be used as an Entity name`));
-            //     console.log(colors.yellow('Entity generation cancelled'));
-            //     process.exit(0);
-            // }
             this.entityName = this.options.entityName;
         }
 
