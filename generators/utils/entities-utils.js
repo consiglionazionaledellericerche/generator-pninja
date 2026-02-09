@@ -48,26 +48,32 @@ export function getEntity(that, entityName) {
 
 function getPninjaFiles(that) {
     const pninjaDir = that.destinationPath('.pninja');
+    const filesMap = new Map();
 
-    // Try mem-fs first
-    const allFiles = that.fs.store.all();
-    const memFsFiles = allFiles.filter(file => file.path.startsWith(pninjaDir));
-
-    // If found in mem-fs, return those
-    if (memFsFiles.length > 0) {
-        return memFsFiles;
-    }
-
-    // Fallback to filesystem
+    // First, get all filesystem files
     if (fs.existsSync(pninjaDir)) {
         const files = fs.readdirSync(pninjaDir);
-        return files.map(file => ({
-            path: path.join(pninjaDir, file),
-            contents: fs.readFileSync(path.join(pninjaDir, file))
-        }));
+        files.forEach(file => {
+            const filePath = path.join(pninjaDir, file);
+            filesMap.set(filePath, {
+                path: filePath,
+                contents: fs.readFileSync(filePath)
+            });
+        });
     }
 
-    return [];
+    // Then, override with mem-fs files (they have priority)
+    const allFiles = that.fs.store.all();
+    const memFsFiles = allFiles.filter(file => file.path.startsWith(pninjaDir));
+    memFsFiles.forEach(file => {
+        filesMap.set(file.path, file);
+    });
+
+    return Array.from(filesMap.values());
+}
+
+export function getEntityByName(that, entityName) {
+    return getEntities(that).find(entity => entity.name === entityName) || null;
 }
 
 export function getEntitiesFiles(that) {
