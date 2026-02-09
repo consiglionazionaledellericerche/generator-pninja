@@ -16,6 +16,7 @@ import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
 import { createEntityPages } from '../client/react.inc.js';
 import { isReservedWord } from '../utils/reserved-words.js';
+import { hello } from '../utils/hello.js';
 
 function replaceEntity(entitiesArray, updatedEntity) {
     return entitiesArray.map(entity =>
@@ -61,6 +62,8 @@ export default class extends Generator {
 
         this.fieldCounter = 0;
         this.relationshipCounter = 0;
+
+        hello(this.log);
     }
 
     async prompting() {
@@ -89,16 +92,47 @@ export default class extends Generator {
             this._printEntitySummary();
             return;
         }
+        if (isReservedWord(pluralize(to.snake(this.options.entityName)))) {
+            this.log(colors.red(`ERROR! '${this.options.entityName}' is a reserved word and cannot be used as an entity name`));
+            this.options.entityName = undefined;
+        } else if (!/^([a-zA-Z0-9]*)$/.test(this.options.entityName)) {
+            this.log(colors.red(`ERROR! Your entity name cannot contain special characters`));
+            this.options.entityName = undefined;
+        } else if (/[0-9]/.test(this.options.entityName.charAt(0))) {
+            this.log(colors.red(`ERROR! Your entity name cannot start with a number`));
+            this.options.entityName = undefined;
+        }
 
         if (!this.options.entityName) {
             const nameAnswer = await this.prompt([{
                 type: 'input',
                 name: 'entityName',
                 message: 'Entity name:',
-                validate: input => input.length > 0 || 'Entity name is required'
+                validate: input => {
+                    if (input === '') {
+                        return 'Your entity name cannot be empty';
+                    }
+                    if (!/^([a-zA-Z0-9]*)$/.test(input)) {
+                        return 'Your entity name cannot contain special characters';
+                    }
+
+                    // Cannot start with a number
+                    if (/[0-9]/.test(input.charAt(0))) {
+                        return 'Your entity name cannot start with a number';
+                    }
+                    if (isReservedWord(pluralize(to.snake(input)))) {
+                        return `'${input}' is a reserved word and cannot be used as an entity name`;
+                    }
+                    return true
+                }
             }]);
             this.entityName = nameAnswer.entityName;
         } else {
+            // if (isReservedWord(pluralize(to.snake(this.options.entityName)))) {
+            //     console.log(colors.redBright(`ERROR! '${this.options.entityName}' is a reserved word and cannot be used as an Entity name`));
+            //     console.log(colors.yellow('Entity generation cancelled'));
+            //     process.exit(0);
+            // }
             this.entityName = this.options.entityName;
         }
 
@@ -404,6 +438,9 @@ export default class extends Generator {
     }
 
     async _askForRelationships() {
+        if (!this.existingEntities || this.existingEntities.length === 0) {
+            return;
+        }
         this.relationshipCounter++;
 
         const addRelationshipAnswer = await this.prompt([{

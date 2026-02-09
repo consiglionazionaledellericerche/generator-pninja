@@ -2,6 +2,12 @@ export const RESERVED_WORDS = new Set([
     // Laravel automatic timestamps and soft deletes
     'id', 'created_at', 'updated_at', 'deleted_at',
 
+    // Laravel table names
+    'cache', 'cache_locks', 'failed_jobs', 'job_batches', 'jobs', 'migrations', 'password_reset_tokens', 'personal_access_tokens', 'sessions', 'users',
+
+    // PNinja table names
+    'ac_rules', 'audits',
+
     // SQL reserved words (common across MySQL, PostgreSQL, MariaDB, SQLite)
     'abort', 'absolute', 'access', 'action', 'add', 'admin', 'after', 'aggregate',
     'all', 'allocate', 'alter', 'analyse', 'analyze', 'and', 'any', 'are', 'array',
