@@ -86,17 +86,8 @@ export default class extends Generator {
                 if (input === '') {
                     return 'Your entity name cannot be empty';
                 }
-                if (/\s/.test(input)) {
-                    return 'Your entity name cannot contain spaces';
-                }
-                if (!/^([a-zA-Z0-9]*)$/.test(input)) {
-                    return 'Your entity name cannot contain special characters';
-                }
-                if (/^[0-9]/.test(input)) {
-                    return 'Your entity name cannot start with a number';
-                }
-                if (/^[a-z]/.test(input)) {
-                    return 'Your entity name cannot start with a lower case letter';
+                if (!/^[A-Z][A-Za-z0-9]*$/.test(input)) {
+                    return `Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`;
                 }
                 if (isReservedWord(to.snake(input))) {
                     return `'${input}' is a reserved word and cannot be used as an entity name`;
@@ -241,13 +232,8 @@ export default class extends Generator {
                 if (input === '') {
                     return 'Table name cannot be empty';
                 }
-                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                    return 'Table name cannot contain special characters';
-                }
-
-                // Cannot start with a number
-                if (/[0-9]/.test(input.charAt(0))) {
-                    return 'Table name cannot start with a number';
+                if (!/^[a-z][a-z0-9_]*$/.test(input)) {
+                    return `Your table name must start with a lower case letter and can only contain lowercase letters, numbers and underscores: /^[a-z][a-z0-9_]*$/`;
                 }
                 if (isReservedTableName(input)) {
                     return `'${input}' is a reserved word and cannot be used as a table name`;
@@ -317,20 +303,11 @@ export default class extends Generator {
                 name: 'fieldName',
                 message: 'What is the name of your field?',
                 validate: input => {
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your field name cannot contain special characters';
-                    }
-                    if (/\s/.test(input)) {
-                        return 'Your field name cannot contain spaces';
-                    }
                     if (input === '') {
                         return 'Your field name cannot be empty';
                     }
-                    if (/^[0-9]/.test(input)) {
-                        return 'Your field name cannot start with a number';
-                    }
-                    if (/^[A-Z]/.test(input)) {
-                        return 'Your field name cannot start with an upper case letter';
+                    if (!/^[a-z][A-Za-z0-9]*$/.test(input)) {
+                        return `Your field name must start with a lower case letter and cannot contain special characters: /^[a-z][A-Za-z0-9]*$/`;
                     }
 
                     const snakeCaseName = to.snake(input);
@@ -474,24 +451,11 @@ export default class extends Generator {
                         : to.camel(sentenceCase);
                 },
                 validate: input => {
-                    // Only alphanumeric and underscore allowed
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your relationship name cannot contain special characters';
-                    }
-
-                    // Cannot be empty
                     if (input === '') {
                         return 'Your relationship name cannot be empty';
                     }
-
-                    // Cannot start with a number
-                    if (/[0-9]/.test(input.charAt(0))) {
-                        return 'Your relationship name cannot start with a number';
-                    }
-
-                    // Cannot start with uppercase
-                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
-                        return 'Your relationship name cannot start with an upper case letter';
+                    if (!/^[a-z][A-Za-z0-9]*$/.test(input)) {
+                        return `Your relationship name must start with a lower case letter and cannot contain special characters: /^[a-z][A-Za-z0-9]*$/`;
                     }
 
                     const snakeCaseName = to.snake(input);
@@ -580,24 +544,11 @@ export default class extends Generator {
                 validate: input => {
                     const otherEntity = getEntity(this, relationshipAnswers.otherEntity);
 
-                    // Only alphanumeric and underscore allowed
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your relationship name cannot contain special characters';
-                    }
-
-                    // Cannot be empty
                     if (input === '') {
                         return 'Your relationship name cannot be empty';
                     }
-
-                    // Cannot start with a number
-                    if (/[0-9]/.test(input.charAt(0))) {
-                        return 'Your relationship name cannot start with a number';
-                    }
-
-                    // Cannot start with uppercase
-                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
-                        return 'Your relationship name cannot start with an upper case letter';
+                    if (!/^[a-z][A-Za-z0-9]*$/.test(input)) {
+                        return `Your relationship name must start with a lower case letter and cannot contain special characters: /^[a-z][A-Za-z0-9]*$/`;
                     }
 
                     const snakeCaseName = to.snake(input);
