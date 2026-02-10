@@ -1,10 +1,9 @@
 import to from 'to-case';
-import pluralize from 'pluralize';
 import { getWits } from '../../utils/getWiths.js';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships } from '../../utils/entities-utils.js';
+import { getEntities, getEntityByName, getEntitiesRelationships } from '../../utils/entities-utils.js';
 
-const getValidations = (e, relationships, op) => {
+const getValidations = (that, e, relationships, op) => {
     const entity = structuredClone(e);
     return {
         ...entity.fields
@@ -64,8 +63,8 @@ const getValidations = (e, relationships, op) => {
                 const toInjectedField = to.snake(
                     relation.otherEntityRelationshipName || relation.entityName
                 );
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const fromTabName = getEntityByName(that, relation.entityName).tableName;
+                const toTabName = getEntityByName(that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = true;
                 const nullable = !relation.relationshipRequired;
@@ -79,10 +78,8 @@ const getValidations = (e, relationships, op) => {
         ...relationships
             .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name)) // one-to-many Relations [<---]
             .reduce((acc, relation) => {
-                const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const fromTabName = getEntityByName(that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
                 const nullable = !relation.inverseRelationshipRequired;
@@ -97,9 +94,8 @@ const getValidations = (e, relationships, op) => {
             .filter(relation => (relation.relationshipType === 'many-to-one' && relation.entityName === entity.name)) // many-to-one Relations [--->]
             .reduce((acc, relation) => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const fromTabName = getEntityByName(that, relation.entityName).tableName;
+                const toTabName = getEntityByName(that, relation.otherEntityName).tableName;;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = false;
                 const nullable = !relation.relationshipRequired;
@@ -113,12 +109,8 @@ const getValidations = (e, relationships, op) => {
         ...relationships
             .filter(relation => (relation.relationshipType === 'many-to-many' && relation.otherEntityName === entity.name)) // many-to-many Relations [<---]
             .reduce((acc, relation) => {
-                const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
-                const foreignId = `${toInjectedField}_id`;
-                const unique = false;
+                const fromTabName = getEntityByName(that, relation.entityName).tableName;
                 const nullable = !relation.inverseRelationshipRequired;
                 acc[toInjectedField] = [`'array'`];
                 if (nullable) acc[toInjectedField].push(`'sometimes'`);
@@ -131,11 +123,7 @@ const getValidations = (e, relationships, op) => {
             .filter(relation => (relation.relationshipType === 'many-to-many' && relation.entityName === entity.name)) // many-to-many Relations [--->]
             .reduce((acc, relation) => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
-                const foreignId = `${fromInjectedField}_id`;
-                const unique = false;
+                const toTabName = getEntityByName(that, relation.otherEntityName).tableName;
                 const nullable = !relation.relationshipRequired;
                 acc[fromInjectedField] = [`'array'`];
                 if (nullable) acc[fromInjectedField].push(`'sometimes'`);
@@ -251,8 +239,8 @@ export class ControllersGenerator {
             {
                 className: entity.name,
                 entityName: to.camel(entity.name),
-                validationsStore: getValidations(entity, relationships, 'store'),
-                validationsUpdate: getValidations(entity, relationships, 'update'),
+                validationsStore: getValidations(this.that, entity, relationships, 'store'),
+                validationsUpdate: getValidations(this.that, entity, relationships, 'update'),
                 fileFields: entity.fields.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
                 imageFields: entity.fields.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
                 booleanFields: entity.fields.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),
@@ -270,8 +258,8 @@ export class ControllersGenerator {
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),
-                    validationsStore: getValidations(entity, relationships, 'store'),
-                    validationsUpdate: getValidations(entity, relationships, 'update'),
+                    validationsStore: getValidations(this.that, entity, relationships, 'store'),
+                    validationsUpdate: getValidations(this.that, entity, relationships, 'update'),
                     fileFields: entity.fields.filter(field => field.type === 'Blob' || field.type === 'AnyBlob' || field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     imageFields: entity.fields.filter(field => field.type === 'ImageBlob').map(field => to.snake(field.name)),
                     booleanFields: entity.fields.filter(field => field.type === 'Boolean').map(field => to.snake(field.name)),

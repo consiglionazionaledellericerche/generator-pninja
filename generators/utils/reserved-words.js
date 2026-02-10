@@ -1,93 +1,36 @@
 export const RESERVED_WORDS = new Set([
     // Laravel automatic timestamps and soft deletes
-    'id', 'created_at', 'updated_at', 'deleted_at',
+    'created_at', 'updated_at', 'deleted_at',
 
+    // Common reserved words for all SQL databases
+    'add', 'all', 'alter', 'and', 'as', 'asc', 'between', 'by', 'case', 'check',
+    'column', 'constraint', 'create', 'cross', 'current', 'database', 'default',
+    'delete', 'desc', 'distinct', 'drop', 'else', 'exists', 'foreign', 'from',
+    'full', 'group', 'having', 'in', 'index', 'inner', 'insert', 'intersect',
+    'into', 'is', 'join', 'key', 'left', 'like', 'limit', 'not', 'null', 'on',
+    'or', 'order', 'outer', 'primary', 'references', 'right', 'select', 'set',
+    'table', 'then', 'to', 'union', 'unique', 'update', 'values', 'when', 'where',
+
+    // Common SQL types
+    'int', 'integer', 'bigint', 'smallint', 'float', 'double', 'decimal', 'numeric',
+    'char', 'varchar', 'text', 'blob', 'date', 'time', 'timestamp', 'boolean',
+
+    // Critical Laravel Eloquent methods
+    'attributes', 'connection', 'exists', 'fill', 'save', 'touch', 'fresh',
+]);
+
+export const RESERVED_TABLE_NAMES = new Set([
     // Laravel table names
     'cache', 'cache_locks', 'failed_jobs', 'job_batches', 'jobs', 'migrations', 'password_reset_tokens', 'personal_access_tokens', 'sessions', 'users',
 
     // PNinja table names
     'ac_rules', 'audits',
-
-    // SQL reserved words (common across MySQL, PostgreSQL, MariaDB, SQLite)
-    'abort', 'absolute', 'access', 'action', 'add', 'admin', 'after', 'aggregate',
-    'all', 'allocate', 'alter', 'analyse', 'analyze', 'and', 'any', 'are', 'array',
-    'as', 'asc', 'assertion', 'at', 'authorization', 'avg', 'backup', 'before',
-    'begin', 'between', 'bigint', 'binary', 'bit', 'blob', 'boolean', 'both', 'breadth',
-    'break', 'browse', 'bulk', 'by', 'call', 'cascade', 'cascaded', 'case', 'cast',
-    'catalog', 'char', 'character', 'check', 'checkpoint', 'close', 'cluster', 'coalesce',
-    'collate', 'collation', 'column', 'commit', 'committed', 'completion', 'compute',
-    'condition', 'connect', 'connection', 'constraint', 'constraints', 'constructor',
-    'contains', 'containstable', 'continue', 'convert', 'corresponding', 'count', 'create',
-    'cross', 'cube', 'current', 'current_date', 'current_path', 'current_role',
-    'current_time', 'current_timestamp', 'current_user', 'cursor', 'cycle', 'data',
-    'database', 'databases', 'date', 'datetime', 'day', 'dbcc', 'deallocate', 'dec',
-    'decimal', 'declare', 'default', 'deferrable', 'deferred', 'delete', 'deny',
-    'depth', 'deref', 'desc', 'describe', 'descriptor', 'destroy', 'destructor',
-    'deterministic', 'diagnostics', 'dictionary', 'disconnect', 'disk', 'distinct',
-    'distributed', 'div', 'domain', 'double', 'drop', 'dummy', 'dump', 'dynamic',
-    'each', 'else', 'elseif', 'end', 'equals', 'escape', 'except', 'exception',
-    'exec', 'execute', 'exists', 'exit', 'explain', 'external', 'extract', 'false',
-    'fetch', 'file', 'fillfactor', 'first', 'float', 'for', 'force', 'foreign',
-    'found', 'free', 'freetext', 'freetexttable', 'from', 'full', 'function',
-    'general', 'get', 'global', 'go', 'goto', 'grant', 'group', 'grouping',
-    'handler', 'having', 'hold', 'holdlock', 'hour', 'identity', 'identity_insert',
-    'identitycol', 'if', 'ignore', 'immediate', 'in', 'include', 'index', 'indicator',
-    'initialize', 'initially', 'inner', 'inout', 'input', 'insensitive', 'insert',
-    'int', 'integer', 'intersect', 'interval', 'into', 'is', 'isolation', 'iterate',
-    'join', 'key', 'kill', 'language', 'large', 'last', 'lateral', 'leading', 'leave',
-    'left', 'less', 'level', 'like', 'limit', 'lineno', 'lines', 'listen', 'load',
-    'local', 'localtime', 'localtimestamp', 'locator', 'lock', 'long', 'loop', 'lower',
-    'match', 'max', 'merge', 'min', 'minute', 'modifies', 'modify', 'module', 'month',
-    'names', 'national', 'natural', 'nchar', 'nclob', 'new', 'next', 'no', 'nocheck',
-    'nonclustered', 'none', 'not', 'null', 'nullif', 'numeric', 'object', 'of', 'off',
-    'offsets', 'old', 'on', 'only', 'open', 'opendatasource', 'openquery', 'openrowset',
-    'openxml', 'operation', 'option', 'or', 'order', 'ordinality', 'out', 'outer',
-    'output', 'over', 'overlaps', 'pad', 'parameter', 'parameters', 'partial', 'partition',
-    'path', 'percent', 'pivot', 'plan', 'position', 'postfix', 'precision', 'prefix',
-    'preorder', 'prepare', 'preserve', 'primary', 'print', 'prior', 'privileges',
-    'proc', 'procedure', 'public', 'raiserror', 'read', 'reads', 'readtext', 'real',
-    'reconfigure', 'recursive', 'ref', 'references', 'referencing', 'regexp', 'relative',
-    'release', 'rename', 'repeat', 'repeatable', 'replace', 'replication', 'require',
-    'resignal', 'restore', 'restrict', 'result', 'return', 'returns', 'revoke', 'right',
-    'rlike', 'role', 'rollback', 'rollup', 'routine', 'row', 'rowcount', 'rowguidcol',
-    'rows', 'rule', 'save', 'savepoint', 'schema', 'schemas', 'scope', 'scroll', 'search',
-    'second', 'section', 'select', 'semantickeyphrasetable', 'semanticsimilaritydetailstable',
-    'semanticsimilaritytable', 'sensitive', 'separator', 'sequence', 'serializable',
-    'session', 'session_user', 'set', 'sets', 'setuser', 'share', 'show', 'shutdown',
-    'signal', 'similar', 'size', 'smallint', 'some', 'space', 'specific', 'specifictype',
-    'sql', 'sqlexception', 'sqlstate', 'sqlwarning', 'start', 'state', 'statement',
-    'static', 'statistics', 'structure', 'substring', 'sum', 'system_user', 'table',
-    'temporary', 'terminate', 'text', 'textsize', 'than', 'then', 'time', 'timestamp',
-    'timezone_hour', 'timezone_minute', 'to', 'top', 'trailing', 'tran', 'transaction',
-    'translate', 'translation', 'treat', 'trigger', 'trim', 'true', 'truncate', 'tsequal',
-    'type', 'under', 'undo', 'union', 'unique', 'unknown', 'unlisten', 'unsigned',
-    'unnest', 'unpivot', 'update', 'updatetext', 'upper', 'usage', 'use', 'user',
-    'using', 'value', 'values', 'varchar', 'variable', 'varying', 'view', 'waitfor',
-    'when', 'whenever', 'where', 'while', 'with', 'without', 'work', 'write', 'writetext',
-    'year', 'zone',
-
-    // Laravel Eloquent methods and properties that would conflict
-    'attributes', 'casts', 'connection', 'dates', 'fillable', 'guarded', 'hidden',
-    'incrementing', 'exists', 'timestamps', 'touches', 'visible', 'with', 'append',
-    'appends', 'original', 'changes', 'dirty', 'wasChanged', 'relations',
-
-    // Laravel Model methods that commonly conflict
-    'find', 'first', 'get', 'all', 'create', 'update', 'delete', 'save', 'fill',
-    'fresh', 'refresh', 'replicate', 'touch', 'push', 'increment', 'decrement',
-    'toggle', 'restore', 'forceDelete',
-
-    // Common problematic combinations in snake_case
-    'select_all', 'delete_all', 'update_all', 'insert_all', 'create_all',
-    'find_all', 'get_all', 'where_all', 'order_by', 'group_by', 'having_by',
-    'select_where', 'delete_where', 'update_where', 'where_in', 'where_not_in',
-    'where_null', 'where_not_null', 'where_between', 'where_not_between',
-    'where_exists', 'where_not_exists', 'where_has', 'order_by_desc',
-    'order_by_asc', 'group_by_raw', 'having_raw', 'where_raw', 'select_raw',
-    'from_raw', 'join_raw', 'latest', 'oldest', 'find_or_fail', 'first_or_fail',
-    'first_or_create', 'first_or_new', 'update_or_create', 'with_count',
-    'with_exists', 'with_avg', 'with_sum', 'with_min', 'with_max'
 ]);
 
 export function isReservedWord(word) {
     return RESERVED_WORDS.has(word.toLowerCase());
+}
+
+export function isReservedTableName(word) {
+    return RESERVED_TABLE_NAMES.has(word.toLowerCase());
 }

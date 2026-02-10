@@ -5,7 +5,7 @@ import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import fs from 'fs';
-import { getEntities, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/entities-utils.js';
+import { getEntities, getEntityByName, getEntitiesNames, getEnumsNames, getEnums, getEntitiesRelationships, getEntity } from '../utils/entities-utils.js';
 import { AcRule } from '../utils/AcRule.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
@@ -15,7 +15,7 @@ import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
 import { createEntityPages } from '../client/react.inc.js';
-import { isReservedWord } from '../utils/reserved-words.js';
+import { isReservedWord, isReservedTableName } from '../utils/reserved-words.js';
 import { hello } from '../utils/hello.js';
 
 function replaceEntity(entitiesArray, updatedEntity) {
@@ -77,28 +77,10 @@ export default class extends Generator {
         this.relationshipsToAdd = [];
         this.relationshipsToRemove = [];
 
-        // Check for answers file
-        const answersFile = this.destinationPath('.entity-answers.json');
-        if (fs.existsSync(answersFile)) {
-            this.log(colors.yellow('Loading answers from .entity-answers.json\n'));
-            const answers = JSON.parse(fs.readFileSync(answersFile, 'utf8'));
-
-            this.entityConfig = JSON.parse(fs.readFileSync(answersFile, 'utf8'));
-            this.entityName = this.entityConfig.name;
-
-            this._loadExistingEntities();
-            this._loadExistingEnums();
-
-            this._printEntitySummary();
-            return;
-        }
-        if (isReservedWord(pluralize(to.snake(this.options.entityName)))) {
-            this.log(colors.red(`ERROR! '${this.options.entityName}' is a reserved word and cannot be used as an entity name`));
-            this.options.entityName = undefined;
-        } else if (!/^([a-zA-Z0-9]*)$/.test(this.options.entityName)) {
+        if (this.options.entityName && !/^([a-zA-Z0-9]*)$/.test(this.options.entityName)) {
             this.log(colors.red(`ERROR! Your entity name cannot contain special characters`));
             this.options.entityName = undefined;
-        } else if (/[0-9]/.test(this.options.entityName.charAt(0))) {
+        } else if (this.options.entityName && /[0-9]/.test(this.options.entityName.charAt(0))) {
             this.log(colors.red(`ERROR! Your entity name cannot start with a number`));
             this.options.entityName = undefined;
         }
@@ -115,12 +97,10 @@ export default class extends Generator {
                     if (!/^([a-zA-Z0-9]*)$/.test(input)) {
                         return 'Your entity name cannot contain special characters';
                     }
-
-                    // Cannot start with a number
                     if (/[0-9]/.test(input.charAt(0))) {
                         return 'Your entity name cannot start with a number';
                     }
-                    if (isReservedWord(pluralize(to.snake(input)))) {
+                    if (isReservedWord(to.snake(input))) {
                         return `'${input}' is a reserved word and cannot be used as an entity name`;
                     }
                     return true
@@ -256,6 +236,31 @@ export default class extends Generator {
         }
 
         // Normal flow for new entity or regenerate
+
+        const tableNameAnswer = await this.prompt([{
+            type: 'input',
+            name: 'tableName',
+            message: 'Entity table name:',
+            default: to.snake(pluralize(this.entityName)),
+            validate: input => {
+                if (input === '') {
+                    return 'Table name cannot be empty';
+                }
+                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                    return 'Table name cannot contain special characters';
+                }
+
+                // Cannot start with a number
+                if (/[0-9]/.test(input.charAt(0))) {
+                    return 'Table name cannot start with a number';
+                }
+                if (isReservedTableName(input)) {
+                    return `'${input}' is a reserved word and cannot be used as a table name`;
+                }
+                return true
+            }
+        }]);
+
         const softDeleteAnswer = await this.prompt([{
             type: 'confirm',
             name: 'softDelete',
@@ -271,7 +276,7 @@ export default class extends Generator {
         }]);
 
         this.entityConfig.name = this.entityName;
-        this.entityConfig.tableName = to.snake(pluralize(this.entityName));
+        this.entityConfig.tableName = tableNameAnswer.tableName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
         this.entityConfig.icon = iconAnswer.icon;
 
@@ -836,7 +841,7 @@ export default class extends Generator {
                 migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
                 relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
                     name: rel.otherEntityName,
-                    tableName: pluralize(to.snake(rel.otherEntityName))
+                    tableName: getEntityByName(this, rel.otherEntityName).tableName
                 })).forEach(relEntity => {
                     migrationsGenerator.createRelation({ entity: relEntity, relationships })
                 });
@@ -881,7 +886,7 @@ export default class extends Generator {
                 migrationsGenerator.createRelation({
                     entity: {
                         name: rel.otherEntityName,
-                        tableName: pluralize(to.snake(rel.otherEntityName))
+                        tableName: getEntityByName(this, rel.otherEntityName).tableName
                     },
                     relationships: [rel],
                 });
@@ -899,7 +904,7 @@ export default class extends Generator {
                 migrationsGenerator.removeRelation({
                     entity: {
                         name: rel.otherEntityName,
-                        tableName: pluralize(to.snake(rel.otherEntityName))
+                        tableName: getEntityByName(this, rel.otherEntityName).tableName
                     },
                     relationships: [rel],
                 });

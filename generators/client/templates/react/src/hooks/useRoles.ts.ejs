@@ -3,7 +3,7 @@ import axios from 'axios'; // Importa axios
 
 const getRolesFromSession = async (): Promise<string[]> => {
   try {
-    const response = await axios.get('/api/user/roles', { withCredentials: true });
+    const response = await axios.get('/api/_user/roles', { withCredentials: true });
     return response.data?.roles || [];
   } catch (error) {
     console.error('Error getting roles from session:', error);

@@ -53,7 +53,7 @@ export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({
 
       // 3. Crea nuova richiesta
       const request = axios
-        .post<{ allowed: boolean }>('/api/user/can', {
+        .post<{ allowed: boolean }>('/api/_user/can', {
           resource,
           action,
         })

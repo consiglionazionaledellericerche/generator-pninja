@@ -1,8 +1,7 @@
 import to from 'to-case';
 import randomstring from 'randomstring';
-import pluralize from 'pluralize';
 import { AcRule } from '../../utils/AcRule.js';
-import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
+import { getEntities, getEntityByName, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
 const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
@@ -149,7 +148,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'one-to-one' && relation.entityName === entity.name))
             .forEach(relation => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = true;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
@@ -162,7 +161,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name))
             .forEach(relation => {
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
+                const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
@@ -175,7 +174,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'many-to-one' && relation.entityName === entity.name))
             .forEach(relation => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = false;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
@@ -201,7 +200,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'one-to-one' && relation.entityName === entity.name))
             .forEach(relation => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = true;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
@@ -214,7 +213,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'one-to-many' && relation.otherEntityName === entity.name))
             .forEach(relation => {
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
+                const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
@@ -227,7 +226,7 @@ export class MigrationsGenerator {
             .filter(relation => (relation.relationshipType === 'many-to-one' && relation.entityName === entity.name))
             .forEach(relation => {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = false;
                 up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
@@ -261,8 +260,8 @@ export class MigrationsGenerator {
             .map(relation => {
                 const fromForeignId = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toForeignId = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const pivotName = [to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_');
                 return {
                     fromForeignId,
@@ -288,8 +287,8 @@ export class MigrationsGenerator {
             .map(relation => {
                 const fromForeignId = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toForeignId = to.snake(relation.otherEntityRelationshipName || relation.entityName);
-                const fromTabName = pluralize(to.snake(relation.entityName));
-                const toTabName = pluralize(to.snake(relation.otherEntityName));
+                const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
+                const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const pivotName = [to.snake(relation.entityName), to.snake(relation.otherEntityName)].sort().join('_');
                 return {
                     fromForeignId,

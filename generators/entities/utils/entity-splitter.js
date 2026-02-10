@@ -1,6 +1,6 @@
 import to from 'to-case';
 import pluralize from "pluralize";
-
+import { isReservedWord, isReservedTableName } from '../../utils/reserved-words.js';
 /**
  * Splits Entities JSON data (from JDL parser) into individual entity files
  * @param {Object} fs - Yeoman file system instance
@@ -14,16 +14,24 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath, log) {
     entitiesData.entities.forEach(entity => {
         const entityConfig = {
             name: entity.name,
-            tableName: to.snake(pluralize(entity.name)),
+            tableName: entity.name === entity.tableName ? to.snake(pluralize(entity.name)) : entity.tableName,
             softDelete: entity.annotations?.some(a => a.optionName === 'softDelete') || false,
             icon: entity.annotations?.find(a => a.optionName === 'icon')?.optionValue || null,
             fields: [],
             relationships: []
         };
 
+        if (isReservedTableName(entityConfig.tableName)) {
+            throw new Error(`ERROR! The table name '${entityConfig.tableName}' for entity '${entityConfig.name}' is a reserved word.`);
+        }
+
         // Convert body to fields
         if (entity.body) {
             entityConfig.fields = entity.body.map(field => {
+                if (isReservedWord(to.snake(field.name))) {
+                    throw new Error(`ERROR! '${field.name}' is a reserved word and cannot be used as a field name for entity '${entityConfig.name}'.`);
+                }
+
                 const fieldConfig = {
                     name: field.name,
                     type: field.type,

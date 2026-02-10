@@ -25,7 +25,7 @@ Route::prefix('auth')->group(function () {
     Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
 });
 
-Route::middleware(['session.auth'])->prefix('user')->group(function () {
+Route::middleware(['session.auth'])->prefix('_user')->group(function () {
     Route::get('/roles', [UserRoleController::class, 'getRoles']);
     Route::post('/has-role', [UserRoleController::class, 'hasRole']);
     Route::post('/has-any-role', [UserRoleController::class, 'hasAnyRole']);
