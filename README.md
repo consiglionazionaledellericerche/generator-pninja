@@ -5,7 +5,7 @@
 # generator-pninja
 
 Generate a full **Laravel + React + Vite** application from a single **JDL model**.
-Backend + Frontend + Docker + Database — ready in seconds ⚡
+Backend + Frontend + Docker + Database – ready in seconds ⚡
 
 [![License][license-badge]][license-url]
 [![npm version][npm-version-badge]][npm-version-url]
@@ -15,7 +15,7 @@ Backend + Frontend + Docker + Database — ready in seconds ⚡
 
 ## License
 
-This project is licensed under the Apache License 2.0 — see the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the Apache License 2.0 – see the [LICENSE.txt](LICENSE.txt) file for details.
 
 ## What is PNinja?
 
@@ -39,6 +39,8 @@ npm install -g yo generator-pninja
 
 ## Usage
 
+### Quick Start with JDL
+
 **Create your entity definition file using JDL:**
 
 ```bash
@@ -56,6 +58,22 @@ yo pninja
 
 **Answer a few prompts** ... and you're ready ⚡
 
+### Interactive Entity Creation
+
+For incremental development or to add entities to an existing project, use the **entity sub-generator**:
+
+```bash
+yo pninja:entity [EntityName]
+```
+
+This interactive command allows you to:
+
+- Create new entities step by step
+- Add or remove fields and relationships
+- Update existing entities (regenerate, add, or remove)
+
+All entity configurations are stored in `.pninja/<EntityName>.json` files.
+
 ## What you get
 
 ```
@@ -63,6 +81,7 @@ my-app/
 ├── client/         # React + Vite app
 ├── docker/         # Docker compose
 ├── server/         # Laravel project
+├── .pninja/        # Entity configurations
 ├── package.json    # With commands
 └── README.md
 ```
@@ -80,15 +99,19 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 ### Data Management
 
 - **Soft Delete Support** - Logical deletion with `deleted_at` timestamps (use `@softDelete` annotation in JDL)
-  ```jdl
+
+```jdl
   @softDelete
   entity MyEntity {
     name String required
     description String
   }
-  ```
+```
+
 - **CSV Database Seeding** - Populate your database from CSV files
 - **Audit Logging** - Complete change tracking for all entity modifications
+- **Interactive Entity Generator** - Create and modify entities through CLI prompts
+- **Incremental Migrations** - Automatic database migrations for entity changes
 
 ### Search & Indexing
 
@@ -112,13 +135,15 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 - **Responsive Design** - Mobile-first approach
 - **Tailwind CSS** - Utility-first styling
 - **Material Symbols Icons** - Associate icons to entities using `@icon` annotation in JDL
-  ```jdl
+
+```jdl
   @icon("star")
   entity MyEntity {
     name String required
     description String
   }
-  ```
+```
+
 - **Component Library** - Pre-built accessible components
 
 ### DevOps Ready
