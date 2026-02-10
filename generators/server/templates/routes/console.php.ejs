@@ -1,0 +1,15 @@
+<?php
+
+use Illuminate\Support\Facades\Artisan;
+use Lauthz\Facades\Enforcer;
+<% if (searchEngine !== "null") { -%>
+use App\Models\AcRule;
+<% } -%>
+
+Artisan::command('add-role {role} {username}', function ($role, $username) {
+    Enforcer::addRoleForUser($username, $role);
+    $this->info("$role role added to user: $username");
+<% if (searchEngine !== "null") { -%>
+    \Artisan::call('scout:import', ['model' => AcRule::class]);
+<% } -%>
+})->purpose('Add a role to a user');

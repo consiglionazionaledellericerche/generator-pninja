@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
+
+class ApiErrorHandler
+{
+    public static function handle(\Exception $e): JsonResponse
+    {
+        if ($e instanceof QueryException) {
+            return DatabaseErrorHandler::handle($e);
+        }
+
+        if ($e instanceof ModelNotFoundException) {
+            return NotFoundErrorHandler::handle($e);
+        }
+
+        if ($e instanceof ValidationException) {
+            return ValidationErrorHandler::handle($e);
+        }
+
+        return response()->json([
+            'error' => 'internal_error',
+            'message' => "An unexpected error occurred: " . $e->getMessage()
+        ], 500);
+    }
+}

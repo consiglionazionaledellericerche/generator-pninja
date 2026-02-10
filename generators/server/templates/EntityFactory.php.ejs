@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+<%- models %>
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class <%- entityName %>Factory extends Factory
+{
+    protected $model = <%- entityName %>::class;
+
+    protected function getRandomUniqueValue(array $idsA, array $idsB) {
+        $uniqueValues = array_diff($idsA, $idsB);
+        if (!empty($uniqueValues)) {
+            return $uniqueValues[array_rand($uniqueValues)];
+        }
+        return null;
+    }
+
+    public function definition(): array
+    {
+        return [
+<%- params %>
+        ];
+    }
+}

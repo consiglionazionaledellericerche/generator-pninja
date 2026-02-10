@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers;
+
+class ElasticsearchQuerySanitizer
+{
+    /**
+     * Sanitizza la query per Elasticsearch
+     */
+    public static function sanitize(?string $query): string
+    {
+        if (empty($query)) {
+            return '';
+        }
+
+        $sanitized = trim($query);
+
+        // 1. Rimuovi caratteri speciali pericolosi
+        $sanitized = str_replace(['\\', '/'], '', $sanitized);
+        $sanitized = preg_replace('/[\^\[\]{}]/', '', $sanitized);
+
+        // 2. Bilancia le parentesi
+        $sanitized = self::balanceParentheses($sanitized);
+
+        // 3. Rimuovi operatori booleani all'inizio
+        $sanitized = preg_replace('/^\s*(AND|OR|NOT)\s+/i', '', $sanitized);
+
+        // 4. Rimuovi operatori booleani alla fine
+        $sanitized = preg_replace('/\s+(AND|OR|NOT)\s*$/i', '', $sanitized);
+
+        // 5. Rimuovi operatori booleani doppi
+        $sanitized = preg_replace('/\s+(AND|OR|NOT)\s+(AND|OR|NOT)\s+/i', ' $1 ', $sanitized);
+
+        // 6. Rimuovi spazi multipli
+        $sanitized = preg_replace('/\s+/', ' ', $sanitized);
+
+        // 7. Rimuovi virgolette non bilanciate
+        $quoteCount = substr_count($sanitized, '"');
+        if ($quoteCount % 2 !== 0) {
+            $sanitized = str_replace('"', '', $sanitized);
+        }
+
+        return trim($sanitized);
+    }
+
+    /**
+     * Bilancia le parentesi rimuovendo quelle non chiuse
+     */
+    private static function balanceParentheses(string $str): string
+    {
+        $openCount = 0;
+        $result = '';
+
+        // Prima passata: rimuovi parentesi chiuse in eccesso
+        for ($i = 0; $i < strlen($str); $i++) {
+            $char = $str[$i];
+
+            if ($char === '(') {
+                $openCount++;
+                $result .= $char;
+            } elseif ($char === ')') {
+                if ($openCount > 0) {
+                    $openCount--;
+                    $result .= $char;
+                }
+                // Altrimenti ignora la parentesi chiusa
+            } else {
+                $result .= $char;
+            }
+        }
+
+        // Seconda passata: rimuovi parentesi aperte non chiuse
+        if ($openCount > 0) {
+            $removed = 0;
+            $chars = str_split($result);
+            $chars = array_reverse($chars);
+
+            $filtered = array_filter($chars, function($char) use (&$removed, $openCount) {
+                if ($char === '(' && $removed < $openCount) {
+                    $removed++;
+                    return false;
+                }
+                return true;
+            });
+
+            $result = implode('', array_reverse($filtered));
+        }
+
+        return $result;
+    }
+}

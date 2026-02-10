@@ -1,0 +1,153 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Config;
+
+class ScoutQuerySanitizer
+{
+    /**
+     * Sanitizza la query in base al driver Scout configurato
+     */
+    public static function sanitize(?string $query): string
+    {
+        $driver = Config::get('scout.driver');
+        
+        return match($driver) {
+            'elastic', 'elasticsearch' => self::sanitizeElastic($query),
+            'database' => self::sanitizeDatabase($query),
+            default => self::sanitizeDefault($query),
+        };
+    }
+    
+    /**
+     * Sanitizzazione per Elasticsearch
+     */
+    private static function sanitizeElastic(?string $query): string
+    {
+        if (empty($query)) {
+            return '';
+        }
+        
+        $sanitized = trim($query);
+        
+        // Rimuovi caratteri speciali pericolosi
+        $sanitized = str_replace(['\\', '/'], '', $sanitized);
+        $sanitized = preg_replace('/[\^\[\]{}]/', '', $sanitized);
+        
+        // Bilancia le parentesi
+        $sanitized = self::balanceParentheses($sanitized);
+        
+        // Rimuovi operatori booleani all'inizio (parole e simboli)
+        $sanitized = preg_replace('/^\s*(AND|OR|NOT|&&|\|\|)\s+/i', '', $sanitized);
+        
+        // Rimuovi operatori booleani alla fine (parole e simboli)
+        $sanitized = preg_replace('/\s+(AND|OR|NOT|&&|\|\|)\s*$/i', '', $sanitized);
+        
+        // Rimuovi operatori booleani doppi
+        $sanitized = preg_replace('/\s+(AND|OR|NOT)\s+(AND|OR|NOT)\s+/i', ' $1 ', $sanitized);
+        
+        // Rimuovi spazi multipli
+        $sanitized = preg_replace('/\s+/', ' ', $sanitized);
+        
+        // Rimuovi virgolette non bilanciate
+        $quoteCount = substr_count($sanitized, '"');
+        if ($quoteCount % 2 !== 0) {
+            $sanitized = str_replace('"', '', $sanitized);
+        }
+        
+        return trim($sanitized);
+    }
+    
+    /**
+     * Sanitizzazione per Database driver
+     */
+    private static function sanitizeDatabase(?string $query): string
+    {
+        if (empty($query)) {
+            return '';
+        }
+        
+        $sanitized = trim($query);
+        
+        // Rimuovi operatori Elasticsearch (parole e simboli)
+        $sanitized = preg_replace('/\s+(AND|OR|NOT|&&|\|\|)\s+/i', ' ', $sanitized);
+        
+        // Rimuovi wildcard e caratteri speciali
+        $sanitized = str_replace(['*', '?', '(', ')', '[', ']', '{', '}', '\\', '/', '^', '"', '&&', '||'], '', $sanitized);
+        
+        // Escape SQL LIKE
+        $sanitized = str_replace(['%', '_'], ['\\%', '\\_'], $sanitized);
+        
+        // Rimuovi spazi multipli
+        $sanitized = preg_replace('/\s+/', ' ', $sanitized);
+        
+        // Limita lunghezza
+        if (strlen($sanitized) > 100) {
+            $sanitized = substr($sanitized, 0, 100);
+        }
+        
+        return trim($sanitized);
+    }
+    
+    /**
+     * Sanitizzazione base per altri driver
+     */
+    private static function sanitizeDefault(?string $query): string
+    {
+        if (empty($query)) {
+            return '';
+        }
+        
+        $sanitized = trim($query);
+        
+        // Solo pulizia base
+        $sanitized = str_replace(['\\', '"'], '', $sanitized);
+        $sanitized = preg_replace('/\s+/', ' ', $sanitized);
+        
+        if (strlen($sanitized) > 100) {
+            $sanitized = substr($sanitized, 0, 100);
+        }
+        
+        return trim($sanitized);
+    }
+    
+    private static function balanceParentheses(string $str): string
+    {
+        $openCount = 0;
+        $result = '';
+        
+        for ($i = 0; $i < strlen($str); $i++) {
+            $char = $str[$i];
+            
+            if ($char === '(') {
+                $openCount++;
+                $result .= $char;
+            } elseif ($char === ')') {
+                if ($openCount > 0) {
+                    $openCount--;
+                    $result .= $char;
+                }
+            } else {
+                $result .= $char;
+            }
+        }
+        
+        if ($openCount > 0) {
+            $removed = 0;
+            $chars = array_reverse(str_split($result));
+            
+            $filtered = array_filter($chars, function($char) use (&$removed, $openCount) {
+                if ($char === '(' && $removed < $openCount) {
+                    $removed++;
+                    return false;
+                }
+                return true;
+            });
+            
+            $result = implode('', array_reverse($filtered));
+        }
+        
+        return $result;
+    }
+}

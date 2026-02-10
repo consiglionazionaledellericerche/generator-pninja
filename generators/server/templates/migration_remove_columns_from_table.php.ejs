@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::table('<%- tabName %>', function (Blueprint $table) {
+<% uniqueFieldsNames.map(name => {-%>
+            $table->dropUnique(['<%- name %>']);
+<% }); -%>
+<% columnsNames.map(name => {-%>
+            $table->dropColumn('<%- name %>');
+<% }); -%>
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('<%- tabName %>', function (Blueprint $table) {
+            <%- downColumns %>
+        });
+    }
+};

@@ -1,0 +1,289 @@
+<?php
+<%
+function isEmpty(obj) {
+  for (let key in obj) {
+    return false;
+  }
+  return true;
+}
+-%>
+namespace App\Http\Controllers;
+
+use App\Models\<%- className %>;
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+<%      relatedEntitiesForFilters.map(({name}) => {-%>
+use App\Models\<%- name %>;
+<%      })-%>
+<%  }-%>
+use App\Traits\HandlesApiErrors;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+class <%- className %>Controller extends Controller
+{
+    use HandlesApiErrors;
+
+    public function index(Request $request)
+    {
+        try {
+<%  if (searchEngine !== 'null') {-%>
+            $search = $request->has('search') ? ScoutQuerySanitizer::sanitize($request->get('search')) : null;
+<%  } -%>
+            $perPage = min($request->get('per_page', 10), 100);
+            $sortBy = $request->get('sort_by', 'id');
+            $sortDirection = $request->get('sort_direction', 'asc');
+
+            if ($request->has('ids') && !empty($request->get('ids'))) {
+                $ids = explode(',', $request->get('ids'));
+                $result = <%- className %>::whereIn('id', $ids)
+<%  if (withs) { -%>
+                    ->with(<%- withs %>)
+<%  } -%>
+                    ->orderBy($sortBy, $sortDirection)
+                    ->paginate($perPage);
+                return response()->json($result);
+            }
+
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+            $excludeIds = [];
+<%      relatedEntitiesForFilters.map(({name, injectedField}) =>{-%>
+            if ($request->has('available_for_<%-to.snake(name)%>')) {
+                $<%-to.camel(name)%>Id = $request->query('available_for_<%-to.snake(name)%>');
+                $excludeIds = <%-name%>::whereNotNull('<%-to.snake(injectedField)%>_id')
+                    ->when($<%-to.camel(name)%>Id, function($query) use ($<%-to.camel(name)%>Id) {
+                        return $query->where('id', '!=', $<%-to.camel(name)%>Id);
+                    })
+                    ->pluck('<%-to.snake(injectedField)%>_id');
+            }
+<%      })-%>
+<%  }-%>
+<%  if (searchEngine !== 'null') {-%>
+            if ($search) {
+<%  if (searchEngine === 'typesense') {-%>
+                $sortBy = $sortBy == 'id' ? '__id' : $sortBy;
+<%  } -%>
+<%  if (searchEngine === 'solr') {-%>
+                $sortBy = $sortBy == 'id' ? '__id_i' : $sortBy;
+<%      toSearchableArray.map(prop => { -%>
+                $sortBy = $sortBy == '<%- prop %>' ? '<%- `${prop}${getSolrSuffix(toSearchableArrayTypes[prop])}` %>' : $sortBy;
+<%      })-%>
+<%  } -%>
+                $result = <%- className %>::search(<%- searchEngine === 'solr' ? `'__fulltext_t:'.` : '' %>$search)
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+                    ->query(function ($builder) use ($excludeIds) {
+                        $builder->whereNotIn('id', $excludeIds)<% if (withs) { %>->with(<%- withs %>)<% } %>;
+                    })
+<%  } else if (withs) { -%>
+                    ->query(function ($builder) {
+                        $builder->with(<%- withs %>);
+                    })
+<%  }-%>
+                    ->orderBy($sortBy, $sortDirection)
+                    ->paginate($perPage);
+            } else {
+                $result = <%- className %><%- withs ? `::with(${withs})` : '::query()' %>
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+                    ->whereNotIn('id', $excludeIds)
+<%  }-%>
+                    ->orderBy($sortBy, $sortDirection)
+                    ->paginate($perPage);
+            }
+<%  } else { -%>
+            $result = <%- className %><%- withs ? `::with(${withs})` : '::query()' %>
+<%      if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+                ->whereNotIn('id', $excludeIds)
+<%      }-%>
+                ->orderBy($sortBy, $sortDirection)
+                ->paginate($perPage);
+<%  } -%>
+
+            return response()->json($result);
+        } catch (\Exception $e) {
+            return $this->handleIndexError($e);
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+<%          if (withs) { -%>
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
+<%          } else { -%>
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+<%          } -%>
+            return response()->json($<%- entityName %>);
+        } catch (\Exception $e) {
+            return $this->handleShowError($e);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+<%  if(isEmpty(validationsStore)) {-%>
+            $data = $request->all();
+<%  } else {-%>
+            $validated = $request->validate([
+<%      for (field in validationsStore) {-%>
+<%          if(!fileFields.includes(field)) { -%>
+                '<%- field %>' => [
+<%          validationsStore[field].forEach(validation => {-%>
+                    <%- validation %>,
+<%          })-%>
+                ],
+<%          } else {-%>
+                '<%- field %>.data' => [
+<%          validationsStore[field].forEach(validation => {-%>
+                    <%- validation %>,
+<%          })-%>
+                ],
+                '<%- field %>.mimeType' => [
+                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
+<%                  if (imageFields.includes(field)) { -%>
+                    'image_mimetype',
+<%                  } -%>
+                ],
+                '<%- field %>.originalName' => [
+                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
+                ],
+                '<%- field %>.delete' => [
+                    'boolean',
+                ],
+<%          } -%>
+<%      }-%>
+            ]);
+            $data = $validated;
+<%  }-%>
+<%  fileFields.forEach((field) => {-%>
+            if (!empty($data['<%-to.snake(field)%>']['data'])) {
+                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
+                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
+                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
+            }
+<%  });-%>
+
+            $<%- entityName %> = <%- className %>::create($data);
+<%          if (createRelated) { -%>
+<%- createRelated.split("\n").filter(line => !line.endsWith("// only-update")).join("\n") %>
+<%          } -%>
+<%          if (withs) { -%>
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($<%- entityName %>->id);
+<%          } -%>
+            return response()->json($<%- entityName %>, 201);
+        } catch (\Exception $e) {
+            return $this->handleCreateError($e);
+        }
+    }
+
+    public function update($id, Request $request)
+    {
+        try {
+<%  if (withs) { -%>
+            $<%- entityName %> = <%- className %>::with(<%- withs %>)->findOrFail($id);
+<%  } else { -%>
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+<%  } -%>
+
+<%  if(isEmpty(validationsUpdate)) {-%>
+            $data = $request->all();
+<%  } else {-%>
+            $validated = $request->validate([
+<%      for (field in validationsUpdate) {-%>
+<%          if(!fileFields.includes(field)) { -%>
+                '<%- field %>' => [
+<%          validationsUpdate[field].forEach(validation => {-%>
+                    <%- validation %>,
+<%          })-%>
+                ],
+<%          } else {-%>
+                '<%- field %>.data' => [
+<%          validationsStore[field].forEach(validation => {-%>
+<%              if (validation === `'required'`) { -%>
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
+<%              } else {-%>
+                    <%- validation %>,
+<%              } -%>
+<%          })-%>
+                ],
+                '<%- field %>.mimeType' => [
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_type'] ? 'nullable' : 'required'` : `'nullable'` %>,
+<%                  if (imageFields.includes(field)) { -%>
+                    'image_mimetype',
+<%                  } -%>
+                ],
+                '<%- field %>.originalName' => [
+                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
+                ],
+                '<%- field %>.delete' => [
+                    'boolean',
+                ],
+<%          } -%>
+<%      }-%>
+            ]);
+            $data = $validated;
+<%  }-%>
+<%  if(!isEmpty(fileFields)) {-%>
+
+<%      fileFields.forEach((field) => {-%>
+            if (!empty($data['<%-to.snake(field)%>']['data'])) {
+                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
+                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
+                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
+            }
+            if (!empty($data['<%-to.snake(field)%>']['delete']) && $data['<%-to.snake(field)%>']['delete']) {
+                $<%- entityName %>-><%-to.snake(field)%>_type = null;
+                $<%- entityName %>-><%-to.snake(field)%>_name = null;
+                $<%- entityName %>-><%-to.snake(field)%>_blob = null;
+            }
+
+<%      });-%>
+<%  }-%>
+            $<%- entityName %>->update($data);
+<%          if (createRelated) { -%>
+<%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
+<%          } -%>
+            return response()->json($<%- entityName %>, 200);
+        } catch (\Exception $e) {
+            return $this->handleUpdateError($e);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+            $<%- entityName %>->delete();
+            return response(null, 200);
+        } catch (\Exception $e) {
+            return $this->handleDeleteError($e);
+        }
+    }
+
+<%  if(!isEmpty(fileFields)) {-%>
+    public function serveBlob($id, string $field)
+    {
+        try {
+            $<%- entityName %> = <%- className %>::findOrFail($id);
+
+            $blobField = $field . '_blob';
+            $nameField = $field . '_name';
+            $mimeField = $field . '_type';
+
+            if (!$<%- entityName %>->$blobField) {
+                return response()->json(['error' => 'File not found'], 404);
+            }
+
+            $content = $<%- entityName %>->$blobField; // byte puri se usi il cast Base64
+            $name = $<%- entityName %>->$nameField ?? 'file';
+            $mime = $<%- entityName %>->$mimeField ?? 'application/octet-stream';
+
+            return response($content, 200)
+                ->header('Content-Type', $mime)
+                ->header('Content-Disposition', "inline; filename=\"$name\"");
+
+        } catch (\Exception $e) {
+            return $this->handleShowError($e);
+        }
+    }
+<%  }-%>
+}

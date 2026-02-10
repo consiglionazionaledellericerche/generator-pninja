@@ -1,0 +1,55 @@
+<?php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class FileController extends Controller
+{
+    public function serveFile(Request $request, $path, $disk)
+    {
+        // Decode the file path
+        $decodedPath = urldecode($path);
+
+        // Prevent path traversal attacks
+        if (str_contains($decodedPath, '..') || str_contains($decodedPath, '\\')) {
+            return response()->json(['error' => 'Invalid path'], 400);
+        }
+
+        // Ensure the path is within the uploads directory
+        if (!str_starts_with($decodedPath, 'uploads/')) {
+            return response()->json(['error' => 'Path not allowed'], 400);
+        }
+
+        // Check if the file exists
+        if (!Storage::disk($disk)->exists($decodedPath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Get file details
+        $mimeType = Storage::disk($disk)->mimeType($decodedPath);
+        $filename = basename($decodedPath);
+        $fileSize = Storage::disk($disk)->size($decodedPath);
+
+        // Set headers for the file response
+        $headers = [
+            'Content-Type' => $mimeType,
+            'Content-Length' => $fileSize,
+            'Cache-Control' => 'private, max-age=3600', // Cache for 1 hour
+            'Expires' => gmdate('D, d M Y H:i:s \G\M\T', time() + 3600),
+        ];
+
+        // Add Content-Disposition for download or inline view
+        if ($request->query('download') === 'true') {
+            $headers['Content-Disposition'] = 'attachment; filename="' . $filename . '"';
+        } else {
+            $headers['Content-Disposition'] = 'inline; filename="' . $filename . '"';
+        }
+
+        // Serve the file
+        return response()->file(
+            Storage::disk($disk)->path($decodedPath),
+            $headers
+        );
+    }
+}

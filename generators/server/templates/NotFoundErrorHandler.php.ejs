@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
+
+class NotFoundErrorHandler
+{
+    public static function handle(ModelNotFoundException $e): JsonResponse
+    {
+        $model = self::getModelName($e->getModel());
+        
+        return response()->json([
+            'error' => 'not_found',
+            'message' => self::formatErrorMessage($model, $e->getIds())
+        ], 404);
+    }
+
+    private static function getModelName(string $modelClass): string
+    {
+        $className = class_basename($modelClass);
+        return Str::title(Str::snake($className, ' '));
+    }
+
+    private static function formatErrorMessage(string $model, array $ids): string
+    {
+        if (empty($ids)) {
+            return "The requested {$model} was not found";
+        }
+
+        $idsString = implode(', ', $ids);
+        
+        if (count($ids) === 1) {
+            return "The requested {$model} with ID {$idsString} was not found";
+        }
+
+        return "The requested {$model} with IDs {$idsString} were not found";
+    }
+}

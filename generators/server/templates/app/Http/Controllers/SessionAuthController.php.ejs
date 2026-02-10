@@ -1,0 +1,330 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
+
+class SessionAuthController extends Controller
+{
+    protected $frontendUrl;
+
+    public function __construct()
+    {
+        $this->frontendUrl = env('FRONTEND_URL') ? env('FRONTEND_URL') : URL::to('/');
+    }
+    public function checkSession(Request $request)
+    {
+        if (Session::has('authenticated_user') && Session::has('session_security')) {
+            $userInfo = Session::get('authenticated_user');
+            $authDebug = Session::get('auth_debug', []);
+
+            return response()->json([
+                'isAuthenticated' => true,
+                'user' => $userInfo,
+                'session' => [
+                    'id' => Session::getId(),
+                    'login_time' => $authDebug['login_time'] ?? null,
+                    'login_method' => $authDebug['login_method'] ?? 'unknown',
+                ],
+            ]);
+        }
+
+        return response()->json([
+            'isAuthenticated' => false,
+            'message' => 'No active session'
+        ]);
+    }
+
+    public function initiateLogin(Request $request)
+    {
+        // Genera state per sicurezza CSRF
+        $state = bin2hex(random_bytes(32));
+        Session::put('oauth_state', $state);
+
+        // Genera code_verifier e code_challenge per PKCE
+        $codeVerifier = $this->generateCodeVerifier();
+        $codeChallenge = $this->generateCodeChallenge($codeVerifier);
+
+        Session::put('code_verifier', $codeVerifier);
+
+        // Salva URL di redirect se fornito
+        if ($request->has('redirect_url')) {
+            Session::put('auth_redirect_url', $request->get('redirect_url'));
+        }
+
+        // Costruisci URL di autorizzazione Keycloak
+        $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $realm = env('KEYCLOAK_REALM', 'CNR');
+        $clientId = env('KEYCLOAK_CLIENT_ID');
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
+
+        $params = [
+            'client_id' => $clientId,
+            'redirect_uri' => $redirectUri,
+            'response_type' => 'code',
+            'scope' => 'openid profile email',
+            'state' => $state,
+            'code_challenge' => $codeChallenge,
+            'code_challenge_method' => 'S256',
+        ];
+
+        $authUrl = "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/auth?" . http_build_query($params);
+
+        return response()->json([
+            'authUrl' => $authUrl,
+            'state' => $state
+        ]);
+    }
+
+    /**
+     * Gestisce il callback da Keycloak
+     */
+    public function handleCallback(Request $request)
+    {
+        $code = $request->get('code');
+        $state = $request->get('state');
+        $storedState = Session::get('oauth_state');
+
+        // Verifica state per sicurezza CSRF
+        if (!$state || $state !== $storedState) {
+            return redirect($this->frontendUrl . '/?error=invalid_state');
+        }
+
+        if (!$code) {
+            return redirect($this->frontendUrl . '/?error=invalid_state');
+        }
+
+        try {
+            // Scambia il codice per token
+            $tokens = $this->exchangeCodeForTokens($code);
+
+            // Ottieni informazioni utente
+            $userInfo = $this->getUserInfo($tokens['access_token']);
+
+            // Crea la sessione (il middleware SessionAuth gestirà questo)
+            // Ma per il callback, creiamo manualmente la sessione
+            $this->createUserSession($userInfo, $tokens['access_token'], $request);
+
+            // Pulisci i dati OAuth temporanei
+            Session::forget(['oauth_state', 'code_verifier']);
+
+            // Redirect al FRONTEND invece che al backend
+            $redirectUrl = Session::pull('auth_redirect_url', $this->frontendUrl);
+
+            \Log::info("message", [
+                'redirect_url' => $redirectUrl,
+                'auth_success' => true,
+                'URL::to(\'/\' )' => URL::to('/' )
+            ]);
+            return redirect($redirectUrl . '?auth_success=true');
+
+        } catch (\Exception $e) {
+            \Log::error('OAuth callback error', [
+                'error' => $e->getMessage(),
+                'code' => $code,
+                'state' => $state,
+            ]);
+
+            return redirect($this->frontendUrl . '/?error=auth_failed&message=' . urlencode($e->getMessage()));
+        }
+    }
+
+    /**
+     * Logout dell'utente - solo sessioni
+     */
+    public function logout(Request $request)
+    {
+        $userInfo = Session::get('authenticated_user');
+        $sessionId = Session::getId();
+
+        // Log del logout
+        \Log::info('User logout (session only)', [
+            'user_id' => $userInfo['sub'] ?? 'unknown',
+            'session_id' => $sessionId,
+            'ip' => $request->ip(),
+        ]);
+
+        // Distruggi la sessione
+        Session::flush();
+
+        // Costruisci URL di logout Keycloak
+        $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $realm = env('KEYCLOAK_REALM', 'CNR');
+
+        $logoutUrl = "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/logout?" .
+                     http_build_query(['post_logout_redirect_uri' => $this->frontendUrl]);
+
+        return response()->json([
+            'success' => true,
+            'logoutUrl' => $logoutUrl
+        ]);
+    }
+
+    /**
+     * Endpoint per ottenere CSRF token
+     */
+    public function getCsrfToken()
+    {
+        return response()->json([
+            'csrf_token' => csrf_token()
+        ]);
+    }
+
+    /**
+     * Scambia authorization code per access token
+     */
+    private function exchangeCodeForTokens($code)
+    {
+        $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $realm = env('KEYCLOAK_REALM', 'CNR');
+        $clientId = env('KEYCLOAK_CLIENT_ID');
+        $clientSecret = env('KEYCLOAK_CLIENT_SECRET');
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
+
+        $codeVerifier = Session::get('code_verifier');
+
+        $tokenUrl = "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/token";
+
+        $response = \Http::asForm()->post($tokenUrl, [
+            'grant_type' => 'authorization_code',
+            'client_id' => $clientId,
+            'client_secret' => $clientSecret,
+            'code' => $code,
+            'redirect_uri' => $redirectUri,
+            'code_verifier' => $codeVerifier,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        throw new \Exception('Failed to exchange code for tokens: ' . $response->body());
+    }
+
+    /**
+     * Ottiene informazioni utente da Keycloak
+     */
+    private function getUserInfo($accessToken)
+    {
+        $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $realm = env('KEYCLOAK_REALM', 'CNR');
+
+        $userInfoUrl = "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/userinfo";
+
+        $response = \Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken
+        ])->get($userInfoUrl);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        throw new \Exception('Failed to get user info: ' . $response->body());
+    }
+
+    /**
+     * Crea sessione utente (SENZA database)
+     */
+    private function createUserSession($userInfo, $token, $request)
+    {
+        // $accessClaims = $this->getAccessClaimsFromJWT($token);
+        $userInfo = [...$userInfo, ...$this->getAccessClaimsFromJWT($token)];
+        Session::put('authenticated_user', $userInfo);
+
+        Session::put('session_security', [
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'created_at' => now()->toDateTimeString(),
+        ]);
+
+        Session::put('auth_debug', [
+            'login_method' => 'oauth_callback',
+            'keycloak_user_id' => $userInfo['sub'] ?? 'unknown',
+            'login_time' => now()->toDateTimeString(),
+        ]);
+
+        Session::regenerate();
+
+        // NESSUN database, NESSUN Auth::setUser()
+        \Log::info('User session created via callback (no database)', [
+            'user_id' => $userInfo['sub'] ?? 'unknown',
+            'session_id' => Session::getId(),
+        ]);
+    }
+
+    /**
+     * Estrae access claims (resource_access e realm_access) dal token JWT
+     *
+     * @param string $jwt Il token JWT completo
+     * @return array|null Array con resource_access e realm_access o null se errore
+     */
+    function getAccessClaimsFromJWT($jwt) {
+        try {
+            // Divide il JWT nelle sue parti (header.payload.signature)
+            $parts = explode('.', $jwt);
+
+            if (count($parts) !== 3) {
+                throw new \Exception('JWT malformato: deve avere 3 parti separate da punti');
+            }
+
+            // Decodifica il payload (seconda parte)
+            $payload = $parts[1];
+
+            // Aggiunge padding se necessario per base64_decode
+            $payload = str_pad($payload, strlen($payload) + (4 - strlen($payload) % 4) % 4, '=');
+
+            // Decodifica da base64
+            $decodedPayload = base64_decode($payload, true);
+
+            if ($decodedPayload === false) {
+                throw new \Exception('Errore nella decodifica base64 del payload');
+            }
+
+            // Converte JSON in array associativo
+            $payloadArray = json_decode($decodedPayload, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Errore nel parsing JSON: ' . json_last_error_msg());
+            }
+
+            // Estrae entrambi gli access claims
+            $result = [
+                'resource_access' => $payloadArray['resource_access'] ?? null,
+                'realm_access' => $payloadArray['realm_access'] ?? null
+            ];
+
+            return $result;
+
+        } catch (\Exception $e) {
+            error_log("Errore nell'estrazione access claims: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Genera code verifier per PKCE
+     */
+    private function generateCodeVerifier($length = 128)
+    {
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._~';
+        $charLength = strlen($chars);
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $chars[rand(0, $charLength - 1)];
+        }
+
+        return $randomString;
+    }
+
+    /**
+     * Genera code challenge per PKCE
+     */
+    private function generateCodeChallenge($codeVerifier)
+    {
+        $hash = hash('sha256', $codeVerifier, true);
+        return rtrim(strtr(base64_encode($hash), '+/', '-_'), '=');
+    }
+}

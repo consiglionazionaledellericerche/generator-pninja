@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Resolvers;
+
+use Illuminate\Support\Facades\Auth;
+use OwenIt\Auditing\Contracts\UserResolver as UserResolverContract;
+
+class UserResolver implements UserResolverContract
+{
+    public static function resolve()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return null;
+        }
+
+        return new class($user) {
+            private $keycloakUser;
+
+            public function __construct($keycloakUser) {
+                $this->keycloakUser = $keycloakUser;
+            }
+
+            public function getAuthIdentifier() {
+                return $this->keycloakUser->username;
+            }
+
+            public function getMorphClass() {
+                return get_class($this->keycloakUser);
+            }
+        };
+    }
+}

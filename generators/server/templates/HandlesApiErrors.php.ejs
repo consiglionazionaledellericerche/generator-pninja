@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Traits;
+
+use App\Exceptions\ApiErrorHandler;
+use Illuminate\Http\JsonResponse;
+
+trait HandlesApiErrors
+{
+    protected function handleApiError(\Exception $e): JsonResponse 
+    {
+        return ApiErrorHandler::handle($e);
+    }
+
+    protected function handleCreateError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
+    }
+
+    protected function handleUpdateError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
+    }
+
+    protected function handleDeleteError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
+    }
+
+    protected function handleShowError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
+    }
+
+    protected function handleIndexError(\Exception $e): JsonResponse 
+    {
+        return $this->handleApiError($e);
+    }
+}

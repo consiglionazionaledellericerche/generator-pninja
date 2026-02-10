@@ -1,0 +1,63 @@
+<?php
+<%
+function isEmpty(obj) {
+  for (let key in obj) {
+    return false;
+  }
+  return true;
+}
+-%>
+namespace App\Http\Controllers;
+
+use App\Models\<%- className %>;
+<%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
+<%      relatedEntitiesForFilters.map(({name}) => {-%>
+use App\Models\<%- name %>;
+<%      })-%>
+<%  }-%>
+use App\Traits\HandlesApiErrors;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+class Trashed<%- className %>Controller extends Controller
+{
+    use HandlesApiErrors;
+
+    public function index(Request $request)
+    {
+        try {
+            $perPage = min($request->get('per_page', 10), 100);
+            $sortBy = $request->get('sort_by', 'id');
+            $sortDirection = $request->get('sort_direction', 'asc');
+            $result = <%- className %>::onlyTrashed()
+                ->orderBy($sortBy, $sortDirection)
+                ->paginate($perPage);
+            return response()->json($result);
+        } catch (\Exception $e) {
+            return $this->handleIndexError($e);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $id = $request->get('id');
+            $<%- entityName %> = <%- className %>::onlyTrashed()->findOrFail($id);
+            $<%- entityName %>->restore();
+            return response()->json(['message' => 'Restored', 'data' => $<%- entityName %>]);
+        } catch (\Exception $e) {
+            return $this->handleCreateError($e);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $<%- entityName %> = <%- className %>::onlyTrashed()->findOrFail($id);
+            $<%- entityName %>->forceDelete();
+            return response()->json(['message' => 'Permanently deleted']);
+        } catch (\Exception $e) {
+            return $this->handleDeleteError($e);
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
+
+class ValidationErrorHandler {
+    public static function handle(ValidationException $e): JsonResponse
+    {
+        $errors = array_merge(...array_values($e->validator->getMessageBag()->toArray()));
+
+        // Conta il numero totale di errori
+        $totalErrors = count($errors);
+
+        // Crea un messaggio principale user-friendly
+        $mainMessage = $totalErrors === 1
+            ? 'There is 1 validation error:'
+            : "There are {$totalErrors} validation errors:";
+
+        return response()->json([
+            'error' => 'validation_failed',
+            'message' => $e->getMessage(),
+            'details' => implode("\n", $errors)
+        ], 422);
+    }
+}

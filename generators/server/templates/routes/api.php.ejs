@@ -1,0 +1,72 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\SessionAuthController;
+<% eRoutes.forEach(({className}) => {-%>
+use App\Http\Controllers\<%- className %>Controller;
+<% }); -%>
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\LogController;
+
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String()
+    ]);
+});
+
+Route::prefix('auth')->group(function () {
+    Route::get('/check-session', [SessionAuthController::class, 'checkSession']);
+    Route::post('/initiate-login', [SessionAuthController::class, 'initiateLogin']);
+    Route::post('/logout', [SessionAuthController::class, 'logout']);
+    Route::get('/csrf-token', [SessionAuthController::class, 'getCsrfToken']);
+    Route::get('/callback', [SessionAuthController::class, 'handleCallback']);
+});
+
+Route::middleware(['session.auth'])->prefix('user')->group(function () {
+    Route::get('/roles', [UserRoleController::class, 'getRoles']);
+    Route::post('/has-role', [UserRoleController::class, 'hasRole']);
+    Route::post('/has-any-role', [UserRoleController::class, 'hasAnyRole']);
+    Route::post('/has-all-roles', [UserRoleController::class, 'hasAllRoles']);
+    Route::post('/can', [UserRoleController::class, 'canPerformAction']);
+});
+
+Route::get('/files/public/{path}', [FileController::class, 'serveFile'])
+    ->where('path', '.*')
+    ->defaults('disk', 'public')
+    ->name('files.serve.public');
+
+Route::middleware(['session.auth', 'access.control'])->group(function () {
+<% eRoutes.forEach(({className, rootPath, hasBlob}) => {-%>
+    Route::apiResource('<%- rootPath %>', <%- className %>Controller::class);
+<%  if (hasBlob) { -%>
+    Route::get('<%- rootPath %>/{id}/{field}/{filename?}', [<%- className %>Controller::class, 'serveBlob']);
+<%  }; -%>
+<% }); -%>
+
+    Route::prefix('audits')->group(function () {
+        Route::get('/', [AuditController::class, 'index']);
+        Route::get('/statistics', [AuditController::class, 'statistics']);
+        Route::get('/timeline', [AuditController::class, 'timeline']);
+        Route::get('/models', [AuditController::class, 'models']);
+        Route::get('/users', [AuditController::class, 'users']);
+        Route::get('/entity/{type}/{id}', [AuditController::class, 'entity']);
+        Route::get('/user/{userId}/profile', [AuditController::class, 'userProfile']);
+        Route::get('/user/{userId}/timeline', [AuditController::class, 'userTimeline']);
+        Route::get('/user/{userId}/hourly-pattern', [AuditController::class, 'userHourlyPattern']);
+        Route::get('/user/{userId}/weekly-pattern', [AuditController::class, 'userWeeklyPattern']);
+        Route::get('/user/{userId}/sessions', [AuditController::class, 'userSessions']);
+        Route::get('/export', [AuditController::class, 'export']);
+        Route::get('/{id}/compare', [AuditController::class, 'compare']);
+        Route::get('/{id}', [AuditController::class, 'show']);
+    });
+
+    Route::get('/logs/tail', [LogController::class, 'tail']);
+
+    Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
+        ->where('path', '.*')
+        ->defaults('disk', 'private')
+        ->name('files.serve.private');
+});

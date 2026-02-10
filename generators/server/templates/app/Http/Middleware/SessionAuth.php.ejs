@@ -1,0 +1,162 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+// use Illuminate\Support\Facades\URL;
+
+class SessionAuth
+{
+    /**
+     * Complete session-based authentication middleware
+     * Handles: initial login with JWT, then sessions for everything
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        // 1. Check if there's already a valid session
+        if ($this->hasValidSession($request)) {
+            $userData = Session::get('authenticated_user');
+            $this->setAuthenticatedUser($userData);
+            return $next($request);
+        }
+
+        // 2. Check if there's a JWT token to create the session
+        $token = $request->bearerToken();
+        if ($token) {
+            $userInfo = $this->verifyTokenWithKeycloak($token);
+            if ($userInfo) {
+                $this->createUserSession($userInfo, $token, $request);
+                $this->setAuthenticatedUser($userInfo);
+                return $next($request);
+            }
+        }
+
+        // 3. Not authenticated - return appropriate error
+        // if ($request->expectsJson()) {
+        //     return response()->json(['error' => 'Unauthorized'], 401);
+        // }
+
+        // Per richieste non-JSON (come file), redirect al login
+        // return redirect((env('FRONTEND_URL') ? env('FRONTEND_URL') : URL::to('/')) . '/login');
+        return $next($request);
+    }
+
+    /**
+     * Check if the session is valid and not compromised
+     */
+    private function hasValidSession($request)
+    {
+        if (!Session::has('authenticated_user') || !Session::has('session_security')) {
+            return false;
+        }
+
+        // Verify session security
+        $sessionSecurity = Session::get('session_security');
+
+        // Check User-Agent
+        if ($sessionSecurity['user_agent'] !== $request->userAgent()) {
+            Log::warning('Session security violation: User-Agent mismatch', [
+                'session_id' => Session::getId(),
+                'expected_ua' => $sessionSecurity['user_agent'],
+                'actual_ua' => $request->userAgent(),
+            ]);
+            Session::flush();
+            return false;
+        }
+
+        // Check if the session has expired (24 hours)
+        $maxAge = 24 * 60 * 60; // 24 hours
+        if (time() - strtotime($sessionSecurity['created_at']) > $maxAge) {
+            Session::flush();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verify token with Keycloak
+     */
+    private function verifyTokenWithKeycloak($token)
+    {
+        try {
+            $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+            $realm = env('KEYCLOAK_REALM', 'CNR');
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])->timeout(10)->get("{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/userinfo");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            return null;
+        } catch (\Exception $e) {
+            Log::warning('Keycloak token verification failed', [
+                'error' => $e->getMessage(),
+                'token_start' => substr($token, 0, 20) . '...'
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Create a session for the authenticated user
+     */
+    private function createUserSession($userInfo, $token, $request)
+    {
+
+        // Save user data in session
+        Session::put('authenticated_user', $userInfo);
+
+        // Security information to validate the session
+        Session::put('session_security', [
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'created_at' => now()->toDateTimeString(),
+        ]);
+
+        // Also save useful debug information
+        Session::put('auth_debug', [
+            'login_method' => 'jwt_token',
+            'keycloak_user_id' => $userInfo['sub'] ?? 'unknown',
+            'login_time' => now()->toDateTimeString(),
+        ]);
+
+        // Regenerate session ID for security
+        Session::regenerate();
+
+        Log::info('User session created', [
+            'user_id' => $userInfo['sub'] ?? 'unknown',
+            'session_id' => Session::getId(),
+            'ip' => $request->ip(),
+            'user_agent' => substr($request->userAgent(), 0, 100),
+        ]);
+    }
+
+    /**
+     * Set the authenticated user in Laravel context
+     * WITHOUT using database - only session data
+     */
+    private function setAuthenticatedUser($userInfo)
+    {
+        // Create a "virtual" user for Laravel without saving to database
+        $user = new \App\Models\User();
+        $user->id = $userInfo['sub']; // Use Keycloak ID as ID
+        $user->email = $userInfo['email'] ?? '';
+        $user->name = $userInfo['name'] ?? $userInfo['preferred_username'] ?? '';
+        $user->username = $userInfo['preferred_username'] ?? '';
+
+        // DO NOT save to database - only set in memory
+        $user->exists = false; // Important: tells Laravel not to attempt DB operations
+
+        // Set the user as authenticated
+        Auth::setUser($user);
+    }
+}

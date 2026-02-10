@@ -35,18 +35,18 @@ export default class extends Generator {
       namespace: 'pninja:auth'
     });
 
-    // sub generator Entities
-    const entitiesGeneratorPath = path.resolve(__dirname, '../entities/index.js');
-    const { default: EntitiesGenerator } = await import(entitiesGeneratorPath);
+    // sub generator Server
+    const serverGeneratorPath = path.resolve(__dirname, '../server/index.js');
+    const { default: ServerGenerator } = await import(serverGeneratorPath);
 
     await this.composeWith({
-      Generator: EntitiesGenerator,
-      path: path.dirname(entitiesGeneratorPath)
+      Generator: ServerGenerator,
+      path: path.dirname(serverGeneratorPath)
     }, {
       fromMain: true,
       env: this.env,
-      resolved: entitiesGeneratorPath,
-      namespace: 'pninja:entities'
+      resolved: serverGeneratorPath,
+      namespace: 'pninja:server'
     });
 
     // sub generator Client

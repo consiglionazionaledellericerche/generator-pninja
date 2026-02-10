@@ -1,0 +1,702 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use OwenIt\Auditing\Models\Audit;
+use Illuminate\Support\Facades\DB;
+
+class AuditController extends Controller
+{
+    /**
+     * Lista tutti gli audit logs con filtri e paginazione
+     */
+    public function index(Request $request)
+    {
+        $query = Audit::query()->with('auditable');
+
+        // Ricerca testuale su più campi
+        if ($request->has('search') && $request->search) {
+            $searchTerm = $request->search;
+            $driver = config('database.default');
+            $connection = config("database.connections.{$driver}.driver");
+
+            $query->where(function($q) use ($searchTerm, $connection) {
+                // Ricerca sui campi standard (funziona su tutti i DB)
+                $q->where('user_id', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('auditable_type', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('auditable_id', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('event', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('ip_address', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('url', 'LIKE', "%{$searchTerm}%")
+                  ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
+
+                // Ricerca nei campi JSON in base al database
+                match ($connection) {
+                    'mysql' => $q->orWhereRaw("JSON_SEARCH(old_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"])
+                                 ->orWhereRaw("JSON_SEARCH(new_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"]),
+
+                    'pgsql' => $q->orWhereRaw("old_values::text ILIKE ?", ["%{$searchTerm}%"])
+                                 ->orWhereRaw("new_values::text ILIKE ?", ["%{$searchTerm}%"]),
+
+                    'sqlite', 'sqlsrv' => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                             ->orWhere('new_values', 'LIKE', "%{$searchTerm}%"),
+
+                    default => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                 ->orWhere('new_values', 'LIKE', "%{$searchTerm}%")
+                };
+            });
+        }
+
+        // Filtro per tipo di modello
+        if ($request->has('auditable_type') && $request->auditable_type) {
+            $query->where('auditable_type', $request->auditable_type);
+        }
+
+        // Filtro per ID specifico del modello
+        if ($request->has('auditable_id') && $request->auditable_id) {
+            $query->where('auditable_id', $request->auditable_id);
+        }
+
+        // Filtro per evento (created, updated, deleted, restored)
+        if ($request->has('event') && $request->event) {
+            $query->where('event', $request->event);
+        }
+
+        // Filtro per utente
+        if ($request->has('user_id') && $request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        // Filtro per range di date
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Ordinamento (default: più recenti prima)
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        // Validazione campo ordinamento per sicurezza
+        $allowedSortFields = ['id', 'event', 'auditable_type', 'auditable_id', 'user_id', 'created_at', 'updated_at'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        // Paginazione
+        $perPage = $request->get('per_page', 15);
+        $perPage = min(max((int)$perPage, 1), 100); // Limite tra 1 e 100
+
+        $audits = $query->paginate($perPage);
+
+        return response()->json($audits);
+    }
+
+    /**
+     * Dettaglio singolo audit log
+     */
+    public function show($id)
+    {
+        $audit = Audit::with('auditable')->findOrFail($id);
+
+        return response()->json($audit);
+    }
+
+    /**
+     * Storia completa di un'entità specifica
+     */
+    public function entity(Request $request, $type, $id)
+    {
+        $audits = Audit::where('auditable_type', $type)
+            ->where('auditable_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($audits);
+    }
+
+    /**
+     * Statistiche degli audit logs
+     */
+    public function statistics(Request $request)
+    {
+        // Converti le stringhe in Carbon datetime con inizio/fine giornata
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(30)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $stats = [
+            'total' => Audit::whereBetween('created_at', [$dateFrom, $dateTo])->count(),
+            'by_event' => Audit::whereBetween('created_at', [$dateFrom, $dateTo])
+                ->select('event', DB::raw('count(*) as total'))
+                ->groupBy('event')
+                ->get(),
+            'by_model' => Audit::whereBetween('created_at', [$dateFrom, $dateTo])
+                ->select('auditable_type', DB::raw('count(*) as total'))
+                ->groupBy('auditable_type')
+                ->orderBy('total', 'desc')
+                ->get(),
+            'by_user' => Audit::whereBetween('created_at', [$dateFrom, $dateTo])
+                ->select('user_id', DB::raw('count(*) as total'))
+                ->groupBy('user_id')
+                ->whereNotNull('user_id')
+                ->orderBy('total', 'desc')
+                ->limit(10)
+                ->get(),
+        ];
+
+        return response()->json($stats);
+    }
+
+    /**
+     * Confronto tra due versioni (old vs new)
+     */
+    public function compare($id)
+    {
+        $audit = Audit::findOrFail($id);
+
+        $comparison = [
+            'audit_id' => $audit->id,
+            'event' => $audit->event,
+            'auditable_type' => $audit->auditable_type,
+            'auditable_id' => $audit->auditable_id,
+            'user_id' => $audit->user_id,
+            'created_at' => $audit->created_at,
+            'changes' => [],
+        ];
+
+        $oldValues = $audit->old_values ?? [];
+        $newValues = $audit->new_values ?? [];
+
+        // Ottieni tutti i campi modificati
+        $allKeys = array_unique(array_merge(array_keys($oldValues), array_keys($newValues)));
+
+        foreach ($allKeys as $key) {
+            $comparison['changes'][$key] = [
+                'old' => $oldValues[$key] ?? null,
+                'new' => $newValues[$key] ?? null,
+                'changed' => ($oldValues[$key] ?? null) !== ($newValues[$key] ?? null),
+            ];
+        }
+
+        return response()->json($comparison);
+    }
+
+    /**
+     * Lista di tutti i tipi di modelli auditable
+     */
+    public function models()
+    {
+        $models = Audit::select('auditable_type')
+            ->distinct()
+            ->orderBy('auditable_type')
+            ->pluck('auditable_type');
+
+        return response()->json($models);
+    }
+
+    /**
+     * Lista di tutti gli utenti che hanno fatto modifiche
+     */
+    public function users()
+    {
+        $users = Audit::select('user_id', 'user_type')
+            ->distinct()
+            ->whereNotNull('user_id')
+            ->orderBy('user_id')
+            ->get();
+
+        return response()->json($users);
+    }
+
+    /**
+     * Timeline degli eventi con granularità automatica o manuale
+     * Tutti i dati sono in UTC per consistenza globale
+     */
+    public function timeline(Request $request)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(30)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        // Calcola la differenza in giorni
+        $diffInDays = ceil($dateFrom->diffInDays($dateTo));
+
+        // Determina la granularità automatica in base all'intervallo
+        $granularity = $request->get('granularity', $this->autoGranularity($diffInDays));
+
+        $driver = config('database.default');
+        $connection = config("database.connections.{$driver}.driver");
+
+        // Determina il formato in base alla granularità e al database (UTC)
+        $dateFormat = $this->getDateFormat($granularity, $connection);
+
+        $timeline = Audit::whereBetween('created_at', [$dateFrom, $dateTo])
+            ->select(
+                DB::raw("{$dateFormat} as period"),
+                'event',
+                DB::raw('count(*) as total')
+            )
+            ->groupBy(DB::raw($dateFormat), 'event')
+            ->orderBy('period', 'asc')
+            ->get();
+
+        // Raggruppa per periodo
+        $grouped = $timeline->groupBy('period')->map(function ($items, $period) {
+            $events = $items->reduce(function ($carry, $item) {
+                $carry[$item->event] = $item->total;
+                return $carry;
+            }, []);
+
+            return [
+                'period' => strval($period),
+                'total' => $items->sum('total'),
+                'created' => $events['created'] ?? 0,
+                'updated' => $events['updated'] ?? 0,
+                'deleted' => $events['deleted'] ?? 0,
+                'restored' => $events['restored'] ?? 0,
+            ];
+        })->values();
+
+        return response()->json([
+            'data' => $grouped,
+            'granularity' => $granularity,
+            'interval_days' => $diffInDays,
+        ]);
+    }
+
+    /**
+     * Determina la granularità automatica in base ai giorni dell'intervallo
+     */
+    private function autoGranularity($days)
+    {
+        if ($days <= 1) {
+            return 'hour';      // <= 1 giorno: ore
+        } elseif ($days <= 7) {
+            return 'day';       // <= 1 settimana: giorni
+        } elseif ($days <= 60) {
+            return 'day';       // <= 2 mesi: giorni
+        } elseif ($days <= 365) {
+            return 'month';     // <= 1 anno: mesi
+        } else {
+            return 'year';      // > 1 anno: anni
+        }
+    }
+
+    /**
+     * Ottieni il formato SQL per la data in base alla granularità e al database
+     * Tutti i formati sono in UTC per consistenza globale
+     */
+    private function getDateFormat($granularity, $connection)
+    {
+        $formats = [
+            'mysql' => [
+                'minute' => "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i')",
+                'hour' => "DATE_FORMAT(created_at, '%Y-%m-%d %H:00')",
+                'day' => "DATE(created_at)",
+                'month' => "DATE_FORMAT(created_at, '%Y-%m')",
+                'year' => "YEAR(created_at)",
+            ],
+            'pgsql' => [
+                'minute' => "TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI')",
+                'hour' => "TO_CHAR(created_at, 'YYYY-MM-DD HH24:00')",
+                'day' => "DATE(created_at)",
+                'month' => "TO_CHAR(created_at, 'YYYY-MM')",
+                'year' => "TO_CHAR(created_at, 'YYYY')",
+            ],
+            'sqlite' => [
+                'minute' => "strftime('%Y-%m-%d %H:%M', created_at)",
+                'hour' => "strftime('%Y-%m-%d %H:00', created_at)",
+                'day' => "DATE(created_at)",
+                'month' => "strftime('%Y-%m', created_at)",
+                'year' => "strftime('%Y', created_at)",
+            ],
+        ];
+
+        return $formats[$connection][$granularity] ?? $formats[$connection]['day'];
+    }
+
+    /**
+     * Profilo completo attività utente
+     */
+    public function userProfile(Request $request, $userId)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(90)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $audits = Audit::where('user_id', $userId)
+            ->whereBetween('created_at', [$dateFrom, $dateTo]);
+
+        // Statistiche overview
+        $overview = [
+            'user_id' => $userId,
+            'total_actions' => $audits->clone()->count(),
+            'first_activity' => $audits->clone()->min('created_at'),
+            'last_activity' => $audits->clone()->max('created_at'),
+            'by_event' => $audits->clone()
+                ->select('event', DB::raw('count(*) as total'))
+                ->groupBy('event')
+                ->get(),
+            'by_model' => $audits->clone()
+                ->select('auditable_type', DB::raw('count(*) as total'))
+                ->groupBy('auditable_type')
+                ->orderBy('total', 'desc')
+                ->limit(10)
+                ->get(),
+            'most_active_day' => $audits->clone()
+                ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+                ->groupBy('date')
+                ->orderBy('total', 'desc')
+                ->first(),
+        ];
+
+        return response()->json($overview);
+    }
+
+    /**
+     * Timeline attività utente con paginazione
+     */
+    public function userTimeline(Request $request, $userId)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(90)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $perPage = $request->get('per_page', 20);
+        $perPage = min(max((int)$perPage, 1), 100);
+
+        $timeline = Audit::where('user_id', $userId)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->with('auditable')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return response()->json($timeline);
+    }
+
+    /**
+     * Pattern temporali - attività per ora del giorno
+     */
+    public function userHourlyPattern(Request $request, $userId)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(90)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $driver = config('database.default');
+        $connection = config("database.connections.{$driver}.driver");
+
+        $hourFormat = match ($connection) {
+            'mysql' => "HOUR(created_at)",
+            'pgsql' => "EXTRACT(HOUR FROM created_at)",
+            'sqlite' => "CAST(strftime('%H', created_at) AS INTEGER)",
+            default => "HOUR(created_at)"
+        };
+
+        $pattern = Audit::where('user_id', $userId)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->select(
+                DB::raw("{$hourFormat} as hour"),
+                DB::raw('count(*) as total')
+            )
+            ->groupBy('hour')
+            ->orderBy('hour')
+            ->get();
+
+        // Riempi le ore mancanti con 0
+        $allHours = collect(range(0, 23))->map(function ($hour) use ($pattern) {
+            $existing = $pattern->firstWhere('hour', $hour);
+            return [
+                'hour' => $hour,
+                'total' => $existing ? $existing->total : 0,
+            ];
+        });
+
+        return response()->json($allHours);
+    }
+
+    /**
+     * Pattern settimanale - attività per giorno della settimana
+     */
+    public function userWeeklyPattern(Request $request, $userId)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(90)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $driver = config('database.default');
+        $connection = config("database.connections.{$driver}.driver");
+
+        // DAYOFWEEK: 1=Sunday, 7=Saturday (MySQL)
+        // Extract DOW: 0=Sunday, 6=Saturday (PostgreSQL)
+        $dayFormat = match ($connection) {
+            'mysql' => "DAYOFWEEK(created_at)",
+            'pgsql' => "EXTRACT(DOW FROM created_at) + 1", // Convert to 1-7
+            'sqlite' => "CAST(strftime('%w', created_at) AS INTEGER) + 1", // Convert to 1-7
+            default => "DAYOFWEEK(created_at)"
+        };
+
+        $pattern = Audit::where('user_id', $userId)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->select(
+                DB::raw("{$dayFormat} as day_of_week"),
+                DB::raw('count(*) as total')
+            )
+            ->groupBy('day_of_week')
+            ->orderBy('day_of_week')
+            ->get();
+
+        // Map to day names
+        $dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+        $allDays = collect(range(1, 7))->map(function ($day) use ($pattern, $dayNames) {
+            $existing = $pattern->firstWhere('day_of_week', $day);
+            return [
+                'day_of_week' => $day,
+                'day_name' => $dayNames[$day - 1],
+                'total' => $existing ? $existing->total : 0,
+            ];
+        });
+
+        return response()->json($allDays);
+    }
+
+    /**
+     * Sessioni di lavoro (raggruppamento attività consecutive)
+     */
+    public function userSessions(Request $request, $userId)
+    {
+        $dateFrom = $request->has('date_from')
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays(30)->startOfDay();
+
+        $dateTo = $request->has('date_to')
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $audits = Audit::where('user_id', $userId)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Raggruppa in sessioni (gap > 30 minuti = nuova sessione)
+        $sessions = [];
+        $currentSession = null;
+        $sessionGapMinutes = 30;
+
+        foreach ($audits as $audit) {
+            $timestamp = \Carbon\Carbon::parse($audit->created_at);
+
+            if (!$currentSession || $timestamp->diffInMinutes($currentSession['end']) > $sessionGapMinutes) {
+                // Nuova sessione
+                if ($currentSession) {
+                    $sessions[] = $currentSession;
+                }
+                $currentSession = [
+                    'start' => $timestamp,
+                    'end' => $timestamp,
+                    'actions' => 1,
+                    'events' => [$audit->event => 1],
+                    'models' => [$audit->auditable_type => 1],
+                ];
+            } else {
+                // Aggiungi alla sessione corrente
+                $currentSession['end'] = $timestamp;
+                $currentSession['actions']++;
+                $currentSession['events'][$audit->event] =
+                    ($currentSession['events'][$audit->event] ?? 0) + 1;
+                $currentSession['models'][$audit->auditable_type] =
+                    ($currentSession['models'][$audit->auditable_type] ?? 0) + 1;
+            }
+        }
+
+        if ($currentSession) {
+            $sessions[] = $currentSession;
+        }
+
+        // Calcola durata e formatta
+        $formattedSessions = collect($sessions)->map(function ($session) {
+            $duration = $session['start']->diffInMinutes($session['end']);
+            return [
+                'start' => $session['start']->toIso8601String(),
+                'end' => $session['end']->toIso8601String(),
+                'duration_minutes' => $duration,
+                'actions' => $session['actions'],
+                'events' => $session['events'],
+                'models' => $session['models'],
+            ];
+        })->sortByDesc('start')->values();
+
+        return response()->json([
+            'total_sessions' => count($formattedSessions),
+            'avg_duration_minutes' => $formattedSessions->avg('duration_minutes'),
+            'avg_actions_per_session' => $formattedSessions->avg('actions'),
+            'sessions' => $formattedSessions,
+        ]);
+    }
+
+    /**
+     * Esporta audit logs in CSV
+     */
+    public function export(Request $request)
+    {
+        $query = Audit::query();
+
+        // Applica gli stessi filtri della lista
+        if ($request->has('search') && $request->search) {
+            $searchTerm = $request->search;
+            $driver = config('database.default');
+            $connection = config("database.connections.{$driver}.driver");
+
+            $query->where(function($q) use ($searchTerm, $connection) {
+                $q->where('user_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('auditable_type', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('auditable_id', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('event', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('ip_address', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('url', 'LIKE', "%{$searchTerm}%")
+                ->orWhere('tags', 'LIKE', "%{$searchTerm}%");
+
+                match ($connection) {
+                    'mysql' => $q->orWhereRaw("JSON_SEARCH(old_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"])
+                                ->orWhereRaw("JSON_SEARCH(new_values, 'one', ?) IS NOT NULL", ["%{$searchTerm}%"]),
+
+                    'pgsql' => $q->orWhereRaw("old_values::text ILIKE ?", ["%{$searchTerm}%"])
+                                ->orWhereRaw("new_values::text ILIKE ?", ["%{$searchTerm}%"]),
+
+                    'sqlite', 'sqlsrv' => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                            ->orWhere('new_values', 'LIKE', "%{$searchTerm}%"),
+
+                    default => $q->orWhere('old_values', 'LIKE', "%{$searchTerm}%")
+                                ->orWhere('new_values', 'LIKE', "%{$searchTerm}%")
+                };
+            });
+        }
+
+        if ($request->has('auditable_type') && $request->auditable_type) {
+            $query->where('auditable_type', $request->auditable_type);
+        }
+
+        if ($request->has('auditable_id') && $request->auditable_id) {
+            $query->where('auditable_id', $request->auditable_id);
+        }
+
+        if ($request->has('event') && $request->event) {
+            $query->where('event', $request->event);
+        }
+
+        if ($request->has('user_id') && $request->user_id) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        if ($request->has('date_from') && $request->date_from) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->has('date_to') && $request->date_to) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Ordinamento
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        $allowedSortFields = ['id', 'event', 'auditable_type', 'auditable_id', 'user_id', 'created_at', 'updated_at'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        $query->orderBy($sortBy, $sortOrder);
+
+        // Limita a 10000 record per sicurezza
+        $audits = $query->limit(10000)->get();
+
+        // Genera CSV
+        $filename = 'audit_logs_' . now()->format('Y-m-d_His') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0',
+        ];
+
+        $callback = function() use ($audits) {
+            $file = fopen('php://output', 'w');
+
+            // BOM per UTF-8 (per Excel)
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Header CSV
+            fputcsv($file, [
+                'ID',
+                'Event',
+                'Model Type',
+                'Record ID',
+                'User ID',
+                'IP Address',
+                'URL',
+                'User Agent',
+                'Tags',
+                'Old Values',
+                'New Values',
+                'Created At',
+            ]);
+
+            // Dati
+            foreach ($audits as $audit) {
+                fputcsv($file, [
+                    $audit->id,
+                    $audit->event,
+                    $audit->auditable_type,
+                    $audit->auditable_id,
+                    $audit->user_id,
+                    $audit->ip_address,
+                    $audit->url,
+                    $audit->user_agent,
+                    $audit->tags,
+                    json_encode($audit->old_values, JSON_UNESCAPED_UNICODE),
+                    json_encode($audit->new_values, JSON_UNESCAPED_UNICODE),
+                    $audit->created_at,
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+}

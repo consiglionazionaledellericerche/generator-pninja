@@ -1,0 +1,7 @@
+ptype,v0,v1,v2,v3,v4,v5
+<%- entities.map(({name}) => `p,__AUTHUSER__,${name},create,,,
+p,__AUTHUSER__,${name},read,,,
+p,__AUTHUSER__,${name},update,,,
+p,__AUTHUSER__,${name},delete,,,`).join('\n');%>
+p,__AUTHUSER__,File,read,,,
+<%- entities.map(({name}) => `p,__GUEST__,${name},read,,,`).join('\n');%>

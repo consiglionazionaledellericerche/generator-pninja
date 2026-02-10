@@ -1,0 +1,295 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
+
+class KeycloakProxyController extends Controller
+{
+    protected $keycloakBaseUrl;
+    protected $realm;
+    protected $clientId;
+    protected $clientSecret;
+    protected $frontendUrl;
+
+    public function __construct()
+    {
+        $this->keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
+        $this->realm = env('KEYCLOAK_REALM');
+        $this->clientId = env('KEYCLOAK_CLIENT_ID');
+        $this->clientSecret = env('KEYCLOAK_CLIENT_SECRET');
+        $this->frontendUrl = env('FRONTEND_URL') ? env('FRONTEND_URL') : URL::to('/');
+    }
+
+    /**
+     * Starts the login flow using the Authorization Code grant
+     */
+    public function initiateLogin(Request $request)
+    {
+        // Generate a PKCE code verifier and code challenge
+        $codeVerifier = Str::random(64);
+        $codeChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
+
+        // Generate a state to prevent CSRF
+        $state = Str::random(32);
+
+        // Save the code verifier and state in the session
+        $request->session()->put('code_verifier', $codeVerifier);
+        $request->session()->put('auth_state', $state);
+
+        // Callback URL for Keycloak
+        $redirectUri = $this->frontendUrl . '/api/auth/callback';
+
+        // Build the Keycloak authorization URL
+        $authUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/auth";
+        $queryParams = http_build_query([
+            'client_id' => $this->clientId,
+            'redirect_uri' => $redirectUri,
+            'response_type' => 'code',
+            'scope' => 'openid profile email',
+            'state' => $state,
+            'code_challenge' => $codeChallenge,
+            'code_challenge_method' => 'S256',
+        ]);
+
+        // Return the authorization URL to the frontend
+        return response()->json([
+            'authUrl' => "{$authUrl}?{$queryParams}"
+        ]);
+    }
+
+    /**
+     * Handles the callback from Keycloak and exchanges the code for tokens
+     */
+    public function handleCallback(Request $request)
+    {
+        $code = $request->input('code');
+        $state = $request->input('state');
+        $sessionState = $request->session()->get('auth_state');
+
+        // Validate the state to prevent CSRF
+        if (!$state || $state !== $sessionState) {
+            return response()->json([
+                'message' => 'Invalid state parameter'
+            ], 400);
+        }
+
+        $codeVerifier = $request->session()->get('code_verifier');
+        if (!$codeVerifier) {
+            return response()->json([
+                'message' => 'Code verifier not found'
+            ], 400);
+        }
+
+        // Exchange the authorization code for tokens
+        try {
+            $redirectUri = $this->frontendUrl . '/api/auth/callback';
+
+            $response = Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/token", [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'redirect_uri' => $redirectUri,
+                'code_verifier' => $codeVerifier
+            ]);
+
+            if ($response->successful()) {
+                // Clear session data
+                $request->session()->forget(['code_verifier', 'auth_state']);
+
+                $tokens = $response->json();
+
+                $request->session()->put('auth_tokens', $tokens);
+
+                return redirect($this->frontendUrl . '?auth_success=true');
+            }
+
+            return response()->json([
+                'message' => 'Failed to exchange code for tokens',
+                'details' => $response->json()
+            ], 400);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Token exchange error',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Checks if the user has an active session with Keycloak
+     */
+    public function checkSession(Request $request)
+    {
+        try {
+            // Retrieve tokens from the session
+            $tokens = $request->session()->get('auth_tokens');
+
+            if ($tokens && isset($tokens['access_token'])) {
+                // Verify the token's validity
+                $userInfoResponse = Http::withHeaders([
+                    'Authorization' => "Bearer {$tokens['access_token']}"
+                ])->get("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/userinfo");
+
+                if ($userInfoResponse->successful()) {
+                    return response()->json([
+                        'isAuthenticated' => true,
+                        'tokens' => $tokens,
+                        'user' => $userInfoResponse->json()
+                    ]);
+                }
+
+                // If the token is invalid, attempt to refresh it
+                if (isset($tokens['refresh_token'])) {
+                    $refreshResponse = Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/token", [
+                        'client_id' => $this->clientId,
+                        'client_secret' => $this->clientSecret,
+                        'grant_type' => 'refresh_token',
+                        'refresh_token' => $tokens['refresh_token']
+                    ]);
+
+                    if ($refreshResponse->successful()) {
+                        $newTokens = $refreshResponse->json();
+                        $request->session()->put('auth_tokens', $newTokens);
+
+                        return response()->json([
+                            'isAuthenticated' => true,
+                            'tokens' => $newTokens
+                        ]);
+                    }
+                }
+            }
+
+            // No valid session
+            return response()->json([
+                'isAuthenticated' => false
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'isAuthenticated' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Refreshes the token using the refresh token
+     */
+    public function refreshToken(Request $request)
+    {
+        $refreshToken = $request->input('refresh_token');
+
+        if (!$refreshToken) {
+            // Retrieve the refresh token from the session
+            $tokens = $request->session()->get('auth_tokens');
+            $refreshToken = $tokens['refresh_token'] ?? null;
+
+            if (!$refreshToken) {
+                return response()->json(['message' => 'Refresh token not provided'], 400);
+            }
+        }
+
+        try {
+            $response = Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/token", [
+                'client_id' => $this->clientId,
+                'client_secret' => $this->clientSecret,
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $refreshToken,
+            ]);
+
+            if ($response->successful()) {
+                $newTokens = $response->json();
+                // Update tokens in the session
+                $request->session()->put('auth_tokens', $newTokens);
+                return response()->json($newTokens);
+            }
+
+            return response()->json([
+                'message' => 'Token refresh failed',
+                'details' => $response->json()
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Token refresh service error',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Verifies the token
+     */
+    public function verifyToken(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!$token) {
+            // Try to retrieve the token from the session
+            $tokens = $request->session()->get('auth_tokens');
+            $token = $tokens['access_token'] ?? null;
+
+            if (!$token) {
+                return response()->json(['message' => 'Token not provided'], 401);
+            }
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])->get("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/userinfo");
+
+            if ($response->successful()) {
+                return response()->json($response->json());
+            }
+
+            return response()->json(['message' => 'Invalid token'], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Token validation error',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Logout
+     */
+    public function logout(Request $request)
+    {
+        $refreshToken = $request->input('refresh_token');
+
+        if (!$refreshToken) {
+            // Retrieve the refresh token from the session
+            $tokens = $request->session()->get('auth_tokens');
+            $refreshToken = $tokens['refresh_token'] ?? null;
+        }
+
+        // Revoke the refresh token if it exists
+        if ($refreshToken) {
+            try {
+                Http::asForm()->post("{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout", [
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'refresh_token' => $refreshToken,
+                ]);
+            } catch (\Exception $e) {
+                // Continue even if logout fails
+            }
+        }
+
+        // Build the logout URL for SSO
+        $logoutUrl = "{$this->keycloakBaseUrl}/realms/{$this->realm}/protocol/openid-connect/logout?redirect_uri=" . urlencode($this->frontendUrl);
+
+        // Clear the session
+        $request->session()->forget('auth_tokens');
+
+        return response()->json([
+            'message' => 'Logged out successfully',
+            'logoutUrl' => $logoutUrl
+        ]);
+    }
+}
