@@ -17,6 +17,9 @@ export const RESERVED_WORDS = new Set([
 
     // Critical Laravel Eloquent methods
     'attributes', 'connection', 'exists', 'fill', 'save', 'touch', 'fresh',
+
+    // PNinja reserved words
+    'ac_rule', 'user'
 ]);
 
 export const RESERVED_TABLE_NAMES = new Set([

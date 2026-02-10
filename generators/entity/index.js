@@ -77,39 +77,34 @@ export default class extends Generator {
         this.relationshipsToAdd = [];
         this.relationshipsToRemove = [];
 
-        if (this.options.entityName && !/^([a-zA-Z0-9]*)$/.test(this.options.entityName)) {
-            this.log(colors.red(`ERROR! Your entity name cannot contain special characters`));
-            this.options.entityName = undefined;
-        } else if (this.options.entityName && /[0-9]/.test(this.options.entityName.charAt(0))) {
-            this.log(colors.red(`ERROR! Your entity name cannot start with a number`));
-            this.options.entityName = undefined;
-        }
-
-        if (!this.options.entityName) {
-            const nameAnswer = await this.prompt([{
-                type: 'input',
-                name: 'entityName',
-                message: 'Entity name:',
-                validate: input => {
-                    if (input === '') {
-                        return 'Your entity name cannot be empty';
-                    }
-                    if (!/^([a-zA-Z0-9]*)$/.test(input)) {
-                        return 'Your entity name cannot contain special characters';
-                    }
-                    if (/[0-9]/.test(input.charAt(0))) {
-                        return 'Your entity name cannot start with a number';
-                    }
-                    if (isReservedWord(to.snake(input))) {
-                        return `'${input}' is a reserved word and cannot be used as an entity name`;
-                    }
-                    return true
+        const nameAnswer = await this.prompt([{
+            type: 'input',
+            name: 'entityName',
+            message: 'Entity name:',
+            default: this.options.entityName,
+            validate: input => {
+                if (input === '') {
+                    return 'Your entity name cannot be empty';
                 }
-            }]);
-            this.entityName = nameAnswer.entityName;
-        } else {
-            this.entityName = this.options.entityName;
-        }
+                if (/\s/.test(input)) {
+                    return 'Your entity name cannot contain spaces';
+                }
+                if (!/^([a-zA-Z0-9]*)$/.test(input)) {
+                    return 'Your entity name cannot contain special characters';
+                }
+                if (/^[0-9]/.test(input)) {
+                    return 'Your entity name cannot start with a number';
+                }
+                if (/^[a-z]/.test(input)) {
+                    return 'Your entity name cannot start with a lower case letter';
+                }
+                if (isReservedWord(to.snake(input))) {
+                    return `'${input}' is a reserved word and cannot be used as an entity name`;
+                }
+                return true
+            }
+        }]);
+        this.entityName = nameAnswer.entityName;
 
         // Check if entity already exists
         const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
@@ -294,7 +289,7 @@ export default class extends Generator {
     }
 
     _loadExistingEntities() {
-        this.existingEntities = getEntitiesNames(this);
+        this.existingEntities = getEntitiesNames(this).filter(name => name !== 'AcRule');
     }
 
     _loadExistingEnums() {
@@ -322,23 +317,19 @@ export default class extends Generator {
                 name: 'fieldName',
                 message: 'What is the name of your field?',
                 validate: input => {
-                    // Only alphanumeric and underscore allowed
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your field name cannot contain special characters';
                     }
-
-                    // Cannot be empty
+                    if (/\s/.test(input)) {
+                        return 'Your field name cannot contain spaces';
+                    }
                     if (input === '') {
                         return 'Your field name cannot be empty';
                     }
-
-                    // Cannot start with a number
-                    if (/[0-9]/.test(input.charAt(0))) {
+                    if (/^[0-9]/.test(input)) {
                         return 'Your field name cannot start with a number';
                     }
-
-                    // Cannot start with uppercase
-                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                    if (/^[A-Z]/.test(input)) {
                         return 'Your field name cannot start with an upper case letter';
                     }
 
