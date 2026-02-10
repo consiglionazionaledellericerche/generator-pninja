@@ -77,25 +77,36 @@ export default class extends Generator {
         this.relationshipsToAdd = [];
         this.relationshipsToRemove = [];
 
-        const nameAnswer = await this.prompt([{
-            type: 'input',
-            name: 'entityName',
-            message: 'Entity name:',
-            default: this.options.entityName,
-            validate: input => {
-                if (input === '') {
-                    return 'Your entity name cannot be empty';
+        if (this.options.entityName && !/^[A-Z][A-Za-z0-9]*$/.test(this.options.entityName)) {
+            this.log(colors.red(`ERROR! Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`));
+            this.options.entityName = undefined;
+        } else if (this.options.entityName && isReservedWord(to.snake(this.options.entityName))) {
+            this.log(colors.red(`ERROR! '${input}' is a reserved word and cannot be used as an entity name`));
+            this.options.entityName = undefined;
+        }
+        if (!this.options.entityName) {
+            const nameAnswer = await this.prompt([{
+                type: 'input',
+                name: 'entityName',
+                message: 'Entity name:',
+                default: this.options.entityName,
+                validate: input => {
+                    if (input === '') {
+                        return 'Your entity name cannot be empty';
+                    }
+                    if (!/^[A-Z][A-Za-z0-9]*$/.test(input)) {
+                        return `Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`;
+                    }
+                    if (isReservedWord(to.snake(input))) {
+                        return `'${input}' is a reserved word and cannot be used as an entity name`;
+                    }
+                    return true
                 }
-                if (!/^[A-Z][A-Za-z0-9]*$/.test(input)) {
-                    return `Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`;
-                }
-                if (isReservedWord(to.snake(input))) {
-                    return `'${input}' is a reserved word and cannot be used as an entity name`;
-                }
-                return true
-            }
-        }]);
-        this.entityName = nameAnswer.entityName;
+            }]);
+            this.entityName = nameAnswer.entityName;
+        } else {
+            this.entityName = this.options.entityName;
+        }
 
         // Check if entity already exists
         const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
@@ -325,7 +336,7 @@ export default class extends Generator {
                     // Check against inverse relationships from other entities
                     if (getEntitiesRelationships(this)
                         .filter(rel => rel.otherEntityName === this.entityConfig.name)
-                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        .some(rel => to.snake(rel.otherEntityRelationshipName ?? '') === snakeCaseName)) {
                         return 'Your field name cannot use an already existing relationship name from other entities';
                     }
 
@@ -458,6 +469,8 @@ export default class extends Generator {
                         return `Your relationship name must start with a lower case letter and cannot contain special characters: /^[a-z][A-Za-z0-9]*$/`;
                     }
 
+                    // console.log('Validating relationship name:', input);
+
                     const snakeCaseName = to.snake(input);
 
                     // Check against reserved field 'id' and existing fields
@@ -473,7 +486,7 @@ export default class extends Generator {
                     // Check against inverse relationships from other entities
                     if (getEntitiesRelationships(this)
                         .filter(rel => rel.otherEntityName === this.entityConfig.name)
-                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        .some(rel => to.snake(rel.otherEntityRelationshipName ?? '') === snakeCaseName)) {
                         return 'Your relationship name cannot use an already existing relationship name from other entities';
                     }
 
@@ -481,6 +494,8 @@ export default class extends Generator {
                     if (isReservedWord(snakeCaseName)) {
                         return `'${input}' is a reserved word and cannot be used as a relationship name`;
                     }
+
+                    console.log('VALID!');
 
                     return true;
                 }
@@ -566,7 +581,7 @@ export default class extends Generator {
                     // Check against inverse relationships pointing to the other entity
                     if (getEntitiesRelationships(this)
                         .filter(rel => rel.otherEntityName === relationshipAnswers.otherEntity)
-                        .some(rel => to.snake(rel.otherEntityRelationshipName) === snakeCaseName)) {
+                        .some(rel => to.snake(rel.otherEntityRelationshipName ?? '') === snakeCaseName)) {
                         return 'Your relationship name cannot use an already existing relationship name from other entities';
                     }
 
