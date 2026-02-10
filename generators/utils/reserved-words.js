@@ -19,7 +19,7 @@ export const RESERVED_WORDS = new Set([
     'attributes', 'connection', 'exists', 'fill', 'save', 'touch', 'fresh',
 
     // PNinja reserved words
-    'ac_rule', 'user'
+    'ac_rule', 'user', 'file', 'audit'
 ]);
 
 export const RESERVED_TABLE_NAMES = new Set([

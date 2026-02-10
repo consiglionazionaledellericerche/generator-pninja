@@ -81,7 +81,7 @@ export default class extends Generator {
             this.log(colors.red(`ERROR! Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`));
             this.options.entityName = undefined;
         } else if (this.options.entityName && isReservedWord(to.snake(this.options.entityName))) {
-            this.log(colors.red(`ERROR! '${input}' is a reserved word and cannot be used as an entity name`));
+            this.log(colors.red(`ERROR! '${this.options.entityName}' is a reserved word and cannot be used as an entity name`));
             this.options.entityName = undefined;
         }
         if (!this.options.entityName) {
