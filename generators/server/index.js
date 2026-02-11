@@ -5,6 +5,7 @@ import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
 import { AcRule } from '../utils/AcRule.js';
+import ansiColors from 'ansi-colors';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
@@ -43,19 +44,18 @@ export default class ServerGenerator extends Generator {
   }
 
   async writing() {
-    // const serverTemplatePath = this.templatePath();
-    const entitiesTemplatePath = this.templatePath() + '/../../entities/templates';
-    const migrationsGenerator = new MigrationsGenerator(this);
-    const modelsGenerator = new ModelsGenerator(this);
-    const controllersGenerator = new ControllersGenerator(this);
-    controllersGenerator.that.sourceRoot(entitiesTemplatePath);
+    const serverTemplatePath = this.templatePath();
+    const entitiesTemplatePath = serverTemplatePath + '/../../entities/templates';
     const searchEngine = this.config.get('searchEngine');
-    migrationsGenerator.createTable({ entity: AcRule, enums: [] });
+    this.sourceRoot(entitiesTemplatePath);
+    (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
     this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
     });
-    modelsGenerator.generateModel(AcRule, [], [], searchEngine);
-    controllersGenerator.generateEntityController(AcRule, [], searchEngine);
+    (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
+    (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
+    this.sourceRoot(serverTemplatePath);
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
     this.fs.copyTpl(this.templatePath("routes/api.php.ejs"), this.destinationPath(`server/routes/api.php`), {
       eRoutes: [{ className: 'AcRule', rootPath: 'ac-rules', hasBlob: false }],
       paths: ['ac-rules'],

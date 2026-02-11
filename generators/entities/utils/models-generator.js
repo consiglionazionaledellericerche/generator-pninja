@@ -1,6 +1,4 @@
 import to from 'to-case';
-import pluralize from 'pluralize';
-import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 export class ModelsGenerator {
     constructor(that) {
@@ -210,10 +208,7 @@ export class ModelsGenerator {
         const enums = getEnums(this.that);
         const relationships = getEntitiesRelationships(this.that);
         const searchEngine = this.that.config.get('searchEngine');
-        if (this.that.config.get('authentication') === 'keycloak') {
-            this.that.fs.copyTpl(this.that.templatePath("app/Resolvers/Keycloak__UserResolver.php.ejs"), this.that.destinationPath(`server/app/Resolvers/UserResolver.php`));
-        }
-        for (const entity of [AcRule, ...entities]) {
+        for (const entity of entities) {
             this.generateModel(entity, enums, relationships, searchEngine);
         }
         for (const enm of enums) {

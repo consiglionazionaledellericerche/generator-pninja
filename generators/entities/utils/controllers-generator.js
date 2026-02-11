@@ -234,7 +234,6 @@ export class ControllersGenerator {
             return acc;
         }, {});
 
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
             {
                 className: entity.name,
@@ -286,18 +285,11 @@ export class ControllersGenerator {
         const relationships = getEntitiesRelationships(this.that);
         const searchEngine = this.that.config.get('searchEngine');
 
-        this.that.fs.copyTpl(this.that.templatePath("ApiErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("NotFoundErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("DatabaseErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("ValidationErrorHandler.php.ejs"), this.that.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Providers/AppServiceProvider.php.ejs"), this.that.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Casts/Base64BinaryCast.php.ejs"), this.that.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
         this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesApiErrors.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("HandlesUserRoles.php.ejs"), this.that.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
 
-        for (const entity of [AcRule, ...entities]) {
+        for (const entity of entities) {
             this.generateEntityController(entity, relationships, searchEngine);
         }
     }

@@ -131,12 +131,9 @@ export class MigrationsGenerator {
     createTables() {
         const entities = getEntities(this.that);
         const enums = getEnums(this.that);
-        for (const entity of [AcRule, ...entities]) {
+        for (const entity of entities) {
             this.createTable({ entity, enums });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/migrations/create_audits_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
-            authentication: this.that.config.get('authentication'),
-        });
     }
 
     removeRelation({ entity, relationships }) {
