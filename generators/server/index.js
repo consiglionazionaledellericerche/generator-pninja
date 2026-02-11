@@ -43,14 +43,19 @@ export default class ServerGenerator extends Generator {
   }
 
   async writing() {
-    let spinner = undefined;
+    // const serverTemplatePath = this.templatePath();
+    const entitiesTemplatePath = this.templatePath() + '/../../entities/templates';
+    const migrationsGenerator = new MigrationsGenerator(this);
+    const modelsGenerator = new ModelsGenerator(this);
+    const controllersGenerator = new ControllersGenerator(this);
+    controllersGenerator.that.sourceRoot(entitiesTemplatePath);
     const searchEngine = this.config.get('searchEngine');
-    (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
+    migrationsGenerator.createTable({ entity: AcRule, enums: [] });
     this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
     });
-    (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
-    (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
+    modelsGenerator.generateModel(AcRule, [], [], searchEngine);
+    controllersGenerator.generateEntityController(AcRule, [], searchEngine);
     this.fs.copyTpl(this.templatePath("routes/api.php.ejs"), this.destinationPath(`server/routes/api.php`), {
       eRoutes: [{ className: 'AcRule', rootPath: 'ac-rules', hasBlob: false }],
       paths: ['ac-rules'],
@@ -71,13 +76,8 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("DatabaseErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("ValidationErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("Providers/AppServiceProvider.php.ejs"), this.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
-    this.fs.copyTpl(this.templatePath("Casts/Base64BinaryCast.php.ejs"), this.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
-    this.fs.copyTpl(this.templatePath("Rules/Base64MaxSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
-    this.fs.copyTpl(this.templatePath("Rules/Base64MinSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
     this.fs.copyTpl(this.templatePath("HandlesApiErrors.php.ejs"), this.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
     this.fs.copyTpl(this.templatePath("HandlesUserRoles.php.ejs"), this.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
-    this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
-    this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
