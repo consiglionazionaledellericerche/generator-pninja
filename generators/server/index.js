@@ -54,6 +54,7 @@ export default class ServerGenerator extends Generator {
     });
     (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
     (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [] });
     this.sourceRoot(serverTemplatePath);
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
     this.fs.copyTpl(this.templatePath("routes/api.php.ejs"), this.destinationPath(`server/routes/api.php`), {
@@ -70,7 +71,6 @@ export default class ServerGenerator extends Generator {
       { entities: [AcRule], manyToMany: [], n: 0 }
     );
 
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [] });
     this.fs.copyTpl(this.templatePath("ApiErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("NotFoundErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("DatabaseErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});

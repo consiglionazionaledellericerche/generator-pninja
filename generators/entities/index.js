@@ -9,6 +9,7 @@ import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
 import { splitEntitiesFile } from './utils/entity-splitter.js';
+import { getEntities } from '../utils/entities-utils.js';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
@@ -34,7 +35,7 @@ function sortJdlStructure(jdl) {
   return sorted;
 }
 
-export default class EntityGenerator extends Generator {
+export default class extends Generator {
   static namespace = 'pninja:entities';
   constructor(args, opts) {
     super(args, opts);
@@ -110,6 +111,9 @@ export default class EntityGenerator extends Generator {
 
     const parsedJDL = sortJdlStructure(parseJDL(entitiesFilePath));
 
+    console.log(colors.blueBright(`Parsed entities configuration file (${entitiesFilePath}):`));
+    console.log(colors.bgBlueBright(JSON.stringify(parsedJDL, null, 2)));
+
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
         throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
@@ -166,6 +170,7 @@ export default class EntityGenerator extends Generator {
     try {
       spinner = ora(`Generating Factory files`);
       (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
+      this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: getEntities(this) });
       spinner.succeed(`Factory files generated`);
     } catch (error) {
       spinner.fail();
