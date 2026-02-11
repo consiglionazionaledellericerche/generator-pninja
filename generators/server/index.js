@@ -4,7 +4,6 @@ import { hello } from '../utils/hello.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
-import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { AcRule } from '../utils/AcRule.js';
 
 function sortJdlStructure(jdl) {
@@ -46,52 +45,6 @@ export default class ServerGenerator extends Generator {
   async writing() {
     let spinner = undefined;
     const searchEngine = this.config.get('searchEngine');
-
-    // JDL > Migrations
-    // try {
-    //   spinner = ora(`Generating migration files`).start();
-    //   (new MigrationsGenerator(this)).generateMigrations();
-    //   spinner.succeed(`Migration files generated`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
-
-    // Generating models
-    // try {
-    //   spinner = ora(`Generating Model files`);
-    //   (new ModelsGenerator(this)).generateModels();
-    //   spinner.succeed(`Model files generated`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
-
-    // Generating Controllers
-    // try {
-    //   spinner = ora(`Generating Controller files`);
-    //   (new ControllersGenerator(this)).generateControllers();
-    //   spinner.succeed(`Controller files generated`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
-
-    // Generating Routers
-    // try {
-    //   spinner = ora(`Generating Router files`);
-    //   (new RoutersGenerator(this)).generateRouters();
-    //   spinner.succeed(`Router files generated`);
-    // } catch (error) {
-    //   spinner.fail();
-    //   console.error(error);
-    //   throw error;
-    // }
-
-    // Generating Factories and DatabaseSeeder
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
     this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
@@ -105,7 +58,13 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("routes/console.php.ejs"), this.destinationPath(`server/routes/console.php`), {
       searchEngine: searchEngine,
     });
-    (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
+
+    this.fs.copyTpl(
+      this.templatePath("DatabaseSeeder.php.ejs"),
+      this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
+      { entities: [AcRule], manyToMany: [], n: 0 }
+    );
+
     this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [] });
     this.fs.copyTpl(this.templatePath("ApiErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("NotFoundErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});
