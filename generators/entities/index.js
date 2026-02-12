@@ -9,7 +9,8 @@ import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
 import { splitEntitiesFile } from './utils/entity-splitter.js';
-import { getEntities } from '../utils/entities-utils.js';
+import { getEntities, getEntitiesRelationships } from '../utils/entities-utils.js';
+import { AcRule } from '../utils/AcRule.js';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
@@ -111,9 +112,6 @@ export default class extends Generator {
 
     const parsedJDL = sortJdlStructure(parseJDL(entitiesFilePath));
 
-    console.log(colors.blueBright(`Parsed entities configuration file (${entitiesFilePath}):`));
-    console.log(colors.bgBlueBright(JSON.stringify(parsedJDL, null, 2)));
-
     parsedJDL.relationships.forEach(relation => {
       if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
         throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
@@ -121,6 +119,9 @@ export default class extends Generator {
     });
 
     splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this), this.log);
+
+    const entities = getEntities(this);
+    const relationships = getEntitiesRelationships(this);
 
     // JDL > Migrations
     try {
@@ -158,7 +159,7 @@ export default class extends Generator {
     // Generating Routers
     try {
       spinner = ora(`Generating Router files`);
-      (new RoutersGenerator(this)).generateRouters();
+      (new RoutersGenerator(this)).generateRouters([AcRule, ...entities]);
       spinner.succeed(`Router files generated`);
     } catch (error) {
       spinner.fail();
@@ -170,7 +171,7 @@ export default class extends Generator {
     try {
       spinner = ora(`Generating Factory files`);
       (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
-      this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: getEntities(this) });
+      this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: entities });
       spinner.succeed(`Factory files generated`);
     } catch (error) {
       spinner.fail();
@@ -180,6 +181,7 @@ export default class extends Generator {
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
+    this.fs.copyTpl(this.templatePath(`../../final/templates/README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
   }
   end() { }
 };
