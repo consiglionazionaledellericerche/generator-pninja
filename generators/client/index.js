@@ -1,7 +1,6 @@
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import { createReactClient } from './react.inc.js';
-import { hello } from '../utils/hello.js';
 import { LANGUAGES, DEFAULT_LANGUAGE, getAvailableLanguages } from './config/languages.js';
 const tab = '    ';
 export default class AuthGenerator extends Generator {
@@ -13,7 +12,7 @@ export default class AuthGenerator extends Generator {
             type: Boolean,
             default: false
         });
-        if (!this.options.fromMain) hello(this.log);
+        if (!this.options.fromMain) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
     }
     async prompting() {
         let prompts = [];

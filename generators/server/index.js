@@ -1,6 +1,5 @@
 import Generator from 'yeoman-generator';
 import randomstring from 'randomstring';
-import { hello } from '../utils/hello.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
@@ -39,7 +38,7 @@ export default class ServerGenerator extends Generator {
       default: false
     });
     this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
-    if (!this.options.fromMain) hello(this.log);
+    if (!this.options.fromMain) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
   }
 
   async writing() {
