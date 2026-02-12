@@ -5,7 +5,6 @@ import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
 import { AcRule } from '../utils/AcRule.js';
-import ansiColors from 'ansi-colors';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
