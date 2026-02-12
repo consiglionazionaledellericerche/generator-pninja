@@ -1,5 +1,4 @@
 // generators/entity/index.js
-import path from 'path';
 import Generator from 'yeoman-generator';
 import colors from 'ansi-colors';
 import to from 'to-case';
