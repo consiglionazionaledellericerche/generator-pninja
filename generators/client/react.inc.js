@@ -156,8 +156,8 @@ export async function createReactClient(that) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
-            entities: [AcRule, ...entities],
-            relationships,
+            entities: [AcRule],
+            relationships: [],
             to,
             pluralize,
             getModelForeignIds,
@@ -172,7 +172,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
 
     that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize });
+    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize });
     that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {
         supportedLngs: JSON.stringify(languages).replaceAll(`"`, `'`),
         fallbackLng: nativeLanguage
@@ -287,9 +287,9 @@ export async function createReactClient(that) {
     //         });
     // }
 
-    for (const enumeration of enums) {
-        that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
-    }
+    // for (const enumeration of enums) {
+    //     that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
+    // }
 
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/audit/Audits.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
@@ -298,9 +298,10 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditUserActivity.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
 
-    for (const entity of [AcRule, ...entities]) {
-        createEntityPages({ that, entity, enums, relationships, searchEngine });
-    }
+    createEntityPages({ that, entity: AcRule, enums: [], relationships: [], searchEngine });
+    // for (const entity of [AcRule, ...entities]) {
+    //     createEntityPages({ that, entity, enums, relationships, searchEngine });
+    // }
 
     that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
     that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`));

@@ -1,3 +1,7 @@
+import to from 'to-case';
+import pluralize from 'pluralize';
+import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
+import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import Generator from 'yeoman-generator';
 import { hello } from '../utils/hello.js';
 import ora from 'ora';
@@ -9,7 +13,8 @@ import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
 import { splitEntitiesFile } from './utils/entity-splitter.js';
-import { getEntities, getEntitiesRelationships } from '../utils/entities-utils.js';
+import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
+import { createEntityPages } from '../client/react.inc.js';
 import { AcRule } from '../utils/AcRule.js';
 
 function sortJdlStructure(jdl) {
@@ -122,6 +127,9 @@ export default class extends Generator {
 
     const entities = getEntities(this);
     const relationships = getEntitiesRelationships(this);
+    const enums = getEnums(this);
+    const nativeLanguage = this.config.get('nativeLanguage') || 'en';
+    const languages = [nativeLanguage, ...this.config.get('languages')];
 
     // JDL > Migrations
     try {
@@ -182,6 +190,38 @@ export default class extends Generator {
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
     this.fs.copyTpl(this.templatePath("blobs/dummy.png"), this.destinationPath(`server/database/factories/dummy.png`));
     this.fs.copyTpl(this.templatePath(`../../final/templates/README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
+
+    // Generate client
+    const appName = this.config.get('name');
+    const entitiesTemplatePath = this.templatePath();
+    const clientTemplatePath = entitiesTemplatePath + '/../../client/templates';
+    const searchEngine = this.config.get('searchEngine');
+    this.sourceRoot(clientTemplatePath);
+    if (this.config.get('clientType') === 'react') {
+      // Update entity icons
+      this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
+
+      // Update Menu
+      this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1 });
+
+      for (const lang of languages) {
+        this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
+          entities: [AcRule, ...entities],
+          relationships,
+          to,
+          pluralize,
+          getModelForeignIds,
+          getModelRelatedEntities
+        });
+      };
+      this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize });
+      for (const enumeration of enums) {
+        this.fs.copyTpl(this.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
+      }
+      for (const entity of entities) {
+        createEntityPages({ that: this, entity, enums, relationships, searchEngine });
+      }
+    }
   }
   end() { }
 };
