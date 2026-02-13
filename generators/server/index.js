@@ -54,7 +54,14 @@ export default class ServerGenerator extends Generator {
     (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
     this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [] });
     this.sourceRoot(serverTemplatePath);
-    this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`), {});
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/FileController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/FileController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/LogController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/LogController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/SessionAuthController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/UserRoleController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/UserRoleController.php`));
+
     this.fs.copyTpl(this.templatePath("routes/api.php.ejs"), this.destinationPath(`server/routes/api.php`), {
       eRoutes: [{ className: 'AcRule', rootPath: 'ac-rules', hasBlob: false }],
       paths: ['ac-rules'],
@@ -90,6 +97,9 @@ export default class ServerGenerator extends Generator {
     if (this.config.get('authentication') === 'keycloak') {
       this.fs.copyTpl(this.templatePath("app/Resolvers/Keycloak__UserResolver.php.ejs"), this.destinationPath(`server/app/Resolvers/UserResolver.php`));
     }
+    this.fs.copyTpl(this.templatePath("Casts/Base64BinaryCast.php.ejs"), this.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
+    this.fs.copyTpl(this.templatePath("Rules/Base64MaxSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
+    this.fs.copyTpl(this.templatePath("Rules/Base64MinSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
   }
   end() { }
 };

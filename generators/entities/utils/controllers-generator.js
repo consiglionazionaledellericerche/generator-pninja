@@ -272,23 +272,12 @@ export class ControllersGenerator {
                     toSearchableArrayTypes,
                 });
         }
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/FileController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/FileController.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/LogController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/LogController.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/SessionAuthController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/UserRoleController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/UserRoleController.php`), {});
     }
 
     generateControllers() {
         const entities = getEntities(this.that);
         const relationships = getEntitiesRelationships(this.that);
         const searchEngine = this.that.config.get('searchEngine');
-
-        this.that.fs.copyTpl(this.that.templatePath("Casts/Base64BinaryCast.php.ejs"), this.that.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MaxSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
-        this.that.fs.copyTpl(this.that.templatePath("Rules/Base64MinSize.php.ejs"), this.that.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
-
         for (const entity of entities) {
             this.generateEntityController(entity, relationships, searchEngine);
         }
