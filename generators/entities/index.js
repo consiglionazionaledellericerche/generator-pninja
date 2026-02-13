@@ -12,10 +12,11 @@ import { ModelsGenerator } from './utils/models-generator.js';
 import { ControllersGenerator } from './utils/controllers-generator.js';
 import { RoutersGenerator } from './utils/routers-generator.js';
 import { FactoriesGenerator } from './utils/factories-generator.js';
-import { splitEntitiesFile } from './utils/entity-splitter.js';
+import { getEntitiesConfig, getEnumsConfig, splitEntitiesFile } from './utils/entity-splitter.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
 import { createEntityPages } from '../client/react.inc.js';
 import { AcRule } from '../utils/AcRule.js';
+import { validateJDL } from './utils/validateJDL.js';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
@@ -117,13 +118,8 @@ export default class extends Generator {
 
     const parsedJDL = sortJdlStructure(parseJDL(entitiesFilePath));
 
-    parsedJDL.relationships.forEach(relation => {
-      if (relation.from.name === relation.to.name && (relation.from.required || relation.to.required)) {
-        throw new Error(`${colors.redBright('ERROR!')} Required relationships to the same entity are not supported, for relationship from and to '${relation.from.name}'.`)
-      }
-    });
-
-    splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this), this.log);
+    validateJDL(this, parsedJDL);
+    splitEntitiesFile(parsedJDL, this.fs, this.destinationPath.bind(this));
 
     const entities = getEntities(this);
     const relationships = getEntitiesRelationships(this);
@@ -134,7 +130,10 @@ export default class extends Generator {
     // JDL > Migrations
     try {
       spinner = ora(`Generating migration files`).start();
-      (new MigrationsGenerator(this)).generateMigrations();
+      (new MigrationsGenerator(this)).generateMigrations({
+        entities: getEntitiesConfig(parsedJDL),
+        enums: getEnumsConfig(parsedJDL),
+      });
       spinner.succeed(`Migration files generated`);
     } catch (error) {
       spinner.fail();

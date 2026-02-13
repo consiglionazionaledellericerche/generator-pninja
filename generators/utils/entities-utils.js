@@ -92,6 +92,10 @@ export function getEntitiesNames(that) {
     return getEntitiesFiles(that).map(file => path.basename(file.path).replace('.json', ''));
 }
 
+export function getEntitiesTableNames(that) {
+    return getEntities(that).map(entity => entity.tableName);
+}
+
 export function getEnums(that) {
     return getEnumsFiles(that).map(file => JSON.parse(file.contents.toString('utf8')));
 }

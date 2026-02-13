@@ -29,11 +29,10 @@ function convertFieldType(jhipsterType, enums) {
 
     const enm = enums.reduce((res, e) => {
         if (e.name === jhipsterType) {
-            return e.values.map(v => v.value || v.key)
+            return 'string';
         }
         return res;
     }, undefined);
-
     return typeMap[jhipsterType] || enm || 'string';
 }
 
@@ -128,9 +127,9 @@ export class MigrationsGenerator {
             });
     }
 
-    createTables() {
-        const entities = getEntities(this.that);
-        const enums = getEnums(this.that);
+    createTables({ entities, enums }) {
+        entities = entities ?? getEntities(this.that);
+        enums = enums ?? getEnums(this.that);
         for (const entity of entities) {
             this.createTable({ entity, enums });
         }
@@ -241,9 +240,14 @@ export class MigrationsGenerator {
         )
     }
 
-    createRelations() {
-        const entities = getEntities(this.that);
-        const relationships = getEntitiesRelationships(this.that);
+    createRelations(entities) {
+        entities = entities ?? getEntities(this.that);
+        const relationships = entities.flatMap(entity =>
+            (entity.relationships || []).map(rel => ({
+                entityName: entity.name,
+                ...rel
+            }))
+        );;
         if (!relationships || relationships.length === 0) return;
 
         entities.forEach(entity => {
@@ -305,14 +309,20 @@ export class MigrationsGenerator {
             ));
     }
 
-    createPivotMigrations() {
-        const relationships = getEntitiesRelationships(this.that);
+    createPivotMigrations(entities) {
+        entities = entities ?? getEntities(this.that);
+        const relationships = entities.flatMap(entity =>
+            (entity.relationships || []).map(rel => ({
+                entityName: entity.name,
+                ...rel
+            }))
+        );
         this.generatePivotMigrations(relationships);
     }
 
-    generateMigrations() {
-        this.createTables();
-        this.createRelations();
-        this.createPivotMigrations();
+    generateMigrations({ entities, enums }) {
+        this.createTables({ entities, enums });
+        this.createRelations(entities);
+        this.createPivotMigrations(entities);
     }
 }
