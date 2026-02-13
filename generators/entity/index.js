@@ -269,7 +269,7 @@ export default class extends Generator {
         this.entityConfig.name = this.entityName;
         this.entityConfig.tableName = tableNameAnswer.tableName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
-        this.entityConfig.icon = iconAnswer.icon;
+        this.entityConfig.icon = iconAnswer.icon || null;
 
         this._loadExistingEntities();
         this._loadExistingEnums();
@@ -907,7 +907,7 @@ export default class extends Generator {
         // Generate routes
         const routersGenerator = new RoutersGenerator(this);
         routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        routersGenerator.generateRouters(storedEntities);
+        routersGenerator.generateRouters([AcRule, ...storedEntities]);
         this.log(colors.green('Routers generated successfully\n'));
 
         // Generate Factories and DatabaseSeeder
