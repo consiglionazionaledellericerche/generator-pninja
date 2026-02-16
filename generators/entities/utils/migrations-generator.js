@@ -242,12 +242,7 @@ export class MigrationsGenerator {
 
     createRelations(entities) {
         entities = entities ?? getEntities(this.that);
-        const relationships = entities.flatMap(entity =>
-            (entity.relationships || []).map(rel => ({
-                entityName: entity.name,
-                ...rel
-            }))
-        );;
+        const relationships = getEntitiesRelationships(this.that);
         if (!relationships || relationships.length === 0) return;
 
         entities.forEach(entity => {

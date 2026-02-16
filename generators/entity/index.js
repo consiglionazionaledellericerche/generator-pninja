@@ -61,13 +61,12 @@ export default class extends Generator {
 
         this.fieldCounter = 0;
         this.relationshipCounter = 0;
-
-        hello(this.log);
+        if (!this.options.fromEntities) {
+            hello(this.log);
+        }
     }
 
     async prompting() {
-        this.log(colors.blue('\nGenerating a new entity\n'));
-
         this.isRegenerate = false;
         this.isAdd = false;
         this.isRemove = false;
@@ -75,6 +74,16 @@ export default class extends Generator {
         this.fieldsToRemove = [];
         this.relationshipsToAdd = [];
         this.relationshipsToRemove = [];
+
+        if (this.options.fromEntities) {
+            this.entityName = this.options.entityName || this.options.entityConfig.name;
+            this.entityConfig = this.options.entityConfig;
+            this.isAdd = this.options.isAdd || !!this.options.relationshipsToAdd;
+            this.relationshipsToAdd = this.options.relationshipsToAdd ?? [];
+            return;
+        }
+
+        this.log(colors.blue('\nGenerating a new entity\n'));
 
         if (this.options.entityName && !/^[A-Z][A-Za-z0-9]*$/.test(this.options.entityName)) {
             this.log(colors.red(`ERROR! Your entity name must start with an upper case letter and cannot contain special characters: /^[A-Z][A-Za-z0-9]*$/`));
@@ -774,17 +783,18 @@ export default class extends Generator {
             // If otherEntityName is also equal, compare relationshipType
             return a.relationshipType.localeCompare(b.relationshipType, undefined, { sensitivity: 'base' });
         });
-        this.log(colors.green('\nEntity configuration completed'));
-        const enums = getEnums(this);
+        !this.options.fromEntities && this.log(colors.green('\nEntity configuration completed'));
+        const enums = this.options.enums ?? getEnums(this);
         const storedEntities = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceEntity(getEntities(this), this.entityConfig) : [...getEntities(this), this.entityConfig];
         const storedRelationships = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceRelationships(getEntitiesRelationships(this), this.entityConfig) : [...getEntitiesRelationships(this), ...this.entityConfig.relationships];
         const searchEngine = this.config.get('searchEngine');
 
         // Save entity configuration to .pninja/<EntityName>.json
-        const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
-        this.fs.writeJSON(entityFilePath, this.entityConfig, null, 2);
-
-        this.log(colors.green(`Entity configuration saved to ${entityFilePath}`));
+        if (!this.options.fromEntities) {
+            const entityFilePath = this.destinationPath(`.pninja/${this.entityName}.json`);
+            this.fs.writeJSON(entityFilePath, this.entityConfig, null, 2);
+            this.log(colors.green(`Entity configuration saved to ${entityFilePath}`));
+        }
 
         const relationships = this.entityConfig.relationships || [];
 
@@ -803,7 +813,7 @@ export default class extends Generator {
                 });
                 migrationsGenerator.generatePivotMigrations(relationships);
             }
-            this.log(colors.green('Migrations generated successfully\n'));
+            !this.options.fromEntities && this.log(colors.green('Migrations generated successfully\n'));
         }
         if (this.fieldsToAdd.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
@@ -816,7 +826,7 @@ export default class extends Generator {
                 },
                 enums
             });
-            this.log(colors.green('Field addition migrations generated successfully\n'));
+            !this.options.fromEntities && this.log(colors.green('Field addition migrations generated successfully\n'));
         }
         if (this.fieldsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
@@ -829,7 +839,7 @@ export default class extends Generator {
                 },
                 enums
             });
-            this.log(colors.green('Field removal migrations generated successfully\n'));
+            !this.options.fromEntities && this.log(colors.green('Field removal migrations generated successfully\n'));
         }
         if (this.relationshipsToAdd.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
@@ -847,7 +857,7 @@ export default class extends Generator {
                     relationships: [rel],
                 });
             });
-            migrationsGenerator.createPivotMigrations(this.relationshipsToAdd.filter(rel => rel.relationshipType === 'many-to-many'));
+            migrationsGenerator.createPivotMigrations([this.entityConfig]);
         }
         if (this.relationshipsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
@@ -882,7 +892,7 @@ export default class extends Generator {
                     modelsGenerator.generateModel(entity, enums, storedRelationships, searchEngine);
                 }
             });
-        this.log(colors.green('Models generated successfully\n'));
+        !this.options.fromEntities && this.log(colors.green('Models generated successfully\n'));
 
         // Generate controllers
         const controllersGenerator = new ControllersGenerator(this);
@@ -902,20 +912,20 @@ export default class extends Generator {
                 const relEntity = storedEntities.find(entity => entity.name === entityName);
                 controllersGenerator.generateEntityController(relEntity, storedRelationships, searchEngine)
             });
-        this.log(colors.green('Controllers generated successfully\n'));
+        !this.options.fromEntities && this.log(colors.green('Controllers generated successfully\n'));
 
         // Generate routes
         const routersGenerator = new RoutersGenerator(this);
         routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         routersGenerator.generateRouters([AcRule, ...storedEntities]);
-        this.log(colors.green('Routers generated successfully\n'));
+        !this.options.fromEntities && this.log(colors.green('Routers generated successfully\n'));
 
         // Generate Factories and DatabaseSeeder
         const factoriesGenerator = new FactoriesGenerator(this);
         factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, storedEntities, storedRelationships, enums);
         factoriesGenerator.that.fs.copyTpl(factoriesGenerator.that.templatePath("database/seeders/csv/AcRule.csv.ejs"), factoriesGenerator.that.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: storedEntities });
-        this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
+        !this.options.fromEntities && this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
 
         // Generate client
         this.sourceRoot(`${this.templatePath()}/../../client/templates`);

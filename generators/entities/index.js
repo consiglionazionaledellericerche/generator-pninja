@@ -1,3 +1,6 @@
+// gerators/entities/index.js
+import { fileURLToPath } from 'url';
+import path from 'path';
 import to from 'to-case';
 import pluralize from 'pluralize';
 import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities.js';
@@ -127,63 +130,35 @@ export default class extends Generator {
     const nativeLanguage = this.config.get('nativeLanguage') || 'en';
     const languages = [nativeLanguage, ...this.config.get('languages')];
 
-    // JDL > Migrations
-    try {
-      spinner = ora(`Generating migration files`).start();
-      (new MigrationsGenerator(this)).generateMigrations({
-        entities: getEntitiesConfig(parsedJDL),
-        enums: getEnumsConfig(parsedJDL),
+    const entitiesConfig = getEntitiesConfig(parsedJDL);
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+    for (const entityConfig of entitiesConfig) {
+      await this.composeWith(path.resolve(__dirname, '../entity'), {
+        fromEntities: true,
+        enums,
+        entityConfig: {
+          ...entityConfig,
+          relationships: []
+        },
       });
-      spinner.succeed(`Migration files generated`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
     }
 
-    // Generating models
-    try {
-      spinner = ora(`Generating Model files`);
-      (new ModelsGenerator(this)).generateModels();
-      spinner.succeed(`Model files generated`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
+    for (const entityConfig of entitiesConfig) {
+      await this.composeWith(path.resolve(__dirname, '../entity'), {
+        fromEntities: true,
+        enums,
+        entityConfig: entityConfig,
+        relationshipsToAdd: entityConfig.relationships
+      });
     }
 
-    // Generating Controllers
-    try {
-      spinner = ora(`Generating Controller files`);
-      (new ControllersGenerator(this)).generateControllers();
-      spinner.succeed(`Controller files generated`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
-
-    // Generating Routers
-    try {
-      spinner = ora(`Generating Router files`);
-      (new RoutersGenerator(this)).generateRouters([AcRule, ...entities]);
-      spinner.succeed(`Router files generated`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
-    }
-
-    // Generating Factories and DatabaseSeeder
-    try {
-      spinner = ora(`Generating Factory files`);
-      (new FactoriesGenerator(this)).generateFactories(this.config.get('howManyToGenerate') || 0);
-      this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: entities });
-      spinner.succeed(`Factory files generated`);
-    } catch (error) {
-      spinner.fail();
-      console.error(error);
-      throw error;
+    for (const enm of enums) {
+      this.fs.copyTpl(this.templatePath("Enum.php.ejs"), this.destinationPath(`server/app/Enums/${enm.name}.php`), {
+        name: enm.name,
+        values: enm.values,
+      })
     }
 
     this.fs.copyTpl(this.templatePath("blobs/dummy.pdf"), this.destinationPath(`server/database/factories/dummy.pdf`));
@@ -214,10 +189,10 @@ export default class extends Generator {
         });
       };
       this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize });
-      for (const enumeration of enums) {
+      for (const enumeration of getEnumsConfig(parsedJDL)) {
         this.fs.copyTpl(this.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
       }
-      for (const entity of entities) {
+      for (const entity of getEntitiesConfig(parsedJDL)) {
         createEntityPages({ that: this, entity, enums, relationships, searchEngine });
       }
     }

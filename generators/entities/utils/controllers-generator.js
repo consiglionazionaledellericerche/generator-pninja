@@ -1,6 +1,5 @@
 import to from 'to-case';
 import { getWits } from '../../utils/getWiths.js';
-import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntityByName, getEntitiesRelationships } from '../../utils/entities-utils.js';
 
 const getValidations = (that, e, relationships, op) => {
@@ -274,8 +273,8 @@ export class ControllersGenerator {
         }
     }
 
-    generateControllers() {
-        const entities = getEntities(this.that);
+    generateControllers(entities) {
+        entities = entities ?? getEntities(this.that);
         const relationships = getEntitiesRelationships(this.that);
         const searchEngine = this.that.config.get('searchEngine');
         for (const entity of entities) {

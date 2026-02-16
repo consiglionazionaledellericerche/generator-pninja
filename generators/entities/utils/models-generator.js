@@ -203,9 +203,9 @@ export class ModelsGenerator {
             });
     }
 
-    generateModels() {
-        const entities = getEntities(this.that);
-        const enums = getEnums(this.that);
+    generateModels({ entities, enums }) {
+        entities = entities ?? getEntities(this.that);
+        enums = enums ?? getEnums(this.that);
         const relationships = getEntitiesRelationships(this.that);
         const searchEngine = this.that.config.get('searchEngine');
         for (const entity of entities) {
