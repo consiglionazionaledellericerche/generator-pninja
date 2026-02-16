@@ -18,7 +18,7 @@ export default class extends Generator {
     });
   }
   async initializing() {
-    hello(this.log);
+    hello(this.log, true);
     this.log(`\n${colors.whiteBright('Application files will be generated in folder:')} ${colors.yellow(process.env.PWD)}\n`);
 
     // sub generator Auth

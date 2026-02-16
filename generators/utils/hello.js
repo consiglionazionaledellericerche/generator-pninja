@@ -2,8 +2,8 @@ import colors from 'ansi-colors';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const packageJson = require('../../package.json');
-export function hello(log) {
-  log(colors.whiteBright(`
+export function hello(log, banner = false) {
+  banner && log(colors.whiteBright(`
                &&&&&&&&&&$$$x+;;              
            &&&&&&&&&&&&&&&&&&+: :+x           
         &&&&&&&&&&&&&&&&&&&&&&;    .;x        
