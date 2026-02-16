@@ -273,24 +273,6 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
     that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
-    // for (const entity of entities) {
-    //     that.fs.copyTpl(
-    //         that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
-    //         that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
-    //         {
-    //             entity,
-    //             enums,
-    //             relationships,
-    //             to,
-    //             foreignIds: getModelForeignIds(entity, relationships),
-    //             relatedEntities: getModelRelatedEntities(entity, relationships)
-    //         });
-    // }
-
-    // for (const enumeration of enums) {
-    //     that.fs.copyTpl(that.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), that.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
-    // }
-
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/audit/Audits.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditList.tsx`));
@@ -299,11 +281,11 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
 
     createEntityPages({ that, entity: AcRule, enums: [], relationships: [], searchEngine });
-    // for (const entity of [AcRule, ...entities]) {
-    //     createEntityPages({ that, entity, enums, relationships, searchEngine });
-    // }
 
     that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
     that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`));
     that.fs.copyTpl(that.templatePath("react/src/types/authorization.ts.ejs"), that.destinationPath(`client/src/types/authorization.ts`));
+
+    that.fs.copyTpl(that.templatePath("blobs/dummy.pdf"), that.destinationPath(`server/database/factories/dummy.pdf`));
+    that.fs.copyTpl(that.templatePath("blobs/dummy.png"), that.destinationPath(`server/database/factories/dummy.png`));
 }
