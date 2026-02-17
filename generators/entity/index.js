@@ -17,6 +17,8 @@ import { createEntityPages } from '../client/react.inc.js';
 import { isReservedWord, isReservedTableName } from '../utils/reserved-words.js';
 import { hello } from '../utils/hello.js';
 
+const HOWMANYTOGENERATE = 10;
+
 function replaceEntity(entitiesArray, updatedEntity) {
     return entitiesArray.map(entity =>
         entity.name === updatedEntity.name ? updatedEntity : entity
@@ -923,7 +925,7 @@ export default class extends Generator {
         // Generate Factories and DatabaseSeeder
         const factoriesGenerator = new FactoriesGenerator(this);
         factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
-        factoriesGenerator.generateFactories(this.config.get('howManyToGenerate') || 0, storedEntities, storedRelationships, enums);
+        factoriesGenerator.generateFactories(HOWMANYTOGENERATE, storedEntities, storedRelationships, enums);
         factoriesGenerator.that.fs.copyTpl(factoriesGenerator.that.templatePath("database/seeders/csv/AcRule.csv.ejs"), factoriesGenerator.that.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: storedEntities });
         !this.options.fromEntities && this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
 

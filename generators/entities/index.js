@@ -61,41 +61,6 @@ export default class extends Generator {
     });
   }
 
-  async prompting() {
-    let prompts = [];
-    if (this.options.fromMain) {
-      prompts = [...prompts, ...[{
-        store: true,
-        type: "confirm",
-        name: "build",
-        message: "Build all entities from entities definition file?",
-        default: true
-      }, {
-        store: true,
-        type: "input",
-        name: "entitiesFilePath",
-        message: "Entities definition file path",
-        default: this.config.get('entitiesFilePath') || 'entities.jdl',
-        when: answers => answers.build,
-        validate: (input) => {
-          const filePath = input[0] === '/' ? input : this.destinationPath(input);
-          if (!this.fs.exists(filePath)) {
-            return `File '${input}' does not exist. Please provide a valid file path.`;
-          }
-          return true;
-        }
-      }, {
-        store: true,
-        type: "number",
-        name: "howManyToGenerate",
-        message: "How many entities to generate for each entity (factories)?",
-        default: this.config.get('howManyToGenerate') ?? 10,
-        when: answers => answers.build
-      }]]
-    }
-    this.answers = await this.prompt(prompts);
-  }
-
   configuring() {
     for (const key in this.answers) {
       this.config.set(key, this.answers[key]);
@@ -109,7 +74,7 @@ export default class extends Generator {
       // Nothing to do
       return;
     }
-    let entitiesFilePath = this.options.fromMain ? this.answers.entitiesFilePath : this.options.entitiesFilePath;
+    let entitiesFilePath = this.options.entitiesFilePath;
     entitiesFilePath = entitiesFilePath[0] === '/' ? entitiesFilePath : this.destinationPath(entitiesFilePath);
     if (!this.fs.exists(entitiesFilePath)) {
       // Entities definition file not found, nothing to do
