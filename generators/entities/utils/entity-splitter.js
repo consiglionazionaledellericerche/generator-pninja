@@ -5,7 +5,6 @@ import { isReservedWord, isReservedTableName } from '../../utils/reserved-words.
 /**
  * Processes JDL entities data to create individual entity configuration objects
  * @returns {Array} Array of entity configuration objects
- * @throws Will throw an error if a reserved word is used as a table name or field name
  * */
 export function getEntitiesConfig(entitiesData) {
     return entitiesData.entities.map(entity => {
@@ -18,17 +17,9 @@ export function getEntitiesConfig(entitiesData) {
             relationships: []
         };
 
-        if (isReservedTableName(entityConfig.tableName)) {
-            throw new Error(`ERROR! The table name '${entityConfig.tableName}' for entity '${entityConfig.name}' is a reserved word.`);
-        }
-
         // Convert body to fields
         if (entity.body) {
             entityConfig.fields = entity.body.map(field => {
-                if (isReservedWord(to.snake(field.name))) {
-                    throw new Error(`ERROR! '${field.name}' is a reserved word and cannot be used as a field name for entity '${entityConfig.name}'.`);
-                }
-
                 const fieldConfig = {
                     name: field.name,
                     type: field.type,
@@ -50,9 +41,6 @@ export function getEntitiesConfig(entitiesData) {
         // Find relationships for this entity
         if (entitiesData.relationships) {
             entitiesData.relationships.forEach(rel => {
-                if (rel.cardinality === 'OneToOne' && !rel.from.injectedField && !!rel.to.injectedField) {
-                    throw new Error(`ERROR! In the One-to-One relship from ${rel.from.name} to ${rel.to.name}, the source entity must possess the destination, or you must invert the direction of the relationship.`);
-                }
                 // Check if this entity is the 'from' side
                 if (rel.from.name === entity.name) {
                     const relationship = {
