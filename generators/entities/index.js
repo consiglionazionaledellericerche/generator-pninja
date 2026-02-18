@@ -78,12 +78,10 @@ export default class extends Generator {
     entitiesFilePath = entitiesFilePath[0] === '/' ? entitiesFilePath : this.destinationPath(entitiesFilePath);
     if (!this.fs.exists(entitiesFilePath)) {
       // Entities definition file not found, nothing to do
-      this.log(colors.red(`! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`));
-      return;
-    } else {
-      this.log(colors.green(`Entities configuration file found! Generating migrations, models, controllers and routes from ${entitiesFilePath}`));
+      throw new Error(`Error! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`);
     }
 
+    spinner = ora(`Generating entities files from ${entitiesFilePath}`).start();
     const parsedJDL = sortJdlStructure(parseJDL(entitiesFilePath));
 
     validateJDL(this, parsedJDL);
@@ -156,9 +154,16 @@ export default class extends Generator {
         this.fs.copyTpl(this.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
       }
       for (const entity of getEntitiesConfig(parsedJDL)) {
-        createEntityPages({ that: this, entity, enums, relationships, searchEngine });
+        await createEntityPages({ that: this, entity, enums, relationships, searchEngine });
       }
     }
+
+    // Search engine configuration
+    await this.composeWith(path.resolve(__dirname, '../search'), {
+      fromEntities: true,
+      entities: entitiesConfig,
+    });
+    spinner.succeed(`Entities files successfully generated from ${entitiesFilePath}`);
   }
   end() { }
 };

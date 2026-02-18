@@ -772,7 +772,7 @@ export default class extends Generator {
         return ['id', ...fields];
     }
 
-    writing() {
+    async writing() {
         this.entityConfig.relationships.sort((a, b) => {
             // First compare entityName
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
@@ -953,7 +953,7 @@ export default class extends Generator {
             this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1 });
 
             // Create entity pages
-            createEntityPages({
+            await createEntityPages({
                 that: this,
                 entity: this.entityConfig,
                 enums: enums,
@@ -963,9 +963,9 @@ export default class extends Generator {
             [...relationships, ...this.relationshipsToRemove]
                 .filter(rel => (rel.relationshipType === 'one-to-many' && rel.bidirectional) || (rel.relationshipType === 'one-to-one' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
-                .forEach(entityName => {
+                .forEach(async entityName => {
                     const relEntity = storedEntities.find(entity => entity.name === entityName);
-                    createEntityPages({
+                    await createEntityPages({
                         that: this,
                         entity: relEntity,
                         enums: enums,
@@ -976,9 +976,9 @@ export default class extends Generator {
             [...relationships, ...this.relationshipsToRemove]
                 .filter(rel => (rel.relationshipType === 'many-to-one' && rel.bidirectional) || (rel.relationshipType === 'many-to-many' && rel.bidirectional))
                 .map(rel => rel.otherEntityName)
-                .forEach(entityName => {
+                .forEach(async entityName => {
                     const relEntity = storedEntities.find(entity => entity.name === entityName);
-                    createEntityPages({
+                    await createEntityPages({
                         that: this,
                         entity: relEntity,
                         enums: enums,
