@@ -118,7 +118,7 @@ export class FactoriesGenerator {
         const maxlength = Number(validations.reduce((maxlength, validation) => validation.key === 'maxlength' ? validation.value : maxlength, undefined));
         const minbytes = Number(validations.reduce((minbytes, validation) => validation.key === 'minbytes' ? validation.value : minbytes, undefined));
         const maxbytes = Number(validations.reduce((maxbytes, validation) => validation.key === 'maxbytes' ? validation.value : maxbytes, undefined));
-        const pattern = Number(validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined));
+        const pattern = validations.reduce((pattern, validation) => validation.key === 'pattern' ? validation.value : pattern, undefined);
         const isEmail = name.toLowerCase().includes('email');
         const isUrl = name.toLowerCase().includes('url');
         const isUnique = field?.validations?.includes('unique');
@@ -126,7 +126,9 @@ export class FactoriesGenerator {
 
         switch (field.type) {
             case 'String':
-                if (isEmail) {
+                if (pattern) {
+                    return `fake()->unique()->regexify('${pattern}')`;
+                } else if (isEmail) {
                     return `substr(str_pad(fake()->unique()->safeEmail(), ${minlength || 0}, 'x', STR_PAD_LEFT), 0, ${maxlength || 255})`;
                 } else if (isUrl) {
                     return `substr(str_pad(fake()->unique()->url(), ${minlength || 0}, 'x', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
