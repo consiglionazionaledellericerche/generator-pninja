@@ -455,10 +455,10 @@ export default class extends Generator {
                 name: 'relationshipType',
                 message: 'What is the type of the relationship?',
                 choices: [
-                    'many-to-one',
-                    'many-to-many',
                     'one-to-one',
-                    'one-to-many'
+                    'one-to-many',
+                    'many-to-one',
+                    'many-to-many'
                 ]
             },
             {
@@ -785,6 +785,7 @@ export default class extends Generator {
         !this.options.fromEntities && this.log(colors.green('\nEntity configuration completed'));
         const enums = this.options.enums ?? getEnums(this);
         const storedEntities = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceEntity(getEntities(this), this.entityConfig) : [...getEntities(this), this.entityConfig];
+        storedEntities.sort((a, b) => a.name.localeCompare(b.name));
         const storedRelationships = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceRelationships(getEntitiesRelationships(this), this.entityConfig) : [...getEntitiesRelationships(this), ...this.entityConfig.relationships];
         const searchEngine = this.config.get('searchEngine');
 
@@ -986,6 +987,15 @@ export default class extends Generator {
             // Update App.tsx
             this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize });
         }
+        // README update
+        this.fs.copyTpl(
+            this.templatePath(`../../final/templates/README.md.ejs`),
+            this.destinationPath(`README.md`), {
+            appName: this.config.get('name'),
+            entities: getEntities(this),
+            relationships: getEntitiesRelationships(this),
+            searchEngine: this.config.get('searchEngine')
+        });
         spinner.succeed(`Files for entity ${this.entityConfig.name} successfully generated`);
     }
 }

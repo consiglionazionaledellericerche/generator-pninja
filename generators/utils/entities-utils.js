@@ -85,7 +85,7 @@ export function getEnumsFiles(that) {
 }
 
 export function getEntities(that) {
-    return getEntitiesFiles(that).map(file => JSON.parse(file.contents.toString('utf8')));
+    return getEntitiesFiles(that).map(file => JSON.parse(file.contents.toString('utf8'))).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function getEntitiesNames(that) {

@@ -25,7 +25,7 @@ export class FactoriesGenerator {
             params.push(...([...paramsBlobBlob, ...paramsBlobType, ...paramsBlobName, ...paramsImageBlob, ...paramsImageType, ...paramsImageName].sort()));
 
             // Relationships one-to-one
-            relationships.filter(relation => (
+            true && relationships.filter(relation => (
                 relation.relationshipType === 'one-to-one'
                 && relation.entityName === entity.name
             )).forEach(relation => {
@@ -42,7 +42,7 @@ export class FactoriesGenerator {
                 },`);
             });
             // Relationships one-to-many
-            relationships.filter(relation => (
+            true && relationships.filter(relation => (
                 relation.relationshipType === 'one-to-many'
                 && relation.otherEntityName === entity.name
                 && relation.entityName !== relation.otherEntityName
@@ -59,7 +59,7 @@ export class FactoriesGenerator {
                 },`);
             });
             // Relationships many-to-one
-            relationships.filter(relation => (
+            true && relationships.filter(relation => (
                 relation.relationshipType === 'many-to-one'
                 && relation.entityName === entity.name
             )).forEach(relation => {
@@ -81,7 +81,7 @@ export class FactoriesGenerator {
                     params: params.join("\n"),
                 });
             // Relationships many-to-many
-            relationships.filter(relation => (
+            true && relationships.filter(relation => (
                 relation.relationshipType === 'many-to-many'
                 && relation.entityName === entity.name
             )).forEach(relation => {

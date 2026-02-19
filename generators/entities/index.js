@@ -112,8 +112,6 @@ export default class extends Generator {
       })
     }
 
-    this.fs.copyTpl(this.templatePath(`../../final/templates/README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
-
     // Generate client
     const appName = this.config.get('name');
     const entitiesTemplatePath = this.templatePath();
@@ -150,6 +148,16 @@ export default class extends Generator {
     await this.composeWith(path.resolve(__dirname, '../search'), {
       fromEntities: true,
       entities: entitiesConfig,
+    });
+
+    // README update
+    this.fs.copyTpl(
+      this.templatePath(`../../final/templates/README.md.ejs`),
+      this.destinationPath(`README.md`), {
+      appName: this.config.get('name'),
+      entities: getEntities(this),
+      relationships: getEntitiesRelationships(this),
+      searchEngine: this.config.get('searchEngine')
     });
   }
 };
