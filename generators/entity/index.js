@@ -479,8 +479,6 @@ export default class extends Generator {
                         return `Your relationship name must start with a lower case letter and cannot contain special characters: /^[a-z][A-Za-z0-9]*$/`;
                     }
 
-                    // console.log('Validating relationship name:', input);
-
                     const snakeCaseName = to.snake(input);
 
                     // Check against reserved field 'id' and existing fields
@@ -504,8 +502,6 @@ export default class extends Generator {
                     if (isReservedWord(snakeCaseName)) {
                         return `'${input}' is a reserved word and cannot be used as a relationship name`;
                     }
-
-                    console.log('VALID!');
 
                     return true;
                 }
@@ -808,7 +804,7 @@ export default class extends Generator {
             migrationsGenerator.createTable({ entity: this.entityConfig, enums });
             if (relationships.length > 0) {
                 migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
-                relationships.filter(rel => rel.relationshipType === 'one-to-many' || rel.relationshipType === 'one-to-one').map(rel => ({
+                relationships.filter(rel => rel.relationshipType === 'one-to-many').map(rel => ({
                     name: rel.otherEntityName,
                     tableName: getEntityByName(this, rel.otherEntityName).tableName
                 })).forEach(relEntity => {
