@@ -132,8 +132,6 @@ export async function createEntityPages({
 export async function createReactClient(that) {
     const searchEngine = that.config.get('searchEngine');
     const entities = getEntities(that);
-    const enums = getEnums(that);
-    const relationships = getEntitiesRelationships(that);
     const appName = that.config.get('name');
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
     const languages = [nativeLanguage, ...that.config.get('languages')];
