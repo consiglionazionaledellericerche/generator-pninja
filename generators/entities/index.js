@@ -1,4 +1,3 @@
-// gerators/entities/index.js
 import { fileURLToPath } from 'url';
 import path from 'path';
 import to from 'to-case';
@@ -7,14 +6,7 @@ import { getModelRelatedEntities } from '../client/utils/getModelRelatedEntities
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
 import Generator from 'yeoman-generator';
 import { hello } from '../utils/hello.js';
-import ora from 'ora';
-import colors from 'ansi-colors';
 import { parseJDL } from '../utils/jdlParser.js';
-import { MigrationsGenerator } from './utils/migrations-generator.js';
-import { ModelsGenerator } from './utils/models-generator.js';
-import { ControllersGenerator } from './utils/controllers-generator.js';
-import { RoutersGenerator } from './utils/routers-generator.js';
-import { FactoriesGenerator } from './utils/factories-generator.js';
 import { getEntitiesConfig, getEnumsConfig, splitEntitiesFile } from './utils/entity-splitter.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
 import { createEntityPages } from '../client/react.inc.js';
@@ -69,7 +61,7 @@ export default class extends Generator {
   }
 
   async writing() {
-    let spinner = undefined;
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
     if (this.options.fromMain && !this.answers.build) {
       // Nothing to do
       return;
@@ -81,7 +73,6 @@ export default class extends Generator {
       throw new Error(`Error! Entities configuration file (${entitiesFilePath}) does not exists; no entities will be generated`);
     }
 
-    spinner = ora(`Generating entities files from ${entitiesFilePath}`).start();
     const parsedJDL = sortJdlStructure(parseJDL(entitiesFilePath));
 
     validateJDL(this, parsedJDL);
@@ -92,10 +83,7 @@ export default class extends Generator {
     const enums = getEnums(this);
     const nativeLanguage = this.config.get('nativeLanguage') || 'en';
     const languages = [nativeLanguage, ...this.config.get('languages')];
-
     const entitiesConfig = getEntitiesConfig(parsedJDL);
-
-    const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
     for (const entityConfig of entitiesConfig) {
       await this.composeWith(path.resolve(__dirname, '../entity'), {
@@ -163,7 +151,5 @@ export default class extends Generator {
       fromEntities: true,
       entities: entitiesConfig,
     });
-    spinner.succeed(`Entities files successfully generated from ${entitiesFilePath}`);
   }
-  end() { }
 };

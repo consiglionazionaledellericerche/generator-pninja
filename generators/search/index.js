@@ -1,4 +1,5 @@
 import Generator from 'yeoman-generator';
+import ora from 'ora';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
@@ -54,6 +55,7 @@ export default class SearchGenerator extends Generator {
   }
 
   async writing() {
+    const spinner = ora('Generating search configuration').start();
     const appName = this.config.get('name');
     const snakeName = to.snake(appName);
     const searchEngine = this.config.get('searchEngine');
@@ -79,6 +81,7 @@ export default class SearchGenerator extends Generator {
       if (searchEngine === 'solr') {
         await this.spawn('composer', ['require', 'klaasie/scout-solr-engine'], { cwd: 'server' });
       }
+      spinner.text = `Generating search configuration: setting up environment variables for ${searchEngine}`;
       let searchEngineConfig = `
   SCOUT_DRIVER=${searchEngine}
   SCOUT_QUEUE=false`;
@@ -120,6 +123,8 @@ export default class SearchGenerator extends Generator {
       }
     }
 
+    spinner.text = `Generating search configuration: setting up Scout configuration for ${searchEngine}`;
+
     const entities = this.options.fromMain ? [AcRule] : (this.options.entities ?? getEntities(this));
 
     const mailiserachIndexSettings = searchEngine === 'meilisearch' ? (this.options.fromMain ? entities : [...entities, AcRule]).reduce((res, entity) => {
@@ -157,6 +162,7 @@ export default class SearchGenerator extends Generator {
       this.fs.copyTpl(this.templatePath('server/config/elastic.client.php.ejs'), this.destinationPath('server/config/elastic.client.php'));
     }
     if (searchEngine === 'elastic') {
+      spinner.text = `Generating search configuration: creating migration files for ElasticSearch indices`;
       const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17);
       for (const entity of entities) {
         const indexName = entity.tableName;
@@ -174,5 +180,6 @@ export default class SearchGenerator extends Generator {
           });
       }
     }
+    spinner.succeed('Search configuration successfully generated');
   }
 }

@@ -1,5 +1,5 @@
-// generators/entity/index.js
 import Generator from 'yeoman-generator';
+import ora from 'ora';
 import colors from 'ansi-colors';
 import to from 'to-case';
 import pluralize from 'pluralize';
@@ -773,6 +773,7 @@ export default class extends Generator {
     }
 
     async writing() {
+        const spinner = ora(`Generating files for entity ${this.entityConfig.name}`).start();
         this.entityConfig.relationships.sort((a, b) => {
             // First compare entityName
             const entityNameCompare = a.entityName.localeCompare(b.entityName, undefined, { sensitivity: 'base' });
@@ -989,5 +990,6 @@ export default class extends Generator {
             // Update App.tsx
             this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize });
         }
+        spinner.succeed(`Files for entity ${this.entityConfig.name} successfully generated`);
     }
 }
