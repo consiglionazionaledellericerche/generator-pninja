@@ -126,7 +126,7 @@ export class FactoriesGenerator {
         switch (field.type) {
             case 'String':
                 if (pattern) {
-                    return `fake()->unique()->regexify('${pattern}')`;
+                    return `fake()->unique()->regexify('${pattern.replace(/'/g, "\\'")}')`;
                 } else if (isEmail) {
                     return `substr(str_pad(fake()->unique()->safeEmail(), ${minlength || 0}, 'x', STR_PAD_LEFT), 0, ${maxlength || 255})`;
                 } else if (isUrl) {
