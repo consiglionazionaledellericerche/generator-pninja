@@ -27,7 +27,7 @@ This project is licensed under the Apache License 2.0 – see the [LICENSE.txt](
 - **Search engine:** Database, Algolia, Elasticsearch, Meilisearch, Typesense, Solr
 - **Docker Compose**
 
-All based on a **single JDL file** describing your domain!
+All based on **JDL files** describing your domain!
 
 ## Installation
 
@@ -39,7 +39,17 @@ npm install -g yo generator-pninja
 
 ## Usage
 
-### Quick Start with JDL
+### 1. Create the Application
+
+Generate the base application structure (server + client without entities):
+
+```bash
+yo pninja
+```
+
+**Answer a few prompts** ... and you're ready ⚡
+
+### 2. Generate Entities from JDL
 
 **Create your entity definition file using JDL:**
 
@@ -50,17 +60,22 @@ touch entities.jdl # or any other name of your choice
 and edit it using this guide:
 https://www.jhipster.tech/jdl/intro/
 
-**Run the generator:**
+**Run the entities generator:**
 
 ```bash
-yo pninja
+yo pninja:entities entities.jdl
 ```
 
-**Answer a few prompts** ... and you're ready ⚡
+You can run this command multiple times with different JDL files:
 
-### Interactive Entity Creation
+```bash
+yo pninja:entities core-entities.jdl
+yo pninja:entities additional-entities.jdl
+```
 
-For incremental development or to add entities to an existing project, use the **entity sub-generator**:
+### 3. Interactive Entity Creation (Alternative)
+
+For incremental development or to modify entities individually, use the **entity sub-generator**:
 
 ```bash
 yo pninja:entity [EntityName]
