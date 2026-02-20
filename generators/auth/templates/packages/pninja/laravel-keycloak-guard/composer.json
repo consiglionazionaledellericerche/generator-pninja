@@ -1,0 +1,39 @@
+{
+  "name": "pninja/laravel-keycloak-guard",
+  "description": "Keycloak JWT Guard for Laravel — without firebase/php-jwt",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "ext-openssl": "*",
+    "lcobucci/jwt": "^5.4",
+    "lcobucci/clock": "^3.3",
+    "illuminate/auth": "^11.0",
+    "illuminate/support": "^11.0",
+    "illuminate/http": "^11.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^9.0",
+    "pestphp/pest": "^3.0",
+    "phpunit/phpunit": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pninja\\KeycloakGuard\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pninja\\KeycloakGuard\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Pninja\\KeycloakGuard\\KeycloakGuardServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

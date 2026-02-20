@@ -46,9 +46,10 @@ export default class AuthGenerator extends Generator {
       return;
     }
     if (this.answers.authentication === 'keycloak') {
-      await this.spawn('composer', ['require', 'robsontenorio/laravel-keycloak-guard'], { cwd: 'server' });
-      await this.spawn('php', ['artisan', 'vendor:publish', '--provider="KeycloakGuard\\KeycloakGuardServiceProvider"'], { cwd: 'server' });
-
+      this.fs.copy(
+        this.templatePath('packages/pninja/laravel-keycloak-guard/**'),
+        this.destinationPath('server/packages/pninja/laravel-keycloak-guard')
+      );
       const envContent = this.fs.read(this.destinationPath(`server/.env`));
       this.fs.write(this.destinationPath('server/.env'), envContent + `
 FRONTEND_URL=http://localhost:5173
@@ -57,16 +58,13 @@ KEYCLOAK_BASE_URL=https://sso.yourkeycloakbaseurl.net/auth
 KEYCLOAK_REALM=yourrealm
 KEYCLOAK_CLIENT_ID=yourclientid
 KEYCLOAK_CLIENT_SECRET=yourclientsecret
-KEYCLOAK_REALM_PUBLIC_KEY="yourrealmpublickey"
+# KEYCLOAK_REALM_PUBLIC_KEY="yourrealmpublickey"
 KEYCLOAK_LOAD_USER_FROM_DATABASE=false
 KEYCLOAK_USER_PROVIDER_CREDENTIAL=username
 KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
 KEYCLOAK_IGNORE_RESOURCES_VALIDATION=true
 KEYCLOAK_USE_SERVICE_ACCOUNT=true`, { encoding: 'utf8', flag: 'w' });
 
-      if (this.fs.exists(`${this.destinationPath('server')}/config/auth.php`)) {
-        fs.unlinkSync(`${this.destinationPath('server')}/config/auth.php`);
-      }
       this.fs.copyTpl(this.templatePath("keycloak.auth.php.ejs"), `${this.destinationPath('server')}/config/auth.php`);
       let bootstrapAppFileContents = fs.readFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, { encoding: 'utf8', flag: 'r' });
       const regexprBootstrapAppUse = /(?=use Illuminate\\Foundation\\Application;)/gmis;
@@ -84,6 +82,19 @@ KEYCLOAK_USE_SERVICE_ACCOUNT=true`, { encoding: 'utf8', flag: 'w' });
       `;
       bootstrapAppFileContents = bootstrapAppFileContents.replace(regexprBootstrapAppExc, replaceBootstrapAppExc);
       fs.writeFileSync(`${this.destinationPath('server')}/bootstrap/app.php`, bootstrapAppFileContents, { encoding: 'utf8', flag: 'w' });
+    }
+  }
+  async install() {
+    if (this.config.get('authentication') === 'keycloak') {
+      const composerPath = this.destinationPath('server/composer.json');
+      const composerContent = JSON.parse(fs.readFileSync(composerPath, { encoding: 'utf8' }));
+      composerContent.repositories = composerContent.repositories || [];
+      composerContent.repositories.push({
+        type: "path",
+        url: "./packages/pninja/laravel-keycloak-guard"
+      });
+      fs.writeFileSync(composerPath, JSON.stringify(composerContent, null, 2), { encoding: 'utf8' });
+      await this.spawn('composer', ['require', 'pninja/laravel-keycloak-guard:@dev'], { cwd: 'server' });
     }
   }
 }
