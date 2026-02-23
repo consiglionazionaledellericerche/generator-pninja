@@ -1,30 +1,31 @@
 {
-    "name": "<%= packageName %>",
-    "description": "<%= projectDescription %>",
-    "version": "<%= projectVersion %>",
-    "author": "<%= authorName %>",
-    "license": "ISC",
-    "dependencies": {
-    },
-    "scripts": {
-        "dev": "concurrently \"npm run server\" \"npm run client\"",
-        "client": "cd client && npm i --loglevel=error && npm run dev",
-        "dump-server": "cd server && php artisan dump-server",
-        "migrate": "cd server && php artisan migrate",
-        "migrate:fresh": "cd server && php artisan migrate:fresh",
-        "migrate:fresh:seed": "cd server && php artisan migrate:fresh --seed",
-        "migrate:seed": "cd server && php artisan migrate --seed",
-        "db:seed": "cd server && php artisan db:seed",
+  "name": "<%= packageName %>",
+  "description": "<%= projectDescription %>",
+  "version": "<%= projectVersion %>",
+  "author": "<%= authorName %>",
+  "license": "ISC",
+  "dependencies": {},
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run queue:listen\" \"npm run client\"",
+    "client": "cd client && npm i --loglevel=error && npm run dev",
+    "dump-server": "cd server && php artisan dump-server",
+    "migrate": "cd server && php artisan migrate",
+    "migrate:fresh": "cd server && php artisan migrate:fresh",
+    "migrate:fresh:seed": "cd server && php artisan migrate:fresh --seed",
+    "migrate:seed": "cd server && php artisan migrate --seed",
+    "db:seed": "cd server && php artisan db:seed",
 <%  if (searchEngine === 'elastic') { -%>
-        "elastic:migrate": "cd server && php artisan elastic:migrate",
-        "elastic:migrate:reset": "cd server && php artisan elastic:migrate:reset",
-        "elastic:migrate:refresh": "cd server && php artisan elastic:migrate:refresh",
+    "elastic:migrate": "cd server && php artisan elastic:migrate",
+    "elastic:migrate:reset": "cd server && php artisan elastic:migrate:reset",
+    "elastic:migrate:refresh": "cd server && php artisan elastic:migrate:refresh",
 <%  } -%>
 <%  if (searchEngine === 'meilisearch') { -%>
-        "scout:sync-index-settings": "cd server && php artisan scout:sync-index-settings",
+    "scout:sync-index-settings": "cd server && php artisan scout:sync-index-settings",
 <%  } -%>
-        "seed": "cd server && php artisan db:seed",
-        "server": "cd server && php artisan serve"
+    "seed": "cd server && php artisan db:seed",
+    "server": "cd server && php artisan serve",
+    "queue:listen": "cd server && php artisan queue:listen",
+    "queue:work": "cd server && php artisan queue:work"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
