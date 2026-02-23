@@ -914,6 +914,12 @@ export default class extends Generator {
             });
         !this.options.fromEntities && this.log(colors.green('Controllers generated successfully\n'));
 
+        // Generate ReindexRequest
+        this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {
+            entities: storedEntities,
+            to
+        });
+
         // Generate routes
         const routersGenerator = new RoutersGenerator(this);
         routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);

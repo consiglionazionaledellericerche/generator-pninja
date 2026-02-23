@@ -1,0 +1,61 @@
+<?php
+// app/Http/Controllers/SearchReindexController.php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ReindexRequest;
+use App\Jobs\ReindexEntityJob;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+
+class SearchReindexController extends Controller
+{
+    /**
+     * Returns the list of indexable entities with the record count.
+     */
+    public function index(): JsonResponse
+    {
+        $entities = collect(ReindexRequest::$indexableEntities)
+            ->map(fn(string $modelClass, string $slug) => [
+                'slug'  => $slug,
+                'label' => class_basename($modelClass),
+                'count' => $modelClass::count(),
+            ])
+            ->values();
+
+        return response()->json($entities);
+    }
+
+    /**
+     * Starts the asynchronous reindexing of an entity.
+     */
+    public function reindex(ReindexRequest $request): JsonResponse
+    {
+        $jobId = (string) Str::uuid();
+
+        Cache::put("reindex:{$jobId}", [
+            'status'   => 'pending',
+            'progress' => 0,
+            'total'    => 0,
+        ], now()->addHours(2));
+
+        ReindexEntityJob::dispatch($jobId, $request->modelClass());
+
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
+    /**
+     * Returns the current status of a reindexing job.
+     */
+    public function status(string $jobId): JsonResponse
+    {
+        $state = Cache::get("reindex:{$jobId}");
+
+        if (!$state) {
+            return response()->json(['message' => 'Job not found or expired'], 404);
+        }
+
+        return response()->json($state);
+    }
+}

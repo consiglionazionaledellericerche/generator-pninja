@@ -59,15 +59,23 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/LogController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/LogController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`));
+    if (searchEngine !== 'null') {
+      this.fs.copyTpl(this.templatePath("app/Http/Controllers/SearchReindexController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SearchReindexController.php`));
+      this.fs.copyTpl(this.templatePath("app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {
+        entities: []
+      });
+      this.fs.copyTpl(this.templatePath("app/Jobs/ReindexEntityJob.php.ejs"), this.destinationPath(`server/app/Jobs/ReindexEntityJob.php`));
+    }
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/SessionAuthController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SessionAuthController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/UserRoleController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/UserRoleController.php`));
 
     this.fs.copyTpl(this.templatePath("routes/api.php.ejs"), this.destinationPath(`server/routes/api.php`), {
       eRoutes: [{ className: 'AcRule', rootPath: 'ac-rules', hasBlob: false }],
       paths: ['ac-rules'],
+      searchEngine
     });
     this.fs.copyTpl(this.templatePath("routes/console.php.ejs"), this.destinationPath(`server/routes/console.php`), {
-      searchEngine: searchEngine,
+      searchEngine,
     });
 
     this.fs.copyTpl(

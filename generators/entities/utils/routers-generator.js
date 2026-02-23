@@ -40,6 +40,13 @@ export class RoutersGenerator {
             };
         });
         const eRoutes = [...eRoutesEntities, ...eRoutesTrash];
-        this.that.fs.copyTpl(this.that.templatePath("routes/api.php.ejs"), this.that.destinationPath(`server/routes/api.php`), { eRoutes, paths: [...entities, AcRule].map(entity => to.slug(pluralize(entity.name))) });
+        this.that.fs.copyTpl(
+            this.that.templatePath("../../server/templates/routes/api.php.ejs"),
+            this.that.destinationPath(`server/routes/api.php`),
+            {
+                eRoutes,
+                paths: [...entities, AcRule].map(entity => to.slug(pluralize(entity.name))),
+                searchEngine: this.that.config.get('searchEngine'),
+            });
     }
 }

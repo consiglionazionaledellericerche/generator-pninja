@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
+<%  if (searchEngine !== "null") {-%>
+use App\Http\Controllers\SearchReindexController;
+<%  } -%>
 <% eRoutes.forEach(({className}) => {-%>
 use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
@@ -62,6 +65,14 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{id}/compare', [AuditController::class, 'compare']);
         Route::get('/{id}', [AuditController::class, 'show']);
     });
+<%  if (searchEngine !== "null") {-%>
+
+    // Route::prefix('search/reindex')->group(function () {
+    //     Route::get('/', [SearchReindexController::class, 'index']);
+    //     Route::post('{entity}', [SearchReindexController::class, 'reindex']);
+    //     Route::get('status/{jobId}', [SearchReindexController::class, 'status']);
+    // });
+<%  } -%>
 
     Route::get('/logs/tail', [LogController::class, 'tail']);
 
@@ -70,3 +81,11 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         ->defaults('disk', 'private')
         ->name('files.serve.private');
 });
+<%  if (searchEngine !== "null") {-%>
+
+Route::prefix('search/reindex')->group(function () {
+    Route::get('/', [SearchReindexController::class, 'index']);
+    Route::post('/{entity}', [SearchReindexController::class, 'reindex']);
+    Route::get('status/{jobId}', [SearchReindexController::class, 'status']);
+});
+<%  } -%>

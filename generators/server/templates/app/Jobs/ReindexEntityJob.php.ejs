@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
+
+class ReindexEntityJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $timeout = 3600;
+
+    public function __construct(
+        private readonly string $jobId,
+        private readonly string $modelClass,
+    ) {}
+
+    public function handle(): void
+    {
+        $cacheKey = "reindex:{$this->jobId}";
+
+        try {
+            $total = $this->modelClass::count();
+            $processed = 0;
+
+            Cache::put($cacheKey, [
+                'status'   => 'running',
+                'progress' => 0,
+                'total'    => $total,
+            ], now()->addHours(2));
+
+            $this->modelClass::chunk(500, function ($models) use ($cacheKey, $total, &$processed) {
+                $models->searchable();
+                $processed += $models->count();
+
+                Cache::put($cacheKey, [
+                    'status'   => 'running',
+                    'progress' => $total > 0 ? (int) round($processed / $total * 100) : 100,
+                    'total'    => $total,
+                ], now()->addHours(2));
+            });
+
+            Cache::put($cacheKey, [
+                'status'   => 'completed',
+                'progress' => 100,
+                'total'    => $total,
+            ], now()->addHours(2));
+
+        } catch (\Throwable $e) {
+            Cache::put($cacheKey, [
+                'status'  => 'failed',
+                'message' => $e->getMessage(),
+            ], now()->addHours(2));
+
+            throw $e;
+        }
+    }
+}
