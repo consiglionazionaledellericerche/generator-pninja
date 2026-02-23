@@ -45,6 +45,14 @@ class SearchReindexController extends Controller
         return response()->json(['job_id' => $jobId], 202);
     }
 
+    public function flush(ReindexRequest $request): JsonResponse
+    {
+        $modelClass = $request->modelClass();
+        $modelClass::removeAllFromSearch();
+
+        return response()->json(['message' => 'Index flushed successfully']);
+    }
+
     /**
      * Returns the current status of a reindexing job.
      */
