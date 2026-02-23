@@ -83,38 +83,38 @@ export default class SearchGenerator extends Generator {
       }
       spinner.text = `Generating search configuration: setting up environment variables for ${searchEngine}`;
       let searchEngineConfig = `
-  SCOUT_DRIVER=${searchEngine}
-  SCOUT_QUEUE=false`;
+SCOUT_DRIVER=${searchEngine}
+SCOUT_QUEUE=false`;
       if (['meilisearch', 'typesense', 'elastic', 'solr'].includes(searchEngine)) {
         searchEngineConfig += `
-  SCOUT_PREFIX=${snakeName}_`;
+SCOUT_PREFIX=${snakeName}_`;
       }
       if (searchEngine === 'elastic') {
         searchEngineConfig += `
-  ELASTIC_HOST=http://localhost:9200`;
+ELASTIC_HOST=http://localhost:9200`;
       }
       if (searchEngine === 'meilisearch') {
         searchEngineConfig += `
-  MEILISEARCH_HOST=http://localhost:7700
-  MEILISEARCH_KEY=meilisearch-master-key-change-me`;
+MEILISEARCH_HOST=http://localhost:7700
+MEILISEARCH_KEY=meilisearch-master-key-change-me`;
       }
       if (searchEngine === 'typesense') {
         searchEngineConfig += `
-  TYPESENSE_API_KEY=xyz
-  TYPESENSE_HOST=localhost
-  TYPESENSE_PORT=8108
-  TYPESENSE_PROTOCOL=http`;
+TYPESENSE_API_KEY=xyz
+TYPESENSE_HOST=localhost
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http`;
       }
       if (searchEngine === 'algolia') {
         searchEngineConfig += `
-  ALGOLIA_APP_ID=your-application-id
-  ALGOLIA_SECRET=your-admin-api-key`;
+ALGOLIA_APP_ID=your-application-id
+ALGOLIA_SECRET=your-admin-api-key`;
       }
       if (searchEngine === 'solr') {
         searchEngineConfig += `
-  SOLR_HOST=localhost
-  SOLR_PORT=8983
-  SOLR_PATH=/`;
+SOLR_HOST=localhost
+SOLR_PORT=8983
+SOLR_PATH=/`;
       }
       searchEngineConfig += "\n";
       if (searchEngine !== 'null') {
