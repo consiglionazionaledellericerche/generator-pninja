@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
-<%  if (searchEngine !== "null") {-%>
+<%  if (!['null', 'database'].includes(searchEngine)) {-%>
 use App\Http\Controllers\SearchReindexController;
 <%  } -%>
 <% eRoutes.forEach(({className}) => {-%>
@@ -65,7 +65,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{id}/compare', [AuditController::class, 'compare']);
         Route::get('/{id}', [AuditController::class, 'show']);
     });
-<%  if (searchEngine !== "null") {-%>
+<%  if (!['null', 'database'].includes(searchEngine)) {-%>
 
     // Route::prefix('search/reindex')->group(function () {
     //     Route::get('/', [SearchReindexController::class, 'index']);
@@ -81,7 +81,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         ->defaults('disk', 'private')
         ->name('files.serve.private');
 });
-<%  if (searchEngine !== "null") {-%>
+<%  if (!['null', 'database'].includes(searchEngine)) {-%>
 
 Route::prefix('search/reindex')->group(function () {
     Route::get('/', [SearchReindexController::class, 'index']);
