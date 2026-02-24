@@ -1,0 +1,40 @@
+{
+  "title": "Hledat index",
+  "algoliaWarning": "Algolia je hostovaná služba s limity na bezplatné úrovni. Každá operace nové indexace spotřebovává kvótu.",
+  "columns": {
+    "entity": "Entita",
+    "records": "Záznamy",
+    "status": "Stav"
+  },
+  "status": {
+    "pending": "Čekající...",
+    "running": "Probíhá",
+    "completed": "Dokončeno",
+    "failed": "Neúspěšné"
+  },
+  "actions": {
+    "reindex": "Nová indexace",
+    "confirmReindex": "Potvrdit novou indexaci",
+    "flush": "Vymazat index",
+    "confirmFlush": "Potvrdit vymazání",
+    "deleteIndex": "Smazat index",
+    "confirmDeleteIndex": "Potvrdit odstranění",
+    "reindexAll": "Nová indexace všech",
+    "confirmReindexAll": "Potvrdit úplnou novou indexaci",
+    "flushAll": "Vymazat všechny indexy",
+    "confirmFlushAll": "Potvrdit úplné vymazání",
+    "deleteIndexAll": "Smazat všechny indexy",
+    "confirmDeleteIndexAll": "Potvrdit úplné smazání"
+  },
+  "records": "záznamy",
+  "progressLabel": "Pokrok nové indexace pro {{entity}}",
+  "reindexCompleted": "Nová indexace {{entity}} dokončena",
+  "reindexFailed": "Nová indexace {{entity}} selhala",
+  "reindexError": "Chyba při zahájení nové indexace pro {{entity}}",
+  "flushCompleted": "Index {{entity}} byl vymazán",
+  "flushError": "Chyba při vymazání indexu {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} byl smazán",
+  "deleteIndexError": "Chyba při mazání indexu {{entity}}",
+  "bulkFlushCompleted": "Všechny indexy byly vymazány",
+  "bulkDeleteIndexCompleted": "Všechny indexy byly smazány"
+}

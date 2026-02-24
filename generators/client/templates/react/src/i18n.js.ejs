@@ -8,7 +8,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    ns: ['log', 'audit', 'entities', 'common'],
+    ns: ['log', 'audit', 'entities'<%- ['null', 'database'].includes(searchEngine) ? '' : `, 'searchReindex'`%>, 'common'],
     defaultNS: 'common',
     supportedLngs: <%- supportedLngs %>,
     fallbackLng: '<%- fallbackLng %>',

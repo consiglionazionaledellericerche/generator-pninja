@@ -1,0 +1,40 @@
+{
+  "title": "खोज सूचकांक",
+  "algoliaWarning": "Algolia एक होस्टेड सेवा है जिसमें मुफ्त स्तर पर सीमाएँ हैं। प्रत्येक रीइंडेक्स ऑपरेशन कोटा का उपभोग करता है।",
+  "columns": {
+    "entity": "इकाई",
+    "records": "रेकॉर्ड",
+    "status": "स्थिति"
+  },
+  "status": {
+    "pending": "लंबित...",
+    "running": "चल रहा है",
+    "completed": "पूर्ण",
+    "failed": "विफल"
+  },
+  "actions": {
+    "reindex": "रीइंडेक्स",
+    "confirmReindex": "रीइंडेक्स की पुष्टि करें",
+    "flush": "इंडेक्स को फ्लश करें",
+    "confirmFlush": "फ्लश की पुष्टि करें",
+    "deleteIndex": "इंडेक्स हटाएँ",
+    "confirmDeleteIndex": "हटाना पुष्टि करें",
+    "reindexAll": "सभी को रीइंडेक्स करें",
+    "confirmReindexAll": "पूर्ण रीइंडेक्स की पुष्टि करें",
+    "flushAll": "सभी इंडेक्स को फ्लश करें",
+    "confirmFlushAll": "पूर्ण फ्लश की पुष्टि करें",
+    "deleteIndexAll": "सभी इंडेक्स हटाएँ",
+    "confirmDeleteIndexAll": "पूर्ण हटाने की पुष्टि करें"
+  },
+  "records": "रेकॉर्ड",
+  "progressLabel": "{{entity}} के लिए रीइंडेक्सिंग प्रगति",
+  "reindexCompleted": "{{entity}} की रीइंडेक्सिंग पूर्ण",
+  "reindexFailed": "{{entity}} की रीइंडेक्सिंग विफल",
+  "reindexError": "{{entity}} के लिए रीइंडेक्स शुरू करने में त्रुटि",
+  "flushCompleted": "इंडेक्स {{entity}} को फ्लश किया गया",
+  "flushError": "इंडेक्स {{entity}} को फ्लश करने में त्रुटि",
+  "deleteIndexCompleted": "इंडेक्स {{entity}} को हटाया गया",
+  "deleteIndexError": "इंडेक्स {{entity}} को हटाने में त्रुटि",
+  "bulkFlushCompleted": "सभी इंडेक्स फ्लश किए गए",
+  "bulkDeleteIndexCompleted": "सभी इंडेक्स हटाए गए"
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Índice de Pesquisa",
+  "algoliaWarning": "Algolia é um serviço hospedado com limites na camada gratuita. Cada operação de reindexação consome cota.",
+  "columns": {
+    "entity": "Entidade",
+    "records": "Registros",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Pendente...",
+    "running": "Executando",
+    "completed": "Concluído",
+    "failed": "Falhou"
+  },
+  "actions": {
+    "reindex": "Reindexar",
+    "confirmReindex": "Confirmar reindexação",
+    "flush": "Limpar índice",
+    "confirmFlush": "Confirmar limpeza",
+    "deleteIndex": "Excluir índice",
+    "confirmDeleteIndex": "Confirmar exclusão",
+    "reindexAll": "Reindexar tudo",
+    "confirmReindexAll": "Confirmar reindexação completa",
+    "flushAll": "Limpar todos os índices",
+    "confirmFlushAll": "Confirmar limpeza completa",
+    "deleteIndexAll": "Excluir todos os índices",
+    "confirmDeleteIndexAll": "Confirmar exclusão completa"
+  },
+  "records": "registros",
+  "progressLabel": "Progresso da reindexação para {{entity}}",
+  "reindexCompleted": "Reindexação de {{entity}} concluída",
+  "reindexFailed": "Reindexação de {{entity}} falhou",
+  "reindexError": "Erro ao iniciar reindexação para {{entity}}",
+  "flushCompleted": "Índice {{entity}} limpo",
+  "flushError": "Erro ao limpar índice {{entity}}",
+  "deleteIndexCompleted": "Índice {{entity}} excluído",
+  "deleteIndexError": "Erro ao excluir índice {{entity}}",
+  "bulkFlushCompleted": "Todos os índices limpos",
+  "bulkDeleteIndexCompleted": "Todos os índices excluídos"
+}

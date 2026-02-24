@@ -1,0 +1,40 @@
+{
+  "title": "Іздеу индексі",
+  "algoliaWarning": "Algolia - шектеулі тегін деңгейі бар хостинг қызметі. Әрбір қайта индексациялау операциясы квотаны жұмсайды.",
+  "columns": {
+    "entity": "Субъект",
+    "records": "Жазбалар",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "Күтілуде...",
+    "running": "Жүрудегі",
+    "completed": "Аяқталды",
+    "failed": "Сәтсіз аяқталды"
+  },
+  "actions": {
+    "reindex": "Қайта индексациялау",
+    "confirmReindex": "Қайта индексациялауды растау",
+    "flush": "Индексіні тазарту",
+    "confirmFlush": "Тазартуды растау",
+    "deleteIndex": "Индексіні жою",
+    "confirmDeleteIndex": "Жоюды растау",
+    "reindexAll": "Барлығын қайта индексациялау",
+    "confirmReindexAll": "Толық қайта индексациялауды растау",
+    "flushAll": "Барлық индекстерді тазарту",
+    "confirmFlushAll": "Толық тазартуды растау",
+    "deleteIndexAll": "Барлық индекстерді жою",
+    "confirmDeleteIndexAll": "Толық жоюды растау"
+  },
+  "records": "жазбалар",
+  "progressLabel": "{{entity}} үшін қайта индексациялау барысы",
+  "reindexCompleted": "{{entity}} қайта индексациялау аяқталды",
+  "reindexFailed": "{{entity}} қайта индексациялау сәтсіз аяқталды",
+  "reindexError": "{{entity}} үшін қайта индексациялауды бастауға қате",
+  "flushCompleted": "Индекс {{entity}} тазартылды",
+  "flushError": "Индекс {{entity}} тазартуда қате",
+  "deleteIndexCompleted": "Индекс {{entity}} жойылды",
+  "deleteIndexError": "Индекс {{entity}} жоюда қате",
+  "bulkFlushCompleted": "Барлық индекстер тазартылды",
+  "bulkDeleteIndexCompleted": "Барлық индекстер жойылды"
+}

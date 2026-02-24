@@ -1,0 +1,40 @@
+{
+  "title": "Axtarış indeksі",
+  "algoliaWarning": "Algolia, pulsuz tierdə məhdudiyyətləri olan bir host xidmətidir. Hər reindeks əməliyyatı kvota istehlak edir.",
+  "columns": {
+    "entity": "Varlıq",
+    "records": "Qeydlər",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Gözləyir...",
+    "running": "İşləyir",
+    "completed": "Tamamlandı",
+    "failed": "Uğursuz"
+  },
+  "actions": {
+    "reindex": "Yenidən İndekslə",
+    "confirmReindex": "Yenidən indeksləməni təsdiqləyin",
+    "flush": "İndeksi boşalt",
+    "confirmFlush": "Boşaltmanı təsdiqləyin",
+    "deleteIndex": "İndeksi sil",
+    "confirmDeleteIndex": "Silinməni təsdiq et",
+    "reindexAll": "Hamısını yenidən indeksləyin",
+    "confirmReindexAll": "Tam yenidən indeksləməyi təsdiqləyin",
+    "flushAll": "Bütün indeksləri boşaldın",
+    "confirmFlushAll": "Tam boşaltmanı təsdiqləyin",
+    "deleteIndexAll": "Bütün indeksləri sil",
+    "confirmDeleteIndexAll": "Tam silməni təsdiqləyin"
+  },
+  "records": "qeydlər",
+  "progressLabel": "{{entity}} üçün yenidən indeksləmə prosesi",
+  "reindexCompleted": "{{entity}}-nin yenidən indekslənməsi tamamlandı",
+  "reindexFailed": "{{entity}}-nin yenidən indekslənməsi uğursuz oldu",
+  "reindexError": "{{entity}} üçün yenidən indekslənməni başladarkən xətası",
+  "flushCompleted": "İndeks {{entity}} boşaldıldı",
+  "flushError": "İndeks {{entity}}-i boşaltarkən xətası",
+  "deleteIndexCompleted": "İndeks {{entity}} silindi",
+  "deleteIndexError": "İndeks {{entity}}-ni silərkən xətası",
+  "bulkFlushCompleted": "Bütün indekslər boşaldıldı",
+  "bulkDeleteIndexCompleted": "Bütün indekslər silindi"
+}

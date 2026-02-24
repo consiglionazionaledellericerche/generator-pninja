@@ -1,0 +1,40 @@
+{
+  "title": "אינדקס חיפוש",
+  "algoliaWarning": "אלגוליה היא שירות מנוהל עם מגבלות על השכבה החינמית. כל פעולה של רינדוקס צורכת מכסה.",
+  "columns": {
+    "entity": "ישות",
+    "records": "רשומות",
+    "status": "סטטוס"
+  },
+  "status": {
+    "pending": "ממתין...",
+    "running": "רץ",
+    "completed": "הושלם",
+    "failed": "נכשל"
+  },
+  "actions": {
+    "reindex": "רינדוקס",
+    "confirmReindex": "אשרר רינדוקס",
+    "flush": "ניקוי אינדקס",
+    "confirmFlush": "אשרר ניקוי",
+    "deleteIndex": "מחק אינדקס",
+    "confirmDeleteIndex": "אשר מחיקה",
+    "reindexAll": "רינדוקס הכל",
+    "confirmReindexAll": "אשרר רינדוקס מלא",
+    "flushAll": "נקה את כל האינדקסים",
+    "confirmFlushAll": "אשרר ניקוי מלא",
+    "deleteIndexAll": "מחק את כל האינדקסים",
+    "confirmDeleteIndexAll": "אשרר מחיקה מלאה"
+  },
+  "records": "רשומות",
+  "progressLabel": "התקדמות רינדוקס עבור {{entity}}",
+  "reindexCompleted": "רינדוקס של {{entity}} הושלם",
+  "reindexFailed": "רינדוקס של {{entity}} נכשל",
+  "reindexError": "שגיאה בעת התחלת רינדוקס עבור {{entity}}",
+  "flushCompleted": "אינדקס {{entity}} נמחק",
+  "flushError": "שגיאה בניקוי אינדקס {{entity}}",
+  "deleteIndexCompleted": "אינדקס {{entity}} נמחק",
+  "deleteIndexError": "שגיאה במחקת אינדקס {{entity}}",
+  "bulkFlushCompleted": "כל האינדקסים נמחקו",
+  "bulkDeleteIndexCompleted": "כל האינדקסים נמחקו"
+}

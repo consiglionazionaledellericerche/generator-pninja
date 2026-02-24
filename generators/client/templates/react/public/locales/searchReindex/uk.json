@@ -1,0 +1,40 @@
+{
+  "title": "Пошуковий індекс",
+  "algoliaWarning": "Algolia - це хостингова служба з обмеженнями на безкоштовному тарифі. Кожна операція повторного індексації споживає квоту.",
+  "columns": {
+    "entity": "Сутність",
+    "records": "Записи",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "В очікуванні...",
+    "running": "Виконується",
+    "completed": "Завершено",
+    "failed": "Не вдалося"
+  },
+  "actions": {
+    "reindex": "Повторна індексація",
+    "confirmReindex": "Підтвердити повторну індексацію",
+    "flush": "Скинути індекс",
+    "confirmFlush": "Підтвердити скидання",
+    "deleteIndex": "Видалити індекс",
+    "confirmDeleteIndex": "Підтвердити видалення",
+    "reindexAll": "Повторна індексація всіх",
+    "confirmReindexAll": "Підтвердити повну повторну індексацію",
+    "flushAll": "Скинути всі індекси",
+    "confirmFlushAll": "Підтвердити повне скидання",
+    "deleteIndexAll": "Видалити всі індекси",
+    "confirmDeleteIndexAll": "Підтвердити повне видалення"
+  },
+  "records": "записи",
+  "progressLabel": "Прогрес повторної індексації для {{entity}}",
+  "reindexCompleted": "Повторна індексація {{entity}} завершена",
+  "reindexFailed": "Повторна індексація {{entity}} не вдалася",
+  "reindexError": "Помилка при запуску повторної індексації для {{entity}}",
+  "flushCompleted": "Індекс {{entity}} скинуто",
+  "flushError": "Помилка при скиданні індексу {{entity}}",
+  "deleteIndexCompleted": "Індекс {{entity}} видалено",
+  "deleteIndexError": "Помилка при видаленні індексу {{entity}}",
+  "bulkFlushCompleted": "Всі індекси скинуті",
+  "bulkDeleteIndexCompleted": "Всі індекси видалені"
+}

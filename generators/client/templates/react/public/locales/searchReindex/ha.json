@@ -1,0 +1,40 @@
+{
+  "title": "Binciken Index",
+  "algoliaWarning": "Algolia sabis ne da aka adana tare da iyakoki akan matakin kyauta. Kowanne aikin sake yin index yana cinye kudi.",
+  "columns": {
+    "entity": "Jihar",
+    "records": "Rajistar",
+    "status": "Matsayi"
+  },
+  "status": {
+    "pending": "Ana jiran...",
+    "running": "Ana gudanarwa",
+    "completed": "An gama",
+    "failed": "Ya kasa"
+  },
+  "actions": {
+    "reindex": "Sake yin index",
+    "confirmReindex": "Tabbatar da sake yin index",
+    "flush": "Fashe index",
+    "confirmFlush": "Tabbatar da fashewa",
+    "deleteIndex": "Goge index",
+    "confirmDeleteIndex": "Tabbatar da gogewa",
+    "reindexAll": "Sake yin duk",
+    "confirmReindexAll": "Tabbatar da sake yin index duka",
+    "flushAll": "Fashe duk ƙididdiga",
+    "confirmFlushAll": "Tabbatar da fashewar duka",
+    "deleteIndexAll": "Goge duk ƙididdiga",
+    "confirmDeleteIndexAll": "Tabbatar da goge duka"
+  },
+  "records": "rajistar",
+  "progressLabel": "Ci gaban sake yin index don {{entity}}",
+  "reindexCompleted": "An kammala sake yin index na {{entity}}",
+  "reindexFailed": "Sake yin index na {{entity}} ya kasa",
+  "reindexError": "Kuskuren fara sake yin index don {{entity}}",
+  "flushCompleted": "Index {{entity}} an fashe",
+  "flushError": "Kuskuren fashe index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} an goge",
+  "deleteIndexError": "Kuskuren goge index {{entity}}",
+  "bulkFlushCompleted": "Duk indexes an fashe",
+  "bulkDeleteIndexCompleted": "Duk indexes an goge"
+}

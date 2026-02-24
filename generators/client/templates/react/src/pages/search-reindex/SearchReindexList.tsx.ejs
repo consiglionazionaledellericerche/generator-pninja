@@ -1,0 +1,528 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
+import ConfirmButton from '../../components/ConfirmButton';
+
+const SCOUT_DRIVER = import.meta.env.VITE_SCOUT_DRIVER as string;
+const POLL_INTERVAL_MS = 500;
+
+interface ISearchEntity {
+  slug: string;
+  label: string;
+  count: number;
+}
+
+type JobStatus = 'pending' | 'running' | 'completed' | 'failed';
+
+interface IJobState {
+  status: JobStatus;
+  progress: number;
+  total: number;
+  message?: string;
+}
+
+interface EntityRowState {
+  jobId: string | null;
+  jobState: IJobState | null;
+  loadingFlush: boolean;
+  loadingDelete: boolean;
+}
+
+function waitForJobCompletion(jobId: string): Promise<IJobState> {
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(async () => {
+      try {
+        const { data } = await axiosInstance.get<IJobState>(`/api/search/reindex/status/${jobId}`);
+        if (data.status === 'completed' || data.status === 'failed') {
+          clearInterval(interval);
+          resolve(data);
+        }
+      } catch (e) {
+        clearInterval(interval);
+        reject(e);
+      }
+    }, POLL_INTERVAL_MS);
+  });
+}
+
+export default function SearchReindexList() {
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+
+  const [loading, setLoading] = useState(false);
+  const [entities, setEntities] = useState<ISearchEntity[]>([]);
+  const [rowState, setRowState] = useState<Record<string, EntityRowState>>({});
+  const [bulkReindexing, setBulkReindexing] = useState(false);
+  const [bulkFlushing, setBulkFlushing] = useState(false);
+  const [bulkDeletingIndex, setBulkDeletingIndex] = useState(false);
+  const pollRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+  const completedJobs = useRef<Set<string>>(new Set());
+
+  const updateRow = (slug: string, patch: Partial<EntityRowState>) =>
+    setRowState((prev) => ({
+      ...prev,
+      [slug]: { ...prev[slug], ...patch },
+    }));
+
+  const stopPolling = (slug: string) => {
+    if (pollRefs.current[slug]) {
+      clearInterval(pollRefs.current[slug]);
+      delete pollRefs.current[slug];
+    }
+  };
+
+  const startPolling = useCallback(
+    (slug: string, jobId: string) => {
+      stopPolling(slug);
+      completedJobs.current.delete(slug);
+
+      pollRefs.current[slug] = setInterval(async () => {
+        try {
+          const { data } = await axiosInstance.get<IJobState>(
+            `/api/search/reindex/status/${jobId}`
+          );
+
+          if (completedJobs.current.has(slug)) return;
+
+          updateRow(slug, { jobState: data });
+
+          if (data.status === 'completed' || data.status === 'failed') {
+            completedJobs.current.add(slug);
+            stopPolling(slug);
+            addNotification({
+              type: data.status === 'failed' ? 'error' : 'success',
+              message:
+                data.status === 'failed'
+                  ? (data.message ?? t('searchReindex:reindexFailed', { entity: slug }))
+                  : t('searchReindex:reindexCompleted', { entity: slug }),
+            });
+          }
+        } catch {
+          stopPolling(slug);
+        }
+      }, POLL_INTERVAL_MS);
+    },
+    [addNotification, t]
+  );
+
+  useEffect(() => {
+    return () => {
+      Object.values(pollRefs.current).forEach(clearInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.title = t('searchReindex:title');
+  }, [i18n.language, t]);
+
+  const loadEntities = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+      .get<ISearchEntity[]>('/api/search/reindex')
+      .then(({ data }) => {
+        setEntities(data);
+        setRowState(
+          Object.fromEntries(
+            data.map(({ slug }) => [
+              slug,
+              { jobId: null, jobState: null, loadingFlush: false, loadingDelete: false },
+            ])
+          )
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message });
+      })
+      .finally(() => setLoading(false));
+  }, [addNotification]);
+
+  useEffect(() => {
+    loadEntities();
+  }, [loadEntities]);
+
+  const handleReindex = (slug: string) => {
+    axiosInstance
+      .post<{ job_id: string }>(`/api/search/reindex/${slug}`)
+      .then(({ data }) => {
+        updateRow(slug, {
+          jobId: data.job_id,
+          jobState: { status: 'pending', progress: 0, total: 0 },
+        });
+        startPolling(slug, data.job_id);
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: `${t('searchReindex:reindexError', { entity: slug })}: ${error.message}`,
+        });
+      });
+  };
+
+  const handleFlush = (slug: string) => {
+    updateRow(slug, { loadingFlush: true });
+    axiosInstance
+      .delete(`/api/search/reindex/${slug}`)
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t('searchReindex:flushCompleted', { entity: slug }),
+        });
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: `${t('searchReindex:flushError', { entity: slug })}: ${error.message}`,
+        });
+      })
+      .finally(() => updateRow(slug, { loadingFlush: false }));
+  };
+
+  const handleDeleteIndex = (slug: string) => {
+    updateRow(slug, { loadingDelete: true });
+    axiosInstance
+      .delete(`/api/search/reindex/${slug}/index`)
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t('searchReindex:deleteIndexCompleted', { entity: slug }),
+        });
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: `${t('searchReindex:deleteIndexError', { entity: slug })}: ${error.message}`,
+        });
+      })
+      .finally(() => updateRow(slug, { loadingDelete: false }));
+  };
+
+  const handleBulkReindex = async () => {
+    setBulkReindexing(true);
+    for (const entity of entities) {
+      try {
+        const { data } = await axiosInstance.post<{ job_id: string }>(
+          `/api/search/reindex/${entity.slug}`
+        );
+        updateRow(entity.slug, {
+          jobId: data.job_id,
+          jobState: { status: 'pending', progress: 0, total: 0 },
+        });
+        startPolling(entity.slug, data.job_id);
+        await waitForJobCompletion(data.job_id);
+      } catch {
+        addNotification({
+          type: 'error',
+          message: t('searchReindex:reindexError', { entity: entity.slug }),
+        });
+      }
+    }
+    setBulkReindexing(false);
+  };
+
+  const handleBulkFlush = async () => {
+    setBulkFlushing(true);
+    setRowState((prev) =>
+      Object.fromEntries(
+        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingFlush: true }])
+      )
+    );
+    await Promise.allSettled(
+      entities.map((entity) =>
+        axiosInstance
+          .delete(`/api/search/reindex/${entity.slug}`)
+          .catch((error: AxiosError<ErrorResponseData>) => {
+            addNotification({
+              type: 'error',
+              message: `${t('searchReindex:flushError', { entity: entity.slug })}: ${error.message}`,
+            });
+          })
+      )
+    );
+    setRowState((prev) =>
+      Object.fromEntries(
+        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingFlush: false }])
+      )
+    );
+    setBulkFlushing(false);
+    addNotification({ type: 'success', message: t('searchReindex:bulkFlushCompleted') });
+  };
+
+  const handleBulkDeleteIndex = async () => {
+    setBulkDeletingIndex(true);
+    setRowState((prev) =>
+      Object.fromEntries(
+        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingDelete: true }])
+      )
+    );
+    await Promise.allSettled(
+      entities.map((entity) =>
+        axiosInstance
+          .delete(`/api/search/reindex/${entity.slug}/index`)
+          .catch((error: AxiosError<ErrorResponseData>) => {
+            addNotification({
+              type: 'error',
+              message: `${t('searchReindex:deleteIndexError', { entity: entity.slug })}: ${error.message}`,
+            });
+          })
+      )
+    );
+    setRowState((prev) =>
+      Object.fromEntries(
+        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingDelete: false }])
+      )
+    );
+    setBulkDeletingIndex(false);
+    addNotification({ type: 'success', message: t('searchReindex:bulkDeleteIndexCompleted') });
+  };
+
+  const getStatusIcon = (state: IJobState | null) => {
+    if (!state) return null;
+    switch (state.status) {
+      case 'pending':
+        return <Icon icon="schedule" size={4} className="text-gray-400 animate-pulse" />;
+      case 'running':
+        return <Icon icon="sync" size={4} className="text-blue-500 animate-spin" />;
+      case 'completed':
+        return <Icon icon="check_circle" size={4} className="text-green-500" />;
+      case 'failed':
+        return <Icon icon="error" size={4} className="text-red-500" />;
+    }
+  };
+
+  const isReindexing = (slug: string) => {
+    const state = rowState[slug]?.jobState;
+    return state?.status === 'pending' || state?.status === 'running';
+  };
+
+  const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex;
+
+  return (
+    <>
+      <SimpleLoader loading={loading} />
+      {!loading && entities.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
+      {!loading && entities.length > 0 && (
+        <>
+          {SCOUT_DRIVER === 'algolia' && (
+            <div className="mb-4 p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 flex items-start gap-3">
+              <Icon
+                icon="warning"
+                size={5}
+                className="text-yellow-600 dark:text-yellow-400 shrink-0 mt-0.5"
+              />
+              <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                {t('searchReindex:algoliaWarning')}
+              </p>
+            </div>
+          )}
+
+          <div className="flex gap-2 mb-4">
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleBulkReindex}
+              className="primary-button"
+              pendingClassName="primary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="refresh" size={4} />
+                  {t('searchReindex:actions.reindexAll')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="refresh" size={4} />
+                  {t('searchReindex:actions.confirmReindexAll')}
+                </span>
+              }
+            />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleBulkFlush}
+              className="secondary-button"
+              pendingClassName="secondary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="cleaning_services" size={4} />
+                  {t('searchReindex:actions.flushAll')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="cleaning_services" size={4} />
+                  {t('searchReindex:actions.confirmFlushAll')}
+                </span>
+              }
+            />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleBulkDeleteIndex}
+              className="danger-button"
+              pendingClassName="danger-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="delete_forever" size={4} />
+                  {t('searchReindex:actions.deleteIndexAll')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="delete_forever" size={4} />
+                  {t('searchReindex:actions.confirmDeleteIndexAll')}
+                </span>
+              }
+            />
+          </div>
+
+          <div className="relative overflow-x-auto">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">{t('searchReindex:columns.entity')}</th>
+                  <th scope="col" className="w-0 text-right">
+                    {t('searchReindex:columns.records')}
+                  </th>
+                  <th scope="col">{t('searchReindex:columns.status')}</th>
+                  <th scope="col">{t('actions.crud.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entities.map((entity) => {
+                  const state = rowState[entity.slug];
+                  const jobState = state?.jobState ?? null;
+                  const busy = isReindexing(entity.slug);
+
+                  return (
+                    <tr key={entity.slug}>
+                      <td className="font-medium">{entity.label}</td>
+                      <td className="w-0 text-right tabular-nums">
+                        {entity.count.toLocaleString()}
+                      </td>
+                      <td className="min-w-48">
+                        {jobState ? (
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(jobState)}
+                            <div className="grow">
+                              {jobState.status === 'pending' && (
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {t('searchReindex:status.pending')}
+                                </span>
+                              )}
+                              {jobState.status === 'running' && (
+                                <>
+                                  <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                    <span>{t('searchReindex:status.running')}</span>
+                                    {jobState.total > 0 && <span>{jobState.progress}%</span>}
+                                  </div>
+                                  <div className="h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                    <div
+                                      className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                                      style={{ width: `${jobState.progress}%` }}
+                                      role="progressbar"
+                                      aria-valuenow={jobState.progress}
+                                      aria-valuemin={0}
+                                      aria-valuemax={100}
+                                      aria-label={t('searchReindex:progressLabel', {
+                                        entity: entity.label,
+                                      })}
+                                    />
+                                  </div>
+                                </>
+                              )}
+                              {(jobState.status === 'completed' ||
+                                jobState.status === 'failed') && (
+                                <span
+                                  className={`text-sm ${jobState.status === 'failed' ? 'text-red-500' : 'text-green-600 dark:text-green-400'}`}
+                                >
+                                  {t(`searchReindex:status.${jobState.status}`)}
+                                  {jobState.status === 'completed' && jobState.total > 0 && (
+                                    <span className="text-gray-500 dark:text-gray-400 ml-1">
+                                      ({jobState.total.toLocaleString()}{' '}
+                                      {t('searchReindex:records')})
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-sm">—</span>
+                        )}
+                      </td>
+                      <td className="text-nowrap w-0">
+                        <div className="flex items-center gap-2">
+                          <ConfirmButton
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
+                            onConfirm={() => handleReindex(entity.slug)}
+                            className="primary-button"
+                            pendingClassName="primary-button"
+                            label={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="refresh" size={4} />
+                                {t('searchReindex:actions.reindex')}
+                              </span>
+                            }
+                            pendingLabel={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="refresh" size={4} />
+                                {t('searchReindex:actions.confirmReindex')}
+                              </span>
+                            }
+                          />
+                          <ConfirmButton
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
+                            onConfirm={() => handleFlush(entity.slug)}
+                            className="secondary-button"
+                            pendingClassName="secondary-button"
+                            label={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="cleaning_services" size={4} />
+                                {t('searchReindex:actions.flush')}
+                              </span>
+                            }
+                            pendingLabel={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="cleaning_services" size={4} />
+                                {t('searchReindex:actions.confirmFlush')}
+                              </span>
+                            }
+                          />
+                          <ConfirmButton
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
+                            onConfirm={() => handleDeleteIndex(entity.slug)}
+                            className="danger-button"
+                            pendingClassName="danger-button"
+                            label={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="delete_forever" size={4} />
+                                {t('searchReindex:actions.deleteIndex')}
+                              </span>
+                            }
+                            pendingLabel={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="delete_forever" size={4} />
+                                {t('searchReindex:actions.confirmDeleteIndex')}
+                              </span>
+                            }
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </>
+  );
+}

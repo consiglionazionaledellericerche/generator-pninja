@@ -1,0 +1,40 @@
+{
+  "title": "Otsinguindeks",
+  "algoliaWarning": "Algolia on põhitellimuse teenus, millel on piirangud tasuta tasemel. Iga uuesti indekseerimise toiming tarbib kvooti.",
+  "columns": {
+    "entity": "Entiteet",
+    "records": "Kanded",
+    "status": "Staatus"
+  },
+  "status": {
+    "pending": "Ootel...",
+    "running": "Töös",
+    "completed": "Lõpetatud",
+    "failed": "Ebaõnnestus"
+  },
+  "actions": {
+    "reindex": "Uuesti indekseerimine",
+    "confirmReindex": "Kinnita uuesti indekseerimine",
+    "flush": "Tühjenda indeks",
+    "confirmFlush": "Kinnita tühjendamine",
+    "deleteIndex": "Kustuta indeks",
+    "confirmDeleteIndex": "Kinnita kustutamine",
+    "reindexAll": "Uuesti indekseerimine kõik",
+    "confirmReindexAll": "Kinnita täielik uuesti indekseerimine",
+    "flushAll": "Tühjenda kõik indeksid",
+    "confirmFlushAll": "Kinnita täielik tühjendamine",
+    "deleteIndexAll": "Kustuta kõik indeksid",
+    "confirmDeleteIndexAll": "Kinnita täielik kustutamine"
+  },
+  "records": "kanded",
+  "progressLabel": "Uuesti indekseerimise edenemine {{entity}} jaoks",
+  "reindexCompleted": "Uuesti indekseerimine {{entity}} lõpetatud",
+  "reindexFailed": "Uuesti indekseerimine {{entity}} ebaõnnestus",
+  "reindexError": "Viga uuesti indekseerimise alustamisel {{entity}} jaoks",
+  "flushCompleted": "Indeks {{entity}} tühjendatud",
+  "flushError": "Viga indeksi tühjendamisel {{entity}}",
+  "deleteIndexCompleted": "Indeks {{entity}} kustutatud",
+  "deleteIndexError": "Viga indeksi kustutamisel {{entity}}",
+  "bulkFlushCompleted": "Kõik indeksid tühjendatud",
+  "bulkDeleteIndexCompleted": "Kõik indeksid kustutatud"
+}

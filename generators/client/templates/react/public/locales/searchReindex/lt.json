@@ -1,0 +1,40 @@
+{
+  "title": "Paieškos indeksas",
+  "algoliaWarning": "Algolia yra talpinama paslauga, kuri turi ribas nemokamoje pakopoje. Kiekviena perindeksavimo operacija sunaudoja kvotą.",
+  "columns": {
+    "entity": "Subjektas",
+    "records": "Įrašai",
+    "status": "Būsena"
+  },
+  "status": {
+    "pending": "Laukiama...",
+    "running": "Veikia",
+    "completed": "Baigta",
+    "failed": "Nepavyko"
+  },
+  "actions": {
+    "reindex": "Perindeksuoti",
+    "confirmReindex": "Patvirtinti perindeksavimą",
+    "flush": "Išvalyti indeksą",
+    "confirmFlush": "Patvirtinti išvalymą",
+    "deleteIndex": "Ištrinti indeksą",
+    "confirmDeleteIndex": "Patvirtinti ištrynimą",
+    "reindexAll": "Perindeksuoti viską",
+    "confirmReindexAll": "Patvirtinti viso perindeksavimo",
+    "flushAll": "Išvalyti visus indeksus",
+    "confirmFlushAll": "Patvirtinti viso išvalymo",
+    "deleteIndexAll": "Ištrinti visus indeksus",
+    "confirmDeleteIndexAll": "Patvirtinti viso ištrynimo"
+  },
+  "records": "įrašai",
+  "progressLabel": "Perindeksavimo pažanga už {{entity}}",
+  "reindexCompleted": "Perindeksavimas už {{entity}} baigtas",
+  "reindexFailed": "Perindeksavimas už {{entity}} nepavyko",
+  "reindexError": "Klaida pradedant perindeksavimą už {{entity}}",
+  "flushCompleted": "Indeksas {{entity}} išvalytas",
+  "flushError": "Klaida valant indeksą {{entity}}",
+  "deleteIndexCompleted": "Indeksas {{entity}} ištrintas",
+  "deleteIndexError": "Klaida trinant indeksą {{entity}}",
+  "bulkFlushCompleted": "Visi indeksai išvalyti",
+  "bulkDeleteIndexCompleted": "Visi indeksai ištrinti"
+}

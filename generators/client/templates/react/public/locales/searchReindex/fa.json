@@ -1,0 +1,40 @@
+{
+  "title": "شاخص جستجو",
+  "algoliaWarning": "الگولیا یک سرویس میزبانی شده است که محدودیت‌هایی در سطح رایگان دارد. هر عملیات دوباره ایندکس مصرفی از سهمیه را مصرف می‌کند.",
+  "columns": {
+    "entity": "موجودیت",
+    "records": "ضبط‌ها",
+    "status": "وضعیت"
+  },
+  "status": {
+    "pending": "در حال انتظار...",
+    "running": "در حال اجرا",
+    "completed": "تکمیل شده",
+    "failed": "ناکام"
+  },
+  "actions": {
+    "reindex": "دوباره ایندکس",
+    "confirmReindex": "تأیید دوباره ایندکس",
+    "flush": "فلاش ایندکس",
+    "confirmFlush": "تأیید فلاش",
+    "deleteIndex": "حذف ایندکس",
+    "confirmDeleteIndex": "تأیید حذف",
+    "reindexAll": "دوباره ایندکس کردن همه",
+    "confirmReindexAll": "تأیید دوباره ایندکس کامل",
+    "flushAll": "فلاش کردن همه ایندکس‌ها",
+    "confirmFlushAll": "تأیید فلاش کامل",
+    "deleteIndexAll": "حذف همه ایندکس‌ها",
+    "confirmDeleteIndexAll": "تأیید حذف کامل"
+  },
+  "records": "ضبط‌ها",
+  "progressLabel": "پیشرفت دوباره ایندکس‌زنی برای {{entity}}",
+  "reindexCompleted": "دوباره ایندکس‌زنی {{entity}} تکمیل شد",
+  "reindexFailed": "دوباره ایندکس‌زنی {{entity}} ناکام بود",
+  "reindexError": "خطا در شروع دوباره ایندکس برای {{entity}}",
+  "flushCompleted": "ایندکس {{entity}} فلاش شد",
+  "flushError": "خطا در فلاش ایندکس {{entity}}",
+  "deleteIndexCompleted": "ایندکس {{entity}} حذف شد",
+  "deleteIndexError": "خطا در حذف ایندکس {{entity}}",
+  "bulkFlushCompleted": "تمام ایندکس‌ها فلاش شدند",
+  "bulkDeleteIndexCompleted": "تمام ایندکس‌ها حذف شدند"
+}

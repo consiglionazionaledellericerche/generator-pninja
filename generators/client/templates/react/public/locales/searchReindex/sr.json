@@ -1,0 +1,40 @@
+{
+  "title": "Потражите индекс",
+  "algoliaWarning": "Algolia је хостована услуга са ограничењима на бесплатном нивоу. Свака операција поновног индексирања троши квоту.",
+  "columns": {
+    "entity": "Ентитет",
+    "records": "Записи",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "У чекању...",
+    "running": "У току",
+    "completed": "Завршено",
+    "failed": "Неуспешно"
+  },
+  "actions": {
+    "reindex": "Поновно индексирање",
+    "confirmReindex": "Потврдите поновно индексирање",
+    "flush": "Испразните индекс",
+    "confirmFlush": "Потврдите испразнење",
+    "deleteIndex": "Избришите индекс",
+    "confirmDeleteIndex": "Potvrdi brisanje",
+    "reindexAll": "Поновно индексирање свега",
+    "confirmReindexAll": "Потврдите поновно индексирање свега",
+    "flushAll": "Испразните све индексе",
+    "confirmFlushAll": "Потврдите испразнење свега",
+    "deleteIndexAll": "Избришите све индексе",
+    "confirmDeleteIndexAll": "Потврдите потпуно брисање"
+  },
+  "records": "записи",
+  "progressLabel": "Напредак поновног индексирања за {{entity}}",
+  "reindexCompleted": "Поновно индексирање {{entity}} је завршено",
+  "reindexFailed": "Поновно индексирање {{entity}} је неуспело",
+  "reindexError": "Грешка при покретању поновног индексирања за {{entity}}",
+  "flushCompleted": "Индекс {{entity}} је испражњен",
+  "flushError": "Грешка при испразњењу индекса {{entity}}",
+  "deleteIndexCompleted": "Индекс {{entity}} је избрisan",
+  "deleteIndexError": "Грешка при брисању индекса {{entity}}",
+  "bulkFlushCompleted": "Сви индекси су испражњени",
+  "bulkDeleteIndexCompleted": "Сви индекси су избрисани"
+}

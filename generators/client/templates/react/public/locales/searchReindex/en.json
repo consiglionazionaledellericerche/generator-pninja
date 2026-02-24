@@ -1,0 +1,40 @@
+{
+  "title": "Search Index",
+  "algoliaWarning": "Algolia is a hosted service with limits on the free tier. Every reindex operation consumes quota.",
+  "columns": {
+    "entity": "Entity",
+    "records": "Records",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Pending...",
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "actions": {
+    "reindex": "Reindex",
+    "confirmReindex": "Confirm reindex",
+    "flush": "Flush index",
+    "confirmFlush": "Confirm flush",
+    "deleteIndex": "Delete index",
+    "confirmDeleteIndex": "Confirm deletion",
+    "reindexAll": "Reindex all",
+    "confirmReindexAll": "Confirm full reindex",
+    "flushAll": "Flush all indexes",
+    "confirmFlushAll": "Confirm full flush",
+    "deleteIndexAll": "Delete all indexes",
+    "confirmDeleteIndexAll": "Confirm full deletion"
+  },
+  "records": "records",
+  "progressLabel": "Reindexing progress for {{entity}}",
+  "reindexCompleted": "Reindexing of {{entity}} completed",
+  "reindexFailed": "Reindexing of {{entity}} failed",
+  "reindexError": "Error starting reindex for {{entity}}",
+  "flushCompleted": "Index {{entity}} flushed",
+  "flushError": "Error flushing index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} deleted",
+  "deleteIndexError": "Error deleting index {{entity}}",
+  "bulkFlushCompleted": "All indexes flushed",
+  "bulkDeleteIndexCompleted": "All indexes deleted"
+}

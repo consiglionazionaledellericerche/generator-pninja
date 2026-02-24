@@ -182,6 +182,17 @@ const Menu: React.FC = () => {
                       <Icon icon="notes" size={5} /> {t('log:title')}
                     </MenuItem>
                   </Can>
+<%    if (!['null', 'database'].includes(searchEngine)) { -%>
+                  <Can action="read" resource="SearchReindex">
+                    <MenuItem
+                      href="/search-reindex"
+                      id="search-reindex"
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/search-reindex') ? menuItemIsActiveClass : ''}`}
+                    >
+                      <Icon icon="search_gear" size={5} /> {t('searchReindex:title')}
+                    </MenuItem>
+                  </Can>
+<%    } -%>
 <%    if (hasTrashMenu) { -%>
                   <Can
                     any={[

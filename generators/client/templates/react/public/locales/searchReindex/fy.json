@@ -1,0 +1,40 @@
+{
+  "title": "Syk indeks",
+  "algoliaWarning": "Algolia is in hoste tsjinst mei beheinings op 'e gratis tier. Elke reindexoperaasje konsumearret kwota.",
+  "columns": {
+    "entity": "Entiteit",
+    "records": "Records",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Wachtsjend...",
+    "running": "Rinnend",
+    "completed": "Kombinearre",
+    "failed": "Mislukt"
+  },
+  "actions": {
+    "reindex": "Reindex",
+    "confirmReindex": "Bevestig reindex",
+    "flush": "Floeie index",
+    "confirmFlush": "Bevestig floeie",
+    "deleteIndex": "Ferwiderje index",
+    "confirmDeleteIndex": "Bevestig wiskjen",
+    "reindexAll": "Reindex alle",
+    "confirmReindexAll": "Bevestig folsleine reindex",
+    "flushAll": "Floeie alle yndeksen",
+    "confirmFlushAll": "Bevestig folsleine floei",
+    "deleteIndexAll": "Ferwiderje alle yndeksen",
+    "confirmDeleteIndexAll": "Bevestig folsleine ferwidering"
+  },
+  "records": "records",
+  "progressLabel": "Reindexing foarútgong foar {{entity}}",
+  "reindexCompleted": "Reindexing fan {{entity}} foltôge",
+  "reindexFailed": "Reindexing fan {{entity}} mislearre",
+  "reindexError": "Fout by it begjinnen fan reindex foar {{entity}}",
+  "flushCompleted": "Index {{entity}} floeid",
+  "flushError": "Fout by it floeie fan index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} ferwidere",
+  "deleteIndexError": "Fout by it ferwiderjen fan index {{entity}}",
+  "bulkFlushCompleted": "Alle yndeksen floeid",
+  "bulkDeleteIndexCompleted": "Alle yndeksen ferwidere"
+}

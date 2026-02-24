@@ -1,0 +1,40 @@
+{
+  "title": "Gushaka Indangamuntu",
+  "algoliaWarning": "Algolia ni serivisi ibikwa ifite imipaka ku rwego rwa ubuntu. Buri gikorwa cyo gusubira mu gushyira mu mutwe gifata quota.",
+  "columns": {
+    "entity": "Ikintu",
+    "records": "Amakuru",
+    "status": "Imiterere"
+  },
+  "status": {
+    "pending": "Birategerejwe...",
+    "running": "Birakorwa",
+    "completed": "Byarangiye",
+    "failed": "Byanze"
+  },
+  "actions": {
+    "reindex": "Gusubira mu gushyira mu mutwe",
+    "confirmReindex": "Emereza gusubira mu gushyira mu mutwe",
+    "flush": "Sukura icyerekezo",
+    "confirmFlush": "Emereza gukuramo",
+    "deleteIndex": "Siba icyerekezo",
+    "confirmDeleteIndex": "Emeza gusiba",
+    "reindexAll": "Subira mu gushyira mu mutwe byose",
+    "confirmReindexAll": "Emereza gusubira mu gushyira mu mutwe bwuzuye",
+    "flushAll": "Sukura ibyerekezo byose",
+    "confirmFlushAll": "Emereza gukuramo byose",
+    "deleteIndexAll": "Siba ibyerekezo byose",
+    "confirmDeleteIndexAll": "Emereza gukuramo byuzuye"
+  },
+  "records": "amakuru",
+  "progressLabel": "Imigendekere yo gusubira mu gushyira mu mutwe kwa {{entity}}",
+  "reindexCompleted": "Gusubira mu gushyira mu mutwe kwa {{entity}} birangiye",
+  "reindexFailed": "Gusubira mu gushyira mu mutwe kwa {{entity}} byanze",
+  "reindexError": "Ikosa ryabaye mu gutangiza gusubira mu gushyira mu mutwe kwa {{entity}}",
+  "flushCompleted": "Icyerekezo {{entity}} cyasukuwe",
+  "flushError": "Ikosa mu gusukura icyerekezo {{entity}}",
+  "deleteIndexCompleted": "Icyerekezo {{entity}} cyasibwe",
+  "deleteIndexError": "Ikosa mu gusiba icyerekezo {{entity}}",
+  "bulkFlushCompleted": "Ibikorwa byose byasukuwe",
+  "bulkDeleteIndexCompleted": "Ibikorwa byose byasibwe"
+}

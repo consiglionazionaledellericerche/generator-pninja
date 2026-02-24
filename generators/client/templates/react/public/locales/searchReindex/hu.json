@@ -1,0 +1,40 @@
+{
+  "title": "Keresési index",
+  "algoliaWarning": "Az Algolia egy hosztolt szolgáltatás, amelynek ingyenes szintjén korlátozások vannak. Minden újraindexelési művelet kvótát fogyaszt.",
+  "columns": {
+    "entity": "Entitás",
+    "records": "Rekordok",
+    "status": "Állapot"
+  },
+  "status": {
+    "pending": "Függőben...",
+    "running": "Fut",
+    "completed": "Befejezve",
+    "failed": "Sikertelen"
+  },
+  "actions": {
+    "reindex": "Újraindexelés",
+    "confirmReindex": "Megerősítés újraindexelés",
+    "flush": "Index kiürítése",
+    "confirmFlush": "Megerősítés kiürítés",
+    "deleteIndex": "Index törlése",
+    "confirmDeleteIndex": "Törlés megerősítése",
+    "reindexAll": "Újraindexelés mind",
+    "confirmReindexAll": "Megerősítés teljes újraindexelés",
+    "flushAll": "Minden index kiürítése",
+    "confirmFlushAll": "Megerősítés teljes kiürítés",
+    "deleteIndexAll": "Minden index törlése",
+    "confirmDeleteIndexAll": "Megerősítés teljes törlés"
+  },
+  "records": "rekordok",
+  "progressLabel": "Újraindexelési előrehaladás a(z) {{entity}} számára",
+  "reindexCompleted": "A(z) {{entity}} újraindexelése befejeződött",
+  "reindexFailed": "A(z) {{entity}} újraindexelése sikertelen",
+  "reindexError": "Hiba lépett fel az újraindexelés során a(z) {{entity}} esetében",
+  "flushCompleted": "A(z) {{entity}} index kiürítve",
+  "flushError": "Hiba történt az index kiürítésekor a(z) {{entity}} esetében",
+  "deleteIndexCompleted": "A(z) {{entity}} index törölve",
+  "deleteIndexError": "Hiba történt az index törlésekor a(z) {{entity}} esetében",
+  "bulkFlushCompleted": "Minden index kiürítve",
+  "bulkDeleteIndexCompleted": "Minden index törölve"
+}

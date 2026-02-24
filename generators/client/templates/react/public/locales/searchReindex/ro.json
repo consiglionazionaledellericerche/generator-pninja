@@ -1,0 +1,40 @@
+{
+  "title": "Index de căutare",
+  "algoliaWarning": "Algolia este un serviciu găzduit cu limite pe tierul gratuit. Fiecare operațiune de reindexare consumă cotă.",
+  "columns": {
+    "entity": "Entitate",
+    "records": "Înregistrări",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "În așteptare...",
+    "running": "Se execută",
+    "completed": "Finalizat",
+    "failed": "Eșuat"
+  },
+  "actions": {
+    "reindex": "Reindexare",
+    "confirmReindex": "Confirmă reindexarea",
+    "flush": "Curăță indexul",
+    "confirmFlush": "Confirmă curățarea",
+    "deleteIndex": "Șterge indexul",
+    "confirmDeleteIndex": "Confirmă ștergerea",
+    "reindexAll": "Reindexează tot",
+    "confirmReindexAll": "Confirmă reindexarea completă",
+    "flushAll": "Curăță toate indexurile",
+    "confirmFlushAll": "Confirmă curățarea completă",
+    "deleteIndexAll": "Șterge toate indexurile",
+    "confirmDeleteIndexAll": "Confirmă ștergerea completă"
+  },
+  "records": "înregistrări",
+  "progressLabel": "Progresul reindexării pentru {{entity}}",
+  "reindexCompleted": "Reindexarea {{entity}} finalizată",
+  "reindexFailed": "Reindexarea {{entity}} a eșuat",
+  "reindexError": "Eroare la începerea reindexării pentru {{entity}}",
+  "flushCompleted": "Indexul {{entity}} a fost curățat",
+  "flushError": "Eroare la curățarea indexului {{entity}}",
+  "deleteIndexCompleted": "Indexul {{entity}} a fost șters",
+  "deleteIndexError": "Eroare la ștergerea indexului {{entity}}",
+  "bulkFlushCompleted": "Toate indexurile au fost curățate",
+  "bulkDeleteIndexCompleted": "Toate indexurile au fost șterse"
+}

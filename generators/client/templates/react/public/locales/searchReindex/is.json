@@ -1,0 +1,40 @@
+{
+  "title": "Leitaskra",
+  "algoliaWarning": "Algolia er hýst þjónusta með takmörkum á frítt þjónustuplan. Hver endurvísunaraðgerð fer í kvóta.",
+  "columns": {
+    "entity": "Eining",
+    "records": "Skrár",
+    "status": "Staða"
+  },
+  "status": {
+    "pending": "Bíðandi...",
+    "running": "Í gangi",
+    "completed": "Lokið",
+    "failed": "Misheppnað"
+  },
+  "actions": {
+    "reindex": "Endurvísun",
+    "confirmReindex": "Staðfesta endurvísun",
+    "flush": "Tóma vísitalan",
+    "confirmFlush": "Staðfesta tóma",
+    "deleteIndex": "Eyða vísitalan",
+    "confirmDeleteIndex": "Staðfesta eyðingu",
+    "reindexAll": "Endurvísun á öllu",
+    "confirmReindexAll": "Staðfesta fulla endurvísun",
+    "flushAll": "Tóma allar vísitölur",
+    "confirmFlushAll": "Staðfesta fulla tóma",
+    "deleteIndexAll": "Eyða öllum vísitölum",
+    "confirmDeleteIndexAll": "Staðfesta fulla eyðingu"
+  },
+  "records": "skrá",
+  "progressLabel": "Endurvísunarframvinda fyrir {{entity}}",
+  "reindexCompleted": "Endurvísun á {{entity}} lokið",
+  "reindexFailed": "Endurvísun á {{entity}} misheppnað",
+  "reindexError": "Villa við að byrja endurvísun fyrir {{entity}}",
+  "flushCompleted": "Vísitala {{entity}} tóma",
+  "flushError": "Villa við að tóma vísitölu {{entity}}",
+  "deleteIndexCompleted": "Vísitala {{entity}} eytt",
+  "deleteIndexError": "Villa við að eyða vísitölu {{entity}}",
+  "bulkFlushCompleted": "Allar vísitölur tóma",
+  "bulkDeleteIndexCompleted": "Allar vísitölur eytt"
+}

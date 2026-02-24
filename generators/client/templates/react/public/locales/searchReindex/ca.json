@@ -1,0 +1,40 @@
+{
+  "title": "Index de cerca",
+  "algoliaWarning": "Algolia és un servei allotjat amb límits al nivell gratuït. Cada operació de reindexació consumeix quota.",
+  "columns": {
+    "entity": "Entitat",
+    "records": "Registres",
+    "status": "Estat"
+  },
+  "status": {
+    "pending": "Pendent...",
+    "running": "S'executa",
+    "completed": "Completat",
+    "failed": "Fallat"
+  },
+  "actions": {
+    "reindex": "Reindexar",
+    "confirmReindex": "Confirmar reindexació",
+    "flush": "Netejar índex",
+    "confirmFlush": "Confirmar neteja",
+    "deleteIndex": "Eliminar índex",
+    "confirmDeleteIndex": "Confirmar eliminació",
+    "reindexAll": "Reindexar tot",
+    "confirmReindexAll": "Confirmar reindexació completa",
+    "flushAll": "Netejar tots els índexs",
+    "confirmFlushAll": "Confirmar neteja completa",
+    "deleteIndexAll": "Eliminar tots els índexs",
+    "confirmDeleteIndexAll": "Confirmar eliminació completa"
+  },
+  "records": "registres",
+  "progressLabel": "Progrés de reindexació per {{entity}}",
+  "reindexCompleted": "Reindexació de {{entity}} completada",
+  "reindexFailed": "Reindexació de {{entity}} fallida",
+  "reindexError": "Error en iniciar la reindexació per {{entity}}",
+  "flushCompleted": "Índex {{entity}} netejat",
+  "flushError": "Error en netejar l'índex {{entity}}",
+  "deleteIndexCompleted": "Índex {{entity}} eliminat",
+  "deleteIndexError": "Error en eliminar l'índex {{entity}}",
+  "bulkFlushCompleted": "Tots els índexs netejats",
+  "bulkDeleteIndexCompleted": "Tots els índexs eliminats"
+}

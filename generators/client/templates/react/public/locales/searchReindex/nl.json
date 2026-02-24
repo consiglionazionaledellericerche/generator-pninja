@@ -1,0 +1,40 @@
+{
+  "title": "Zoekindex",
+  "algoliaWarning": "Algolia is een gehoste service met limieten voor de gratis laag. Elke reindexeerbewerking verbruikt quota.",
+  "columns": {
+    "entity": "Entiteit",
+    "records": "Records",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "In afwachting...",
+    "running": "Bezig",
+    "completed": "Voltooid",
+    "failed": "Mislukt"
+  },
+  "actions": {
+    "reindex": "Reindexeer",
+    "confirmReindex": "Bevestig reindex",
+    "flush": "Vernietig index",
+    "confirmFlush": "Bevestig vernietiging",
+    "deleteIndex": "Verwijder index",
+    "confirmDeleteIndex": "Bevestig verwijdering",
+    "reindexAll": "Reindexeer alles",
+    "confirmReindexAll": "Bevestig volledige reindex",
+    "flushAll": "Vernietig alle indexen",
+    "confirmFlushAll": "Bevestig volledige vernietiging",
+    "deleteIndexAll": "Verwijder alle indexen",
+    "confirmDeleteIndexAll": "Bevestig volledige verwijdering"
+  },
+  "records": "records",
+  "progressLabel": "Reindexeer voortgang voor {{entity}}",
+  "reindexCompleted": "Reindexeren van {{entity}} voltooid",
+  "reindexFailed": "Reindexeren van {{entity}} mislukt",
+  "reindexError": "Fout bij het starten van reindex voor {{entity}}",
+  "flushCompleted": "Index {{entity}} vernietigd",
+  "flushError": "Fout bij het vernietigen van index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} verwijderd",
+  "deleteIndexError": "Fout bij het verwijderen van index {{entity}}",
+  "bulkFlushCompleted": "Alle indexen vernietigd",
+  "bulkDeleteIndexCompleted": "Alle indexen verwijderd"
+}

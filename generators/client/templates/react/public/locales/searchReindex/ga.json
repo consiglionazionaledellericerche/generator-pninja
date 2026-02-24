@@ -1,0 +1,40 @@
+{
+  "title": "Cuardach Innéacs",
+  "algoliaWarning": "Is seirbhís óstáilte í Algolia le teorainneacha ar an leibhéal saor in aisce. Cónaíonn gach oibreacha athíocaíochta cota.",
+  "columns": {
+    "entity": "Duine",
+    "records": "Taifid",
+    "status": "Stádas"
+  },
+  "status": {
+    "pending": "Ag fanacht...",
+    "running": "Ag rith",
+    "completed": "Comhluite",
+    "failed": "Teip"
+  },
+  "actions": {
+    "reindex": "Athíocaigh",
+    "confirmReindex": "Deimhnigh athíocaíocht",
+    "flush": "Glan innéacs",
+    "confirmFlush": "Deimhnigh glanadh",
+    "deleteIndex": "Scrioinn innéacs",
+    "confirmDeleteIndex": "Deimhnigh scrios",
+    "reindexAll": "Athíocaigh uile",
+    "confirmReindexAll": "Deimhnigh athíocaíocht iomlán",
+    "flushAll": "Glan na heinnéacsanna go léir",
+    "confirmFlushAll": "Deimhnigh glanadh iomlán",
+    "deleteIndexAll": "Scrios na heinnéacsanna go léir",
+    "confirmDeleteIndexAll": "Deimhnigh scrios iomlán"
+  },
+  "records": "taifid",
+  "progressLabel": "Saoil na hathíocaíochta do {{entity}}",
+  "reindexCompleted": "Comhlíonadh athíocaíochta do {{entity}}",
+  "reindexFailed": "Teip ar an athíocaíocht do {{entity}}",
+  "reindexError": "Earráid ag tosú an athíocaíochta do {{entity}}",
+  "flushCompleted": "Innex {{entity}} glanta",
+  "flushError": "Earráid ag glanadh innéacs {{entity}}",
+  "deleteIndexCompleted": "Innex {{entity}} scriofa",
+  "deleteIndexError": "Earráid ag scrios innéacs {{entity}}",
+  "bulkFlushCompleted": "Glanadh na heinnéacsanna go léir",
+  "bulkDeleteIndexCompleted": "Scrios na heinnéacsanna go léir"
+}

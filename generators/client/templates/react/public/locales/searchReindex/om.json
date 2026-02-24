@@ -1,0 +1,40 @@
+{
+  "title": "Qorannoo Indeksii",
+  "algoliaWarning": "Algolia tajaajila qusannoo qabuu kan daangaa qabeessa ta'eedha. Hunda reindex gochuun qusannoo ni fayyada.",
+  "columns": {
+    "entity": "Waa'ee",
+    "records": "Galmeewwan",
+    "status": "Haala"
+  },
+  "status": {
+    "pending": "Eeggachaa...",
+    "running": "Hojii irra jira",
+    "completed": "Xumuramee",
+    "failed": "Haga'aan"
+  },
+  "actions": {
+    "reindex": "Reindex",
+    "confirmReindex": "Reindex mirkaneeffadhu",
+    "flush": "Indexii qusuu",
+    "confirmFlush": "Qusuu mirkaneeffadhu",
+    "deleteIndex": "Indexii haqu",
+    "confirmDeleteIndex": "Gatii haquu mirkaneessu",
+    "reindexAll": "Hunda reindex",
+    "confirmReindexAll": "Reindex guutuu mirkaneeffadhu",
+    "flushAll": "Hunda indexii qusuu",
+    "confirmFlushAll": "Qusuu guutuu mirkaneeffadhu",
+    "deleteIndexAll": "Hunda indexii haqu",
+    "confirmDeleteIndexAll": "Haquu guutuu mirkaneeffadhu"
+  },
+  "records": "galmeewwan",
+  "progressLabel": "Reindexing fooyya'iinsa {{entity}}",
+  "reindexCompleted": "Reindexing {{entity}} xumuramee",
+  "reindexFailed": "Reindexing {{entity}} bu'aa dhabe",
+  "reindexError": "Dogoggora ka'umsa reindexiidhaaf {{entity}}",
+  "flushCompleted": "Index {{entity}} qulqulleefamee",
+  "flushError": "Dogoggora index {{entity}} qulqulleessuu",
+  "deleteIndexCompleted": "Index {{entity}} haqu",
+  "deleteIndexError": "Dogoggora index {{entity}} haquu",
+  "bulkFlushCompleted": "Hunda indexii qulqulleefame",
+  "bulkDeleteIndexCompleted": "Hunda indexii haqi malee"
+}

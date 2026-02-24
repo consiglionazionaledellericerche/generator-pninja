@@ -1,0 +1,40 @@
+{
+  "title": "Søk indeks",
+  "algoliaWarning": "Algolia er en vertstjeneste med begrensninger på den gratis versjonen. Hver reindekseringsoperasjon forbruker kvote.",
+  "columns": {
+    "entity": "Enhet",
+    "records": "Poster",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Venter...",
+    "running": "Kjører",
+    "completed": "Fullført",
+    "failed": "Mislykket"
+  },
+  "actions": {
+    "reindex": "Reindekser",
+    "confirmReindex": "Bekreft reindeksering",
+    "flush": "Tøm indeks",
+    "confirmFlush": "Bekreft tømming",
+    "deleteIndex": "Slett indeks",
+    "confirmDeleteIndex": "Bekreft sletting",
+    "reindexAll": "Reindekser alt",
+    "confirmReindexAll": "Bekreft full reindeksering",
+    "flushAll": "Tøm alle indekser",
+    "confirmFlushAll": "Bekreft full tømming",
+    "deleteIndexAll": "Slett alle indekser",
+    "confirmDeleteIndexAll": "Bekreft full sletting"
+  },
+  "records": "poster",
+  "progressLabel": "Reindekseringsprosess for {{entity}}",
+  "reindexCompleted": "Reindeksering av {{entity}} fullført",
+  "reindexFailed": "Reindeksering av {{entity}} mislykket",
+  "reindexError": "Feil under oppstart av reindeksering for {{entity}}",
+  "flushCompleted": "Indeks {{entity}} tømt",
+  "flushError": "Feil ved tømming av indeks {{entity}}",
+  "deleteIndexCompleted": "Indeks {{entity}} slettet",
+  "deleteIndexError": "Feil ved sletting av indeks {{entity}}",
+  "bulkFlushCompleted": "Alle indekser tømt",
+  "bulkDeleteIndexCompleted": "Alle indekser slettet"
+}

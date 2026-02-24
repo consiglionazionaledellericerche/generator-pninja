@@ -1,0 +1,40 @@
+{
+  "title": "Indeksi i Kërkimit",
+  "algoliaWarning": "Algolia është një shërbim i akorduar me kufij në nivelin falas. Çdo operacion riindekson konsumon kuotë.",
+  "columns": {
+    "entity": "Entitet",
+    "records": "Regjistrat",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Në pritje...",
+    "running": "Duke u kryer",
+    "completed": "Përfunduar",
+    "failed": "Dështuar"
+  },
+  "actions": {
+    "reindex": "Riindekso",
+    "confirmReindex": "Konfirmo riindeksimin",
+    "flush": "Pastroni indeksin",
+    "confirmFlush": "Konfirmo pastrimin",
+    "deleteIndex": "Fshi indeksin",
+    "confirmDeleteIndex": "Konfirmo fshirjen",
+    "reindexAll": "Riindekso të gjitha",
+    "confirmReindexAll": "Konfirmo riindeksimin e plotë",
+    "flushAll": "Pastroni të gjitha indekset",
+    "confirmFlushAll": "Konfirmo pastrimin e plotë",
+    "deleteIndexAll": "Fshi të gjitha indekset",
+    "confirmDeleteIndexAll": "Konfirmo fshirjen e plotë"
+  },
+  "records": "regjistrat",
+  "progressLabel": "Progresi i riindeksimit për {{entity}}",
+  "reindexCompleted": "Riindeksimi i {{entity}} përfundoi",
+  "reindexFailed": "Riindeksimi i {{entity}} dështoi",
+  "reindexError": "Gabim duke filluar riindeksimin për {{entity}}",
+  "flushCompleted": "Indeksi {{entity}} u pastrua",
+  "flushError": "Gabim në pastrimin e indeksit {{entity}}",
+  "deleteIndexCompleted": "Indeksi {{entity}} u fshi",
+  "deleteIndexError": "Gabim në fshirjen e indeksit {{entity}}",
+  "bulkFlushCompleted": "Të gjitha indekset u pastruan",
+  "bulkDeleteIndexCompleted": "Të gjitha indekset u fshinë"
+}

@@ -1,0 +1,40 @@
+{
+  "title": "تلاش کا اندراج",
+  "algoliaWarning": "الگولیا ایک میزبان خدمت ہے جس کی مفت سطح پر حدود ہیں۔ ہر دوبارہ انڈیکسنگ کی کارروائی کوٹہ مصرف کرتی ہے۔",
+  "columns": {
+    "entity": "کیانو",
+    "records": "ریکارڈز",
+    "status": "حالت"
+  },
+  "status": {
+    "pending": "زیر انتظار...",
+    "running": "چل رہا ہے",
+    "completed": "مکمل",
+    "failed": "ناکام"
+  },
+  "actions": {
+    "reindex": "دوبارہ انڈیکس کریں",
+    "confirmReindex": "دوبارہ انڈیکس کی تصدیق کریں",
+    "flush": "انڈیکس کو صاف کریں",
+    "confirmFlush": "صاف کرنے کی تصدیق کریں",
+    "deleteIndex": "انڈیکس کو حذف کریں",
+    "confirmDeleteIndex": "حذف کی تصدیق کریں",
+    "reindexAll": "تمام کو دوبارہ انڈیکس کریں",
+    "confirmReindexAll": "مکمل دوبارہ انڈیکس کی تصدیق کریں",
+    "flushAll": "تمام انڈیکس کو صاف کریں",
+    "confirmFlushAll": "مکمل صاف کرنے کی تصدیق کریں",
+    "deleteIndexAll": "تمام انڈیکس کو حذف کریں",
+    "confirmDeleteIndexAll": "مکمل حذف کی تصدیق کریں"
+  },
+  "records": "ریکارڈز",
+  "progressLabel": "{{entity}} کے لیے دوبارہ انڈیکسنگ کی پیش رفت",
+  "reindexCompleted": "{{entity}} کی دوبارہ انڈیکسنگ مکمل",
+  "reindexFailed": "{{entity}} کی دوبارہ انڈیکسنگ ناکام",
+  "reindexError": "{{entity}} کے لیے دوبارہ انڈیکس شروع کرنے میں خرابی",
+  "flushCompleted": "انڈیکس {{entity}} صاف کیا گیا",
+  "flushError": "انڈیکس {{entity}} کو صاف کرنے میں خرابی",
+  "deleteIndexCompleted": "انڈیکس {{entity}} حذف کر دیا گیا",
+  "deleteIndexError": "انڈیکس {{entity}} کو حذف کرنے میں خرابی",
+  "bulkFlushCompleted": "تمام انڈیکس صاف ہو گئے",
+  "bulkDeleteIndexCompleted": "تمام انڈیکس حذف کر دیے گئے"
+}

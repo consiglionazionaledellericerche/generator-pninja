@@ -1,0 +1,40 @@
+{
+  "title": "Funa i-Index",
+  "algoliaWarning": "I-Algoia iyinsizakalo ephathwayo enemikhawulo kumkhakha omuhle. Ukwenza kabusha okukodwa kusebenzisa isikhwama.",
+  "columns": {
+    "entity": "Ubunikazi",
+    "records": "Iziqinisekiso",
+    "status": "Isimo"
+  },
+  "status": {
+    "pending": "Kulindelwe...",
+    "running": "Kusebenza",
+    "completed": "Kuphelelwe",
+    "failed": "Kwehluleka"
+  },
+  "actions": {
+    "reindex": "Phinda ukufaka",
+    "confirmReindex": "Qinisekisa ukuphinda ukufaka",
+    "flush": "Hlanza isikhumbuzo",
+    "confirmFlush": "Qinisekisa ukuhlanza",
+    "deleteIndex": "Susa isikhumbuzo",
+    "confirmDeleteIndex": "Qinisekisa ukususa",
+    "reindexAll": "Phinda ukufaka konke",
+    "confirmReindexAll": "Qinisekisa ukuphinda ukufaka okuphelele",
+    "flushAll": "Hlanza zonke izikhumbuzo",
+    "confirmFlushAll": "Qinisekisa ukuhlanza okuphelele",
+    "deleteIndexAll": "Suswa zonke izikhumbuzo",
+    "confirmDeleteIndexAll": "Qinisekisa ukususa okuphelele"
+  },
+  "records": "iziqinisekiso",
+  "progressLabel": "Inqubekela phambili ye-reindexing ye {{entity}}",
+  "reindexCompleted": "I-reindexing ye {{entity}} iphelile",
+  "reindexFailed": "I-reindexing ye {{entity}} yehlulekile",
+  "reindexError": "Iphutha lokuqala ukuphindisela {{entity}}",
+  "flushCompleted": "Isikhumbuzo {{entity}} sihlanzile",
+  "flushError": "Iphutha lokuhlamba isikhumbuzo {{entity}}",
+  "deleteIndexCompleted": "Isikhumbuzo {{entity}} sesusiwe",
+  "deleteIndexError": "Iphutha lokususa isikhumbuzo {{entity}}",
+  "bulkFlushCompleted": "Zonke izikhumbuzo zihlanzwe",
+  "bulkDeleteIndexCompleted": "Zonke izikhumbuzo zisusiwe"
+}

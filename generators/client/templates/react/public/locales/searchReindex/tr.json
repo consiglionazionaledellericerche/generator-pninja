@@ -1,0 +1,40 @@
+{
+  "title": "Arama Endeksi",
+  "algoliaWarning": "Algolia, ücretsiz katmanında sınırlamalarla birlikte barındırılan bir hizmettir. Her yeniden dizinleme işlemi kota tüketir.",
+  "columns": {
+    "entity": "Varlık",
+    "records": "Kayıtlar",
+    "status": "Durum"
+  },
+  "status": {
+    "pending": "Beklemede...",
+    "running": "Yürütülüyor",
+    "completed": "Tamamlandı",
+    "failed": "Başarısız"
+  },
+  "actions": {
+    "reindex": "Yeniden Dizinle",
+    "confirmReindex": "Yeniden dizinleme onayı",
+    "flush": "İndeksi temizle",
+    "confirmFlush": "Temizleme onayı",
+    "deleteIndex": "İndeksi sil",
+    "confirmDeleteIndex": "Silme onayla",
+    "reindexAll": "Tümünü yeniden dizinle",
+    "confirmReindexAll": "Tam yeniden dizinleme onayı",
+    "flushAll": "Tüm indeksleri temizle",
+    "confirmFlushAll": "Tam temizleme onayı",
+    "deleteIndexAll": "Tüm indeksleri sil",
+    "confirmDeleteIndexAll": "Tam silme onayı"
+  },
+  "records": "kayıtlar",
+  "progressLabel": "{{entity}} için yeniden dizinleme ilerlemesi",
+  "reindexCompleted": "{{entity}} yeniden dizinlemesi tamamlandı",
+  "reindexFailed": "{{entity}} yeniden dizinlemesi başarısız oldu",
+  "reindexError": "{{entity}} için yeniden dizinlemeye başlama hatası",
+  "flushCompleted": "İndeks {{entity}} temizlendi",
+  "flushError": "İndeks {{entity}} temizleme hatası",
+  "deleteIndexCompleted": "İndeks {{entity}} silindi",
+  "deleteIndexError": "İndeks {{entity}} silme hatası",
+  "bulkFlushCompleted": "Tüm indeksler temizlendi",
+  "bulkDeleteIndexCompleted": "Tüm indeksler silindi"
+}

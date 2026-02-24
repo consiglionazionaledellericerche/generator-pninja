@@ -1,0 +1,40 @@
+{
+  "title": "Որոնման ինդեքս",
+  "algoliaWarning": "Algolia-ն հյուրընկալված ծառայություն է, որը ունի սահմանափակումներ անվճար շերտում: Յուրաքանչյուր վերևի որոնման գործողություն սպառում է քվոտան:",
+  "columns": {
+    "entity": "Հետք",
+    "records": "Վարկանիշներ",
+    "status": "Պատկերակ"
+  },
+  "status": {
+    "pending": "Սպասման մեջ...",
+    "running": "Գործարկվում",
+    "completed": "Ավարտված",
+    "failed": "Չհաջողվեց"
+  },
+  "actions": {
+    "reindex": "Վերակառուցում",
+    "confirmReindex": "Հաստատեք վերակառուցումը",
+    "flush": "Մաքրել ինդեքսը",
+    "confirmFlush": "Հաստատեք մաքրման գործընթացը",
+    "deleteIndex": "Ջնջել ինդեքսը",
+    "confirmDeleteIndex": "Հաստատել ջնջումը",
+    "reindexAll": "Վերակառուցել բոլորը",
+    "confirmReindexAll": "Հաստատեք ամբողջական վերակառուցումը",
+    "flushAll": "Մաքրել բոլոր ինդեքսները",
+    "confirmFlushAll": "Հաստատեք ամբողջական մաքրումը",
+    "deleteIndexAll": "Ջնջել բոլոր ինդեքսները",
+    "confirmDeleteIndexAll": "Հաստատեք ամբողջական ջ likelyշումը"
+  },
+  "records": "վարկանիշներ",
+  "progressLabel": "Վերակառուցման progreso {{entity}}",
+  "reindexCompleted": "Վերակառուցումը {{entity}} ավարտվեց",
+  "reindexFailed": "Վերակառուցման գործընթացը {{entity}} չհաջողվեց",
+  "reindexError": "Սխալ վերակառուցման համար {{entity}}",
+  "flushCompleted": "Ինդեքսը {{entity}} մաքրվել է",
+  "flushError": "Սխալ մաքրում ինդեքսի {{entity}}",
+  "deleteIndexCompleted": "Ինդեքսը {{entity}} ջնջվել է",
+  "deleteIndexError": "Սխալ ջնջում ինդեքսի {{entity}}",
+  "bulkFlushCompleted": "Բոլոր ինդեքսները մաքրվել են",
+  "bulkDeleteIndexCompleted": "Բոլոր ինդեքսները ջնջվել են"
+}

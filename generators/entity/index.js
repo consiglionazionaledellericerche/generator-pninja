@@ -954,7 +954,7 @@ export default class extends Generator {
             this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
 
             // Update Menu
-            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1 });
+            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
 
             // Create entity pages
             await createEntityPages({
@@ -991,7 +991,7 @@ export default class extends Generator {
                     });
                 });
             // Update App.tsx
-            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize });
+            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine });
         }
         // README update
         this.fs.copyTpl(

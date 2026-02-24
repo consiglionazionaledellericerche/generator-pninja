@@ -1,0 +1,40 @@
+{
+  "title": "搜索索引",
+  "algoliaWarning": "Algolia 是一种托管服务，免费层有使用限制。每次重新索引操作都会消耗配额。",
+  "columns": {
+    "entity": "实体",
+    "records": "记录",
+    "status": "状态"
+  },
+  "status": {
+    "pending": "等待中...",
+    "running": "运行中",
+    "completed": "已完成",
+    "failed": "失败"
+  },
+  "actions": {
+    "reindex": "重新索引",
+    "confirmReindex": "确认重新索引",
+    "flush": "刷新索引",
+    "confirmFlush": "确认刷新",
+    "deleteIndex": "删除索引",
+    "confirmDeleteIndex": "确认删除",
+    "reindexAll": "重新索引所有",
+    "confirmReindexAll": "确认完全重新索引",
+    "flushAll": "刷新所有索引",
+    "confirmFlushAll": "确认完全刷新",
+    "deleteIndexAll": "删除所有索引",
+    "confirmDeleteIndexAll": "确认完全删除"
+  },
+  "records": "记录",
+  "progressLabel": "{{entity}} 的重新索引进度",
+  "reindexCompleted": "{{entity}} 的重新索引完成",
+  "reindexFailed": "{{entity}} 的重新索引失败",
+  "reindexError": "启动 {{entity}} 的重新索引时出错",
+  "flushCompleted": "索引 {{entity}} 已刷新",
+  "flushError": "刷新索引 {{entity}} 时出错",
+  "deleteIndexCompleted": "索引 {{entity}} 已删除",
+  "deleteIndexError": "删除索引 {{entity}} 时出错",
+  "bulkFlushCompleted": "所有索引已刷新",
+  "bulkDeleteIndexCompleted": "所有索引已删除"
+}

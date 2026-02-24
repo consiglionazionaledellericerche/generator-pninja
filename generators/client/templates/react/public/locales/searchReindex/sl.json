@@ -1,0 +1,40 @@
+{
+  "title": "Iskalni indeks",
+  "algoliaWarning": "Algolia je gostovana storitev z omejitvami na brezplačnem nivoju. Vsaka operacija ponovnega indeksiranja porabi kvoto.",
+  "columns": {
+    "entity": "Entiteta",
+    "records": "Zapis",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Čaka...",
+    "running": "Tek",
+    "completed": "Dokončano",
+    "failed": "Neuspešno"
+  },
+  "actions": {
+    "reindex": "Ponovno indeksiranje",
+    "confirmReindex": "Potrdite ponovno indeksiranje",
+    "flush": "Opraviči indeks",
+    "confirmFlush": "Potrdite izbris",
+    "deleteIndex": "Izbriši indeks",
+    "confirmDeleteIndex": "Potrdi izbris",
+    "reindexAll": "Ponovno indeksiraj vse",
+    "confirmReindexAll": "Potrdite popolno ponovno indeksiranje",
+    "flushAll": "Opraviči vse indekse",
+    "confirmFlushAll": "Potrdite popoln izbris",
+    "deleteIndexAll": "Izbriši vse indekse",
+    "confirmDeleteIndexAll": "Potrdite popolno brisanje"
+  },
+  "records": "zapisi",
+  "progressLabel": "Napredek pri ponovnem indeksiranju za {{entity}}",
+  "reindexCompleted": "Ponovno indeksiranje {{entity}} je zaključeno",
+  "reindexFailed": "Ponovno indeksiranje {{entity}} je neuspešno",
+  "reindexError": "Napaka pri zagonu ponovnega indeksiranja za {{entity}}",
+  "flushCompleted": "Indeks {{entity}} je opravičen",
+  "flushError": "Napaka pri opravičevanju indeksa {{entity}}",
+  "deleteIndexCompleted": "Indeks {{entity}} je izbrisan",
+  "deleteIndexError": "Napaka pri brisanju indeksa {{entity}}",
+  "bulkFlushCompleted": "Vsi indeksi so opravičeni",
+  "bulkDeleteIndexCompleted": "Vsi indeksi so izbrisani"
+}

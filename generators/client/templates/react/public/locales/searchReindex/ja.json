@@ -1,0 +1,40 @@
+{
+  "title": "検索インデックス",
+  "algoliaWarning": "Algoliaは無料プランに制限のあるホスティングサービスです。再インデックス操作はすべてクォータを消費します。",
+  "columns": {
+    "entity": "エンティティ",
+    "records": "レコード",
+    "status": "ステータス"
+  },
+  "status": {
+    "pending": "保留中...",
+    "running": "実行中",
+    "completed": "完了",
+    "failed": "失敗"
+  },
+  "actions": {
+    "reindex": "再インデックス",
+    "confirmReindex": "再インデックス確認",
+    "flush": "インデックスをフラッシュ",
+    "confirmFlush": "フラッシュ確認",
+    "deleteIndex": "インデックスを削除",
+    "confirmDeleteIndex": "削除を確認",
+    "reindexAll": "すべて再インデックス",
+    "confirmReindexAll": "完全再インデックス確認",
+    "flushAll": "すべてのインデックスをフラッシュ",
+    "confirmFlushAll": "完全フラッシュ確認",
+    "deleteIndexAll": "すべてのインデックスを削除",
+    "confirmDeleteIndexAll": "完全削除確認"
+  },
+  "records": "レコード",
+  "progressLabel": "{{entity}}の再インデックス進行状況",
+  "reindexCompleted": "{{entity}}の再インデックスが完了しました",
+  "reindexFailed": "{{entity}}の再インデックスが失敗しました",
+  "reindexError": "{{entity}}の再インデックスを開始中にエラーが発生しました",
+  "flushCompleted": "インデックス{{entity}}がフラッシュされました",
+  "flushError": "インデックス{{entity}}をフラッシュする際にエラーが発生しました",
+  "deleteIndexCompleted": "インデックス{{entity}}が削除されました",
+  "deleteIndexError": "インデックス{{entity}}を削除する際にエラーが発生しました",
+  "bulkFlushCompleted": "すべてのインデックスがフラッシュされました",
+  "bulkDeleteIndexCompleted": "すべてのインデックスが削除されました"
+}

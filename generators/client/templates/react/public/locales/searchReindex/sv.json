@@ -1,0 +1,40 @@
+{
+  "title": "Sökindex",
+  "algoliaWarning": "Algolia är en hostad tjänst med begränsningar på den kostnadsfria nivån. Varje omindexeringsoperation förbrukar kvot.",
+  "columns": {
+    "entity": "Enhet",
+    "records": "Poster",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Väntar...",
+    "running": "Kör",
+    "completed": "Avslutad",
+    "failed": "Misslyckad"
+  },
+  "actions": {
+    "reindex": "Omindexera",
+    "confirmReindex": "Bekräfta omindexering",
+    "flush": "Töm index",
+    "confirmFlush": "Bekräfta tömning",
+    "deleteIndex": "Ta bort index",
+    "confirmDeleteIndex": "Bekräfta radering",
+    "reindexAll": "Omindexera allt",
+    "confirmReindexAll": "Bekräfta full omindexering",
+    "flushAll": "Töm alla index",
+    "confirmFlushAll": "Bekräfta full tömning",
+    "deleteIndexAll": "Ta bort alla index",
+    "confirmDeleteIndexAll": "Bekräfta full borttagning"
+  },
+  "records": "poster",
+  "progressLabel": "Omindexeringsframsteg för {{entity}}",
+  "reindexCompleted": "Omindexering av {{entity}} avslutad",
+  "reindexFailed": "Omindexering av {{entity}} misslyckades",
+  "reindexError": "Fel vid start av omindexering för {{entity}}",
+  "flushCompleted": "Index {{entity}} tömt",
+  "flushError": "Fel vid tömning av index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} borttaget",
+  "deleteIndexError": "Fel vid borttagning av index {{entity}}",
+  "bulkFlushCompleted": "Alla index tömda",
+  "bulkDeleteIndexCompleted": "Alla index borttagna"
+}

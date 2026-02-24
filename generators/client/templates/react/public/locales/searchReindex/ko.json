@@ -1,0 +1,40 @@
+{
+  "title": "검색 인덱스",
+  "algoliaWarning": "Algolia는 무료 요금제에 한계가 있는 호스팅 서비스입니다. 모든 리인덱스 작업은 할당량을 소모합니다.",
+  "columns": {
+    "entity": "엔티티",
+    "records": "레코드",
+    "status": "상태"
+  },
+  "status": {
+    "pending": "대기 중...",
+    "running": "실행 중",
+    "completed": "완료",
+    "failed": "실패"
+  },
+  "actions": {
+    "reindex": "리인덱스",
+    "confirmReindex": "리인덱스 확인",
+    "flush": "인덱스 플러시",
+    "confirmFlush": "플러시 확인",
+    "deleteIndex": "인덱스 삭제",
+    "confirmDeleteIndex": "삭제 확인",
+    "reindexAll": "모두 리인덱스",
+    "confirmReindexAll": "전체 리인덱스 확인",
+    "flushAll": "모든 인덱스 플러시",
+    "confirmFlushAll": "전체 플러시 확인",
+    "deleteIndexAll": "모든 인덱스 삭제",
+    "confirmDeleteIndexAll": "전체 삭제 확인"
+  },
+  "records": "레코드",
+  "progressLabel": "{{entity}}의 리인덱싱 진행 상황",
+  "reindexCompleted": "{{entity}}의 리인덱싱이 완료되었습니다",
+  "reindexFailed": "{{entity}}의 리인덱싱이 실패했습니다",
+  "reindexError": "{{entity}}에 대한 리인덱스 시작 오류",
+  "flushCompleted": "인덱스 {{entity}}가 플러시되었습니다",
+  "flushError": "인덱스 {{entity}} 플러시 오류",
+  "deleteIndexCompleted": "인덱스 {{entity}}가 삭제되었습니다",
+  "deleteIndexError": "인덱스 {{entity}} 삭제 오류",
+  "bulkFlushCompleted": "모든 인덱스가 플러시되었습니다",
+  "bulkDeleteIndexCompleted": "모든 인덱스가 삭제되었습니다"
+}

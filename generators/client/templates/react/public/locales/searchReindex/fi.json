@@ -1,0 +1,40 @@
+{
+  "title": "Hakemisto",
+  "algoliaWarning": "Algolia on isännöity palvelu, jossa on rajoituksia ilmaisella tasolla. Jokainen uudelleenindeksointitoiminto kuluttaa osuutta.",
+  "columns": {
+    "entity": "Entiteetti",
+    "records": "Tietueet",
+    "status": "Tila"
+  },
+  "status": {
+    "pending": "Odottaa...",
+    "running": "Suoritetaan",
+    "completed": "Valmis",
+    "failed": "Epätavallinen"
+  },
+  "actions": {
+    "reindex": "Uudelleenindeksoi",
+    "confirmReindex": "Vahvista uudelleenindeksointi",
+    "flush": "Tyhjennä indeksi",
+    "confirmFlush": "Vahvista tyhjennys",
+    "deleteIndex": "Poista indeksi",
+    "confirmDeleteIndex": "Vahvista poistaminen",
+    "reindexAll": "Uudelleenindeksoi kaikki",
+    "confirmReindexAll": "Vahvista koko uudelleenindeksointi",
+    "flushAll": "Tyhjennä kaikki indeksit",
+    "confirmFlushAll": "Vahvista koko tyhjennys",
+    "deleteIndexAll": "Poista kaikki indeksit",
+    "confirmDeleteIndexAll": "Vahvista koko poistaminen"
+  },
+  "records": "tietueet",
+  "progressLabel": "Uudelleenindeksointiprosessi {{entity}} varten",
+  "reindexCompleted": "{{entity}} uudelleenindeksointi valmis",
+  "reindexFailed": "{{entity}} uudelleenindeksointi epäonnistui",
+  "reindexError": "Virhe uudelleenindeksoinnin aloittamisessa {{entity}}:lle",
+  "flushCompleted": "Indeksi {{entity}} tyhjennetty",
+  "flushError": "Virhe täyttämisessä indeksi {{entity}}",
+  "deleteIndexCompleted": "Indeksi {{entity}} poistettu",
+  "deleteIndexError": "Virhe poistettaessa indeksi {{entity}}",
+  "bulkFlushCompleted": "Kaikki indeksit tyhjennetty",
+  "bulkDeleteIndexCompleted": "Kaikki indeksit poistettu"
+}

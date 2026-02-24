@@ -1,0 +1,40 @@
+{
+  "title": "Iyìwò Àwárí",
+  "algoliaWarning": "Algolia jẹ́ iṣẹ́ tí a gbà sílẹ̀ pẹ̀lú àwọn ìdíyelé lórí ipele ọfẹ. Gbogbo iṣẹ́ atunṣe kópa wàhálà.",
+  "columns": {
+    "entity": "Ìṣẹ́",
+    "records": "Àkọsílẹ̀",
+    "status": "Ìpèjọ́"
+  },
+  "status": {
+    "pending": "Níbi ìbẹ̀rẹ̀...",
+    "running": "Ṣíṣe",
+    "completed": "Kó parí",
+    "failed": "Fé"
+  },
+  "actions": {
+    "reindex": "Ìtòsọ́nà",
+    "confirmReindex": "Jẹ́ kí a fọwọ́sowọ́pọ̀ ìtòsọ́nà",
+    "flush": "Wẹ̀ ìkàwé",
+    "confirmFlush": "Jẹ́ kí a fọwọ́sowọ́pọ̀ wẹ̀",
+    "deleteIndex": "Parè ìkàwé",
+    "confirmDeleteIndex": "Jẹ́ kí a dá sílẹ̀",
+    "reindexAll": "Ìtòsọ́nà gbogbo",
+    "confirmReindexAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ ìtòsọ́nà gbogbo",
+    "flushAll": "Wẹ̀ gbogbo ìkàwé",
+    "confirmFlushAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ wẹ̀ gbogbo",
+    "deleteIndexAll": "Parè gbogbo ìkàwé",
+    "confirmDeleteIndexAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ parè gbogbo"
+  },
+  "records": "àkọsílẹ̀",
+  "progressLabel": "Ìdàgbàsókè ìtòsọ́nà fún {{entity}}",
+  "reindexCompleted": "Ìtòsọ́nà ti {{entity}} parí",
+  "reindexFailed": "Ìtòsọ́nà ti {{entity}} fé",
+  "reindexError": "Kòsùn-ṣàkóso níbè lórí ìtòsọ́nà fún {{entity}}",
+  "flushCompleted": "Ìkàwé {{entity}} ti wẹ̀",
+  "flushError": "Kòsùn-ṣàkóso níbè lórí ìkàwé {{entity}}",
+  "deleteIndexCompleted": "Ìkàwé {{entity}} ti parè",
+  "deleteIndexError": "Kòsùn-ṣàkóso níbè lórí parè ìkàwé {{entity}}",
+  "bulkFlushCompleted": "Gbogbo ìkàwé ti wẹ̀",
+  "bulkDeleteIndexCompleted": "Gbogbo ìkàwé ti parè"
+}

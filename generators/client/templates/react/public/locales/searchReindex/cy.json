@@ -1,0 +1,40 @@
+{
+  "title": "Chwilio Mynegai",
+  "algoliaWarning": "Mae Algolia yn gwasanaeth wedi'i gynnal gyda chyfyngiadau ar y haen am ddim. Mae pob gweithred ail-gydgrynhoi yn defnyddio cwota.",
+  "columns": {
+    "entity": "Endid",
+    "records": "Cofnodion",
+    "status": "Statws"
+  },
+  "status": {
+    "pending": "Ar aros...",
+    "running": "Yn rhedeg",
+    "completed": "Wedi'i gwblhau",
+    "failed": "Methodd"
+  },
+  "actions": {
+    "reindex": "Ail-gydgrynhoi",
+    "confirmReindex": "Cadarnhau ail-gydgrynhoi",
+    "flush": "Chwyddo mynegai",
+    "confirmFlush": "Cadarnhau chwyddo",
+    "deleteIndex": "Dileu mynegai",
+    "confirmDeleteIndex": "Cadarnhau dileu",
+    "reindexAll": "Ail-gydgrynhoi pob un",
+    "confirmReindexAll": "Cadarnhau ail-gydgrynhoi llawn",
+    "flushAll": "Chwyddo pob mynegai",
+    "confirmFlushAll": "Cadarnhau chwyddo llawn",
+    "deleteIndexAll": "Dileu pob mynegai",
+    "confirmDeleteIndexAll": "Cadarnhau dileu llawn"
+  },
+  "records": "cofnodion",
+  "progressLabel": "Cynnydd ail-gydgrynhoi ar gyfer {{entity}}",
+  "reindexCompleted": "Mae ail-gydgrynhoi {{entity}} wedi'i gwblhau",
+  "reindexFailed": "Methodd ail-gydgrynhoi {{entity}}",
+  "reindexError": "Gwall wrth ddechrau ail-gydgrynhoi ar gyfer {{entity}}",
+  "flushCompleted": "Mynegai {{entity}} wedi'i chwyddo",
+  "flushError": "Gwall wrth chwyddo mynegai {{entity}}",
+  "deleteIndexCompleted": "Mynegai {{entity}} wedi'i ddileu",
+  "deleteIndexError": "Gwall wrth ddileu mynegai {{entity}}",
+  "bulkFlushCompleted": "Mae pob mynegai wedi'i chwyddo",
+  "bulkDeleteIndexCompleted": "Mae pob mynegai wedi'i ddileu"
+}

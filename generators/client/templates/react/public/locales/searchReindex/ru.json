@@ -1,0 +1,40 @@
+{
+  "title": "Индекс поиска",
+  "algoliaWarning": "Algolia - это управляемый сервис с ограничениями на бесплатном уровне. Каждая операция повторной индексации потребляет квоту.",
+  "columns": {
+    "entity": "Сущность",
+    "records": "Записи",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "В ожидании...",
+    "running": "Выполняется",
+    "completed": "Завершено",
+    "failed": "Неудача"
+  },
+  "actions": {
+    "reindex": "Повторная индексация",
+    "confirmReindex": "Подтвердить повторную индексацию",
+    "flush": "Очистить индекс",
+    "confirmFlush": "Подтвердить очистку",
+    "deleteIndex": "Удалить индекс",
+    "confirmDeleteIndex": "Подтвердить удаление",
+    "reindexAll": "Повторная индексация всех",
+    "confirmReindexAll": "Подтвердить полную повторную индексацию",
+    "flushAll": "Очистить все индексы",
+    "confirmFlushAll": "Подтвердить полную очистку",
+    "deleteIndexAll": "Удалить все индексы",
+    "confirmDeleteIndexAll": "Подтвердить полное удаление"
+  },
+  "records": "записи",
+  "progressLabel": "Прогресс повторной индексации для {{entity}}",
+  "reindexCompleted": "Повторная индексация {{entity}} завершена",
+  "reindexFailed": "Повторная индексация {{entity}} не удалась",
+  "reindexError": "Ошибка при запуске повторной индексации для {{entity}}",
+  "flushCompleted": "Индекс {{entity}} очищен",
+  "flushError": "Ошибка при очистке индекса {{entity}}",
+  "deleteIndexCompleted": "Индекс {{entity}} удален",
+  "deleteIndexError": "Ошибка при удалении индекса {{entity}}",
+  "bulkFlushCompleted": "Все индексы очищены",
+  "bulkDeleteIndexCompleted": "Все индексы удалены"
+}

@@ -26,6 +26,10 @@ import AuditHistory from './pages/audit/AuditHistory';
 import AuditUserActivity from './pages/audit/AuditUserActivity';
 
 import { LogViewer } from './pages/server-logs/LogViewer';
+<%  if (!['null', 'database'].includes(searchEngine)) { -%>
+
+import SearchReindexList from './pages/search-reindex/SearchReindexList';
+<%  } -%>
 
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
@@ -143,6 +147,21 @@ function App() {
                 </Can>
               }
             />
+<%  if (!['null', 'database'].includes(searchEngine)) { -%>
+            <Route
+              path="/search-reindex"
+              element={
+                <Can
+                  resource="SearchReindex"
+                  action="read"
+                  fallback={<Err403 />}
+                  force_login={true}
+                >
+                  <SearchReindexList />
+                </Can>
+              }
+            />
+<%  } -%>
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<Err404 />} />

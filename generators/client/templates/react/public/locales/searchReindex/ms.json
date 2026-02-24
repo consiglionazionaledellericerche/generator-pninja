@@ -1,0 +1,40 @@
+{
+  "title": "Carian Indeks",
+  "algoliaWarning": "Algolia adalah perkhidmatan yang dihoskan dengan had pada tahap percuma. Setiap operasi reindex menggunakan kuota.",
+  "columns": {
+    "entity": "Entiti",
+    "records": "Rekod",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Tertunda...",
+    "running": "Sedang berjalan",
+    "completed": "Selesai",
+    "failed": "Gagal"
+  },
+  "actions": {
+    "reindex": "Reindex",
+    "confirmReindex": "Sahkan reindex",
+    "flush": "Kosongkan indeks",
+    "confirmFlush": "Sahkan pengosongan",
+    "deleteIndex": "Padam indeks",
+    "confirmDeleteIndex": "Sahkan penghapusan",
+    "reindexAll": "Reindex semua",
+    "confirmReindexAll": "Sahkan reindex penuh",
+    "flushAll": "Kosongkan semua indeks",
+    "confirmFlushAll": "Sahkan pengosongan penuh",
+    "deleteIndexAll": "Padam semua indeks",
+    "confirmDeleteIndexAll": "Sahkan penghapusan penuh"
+  },
+  "records": "rekod",
+  "progressLabel": "Kemajuan reindexing untuk {{entity}}",
+  "reindexCompleted": "Reindexing bagi {{entity}} selesai",
+  "reindexFailed": "Reindexing bagi {{entity}} gagal",
+  "reindexError": "Ralat semasa memulakan reindex untuk {{entity}}",
+  "flushCompleted": "Indeks {{entity}} telah dikosongkan",
+  "flushError": "Ralat semasa mengosongkan indeks {{entity}}",
+  "deleteIndexCompleted": "Indeks {{entity}} telah dipadam",
+  "deleteIndexError": "Ralat semasa memadam indeks {{entity}}",
+  "bulkFlushCompleted": "Semua indeks telah dikosongkan",
+  "bulkDeleteIndexCompleted": "Semua indeks telah dipadam"
+}

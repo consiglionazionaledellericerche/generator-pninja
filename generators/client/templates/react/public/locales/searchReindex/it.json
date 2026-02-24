@@ -1,0 +1,40 @@
+{
+  "title": "Indice di ricerca",
+  "algoliaWarning": "Algolia è un servizio ospitato con limiti sul piano gratuito. Ogni operazione di reindicizzazione consuma quota.",
+  "columns": {
+    "entity": "Entità",
+    "records": "Registrazioni",
+    "status": "Stato"
+  },
+  "status": {
+    "pending": "In attesa...",
+    "running": "In esecuzione",
+    "completed": "Completato",
+    "failed": "Fallito"
+  },
+  "actions": {
+    "reindex": "Reindicizza",
+    "confirmReindex": "Conferma reindicizzazione",
+    "flush": "Svuota indice",
+    "confirmFlush": "Conferma svuotamento",
+    "deleteIndex": "Elimina indice",
+    "confirmDeleteIndex": "Conferma eliminazione",
+    "reindexAll": "Reindicizza tutto",
+    "confirmReindexAll": "Conferma reindicizzazione completa",
+    "flushAll": "Svuota tutti gli indici",
+    "confirmFlushAll": "Conferma svuotamento completo",
+    "deleteIndexAll": "Elimina tutti gli indici",
+    "confirmDeleteIndexAll": "Conferma eliminazione completa"
+  },
+  "records": "registrazioni",
+  "progressLabel": "Progresso della reindicizzazione per {{entity}}",
+  "reindexCompleted": "Reindicizzazione di {{entity}} completata",
+  "reindexFailed": "Reindicizzazione di {{entity}} fallita",
+  "reindexError": "Errore nell'avvio della reindicizzazione per {{entity}}",
+  "flushCompleted": "Indice {{entity}} svuotato",
+  "flushError": "Errore nello svuotamento dell'indice {{entity}}",
+  "deleteIndexCompleted": "Indice {{entity}} eliminato",
+  "deleteIndexError": "Errore nell'eliminazione dell'indice {{entity}}",
+  "bulkFlushCompleted": "Tutti gli indici svuotati",
+  "bulkDeleteIndexCompleted": "Tutti gli indici eliminati"
+}

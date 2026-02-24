@@ -1,0 +1,40 @@
+{
+  "title": "Tìm kiếm chỉ mục",
+  "algoliaWarning": "Algolia là một dịch vụ lưu trữ với giới hạn trên mức miễn phí. Mỗi thao tác tái lập chỉ mục tiêu tốn hạn ngạch.",
+  "columns": {
+    "entity": "Thực thể",
+    "records": "Bản ghi",
+    "status": "Trạng thái"
+  },
+  "status": {
+    "pending": "Đang chờ...",
+    "running": "Đang chạy",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại"
+  },
+  "actions": {
+    "reindex": "Tái lập chỉ mục",
+    "confirmReindex": "Xác nhận tái lập chỉ mục",
+    "flush": "Xóa chỉ mục",
+    "confirmFlush": "Tái lập tất cả",
+    "deleteIndex": "Xác nhận tái lập lại toàn bộ",
+    "confirmDeleteIndex": "Xác nhận xóa",
+    "reindexAll": "Xóa tất cả chỉ mục",
+    "confirmReindexAll": "Xác nhận xóa toàn bộ",
+    "flushAll": "bản ghi",
+    "confirmFlushAll": "Tiến trình tái lập chỉ mục cho {{entity}}",
+    "deleteIndexAll": "Tái lập chỉ mục của {{entity}} đã hoàn thành",
+    "confirmDeleteIndexAll": "Tái lập chỉ mục của {{entity}} thất bại"
+  },
+  "records": "Lỗi khi khởi động tái lập chỉ mục cho {{entity}}",
+  "progressLabel": "Chỉ mục {{entity}} đã được xóa",
+  "reindexCompleted": "Lỗi khi xóa chỉ mục {{entity}}",
+  "reindexFailed": "Chỉ mục {{entity}} đã bị xóa",
+  "reindexError": "Lỗi khi xóa chỉ mục {{entity}}",
+  "flushCompleted": "Tất cả các chỉ mục đã được xóa",
+  "flushError": "Tất cả các chỉ mục đã bị xóa",
+  "deleteIndexCompleted": "Index {{entity}} deleted",
+  "deleteIndexError": "Error deleting index {{entity}}",
+  "bulkFlushCompleted": "All indexes flushed",
+  "bulkDeleteIndexCompleted": "All indexes deleted"
+}

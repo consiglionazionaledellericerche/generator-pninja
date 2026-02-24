@@ -1,0 +1,40 @@
+{
+  "title": "Søgeindeks",
+  "algoliaWarning": "Algolia er en hostet service med grænser på den gratis plan. Hver reindekseringsoperation forbruger kvote.",
+  "columns": {
+    "entity": "Enhed",
+    "records": "Poster",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Ventende...",
+    "running": "Kørende",
+    "completed": "Færdig",
+    "failed": "Mislykket"
+  },
+  "actions": {
+    "reindex": "Reindekser",
+    "confirmReindex": "Bekræft reindeksering",
+    "flush": "Flush indeks",
+    "confirmFlush": "Bekræft flush",
+    "deleteIndex": "Slet indeks",
+    "confirmDeleteIndex": "Bekræft sletning",
+    "reindexAll": "Reindekser alle",
+    "confirmReindexAll": "Bekræft fuld reindeksering",
+    "flushAll": "Flush alle indekser",
+    "confirmFlushAll": "Bekræft fuld flush",
+    "deleteIndexAll": "Slet alle indekser",
+    "confirmDeleteIndexAll": "Bekræft fuld sletning"
+  },
+  "records": "poster",
+  "progressLabel": "Reindekseringsfremskridt for {{entity}}",
+  "reindexCompleted": "Reindeksering af {{entity}} fuldført",
+  "reindexFailed": "Reindeksering af {{entity}} mislykkedes",
+  "reindexError": "Fejl ved opstart af reindeksering for {{entity}}",
+  "flushCompleted": "Indeks {{entity}} flushed",
+  "flushError": "Fejl ved flush af indeks {{entity}}",
+  "deleteIndexCompleted": "Indeks {{entity}} slettet",
+  "deleteIndexError": "Fejl ved sletning af indeks {{entity}}",
+  "bulkFlushCompleted": "Alle indekser flushed",
+  "bulkDeleteIndexCompleted": "Alle indekser slettet"
+}

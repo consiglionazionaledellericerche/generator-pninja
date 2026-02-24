@@ -1,0 +1,40 @@
+{
+  "title": "Rechèch Index",
+  "algoliaWarning": "Algolia se yon sèvis hosting avèk limit sou nivo gratis la. Chak operasyon reindex konsome kvout la.",
+  "columns": {
+    "entity": "Antite",
+    "records": "Dosye",
+    "status": "Estati"
+  },
+  "status": {
+    "pending": "An atant...",
+    "running": "Ap kouri",
+    "completed": "Fini",
+    "failed": "Echwe"
+  },
+  "actions": {
+    "reindex": "Reindex",
+    "confirmReindex": "Konfime reindex",
+    "flush": "Flechi index",
+    "confirmFlush": "Konfime flechi",
+    "deleteIndex": "Efase index",
+    "confirmDeleteIndex": "Konfime efasman",
+    "reindexAll": "Reindex tout",
+    "confirmReindexAll": "Konfime reindex konplè",
+    "flushAll": "Flechi tout index",
+    "confirmFlushAll": "Konfime flechi konplè",
+    "deleteIndexAll": "Efase tout index",
+    "confirmDeleteIndexAll": "Konfime efasman konplè"
+  },
+  "records": "dosye",
+  "progressLabel": "Pwogrè reindexing pou {{entity}}",
+  "reindexCompleted": "Reindexing de {{entity}} fini",
+  "reindexFailed": "Reindexing de {{entity}} echwe",
+  "reindexError": "Erè pandan ap kòmanse reindex pou {{entity}}",
+  "flushCompleted": "Index {{entity}} flechi",
+  "flushError": "Erè pandan flechi index {{entity}}",
+  "deleteIndexCompleted": "Index {{entity}} efase",
+  "deleteIndexError": "Erè pandan efase index {{entity}}",
+  "bulkFlushCompleted": "Tout index flechi",
+  "bulkDeleteIndexCompleted": "Tout index efase"
+}
