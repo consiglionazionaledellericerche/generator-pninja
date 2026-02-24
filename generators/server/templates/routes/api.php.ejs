@@ -71,6 +71,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
     //     Route::get('/', [SearchReindexController::class, 'index']);
     //     Route::post('/{entity}', [SearchReindexController::class, 'reindex']);
     //     Route::delete('/{entity}', [SearchReindexController::class, 'flush']);
+    //     Route::delete('/{entity}/index', [SearchReindexController::class, 'deleteIndex']);
     //     Route::get('/status/{jobId}', [SearchReindexController::class, 'status']);
     // });
 <%  } -%>
@@ -88,6 +89,7 @@ Route::prefix('search/reindex')->group(function () {
     Route::get('/', [SearchReindexController::class, 'index']);
     Route::post('/{entity}', [SearchReindexController::class, 'reindex']);
     Route::delete('/{entity}', [SearchReindexController::class, 'flush']);
+    Route::delete('/{entity}/index', [SearchReindexController::class, 'deleteIndex']);
     Route::get('/status/{jobId}', [SearchReindexController::class, 'status']);
 });
 <%  } -%>

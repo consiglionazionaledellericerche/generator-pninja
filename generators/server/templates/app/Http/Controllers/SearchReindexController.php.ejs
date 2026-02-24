@@ -34,6 +34,15 @@ class SearchReindexController extends Controller
     {
         $jobId = (string) Str::uuid();
 
+        try {// Attempt to create the index before dispatching the job. If it already exists, we'll ignore the error and let the job handle it.
+            $modelClass = $request->modelClass();
+            app(\Laravel\Scout\EngineManager::class)->engine()->createIndex(
+                (new $modelClass)->searchableAs()
+            );
+        } catch (\Exception $e) {
+            // Index might already exist, ignore errors and proceed with reindexing
+        }
+
         Cache::put("reindex:{$jobId}", [
             'status'   => 'pending',
             'progress' => 0,
@@ -45,12 +54,29 @@ class SearchReindexController extends Controller
         return response()->json(['job_id' => $jobId], 202);
     }
 
+    /**
+     * Flushes the search index for the specified entity.
+     */
     public function flush(ReindexRequest $request): JsonResponse
     {
         $modelClass = $request->modelClass();
         $modelClass::removeAllFromSearch();
 
         return response()->json(['message' => 'Index flushed successfully']);
+    }
+
+    /**
+     * Deletes the search index for the specified entity.
+     */
+    public function deleteIndex(ReindexRequest $request): JsonResponse
+    {
+        $modelClass = $request->modelClass();
+
+        app(\Laravel\Scout\EngineManager::class)->engine()->deleteIndex(
+            (new $modelClass)->searchableAs()
+        );
+
+        return response()->json(['message' => 'Index deleted successfully']);
     }
 
     /**
