@@ -1,6 +1,8 @@
 {
   "title": "Indeks Pencarian",
   "algoliaWarning": "Algolia adalah layanan yang dihosting dengan batas pada tingkat gratis. Setiap operasi reindeks mengkonsumsi kuota.",
+  "selectAll": "Pilih semua entitas",
+  "selectEntity": "Pilih {{entity}}",
   "columns": {
     "entity": "Entitas",
     "records": "Rekam",
@@ -19,12 +21,12 @@
     "confirmFlush": "Konfirmasi pembersihan",
     "deleteIndex": "Hapus indeks",
     "confirmDeleteIndex": "Konfirmasi penghapusan",
-    "reindexAll": "Reindeks semua",
-    "confirmReindexAll": "Konfirmasi reindeks penuh",
-    "flushAll": "Bersihkan semua indeks",
-    "confirmFlushAll": "Konfirmasi pembersihan penuh",
-    "deleteIndexAll": "Hapus semua indeks",
-    "confirmDeleteIndexAll": "Konfirmasi penghapusan penuh"
+    "reindexSelected": "Reindex yang dipilih",
+    "confirmReindexSelected": "Konfirmasi reindeks",
+    "flushSelected": "Bersihkan yang dipilih",
+    "confirmFlushSelected": "Konfirmasi pembersihan",
+    "deleteIndexSelected": "Hapus indeks yang dipilih",
+    "confirmDeleteIndexSelected": "Konfirmasi penghapusan"
   },
   "records": "rekaman",
   "progressLabel": "Kemajuan reindeksing untuk {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Kesalahan saat membersihkan indeks {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} dihapus",
   "deleteIndexError": "Kesalahan saat menghapus indeks {{entity}}",
-  "bulkFlushCompleted": "Semua indeks dibersihkan",
-  "bulkDeleteIndexCompleted": "Semua indeks dihapus"
+  "bulkFlushCompleted": "Indeks yang dipilih dibersihkan",
+  "bulkDeleteIndexCompleted": "Indeks yang dipilih dihapus"
 }

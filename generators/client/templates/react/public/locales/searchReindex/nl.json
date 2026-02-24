@@ -1,6 +1,8 @@
 {
   "title": "Zoekindex",
   "algoliaWarning": "Algolia is een gehoste service met limieten voor de gratis laag. Elke reindexeerbewerking verbruikt quota.",
+  "selectAll": "Selecteer alle entiteiten",
+  "selectEntity": "Selecteer {{entity}}",
   "columns": {
     "entity": "Entiteit",
     "records": "Records",
@@ -19,12 +21,12 @@
     "confirmFlush": "Bevestig vernietiging",
     "deleteIndex": "Verwijder index",
     "confirmDeleteIndex": "Bevestig verwijdering",
-    "reindexAll": "Reindexeer alles",
-    "confirmReindexAll": "Bevestig volledige reindex",
-    "flushAll": "Vernietig alle indexen",
-    "confirmFlushAll": "Bevestig volledige vernietiging",
-    "deleteIndexAll": "Verwijder alle indexen",
-    "confirmDeleteIndexAll": "Bevestig volledige verwijdering"
+    "reindexSelected": "Herschik geselecteerd",
+    "confirmReindexSelected": "Bevestig reindex",
+    "flushSelected": "Vervang geselecteerd",
+    "confirmFlushSelected": "Bevestig vernietiging",
+    "deleteIndexSelected": "Verwijder geselecteerde indexen",
+    "confirmDeleteIndexSelected": "Bevestig verwijdering"
   },
   "records": "records",
   "progressLabel": "Reindexeer voortgang voor {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Fout bij het vernietigen van index {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} verwijderd",
   "deleteIndexError": "Fout bij het verwijderen van index {{entity}}",
-  "bulkFlushCompleted": "Alle indexen vernietigd",
-  "bulkDeleteIndexCompleted": "Alle indexen verwijderd"
+  "bulkFlushCompleted": "Geselecteerde indexen gewist",
+  "bulkDeleteIndexCompleted": "Geselecteerde indexen verwijderd"
 }

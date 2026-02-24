@@ -1,6 +1,8 @@
 {
   "title": "Iskalni indeks",
   "algoliaWarning": "Algolia je gostovana storitev z omejitvami na brezplačnem nivoju. Vsaka operacija ponovnega indeksiranja porabi kvoto.",
+  "selectAll": "Izberite vse entitete",
+  "selectEntity": "Izberite {{entity}}",
   "columns": {
     "entity": "Entiteta",
     "records": "Zapis",
@@ -19,12 +21,12 @@
     "confirmFlush": "Potrdite izbris",
     "deleteIndex": "Izbriši indeks",
     "confirmDeleteIndex": "Potrdi izbris",
-    "reindexAll": "Ponovno indeksiraj vse",
-    "confirmReindexAll": "Potrdite popolno ponovno indeksiranje",
-    "flushAll": "Opraviči vse indekse",
-    "confirmFlushAll": "Potrdite popoln izbris",
-    "deleteIndexAll": "Izbriši vse indekse",
-    "confirmDeleteIndexAll": "Potrdite popolno brisanje"
+    "reindexSelected": "Ponovno indeksirajte izbrane",
+    "confirmReindexSelected": "Potrdite ponovno indeksiranje",
+    "flushSelected": "Izpraznite izbrane",
+    "confirmFlushSelected": "Potrdite izbris",
+    "deleteIndexSelected": "Izbrišite izbrane indekse",
+    "confirmDeleteIndexSelected": "Potrdi izbris"
   },
   "records": "zapisi",
   "progressLabel": "Napredek pri ponovnem indeksiranju za {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Napaka pri opravičevanju indeksa {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} je izbrisan",
   "deleteIndexError": "Napaka pri brisanju indeksa {{entity}}",
-  "bulkFlushCompleted": "Vsi indeksi so opravičeni",
-  "bulkDeleteIndexCompleted": "Vsi indeksi so izbrisani"
+  "bulkFlushCompleted": "Izbrani indeksi so bili izpraznjeni",
+  "bulkDeleteIndexCompleted": "Izbrani indeksi so bili izbrisani"
 }

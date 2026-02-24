@@ -1,6 +1,8 @@
 {
   "title": "Qorannoo Indeksii",
   "algoliaWarning": "Algolia tajaajila qusannoo qabuu kan daangaa qabeessa ta'eedha. Hunda reindex gochuun qusannoo ni fayyada.",
+  "selectAll": "Hunda tokkoon tokkoon filadhu",
+  "selectEntity": "{{entity}} filadhu",
   "columns": {
     "entity": "Waa'ee",
     "records": "Galmeewwan",
@@ -19,12 +21,12 @@
     "confirmFlush": "Qusuu mirkaneeffadhu",
     "deleteIndex": "Indexii haqu",
     "confirmDeleteIndex": "Gatii haquu mirkaneessu",
-    "reindexAll": "Hunda reindex",
-    "confirmReindexAll": "Reindex guutuu mirkaneeffadhu",
-    "flushAll": "Hunda indexii qusuu",
-    "confirmFlushAll": "Qusuu guutuu mirkaneeffadhu",
-    "deleteIndexAll": "Hunda indexii haqu",
-    "confirmDeleteIndexAll": "Haquu guutuu mirkaneeffadhu"
+    "reindexSelected": "Filannoon filatame haala hojiirra oola",
+    "confirmReindexSelected": "Reindex mirkaneeffadhu",
+    "flushSelected": "Filannoon filatame gabbifame",
+    "confirmFlushSelected": "Qusuu mirkaneeffadhu",
+    "deleteIndexSelected": "Filannoon filatame haqame",
+    "confirmDeleteIndexSelected": "Gatii haquu mirkaneessu"
   },
   "records": "galmeewwan",
   "progressLabel": "Reindexing fooyya'iinsa {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Dogoggora index {{entity}} qulqulleessuu",
   "deleteIndexCompleted": "Index {{entity}} haqu",
   "deleteIndexError": "Dogoggora index {{entity}} haquu",
-  "bulkFlushCompleted": "Hunda indexii qulqulleefame",
-  "bulkDeleteIndexCompleted": "Hunda indexii haqi malee"
+  "bulkFlushCompleted": "Filannoon filatame gabbifame",
+  "bulkDeleteIndexCompleted": "Filannoon filatame haqame"
 }

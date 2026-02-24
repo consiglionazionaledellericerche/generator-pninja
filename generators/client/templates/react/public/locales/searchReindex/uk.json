@@ -1,6 +1,8 @@
 {
   "title": "Пошуковий індекс",
   "algoliaWarning": "Algolia - це хостингова служба з обмеженнями на безкоштовному тарифі. Кожна операція повторного індексації споживає квоту.",
+  "selectAll": "Вибрати всі сутності",
+  "selectEntity": "Вибрати {{entity}}",
   "columns": {
     "entity": "Сутність",
     "records": "Записи",
@@ -19,12 +21,12 @@
     "confirmFlush": "Підтвердити скидання",
     "deleteIndex": "Видалити індекс",
     "confirmDeleteIndex": "Підтвердити видалення",
-    "reindexAll": "Повторна індексація всіх",
-    "confirmReindexAll": "Підтвердити повну повторну індексацію",
-    "flushAll": "Скинути всі індекси",
-    "confirmFlushAll": "Підтвердити повне скидання",
-    "deleteIndexAll": "Видалити всі індекси",
-    "confirmDeleteIndexAll": "Підтвердити повне видалення"
+    "reindexSelected": "Перейменувати вибране",
+    "confirmReindexSelected": "Підтвердити повторну індексацію",
+    "flushSelected": "Скинути вибране",
+    "confirmFlushSelected": "Підтвердити скидання",
+    "deleteIndexSelected": "Видалити вибрані індекси",
+    "confirmDeleteIndexSelected": "Підтвердити видалення"
   },
   "records": "записи",
   "progressLabel": "Прогрес повторної індексації для {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Помилка при скиданні індексу {{entity}}",
   "deleteIndexCompleted": "Індекс {{entity}} видалено",
   "deleteIndexError": "Помилка при видаленні індексу {{entity}}",
-  "bulkFlushCompleted": "Всі індекси скинуті",
-  "bulkDeleteIndexCompleted": "Всі індекси видалені"
+  "bulkFlushCompleted": "Вибрані індекси скинуті",
+  "bulkDeleteIndexCompleted": "Вибрані індекси видалені"
 }

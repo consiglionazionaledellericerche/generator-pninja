@@ -1,6 +1,8 @@
 {
   "title": "Arama Endeksi",
   "algoliaWarning": "Algolia, ücretsiz katmanında sınırlamalarla birlikte barındırılan bir hizmettir. Her yeniden dizinleme işlemi kota tüketir.",
+  "selectAll": "Tüm varlıkları seç",
+  "selectEntity": "{{entity}}'yi seç",
   "columns": {
     "entity": "Varlık",
     "records": "Kayıtlar",
@@ -19,12 +21,12 @@
     "confirmFlush": "Temizleme onayı",
     "deleteIndex": "İndeksi sil",
     "confirmDeleteIndex": "Silme onayla",
-    "reindexAll": "Tümünü yeniden dizinle",
-    "confirmReindexAll": "Tam yeniden dizinleme onayı",
-    "flushAll": "Tüm indeksleri temizle",
-    "confirmFlushAll": "Tam temizleme onayı",
-    "deleteIndexAll": "Tüm indeksleri sil",
-    "confirmDeleteIndexAll": "Tam silme onayı"
+    "reindexSelected": "Seçilenleri yeniden dizinle",
+    "confirmReindexSelected": "Yeniden dizinleme onayı",
+    "flushSelected": "Seçilenleri temizle",
+    "confirmFlushSelected": "Temizleme onayı",
+    "deleteIndexSelected": "Seçilen dizinleri sil",
+    "confirmDeleteIndexSelected": "Silme onayla"
   },
   "records": "kayıtlar",
   "progressLabel": "{{entity}} için yeniden dizinleme ilerlemesi",
@@ -35,6 +37,6 @@
   "flushError": "İndeks {{entity}} temizleme hatası",
   "deleteIndexCompleted": "İndeks {{entity}} silindi",
   "deleteIndexError": "İndeks {{entity}} silme hatası",
-  "bulkFlushCompleted": "Tüm indeksler temizlendi",
-  "bulkDeleteIndexCompleted": "Tüm indeksler silindi"
+  "bulkFlushCompleted": "Seçilen dizinler temizlendi",
+  "bulkDeleteIndexCompleted": "Seçilen dizinler silindi"
 }

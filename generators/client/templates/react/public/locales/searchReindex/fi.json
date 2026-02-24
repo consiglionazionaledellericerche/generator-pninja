@@ -1,6 +1,8 @@
 {
   "title": "Hakemisto",
   "algoliaWarning": "Algolia on isännöity palvelu, jossa on rajoituksia ilmaisella tasolla. Jokainen uudelleenindeksointitoiminto kuluttaa osuutta.",
+  "selectAll": "Valitse kaikki entiteetit",
+  "selectEntity": "Valitse {{entity}}",
   "columns": {
     "entity": "Entiteetti",
     "records": "Tietueet",
@@ -19,12 +21,12 @@
     "confirmFlush": "Vahvista tyhjennys",
     "deleteIndex": "Poista indeksi",
     "confirmDeleteIndex": "Vahvista poistaminen",
-    "reindexAll": "Uudelleenindeksoi kaikki",
-    "confirmReindexAll": "Vahvista koko uudelleenindeksointi",
-    "flushAll": "Tyhjennä kaikki indeksit",
-    "confirmFlushAll": "Vahvista koko tyhjennys",
-    "deleteIndexAll": "Poista kaikki indeksit",
-    "confirmDeleteIndexAll": "Vahvista koko poistaminen"
+    "reindexSelected": "Uudelleenindeksoi valitut",
+    "confirmReindexSelected": "Vahvista uudelleenindeksointi",
+    "flushSelected": "Tyhjennä valitut",
+    "confirmFlushSelected": "Vahvista tyhjennys",
+    "deleteIndexSelected": "Poista valitut indeksit",
+    "confirmDeleteIndexSelected": "Vahvista poistaminen"
   },
   "records": "tietueet",
   "progressLabel": "Uudelleenindeksointiprosessi {{entity}} varten",
@@ -35,6 +37,6 @@
   "flushError": "Virhe täyttämisessä indeksi {{entity}}",
   "deleteIndexCompleted": "Indeksi {{entity}} poistettu",
   "deleteIndexError": "Virhe poistettaessa indeksi {{entity}}",
-  "bulkFlushCompleted": "Kaikki indeksit tyhjennetty",
-  "bulkDeleteIndexCompleted": "Kaikki indeksit poistettu"
+  "bulkFlushCompleted": "Valitut indeksit tyhjennetty",
+  "bulkDeleteIndexCompleted": "Valitut indeksit poistettu"
 }

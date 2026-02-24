@@ -1,6 +1,8 @@
 {
   "title": "Paieškos indeksas",
   "algoliaWarning": "Algolia yra talpinama paslauga, kuri turi ribas nemokamoje pakopoje. Kiekviena perindeksavimo operacija sunaudoja kvotą.",
+  "selectAll": "Pasirinkti visas entites",
+  "selectEntity": "Pasirinkti {{entity}}",
   "columns": {
     "entity": "Subjektas",
     "records": "Įrašai",
@@ -19,12 +21,12 @@
     "confirmFlush": "Patvirtinti išvalymą",
     "deleteIndex": "Ištrinti indeksą",
     "confirmDeleteIndex": "Patvirtinti ištrynimą",
-    "reindexAll": "Perindeksuoti viską",
-    "confirmReindexAll": "Patvirtinti viso perindeksavimo",
-    "flushAll": "Išvalyti visus indeksus",
-    "confirmFlushAll": "Patvirtinti viso išvalymo",
-    "deleteIndexAll": "Ištrinti visus indeksus",
-    "confirmDeleteIndexAll": "Patvirtinti viso ištrynimo"
+    "reindexSelected": "Perindexuoti parinktus",
+    "confirmReindexSelected": "Patvirtinti perindeksavimą",
+    "flushSelected": "Išvalyti parinktus",
+    "confirmFlushSelected": "Patvirtinti išvalymą",
+    "deleteIndexSelected": "Ištrinami parinkti indeksai",
+    "confirmDeleteIndexSelected": "Patvirtinti ištrynimą"
   },
   "records": "įrašai",
   "progressLabel": "Perindeksavimo pažanga už {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Klaida valant indeksą {{entity}}",
   "deleteIndexCompleted": "Indeksas {{entity}} ištrintas",
   "deleteIndexError": "Klaida trinant indeksą {{entity}}",
-  "bulkFlushCompleted": "Visi indeksai išvalyti",
-  "bulkDeleteIndexCompleted": "Visi indeksai ištrinti"
+  "bulkFlushCompleted": "Parinkti indeksai išvalyti",
+  "bulkDeleteIndexCompleted": "Parinkti indeksai ištrinti"
 }

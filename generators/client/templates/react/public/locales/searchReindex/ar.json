@@ -1,6 +1,8 @@
 {
   "title": "مؤشر البحث",
   "algoliaWarning": "Algolia هي خدمة مستضافة مع حدود على المستوى المجاني. كل عملية إعادة فهرسة تستهلك الحصة.",
+  "selectAll": "اختر جميع الكيانات",
+  "selectEntity": "اختر {{entity}}",
   "columns": {
     "entity": "كيان",
     "records": "سجلات",
@@ -19,12 +21,12 @@
     "confirmFlush": "تأكيد التفريغ",
     "deleteIndex": "حذف الفهرس",
     "confirmDeleteIndex": "تأكيد الحذف",
-    "reindexAll": "إعادة فهرسة الكل",
-    "confirmReindexAll": "تأكيد إعادة الفهرسة الكاملة",
-    "flushAll": "تفريغ جميع الفهارس",
-    "confirmFlushAll": "تأكيد التفريغ الكامل",
-    "deleteIndexAll": "حذف جميع الفهارس",
-    "confirmDeleteIndexAll": "تأكيد الحذف الكامل"
+    "reindexSelected": "إعادة فهرسة المحددة",
+    "confirmReindexSelected": "تأكيد إعادة الفهرسة",
+    "flushSelected": "تطهير المحددة",
+    "confirmFlushSelected": "تأكيد التفريغ",
+    "deleteIndexSelected": "حذف الفهارس المحددة",
+    "confirmDeleteIndexSelected": "تأكيد الحذف"
   },
   "records": "السجلات",
   "progressLabel": "تقدم إعادة الفهرسة لـ {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "خطأ في تفريغ الفهرس {{entity}}",
   "deleteIndexCompleted": "تم حذف الفهرس {{entity}}",
   "deleteIndexError": "خطأ في حذف الفهرس {{entity}}",
-  "bulkFlushCompleted": "تمت عملية تفريغ جميع الفهارس",
-  "bulkDeleteIndexCompleted": "تمت عملية حذف جميع الفهارس"
+  "bulkFlushCompleted": "تم تطهير الفهارس المحددة",
+  "bulkDeleteIndexCompleted": "تم حذف الفهارس المحددة"
 }

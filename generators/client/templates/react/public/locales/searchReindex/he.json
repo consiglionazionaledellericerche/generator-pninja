@@ -1,6 +1,8 @@
 {
   "title": "אינדקס חיפוש",
   "algoliaWarning": "אלגוליה היא שירות מנוהל עם מגבלות על השכבה החינמית. כל פעולה של רינדוקס צורכת מכסה.",
+  "selectAll": "בחר את כל הישויות",
+  "selectEntity": "בחר {{entity}}",
   "columns": {
     "entity": "ישות",
     "records": "רשומות",
@@ -19,12 +21,12 @@
     "confirmFlush": "אשרר ניקוי",
     "deleteIndex": "מחק אינדקס",
     "confirmDeleteIndex": "אשר מחיקה",
-    "reindexAll": "רינדוקס הכל",
-    "confirmReindexAll": "אשרר רינדוקס מלא",
-    "flushAll": "נקה את כל האינדקסים",
-    "confirmFlushAll": "אשרר ניקוי מלא",
-    "deleteIndexAll": "מחק את כל האינדקסים",
-    "confirmDeleteIndexAll": "אשרר מחיקה מלאה"
+    "reindexSelected": "מוין מחדש את הנבחרים",
+    "confirmReindexSelected": "אשרר רינדוקס",
+    "flushSelected": "נקה את הנבחרים",
+    "confirmFlushSelected": "אשרר ניקוי",
+    "deleteIndexSelected": "מחק את האינדקסים הנבחרים",
+    "confirmDeleteIndexSelected": "אשר מחיקה"
   },
   "records": "רשומות",
   "progressLabel": "התקדמות רינדוקס עבור {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "שגיאה בניקוי אינדקס {{entity}}",
   "deleteIndexCompleted": "אינדקס {{entity}} נמחק",
   "deleteIndexError": "שגיאה במחקת אינדקס {{entity}}",
-  "bulkFlushCompleted": "כל האינדקסים נמחקו",
-  "bulkDeleteIndexCompleted": "כל האינדקסים נמחקו"
+  "bulkFlushCompleted": "האינדקסים הנבחרים נמחקו",
+  "bulkDeleteIndexCompleted": "האינדקסים הנבחרים נוקו"
 }

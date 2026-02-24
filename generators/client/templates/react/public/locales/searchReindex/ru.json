@@ -1,6 +1,8 @@
 {
   "title": "Индекс поиска",
   "algoliaWarning": "Algolia - это управляемый сервис с ограничениями на бесплатном уровне. Каждая операция повторной индексации потребляет квоту.",
+  "selectAll": "Выбрать все сущности",
+  "selectEntity": "Выбрать {{entity}}",
   "columns": {
     "entity": "Сущность",
     "records": "Записи",
@@ -19,12 +21,12 @@
     "confirmFlush": "Подтвердить очистку",
     "deleteIndex": "Удалить индекс",
     "confirmDeleteIndex": "Подтвердить удаление",
-    "reindexAll": "Повторная индексация всех",
-    "confirmReindexAll": "Подтвердить полную повторную индексацию",
-    "flushAll": "Очистить все индексы",
-    "confirmFlushAll": "Подтвердить полную очистку",
-    "deleteIndexAll": "Удалить все индексы",
-    "confirmDeleteIndexAll": "Подтвердить полное удаление"
+    "reindexSelected": "Переиндексировать выбранные",
+    "confirmReindexSelected": "Подтвердить повторную индексацию",
+    "flushSelected": "Сбросить выбранные",
+    "confirmFlushSelected": "Подтвердить очистку",
+    "deleteIndexSelected": "Удалить выбранные индексы",
+    "confirmDeleteIndexSelected": "Подтвердить удаление"
   },
   "records": "записи",
   "progressLabel": "Прогресс повторной индексации для {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Ошибка при очистке индекса {{entity}}",
   "deleteIndexCompleted": "Индекс {{entity}} удален",
   "deleteIndexError": "Ошибка при удалении индекса {{entity}}",
-  "bulkFlushCompleted": "Все индексы очищены",
-  "bulkDeleteIndexCompleted": "Все индексы удалены"
+  "bulkFlushCompleted": "Выбранные индексы сброшены",
+  "bulkDeleteIndexCompleted": "Выбранные индексы удалены"
 }

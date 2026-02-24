@@ -1,6 +1,8 @@
 {
   "title": "Keresési index",
   "algoliaWarning": "Az Algolia egy hosztolt szolgáltatás, amelynek ingyenes szintjén korlátozások vannak. Minden újraindexelési művelet kvótát fogyaszt.",
+  "selectAll": "Válassza ki az összes entitást",
+  "selectEntity": "Válassza ki {{entity}}",
   "columns": {
     "entity": "Entitás",
     "records": "Rekordok",
@@ -19,12 +21,12 @@
     "confirmFlush": "Megerősítés kiürítés",
     "deleteIndex": "Index törlése",
     "confirmDeleteIndex": "Törlés megerősítése",
-    "reindexAll": "Újraindexelés mind",
-    "confirmReindexAll": "Megerősítés teljes újraindexelés",
-    "flushAll": "Minden index kiürítése",
-    "confirmFlushAll": "Megerősítés teljes kiürítés",
-    "deleteIndexAll": "Minden index törlése",
-    "confirmDeleteIndexAll": "Megerősítés teljes törlés"
+    "reindexSelected": "Az kiválasztottakat reindexálja",
+    "confirmReindexSelected": "Megerősítés újraindexelés",
+    "flushSelected": "Az kiválasztottakat törölje",
+    "confirmFlushSelected": "Megerősítés kiürítés",
+    "deleteIndexSelected": "A kiválasztott indexek kiürítve",
+    "confirmDeleteIndexSelected": "Törlés megerősítése"
   },
   "records": "rekordok",
   "progressLabel": "Újraindexelési előrehaladás a(z) {{entity}} számára",
@@ -35,6 +37,6 @@
   "flushError": "Hiba történt az index kiürítésekor a(z) {{entity}} esetében",
   "deleteIndexCompleted": "A(z) {{entity}} index törölve",
   "deleteIndexError": "Hiba történt az index törlésekor a(z) {{entity}} esetében",
-  "bulkFlushCompleted": "Minden index kiürítve",
-  "bulkDeleteIndexCompleted": "Minden index törölve"
+  "bulkFlushCompleted": "A kiválasztott indexek törölve",
+  "bulkDeleteIndexCompleted": "Selected indexes deleted"
 }

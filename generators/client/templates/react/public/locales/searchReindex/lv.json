@@ -1,6 +1,8 @@
 {
   "title": "Meklēšanas indekss",
   "algoliaWarning": "Algolia ir mitināta pakalpojums ar ierobežojumiem bezmaksas līmenī. Katrs reindeksācijas darbs patērē kvotu.",
+  "selectAll": "Atlasīt visas vienības",
+  "selectEntity": "Atlasīt {{entity}}",
   "columns": {
     "entity": "Vienība",
     "records": "Ieraksti",
@@ -19,12 +21,12 @@
     "confirmFlush": "Apstiprināt notīrīšanu",
     "deleteIndex": "Dzēst indeksu",
     "confirmDeleteIndex": "Apstiprināt dzēšanu",
-    "reindexAll": "Reindeksēt visus",
-    "confirmReindexAll": "Apstiprināt pilnīgu reindeksāciju",
-    "flushAll": "Notīrīt visus indeksus",
-    "confirmFlushAll": "Apstiprināt pilnīgu notīrīšanu",
-    "deleteIndexAll": "Dzēst visus indeksus",
-    "confirmDeleteIndexAll": "Apstiprināt pilnīgu dzēšanu"
+    "reindexSelected": "Pārindot atlasītos",
+    "confirmReindexSelected": "Apstiprināt reindeksāciju",
+    "flushSelected": "Notīrīt atlasītos",
+    "confirmFlushSelected": "Apstiprināt notīrīšanu",
+    "deleteIndexSelected": "Dzēst atlasītos indeksus",
+    "confirmDeleteIndexSelected": "Apstiprināt dzēšanu"
   },
   "records": "ieraksti",
   "progressLabel": "Reindeksācijas progress {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Kļūda, notīrot indeksu {{entity}}",
   "deleteIndexCompleted": "Indeksu {{entity}} dzēsts",
   "deleteIndexError": "Kļūda, dzēšot indeksu {{entity}}",
-  "bulkFlushCompleted": "Visi indeksi notīrīti",
-  "bulkDeleteIndexCompleted": "Visi indeksi dzēsti"
+  "bulkFlushCompleted": "Atlasītie indeksi notīrīti",
+  "bulkDeleteIndexCompleted": "Atlasītie indeksi dzēsti"
 }

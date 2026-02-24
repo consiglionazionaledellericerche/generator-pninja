@@ -1,6 +1,8 @@
 {
   "title": "অনুসন্ধান সূচী",
   "algoliaWarning": "অ্যালগোলিয়া একটি হোস্টেড সার্ভিস যা ফ্রি টিয়ারে সীমাবদ্ধতা রয়েছে। প্রতিটি পুনঃইনডেক্স অপারেশন কোটা খরচ করে।",
+  "selectAll": "সমস্ত সত্তা নির্বাচন করুন",
+  "selectEntity": "{{entity}} নির্বাচন করুন",
   "columns": {
     "entity": "এন্টিটি",
     "records": "রেকর্ড",
@@ -19,12 +21,12 @@
     "confirmFlush": "ফ্লাশ নিশ্চিত করুন",
     "deleteIndex": "ইনডেক্স মুছুন",
     "confirmDeleteIndex": "মুছে ফেলার নিশ্চিতকরণ",
-    "reindexAll": "সব ইনডেক্স পুনঃইনডেক্স করুন",
-    "confirmReindexAll": "সম্পূর্ণ পুনঃইনডেক্স নিশ্চিত করুন",
-    "flushAll": "সব ইনডেক্স ফ্লাশ করুন",
-    "confirmFlushAll": "সম্পূর্ণ ফ্লাশ নিশ্চিত করুন",
-    "deleteIndexAll": "সব ইনডেক্স মুছুন",
-    "confirmDeleteIndexAll": "সম্পূর্ণ মুছতে নিশ্চিত করুন"
+    "reindexSelected": "নির্বাচিত পুনঃসূচক করুন",
+    "confirmReindexSelected": "পুনঃইনডেক্স নিশ্চিত করুন",
+    "flushSelected": "নির্বাচিত মুছুন",
+    "confirmFlushSelected": "ফ্লাশ নিশ্চিত করুন",
+    "deleteIndexSelected": "নির্বাচিত সূচক মুছুন",
+    "confirmDeleteIndexSelected": "মুছে ফেলার নিশ্চিতকরণ"
   },
   "records": "রেকর্ড",
   "progressLabel": "{{entity}} এর জন্য পুনঃইনডেক্সিং অগ্রগতি",
@@ -35,6 +37,6 @@
   "flushError": "ইনডেক্স {{entity}} ফ্লাশ করতে ত্রুটি",
   "deleteIndexCompleted": "ইনডেক্স {{entity}} মুছা হয়েছে",
   "deleteIndexError": "ইনডেক্স {{entity}} মুছতে ত্রুটি",
-  "bulkFlushCompleted": "সমস্ত ইনডেক্স ফ্লাশ হয়েছে",
-  "bulkDeleteIndexCompleted": "সমস্ত ইনডেক্স মুছা হয়েছে"
+  "bulkFlushCompleted": "নির্বাচিত সূচকগুলো মুছে ফেলা হয়েছে",
+  "bulkDeleteIndexCompleted": "নির্বাচিত সূচকগুলো মুছে ফেলা হয়েছে"
 }

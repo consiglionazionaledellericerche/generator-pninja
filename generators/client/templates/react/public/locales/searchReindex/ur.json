@@ -1,6 +1,8 @@
 {
   "title": "تلاش کا اندراج",
   "algoliaWarning": "الگولیا ایک میزبان خدمت ہے جس کی مفت سطح پر حدود ہیں۔ ہر دوبارہ انڈیکسنگ کی کارروائی کوٹہ مصرف کرتی ہے۔",
+  "selectAll": "تمام ہستیوں کا انتخاب کریں",
+  "selectEntity": "{{entity}} کا انتخاب کریں",
   "columns": {
     "entity": "کیانو",
     "records": "ریکارڈز",
@@ -19,12 +21,12 @@
     "confirmFlush": "صاف کرنے کی تصدیق کریں",
     "deleteIndex": "انڈیکس کو حذف کریں",
     "confirmDeleteIndex": "حذف کی تصدیق کریں",
-    "reindexAll": "تمام کو دوبارہ انڈیکس کریں",
-    "confirmReindexAll": "مکمل دوبارہ انڈیکس کی تصدیق کریں",
-    "flushAll": "تمام انڈیکس کو صاف کریں",
-    "confirmFlushAll": "مکمل صاف کرنے کی تصدیق کریں",
-    "deleteIndexAll": "تمام انڈیکس کو حذف کریں",
-    "confirmDeleteIndexAll": "مکمل حذف کی تصدیق کریں"
+    "reindexSelected": "منتخب کردہ دوبارہ ترتیب دیں",
+    "confirmReindexSelected": "دوبارہ انڈیکس کی تصدیق کریں",
+    "flushSelected": "منتخب کردہ صاف کریں",
+    "confirmFlushSelected": "صاف کرنے کی تصدیق کریں",
+    "deleteIndexSelected": "منتخب کردہ انڈیکس حذف کریں",
+    "confirmDeleteIndexSelected": "حذف کی تصدیق کریں"
   },
   "records": "ریکارڈز",
   "progressLabel": "{{entity}} کے لیے دوبارہ انڈیکسنگ کی پیش رفت",
@@ -35,6 +37,6 @@
   "flushError": "انڈیکس {{entity}} کو صاف کرنے میں خرابی",
   "deleteIndexCompleted": "انڈیکس {{entity}} حذف کر دیا گیا",
   "deleteIndexError": "انڈیکس {{entity}} کو حذف کرنے میں خرابی",
-  "bulkFlushCompleted": "تمام انڈیکس صاف ہو گئے",
-  "bulkDeleteIndexCompleted": "تمام انڈیکس حذف کر دیے گئے"
+  "bulkFlushCompleted": "منتخب کردہ انڈیکس صاف ہو چکے ہیں",
+  "bulkDeleteIndexCompleted": "منتخب کردہ انڈیکس حذف ہو چکے ہیں"
 }

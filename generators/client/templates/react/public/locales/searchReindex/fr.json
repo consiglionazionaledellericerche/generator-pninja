@@ -1,6 +1,8 @@
 {
   "title": "Index de recherche",
   "algoliaWarning": "Algolia est un service hébergé avec des limites sur le niveau gratuit. Chaque opération de réindexation consomme une quota.",
+  "selectAll": "Sélectionnez toutes les entités",
+  "selectEntity": "Sélectionnez {{entity}}",
   "columns": {
     "entity": "Entité",
     "records": "Enregistrements",
@@ -19,12 +21,12 @@
     "confirmFlush": "Confirmer le vidage",
     "deleteIndex": "Supprimer l'index",
     "confirmDeleteIndex": "Confirmer la suppression",
-    "reindexAll": "Réindexer tout",
-    "confirmReindexAll": "Confirmer la réindexation complète",
-    "flushAll": "Vider tous les index",
-    "confirmFlushAll": "Confirmer le vidage complet",
-    "deleteIndexAll": "Supprimer tous les index",
-    "confirmDeleteIndexAll": "Confirmer la suppression complète"
+    "reindexSelected": "Réindexer sélectionnés",
+    "confirmReindexSelected": "Confirmer la réindexation",
+    "flushSelected": "Vider sélectionnés",
+    "confirmFlushSelected": "Confirmer le vidage",
+    "deleteIndexSelected": "Supprimer les index sélectionnés",
+    "confirmDeleteIndexSelected": "Confirmer la suppression"
   },
   "records": "enregistrements",
   "progressLabel": "Progression de la réindexation pour {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Erreur lors du vidage de l'index {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} supprimé",
   "deleteIndexError": "Erreur lors de la suppression de l'index {{entity}}",
-  "bulkFlushCompleted": "Tous les index vidés",
-  "bulkDeleteIndexCompleted": "Tous les index supprimés"
+  "bulkFlushCompleted": "Index sélectionnés vidés",
+  "bulkDeleteIndexCompleted": "Index sélectionnés supprimés"
 }

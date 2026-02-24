@@ -1,6 +1,8 @@
 {
   "title": "Gushaka Indangamuntu",
   "algoliaWarning": "Algolia ni serivisi ibikwa ifite imipaka ku rwego rwa ubuntu. Buri gikorwa cyo gusubira mu gushyira mu mutwe gifata quota.",
+  "selectAll": "Hitamo ibigo byose",
+  "selectEntity": "Hitamo {{entity}}",
   "columns": {
     "entity": "Ikintu",
     "records": "Amakuru",
@@ -19,12 +21,12 @@
     "confirmFlush": "Emereza gukuramo",
     "deleteIndex": "Siba icyerekezo",
     "confirmDeleteIndex": "Emeza gusiba",
-    "reindexAll": "Subira mu gushyira mu mutwe byose",
-    "confirmReindexAll": "Emereza gusubira mu gushyira mu mutwe bwuzuye",
-    "flushAll": "Sukura ibyerekezo byose",
-    "confirmFlushAll": "Emereza gukuramo byose",
-    "deleteIndexAll": "Siba ibyerekezo byose",
-    "confirmDeleteIndexAll": "Emereza gukuramo byuzuye"
+    "reindexSelected": "Sukura ibyo wahisemo",
+    "confirmReindexSelected": "Emereza gusubira mu gushyira mu mutwe",
+    "flushSelected": "Sukura ibyo wahisemo",
+    "confirmFlushSelected": "Emereza gukuramo",
+    "deleteIndexSelected": "Siba imyandikire wahisemo",
+    "confirmDeleteIndexSelected": "Emeza gusiba"
   },
   "records": "amakuru",
   "progressLabel": "Imigendekere yo gusubira mu gushyira mu mutwe kwa {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Ikosa mu gusukura icyerekezo {{entity}}",
   "deleteIndexCompleted": "Icyerekezo {{entity}} cyasibwe",
   "deleteIndexError": "Ikosa mu gusiba icyerekezo {{entity}}",
-  "bulkFlushCompleted": "Ibikorwa byose byasukuwe",
-  "bulkDeleteIndexCompleted": "Ibikorwa byose byasibwe"
+  "bulkFlushCompleted": "Imyandikire wahisemo yasukuwe",
+  "bulkDeleteIndexCompleted": "Imyandikire wahisemo yakuweho"
 }

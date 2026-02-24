@@ -1,6 +1,8 @@
 {
   "title": "Leitaskra",
   "algoliaWarning": "Algolia er hýst þjónusta með takmörkum á frítt þjónustuplan. Hver endurvísunaraðgerð fer í kvóta.",
+  "selectAll": "Veldu allar einingar",
+  "selectEntity": "Veldu {{entity}}",
   "columns": {
     "entity": "Eining",
     "records": "Skrár",
@@ -19,12 +21,12 @@
     "confirmFlush": "Staðfesta tóma",
     "deleteIndex": "Eyða vísitalan",
     "confirmDeleteIndex": "Staðfesta eyðingu",
-    "reindexAll": "Endurvísun á öllu",
-    "confirmReindexAll": "Staðfesta fulla endurvísun",
-    "flushAll": "Tóma allar vísitölur",
-    "confirmFlushAll": "Staðfesta fulla tóma",
-    "deleteIndexAll": "Eyða öllum vísitölum",
-    "confirmDeleteIndexAll": "Staðfesta fulla eyðingu"
+    "reindexSelected": "Endurhanna valdar einingar",
+    "confirmReindexSelected": "Staðfesta endurvísun",
+    "flushSelected": "Tæmdu valdar einingar",
+    "confirmFlushSelected": "Staðfesta tóma",
+    "deleteIndexSelected": "Eyða valdum skráningum",
+    "confirmDeleteIndexSelected": "Staðfesta eyðingu"
   },
   "records": "skrá",
   "progressLabel": "Endurvísunarframvinda fyrir {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Villa við að tóma vísitölu {{entity}}",
   "deleteIndexCompleted": "Vísitala {{entity}} eytt",
   "deleteIndexError": "Villa við að eyða vísitölu {{entity}}",
-  "bulkFlushCompleted": "Allar vísitölur tóma",
-  "bulkDeleteIndexCompleted": "Allar vísitölur eytt"
+  "bulkFlushCompleted": "Valdar skráningar tæmdar",
+  "bulkDeleteIndexCompleted": "Valdar skráningar eyddar"
 }

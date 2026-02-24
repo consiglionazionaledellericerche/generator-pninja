@@ -1,6 +1,8 @@
 {
   "title": "Qidiruv Indeksi",
   "algoliaWarning": "Algolia – bepul qatlamda cheklovlarga ega bo'lgan xizmat. Har bir qayta indekslash operatsiyasi kvotani iste'mol qiladi.",
+  "selectAll": "Barcha ob'ektlarni tanlang",
+  "selectEntity": "Tanlang {{entity}}",
   "columns": {
     "entity": "Vazifa",
     "records": "Yozuvlar",
@@ -19,12 +21,12 @@
     "confirmFlush": "Tozalashni tasdiqlang",
     "deleteIndex": "Indeksni o'chirish",
     "confirmDeleteIndex": "O'chirishni tasdiqlash",
-    "reindexAll": "Barchasini qayta indekslash",
-    "confirmReindexAll": "To'liq qayta indekslashni tasdiqlang",
-    "flushAll": "Barcha indekslarni tozalang",
-    "confirmFlushAll": "To'liq tozalashni tasdiqlang",
-    "deleteIndexAll": "Barcha indekslarni o'chiring",
-    "confirmDeleteIndexAll": "To'liq o'chirishni tasdiqlang"
+    "reindexSelected": "Tanlanganlarni qayta indekslash",
+    "confirmReindexSelected": "Qayta indekslashni tasdiqlang",
+    "flushSelected": "Tanlanganlarni tozalash",
+    "confirmFlushSelected": "Tozalashni tasdiqlang",
+    "deleteIndexSelected": "Tanlangan indekslarni o'chirish",
+    "confirmDeleteIndexSelected": "O'chirishni tasdiqlash"
   },
   "records": "yozuvlar",
   "progressLabel": "{{entity}} uchun qayta indekslash jarayoni",
@@ -35,6 +37,6 @@
   "flushError": "Indeks {{entity}} tozalashda xatoga uchradi",
   "deleteIndexCompleted": "Indeks {{entity}} o'chirildi",
   "deleteIndexError": "Indeks {{entity}} ni o'chirishda xatoga uchradi",
-  "bulkFlushCompleted": "Barcha indekslar tozalanadi",
-  "bulkDeleteIndexCompleted": "Barcha indekslar o'chirildi"
+  "bulkFlushCompleted": "Tanlangan indekslar tozalandı",
+  "bulkDeleteIndexCompleted": "Tanlangan indekslar o'chirildi"
 }

@@ -1,6 +1,8 @@
 {
   "title": "Bilaketa Indizea",
   "algoliaWarning": "Algolia doako tierrean muga dituzten zerbitzu bat da. Reindex operazio bakoitzak kuota kontsumitzen du.",
+  "selectAll": "Aukeratu entitate guztiak",
+  "selectEntity": "Aukeratu {{entity}}",
   "columns": {
     "entity": "Entitate",
     "records": "Erregistroak",
@@ -19,12 +21,12 @@
     "confirmFlush": "Flush baieztatu",
     "deleteIndex": "Ezabatu indizea",
     "confirmDeleteIndex": "Ezabatu egiaztatu",
-    "reindexAll": "Reindexatu dena",
-    "confirmReindexAll": "Reindexatu osoa baieztatu",
-    "flushAll": "Flush egin guztiak indizeak",
-    "confirmFlushAll": "Flush osoa baieztatu",
-    "deleteIndexAll": "Ezabatu indize guztiak",
-    "confirmDeleteIndexAll": "Ezabatu osoa baieztatu"
+    "reindexSelected": "Aldatu hautatuak",
+    "confirmReindexSelected": "Reindexatu baieztatu",
+    "flushSelected": "Lurrinatu hautatuak",
+    "confirmFlushSelected": "Flush baieztatu",
+    "deleteIndexSelected": "Ezabatu hautatutako iradokizunak",
+    "confirmDeleteIndexSelected": "Ezabatu egiaztatu"
   },
   "records": "Erregistroak",
   "progressLabel": "Reindexatze aurrerapena {{entity}}rako",
@@ -35,6 +37,6 @@
   "flushError": "Errorea flushing indize {{entity}}",
   "deleteIndexCompleted": "Indizea {{entity}} ezabatua",
   "deleteIndexError": "Errorea indizea ezabatzean {{entity}}",
-  "bulkFlushCompleted": "Indize guztiak flush eginda",
-  "bulkDeleteIndexCompleted": "Indize guztiak ezabatuta"
+  "bulkFlushCompleted": "Hautatutako iradokizunak lurrinatu dira",
+  "bulkDeleteIndexCompleted": "Hautatutako iradokizunak ezabatu dira"
 }

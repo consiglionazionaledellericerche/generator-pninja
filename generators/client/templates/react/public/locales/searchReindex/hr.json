@@ -1,6 +1,8 @@
 {
   "title": "Pretraživački indeks",
   "algoliaWarning": "Algolia je usluga koja se hostira s ograničenjima na besplatnoj razini. Svaka operacija reindeksiranja troši kvotu.",
+  "selectAll": "Odaberi sve entitete",
+  "selectEntity": "Odaberi {{entity}}",
   "columns": {
     "entity": "Entitet",
     "records": "Zapisi",
@@ -19,12 +21,12 @@
     "confirmFlush": "Potvrdi čišćenje",
     "deleteIndex": "Izbriši indeks",
     "confirmDeleteIndex": "Potvrdi brisanje",
-    "reindexAll": "Reindeksiraj sve",
-    "confirmReindexAll": "Potvrdi potpuno reindeksiranje",
-    "flushAll": "Očisti sve indekse",
-    "confirmFlushAll": "Potvrdi potpuno brisanje",
-    "deleteIndexAll": "Izbriši sve indekse",
-    "confirmDeleteIndexAll": "Potvrdi potpuno brisanje"
+    "reindexSelected": "Ponovno indeksiraj odabrano",
+    "confirmReindexSelected": "Potvrdi reindeksiranje",
+    "flushSelected": "Isprazni odabrano",
+    "confirmFlushSelected": "Potvrdi čišćenje",
+    "deleteIndexSelected": "Izbriši odabrane indekse",
+    "confirmDeleteIndexSelected": "Potvrdi brisanje"
   },
   "records": "zapisi",
   "progressLabel": "Napredak reindeksiranja za {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Greška prilikom čišćenja indeksa {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} je izbrisan",
   "deleteIndexError": "Greška prilikom brisanja indeksa {{entity}}",
-  "bulkFlushCompleted": "Svi indeksi su očišćeni",
-  "bulkDeleteIndexCompleted": "Svi indeksi su izbrisani"
+  "bulkFlushCompleted": "Odabrani indeksi ispražnjeni",
+  "bulkDeleteIndexCompleted": "Odabrani indeksi izbrisani"
 }

@@ -1,6 +1,8 @@
 {
   "title": "شاخص جستجو",
   "algoliaWarning": "الگولیا یک سرویس میزبانی شده است که محدودیت‌هایی در سطح رایگان دارد. هر عملیات دوباره ایندکس مصرفی از سهمیه را مصرف می‌کند.",
+  "selectAll": "همه موجودیت‌ها را انتخاب کنید",
+  "selectEntity": "{{entity}} را انتخاب کنید",
   "columns": {
     "entity": "موجودیت",
     "records": "ضبط‌ها",
@@ -19,12 +21,12 @@
     "confirmFlush": "تأیید فلاش",
     "deleteIndex": "حذف ایندکس",
     "confirmDeleteIndex": "تأیید حذف",
-    "reindexAll": "دوباره ایندکس کردن همه",
-    "confirmReindexAll": "تأیید دوباره ایندکس کامل",
-    "flushAll": "فلاش کردن همه ایندکس‌ها",
-    "confirmFlushAll": "تأیید فلاش کامل",
-    "deleteIndexAll": "حذف همه ایندکس‌ها",
-    "confirmDeleteIndexAll": "تأیید حذف کامل"
+    "reindexSelected": "ایندکس‌های انتخاب شده را مجدداً ایندکس کنید",
+    "confirmReindexSelected": "تأیید دوباره ایندکس",
+    "flushSelected": "ایندکس‌های انتخاب شده را پاک‌سازی کنید",
+    "confirmFlushSelected": "تأیید فلاش",
+    "deleteIndexSelected": "ایندکس‌های انتخاب شده را حذف کنید",
+    "confirmDeleteIndexSelected": "تأیید حذف"
   },
   "records": "ضبط‌ها",
   "progressLabel": "پیشرفت دوباره ایندکس‌زنی برای {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "خطا در فلاش ایندکس {{entity}}",
   "deleteIndexCompleted": "ایندکس {{entity}} حذف شد",
   "deleteIndexError": "خطا در حذف ایندکس {{entity}}",
-  "bulkFlushCompleted": "تمام ایندکس‌ها فلاش شدند",
-  "bulkDeleteIndexCompleted": "تمام ایندکس‌ها حذف شدند"
+  "bulkFlushCompleted": "ایندکس‌های انتخاب شده پاک‌سازی شد",
+  "bulkDeleteIndexCompleted": "ایندکس‌های انتخاب شده حذف شدند"
 }

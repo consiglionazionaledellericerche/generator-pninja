@@ -1,6 +1,8 @@
 {
   "title": "Vyhľadávací index",
   "algoliaWarning": "Algolia je hosťovaná služba s limitmi na bezplatnej verzii. Každá operácia preindeksovania spotrebuje kvótu.",
+  "selectAll": "Vyberte všetky entity",
+  "selectEntity": "Vyberte {{entity}}",
   "columns": {
     "entity": "Entita",
     "records": "Záznamy",
@@ -19,12 +21,12 @@
     "confirmFlush": "Potvrdiť vyprázdnenie",
     "deleteIndex": "Vymazať index",
     "confirmDeleteIndex": "Potvrdiť odstránenie",
-    "reindexAll": "Preindexovať všetko",
-    "confirmReindexAll": "Potvrdiť úplné preindexovanie",
-    "flushAll": "Vypustiť všetky indexy",
-    "confirmFlushAll": "Potvrdiť úplné vyprázdnenie",
-    "deleteIndexAll": "Vymazať všetky indexy",
-    "confirmDeleteIndexAll": "Potvrdiť úplné vymazanie"
+    "reindexSelected": "Znovu indexujte vybrané",
+    "confirmReindexSelected": "Potvrdiť preindexovanie",
+    "flushSelected": "Vyprázdnite vybrané",
+    "confirmFlushSelected": "Potvrdiť vyprázdnenie",
+    "deleteIndexSelected": "Odstráňte vybrané indexy",
+    "confirmDeleteIndexSelected": "Potvrdiť odstránenie"
   },
   "records": "záznamy",
   "progressLabel": "Pokrok pri preindexovaní pre {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Chyba pri vyprázdnení indexu {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} bol vymazaný",
   "deleteIndexError": "Chyba pri vymazávaní indexu {{entity}}",
-  "bulkFlushCompleted": "Všetky indexy boli vyprázdnené",
-  "bulkDeleteIndexCompleted": "Všetky indexy boli vymazané"
+  "bulkFlushCompleted": "Vybrané indexy vyprázdnené",
+  "bulkDeleteIndexCompleted": "Vybrané indexy odstránené"
 }

@@ -1,6 +1,8 @@
 {
   "title": "Iyìwò Àwárí",
   "algoliaWarning": "Algolia jẹ́ iṣẹ́ tí a gbà sílẹ̀ pẹ̀lú àwọn ìdíyelé lórí ipele ọfẹ. Gbogbo iṣẹ́ atunṣe kópa wàhálà.",
+  "selectAll": "Yan gbogbo awọn ajọ",
+  "selectEntity": "Yan {{entity}}",
   "columns": {
     "entity": "Ìṣẹ́",
     "records": "Àkọsílẹ̀",
@@ -19,12 +21,12 @@
     "confirmFlush": "Jẹ́ kí a fọwọ́sowọ́pọ̀ wẹ̀",
     "deleteIndex": "Parè ìkàwé",
     "confirmDeleteIndex": "Jẹ́ kí a dá sílẹ̀",
-    "reindexAll": "Ìtòsọ́nà gbogbo",
-    "confirmReindexAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ ìtòsọ́nà gbogbo",
-    "flushAll": "Wẹ̀ gbogbo ìkàwé",
-    "confirmFlushAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ wẹ̀ gbogbo",
-    "deleteIndexAll": "Parè gbogbo ìkàwé",
-    "confirmDeleteIndexAll": "Jẹ́ kí a fọwọ́sowọ́pọ̀ parè gbogbo"
+    "reindexSelected": "Tun awọn ti a yan ṣe",
+    "confirmReindexSelected": "Jẹ́ kí a fọwọ́sowọ́pọ̀ ìtòsọ́nà",
+    "flushSelected": "Tu awọn ti a yan silẹ",
+    "confirmFlushSelected": "Jẹ́ kí a fọwọ́sowọ́pọ̀ wẹ̀",
+    "deleteIndexSelected": "Pa awọn itọkasi ti a yan",
+    "confirmDeleteIndexSelected": "Jẹ́ kí a dá sílẹ̀"
   },
   "records": "àkọsílẹ̀",
   "progressLabel": "Ìdàgbàsókè ìtòsọ́nà fún {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Kòsùn-ṣàkóso níbè lórí ìkàwé {{entity}}",
   "deleteIndexCompleted": "Ìkàwé {{entity}} ti parè",
   "deleteIndexError": "Kòsùn-ṣàkóso níbè lórí parè ìkàwé {{entity}}",
-  "bulkFlushCompleted": "Gbogbo ìkàwé ti wẹ̀",
-  "bulkDeleteIndexCompleted": "Gbogbo ìkàwé ti parè"
+  "bulkFlushCompleted": "Awọn itọkasi ti a yan ti tu silẹ",
+  "bulkDeleteIndexCompleted": "Awọn itọkasi ti a yan ti paarẹ"
 }

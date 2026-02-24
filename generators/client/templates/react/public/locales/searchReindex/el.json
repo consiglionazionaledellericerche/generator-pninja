@@ -1,6 +1,8 @@
 {
   "title": "Ευρετήριο Αναζητήσεως",
   "algoliaWarning": "Η Algolia είναι μια φιλοξενούμενη υπηρεσία με περιορισμούς στο δωρεάν επίπεδο. Κάθε επιχείρηση επανευρετηρίασης καταναλώνει ποσοστό.",
+  "selectAll": "Επιλέξτε όλες τις οντότητες",
+  "selectEntity": "Επιλέξτε {{entity}}",
   "columns": {
     "entity": "Οντότητα",
     "records": "Καταχωρήσεις",
@@ -19,12 +21,12 @@
     "confirmFlush": "Επιβεβαίωση εκκαθάρισης",
     "deleteIndex": "Διαγραφή ευρετηρίου",
     "confirmDeleteIndex": "Επιβεβαίωση διαγραφής",
-    "reindexAll": "Επανευρετηρίαση όλων",
-    "confirmReindexAll": "Επιβεβαίωση πλήρους επανευρετηρίας",
-    "flushAll": "Εκκαθάριση όλων των ευρετηρίων",
-    "confirmFlushAll": "Επιβεβαίωση πλήρους εκκαθάρισης",
-    "deleteIndexAll": "Διαγραφή όλων των ευρετηρίων",
-    "confirmDeleteIndexAll": "Επιβεβαίωση πλήρους διαγραφής"
+    "reindexSelected": "Επανακαταχώρηση των επιλεγμένων",
+    "confirmReindexSelected": "Επιβεβαίωση επανευρετηρίας",
+    "flushSelected": "Εκκαθάριση των επιλεγμένων",
+    "confirmFlushSelected": "Επιβεβαίωση εκκαθάρισης",
+    "deleteIndexSelected": "Διαγραφή των επιλεγμένων δεικτών",
+    "confirmDeleteIndexSelected": "Επιβεβαίωση διαγραφής"
   },
   "records": "καταχωρήσεις",
   "progressLabel": "Πρόοδος επανευρετηρίας για {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Σφάλμα κατά την εκκαθάριση του ευρετηρίου {{entity}}",
   "deleteIndexCompleted": "Το ευρετήριο {{entity}} διαγράφηκε",
   "deleteIndexError": "Σφάλμα κατά τη διαγραφή του ευρετηρίου {{entity}}",
-  "bulkFlushCompleted": "Όλα τα ευρετήρια εκκαθαρίστηκαν",
-  "bulkDeleteIndexCompleted": "Όλα τα ευρετήρια διαγράφηκαν"
+  "bulkFlushCompleted": "Οι επιλεγμένοι δείκτες εκκαθαρίστηκαν",
+  "bulkDeleteIndexCompleted": "Οι επιλεγμένοι δείκτες διαγράφηκαν"
 }

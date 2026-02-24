@@ -1,6 +1,8 @@
 {
   "title": "Indeksi i Kërkimit",
   "algoliaWarning": "Algolia është një shërbim i akorduar me kufij në nivelin falas. Çdo operacion riindekson konsumon kuotë.",
+  "selectAll": "Zgjidh të gjitha entitetet",
+  "selectEntity": "Zgjidh {{entity}}",
   "columns": {
     "entity": "Entitet",
     "records": "Regjistrat",
@@ -19,12 +21,12 @@
     "confirmFlush": "Konfirmo pastrimin",
     "deleteIndex": "Fshi indeksin",
     "confirmDeleteIndex": "Konfirmo fshirjen",
-    "reindexAll": "Riindekso të gjitha",
-    "confirmReindexAll": "Konfirmo riindeksimin e plotë",
-    "flushAll": "Pastroni të gjitha indekset",
-    "confirmFlushAll": "Konfirmo pastrimin e plotë",
-    "deleteIndexAll": "Fshi të gjitha indekset",
-    "confirmDeleteIndexAll": "Konfirmo fshirjen e plotë"
+    "reindexSelected": "Rindiz indeksat e zgjedhur",
+    "confirmReindexSelected": "Konfirmo riindeksimin",
+    "flushSelected": "Shkarkoni indekset e zgjedhur",
+    "confirmFlushSelected": "Konfirmo pastrimin",
+    "deleteIndexSelected": "Fshini indeksat e zgjedhur",
+    "confirmDeleteIndexSelected": "Konfirmo fshirjen"
   },
   "records": "regjistrat",
   "progressLabel": "Progresi i riindeksimit për {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Gabim në pastrimin e indeksit {{entity}}",
   "deleteIndexCompleted": "Indeksi {{entity}} u fshi",
   "deleteIndexError": "Gabim në fshirjen e indeksit {{entity}}",
-  "bulkFlushCompleted": "Të gjitha indekset u pastruan",
-  "bulkDeleteIndexCompleted": "Të gjitha indekset u fshinë"
+  "bulkFlushCompleted": "Indeksat e zgjedhur janë shkarkuar",
+  "bulkDeleteIndexCompleted": "Indeksat e zgjedhur janë fshirë"
 }

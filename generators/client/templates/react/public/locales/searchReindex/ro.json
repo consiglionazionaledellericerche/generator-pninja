@@ -1,6 +1,8 @@
 {
   "title": "Index de căutare",
   "algoliaWarning": "Algolia este un serviciu găzduit cu limite pe tierul gratuit. Fiecare operațiune de reindexare consumă cotă.",
+  "selectAll": "Selectați toate entitățile",
+  "selectEntity": "Selectați {{entity}}",
   "columns": {
     "entity": "Entitate",
     "records": "Înregistrări",
@@ -19,12 +21,12 @@
     "confirmFlush": "Confirmă curățarea",
     "deleteIndex": "Șterge indexul",
     "confirmDeleteIndex": "Confirmă ștergerea",
-    "reindexAll": "Reindexează tot",
-    "confirmReindexAll": "Confirmă reindexarea completă",
-    "flushAll": "Curăță toate indexurile",
-    "confirmFlushAll": "Confirmă curățarea completă",
-    "deleteIndexAll": "Șterge toate indexurile",
-    "confirmDeleteIndexAll": "Confirmă ștergerea completă"
+    "reindexSelected": "Reindexați selecționate",
+    "confirmReindexSelected": "Confirmă reindexarea",
+    "flushSelected": "Goliți selecționate",
+    "confirmFlushSelected": "Confirmă curățarea",
+    "deleteIndexSelected": "Ștergeți indecșii selectați",
+    "confirmDeleteIndexSelected": "Confirmă ștergerea"
   },
   "records": "înregistrări",
   "progressLabel": "Progresul reindexării pentru {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Eroare la curățarea indexului {{entity}}",
   "deleteIndexCompleted": "Indexul {{entity}} a fost șters",
   "deleteIndexError": "Eroare la ștergerea indexului {{entity}}",
-  "bulkFlushCompleted": "Toate indexurile au fost curățate",
-  "bulkDeleteIndexCompleted": "Toate indexurile au fost șterse"
+  "bulkFlushCompleted": "Indecșii selectați goliți",
+  "bulkDeleteIndexCompleted": "Indecșii selectați șterși"
 }

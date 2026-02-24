@@ -1,6 +1,8 @@
 {
   "title": "Axtarış indeksі",
   "algoliaWarning": "Algolia, pulsuz tierdə məhdudiyyətləri olan bir host xidmətidir. Hər reindeks əməliyyatı kvota istehlak edir.",
+  "selectAll": "Bütün varlıqları seçin",
+  "selectEntity": "{{entity}} seçin",
   "columns": {
     "entity": "Varlıq",
     "records": "Qeydlər",
@@ -19,12 +21,12 @@
     "confirmFlush": "Boşaltmanı təsdiqləyin",
     "deleteIndex": "İndeksi sil",
     "confirmDeleteIndex": "Silinməni təsdiq et",
-    "reindexAll": "Hamısını yenidən indeksləyin",
-    "confirmReindexAll": "Tam yenidən indeksləməyi təsdiqləyin",
-    "flushAll": "Bütün indeksləri boşaldın",
-    "confirmFlushAll": "Tam boşaltmanı təsdiqləyin",
-    "deleteIndexAll": "Bütün indeksləri sil",
-    "confirmDeleteIndexAll": "Tam silməni təsdiqləyin"
+    "reindexSelected": "Seçilmişləri yenidən indeksləyin",
+    "confirmReindexSelected": "Yenidən indeksləməni təsdiqləyin",
+    "flushSelected": "Seçilmişləri təmizləyin",
+    "confirmFlushSelected": "Boşaltmanı təsdiqləyin",
+    "deleteIndexSelected": "Seçilmiş indeksləri silin",
+    "confirmDeleteIndexSelected": "Silinməni təsdiq et"
   },
   "records": "qeydlər",
   "progressLabel": "{{entity}} üçün yenidən indeksləmə prosesi",
@@ -35,6 +37,6 @@
   "flushError": "İndeks {{entity}}-i boşaltarkən xətası",
   "deleteIndexCompleted": "İndeks {{entity}} silindi",
   "deleteIndexError": "İndeks {{entity}}-ni silərkən xətası",
-  "bulkFlushCompleted": "Bütün indekslər boşaldıldı",
-  "bulkDeleteIndexCompleted": "Bütün indekslər silindi"
+  "bulkFlushCompleted": "Seçilmiş indekslər təmizləndi",
+  "bulkDeleteIndexCompleted": "Seçilmiş indekslər silindi"
 }

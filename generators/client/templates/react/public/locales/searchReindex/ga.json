@@ -1,6 +1,8 @@
 {
   "title": "Cuardach Innéacs",
   "algoliaWarning": "Is seirbhís óstáilte í Algolia le teorainneacha ar an leibhéal saor in aisce. Cónaíonn gach oibreacha athíocaíochta cota.",
+  "selectAll": "Roghnaigh gach eintiteas",
+  "selectEntity": "Roghnaigh {{entity}}",
   "columns": {
     "entity": "Duine",
     "records": "Taifid",
@@ -19,12 +21,12 @@
     "confirmFlush": "Deimhnigh glanadh",
     "deleteIndex": "Scrioinn innéacs",
     "confirmDeleteIndex": "Deimhnigh scrios",
-    "reindexAll": "Athíocaigh uile",
-    "confirmReindexAll": "Deimhnigh athíocaíocht iomlán",
-    "flushAll": "Glan na heinnéacsanna go léir",
-    "confirmFlushAll": "Deimhnigh glanadh iomlán",
-    "deleteIndexAll": "Scrios na heinnéacsanna go léir",
-    "confirmDeleteIndexAll": "Deimhnigh scrios iomlán"
+    "reindexSelected": "Athshocrú roghnaithe",
+    "confirmReindexSelected": "Deimhnigh athíocaíocht",
+    "flushSelected": "Séalaigh roghnaithe",
+    "confirmFlushSelected": "Deimhnigh glanadh",
+    "deleteIndexSelected": "Scrios na huhinní roghnaithe",
+    "confirmDeleteIndexSelected": "Deimhnigh scrios"
   },
   "records": "taifid",
   "progressLabel": "Saoil na hathíocaíochta do {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Earráid ag glanadh innéacs {{entity}}",
   "deleteIndexCompleted": "Innex {{entity}} scriofa",
   "deleteIndexError": "Earráid ag scrios innéacs {{entity}}",
-  "bulkFlushCompleted": "Glanadh na heinnéacsanna go léir",
-  "bulkDeleteIndexCompleted": "Scrios na heinnéacsanna go léir"
+  "bulkFlushCompleted": "Séalaíodh na huhinní roghnaithe",
+  "bulkDeleteIndexCompleted": "Scriosadh na huhinní roghnaithe"
 }

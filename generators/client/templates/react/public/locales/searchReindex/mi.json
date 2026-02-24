@@ -1,6 +1,8 @@
 {
   "title": "Pūtanga Rūri",
   "algoliaWarning": "Ngā kaupapa e noho ana i runga i te whakahaere ārai me ngā teihana tākai. Ka pau te wāriu i ia mahi whakairo.",
+  "selectAll": "Tīpakohia ngā katoa ngā whakaritenga",
+  "selectEntity": "Tīpakohia {{entity}}",
   "columns": {
     "entity": "Ngā Pūkete",
     "records": "Ngā Rēhita",
@@ -19,12 +21,12 @@
     "confirmFlush": "Whakauka i te tāwharotanga",
     "deleteIndex": "Mōrearea whakairo",
     "confirmDeleteIndex": "Whakaaetanga ki te mukunga",
-    "reindexAll": "Whakauka i te taha katoa",
-    "confirmReindexAll": "Tāwharotanga katoa",
-    "flushAll": "Whakauka i te tātari katoa",
-    "confirmFlushAll": "Mōrearea whakamahukitare",
-    "deleteIndexAll": "E hiahiatia ana",
-    "confirmDeleteIndexAll": "Te ahunga whakamua te whakairo mo {{entity}}"
+    "reindexSelected": "Whakahōu te katoa nāna i tīpakohia",
+    "confirmReindexSelected": "Whakauka i te whakairo",
+    "flushSelected": "Whakakā i ngā mea nāna i tīpakohia",
+    "confirmFlushSelected": "Whakauka i te tāwharotanga",
+    "deleteIndexSelected": "Mārohia ngā whakaritenga nāna i tīpakohia",
+    "confirmDeleteIndexSelected": "Whakaaetanga ki te mukunga"
   },
   "records": "Kua oti te whakairo o {{entity}}",
   "progressLabel": "I hinga te whakairo o {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Hē te mūhio o te rārangi {{entity}}",
   "deleteIndexCompleted": "Kua tāwharotia ngā rārangi katoa",
   "deleteIndexError": "Kua whakaarahia ngā rārangi katoa",
-  "bulkFlushCompleted": "All indexes flushed",
-  "bulkDeleteIndexCompleted": "All indexes deleted"
+  "bulkFlushCompleted": "Kua whakakā ngā whakaritenga nāna i tīpakohia",
+  "bulkDeleteIndexCompleted": "Kua mārohia ngā whakaritenga nāna i tīpakohia"
 }

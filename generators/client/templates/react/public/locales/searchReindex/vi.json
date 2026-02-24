@@ -1,6 +1,8 @@
 {
   "title": "Tìm kiếm chỉ mục",
   "algoliaWarning": "Algolia là một dịch vụ lưu trữ với giới hạn trên mức miễn phí. Mỗi thao tác tái lập chỉ mục tiêu tốn hạn ngạch.",
+  "selectAll": "Chọn tất cả các thực thể",
+  "selectEntity": "Chọn {{entity}}",
   "columns": {
     "entity": "Thực thể",
     "records": "Bản ghi",
@@ -19,12 +21,12 @@
     "confirmFlush": "Tái lập tất cả",
     "deleteIndex": "Xác nhận tái lập lại toàn bộ",
     "confirmDeleteIndex": "Xác nhận xóa",
-    "reindexAll": "Xóa tất cả chỉ mục",
-    "confirmReindexAll": "Xác nhận xóa toàn bộ",
-    "flushAll": "bản ghi",
-    "confirmFlushAll": "Tiến trình tái lập chỉ mục cho {{entity}}",
-    "deleteIndexAll": "Tái lập chỉ mục của {{entity}} đã hoàn thành",
-    "confirmDeleteIndexAll": "Tái lập chỉ mục của {{entity}} thất bại"
+    "reindexSelected": "Tái chỉ mục đã chọn",
+    "confirmReindexSelected": "Xác nhận tái lập chỉ mục",
+    "flushSelected": "Xóa bỏ đã chọn",
+    "confirmFlushSelected": "Tái lập tất cả",
+    "deleteIndexSelected": "Xóa chỉ mục đã chọn",
+    "confirmDeleteIndexSelected": "Xác nhận xóa"
   },
   "records": "Lỗi khi khởi động tái lập chỉ mục cho {{entity}}",
   "progressLabel": "Chỉ mục {{entity}} đã được xóa",
@@ -35,6 +37,6 @@
   "flushError": "Tất cả các chỉ mục đã bị xóa",
   "deleteIndexCompleted": "Index {{entity}} deleted",
   "deleteIndexError": "Error deleting index {{entity}}",
-  "bulkFlushCompleted": "All indexes flushed",
-  "bulkDeleteIndexCompleted": "All indexes deleted"
+  "bulkFlushCompleted": "Chỉ mục đã chọn đã được xóa bỏ",
+  "bulkDeleteIndexCompleted": "Chỉ mục đã chọn đã bị xóa"
 }

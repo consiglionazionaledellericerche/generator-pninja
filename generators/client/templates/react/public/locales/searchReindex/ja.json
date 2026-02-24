@@ -1,6 +1,8 @@
 {
   "title": "検索インデックス",
   "algoliaWarning": "Algoliaは無料プランに制限のあるホスティングサービスです。再インデックス操作はすべてクォータを消費します。",
+  "selectAll": "すべてのエンティティを選択",
+  "selectEntity": "{{entity}}を選択",
   "columns": {
     "entity": "エンティティ",
     "records": "レコード",
@@ -19,12 +21,12 @@
     "confirmFlush": "フラッシュ確認",
     "deleteIndex": "インデックスを削除",
     "confirmDeleteIndex": "削除を確認",
-    "reindexAll": "すべて再インデックス",
-    "confirmReindexAll": "完全再インデックス確認",
-    "flushAll": "すべてのインデックスをフラッシュ",
-    "confirmFlushAll": "完全フラッシュ確認",
-    "deleteIndexAll": "すべてのインデックスを削除",
-    "confirmDeleteIndexAll": "完全削除確認"
+    "reindexSelected": "選択したものを再インデックス",
+    "confirmReindexSelected": "再インデックス確認",
+    "flushSelected": "選択したものをフラッシュ",
+    "confirmFlushSelected": "フラッシュ確認",
+    "deleteIndexSelected": "選択したインデックスを削除",
+    "confirmDeleteIndexSelected": "削除を確認"
   },
   "records": "レコード",
   "progressLabel": "{{entity}}の再インデックス進行状況",
@@ -35,6 +37,6 @@
   "flushError": "インデックス{{entity}}をフラッシュする際にエラーが発生しました",
   "deleteIndexCompleted": "インデックス{{entity}}が削除されました",
   "deleteIndexError": "インデックス{{entity}}を削除する際にエラーが発生しました",
-  "bulkFlushCompleted": "すべてのインデックスがフラッシュされました",
-  "bulkDeleteIndexCompleted": "すべてのインデックスが削除されました"
+  "bulkFlushCompleted": "選択したインデックスがフラッシュされました",
+  "bulkDeleteIndexCompleted": "選択したインデックスが削除されました"
 }

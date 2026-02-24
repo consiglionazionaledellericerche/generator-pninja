@@ -1,6 +1,8 @@
 {
   "title": "Іздеу индексі",
   "algoliaWarning": "Algolia - шектеулі тегін деңгейі бар хостинг қызметі. Әрбір қайта индексациялау операциясы квотаны жұмсайды.",
+  "selectAll": "Барлық нысандарды таңдаңыз",
+  "selectEntity": "{{entity}} таңдаңыз",
   "columns": {
     "entity": "Субъект",
     "records": "Жазбалар",
@@ -19,12 +21,12 @@
     "confirmFlush": "Тазартуды растау",
     "deleteIndex": "Индексіні жою",
     "confirmDeleteIndex": "Жоюды растау",
-    "reindexAll": "Барлығын қайта индексациялау",
-    "confirmReindexAll": "Толық қайта индексациялауды растау",
-    "flushAll": "Барлық индекстерді тазарту",
-    "confirmFlushAll": "Толық тазартуды растау",
-    "deleteIndexAll": "Барлық индекстерді жою",
-    "confirmDeleteIndexAll": "Толық жоюды растау"
+    "reindexSelected": "Таңдалғанды қайта индекстеу",
+    "confirmReindexSelected": "Қайта индексациялауды растау",
+    "flushSelected": "Таңдалғанды жою",
+    "confirmFlushSelected": "Тазартуды растау",
+    "deleteIndexSelected": "Таңдалған индекстер жойылды",
+    "confirmDeleteIndexSelected": "Жоюды растау"
   },
   "records": "жазбалар",
   "progressLabel": "{{entity}} үшін қайта индексациялау барысы",
@@ -35,6 +37,6 @@
   "flushError": "Индекс {{entity}} тазартуда қате",
   "deleteIndexCompleted": "Индекс {{entity}} жойылды",
   "deleteIndexError": "Индекс {{entity}} жоюда қате",
-  "bulkFlushCompleted": "Барлық индекстер тазартылды",
-  "bulkDeleteIndexCompleted": "Барлық индекстер жойылды"
+  "bulkFlushCompleted": "Таңдалған индекстер өшірілді",
+  "bulkDeleteIndexCompleted": "Таңдалған индекстер жойылды"
 }

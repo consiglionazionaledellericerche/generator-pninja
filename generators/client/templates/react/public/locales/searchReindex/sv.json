@@ -1,6 +1,8 @@
 {
   "title": "Sökindex",
   "algoliaWarning": "Algolia är en hostad tjänst med begränsningar på den kostnadsfria nivån. Varje omindexeringsoperation förbrukar kvot.",
+  "selectAll": "Välj alla enheter",
+  "selectEntity": "Välj {{entity}}",
   "columns": {
     "entity": "Enhet",
     "records": "Poster",
@@ -19,12 +21,12 @@
     "confirmFlush": "Bekräfta tömning",
     "deleteIndex": "Ta bort index",
     "confirmDeleteIndex": "Bekräfta radering",
-    "reindexAll": "Omindexera allt",
-    "confirmReindexAll": "Bekräfta full omindexering",
-    "flushAll": "Töm alla index",
-    "confirmFlushAll": "Bekräfta full tömning",
-    "deleteIndexAll": "Ta bort alla index",
-    "confirmDeleteIndexAll": "Bekräfta full borttagning"
+    "reindexSelected": "Reindexera valda",
+    "confirmReindexSelected": "Bekräfta omindexering",
+    "flushSelected": "Töm ut valda",
+    "confirmFlushSelected": "Bekräfta tömning",
+    "deleteIndexSelected": "Ta bort valda index",
+    "confirmDeleteIndexSelected": "Bekräfta radering"
   },
   "records": "poster",
   "progressLabel": "Omindexeringsframsteg för {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Fel vid tömning av index {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} borttaget",
   "deleteIndexError": "Fel vid borttagning av index {{entity}}",
-  "bulkFlushCompleted": "Alla index tömda",
-  "bulkDeleteIndexCompleted": "Alla index borttagna"
+  "bulkFlushCompleted": "Valda index tömda",
+  "bulkDeleteIndexCompleted": "Valda index borttagna"
 }

@@ -1,6 +1,8 @@
 {
   "title": "Binciken Index",
   "algoliaWarning": "Algolia sabis ne da aka adana tare da iyakoki akan matakin kyauta. Kowanne aikin sake yin index yana cinye kudi.",
+  "selectAll": "Zaɓi dukkan ƙungiyoyi",
+  "selectEntity": "Zaɓi {{entity}}",
   "columns": {
     "entity": "Jihar",
     "records": "Rajistar",
@@ -19,12 +21,12 @@
     "confirmFlush": "Tabbatar da fashewa",
     "deleteIndex": "Goge index",
     "confirmDeleteIndex": "Tabbatar da gogewa",
-    "reindexAll": "Sake yin duk",
-    "confirmReindexAll": "Tabbatar da sake yin index duka",
-    "flushAll": "Fashe duk ƙididdiga",
-    "confirmFlushAll": "Tabbatar da fashewar duka",
-    "deleteIndexAll": "Goge duk ƙididdiga",
-    "confirmDeleteIndexAll": "Tabbatar da goge duka"
+    "reindexSelected": "Sake tsara zaɓaɓɓen",
+    "confirmReindexSelected": "Tabbatar da sake yin index",
+    "flushSelected": "Fita zaɓaɓɓen",
+    "confirmFlushSelected": "Tabbatar da fashewa",
+    "deleteIndexSelected": "Goge zaɓaɓɓen tushe",
+    "confirmDeleteIndexSelected": "Tabbatar da gogewa"
   },
   "records": "rajistar",
   "progressLabel": "Ci gaban sake yin index don {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Kuskuren fashe index {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} an goge",
   "deleteIndexError": "Kuskuren goge index {{entity}}",
-  "bulkFlushCompleted": "Duk indexes an fashe",
-  "bulkDeleteIndexCompleted": "Duk indexes an goge"
+  "bulkFlushCompleted": "Tushen zaɓaɓɓe an fita",
+  "bulkDeleteIndexCompleted": "Tushen zaɓaɓɓe an goge"
 }

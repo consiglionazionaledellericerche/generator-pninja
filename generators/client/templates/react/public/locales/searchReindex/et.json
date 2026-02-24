@@ -1,6 +1,8 @@
 {
   "title": "Otsinguindeks",
   "algoliaWarning": "Algolia on põhitellimuse teenus, millel on piirangud tasuta tasemel. Iga uuesti indekseerimise toiming tarbib kvooti.",
+  "selectAll": "Vali kõik üksused",
+  "selectEntity": "Vali {{entity}}",
   "columns": {
     "entity": "Entiteet",
     "records": "Kanded",
@@ -19,12 +21,12 @@
     "confirmFlush": "Kinnita tühjendamine",
     "deleteIndex": "Kustuta indeks",
     "confirmDeleteIndex": "Kinnita kustutamine",
-    "reindexAll": "Uuesti indekseerimine kõik",
-    "confirmReindexAll": "Kinnita täielik uuesti indekseerimine",
-    "flushAll": "Tühjenda kõik indeksid",
-    "confirmFlushAll": "Kinnita täielik tühjendamine",
-    "deleteIndexAll": "Kustuta kõik indeksid",
-    "confirmDeleteIndexAll": "Kinnita täielik kustutamine"
+    "reindexSelected": "Taasta valitud",
+    "confirmReindexSelected": "Kinnita uuesti indekseerimine",
+    "flushSelected": "Tühjenda valitud",
+    "confirmFlushSelected": "Kinnita tühjendamine",
+    "deleteIndexSelected": "Kustuta valitud indeksid",
+    "confirmDeleteIndexSelected": "Kinnita kustutamine"
   },
   "records": "kanded",
   "progressLabel": "Uuesti indekseerimise edenemine {{entity}} jaoks",
@@ -35,6 +37,6 @@
   "flushError": "Viga indeksi tühjendamisel {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} kustutatud",
   "deleteIndexError": "Viga indeksi kustutamisel {{entity}}",
-  "bulkFlushCompleted": "Kõik indeksid tühjendatud",
-  "bulkDeleteIndexCompleted": "Kõik indeksid kustutatud"
+  "bulkFlushCompleted": "Valitud indeksid tühjendatud",
+  "bulkDeleteIndexCompleted": "Valitud indeksid kustutatud"
 }

@@ -1,6 +1,8 @@
 {
   "title": "શોધ સૂચકાંક",
   "algoliaWarning": "અલ્ગોલિયા એ મોટે ભાગે ટકાઉ સેવા છે જેમાં મફત સ્તરે મર્યાદાઓ છે. દરેક પુનૃત્પાદન પ્રક્રિયા કોઠાનો ઉપયો કરે છે.",
+  "selectAll": "બધા અધિકારોની પસંદગી કરો",
+  "selectEntity": "{{entity}} પસંદ કરો",
   "columns": {
     "entity": "એકમ",
     "records": "record",
@@ -19,12 +21,12 @@
     "confirmFlush": "સૂચકતા ખાલી કરવાની પુષ્ટિ કરો",
     "deleteIndex": "સૂચકતા નષ્ટ કરો",
     "confirmDeleteIndex": "મૂળભૂત ખોટી માહિતી ધરાવાય છે",
-    "reindexAll": "બધા પુનરુક્તિ કરો",
-    "confirmReindexAll": "પૂર્ણ પુનરુક્તિની પુષ્ટિ કરો",
-    "flushAll": "બધા સૂચકતા ખાલી કરો",
-    "confirmFlushAll": "પૂર્ણ ખાલી કરવાની પુષ્ટિ કરો",
-    "deleteIndexAll": "બધા સૂચકતાઓ નષ્ટ કરો",
-    "confirmDeleteIndexAll": "પૂર્ણ નષ્ટ કરવાની પુષ્ટિ કરો"
+    "reindexSelected": "પસંદ કરેલી પુનર નોંધણી",
+    "confirmReindexSelected": "પુનરુક્તિની પુષ્ટિ કરો",
+    "flushSelected": "પસંદ કરેલું બંધ કરવું",
+    "confirmFlushSelected": "સૂચકતા ખાલી કરવાની પુષ્ટિ કરો",
+    "deleteIndexSelected": "પસંદ કરેલાં સૂચકો કાઢી નાખો",
+    "confirmDeleteIndexSelected": "મૂળભૂત ખોટી માહિતી ધરાવાય છે"
   },
   "records": "record",
   "progressLabel": "{{entity}} માટે પુનરુક્તિકરણ પ્રગતિ",
@@ -35,6 +37,6 @@
   "flushError": "સૂચકતા {{entity}} ખાલી કરવામાં ભૂલ",
   "deleteIndexCompleted": "સૂચકતા {{entity}} નષ્ટ કરી",
   "deleteIndexError": "સૂચકતા {{entity}} નષ્ટ કરવામાં ભૂલ",
-  "bulkFlushCompleted": "બધા સૂચકતાઓ ખાલી કરવામાં આવી",
-  "bulkDeleteIndexCompleted": "બધા સૂચકતાઓ નષ્ટ કરવામાં આવી"
+  "bulkFlushCompleted": "પસંદ કરાયેલા સૂચકો ફલશ કરવામાં આવ્યાં",
+  "bulkDeleteIndexCompleted": "પસંદ કરાયેલા સૂચકો કાઢી મૂકવામાં આવ્યા"
 }

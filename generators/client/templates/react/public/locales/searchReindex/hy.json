@@ -1,6 +1,8 @@
 {
   "title": "Որոնման ինդեքս",
   "algoliaWarning": "Algolia-ն հյուրընկալված ծառայություն է, որը ունի սահմանափակումներ անվճար շերտում: Յուրաքանչյուր վերևի որոնման գործողություն սպառում է քվոտան:",
+  "selectAll": "Ընտրել բոլոր գույքները",
+  "selectEntity": "Ընտրել {{entity}}",
   "columns": {
     "entity": "Հետք",
     "records": "Վարկանիշներ",
@@ -19,12 +21,12 @@
     "confirmFlush": "Հաստատեք մաքրման գործընթացը",
     "deleteIndex": "Ջնջել ինդեքսը",
     "confirmDeleteIndex": "Հաստատել ջնջումը",
-    "reindexAll": "Վերակառուցել բոլորը",
-    "confirmReindexAll": "Հաստատեք ամբողջական վերակառուցումը",
-    "flushAll": "Մաքրել բոլոր ինդեքսները",
-    "confirmFlushAll": "Հաստատեք ամբողջական մաքրումը",
-    "deleteIndexAll": "Ջնջել բոլոր ինդեքսները",
-    "confirmDeleteIndexAll": "Հաստատեք ամբողջական ջ likelyշումը"
+    "reindexSelected": "Ավելի հետազոտել ընտրված",
+    "confirmReindexSelected": "Հաստատեք վերակառուցումը",
+    "flushSelected": "Այնքանով առաջացնելու ընտրված",
+    "confirmFlushSelected": "Հաստատեք մաքրման գործընթացը",
+    "deleteIndexSelected": "Ջնջել ընտրված ցուցակը",
+    "confirmDeleteIndexSelected": "Հաստատել ջնջումը"
   },
   "records": "վարկանիշներ",
   "progressLabel": "Վերակառուցման progreso {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Սխալ մաքրում ինդեքսի {{entity}}",
   "deleteIndexCompleted": "Ինդեքսը {{entity}} ջնջվել է",
   "deleteIndexError": "Սխալ ջնջում ինդեքսի {{entity}}",
-  "bulkFlushCompleted": "Բոլոր ինդեքսները մաքրվել են",
-  "bulkDeleteIndexCompleted": "Բոլոր ինդեքսները ջնջվել են"
+  "bulkFlushCompleted": "Ընտրված ցուցակը մաքրվել է",
+  "bulkDeleteIndexCompleted": "Ընտրված ցուցակը ջնջվել է"
 }

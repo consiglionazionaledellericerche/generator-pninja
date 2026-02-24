@@ -1,6 +1,8 @@
 {
   "title": "Suchindex",
   "algoliaWarning": "Algolia ist ein gehosteter Service mit Einschränkungen im kostenlosen Tarif. Jede Reindexierungsoperation verbraucht das Kontingent.",
+  "selectAll": "Wählen Sie alle Entitäten aus",
+  "selectEntity": "Wählen Sie {{entity}} aus",
   "columns": {
     "entity": "Entität",
     "records": "Datensätze",
@@ -19,12 +21,12 @@
     "confirmFlush": "Leeren bestätigen",
     "deleteIndex": "Index löschen",
     "confirmDeleteIndex": "Löschung bestätigen",
-    "reindexAll": "Alle reindexieren",
-    "confirmReindexAll": "Vollständige Reindexierung bestätigen",
-    "flushAll": "Alle Indizes leeren",
-    "confirmFlushAll": "Vollständiges Leeren bestätigen",
-    "deleteIndexAll": "Alle Indizes löschen",
-    "confirmDeleteIndexAll": "Vollständige Löschung bestätigen"
+    "reindexSelected": "Ausgewählte neu indizieren",
+    "confirmReindexSelected": "Reindexierung bestätigen",
+    "flushSelected": "Ausgewählte leeren",
+    "confirmFlushSelected": "Leeren bestätigen",
+    "deleteIndexSelected": "Ausgewählte Indizes löschen",
+    "confirmDeleteIndexSelected": "Löschung bestätigen"
   },
   "records": "Datensätze",
   "progressLabel": "Fortschritt der Reindexierung für {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Fehler beim Leeren des Indexes {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} gelöscht",
   "deleteIndexError": "Fehler beim Löschen des Indexes {{entity}}",
-  "bulkFlushCompleted": "Alle Indizes geleert",
-  "bulkDeleteIndexCompleted": "Alle Indizes gelöscht"
+  "bulkFlushCompleted": "Ausgewählte Indizes geleert",
+  "bulkDeleteIndexCompleted": "Ausgewählte Indizes gelöscht"
 }

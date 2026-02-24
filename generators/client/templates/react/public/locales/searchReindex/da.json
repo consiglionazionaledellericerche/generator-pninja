@@ -1,6 +1,8 @@
 {
   "title": "Søgeindeks",
   "algoliaWarning": "Algolia er en hostet service med grænser på den gratis plan. Hver reindekseringsoperation forbruger kvote.",
+  "selectAll": "Vælg alle enheder",
+  "selectEntity": "Vælg {{entity}}",
   "columns": {
     "entity": "Enhed",
     "records": "Poster",
@@ -19,12 +21,12 @@
     "confirmFlush": "Bekræft flush",
     "deleteIndex": "Slet indeks",
     "confirmDeleteIndex": "Bekræft sletning",
-    "reindexAll": "Reindekser alle",
-    "confirmReindexAll": "Bekræft fuld reindeksering",
-    "flushAll": "Flush alle indekser",
-    "confirmFlushAll": "Bekræft fuld flush",
-    "deleteIndexAll": "Slet alle indekser",
-    "confirmDeleteIndexAll": "Bekræft fuld sletning"
+    "reindexSelected": "Genindindekser valgte",
+    "confirmReindexSelected": "Bekræft reindeksering",
+    "flushSelected": "Tøm valgte",
+    "confirmFlushSelected": "Bekræft flush",
+    "deleteIndexSelected": "Slet valgte indekser",
+    "confirmDeleteIndexSelected": "Bekræft sletning"
   },
   "records": "poster",
   "progressLabel": "Reindekseringsfremskridt for {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Fejl ved flush af indeks {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} slettet",
   "deleteIndexError": "Fejl ved sletning af indeks {{entity}}",
-  "bulkFlushCompleted": "Alle indekser flushed",
-  "bulkDeleteIndexCompleted": "Alle indekser slettet"
+  "bulkFlushCompleted": "Valgte indekser tømt",
+  "bulkDeleteIndexCompleted": "Valgte indekser slettet"
 }

@@ -1,6 +1,8 @@
 {
   "title": "Índice de Pesquisa",
   "algoliaWarning": "Algolia é um serviço hospedado com limites na camada gratuita. Cada operação de reindexação consome cota.",
+  "selectAll": "Selecionar todas as entidades",
+  "selectEntity": "Selecionar {{entity}}",
   "columns": {
     "entity": "Entidade",
     "records": "Registros",
@@ -19,12 +21,12 @@
     "confirmFlush": "Confirmar limpeza",
     "deleteIndex": "Excluir índice",
     "confirmDeleteIndex": "Confirmar exclusão",
-    "reindexAll": "Reindexar tudo",
-    "confirmReindexAll": "Confirmar reindexação completa",
-    "flushAll": "Limpar todos os índices",
-    "confirmFlushAll": "Confirmar limpeza completa",
-    "deleteIndexAll": "Excluir todos os índices",
-    "confirmDeleteIndexAll": "Confirmar exclusão completa"
+    "reindexSelected": "Reindexar selecionados",
+    "confirmReindexSelected": "Confirmar reindexação",
+    "flushSelected": "Limpar selecionados",
+    "confirmFlushSelected": "Confirmar limpeza",
+    "deleteIndexSelected": "Excluir índices selecionados",
+    "confirmDeleteIndexSelected": "Confirmar exclusão"
   },
   "records": "registros",
   "progressLabel": "Progresso da reindexação para {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Erro ao limpar índice {{entity}}",
   "deleteIndexCompleted": "Índice {{entity}} excluído",
   "deleteIndexError": "Erro ao excluir índice {{entity}}",
-  "bulkFlushCompleted": "Todos os índices limpos",
-  "bulkDeleteIndexCompleted": "Todos os índices excluídos"
+  "bulkFlushCompleted": "Índices selecionados limpos",
+  "bulkDeleteIndexCompleted": "Índices selecionados excluídos"
 }

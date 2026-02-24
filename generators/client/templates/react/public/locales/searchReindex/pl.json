@@ -1,6 +1,8 @@
 {
   "title": "Indeks wyszukiwania",
   "algoliaWarning": "Algolia to usługa hostowana z ograniczeniami na darmowym poziomie. Każda operacja ponownego indeksowania zużywa limit.",
+  "selectAll": "Wybierz wszystkie encje",
+  "selectEntity": "Wybierz {{entity}}",
   "columns": {
     "entity": "Podmiot",
     "records": "Rekordy",
@@ -19,12 +21,12 @@
     "confirmFlush": "Potwierdź opróżnienie",
     "deleteIndex": "Usuń indeks",
     "confirmDeleteIndex": "Potwierdź usunięcie",
-    "reindexAll": "Ponowne indeksowanie wszystkich",
-    "confirmReindexAll": "Potwierdź pełne ponowne indeksowanie",
-    "flushAll": "Opróżnij wszystkie indeksy",
-    "confirmFlushAll": "Potwierdź pełne opróżnienie",
-    "deleteIndexAll": "Usuń wszystkie indeksy",
-    "confirmDeleteIndexAll": "Potwierdź pełne usunięcie"
+    "reindexSelected": "Reindeksuj zaznaczone",
+    "confirmReindexSelected": "Potwierdź ponowne indeksowanie",
+    "flushSelected": "Opróżnij zaznaczone",
+    "confirmFlushSelected": "Potwierdź opróżnienie",
+    "deleteIndexSelected": "Usuń zaznaczone indeksy",
+    "confirmDeleteIndexSelected": "Potwierdź usunięcie"
   },
   "records": "rekordy",
   "progressLabel": "Postęp ponownego indeksowania dla {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Błąd podczas opróżniania indeksu {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} usunięty",
   "deleteIndexError": "Błąd podczas usuwania indeksu {{entity}}",
-  "bulkFlushCompleted": "Wszystkie indeksy opróżnione",
-  "bulkDeleteIndexCompleted": "Wszystkie indeksy usunięte"
+  "bulkFlushCompleted": "Zaznaczone indeksy opróżnione",
+  "bulkDeleteIndexCompleted": "Zaznaczone indeksy usunięte"
 }

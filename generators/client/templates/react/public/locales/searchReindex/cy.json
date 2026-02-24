@@ -1,6 +1,8 @@
 {
   "title": "Chwilio Mynegai",
   "algoliaWarning": "Mae Algolia yn gwasanaeth wedi'i gynnal gyda chyfyngiadau ar y haen am ddim. Mae pob gweithred ail-gydgrynhoi yn defnyddio cwota.",
+  "selectAll": "Dewiswch yr holl enghreifftiau",
+  "selectEntity": "Dewiswch {{entity}}",
   "columns": {
     "entity": "Endid",
     "records": "Cofnodion",
@@ -19,12 +21,12 @@
     "confirmFlush": "Cadarnhau chwyddo",
     "deleteIndex": "Dileu mynegai",
     "confirmDeleteIndex": "Cadarnhau dileu",
-    "reindexAll": "Ail-gydgrynhoi pob un",
-    "confirmReindexAll": "Cadarnhau ail-gydgrynhoi llawn",
-    "flushAll": "Chwyddo pob mynegai",
-    "confirmFlushAll": "Cadarnhau chwyddo llawn",
-    "deleteIndexAll": "Dileu pob mynegai",
-    "confirmDeleteIndexAll": "Cadarnhau dileu llawn"
+    "reindexSelected": "Ailfarchnatwch y rhai a ddewiswyd",
+    "confirmReindexSelected": "Cadarnhau ail-gydgrynhoi",
+    "flushSelected": "Iechydwch y rhai a ddewiswyd",
+    "confirmFlushSelected": "Cadarnhau chwyddo",
+    "deleteIndexSelected": "Dileu y mynegiadau a ddewiswyd",
+    "confirmDeleteIndexSelected": "Cadarnhau dileu"
   },
   "records": "cofnodion",
   "progressLabel": "Cynnydd ail-gydgrynhoi ar gyfer {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Gwall wrth chwyddo mynegai {{entity}}",
   "deleteIndexCompleted": "Mynegai {{entity}} wedi'i ddileu",
   "deleteIndexError": "Gwall wrth ddileu mynegai {{entity}}",
-  "bulkFlushCompleted": "Mae pob mynegai wedi'i chwyddo",
-  "bulkDeleteIndexCompleted": "Mae pob mynegai wedi'i ddileu"
+  "bulkFlushCompleted": "Mynegiadau a ddewiswyd wedi'u hiachydio",
+  "bulkDeleteIndexCompleted": "Mynegiadau a ddewiswyd wedi'u dileu"
 }

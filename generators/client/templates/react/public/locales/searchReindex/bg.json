@@ -1,6 +1,8 @@
 {
   "title": "Търсене на индекс",
   "algoliaWarning": "Algolia е хоствана услуга с ограничения на безплатния план. Всяка операция по повторно индексиране консумира квота.",
+  "selectAll": "Изберете всички единици",
+  "selectEntity": "Изберете {{entity}}",
   "columns": {
     "entity": "Субект",
     "records": "Записи",
@@ -19,12 +21,12 @@
     "confirmFlush": "Потвърдете изпразването",
     "deleteIndex": "Изтриване на индекса",
     "confirmDeleteIndex": "Потвърдете изтриването",
-    "reindexAll": "Повторно индексиране на всичко",
-    "confirmReindexAll": "Потвърдете пълно повторно индексиране",
-    "flushAll": "Изпразнете всички индекси",
-    "confirmFlushAll": "Потвърдете пълното изпразване",
-    "deleteIndexAll": "Изтриване на всички индекси",
-    "confirmDeleteIndexAll": "Потвърдете пълното изтриване"
+    "reindexSelected": "Преиндексирайте избраните",
+    "confirmReindexSelected": "Потвърдете повторното индексиране",
+    "flushSelected": "Изчистете избраните",
+    "confirmFlushSelected": "Потвърдете изпразването",
+    "deleteIndexSelected": "Изтрийте избраните индекси",
+    "confirmDeleteIndexSelected": "Потвърдете изтриването"
   },
   "records": "записи",
   "progressLabel": "Напредък по повторното индексиране за {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Грешка при изпразване на индекса {{entity}}",
   "deleteIndexCompleted": "Индексът {{entity}} е изтрит",
   "deleteIndexError": "Грешка при изтриване на индекса {{entity}}",
-  "bulkFlushCompleted": "Всички индекси са изпразнени",
-  "bulkDeleteIndexCompleted": "Всички индекси са изтрити"
+  "bulkFlushCompleted": "Избраните индекси са изчистени",
+  "bulkDeleteIndexCompleted": "Избраните индекси са изтрити"
 }

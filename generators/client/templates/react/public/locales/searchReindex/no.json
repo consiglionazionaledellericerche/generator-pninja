@@ -1,6 +1,8 @@
 {
   "title": "Søk indeks",
   "algoliaWarning": "Algolia er en vertstjeneste med begrensninger på den gratis versjonen. Hver reindekseringsoperasjon forbruker kvote.",
+  "selectAll": "Velg alle enheter",
+  "selectEntity": "Velg {{entity}}",
   "columns": {
     "entity": "Enhet",
     "records": "Poster",
@@ -19,12 +21,12 @@
     "confirmFlush": "Bekreft tømming",
     "deleteIndex": "Slett indeks",
     "confirmDeleteIndex": "Bekreft sletting",
-    "reindexAll": "Reindekser alt",
-    "confirmReindexAll": "Bekreft full reindeksering",
-    "flushAll": "Tøm alle indekser",
-    "confirmFlushAll": "Bekreft full tømming",
-    "deleteIndexAll": "Slett alle indekser",
-    "confirmDeleteIndexAll": "Bekreft full sletting"
+    "reindexSelected": "Reindekser valgte",
+    "confirmReindexSelected": "Bekreft reindeksering",
+    "flushSelected": "Tøm utvalgte",
+    "confirmFlushSelected": "Bekreft tømming",
+    "deleteIndexSelected": "Slett valgte indekser",
+    "confirmDeleteIndexSelected": "Bekreft sletting"
   },
   "records": "poster",
   "progressLabel": "Reindekseringsprosess for {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Feil ved tømming av indeks {{entity}}",
   "deleteIndexCompleted": "Indeks {{entity}} slettet",
   "deleteIndexError": "Feil ved sletting av indeks {{entity}}",
-  "bulkFlushCompleted": "Alle indekser tømt",
-  "bulkDeleteIndexCompleted": "Alle indekser slettet"
+  "bulkFlushCompleted": "Valgte indekser tømt",
+  "bulkDeleteIndexCompleted": "Valgte indekser slettet"
 }

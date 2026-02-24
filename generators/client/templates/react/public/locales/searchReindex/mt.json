@@ -1,6 +1,8 @@
 {
   "title": "Indiċi ta' Tiftix",
   "algoliaWarning": "Algolia hija servizz mqanqal bi limiti fuq il-livell ħieles. Kull operazzjoni ta’ reindeksazzjoni timmarka kwota.",
+  "selectAll": "Agħżel l-entitajiet kollha",
+  "selectEntity": "Agħżel {{entity}}",
   "columns": {
     "entity": "Entità",
     "records": "Rekords",
@@ -19,12 +21,12 @@
     "confirmFlush": "Ikkonferma fluss",
     "deleteIndex": "Ħassar indiċi",
     "confirmDeleteIndex": "Ikkomprova t-tneħħija",
-    "reindexAll": "Reindeksi kollox",
-    "confirmReindexAll": "Ikkonferma reindeksazzjoni sħiħa",
-    "flushAll": "Fluss kollha tal-indici",
-    "confirmFlushAll": "Ikkonferma fluss sħiħ",
-    "deleteIndexAll": "Ħassar l-indici kollha",
-    "confirmDeleteIndexAll": "Ikkonferma ħsara sħiħa"
+    "reindexSelected": "Reindicizza magħżulin",
+    "confirmReindexSelected": "Ikkonferma reindeks",
+    "flushSelected": "Ikel magħżulin",
+    "confirmFlushSelected": "Ikkonferma fluss",
+    "deleteIndexSelected": "Ħassar indeksijiet magħżula",
+    "confirmDeleteIndexSelected": "Ikkomprova t-tneħħija"
   },
   "records": "rekords",
   "progressLabel": "Proċess ta’ reindeksazzjoni għal {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Żball fil-fluss tal-indici {{entity}}",
   "deleteIndexCompleted": "Indiċi {{entity}} ħassra",
   "deleteIndexError": "Żball fil-ħsara tal-indici {{entity}}",
-  "bulkFlushCompleted": "L-indici kollha fluss",
-  "bulkDeleteIndexCompleted": "L-indici kollha ħassrin"
+  "bulkFlushCompleted": "Indeksijiet magħżula mfarrak",
+  "bulkDeleteIndexCompleted": "Indeksijiet magħżula ħassru"
 }

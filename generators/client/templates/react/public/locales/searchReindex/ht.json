@@ -1,6 +1,8 @@
 {
   "title": "Rechèch Index",
   "algoliaWarning": "Algolia se yon sèvis hosting avèk limit sou nivo gratis la. Chak operasyon reindex konsome kvout la.",
+  "selectAll": "Chwazi tout antite yo",
+  "selectEntity": "Chwazi {{entity}}",
   "columns": {
     "entity": "Antite",
     "records": "Dosye",
@@ -19,12 +21,12 @@
     "confirmFlush": "Konfime flechi",
     "deleteIndex": "Efase index",
     "confirmDeleteIndex": "Konfime efasman",
-    "reindexAll": "Reindex tout",
-    "confirmReindexAll": "Konfime reindex konplè",
-    "flushAll": "Flechi tout index",
-    "confirmFlushAll": "Konfime flechi konplè",
-    "deleteIndexAll": "Efase tout index",
-    "confirmDeleteIndexAll": "Konfime efasman konplè"
+    "reindexSelected": "Reindex chwazi yo",
+    "confirmReindexSelected": "Konfime reindex",
+    "flushSelected": "Flu chwazi yo",
+    "confirmFlushSelected": "Konfime flechi",
+    "deleteIndexSelected": "Supprime index chwazi yo",
+    "confirmDeleteIndexSelected": "Konfime efasman"
   },
   "records": "dosye",
   "progressLabel": "Pwogrè reindexing pou {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Erè pandan flechi index {{entity}}",
   "deleteIndexCompleted": "Index {{entity}} efase",
   "deleteIndexError": "Erè pandan efase index {{entity}}",
-  "bulkFlushCompleted": "Tout index flechi",
-  "bulkDeleteIndexCompleted": "Tout index efase"
+  "bulkFlushCompleted": "Index chwazi yo flu",
+  "bulkDeleteIndexCompleted": "Index chwazi yo supprime"
 }

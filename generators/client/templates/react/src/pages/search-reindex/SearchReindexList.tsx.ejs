@@ -8,7 +8,7 @@ import { Icon } from '../../components/Icon';
 import ConfirmButton from '../../components/ConfirmButton';
 
 const SCOUT_DRIVER = import.meta.env.VITE_SCOUT_DRIVER as string;
-const POLL_INTERVAL_MS = 500;
+const POLL_INTERVAL_MS = 1500;
 
 interface ISearchEntity {
   slug: string;
@@ -56,6 +56,7 @@ export default function SearchReindexList() {
   const [loading, setLoading] = useState(false);
   const [entities, setEntities] = useState<ISearchEntity[]>([]);
   const [rowState, setRowState] = useState<Record<string, EntityRowState>>({});
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkReindexing, setBulkReindexing] = useState(false);
   const [bulkFlushing, setBulkFlushing] = useState(false);
   const [bulkDeletingIndex, setBulkDeletingIndex] = useState(false);
@@ -144,6 +145,29 @@ export default function SearchReindexList() {
     loadEntities();
   }, [loadEntities]);
 
+  // Selection
+  const allSlugs = entities.map((e) => e.slug);
+  const allSelected = allSlugs.length > 0 && allSlugs.every((s) => selected.has(s));
+  const someSelected = allSlugs.some((s) => selected.has(s)) && !allSelected;
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(allSlugs));
+    }
+  };
+
+  const toggleSelect = (slug: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      return next;
+    });
+  };
+
+  // Single actions
   const handleReindex = (slug: string) => {
     axiosInstance
       .post<{ job_id: string }>(`/api/search/reindex/${slug}`)
@@ -200,9 +224,12 @@ export default function SearchReindexList() {
       .finally(() => updateRow(slug, { loadingDelete: false }));
   };
 
+  // Bulk actions
+  const selectedEntities = entities.filter((e) => selected.has(e.slug));
+
   const handleBulkReindex = async () => {
     setBulkReindexing(true);
-    for (const entity of entities) {
+    for (const entity of selectedEntities) {
       try {
         const { data } = await axiosInstance.post<{ job_id: string }>(
           `/api/search/reindex/${entity.slug}`
@@ -227,11 +254,14 @@ export default function SearchReindexList() {
     setBulkFlushing(true);
     setRowState((prev) =>
       Object.fromEntries(
-        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingFlush: true }])
+        Object.entries(prev).map(([slug, state]) => [
+          slug,
+          { ...state, loadingFlush: selected.has(slug) ? true : state.loadingFlush },
+        ])
       )
     );
     await Promise.allSettled(
-      entities.map((entity) =>
+      selectedEntities.map((entity) =>
         axiosInstance
           .delete(`/api/search/reindex/${entity.slug}`)
           .catch((error: AxiosError<ErrorResponseData>) => {
@@ -244,7 +274,10 @@ export default function SearchReindexList() {
     );
     setRowState((prev) =>
       Object.fromEntries(
-        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingFlush: false }])
+        Object.entries(prev).map(([slug, state]) => [
+          slug,
+          { ...state, loadingFlush: selected.has(slug) ? false : state.loadingFlush },
+        ])
       )
     );
     setBulkFlushing(false);
@@ -255,11 +288,14 @@ export default function SearchReindexList() {
     setBulkDeletingIndex(true);
     setRowState((prev) =>
       Object.fromEntries(
-        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingDelete: true }])
+        Object.entries(prev).map(([slug, state]) => [
+          slug,
+          { ...state, loadingDelete: selected.has(slug) ? true : state.loadingDelete },
+        ])
       )
     );
     await Promise.allSettled(
-      entities.map((entity) =>
+      selectedEntities.map((entity) =>
         axiosInstance
           .delete(`/api/search/reindex/${entity.slug}/index`)
           .catch((error: AxiosError<ErrorResponseData>) => {
@@ -272,7 +308,10 @@ export default function SearchReindexList() {
     );
     setRowState((prev) =>
       Object.fromEntries(
-        Object.entries(prev).map(([slug, state]) => [slug, { ...state, loadingDelete: false }])
+        Object.entries(prev).map(([slug, state]) => [
+          slug,
+          { ...state, loadingDelete: selected.has(slug) ? false : state.loadingDelete },
+        ])
       )
     );
     setBulkDeletingIndex(false);
@@ -299,11 +338,15 @@ export default function SearchReindexList() {
   };
 
   const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex;
+  const noneSelected = selected.size === 0;
 
   return (
     <>
+      <h1 className="text-2xl font-bold mb-6">{t('searchReindex:title')}</h1>
       <SimpleLoader loading={loading} />
-      {!loading && entities.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
+      {!loading && entities.length === 0 && (
+        <p className="mb-4 text-2xl">{t('messages.noData')}</p>
+      )}
       {!loading && entities.length > 0 && (
         <>
           {SCOUT_DRIVER === 'algolia' && (
@@ -321,56 +364,56 @@ export default function SearchReindexList() {
 
           <div className="flex gap-2 mb-4">
             <ConfirmButton
-              disabled={anyBusy}
+              disabled={anyBusy || noneSelected}
               onConfirm={handleBulkReindex}
               className="primary-button"
               pendingClassName="primary-button"
               label={
                 <span className="flex items-center gap-2">
                   <Icon icon="refresh" size={4} />
-                  {t('searchReindex:actions.reindexAll')}
+                  {t('searchReindex:actions.reindexSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
                   <Icon icon="refresh" size={4} />
-                  {t('searchReindex:actions.confirmReindexAll')}
+                  {t('searchReindex:actions.confirmReindexSelected')}
                 </span>
               }
             />
             <ConfirmButton
-              disabled={anyBusy}
+              disabled={anyBusy || noneSelected}
               onConfirm={handleBulkFlush}
               className="secondary-button"
               pendingClassName="secondary-button"
               label={
                 <span className="flex items-center gap-2">
                   <Icon icon="cleaning_services" size={4} />
-                  {t('searchReindex:actions.flushAll')}
+                  {t('searchReindex:actions.flushSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
                   <Icon icon="cleaning_services" size={4} />
-                  {t('searchReindex:actions.confirmFlushAll')}
+                  {t('searchReindex:actions.confirmFlushSelected')}
                 </span>
               }
             />
             <ConfirmButton
-              disabled={anyBusy}
+              disabled={anyBusy || noneSelected}
               onConfirm={handleBulkDeleteIndex}
               className="danger-button"
               pendingClassName="danger-button"
               label={
                 <span className="flex items-center gap-2">
                   <Icon icon="delete_forever" size={4} />
-                  {t('searchReindex:actions.deleteIndexAll')}
+                  {t('searchReindex:actions.deleteIndexSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
                   <Icon icon="delete_forever" size={4} />
-                  {t('searchReindex:actions.confirmDeleteIndexAll')}
+                  {t('searchReindex:actions.confirmDeleteIndexSelected')}
                 </span>
               }
             />
@@ -380,6 +423,18 @@ export default function SearchReindexList() {
             <table className="data-table">
               <thead>
                 <tr>
+                  <th scope="col" className="w-0">
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected;
+                      }}
+                      onChange={toggleSelectAll}
+                      aria-label={t('searchReindex:selectAll')}
+                      className="cursor-pointer"
+                    />
+                  </th>
                   <th scope="col">{t('searchReindex:columns.entity')}</th>
                   <th scope="col" className="w-0 text-right">
                     {t('searchReindex:columns.records')}
@@ -393,9 +448,19 @@ export default function SearchReindexList() {
                   const state = rowState[entity.slug];
                   const jobState = state?.jobState ?? null;
                   const busy = isReindexing(entity.slug);
+                  const isSelected = selected.has(entity.slug);
 
                   return (
                     <tr key={entity.slug}>
+                      <td className="w-0">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(entity.slug)}
+                          aria-label={t('searchReindex:selectEntity', { entity: entity.label })}
+                          className="cursor-pointer"
+                        />
+                      </td>
                       <td className="font-medium">{entity.label}</td>
                       <td className="w-0 text-right tabular-nums">
                         {entity.count.toLocaleString()}
@@ -454,9 +519,7 @@ export default function SearchReindexList() {
                       <td className="text-nowrap w-0">
                         <div className="flex items-center gap-2">
                           <ConfirmButton
-                            disabled={
-                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
-                            }
+                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
                             onConfirm={() => handleReindex(entity.slug)}
                             className="primary-button"
                             pendingClassName="primary-button"
@@ -474,9 +537,7 @@ export default function SearchReindexList() {
                             }
                           />
                           <ConfirmButton
-                            disabled={
-                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
-                            }
+                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
                             onConfirm={() => handleFlush(entity.slug)}
                             className="secondary-button"
                             pendingClassName="secondary-button"
@@ -494,9 +555,7 @@ export default function SearchReindexList() {
                             }
                           />
                           <ConfirmButton
-                            disabled={
-                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
-                            }
+                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
                             onConfirm={() => handleDeleteIndex(entity.slug)}
                             className="danger-button"
                             pendingClassName="danger-button"

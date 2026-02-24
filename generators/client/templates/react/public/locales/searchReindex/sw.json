@@ -1,6 +1,8 @@
 {
   "title": "Hanzo la Utafutaji",
   "algoliaWarning": "Algolia ni huduma inayohudumiwa na mipaka kwenye kiwango cha bure. Kila operesheni ya kuarifu inatumia quota.",
+  "selectAll": "chagua vyote",
+  "selectEntity": "Chagua {{entity}}",
   "columns": {
     "entity": "Kitu",
     "records": "Rekodi",
@@ -19,12 +21,12 @@
     "confirmFlush": "Kithibitisha kusafisha",
     "deleteIndex": "Futa kijalala",
     "confirmDeleteIndex": "Thibitisha kufuta",
-    "reindexAll": "Kuarifu tena yote",
-    "confirmReindexAll": "Kithibitisha kuarifu tena kamili",
-    "flushAll": "Safisha kijalala zote",
-    "confirmFlushAll": "Kithibitisha kusafisha kamili",
-    "deleteIndexAll": "Futa kijalala zote",
-    "confirmDeleteIndexAll": "Kithibitisha kufuta kabisa"
+    "reindexSelected": "Reindex iliyochaguliwa",
+    "confirmReindexSelected": "Kithibitisha kuarifu tena",
+    "flushSelected": "Flush iliyochaguliwa",
+    "confirmFlushSelected": "Kithibitisha kusafisha",
+    "deleteIndexSelected": "Futa viashiria vilivyochaguliwa",
+    "confirmDeleteIndexSelected": "Thibitisha kufuta"
   },
   "records": "rekodi",
   "progressLabel": "Progress ya kuarifu tena kwa {{entity}}",
@@ -35,6 +37,6 @@
   "flushError": "Kosa kusafisha kijalala {{entity}}",
   "deleteIndexCompleted": "Kijalala {{entity}} kimefutwa",
   "deleteIndexError": "Kosa kufuta kijalala {{entity}}",
-  "bulkFlushCompleted": "Kijalala zote zimesafishwa",
-  "bulkDeleteIndexCompleted": "Kijalala zote zimefutwa"
+  "bulkFlushCompleted": "Viashiria vilivyochaguliwa vimefutwa",
+  "bulkDeleteIndexCompleted": "Viashiria vilivyochaguliwa vimemalizika"
 }
