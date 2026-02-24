@@ -138,7 +138,7 @@ export async function createReactClient(that) {
 
     await that.spawn('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts', '--no-install']);
 
-    that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), {});
+    that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), { searchEngine });
     that.fs.copyTpl(that.templatePath('react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
     that.fs.copyTpl(that.templatePath('react/eslint.config.js.ejs'), that.destinationPath('client/eslint.config.js'), {});
     that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
