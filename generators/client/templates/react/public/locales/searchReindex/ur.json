@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "انڈیکس {{entity}} حذف کر دیا گیا",
   "deleteIndexError": "انڈیکس {{entity}} کو حذف کرنے میں خرابی",
   "bulkFlushCompleted": "منتخب کردہ انڈیکس صاف ہو چکے ہیں",
-  "bulkDeleteIndexCompleted": "منتخب کردہ انڈیکس حذف ہو چکے ہیں"
+  "bulkDeleteIndexCompleted": "منتخب کردہ انڈیکس حذف ہو چکے ہیں",
+  "engine": {
+    "elastic": {
+      "migrate": "انڈیکس منتقل کریں",
+      "confirmMigrate": "مائگریشن کی تصدیق کریں",
+      "migrateCompleted": "Elasticsearch مائگریشن مکمل ہوا",
+      "reset": "انڈیکس ری سیٹ کریں",
+      "confirmReset": "ری سیٹ کی تصدیق کریں",
+      "resetCompleted": "Elasticsearch ری سیٹ مکمل ہوا",
+      "refresh": "انڈیکس کو تازہ کریں",
+      "confirmRefresh": "تازہ کاری کی تصدیق کریں",
+      "refreshCompleted": "Elasticsearch تازہ کاری مکمل ہوئی"
+    },
+    "meilisearch": {
+      "sync": "انڈیکس سیٹنگز ہم آہنگ کریں",
+      "confirmSync": "ہم آہنگی کی تصدیق کریں",
+      "syncCompleted": "Meilisearch انڈیکس سیٹنگز ہم آہنگ ہو گئیں"
+    }
+  }
 }

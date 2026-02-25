@@ -60,7 +60,7 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/LogController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/LogController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`));
     if (!['null', 'database'].includes(searchEngine)) {
-      this.fs.copyTpl(this.templatePath("app/Http/Controllers/SearchReindexController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SearchReindexController.php`));
+      this.fs.copyTpl(this.templatePath("app/Http/Controllers/SearchReindexController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SearchReindexController.php`), { searchEngine });
       this.fs.copyTpl(this.templatePath("app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {
         entities: []
       });

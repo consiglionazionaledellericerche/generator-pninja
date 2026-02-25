@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Índice {{entity}} excluído",
   "deleteIndexError": "Erro ao excluir índice {{entity}}",
   "bulkFlushCompleted": "Índices selecionados limpos",
-  "bulkDeleteIndexCompleted": "Índices selecionados excluídos"
+  "bulkDeleteIndexCompleted": "Índices selecionados excluídos",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrar índices",
+      "confirmMigrate": "Confirmar migração",
+      "migrateCompleted": "Migração do Elasticsearch concluída",
+      "reset": "Redefinir índices",
+      "confirmReset": "Confirmar redefinição",
+      "resetCompleted": "Redefinição do Elasticsearch concluída",
+      "refresh": "Atualizar índices",
+      "confirmRefresh": "Confirmar atualização",
+      "refreshCompleted": "Atualização do Elasticsearch concluída"
+    },
+    "meilisearch": {
+      "sync": "Sincronizar configurações de índice",
+      "confirmSync": "Confirmar sincronização",
+      "syncCompleted": "Configurações de índice do Meilisearch sincronizadas"
+    }
+  }
 }

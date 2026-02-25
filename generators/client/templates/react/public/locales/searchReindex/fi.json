@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeksi {{entity}} poistettu",
   "deleteIndexError": "Virhe poistettaessa indeksi {{entity}}",
   "bulkFlushCompleted": "Valitut indeksit tyhjennetty",
-  "bulkDeleteIndexCompleted": "Valitut indeksit poistettu"
+  "bulkDeleteIndexCompleted": "Valitut indeksit poistettu",
+  "engine": {
+    "elastic": {
+      "migrate": "Siirrä indeksit",
+      "confirmMigrate": "Vahvista siirto",
+      "migrateCompleted": "Elasticsearch-siirto suoritettu",
+      "reset": "Nollaa indeksit",
+      "confirmReset": "Vahvista nollaus",
+      "resetCompleted": "Elasticsearch-nollaus suoritettu",
+      "refresh": "Päivitä indeksit",
+      "confirmRefresh": "Vahvista päivitys",
+      "refreshCompleted": "Elasticsearch-päivitys suoritettu"
+    },
+    "meilisearch": {
+      "sync": "Synkronoi indeksiasetukset",
+      "confirmSync": "Vahvista synkronointi",
+      "syncCompleted": "Meilisearch-indeksiasetukset synkronoitu"
+    }
+  }
 }

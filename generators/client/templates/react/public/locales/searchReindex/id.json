@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} dihapus",
   "deleteIndexError": "Kesalahan saat menghapus indeks {{entity}}",
   "bulkFlushCompleted": "Indeks yang dipilih dibersihkan",
-  "bulkDeleteIndexCompleted": "Indeks yang dipilih dihapus"
+  "bulkDeleteIndexCompleted": "Indeks yang dipilih dihapus",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrasi indeks",
+      "confirmMigrate": "Konfirmasi migrasi",
+      "migrateCompleted": "Migrasi Elasticsearch selesai",
+      "reset": "Reset indeks",
+      "confirmReset": "Konfirmasi reset",
+      "resetCompleted": "Reset Elasticsearch selesai",
+      "refresh": "Segarkan indeks",
+      "confirmRefresh": "Konfirmasi segarkan",
+      "refreshCompleted": "Segarkan Elasticsearch selesai"
+    },
+    "meilisearch": {
+      "sync": "Sinkronkan pengaturan indeks",
+      "confirmSync": "Konfirmasi sinkron",
+      "syncCompleted": "Pengaturan indeks Meilisearch disinkronkan"
+    }
+  }
 }

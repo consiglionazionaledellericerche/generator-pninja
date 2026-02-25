@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Индексът {{entity}} е изтрит",
   "deleteIndexError": "Грешка при изтриване на индекса {{entity}}",
   "bulkFlushCompleted": "Избраните индекси са изчистени",
-  "bulkDeleteIndexCompleted": "Избраните индекси са изтрити"
+  "bulkDeleteIndexCompleted": "Избраните индекси са изтрити",
+  "engine": {
+    "elastic": {
+      "migrate": "Мигриране на индекси",
+      "confirmMigrate": "Потвърдете миграцията",
+      "migrateCompleted": "Миграцията на Elasticsearch завършена",
+      "reset": "Нулиране на индекси",
+      "confirmReset": "Потвърдете нулирането",
+      "resetCompleted": "Нулирането на Elasticsearch завършено",
+      "refresh": "Обновяване на индекси",
+      "confirmRefresh": "Потвърдете обновяването",
+      "refreshCompleted": "Обновяването на Elasticsearch завършено"
+    },
+    "meilisearch": {
+      "sync": "Синхронизиране на настройки на индекса",
+      "confirmSync": "Потвърдете синхронизацията",
+      "syncCompleted": "Настройките на индекса на Meilisearch синхронизирани"
+    }
+  }
 }

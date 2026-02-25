@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} ferwidere",
   "deleteIndexError": "Fout by it ferwiderjen fan index {{entity}}",
   "bulkFlushCompleted": "Selektearre yndeksen fleanse",
-  "bulkDeleteIndexCompleted": "Selektearre yndeksen ferwidere"
+  "bulkDeleteIndexCompleted": "Selektearre yndeksen ferwidere",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrear yndeksen",
+      "confirmMigrate": "Beëinigje migraasje",
+      "migrateCompleted": "Elasticsearch migraasje foltôge",
+      "reset": "Reset yndeksen",
+      "confirmReset": "Beëinigje reset",
+      "resetCompleted": "Elasticsearch reset foltôge",
+      "refresh": "Fernijd yndeksen",
+      "confirmRefresh": "Beëinigje fernijing",
+      "refreshCompleted": "Elasticsearch fernijing foltôge"
+    },
+    "meilisearch": {
+      "sync": "Synchronisearje yndeksynstellingen",
+      "confirmSync": "Beëinigje synchronisearjen",
+      "syncCompleted": "Meilisearch yndeksynstellingen syncronisearre"
+    }
+  }
 }

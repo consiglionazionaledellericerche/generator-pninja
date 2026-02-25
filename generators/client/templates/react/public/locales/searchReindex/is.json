@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Vísitala {{entity}} eytt",
   "deleteIndexError": "Villa við að eyða vísitölu {{entity}}",
   "bulkFlushCompleted": "Valdar skráningar tæmdar",
-  "bulkDeleteIndexCompleted": "Valdar skráningar eyddar"
+  "bulkDeleteIndexCompleted": "Valdar skráningar eyddar",
+  "engine": {
+    "elastic": {
+      "migrate": "Færðu yfir vísitölur",
+      "confirmMigrate": "Staðfesta flutning",
+      "migrateCompleted": "Elasticsearch flutningur lokið",
+      "reset": "Endurstilla vísitölur",
+      "confirmReset": "Staðfesta endurstillingu",
+      "resetCompleted": "Elasticsearch endurstilling lokið",
+      "refresh": "Uppfæra vísitölur",
+      "confirmRefresh": "Staðfesta uppfærslu",
+      "refreshCompleted": "Elasticsearch uppfærsla lokið"
+    },
+    "meilisearch": {
+      "sync": "Samhæfa vísitölustillingar",
+      "confirmSync": "Staðfesta samhæfingu",
+      "syncCompleted": "Meilisearch vísitölustillingar samhæfðar"
+    }
+  }
 }

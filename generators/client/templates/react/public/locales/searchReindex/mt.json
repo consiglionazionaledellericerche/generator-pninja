@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indiċi {{entity}} ħassra",
   "deleteIndexError": "Żball fil-ħsara tal-indici {{entity}}",
   "bulkFlushCompleted": "Indeksijiet magħżula mfarrak",
-  "bulkDeleteIndexCompleted": "Indeksijiet magħżula ħassru"
+  "bulkDeleteIndexCompleted": "Indeksijiet magħżula ħassru",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrat l-indici",
+      "confirmMigrate": "Ikkonferma l-migrazzjoni",
+      "migrateCompleted": "Il-migrazzjoni ta' Elasticsearch kompletata",
+      "reset": "Irrestaura l-indici",
+      "confirmReset": "Ikkonferma r-restawr",
+      "resetCompleted": "Ir-restawr ta' Elasticsearch kompletat",
+      "refresh": "Aġġorna l-indici",
+      "confirmRefresh": "Ikkonferma l-aġġornament",
+      "refreshCompleted": "L-aġġornament ta' Elasticsearch kompletat"
+    },
+    "meilisearch": {
+      "sync": "Sinċronizza s-settings tal-indice",
+      "confirmSync": "Ikkonferma s-sinċronizzazzjoni",
+      "syncCompleted": "Is-settings tal-indice Meilisearch ġew sinċronizzati"
+    }
+  }
 }

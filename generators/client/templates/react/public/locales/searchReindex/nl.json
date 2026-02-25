@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} verwijderd",
   "deleteIndexError": "Fout bij het verwijderen van index {{entity}}",
   "bulkFlushCompleted": "Geselecteerde indexen gewist",
-  "bulkDeleteIndexCompleted": "Geselecteerde indexen verwijderd"
+  "bulkDeleteIndexCompleted": "Geselecteerde indexen verwijderd",
+  "engine": {
+    "elastic": {
+      "migrate": "Indexen migreren",
+      "confirmMigrate": "Migratie bevestigen",
+      "migrateCompleted": "Elasticsearch migratie voltooid",
+      "reset": "Indexen resetten",
+      "confirmReset": "Reset bevestigen",
+      "resetCompleted": "Elasticsearch reset voltooid",
+      "refresh": "Indexen verversen",
+      "confirmRefresh": "Ververs bevestigen",
+      "refreshCompleted": "Elasticsearch verversing voltooid"
+    },
+    "meilisearch": {
+      "sync": "Indexinstellingen synchroniseren",
+      "confirmSync": "Synchronisatie bevestigen",
+      "syncCompleted": "Meilisearch indexinstellingen gesynchroniseerd"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} o'chirildi",
   "deleteIndexError": "Indeks {{entity}} ni o'chirishda xatoga uchradi",
   "bulkFlushCompleted": "Tanlangan indekslar tozalandı",
-  "bulkDeleteIndexCompleted": "Tanlangan indekslar o'chirildi"
+  "bulkDeleteIndexCompleted": "Tanlangan indekslar o'chirildi",
+  "engine": {
+    "elastic": {
+      "migrate": "Indekslarni ko'chirish",
+      "confirmMigrate": "Ko'chirishni tasdiqlang",
+      "migrateCompleted": "Elasticsearch ko'chirish tugallandi",
+      "reset": "Indekslarni qayta tiklash",
+      "confirmReset": "Qayta tiklashni tasdiqlang",
+      "resetCompleted": "Elasticsearch qayta tiklash tugallandi",
+      "refresh": "Indekslarni yangilash",
+      "confirmRefresh": "Yangilanishni tasdiqlang",
+      "refreshCompleted": "Elasticsearch yangilanish tugallandi"
+    },
+    "meilisearch": {
+      "sync": "Indeks sozlamalarini sinxronlash",
+      "confirmSync": "Sinxronizatsiyani tasdiqlang",
+      "syncCompleted": "Meilisearch indeks sozlamalari sinxronlandi"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} byl smazán",
   "deleteIndexError": "Chyba při mazání indexu {{entity}}",
   "bulkFlushCompleted": "Vybrané indexy vyprázdněny",
-  "bulkDeleteIndexCompleted": "Vybrané indexy smazány"
+  "bulkDeleteIndexCompleted": "Vybrané indexy smazány",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrace indexů",
+      "confirmMigrate": "Potvrdit migraci",
+      "migrateCompleted": "Migrace Elasticsearch dokončena",
+      "reset": "Resetovat indexy",
+      "confirmReset": "Potvrdit reset",
+      "resetCompleted": "Resetování Elasticsearch dokončeno",
+      "refresh": "Obnovit indexy",
+      "confirmRefresh": "Potvrdit obnovu",
+      "refreshCompleted": "Obnovení Elasticsearch dokončeno"
+    },
+    "meilisearch": {
+      "sync": "Synchronizovat nastavení indexu",
+      "confirmSync": "Potvrdit synchronizaci",
+      "syncCompleted": "Nastavení indexu Meilisearch synchronizováno"
+    }
+  }
 }

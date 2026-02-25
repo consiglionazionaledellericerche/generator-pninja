@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "تم حذف الفهرس {{entity}}",
   "deleteIndexError": "خطأ في حذف الفهرس {{entity}}",
   "bulkFlushCompleted": "تم تطهير الفهارس المحددة",
-  "bulkDeleteIndexCompleted": "تم حذف الفهارس المحددة"
+  "bulkDeleteIndexCompleted": "تم حذف الفهارس المحددة",
+  "engine": {
+    "elastic": {
+      "migrate": "ترحيل الفهارس",
+      "confirmMigrate": "تأكيد الترحيل",
+      "migrateCompleted": "اكتمل ترحيل Elasticsearch",
+      "reset": "إعادة تعيين الفهارس",
+      "confirmReset": "تأكيد إعادة التعيين",
+      "resetCompleted": "اكتمل إعادة تعيين Elasticsearch",
+      "refresh": "تحديث الفهارس",
+      "confirmRefresh": "تأكيد التحديث",
+      "refreshCompleted": "اكتمل تحديث Elasticsearch"
+    },
+    "meilisearch": {
+      "sync": "مزامنة إعدادات الفهرس",
+      "confirmSync": "تأكيد المزامنة",
+      "syncCompleted": "تم مزامنة إعدادات فهرس Meilisearch"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Kijalala {{entity}} kimefutwa",
   "deleteIndexError": "Kosa kufuta kijalala {{entity}}",
   "bulkFlushCompleted": "Viashiria vilivyochaguliwa vimefutwa",
-  "bulkDeleteIndexCompleted": "Viashiria vilivyochaguliwa vimemalizika"
+  "bulkDeleteIndexCompleted": "Viashiria vilivyochaguliwa vimemalizika",
+  "engine": {
+    "elastic": {
+      "migrate": "hamasisha viashiria",
+      "confirmMigrate": "thibitisha uhamasishaji",
+      "migrateCompleted": "uhamasishaji wa Elasticsearch umekamilika",
+      "reset": "rejesha viashiria",
+      "confirmReset": "thibitisha urejeleaji",
+      "resetCompleted": "urejeleaji wa Elasticsearch umekamilika",
+      "refresh": "karabati viashiria",
+      "confirmRefresh": "thibitisha karabati",
+      "refreshCompleted": "karabati ya Elasticsearch imekamilika"
+    },
+    "meilisearch": {
+      "sync": "sawazisha mipangilio ya viashiria",
+      "confirmSync": "thibitisha usawa",
+      "syncCompleted": "mipangilio ya viashiria ya Meilisearch imewasawazishwa"
+    }
+  }
 }

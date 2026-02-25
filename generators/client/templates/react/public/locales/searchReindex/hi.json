@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "इंडेक्स {{entity}} को हटाया गया",
   "deleteIndexError": "इंडेक्स {{entity}} को हटाने में त्रुटि",
   "bulkFlushCompleted": "चयनित अनुक्रमणकों को निकाल दिया गया",
-  "bulkDeleteIndexCompleted": "चयनित अनुक्रमणकों को हटा दिया गया"
+  "bulkDeleteIndexCompleted": "चयनित अनुक्रमणकों को हटा दिया गया",
+  "engine": {
+    "elastic": {
+      "migrate": "सूचकांक माइग्रेट करें",
+      "confirmMigrate": "माइग्रेशन की पुष्टि करें",
+      "migrateCompleted": "Elasticsearch माइग्रेशन पूरा हुआ",
+      "reset": "सूचकांक रीसेट करें",
+      "confirmReset": "रीसेट की पुष्टि करें",
+      "resetCompleted": "Elasticsearch रीसेट पूरा हुआ",
+      "refresh": "सूचकांक रीफ्रेश करें",
+      "confirmRefresh": "रीफ्रेश की पुष्टि करें",
+      "refreshCompleted": "Elasticsearch रीफ्रेश पूरा हुआ"
+    },
+    "meilisearch": {
+      "sync": "सूचकांक सेटिंग्स समन्वयित करें",
+      "confirmSync": "समन्वय की पुष्टि करें",
+      "syncCompleted": "Meilisearch सूचकांक सेटिंग्स समन्वयित की गईं"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} an goge",
   "deleteIndexError": "Kuskuren goge index {{entity}}",
   "bulkFlushCompleted": "Tushen zaɓaɓɓe an fita",
-  "bulkDeleteIndexCompleted": "Tushen zaɓaɓɓe an goge"
+  "bulkDeleteIndexCompleted": "Tushen zaɓaɓɓe an goge",
+  "engine": {
+    "elastic": {
+      "migrate": "Canja matsayin",
+      "confirmMigrate": "Tabbatar da canja",
+      "migrateCompleted": "An kammala canja Elasticsearch",
+      "reset": "Sake saita matsayin",
+      "confirmReset": "Tabbatar da sake saita",
+      "resetCompleted": "An kammala reset Elasticsearch",
+      "refresh": "Sabunta matsayin",
+      "confirmRefresh": "Tabbatar da sabuntawa",
+      "refreshCompleted": "An kammala sabuntawa Elasticsearch"
+    },
+    "meilisearch": {
+      "sync": "Daidaita nastun matsayin",
+      "confirmSync": "Tabbatar da daidaitawa",
+      "syncCompleted": "An daidaita nastun matsayin Meilisearch"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indizea {{entity}} ezabatua",
   "deleteIndexError": "Errorea indizea ezabatzean {{entity}}",
   "bulkFlushCompleted": "Hautatutako iradokizunak lurrinatu dira",
-  "bulkDeleteIndexCompleted": "Hautatutako iradokizunak ezabatu dira"
+  "bulkDeleteIndexCompleted": "Hautatutako iradokizunak ezabatu dira",
+  "engine": {
+    "elastic": {
+      "migrate": "Indizeak migratu",
+      "confirmMigrate": "Migrazioa baieztatu",
+      "migrateCompleted": "Elasticsearch migrazioa amaituta",
+      "reset": "Indizeak berrezarri",
+      "confirmReset": "Berrespena baieztatu",
+      "resetCompleted": "Elasticsearch berrespena amaituta",
+      "refresh": "Indizeak eguneratu",
+      "confirmRefresh": "Eguneratzea baieztatu",
+      "refreshCompleted": "Elasticsearch eguneratzea amaituta"
+    },
+    "meilisearch": {
+      "sync": "Indizeen konfigurazioa sinkronizatu",
+      "confirmSync": "Sinkronizazioa baieztatu",
+      "syncCompleted": "Meilisearch indizearen konfigurazioa sinkronizatuta"
+    }
+  }
 }

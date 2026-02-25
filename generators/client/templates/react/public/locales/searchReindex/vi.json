@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} deleted",
   "deleteIndexError": "Error deleting index {{entity}}",
   "bulkFlushCompleted": "Chỉ mục đã chọn đã được xóa bỏ",
-  "bulkDeleteIndexCompleted": "Chỉ mục đã chọn đã bị xóa"
+  "bulkDeleteIndexCompleted": "Chỉ mục đã chọn đã bị xóa",
+  "engine": {
+    "elastic": {
+      "migrate": "Di chuyển chỉ mục",
+      "confirmMigrate": "Xác nhận di chuyển",
+      "migrateCompleted": "Di chuyển Elasticsearch đã hoàn thành",
+      "reset": "Đặt lại chỉ mục",
+      "confirmReset": "Xác nhận đặt lại",
+      "resetCompleted": "Đặt lại Elasticsearch đã hoàn thành",
+      "refresh": "Cập nhật chỉ mục",
+      "confirmRefresh": "Xác nhận cập nhật",
+      "refreshCompleted": "Cập nhật Elasticsearch đã hoàn thành"
+    },
+    "meilisearch": {
+      "sync": "Đồng bộ cài đặt chỉ mục",
+      "confirmSync": "Xác nhận đồng bộ",
+      "syncCompleted": "Cài đặt chỉ mục Meilisearch đã được đồng bộ"
+    }
+  }
 }

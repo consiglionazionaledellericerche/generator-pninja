@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Το ευρετήριο {{entity}} διαγράφηκε",
   "deleteIndexError": "Σφάλμα κατά τη διαγραφή του ευρετηρίου {{entity}}",
   "bulkFlushCompleted": "Οι επιλεγμένοι δείκτες εκκαθαρίστηκαν",
-  "bulkDeleteIndexCompleted": "Οι επιλεγμένοι δείκτες διαγράφηκαν"
+  "bulkDeleteIndexCompleted": "Οι επιλεγμένοι δείκτες διαγράφηκαν",
+  "engine": {
+    "elastic": {
+      "migrate": "Μεταφέρετε τους δείκτες",
+      "confirmMigrate": "Επιβεβαιώστε τη μετανάστευση",
+      "migrateCompleted": "Η μετανάστευση του Elasticsearch ολοκληρώθηκε",
+      "reset": "Επαναφέρετε τους δείκτες",
+      "confirmReset": "Επιβεβαιώστε την επαναφορά",
+      "resetCompleted": "Η επαναφορά του Elasticsearch ολοκληρώθηκε",
+      "refresh": "Ενημερώστε τους δείκτες",
+      "confirmRefresh": "Επιβεβαιώστε την ενημέρωση",
+      "refreshCompleted": "Η ενημέρωση του Elasticsearch ολοκληρώθηκε"
+    },
+    "meilisearch": {
+      "sync": "Συγχρονίστε τις ρυθμίσεις του δείκτη",
+      "confirmSync": "Επιβεβαιώστε τον συγχρονισμό",
+      "syncCompleted": "Οι ρυθμίσεις του δείκτη Meilisearch συγχρονίστηκαν"
+    }
+  }
 }

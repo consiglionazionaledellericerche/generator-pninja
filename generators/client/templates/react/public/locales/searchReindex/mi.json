@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Kua tāwharotia ngā rārangi katoa",
   "deleteIndexError": "Kua whakaarahia ngā rārangi katoa",
   "bulkFlushCompleted": "Kua whakakā ngā whakaritenga nāna i tīpakohia",
-  "bulkDeleteIndexCompleted": "Kua mārohia ngā whakaritenga nāna i tīpakohia"
+  "bulkDeleteIndexCompleted": "Kua mārohia ngā whakaritenga nāna i tīpakohia",
+  "engine": {
+    "elastic": {
+      "migrate": "Hōputu rerenga",
+      "confirmMigrate": "Whakauaua te rerenga",
+      "migrateCompleted": "Kua oti te rerenga Elasticsearch",
+      "reset": "Whakakā me ngā hōputu",
+      "confirmReset": "Whakauaua te whakakā",
+      "resetCompleted": "Kua oti te whakakā Elasticsearch",
+      "refresh": "Whakamāoritia ngā hōputu",
+      "confirmRefresh": "Whakauaua te whakanui",
+      "refreshCompleted": "Kua oti te whakanui Elasticsearch"
+    },
+    "meilisearch": {
+      "sync": "Whakaū ngā tautuhinga hōputu",
+      "confirmSync": "Whakauaua te whakaū",
+      "syncCompleted": "Kua rite ngā tautuhinga hōputu Meilisearch"
+    }
+  }
 }

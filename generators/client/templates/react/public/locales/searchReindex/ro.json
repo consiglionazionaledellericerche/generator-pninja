@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indexul {{entity}} a fost șters",
   "deleteIndexError": "Eroare la ștergerea indexului {{entity}}",
   "bulkFlushCompleted": "Indecșii selectați goliți",
-  "bulkDeleteIndexCompleted": "Indecșii selectați șterși"
+  "bulkDeleteIndexCompleted": "Indecșii selectați șterși",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrați indexurile",
+      "confirmMigrate": "Confirmați migrarea",
+      "migrateCompleted": "Migrarea Elasticsearch finalizată",
+      "reset": "Resetați indexurile",
+      "confirmReset": "Confirmați resetarea",
+      "resetCompleted": "Resetarea Elasticsearch finalizată",
+      "refresh": "Reîncărcați indexurile",
+      "confirmRefresh": "Confirmați reîmprospătarea",
+      "refreshCompleted": "Reîmprospătarea Elasticsearch finalizată"
+    },
+    "meilisearch": {
+      "sync": "Sincronizați setările indexului",
+      "confirmSync": "Confirmați sincronizarea",
+      "syncCompleted": "Setările indexului Meilisearch sincronizate"
+    }
+  }
 }

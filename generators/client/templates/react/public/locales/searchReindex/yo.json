@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Ìkàwé {{entity}} ti parè",
   "deleteIndexError": "Kòsùn-ṣàkóso níbè lórí parè ìkàwé {{entity}}",
   "bulkFlushCompleted": "Awọn itọkasi ti a yan ti tu silẹ",
-  "bulkDeleteIndexCompleted": "Awọn itọkasi ti a yan ti paarẹ"
+  "bulkDeleteIndexCompleted": "Awọn itọkasi ti a yan ti paarẹ",
+  "engine": {
+    "elastic": {
+      "migrate": "Gbe awọn atọka",
+      "confirmMigrate": "Jẹrisi ìkó",
+      "migrateCompleted": "Ilana Elasticsearch ti pari",
+      "reset": "Tun awọn atọka",
+      "confirmReset": "Jẹrisi tun",
+      "resetCompleted": "Ilana Elasticsearch ti tun pari",
+      "refresh": "Tunṣe awọn atọka",
+      "confirmRefresh": "Jẹrisi atunṣe",
+      "refreshCompleted": "Ilana Elasticsearch ti tunṣe pari"
+    },
+    "meilisearch": {
+      "sync": "Sopọ awọn eto atọka",
+      "confirmSync": "Jẹrisi ìsopọ",
+      "syncCompleted": "Awọn eto atọka Meilisearch ti sopọ."
+    }
+  }
 }

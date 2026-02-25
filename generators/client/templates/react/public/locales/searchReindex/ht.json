@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} efase",
   "deleteIndexError": "Erè pandan efase index {{entity}}",
   "bulkFlushCompleted": "Index chwazi yo flu",
-  "bulkDeleteIndexCompleted": "Index chwazi yo supprime"
+  "bulkDeleteIndexCompleted": "Index chwazi yo supprime",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrate indexes",
+      "confirmMigrate": "Konfime migrasyon",
+      "migrateCompleted": "Migrasyon Elasticsearch fini",
+      "reset": "Reyaji index yo",
+      "confirmReset": "Konfime reyajisman",
+      "resetCompleted": "Reyajisman Elasticsearch fini",
+      "refresh": "Rafrechi index yo",
+      "confirmRefresh": "Konfime rafrechisman",
+      "refreshCompleted": "Rafrechisman Elasticsearch fini"
+    },
+    "meilisearch": {
+      "sync": "Senkrone anviwònman index yo",
+      "confirmSync": "Konfime senkronizasyon",
+      "syncCompleted": "Anviwònman index Meilisearch senkronize"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} deleted",
   "deleteIndexError": "Error deleting index {{entity}}",
   "bulkFlushCompleted": "Selected indexes flushed",
-  "bulkDeleteIndexCompleted": "Selected indexes deleted"
+  "bulkDeleteIndexCompleted": "Selected indexes deleted",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrate indexes",
+      "confirmMigrate": "Confirm migration",
+      "migrateCompleted": "Elasticsearch migration completed",
+      "reset": "Reset indexes",
+      "confirmReset": "Confirm reset",
+      "resetCompleted": "Elasticsearch reset completed",
+      "refresh": "Refresh indexes",
+      "confirmRefresh": "Confirm refresh",
+      "refreshCompleted": "Elasticsearch refresh completed"
+    },
+    "meilisearch": {
+      "sync": "Sync index settings",
+      "confirmSync": "Confirm sync",
+      "syncCompleted": "Meilisearch index settings synced"
+    }
+  }
 }

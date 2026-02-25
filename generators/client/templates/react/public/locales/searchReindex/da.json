@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} slettet",
   "deleteIndexError": "Fejl ved sletning af indeks {{entity}}",
   "bulkFlushCompleted": "Valgte indekser tømt",
-  "bulkDeleteIndexCompleted": "Valgte indekser slettet"
+  "bulkDeleteIndexCompleted": "Valgte indekser slettet",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrere indekser",
+      "confirmMigrate": "Bekræft migration",
+      "migrateCompleted": "Elasticsearch migration afsluttet",
+      "reset": "Nulstil indekser",
+      "confirmReset": "Bekræft nulstilling",
+      "resetCompleted": "Elasticsearch nulstilling afsluttet",
+      "refresh": "Opdater indekser",
+      "confirmRefresh": "Bekræft opdatering",
+      "refreshCompleted": "Elasticsearch opdatering afsluttet"
+    },
+    "meilisearch": {
+      "sync": "Synkroniser indeksindstillinger",
+      "confirmSync": "Bekræft synkronisering",
+      "syncCompleted": "Meilisearch indeksindstillinger synkroniseret"
+    }
+  }
 }

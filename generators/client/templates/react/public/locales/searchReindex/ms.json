@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} telah dipadam",
   "deleteIndexError": "Ralat semasa memadam indeks {{entity}}",
   "bulkFlushCompleted": "Indeks yang dipilih telah dibersihkan",
-  "bulkDeleteIndexCompleted": "Indeks yang dipilih telah dipadam"
+  "bulkDeleteIndexCompleted": "Indeks yang dipilih telah dipadam",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrasi indeks",
+      "confirmMigrate": "Sahkan migrasi",
+      "migrateCompleted": "Migrasi Elasticsearch selesai",
+      "reset": "Set semula indeks",
+      "confirmReset": "Sahkan set semula",
+      "resetCompleted": "Set semula Elasticsearch selesai",
+      "refresh": "Segarkan indeks",
+      "confirmRefresh": "Sahkan penyegaran",
+      "refreshCompleted": "Penyegaran Elasticsearch selesai"
+    },
+    "meilisearch": {
+      "sync": "Penyelarasan tetapan indeks",
+      "confirmSync": "Sahkan penyelarasan",
+      "syncCompleted": "Tetapan indeks Meilisearch diselaraskan"
+    }
+  }
 }

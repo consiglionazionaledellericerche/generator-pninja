@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Isikhumbuzo {{entity}} sesusiwe",
   "deleteIndexError": "Iphutha lokususa isikhumbuzo {{entity}}",
   "bulkFlushCompleted": "Ama-index akhethwe aphumile",
-  "bulkDeleteIndexCompleted": "Ama-index akhethwe asusiwe"
+  "bulkDeleteIndexCompleted": "Ama-index akhethwe asusiwe",
+  "engine": {
+    "elastic": {
+      "migrate": "Phakamisa ama-index",
+      "confirmMigrate": "Qinisekisa ukufudukela",
+      "migrateCompleted": "U-Fudukela ku-Elasticsearch uphelile",
+      "reset": "Phinda kabusha ama-index",
+      "confirmReset": "Qinisekisa ukuphinda",
+      "resetCompleted": "U-Phinda ku-Elasticsearch uphelile",
+      "refresh": "Buyekeza ama-index",
+      "confirmRefresh": "Qinisekisa ukuvuselela",
+      "refreshCompleted": "U-Buyekeza ku-Elasticsearch uphelile"
+    },
+    "meilisearch": {
+      "sync": "Hlanganyela izilungiselelo ze-index",
+      "confirmSync": "Qinisekisa ukuhambisana",
+      "syncCompleted": "Izilungiselelo ze-index ze-Meilisearch zihlanganyisiwe"
+    }
+  }
 }

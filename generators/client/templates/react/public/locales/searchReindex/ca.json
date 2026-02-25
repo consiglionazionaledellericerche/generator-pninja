@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Índex {{entity}} eliminat",
   "deleteIndexError": "Error en eliminar l'índex {{entity}}",
   "bulkFlushCompleted": "Índexs seleccionats nets",
-  "bulkDeleteIndexCompleted": "Índexs seleccionats suprimits"
+  "bulkDeleteIndexCompleted": "Índexs seleccionats suprimits",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrar índexs",
+      "confirmMigrate": "Confirmar migració",
+      "migrateCompleted": "Migració d'Elasticsearch completada",
+      "reset": "Restablir índexs",
+      "confirmReset": "Confirmar restabliment",
+      "resetCompleted": "Restabliment d'Elasticsearch completat",
+      "refresh": "Actualitzar índexs",
+      "confirmRefresh": "Confirmar actualització",
+      "refreshCompleted": "Actualització d'Elasticsearch completada"
+    },
+    "meilisearch": {
+      "sync": "Sincronitzar configuracions d'índex",
+      "confirmSync": "Confirmar sincronització",
+      "syncCompleted": "Configuracions d'índex de Meilisearch sincronitzades"
+    }
+  }
 }

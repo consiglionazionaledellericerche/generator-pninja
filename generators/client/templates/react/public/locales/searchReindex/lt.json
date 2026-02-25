@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeksas {{entity}} ištrintas",
   "deleteIndexError": "Klaida trinant indeksą {{entity}}",
   "bulkFlushCompleted": "Parinkti indeksai išvalyti",
-  "bulkDeleteIndexCompleted": "Parinkti indeksai ištrinti"
+  "bulkDeleteIndexCompleted": "Parinkti indeksai ištrinti",
+  "engine": {
+    "elastic": {
+      "migrate": "Migracija indeksų",
+      "confirmMigrate": "Patvirtinti migraciją",
+      "migrateCompleted": "Elasticsearch migracija baigta",
+      "reset": "Nustatyti indeksus",
+      "confirmReset": "Patvirtinti nustatymą",
+      "resetCompleted": "Elasticsearch nustatymas baigtas",
+      "refresh": "Atnaujinti indeksus",
+      "confirmRefresh": "Patvirtinti atnaujinimą",
+      "refreshCompleted": "Elasticsearch atnaujinimas baigtas"
+    },
+    "meilisearch": {
+      "sync": "Sinchronizuoti indeksų nustatymus",
+      "confirmSync": "Patvirtinti sinchronizavimą",
+      "syncCompleted": "Meilisearch indeksų nustatymai sinchronizuoti"
+    }
+  }
 }

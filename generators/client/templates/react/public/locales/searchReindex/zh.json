@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "索引 {{entity}} 已删除",
   "deleteIndexError": "删除索引 {{entity}} 时出错",
   "bulkFlushCompleted": "所选索引已清除",
-  "bulkDeleteIndexCompleted": "所选索引已删除"
+  "bulkDeleteIndexCompleted": "所选索引已删除",
+  "engine": {
+    "elastic": {
+      "migrate": "迁移索引",
+      "confirmMigrate": "确认迁移",
+      "migrateCompleted": "Elasticsearch 迁移完成",
+      "reset": "重置索引",
+      "confirmReset": "确认重置",
+      "resetCompleted": "Elasticsearch 重置完成",
+      "refresh": "刷新索引",
+      "confirmRefresh": "确认刷新",
+      "refreshCompleted": "Elasticsearch 刷新完成"
+    },
+    "meilisearch": {
+      "sync": "同步索引设置",
+      "confirmSync": "确认同步",
+      "syncCompleted": "Meilisearch 索引设置已同步"
+    }
+  }
 }

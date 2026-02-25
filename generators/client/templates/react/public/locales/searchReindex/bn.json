@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "ইনডেক্স {{entity}} মুছা হয়েছে",
   "deleteIndexError": "ইনডেক্স {{entity}} মুছতে ত্রুটি",
   "bulkFlushCompleted": "নির্বাচিত সূচকগুলো মুছে ফেলা হয়েছে",
-  "bulkDeleteIndexCompleted": "নির্বাচিত সূচকগুলো মুছে ফেলা হয়েছে"
+  "bulkDeleteIndexCompleted": "নির্বাচিত সূচকগুলো মুছে ফেলা হয়েছে",
+  "engine": {
+    "elastic": {
+      "migrate": "সূচক স্থানান্তর করুন",
+      "confirmMigrate": "স্থানান্তর নিশ্চিত করুন",
+      "migrateCompleted": "Elasticsearch স্থানান্তর সম্পন্ন হয়েছে",
+      "reset": "সূচক পুনরায় স্থাপন করুন",
+      "confirmReset": "পুনরায় স্থাপন নিশ্চিত করুন",
+      "resetCompleted": "Elasticsearch পুনরায় স্থাপন সম্পন্ন হয়েছে",
+      "refresh": "সূচক রিফ্রেশ করুন",
+      "confirmRefresh": "রিফ্রেশ নিশ্চিত করুন",
+      "refreshCompleted": "Elasticsearch রিফ্রেশ সম্পন্ন হয়েছে"
+    },
+    "meilisearch": {
+      "sync": "সূচক সেটিংস সমন্বয় করুন",
+      "confirmSync": "সমন্বয় নিশ্চিত করুন",
+      "syncCompleted": "Meilisearch সূচক সেটিংস সমন্বয় করা হয়েছে"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Icyerekezo {{entity}} cyasibwe",
   "deleteIndexError": "Ikosa mu gusiba icyerekezo {{entity}}",
   "bulkFlushCompleted": "Imyandikire wahisemo yasukuwe",
-  "bulkDeleteIndexCompleted": "Imyandikire wahisemo yakuweho"
+  "bulkDeleteIndexCompleted": "Imyandikire wahisemo yakuweho",
+  "engine": {
+    "elastic": {
+      "migrate": "Kohereza imbonerahamwe",
+      "confirmMigrate": "Emeza kohereza",
+      "migrateCompleted": "Kohereza Elasticsearch kurangira",
+      "reset": "Sukura imbonerahamwe",
+      "confirmReset": "Emeza isukura",
+      "resetCompleted": "Isukura Elasticsearch kurangira",
+      "refresh": "Subika imbonerahamwe",
+      "confirmRefresh": "Emeza subika",
+      "refreshCompleted": "Subika Elasticsearch kurangira"
+    },
+    "meilisearch": {
+      "sync": "Huza imikoreshereze y'imbonerahamwe",
+      "confirmSync": "Emeza guhuza",
+      "syncCompleted": "Imikoreshereze y'imbonerahamwe ya Meilisearch yahujwe"
+    }
+  }
 }

@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} je izbrisan",
   "deleteIndexError": "Napaka pri brisanju indeksa {{entity}}",
   "bulkFlushCompleted": "Izbrani indeksi so bili izpraznjeni",
-  "bulkDeleteIndexCompleted": "Izbrani indeksi so bili izbrisani"
+  "bulkDeleteIndexCompleted": "Izbrani indeksi so bili izbrisani",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrirajte indekse",
+      "confirmMigrate": "Potrdite migracijo",
+      "migrateCompleted": "Migracija Elasticsearch je bila zaključena",
+      "reset": "Ponastavite indekse",
+      "confirmReset": "Potrdite ponastavitev",
+      "resetCompleted": "Ponastavitev Elasticsearch je bila zaključena",
+      "refresh": "Osvežite indekse",
+      "confirmRefresh": "Potrdite osvežitev",
+      "refreshCompleted": "Osvežitev Elasticsearch je bila zaključena"
+    },
+    "meilisearch": {
+      "sync": "Sinhronizirajte nastavitve indeksa",
+      "confirmSync": "Potrdite sinhronizacijo",
+      "syncCompleted": "Nastavitve Meilisearch indeksa so sinhronizirane"
+    }
+  }
 }

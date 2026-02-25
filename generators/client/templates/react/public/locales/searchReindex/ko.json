@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "인덱스 {{entity}}가 삭제되었습니다",
   "deleteIndexError": "인덱스 {{entity}} 삭제 오류",
   "bulkFlushCompleted": "선택한 인덱스 초기화 완료",
-  "bulkDeleteIndexCompleted": "선택한 인덱스 삭제 완료"
+  "bulkDeleteIndexCompleted": "선택한 인덱스 삭제 완료",
+  "engine": {
+    "elastic": {
+      "migrate": "인덱스 마이그레이션",
+      "confirmMigrate": "마이그레이션 확인",
+      "migrateCompleted": "엘라스틱서치 마이그레이션 완료",
+      "reset": "인덱스 재설정",
+      "confirmReset": "재설정 확인",
+      "resetCompleted": "엘라스틱서치 재설정 완료",
+      "refresh": "인덱스 새로 고침",
+      "confirmRefresh": "새로 고침 확인",
+      "refreshCompleted": "엘라스틱서치 새로 고침 완료"
+    },
+    "meilisearch": {
+      "sync": "인덱스 설정 동기화",
+      "confirmSync": "동기화 확인",
+      "syncCompleted": "메일리서치 인덱스 설정 동기화 완료"
+    }
+  }
 }

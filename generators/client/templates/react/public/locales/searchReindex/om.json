@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} haqu",
   "deleteIndexError": "Dogoggora index {{entity}} haquu",
   "bulkFlushCompleted": "Filannoon filatame gabbifame",
-  "bulkDeleteIndexCompleted": "Filannoon filatame haqame"
+  "bulkDeleteIndexCompleted": "Filannoon filatame haqame",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrate indexes",
+      "confirmMigrate": "Confirm migration",
+      "migrateCompleted": "Elasticsearch migration completed",
+      "reset": "Reset indexes",
+      "confirmReset": "Confirm reset",
+      "resetCompleted": "Elasticsearch reset completed",
+      "refresh": "Refresh indexes",
+      "confirmRefresh": "Confirm refresh",
+      "refreshCompleted": "Elasticsearch refresh completed"
+    },
+    "meilisearch": {
+      "sync": "Sync index settings",
+      "confirmSync": "Confirm sync",
+      "syncCompleted": "Meilisearch index settings synced"
+    }
+  }
 }

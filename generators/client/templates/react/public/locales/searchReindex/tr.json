@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "İndeks {{entity}} silindi",
   "deleteIndexError": "İndeks {{entity}} silme hatası",
   "bulkFlushCompleted": "Seçilen dizinler temizlendi",
-  "bulkDeleteIndexCompleted": "Seçilen dizinler silindi"
+  "bulkDeleteIndexCompleted": "Seçilen dizinler silindi",
+  "engine": {
+    "elastic": {
+      "migrate": "İndeksleri taşın",
+      "confirmMigrate": "Taşımayı onayla",
+      "migrateCompleted": "Elasticsearch taşıma tamamlandı",
+      "reset": "İndeksleri sıfırla",
+      "confirmReset": "Sıfırlamayı onayla",
+      "resetCompleted": "Elasticsearch sıfırlama tamamlandı",
+      "refresh": "İndeksleri yenile",
+      "confirmRefresh": "Yenilemeyi onayla",
+      "refreshCompleted": "Elasticsearch yenileme tamamlandı"
+    },
+    "meilisearch": {
+      "sync": "İndeks ayarlarını senkronize et",
+      "confirmSync": "Senkronizasyonu onayla",
+      "syncCompleted": "Meilisearch indeks ayarları senkronize edildi"
+    }
+  }
 }

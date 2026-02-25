@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "ዝርዝሮች አልቆይ",
   "deleteIndexError": "Error deleting index {{entity}}",
   "bulkFlushCompleted": "Selected indexes flushed",
-  "bulkDeleteIndexCompleted": "Selected indexes deleted"
+  "bulkDeleteIndexCompleted": "Selected indexes deleted",
+  "engine": {
+    "elastic": {
+      "migrate": "ዳቦችን ወደ አይኮይ ይሰድቡ",
+      "confirmMigrate": "እቅፍ በግብአት",
+      "migrateCompleted": "Elasticsearch ወደ አይኮይ ተወዋይ",
+      "reset": "ዳቦችን ወደ ዳቦ ይመልሱ",
+      "confirmReset": "እቅፍ በምዕባር",
+      "resetCompleted": "Elasticsearch ወደ ዳቦ ተወዋይ",
+      "refresh": "ዳቦችን ይዳዋሉ",
+      "confirmRefresh": "እቅፍ በዳዋል",
+      "refreshCompleted": "Elasticsearch ዳዋል ተወዋይ"
+    },
+    "meilisearch": {
+      "sync": "የዳቦ ቅድመ ትንበይዎችን አገናኝ ይመልሱ",
+      "confirmSync": "እቅፍ ወደ ምርዕ",
+      "syncCompleted": "Meilisearch የዳቦ ቅድመ ትንበይዎችን ተያቀበ ይሰድቡ"
+    }
+  }
 }

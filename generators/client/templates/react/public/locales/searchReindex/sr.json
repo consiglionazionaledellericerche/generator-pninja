@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Индекс {{entity}} је избрisan",
   "deleteIndexError": "Грешка при брисању индекса {{entity}}",
   "bulkFlushCompleted": "Изабрани индекси су очишћени",
-  "bulkDeleteIndexCompleted": "Изабрани индекси су обрисани"
+  "bulkDeleteIndexCompleted": "Изабрани индекси су обрисани",
+  "engine": {
+    "elastic": {
+      "migrate": "Мигрирај индексе",
+      "confirmMigrate": "Потврди миграцију",
+      "migrateCompleted": "Elasticsearch миграција завршена",
+      "reset": "Ресетуј индексе",
+      "confirmReset": "Потврди ресетовање",
+      "resetCompleted": "Elasticsearch ресетовање завршено",
+      "refresh": "Освежи индексе",
+      "confirmRefresh": "Потврди освежавање",
+      "refreshCompleted": "Elasticsearch освежавање завршено"
+    },
+    "meilisearch": {
+      "sync": "Синхронизуј подешавања индекса",
+      "confirmSync": "Потврди синхронизацију",
+      "syncCompleted": "Meilisearch подешавања индекса синхронизована"
+    }
+  }
 }

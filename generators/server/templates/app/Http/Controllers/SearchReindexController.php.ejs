@@ -6,6 +6,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReindexRequest;
 use App\Jobs\ReindexEntityJob;
 use Illuminate\Http\JsonResponse;
+<%if (searchEngine === 'elastic') { -%>
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+<% } -%>
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -26,6 +30,40 @@ class SearchReindexController extends Controller
 
         return response()->json($entities);
     }
+<%if (searchEngine === 'elastic') { -%>
+
+    /**
+     * Handles the migration of Elasticsearch indices based on the provided command.
+     */
+    public function elasticMigrate(Request $request): JsonResponse
+    {
+        $command = match($request->input('command')) {
+            'reset'   => 'elastic:migrate:reset',
+            'refresh' => 'elastic:migrate:refresh',
+            default   => 'elastic:migrate',
+        };
+
+        Artisan::call($command);
+
+        return response()->json([
+            'message' => Artisan::output(),
+        ]);
+    }
+<% } -%>
+<%if (searchEngine === 'meilisearch') { -%>
+
+    /**
+     * Syncs the Meilisearch index settings for all entities.
+     */
+    public function meilisearchSyncSettings(): JsonResponse
+    {
+        $command = new \Laravel\Scout\Console\SyncIndexSettingsCommand();
+        $command->setLaravel(app());
+        $command->run(new \Symfony\Component\Console\Input\ArrayInput([]), new \Symfony\Component\Console\Output\NullOutput());
+
+        return response()->json(['message' => 'Index settings synced successfully.']);
+    }
+<% } -%>
 
     /**
      * Starts the asynchronous reindexing of an entity.

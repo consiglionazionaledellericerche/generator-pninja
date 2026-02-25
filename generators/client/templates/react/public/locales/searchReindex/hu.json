@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "A(z) {{entity}} index törölve",
   "deleteIndexError": "Hiba történt az index törlésekor a(z) {{entity}} esetében",
   "bulkFlushCompleted": "A kiválasztott indexek törölve",
-  "bulkDeleteIndexCompleted": "Selected indexes deleted"
+  "bulkDeleteIndexCompleted": "Selected indexes deleted",
+  "engine": {
+    "elastic": {
+      "migrate": "Indexek migrálása",
+      "confirmMigrate": "Migráció megerősítése",
+      "migrateCompleted": "Elasticsearch migráció befejeződött",
+      "reset": "Indexek visszaállítása",
+      "confirmReset": "Visszaállítás megerősítése",
+      "resetCompleted": "Elasticsearch visszaállítás befejeződött",
+      "refresh": "Indexek frissítése",
+      "confirmRefresh": "Frissítés megerősítése",
+      "refreshCompleted": "Elasticsearch frissítés befejeződött"
+    },
+    "meilisearch": {
+      "sync": "Indexbeállítások szinkronizálása",
+      "confirmSync": "Szinkronizálás megerősítése",
+      "syncCompleted": "Meilisearch indexbeállítások szinkronizálva"
+    }
+  }
 }

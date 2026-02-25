@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Ինդեքսը {{entity}} ջնջվել է",
   "deleteIndexError": "Սխալ ջնջում ինդեքսի {{entity}}",
   "bulkFlushCompleted": "Ընտրված ցուցակը մաքրվել է",
-  "bulkDeleteIndexCompleted": "Ընտրված ցուցակը ջնջվել է"
+  "bulkDeleteIndexCompleted": "Ընտրված ցուցակը ջնջվել է",
+  "engine": {
+    "elastic": {
+      "migrate": "Վերահասցեավորել ինդեքսները",
+      "confirmMigrate": "Հաստատել վերահասցեավորումը",
+      "migrateCompleted": "Elasticsearch-ի վերահասցեավորումը ավարտված է",
+      "reset": "Նորից կարգաբերել ինդեքսները",
+      "confirmReset": "Հաստատել նորից կարգաբեռը",
+      "resetCompleted": "Elasticsearch-ի նորից կարգաբեռը ավարտված է",
+      "refresh": "Փաստաթղթել ինդեքսները",
+      "confirmRefresh": "Հաստատել փաստաթղթելը",
+      "refreshCompleted": "Elasticsearch-ի փաստաթղթումը ավարտված է"
+    },
+    "meilisearch": {
+      "sync": "Ահարմատել ինդեքսի կարգաբերումները",
+      "confirmSync": "Հաստատել հաճեցումը",
+      "syncCompleted": "Meilisearch ինդեքսի կարգաբերումները համադրվել են"
+    }
+  }
 }

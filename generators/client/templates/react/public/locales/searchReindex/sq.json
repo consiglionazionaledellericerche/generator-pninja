@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeksi {{entity}} u fshi",
   "deleteIndexError": "Gabim në fshirjen e indeksit {{entity}}",
   "bulkFlushCompleted": "Indeksat e zgjedhur janë shkarkuar",
-  "bulkDeleteIndexCompleted": "Indeksat e zgjedhur janë fshirë"
+  "bulkDeleteIndexCompleted": "Indeksat e zgjedhur janë fshirë",
+  "engine": {
+    "elastic": {
+      "migrate": "Migroj indekset",
+      "confirmMigrate": "Konfirmo migrimin",
+      "migrateCompleted": "Migrimi i Elasticsearch përfundoi",
+      "reset": "Rivendos indekset",
+      "confirmReset": "Konfirmo rivendosjen",
+      "resetCompleted": "Rivendosja e Elasticsearch përfundoi",
+      "refresh": "Rifresko indekset",
+      "confirmRefresh": "Konfirmo rifreskimin",
+      "refreshCompleted": "Rifreskimi i Elasticsearch përfundoi"
+    },
+    "meilisearch": {
+      "sync": "Sinkronizo parametrat e indekseve",
+      "confirmSync": "Konfirmo sinkronizimin",
+      "syncCompleted": "Parametrat e indekseve të Meilisearch u sinkronizuan"
+    }
+  }
 }

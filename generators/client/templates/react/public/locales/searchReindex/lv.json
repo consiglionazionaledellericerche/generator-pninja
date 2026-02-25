@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeksu {{entity}} dzēsts",
   "deleteIndexError": "Kļūda, dzēšot indeksu {{entity}}",
   "bulkFlushCompleted": "Atlasītie indeksi notīrīti",
-  "bulkDeleteIndexCompleted": "Atlasītie indeksi dzēsti"
+  "bulkDeleteIndexCompleted": "Atlasītie indeksi dzēsti",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrēt indeksus",
+      "confirmMigrate": "Apstiprināt migrāciju",
+      "migrateCompleted": "Elasticsearch migrācija pabeigta",
+      "reset": "Atiestatīt indeksus",
+      "confirmReset": "Apstiprināt atiestatīšanu",
+      "resetCompleted": "Elasticsearch atiestatīšana pabeigta",
+      "refresh": "Atjaunot indeksus",
+      "confirmRefresh": "Apstiprināt atjaunošanu",
+      "refreshCompleted": "Elasticsearch atjaunošana pabeigta"
+    },
+    "meilisearch": {
+      "sync": "Sinhronizēt indeksa iestatījumus",
+      "confirmSync": "Apstiprināt sinhronizāciju",
+      "syncCompleted": "Meilisearch indeksa iestatījumi sinhronizēti"
+    }
+  }
 }

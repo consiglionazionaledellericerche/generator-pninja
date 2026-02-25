@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "સૂચકતા {{entity}} નષ્ટ કરી",
   "deleteIndexError": "સૂચકતા {{entity}} નષ્ટ કરવામાં ભૂલ",
   "bulkFlushCompleted": "પસંદ કરાયેલા સૂચકો ફલશ કરવામાં આવ્યાં",
-  "bulkDeleteIndexCompleted": "પસંદ કરાયેલા સૂચકો કાઢી મૂકવામાં આવ્યા"
+  "bulkDeleteIndexCompleted": "પસંદ કરાયેલા સૂચકો કાઢી મૂકવામાં આવ્યા",
+  "engine": {
+    "elastic": {
+      "migrate": "વ્હાલા સૂચકાંકને પ્રવર્તિત કરો",
+      "confirmMigrate": "ગુણાકારની પુષ્ટિ કરો",
+      "migrateCompleted": "Elasticsearch પરિવર્તન પૂર્ણ થયું",
+      "reset": "સૂચકાંનું પુનર્સ્થાપન કરો",
+      "confirmReset": "પુનઃસ્થાપનને પુષ્ટિ કરો",
+      "resetCompleted": "Elasticsearch પુનઃસ્થાપન પૂર્ણ થયું",
+      "refresh": "સૂચકાંને નવીન કરો",
+      "confirmRefresh": "નવીનીકરણને પુષ્ટિ કરો",
+      "refreshCompleted": "Elasticsearch નવીનીકરણ પૂર્ણ થયું"
+    },
+    "meilisearch": {
+      "sync": "સૂચકાંના સુવર્ણને સમસમાનો કરો",
+      "confirmSync": "સમસમાનોની પુષ્ટિ કરો",
+      "syncCompleted": "Meilisearch સૂચકાંક સુવર્ણ સમસમાનો કરવામાં આવી છે"
+    }
+  }
 }

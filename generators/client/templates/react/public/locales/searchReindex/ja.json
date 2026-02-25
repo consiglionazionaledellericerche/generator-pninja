@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "インデックス{{entity}}が削除されました",
   "deleteIndexError": "インデックス{{entity}}を削除する際にエラーが発生しました",
   "bulkFlushCompleted": "選択したインデックスがフラッシュされました",
-  "bulkDeleteIndexCompleted": "選択したインデックスが削除されました"
+  "bulkDeleteIndexCompleted": "選択したインデックスが削除されました",
+  "engine": {
+    "elastic": {
+      "migrate": "インデックスを移行",
+      "confirmMigrate": "移行を確認",
+      "migrateCompleted": "Elasticsearch の移行が完了しました",
+      "reset": "インデックスをリセット",
+      "confirmReset": "リセットを確認",
+      "resetCompleted": "Elasticsearch のリセットが完了しました",
+      "refresh": "インデックスを更新",
+      "confirmRefresh": "更新を確認",
+      "refreshCompleted": "Elasticsearch の更新が完了しました"
+    },
+    "meilisearch": {
+      "sync": "インデックス設定を同期",
+      "confirmSync": "同期を確認",
+      "syncCompleted": "Meilisearch のインデックス設定が同期されました"
+    }
+  }
 }

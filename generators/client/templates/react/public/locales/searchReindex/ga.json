@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Innex {{entity}} scriofa",
   "deleteIndexError": "Earráid ag scrios innéacs {{entity}}",
   "bulkFlushCompleted": "Séalaíodh na huhinní roghnaithe",
-  "bulkDeleteIndexCompleted": "Scriosadh na huhinní roghnaithe"
+  "bulkDeleteIndexCompleted": "Scriosadh na huhinní roghnaithe",
+  "engine": {
+    "elastic": {
+      "migrate": "Aistrigh innéacsanna",
+      "confirmMigrate": "Deimhnigh aistriú",
+      "migrateCompleted": "Críochnaíodh an aistriú Elasticsearch",
+      "reset": "Athshocrú innéacsanna",
+      "confirmReset": "Deimhnigh athshocrú",
+      "resetCompleted": "Críochnaíodh an athshocrú Elasticsearch",
+      "refresh": "Athnuachan innéacsanna",
+      "confirmRefresh": "Deimhnigh athnuachan",
+      "refreshCompleted": "Críochnaíodh an t-athnuachan Elasticsearch"
+    },
+    "meilisearch": {
+      "sync": "Sincronigh socruithe innéacs",
+      "confirmSync": "Deimhnigh sincronization",
+      "syncCompleted": "Socruithe innéacs Meilisearch synchronized"
+    }
+  }
 }

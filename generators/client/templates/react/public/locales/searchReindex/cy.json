@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Mynegai {{entity}} wedi'i ddileu",
   "deleteIndexError": "Gwall wrth ddileu mynegai {{entity}}",
   "bulkFlushCompleted": "Mynegiadau a ddewiswyd wedi'u hiachydio",
-  "bulkDeleteIndexCompleted": "Mynegiadau a ddewiswyd wedi'u dileu"
+  "bulkDeleteIndexCompleted": "Mynegiadau a ddewiswyd wedi'u dileu",
+  "engine": {
+    "elastic": {
+      "migrate": "Mudo indexiau",
+      "confirmMigrate": "Cadarnhewch y mudo",
+      "migrateCompleted": "Cwblhau mudo Elasticsearch",
+      "reset": "Ailgychwyn indexiau",
+      "confirmReset": "Cadarnhewch ailgychwyn",
+      "resetCompleted": "Cwblhau ailgychwyn Elasticsearch",
+      "refresh": "Ailgylchu indexiau",
+      "confirmRefresh": "Cadarnhewch ailgylch",
+      "refreshCompleted": "Cwblhau ailgylch Elasticsearch"
+    },
+    "meilisearch": {
+      "sync": "Syncio gosodiadau index",
+      "confirmSync": "Cadarnhewch syncio",
+      "syncCompleted": "Gosodiadau index Meilisearch wedi'u syncio"
+    }
+  }
 }

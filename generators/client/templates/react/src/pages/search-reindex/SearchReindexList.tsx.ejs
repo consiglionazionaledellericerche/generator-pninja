@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -136,7 +136,7 @@ export default function SearchReindexList() {
         );
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
-        addNotification({ type: 'error', message: error.message });
+        addNotification({ type: 'error', message: error.message, error });
       })
       .finally(() => setLoading(false));
   }, [addNotification]);
@@ -182,6 +182,7 @@ export default function SearchReindexList() {
         addNotification({
           type: 'error',
           message: `${t('searchReindex:reindexError', { entity: slug })}: ${error.message}`,
+          error,
         });
       });
   };
@@ -200,6 +201,7 @@ export default function SearchReindexList() {
         addNotification({
           type: 'error',
           message: `${t('searchReindex:flushError', { entity: slug })}: ${error.message}`,
+          error,
         });
       })
       .finally(() => updateRow(slug, { loadingFlush: false }));
@@ -219,6 +221,7 @@ export default function SearchReindexList() {
         addNotification({
           type: 'error',
           message: `${t('searchReindex:deleteIndexError', { entity: slug })}: ${error.message}`,
+          error,
         });
       })
       .finally(() => updateRow(slug, { loadingDelete: false }));
@@ -240,10 +243,11 @@ export default function SearchReindexList() {
         });
         startPolling(entity.slug, data.job_id);
         await waitForJobCompletion(data.job_id);
-      } catch {
+      } catch (error) {
         addNotification({
           type: 'error',
           message: t('searchReindex:reindexError', { entity: entity.slug }),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
         });
       }
     }
@@ -268,6 +272,7 @@ export default function SearchReindexList() {
             addNotification({
               type: 'error',
               message: `${t('searchReindex:flushError', { entity: entity.slug })}: ${error.message}`,
+              error,
             });
           })
       )
@@ -302,6 +307,7 @@ export default function SearchReindexList() {
             addNotification({
               type: 'error',
               message: `${t('searchReindex:deleteIndexError', { entity: entity.slug })}: ${error.message}`,
+              error,
             });
           })
       )
@@ -336,17 +342,56 @@ export default function SearchReindexList() {
     const state = rowState[slug]?.jobState;
     return state?.status === 'pending' || state?.status === 'running';
   };
+<% if (searchEngine === 'elastic') { -%>
 
-  const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex;
+  // Engine-specific actions
+  const [engineLoading, setEngineLoading] = useState<string | null>(null);
+
+  const handleElasticMigrate = (command: 'migrate' | 'reset' | 'refresh') => {
+    setEngineLoading(command);
+    axiosInstance
+      .post('/api/search/reindex/engine/elastic-migrate', { command })
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t(`searchReindex:engine.elastic.${command}Completed`),
+        });
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message, error });
+      })
+      .finally(() => setEngineLoading(null));
+  };
+<% } -%>
+<% if (searchEngine === 'meilisearch') { -%>
+
+  // Engine-specific actions
+  const [engineLoading, setEngineLoading] = useState<string | null>(null);
+
+  const handleMeiliSyncSettings = () => {
+    setEngineLoading('meilisearch-sync-settings');
+    axiosInstance
+      .post('/api/search/reindex/engine/meilisearch-sync-settings')
+      .then(() => {
+        addNotification({
+          type: 'success',
+          message: t('searchReindex:engine.meilisearch.syncCompleted'),
+        });
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message, error });
+      })
+      .finally(() => setEngineLoading(null));
+  };
+<% } -%>
+  const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex || engineLoading !== null;
   const noneSelected = selected.size === 0;
 
   return (
     <>
       <h1 className="text-2xl font-bold mb-6">{t('searchReindex:title')}</h1>
       <SimpleLoader loading={loading} />
-      {!loading && entities.length === 0 && (
-        <p className="mb-4 text-2xl">{t('messages.noData')}</p>
-      )}
+      {!loading && entities.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
       {!loading && entities.length > 0 && (
         <>
           {SCOUT_DRIVER === 'algolia' && (
@@ -362,7 +407,7 @@ export default function SearchReindexList() {
             </div>
           )}
 
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             <ConfirmButton
               disabled={anyBusy || noneSelected}
               onConfirm={handleBulkReindex}
@@ -417,6 +462,84 @@ export default function SearchReindexList() {
                 </span>
               }
             />
+<% if (searchEngine === 'elastic') { -%>
+            <div className="w-px bg-gray-200 dark:bg-slate-600 self-stretch mx-1" aria-hidden />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={() => handleElasticMigrate('migrate')}
+              className="secondary-button"
+              pendingClassName="secondary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="upgrade" size={4} />
+                  {t('searchReindex:engine.elastic.migrate')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="upgrade" size={4} />
+                  {t('searchReindex:engine.elastic.confirmMigrate')}
+                </span>
+              }
+            />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={() => handleElasticMigrate('reset')}
+              className="danger-button"
+              pendingClassName="danger-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="restart_alt" size={4} />
+                  {t('searchReindex:engine.elastic.reset')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="restart_alt" size={4} />
+                  {t('searchReindex:engine.elastic.confirmReset')}
+                </span>
+              }
+            />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={() => handleElasticMigrate('refresh')}
+              className="secondary-button"
+              pendingClassName="secondary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="autorenew" size={4} />
+                  {t('searchReindex:engine.elastic.refresh')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="autorenew" size={4} />
+                  {t('searchReindex:engine.elastic.confirmRefresh')}
+                </span>
+              }
+            />
+<% } -%>
+<% if (searchEngine === 'meilisearch') { -%>
+            <div className="w-px bg-gray-200 dark:bg-slate-600 self-stretch mx-1" aria-hidden />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleMeiliSyncSettings}
+              className="secondary-button"
+              pendingClassName="secondary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="settings_backup_restore" size={4} />
+                  {t('searchReindex:engine.meilisearch.sync')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="settings_backup_restore" size={4} />
+                  {t('searchReindex:engine.meilisearch.confirmSync')}
+                </span>
+              }
+            />
+<% } -%>
           </div>
 
           <div className="relative overflow-x-auto">
@@ -519,7 +642,9 @@ export default function SearchReindexList() {
                       <td className="text-nowrap w-0">
                         <div className="flex items-center gap-2">
                           <ConfirmButton
-                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
                             onConfirm={() => handleReindex(entity.slug)}
                             className="primary-button"
                             pendingClassName="primary-button"
@@ -537,7 +662,9 @@ export default function SearchReindexList() {
                             }
                           />
                           <ConfirmButton
-                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
                             onConfirm={() => handleFlush(entity.slug)}
                             className="secondary-button"
                             pendingClassName="secondary-button"
@@ -555,7 +682,9 @@ export default function SearchReindexList() {
                             }
                           />
                           <ConfirmButton
-                            disabled={anyBusy || busy || state?.loadingFlush || state?.loadingDelete}
+                            disabled={
+                              anyBusy || busy || state?.loadingFlush || state?.loadingDelete
+                            }
                             onConfirm={() => handleDeleteIndex(entity.slug)}
                             className="danger-button"
                             pendingClassName="danger-button"

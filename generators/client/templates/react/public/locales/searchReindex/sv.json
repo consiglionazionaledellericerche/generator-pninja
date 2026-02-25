@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Index {{entity}} borttaget",
   "deleteIndexError": "Fel vid borttagning av index {{entity}}",
   "bulkFlushCompleted": "Valda index tömda",
-  "bulkDeleteIndexCompleted": "Valda index borttagna"
+  "bulkDeleteIndexCompleted": "Valda index borttagna",
+  "engine": {
+    "elastic": {
+      "migrate": "Migrera index",
+      "confirmMigrate": "Bekräfta migrering",
+      "migrateCompleted": "Elasticsearch-migrering slutförd",
+      "reset": "Återställ index",
+      "confirmReset": "Bekräfta återställning",
+      "resetCompleted": "Elasticsearch-återställning slutförd",
+      "refresh": "Uppdatera index",
+      "confirmRefresh": "Bekräfta uppdatering",
+      "refreshCompleted": "Elasticsearch-uppdatering slutförd"
+    },
+    "meilisearch": {
+      "sync": "Synkronisera indexinställningar",
+      "confirmSync": "Bekräfta synkronisering",
+      "syncCompleted": "Meilisearch indexinställningar synkroniserade"
+    }
+  }
 }

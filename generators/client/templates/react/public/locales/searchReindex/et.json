@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Indeks {{entity}} kustutatud",
   "deleteIndexError": "Viga indeksi kustutamisel {{entity}}",
   "bulkFlushCompleted": "Valitud indeksid tühjendatud",
-  "bulkDeleteIndexCompleted": "Valitud indeksid kustutatud"
+  "bulkDeleteIndexCompleted": "Valitud indeksid kustutatud",
+  "engine": {
+    "elastic": {
+      "migrate": "Indeksite migreerimine",
+      "confirmMigrate": "Kinnita migratsioon",
+      "migrateCompleted": "Elasticsearchi migratsioon lõpetatud",
+      "reset": "Indeksite lähtestamine",
+      "confirmReset": "Kinnita lähtestamine",
+      "resetCompleted": "Elasticsearchi lähtestamine lõpetatud",
+      "refresh": "Indeksite värskendamine",
+      "confirmRefresh": "Kinnita värskendamine",
+      "refreshCompleted": "Elasticsearchi värskendamine lõpetatud"
+    },
+    "meilisearch": {
+      "sync": "Indeksi seadete sünkroonimine",
+      "confirmSync": "Kinnita sünkroonimine",
+      "syncCompleted": "Meilisearchi indeksiseaded sünkroonitud"
+    }
+  }
 }

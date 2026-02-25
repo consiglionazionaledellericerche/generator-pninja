@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "Индекс {{entity}} жойылды",
   "deleteIndexError": "Индекс {{entity}} жоюда қате",
   "bulkFlushCompleted": "Таңдалған индекстер өшірілді",
-  "bulkDeleteIndexCompleted": "Таңдалған индекстер жойылды"
+  "bulkDeleteIndexCompleted": "Таңдалған индекстер жойылды",
+  "engine": {
+    "elastic": {
+      "migrate": "Индексдерді көшіру",
+      "confirmMigrate": "Көшіруді растау",
+      "migrateCompleted": "Elasticsearch көшіруі аяқталды",
+      "reset": "Индексдерді қалпына келтіру",
+      "confirmReset": "Қалпына келтіруді растау",
+      "resetCompleted": "Elasticsearch-ті қалпына келтіру аяқталды",
+      "refresh": "Индексдерді жаңарту",
+      "confirmRefresh": "Жаңартуды растау",
+      "refreshCompleted": "Elasticsearch жаңартуы аяқталды"
+    },
+    "meilisearch": {
+      "sync": "Индекс параметрлерін синхрондау",
+      "confirmSync": "Синхрондауды растау",
+      "syncCompleted": "Meilisearch индекс параметрлері синхрондалды"
+    }
+  }
 }

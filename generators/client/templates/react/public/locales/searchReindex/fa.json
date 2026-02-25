@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "ایندکس {{entity}} حذف شد",
   "deleteIndexError": "خطا در حذف ایندکس {{entity}}",
   "bulkFlushCompleted": "ایندکس‌های انتخاب شده پاک‌سازی شد",
-  "bulkDeleteIndexCompleted": "ایندکس‌های انتخاب شده حذف شدند"
+  "bulkDeleteIndexCompleted": "ایندکس‌های انتخاب شده حذف شدند",
+  "engine": {
+    "elastic": {
+      "migrate": "مهاجرت ایندکس‌ها",
+      "confirmMigrate": "تأیید مهاجرت",
+      "migrateCompleted": "مهاجرت Elasticsearch کامل شد",
+      "reset": "بازنشانی ایندکس‌ها",
+      "confirmReset": "تأیید بازنشانی",
+      "resetCompleted": "بازنشانی Elasticsearch کامل شد",
+      "refresh": "به‌روزرسانی ایندکس‌ها",
+      "confirmRefresh": "تأیید به‌روزرسانی",
+      "refreshCompleted": "به‌روزرسانی Elasticsearch کامل شد"
+    },
+    "meilisearch": {
+      "sync": "همگام‌سازی تنظیمات ایندکس",
+      "confirmSync": "تأیید همگام‌سازی",
+      "syncCompleted": "تنظیمات ایندکس Meilisearch همگام‌سازی شد"
+    }
+  }
 }

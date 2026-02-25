@@ -38,5 +38,23 @@
   "deleteIndexCompleted": "אינדקס {{entity}} נמחק",
   "deleteIndexError": "שגיאה במחקת אינדקס {{entity}}",
   "bulkFlushCompleted": "האינדקסים הנבחרים נמחקו",
-  "bulkDeleteIndexCompleted": "האינדקסים הנבחרים נוקו"
+  "bulkDeleteIndexCompleted": "האינדקסים הנבחרים נוקו",
+  "engine": {
+    "elastic": {
+      "migrate": "מעבר אינדקסים",
+      "confirmMigrate": "אשר מעבר",
+      "migrateCompleted": "המעבר של Elasticsearch הושלם",
+      "reset": "איפוס אינדקסים",
+      "confirmReset": "אשר איפוס",
+      "resetCompleted": "האיפוס של Elasticsearch הושלם",
+      "refresh": "רענון אינדקסים",
+      "confirmRefresh": "אשר רענון",
+      "refreshCompleted": "הרענון של Elasticsearch הושלם"
+    },
+    "meilisearch": {
+      "sync": "סנכרן הגדרות אינדקס",
+      "confirmSync": "אשר סנכרון",
+      "syncCompleted": "הגדרות אינדקס של Meilisearch סונכרנו"
+    }
+  }
 }
