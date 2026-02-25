@@ -24,7 +24,7 @@ export const RESERVED_WORDS = new Set([
 
 export const RESERVED_TABLE_NAMES = new Set([
     // Laravel table names
-    'cache', 'cache_locks', 'failed_jobs', 'job_batches', 'jobs', 'migrations', 'password_reset_tokens', 'personal_access_tokens', 'sessions', 'users',
+    'cache', 'cache_locks', 'failed_jobs', 'job_batches', 'jobs', 'migrations', 'elastic_migrations', 'password_reset_tokens', 'personal_access_tokens', 'sessions', 'users',
 
     // PNinja table names
     'ac_rules', 'audits',
