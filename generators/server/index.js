@@ -81,7 +81,7 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(
       `${entitiesTemplatePath}/DatabaseSeeder.php.ejs`,
       this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
-      { entities: [AcRule], manyToMany: [], n: 0 }
+      { entities: [], manyToMany: [], n: 0 }
     );
 
     this.fs.copyTpl(this.templatePath("ApiErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});

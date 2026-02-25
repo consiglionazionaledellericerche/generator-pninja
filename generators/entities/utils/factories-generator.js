@@ -14,7 +14,7 @@ export class FactoriesGenerator {
         enums = enums ?? getEnums(this.that);
         let manyToMany = [];
         for (const entity of entities) {
-            const models = [`use App\\Models\\${entity.name};`];
+            const models = [];
             const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop, enums)},`);
             const paramsBlobBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
             const paramsBlobType = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
@@ -32,14 +32,7 @@ export class FactoriesGenerator {
                 if (relation.entityName !== relation.otherEntityName) {
                     models.push(`use App\\Models\\${relation.otherEntityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => function() {
-                    if (${relation.otherEntityName}::count() === 0) {
-                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.otherEntityName}::count() < ${n}) ${relation.otherEntityName}::factory()->create()` : `return null`};
-                    }
-                    $ids${relation.otherEntityName} = array_map(function($e) { return $e['id']; }, (${relation.otherEntityName}::all(['id']))->toArray());
-                    $ids${entity.name} = array_map(function($e) { return $e['${to.snake(relation.relationshipName || relation.otherEntityName)}_id']; }, (${entity.name}::all(['${to.snake(relation.relationshipName || relation.otherEntityName)}_id']))->toArray());
-                    return $this->getRandomUniqueValue($ids${relation.otherEntityName}, $ids${entity.name});
-                },`);
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => ${relation.otherEntityName}::factory(),`);
             });
             // Relationships one-to-many
             true && relationships.filter(relation => (
@@ -50,13 +43,7 @@ export class FactoriesGenerator {
                 if (relation.entityName !== relation.otherEntityName) {
                     models.push(`use App\\Models\\${relation.entityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id' => function() {
-                    if (${relation.entityName}::count() === 0) {
-                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.entityName}::count() < ${n}) ${relation.entityName}::factory()->create()` : `return null`};
-                    }
-                    $ids${relation.entityName} = array_map(function($e) { return $e['id']; }, (${relation.entityName}::all(['id']))->toArray());
-                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.entityName}))[0];
-                },`);
+                params.push(`${tab(3)}'${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id' => ${relation.entityName}::factory(),`);
             });
             // Relationships many-to-one
             true && relationships.filter(relation => (
@@ -66,13 +53,7 @@ export class FactoriesGenerator {
                 if (relation.entityName !== relation.otherEntityName) {
                     models.push(`use App\\Models\\${relation.otherEntityName};`)
                 }
-                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => function() {
-                    if (${relation.otherEntityName}::count() === 0) {
-                        ${relation.entityName !== relation.otherEntityName ? `while(${relation.otherEntityName}::count() < ${n}) ${relation.otherEntityName}::factory()->create()` : `return null`};
-                    }
-                    $ids${relation.otherEntityName} = array_map(function($e) { return $e['id']; }, (${relation.otherEntityName}::all(['id']))->toArray());
-                    return ((new \\Random\\Randomizer())->shuffleArray($ids${relation.otherEntityName}))[0];
-                },`);
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => ${relation.otherEntityName}::factory(),`);
             });
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
@@ -102,7 +83,7 @@ export class FactoriesGenerator {
         }
         this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
-                entities: [AcRule, ...entities],
+                entities: entities,
                 manyToMany,
                 n,
             });

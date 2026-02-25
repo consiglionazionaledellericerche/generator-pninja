@@ -3,42 +3,33 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\File;
+use App\Models\AcRule;
 <% entities.forEach(function(entity) { -%>
 use App\Models\<%= entity.name %>;
 <% }); -%>
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        $this->withoutScout(function () {
+        $csvPath = database_path("seeders/csv/AcRule.csv");
+        File::exists($csvPath) && $this->seedFromCsv(AcRule::class, $csvPath);
 <% entities.forEach(function(entity) { -%>
-            $this->seedModel(<%= entity.name %>::class, '<%= entity.name %>.csv', <%= n %>);
+        $csvPath = database_path("seeders/csv/<%= entity.name %>.csv");
+        File::exists($csvPath) ?
+            $this->seedFromCsv(<%= entity.name %>::class, $csvPath) :
+            <%= entity.name %>::factory()
+                ->recycle(Aaaa::all())
+                ->count(10 - <%= entity.name %>::count())->create();
 <% }); -%>
 
-            // Many-to-many relationships
-<% manyToMany.forEach(function(rel) { -%>
-            $this->seedManyToMany(<%= rel.fromEntity %>::class, '<%= rel.relPropery %>', <%= rel.toEntity %>::class, '<%= rel.fromEntity %>_<%= rel.toEntity %>.csv', <%- Math.round(n/2) %>);
-<% }); -%>
-        });
-        $this->indexModels();
-    }
-
-    /**
-     * Seed without synchronizing with Scout
-     */
-    private function withoutScout(callable $callback): void
-    {
-        $originalDriver = config('scout.driver');
-        config(['scout.driver' => null]);
-        try {
-            $callback();
-        } finally {
-            config(['scout.driver' => $originalDriver]);
-        }
+        // $this->indexModels();
     }
 
     /**
