@@ -259,6 +259,51 @@ For high-traffic applications, consider:
 - Indexing the `audits` table on frequently queried columns
 - Using a separate database for audit data
 
+<%  if (['solr','meilisearch','elastic','algolia','typesense'].includes(searchEngine)) { -%>
+## Search Index Management
+
+The application includes a **search index management interface** accessible at `/search/reindex`. It allows you to manage the search indexes for all indexable entities without using the command line.
+
+**Features:**
+
+- **Per-entity actions**: reindex, flush (empty the index), or delete the index for each entity individually
+- **Bulk actions**: select multiple entities via checkbox and reindex, flush, or delete their indexes in one operation
+- **Reindexing progress**: real-time progress bar during reindexing operations
+- **Record count**: number of indexed records displayed for each entity
+<%      if (searchEngine === 'algolia') { -%>
+
+> ⚠️ **Algolia free tier**: every reindex operation consumes quota. Use bulk reindex with care.
+<%      } -%>
+
+**Available actions:**
+
+- **Reindex**: creates the index if it does not exist, then indexes all records (serial execution for bulk)
+- **Flush index**: removes all records from the index but keeps the index structure
+- **Delete index**: permanently removes the index
+<%      if (searchEngine === 'elastic') { -%>
+
+**Elasticsearch-specific actions** (available in the toolbar):
+
+- **Migrate indexes**: runs `elastic:migrate`
+- **Reset indexes**: runs `elastic:migrate:reset`
+- **Refresh indexes**: runs `elastic:migrate:refresh`
+<%      } -%>
+<%      if (searchEngine === 'meilisearch') { -%>
+
+**Meilisearch-specific actions** (available in the toolbar):
+
+- **Sync index settings**: synchronizes the index settings configured in `config/scout.php` with Meilisearch
+<%      } -%>
+
+**Access control:**
+
+By default, **only `superadmin` role** can access the search index management. To grant access to other roles, add policies to the `ac_rules` table:
+
+```csv
+p,admin,SearchReindex,read
+```
+
+<%  } -%>
 ## Docker composition
 
 To start the **Docker composition**:
