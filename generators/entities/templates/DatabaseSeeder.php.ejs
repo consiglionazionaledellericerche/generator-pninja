@@ -18,15 +18,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $csvPath = database_path("seeders/csv/AcRule.csv");
-        File::exists($csvPath) && $this->seedFromCsv(AcRule::class, $csvPath);
+        $this->seedFromCsv(AcRule::class);
 <% entities.forEach(function(entity) { -%>
-        $csvPath = database_path("seeders/csv/<%= entity.name %>.csv");
-        File::exists($csvPath) ?
-            $this->seedFromCsv(<%= entity.name %>::class, $csvPath) :
-            <%= entity.name %>::factory()
-                ->recycle(Aaaa::all())
-                ->count(10 - <%= entity.name %>::count())->create();
+        $this->seedFromCsv(<%= entity.name %>::class) || <%= entity.name %>::factory()
+<% if (recycle[entity.name]?.length) { -%>
+            <%- recycle[entity.name]?.map(e => `->recycle(${e}::all())`).join('') %>
+<% } -%>
+<% if (manyToMany?.filter(r => r.fromEntity === entity.name).length) { -%>
+            <%- manyToMany.filter(r => r.fromEntity === entity.name).map(r => `->has(${r.toEntity}::factory()->count(3))`).join('') %>
+<% } -%>
+            ->count(10 - <%= entity.name %>::count())
+            ->create();
 <% }); -%>
 
         // $this->indexModels();
@@ -64,53 +66,42 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Seed from CSV or factory
-     */
-    private function seedModel(string $modelClass, string $csvFilename, int $minCount): void
-    {
-        $csvPath = database_path("seeders/csv/{$csvFilename}");
-
-        if (File::exists($csvPath)) {
-            // If CSV exists, load ONLY from CSV
-            $this->seedFromCsv($modelClass, $csvPath);
-        } else {
-            // Otherwise, use ONLY the factory
-            while ($modelClass::count() < $minCount) {
-                $modelClass::factory()->create();
-            }
-        }
-    }
-
-    /**
      * Load data from a CSV file
-     * 
+     *
      * @param string $modelClass Fully qualified name of the model class
      * @param string $csvPath Full path to the CSV file
      * @return int Number of records loaded
      */
-    private function seedFromCsv(string $modelClass, string $csvPath): void
+    private function seedFromCsv(string $modelClass): bool
     {
-        $csv = array_map('str_getcsv', file($csvPath));
-        $headers = array_shift($csv);
+        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . ".csv");
+        if (!File::exists($csvPath)) return false;
+        try {
+            $csv = array_map('str_getcsv', file($csvPath));
+            $headers = array_shift($csv);
 
-        foreach ($csv as $row) {
-            // Skip empty rows
-            if (empty(array_filter($row))) {
-                continue;
-            }
-            
-            $data = array_combine($headers, $row);
-            
-            // Remove empty or null fields
-            $data = array_filter($data, function($value) {
-                return $value !== '' && $value !== null;
-            });
+            foreach ($csv as $row) {
+                // Skip empty rows
+                if (empty(array_filter($row))) {
+                    continue;
+                }
 
-            try {
-                $modelClass::create($data);
-            } catch (\Throwable $th) {
-                $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
+                $data = array_combine($headers, $row);
+
+                // Remove empty or null fields
+                $data = array_filter($data, function($value) {
+                    return $value !== '' && $value !== null;
+                });
+
+                try {
+                    $modelClass::create($data);
+                } catch (\Throwable $th) {
+                    $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
+                }//throw $th;
             }
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 

@@ -12,6 +12,7 @@ export class FactoriesGenerator {
         entities = entities ?? getEntities(this.that);
         relationships = relationships ?? getEntitiesRelationships(this.that);
         enums = enums ?? getEnums(this.that);
+        const recycle = {};
         let manyToMany = [];
         for (const entity of entities) {
             const models = [];
@@ -30,9 +31,11 @@ export class FactoriesGenerator {
                 && relation.entityName === entity.name
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.otherEntityName};`)
+                    models.push(`use App\\Models\\${relation.otherEntityName};`);
+                    if (!recycle[relation.entityName]) recycle[relation.entityName] = [];
+                    recycle[relation.entityName].push(relation.otherEntityName);
                 }
-                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => ${relation.otherEntityName}::factory(),`);
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => \\App\\Models\\${relation.otherEntityName}::factory(),`);
             });
             // Relationships one-to-many
             true && relationships.filter(relation => (
@@ -41,9 +44,11 @@ export class FactoriesGenerator {
                 && relation.entityName !== relation.otherEntityName
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.entityName};`)
+                    models.push(`use App\\Models\\${relation.entityName};`);
+                    if (!recycle[relation.otherEntityName]) recycle[relation.otherEntityName] = [];
+                    recycle[relation.otherEntityName].push(relation.entityName);
                 }
-                params.push(`${tab(3)}'${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id' => ${relation.entityName}::factory(),`);
+                params.push(`${tab(3)}'${to.snake(relation.otherEntityRelationshipName || relation.entityName)}_id' => \\App\\Models\\${relation.entityName}::factory(),`);
             });
             // Relationships many-to-one
             true && relationships.filter(relation => (
@@ -51,14 +56,16 @@ export class FactoriesGenerator {
                 && relation.entityName === entity.name
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.otherEntityName};`)
+                    models.push(`use App\\Models\\${relation.otherEntityName};`);
+                    if (!recycle[relation.entityName]) recycle[relation.entityName] = [];
+                    recycle[relation.entityName].push(relation.otherEntityName);
                 }
-                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => ${relation.otherEntityName}::factory(),`);
+                params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => \\App\\Models\\${relation.otherEntityName}::factory(),`);
             });
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,
-                    models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
+                    // models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
                     params: params.join("\n"),
                 });
             // Relationships many-to-many
@@ -83,7 +90,8 @@ export class FactoriesGenerator {
         }
         this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
-                entities: entities,
+                entities,
+                recycle,
                 manyToMany,
                 n,
             });
