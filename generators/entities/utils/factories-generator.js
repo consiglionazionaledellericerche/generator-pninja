@@ -1,5 +1,4 @@
 import to from 'to-case';
-import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 const tab = (n = 1) => (Array(n)).fill('    ').join('');
 
@@ -15,7 +14,6 @@ export class FactoriesGenerator {
         const recycle = {};
         let manyToMany = [];
         for (const entity of entities) {
-            const models = [];
             const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop, enums)},`);
             const paramsBlobBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
             const paramsBlobType = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
@@ -31,7 +29,6 @@ export class FactoriesGenerator {
                 && relation.entityName === entity.name
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.otherEntityName};`);
                     if (!recycle[relation.entityName]) recycle[relation.entityName] = [];
                     recycle[relation.entityName].push(relation.otherEntityName);
                 }
@@ -44,7 +41,6 @@ export class FactoriesGenerator {
                 && relation.entityName !== relation.otherEntityName
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.entityName};`);
                     if (!recycle[relation.otherEntityName]) recycle[relation.otherEntityName] = [];
                     recycle[relation.otherEntityName].push(relation.entityName);
                 }
@@ -56,7 +52,6 @@ export class FactoriesGenerator {
                 && relation.entityName === entity.name
             )).forEach(relation => {
                 if (relation.entityName !== relation.otherEntityName) {
-                    models.push(`use App\\Models\\${relation.otherEntityName};`);
                     if (!recycle[relation.entityName]) recycle[relation.entityName] = [];
                     recycle[relation.entityName].push(relation.otherEntityName);
                 }
@@ -65,7 +60,6 @@ export class FactoriesGenerator {
             this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,
-                    // models: models.reduce((acc, curr) => acc.includes(curr) ? acc : [...acc, curr], []).join("\n"),
                     params: params.join("\n"),
                 });
             // Relationships many-to-many
