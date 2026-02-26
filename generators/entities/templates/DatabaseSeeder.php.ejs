@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
+    // Number of records to create for each model if the CSV file is missing or empty
+    private int $N = <%- n %>;
+
     /**
      * Seed the application's database.
      */
@@ -25,44 +28,15 @@ class DatabaseSeeder extends Seeder
             <%- recycle[entity.name]?.map(e => `->recycle(${e}::all())`).join('') %>
 <% } -%>
 <% if (manyToMany?.filter(r => r.fromEntity === entity.name).length) { -%>
-            <%- manyToMany.filter(r => r.fromEntity === entity.name).map(r => `->has(${r.toEntity}::factory()->count(3))`).join('') %>
+            // <%- manyToMany.filter(r => r.fromEntity === entity.name).map(r => `->has(${r.toEntity}::factory()->count(3))`).join('') %>
 <% } -%>
-            ->count(10 - <%= entity.name %>::count())
+            ->count(max(0, $this->N - <%= entity.name %>::count()))
             ->create();
 <% }); -%>
 
-        // $this->indexModels();
-    }
-
-    /**
-     * Index all searchable models
-     */
-    private function indexModels(): void
-    {
-        $searchableModels = [
-<% entities.forEach(function(entity) { -%>
-            <%= entity.name %>::class,
+<% manyToMany.forEach(function(rel) { -%>
+        $this->seedManyToManyFromCsv(<%= rel.fromEntity %>::class, <%= rel.toEntity %>::class, '<%= rel.relPropery %>') || <%= rel.fromEntity %>::all()->each(fn($entity) => $entity-><%= rel.relPropery %>()->attach(<%= rel.toEntity %>::all()->random(rand(1, <%= rel.toEntity %>::count()))));
 <% }); -%>
-        ];
-
-        $this->command->newLine();
-        $this->command->info('🔍 Indexing all searchable models...');
-
-        foreach ($searchableModels as $model) {
-            $modelName = class_basename($model);
-            $this->command->info("  → Indexing {$modelName}...");
-
-            try {
-                \Artisan::call('scout:import', ['model' => $model]);
-                $count = $model::count();
-                $this->command->info("    ✓ {$count} records indexed");
-            } catch (\Exception $e) {
-                $this->command->error("    ✗ Failed: {$e->getMessage()}");
-            }
-        }
-
-        $this->command->newLine();
-        $this->command->info('✓ Seeding and indexing completed!');
     }
 
     /**
@@ -106,35 +80,13 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Seed many-to-many relationships
-     */
-    private function seedManyToMany(
-        string $modelClass, 
-        string $relationName, 
-        string $relatedClass, 
-        string $csvFilename, 
-        int $randomCount
-    ): void {
-        $csvPath = database_path("seeders/csv/{$csvFilename}");
-
-        if (File::exists($csvPath)) {
-            $this->seedManyToManyFromCsv($modelClass, $relationName, $csvPath);
-        } else {
-            // Use random associations
-            $modelClass::all()->each(function ($entity) use ($relationName, $relatedClass, $randomCount) {
-                $entity->$relationName()->attach(
-                    $relatedClass::all()->random($randomCount)->pluck('id')->toArray()
-                );
-            });
-        }
-    }
-
-    /**
      * Load many-to-many relationships from a CSV file.
      * The CSV must have the columns: model_id, related_id.
      */
-    private function seedManyToManyFromCsv(string $modelClass, string $relationName, string $csvPath): void
+    private function seedManyToManyFromCsv(string $modelClass, string $relatedClass, string $relationName): bool
     {
+        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . "_" . ((new \ReflectionClass($relatedClass))->getShortName()) . ".csv");
+        if (!File::exists($csvPath)) return false;
         $csv = array_map('str_getcsv', file($csvPath));
         $headers = array_shift($csv);
 
@@ -144,11 +96,11 @@ class DatabaseSeeder extends Seeder
             if (empty(array_filter($row))) {
                 continue;
             }
-            
+
             $data = array_combine($headers, $row);
             $modelId = $data['model_id'];
             $relatedId = $data['related_id'];
-            
+
             if (!isset($grouped[$modelId])) {
                 $grouped[$modelId] = [];
             }
@@ -161,5 +113,6 @@ class DatabaseSeeder extends Seeder
                 $model->$relationName()->attach($relatedIds);
             }
         }
+        return true;
     }
 }
