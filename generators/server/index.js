@@ -79,7 +79,7 @@ export default class ServerGenerator extends Generator {
     });
 
     this.fs.copyTpl(
-      `${entitiesTemplatePath}/DatabaseSeeder.php.ejs`,
+      `${entitiesTemplatePath}/database/seeders/DatabaseSeeder.php.ejs`,
       this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
       { entities: [], manyToMany: [], n: 0 }
     );
@@ -89,12 +89,13 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("DatabaseErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/DatabaseErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("ValidationErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ValidationErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("Providers/AppServiceProvider.php.ejs"), this.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
-    this.fs.copyTpl(this.templatePath("HandlesApiErrors.php.ejs"), this.destinationPath(`server/app/Traits/HandlesApiErrors.php`), {});
-    this.fs.copyTpl(this.templatePath("HandlesUserRoles.php.ejs"), this.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
+    this.fs.copyTpl(this.templatePath("app/Traits/HandlesApiErrors.php.ejs"), this.destinationPath(`server/app/Traits/HandlesApiErrors.php`));
+    this.fs.copyTpl(this.templatePath("app/Traits/HandlesUserRoles.php.ejs"), this.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
+    this.fs.copyTpl(this.templatePath("app/Traits/SeederHelpers.php.ejs"), this.destinationPath(`server/app/Traits/SeederHelpers.php`));
     this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
     this.fs.copyTpl(this.templatePath("config/audit.php.ejs"), this.destinationPath('server/config/audit.php'), {

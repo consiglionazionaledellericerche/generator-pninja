@@ -82,13 +82,19 @@ export class FactoriesGenerator {
                 }
             });
         }
-        this.that.fs.copyTpl(this.that.templatePath("DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
+        this.that.fs.copyTpl(this.that.templatePath("database/seeders/DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
                 entities,
                 recycle,
                 manyToMany,
                 n,
             });
+        entities.forEach((entity) => {
+            this.that.fs.copyTpl(this.that.templatePath(`database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
+                entity,
+                recycle,
+            });
+        });
     }
 
     _getFakerRule(field, enums) {

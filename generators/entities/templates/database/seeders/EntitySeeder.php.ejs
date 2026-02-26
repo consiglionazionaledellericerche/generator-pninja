@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Traits\SeederHelpers;
+use App\Models\<%= entity.name %>;
+<% if (recycle[entity.name]?.length) { -%>
+<%- recycle[entity.name]?.map(e => `use App\\Models\\${e};`).join('\n') %>
+<% } -%>
+
+class <%= entity.name %>Seeder extends Seeder
+{
+    use WithoutModelEvents, SeederHelpers;
+
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $N = (int) env('SEEDER_RECORDS_PER_MODEL', 10);
+        $this->seedFromCsv(<%= entity.name %>::class) || <%= entity.name %>::factory()
+<% if (recycle[entity.name]?.length) { -%>
+            <%- recycle[entity.name]?.map(e => `->recycle(${e}::all())`).join('') %>
+<% } -%>
+            ->count(max(0, $N - <%= entity.name %>::count()))
+            ->create();
+    }
+}

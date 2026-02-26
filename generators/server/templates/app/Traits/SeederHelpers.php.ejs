@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Traits;
+
+use Illuminate\Support\Facades\File;
+
+trait SeederHelpers
+{
+    public function seedFromCsv(string $modelClass): bool
+    {
+        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . ".csv");
+        if (!File::exists($csvPath)) return false;
+        try {
+            $csv = array_map('str_getcsv', file($csvPath));
+            $headers = array_shift($csv);
+
+            foreach ($csv as $row) {
+                if (empty(array_filter($row))) continue;
+
+                $data = array_combine($headers, $row);
+                $data = array_filter($data, fn($value) => $value !== '' && $value !== null);
+
+                try {
+                    $modelClass::create($data);
+                } catch (\Throwable $th) {
+                    $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
+                }
+            }
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    private function seedManyToManyFromCsv(string $modelClass, string $relatedClass, string $relationName): bool
+    {
+        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . "_" . ((new \ReflectionClass($relatedClass))->getShortName()) . ".csv");
+        if (!File::exists($csvPath)) return false;
+
+        $csv = array_map('str_getcsv', file($csvPath));
+        $headers = array_shift($csv);
+
+        $grouped = [];
+        foreach ($csv as $row) {
+            if (empty(array_filter($row))) continue;
+            $data = array_combine($headers, $row);
+            $grouped[$data['model_id']][] = $data['related_id'];
+        }
+
+        foreach ($grouped as $modelId => $relatedIds) {
+            $model = $modelClass::find($modelId);
+            if ($model) $model->$relationName()->attach($relatedIds);
+        }
+        return true;
+    }
+}
