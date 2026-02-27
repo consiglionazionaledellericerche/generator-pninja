@@ -4,109 +4,25 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Support\Facades\File;
-use App\Models\AcRule;
+use App\Traits\SeederHelpers;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
+    use WithoutModelEvents, SeederHelpers;
 
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-<%  if (entities.length) { -%>
-        $N = (int) env('SEEDER_RECORDS_PER_MODEL', 10);
-<%  } -%>
-        $this->seedFromCsv(AcRule::class);
-<%  if (entities.length) { -%>
         $this->call([
-<%      entities.forEach(function(entity) { -%>
+<%  entities.forEach(function(entity) { -%>
             <%= entity.name %>Seeder::class,
-<%      }); -%>
+<%  }); -%>
         ]);
-<%  } -%>
 
 <% manyToMany.forEach(function(rel) { -%>
         $this->seedManyToManyFromCsv(\App\Models\<%= rel.fromEntity %>::class, \App\Models\<%= rel.toEntity %>::class, '<%= rel.relPropery %>') || \App\Models\<%= rel.fromEntity %>::all()->each(fn($entity) => $entity-><%= rel.relPropery %>()->attach(\App\Models\<%= rel.toEntity %>::all()->random(rand(1, \App\Models\<%= rel.toEntity %>::count()))));
 <% }); -%>
-    }
-
-    /**
-     * Load data from a CSV file
-     *
-     * @param string $modelClass Fully qualified name of the model class
-     * @param string $csvPath Full path to the CSV file
-     * @return int Number of records loaded
-     */
-    private function seedFromCsv(string $modelClass): bool
-    {
-        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . ".csv");
-        if (!File::exists($csvPath)) return false;
-        try {
-            $csv = array_map('str_getcsv', file($csvPath));
-            $headers = array_shift($csv);
-
-            foreach ($csv as $row) {
-                // Skip empty rows
-                if (empty(array_filter($row))) {
-                    continue;
-                }
-
-                $data = array_combine($headers, $row);
-
-                // Remove empty or null fields
-                $data = array_filter($data, function($value) {
-                    return $value !== '' && $value !== null;
-                });
-
-                try {
-                    $modelClass::create($data);
-                } catch (\Throwable $th) {
-                    $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
-                }//throw $th;
-            }
-            return true;
-        } catch (\Throwable $th) {
-            return false;
-        }
-    }
-
-    /**
-     * Load many-to-many relationships from a CSV file.
-     * The CSV must have the columns: model_id, related_id.
-     */
-    private function seedManyToManyFromCsv(string $modelClass, string $relatedClass, string $relationName): bool
-    {
-        $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . "_" . ((new \ReflectionClass($relatedClass))->getShortName()) . ".csv");
-        if (!File::exists($csvPath)) return false;
-        $csv = array_map('str_getcsv', file($csvPath));
-        $headers = array_shift($csv);
-
-        $grouped = [];
-        foreach ($csv as $row) {
-            // Salta righe vuote
-            if (empty(array_filter($row))) {
-                continue;
-            }
-
-            $data = array_combine($headers, $row);
-            $modelId = $data['model_id'];
-            $relatedId = $data['related_id'];
-
-            if (!isset($grouped[$modelId])) {
-                $grouped[$modelId] = [];
-            }
-            $grouped[$modelId][] = $relatedId;
-        }
-
-        foreach ($grouped as $modelId => $relatedIds) {
-            $model = $modelClass::find($modelId);
-            if ($model) {
-                $model->$relationName()->attach($relatedIds);
-            }
-        }
-        return true;
     }
 }

@@ -2,6 +2,7 @@ import Generator from 'yeoman-generator';
 import randomstring from 'randomstring';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
+import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
 import { AcRule } from '../utils/AcRule.js';
 
@@ -46,6 +47,17 @@ export default class ServerGenerator extends Generator {
     const entitiesTemplatePath = serverTemplatePath + '/../../entities/templates';
     const searchEngine = this.config.get('searchEngine');
     this.sourceRoot(entitiesTemplatePath);
+    (new FactoriesGenerator(this)).generateFactories([AcRule], [], []);
+    this.fs.copyTpl(
+      this.templatePath('database/seeders/DatabaseSeeder.php.ejs'),
+      this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
+      { entities: [AcRule], manyToMany: [], recycle: [] }
+    );
+    this.fs.copyTpl(
+      this.templatePath('database/seeders/EntitySeeder.php.ejs'),
+      this.destinationPath(`server/database/seeders/AcRuleSeeder.php`),
+      { entity: AcRule, recycle: [] }
+    );
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
     this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
@@ -77,12 +89,6 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("routes/console.php.ejs"), this.destinationPath(`server/routes/console.php`), {
       searchEngine,
     });
-
-    this.fs.copyTpl(
-      `${entitiesTemplatePath}/database/seeders/DatabaseSeeder.php.ejs`,
-      this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
-      { entities: [], manyToMany: [], n: 0 }
-    );
 
     this.fs.copyTpl(this.templatePath("ApiErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/ApiErrorHandler.php`), {});
     this.fs.copyTpl(this.templatePath("NotFoundErrorHandler.php.ejs"), this.destinationPath(`server/app/Exceptions/NotFoundErrorHandler.php`), {});

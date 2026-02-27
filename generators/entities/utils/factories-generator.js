@@ -7,7 +7,7 @@ export class FactoriesGenerator {
         this.that = that;
     }
 
-    generateFactories(n = 5, entities = null, relationships = null, enums = null) {
+    generateFactories(entities = null, relationships = null, enums = null) {
         entities = entities ?? getEntities(this.that);
         relationships = relationships ?? getEntitiesRelationships(this.that);
         enums = enums ?? getEnums(this.that);
@@ -87,7 +87,6 @@ export class FactoriesGenerator {
                 entities,
                 recycle,
                 manyToMany,
-                n,
             });
         entities.forEach((entity) => {
             this.that.fs.copyTpl(this.that.templatePath(`database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
