@@ -1,0 +1,20 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Traits\SeederHelpers;
+
+class <%- relation.fromEntity %>_<%- relation.toEntity %>Seeder extends Seeder
+{
+    use WithoutModelEvents, SeederHelpers;
+
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->seedManyToManyFromCsv(\App\Models\<%= relation.fromEntity %>::class, \App\Models\<%= relation.toEntity %>::class, '<%= relation.relPropery %>') || \App\Models\<%= relation.fromEntity %>::all()->each(fn($entity) => $entity-><%= relation.relPropery %>()->attach(\App\Models\<%= relation.toEntity %>::all()->random(rand(1, \App\Models\<%= relation.toEntity %>::count()))));
+    }
+}

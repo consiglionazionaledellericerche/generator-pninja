@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
 <%  entities.forEach(function(entity) { -%>
             <%= entity.name %>Seeder::class,
 <%  }); -%>
+<%  manyToMany.forEach(function(rel) { -%>
+            <%= rel.fromEntity %>_<%= rel.toEntity %>Seeder::class,
+<%  }); -%>
         ]);
 
-<% manyToMany.forEach(function(rel) { -%>
-        $this->seedManyToManyFromCsv(\App\Models\<%= rel.fromEntity %>::class, \App\Models\<%= rel.toEntity %>::class, '<%= rel.relPropery %>') || \App\Models\<%= rel.fromEntity %>::all()->each(fn($entity) => $entity-><%= rel.relPropery %>()->attach(\App\Models\<%= rel.toEntity %>::all()->random(rand(1, \App\Models\<%= rel.toEntity %>::count()))));
-<% }); -%>
     }
 }

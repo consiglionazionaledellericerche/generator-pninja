@@ -95,6 +95,11 @@ export class FactoriesGenerator {
                 recycle,
             });
         });
+        manyToMany.forEach((relation) => {
+            this.that.fs.copyTpl(this.that.templatePath(`database/seeders/ManyToManySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${relation.fromEntity}_${relation.toEntity}Seeder.php`), {
+                relation,
+            });
+        });
         this.that.fs.copyTpl(this.that.templatePath(`database/seeders/AcRuleSeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/AcRuleSeeder.php`), {
             entities: entities.filter(e => e.name !== 'AcRule'),
         });
