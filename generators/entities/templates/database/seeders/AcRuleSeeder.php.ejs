@@ -1,0 +1,83 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Traits\SeederHelpers;
+use App\Models\AcRule;
+
+class AcRuleSeeder extends Seeder
+{
+    use WithoutModelEvents, SeederHelpers;
+
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        <%- entities.length ? '$fromCsv = ' : '' %>$this->seedFromCsv(AcRule::class);
+<%  if (entities.length) { -%>
+        if (!$fromCsv) {
+<%  entities.forEach((entity, index) => {-%>
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__AUTHUSER__',
+                'v1' => '<%- entity.name %>',
+                'v2' => 'create',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__AUTHUSER__',
+                'v1' => '<%- entity.name %>',
+                'v2' => 'read',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__AUTHUSER__',
+                'v1' => '<%- entity.name %>',
+                'v2' => 'update',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__AUTHUSER__',
+                'v1' => '<%- entity.name %>',
+                'v2' => 'delete',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+<%  });-%>
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__AUTHUSER__',
+                'v1' => 'File',
+                'v2' => 'read',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+<%  entities.forEach((entity, index) => {-%>
+            AcRule::create([
+                'ptype' => 'p',
+                'v0' => '__GUEST__',
+                'v1' => '<%- entity.name %>',
+                'v2' => 'read',
+                'v3' => '',
+                'v4' => '',
+                'v5' => '',
+            ]);
+<%  });-%>
+        }
+<%  } -%>
+    }
+}

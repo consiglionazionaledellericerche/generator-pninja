@@ -53,18 +53,13 @@ export default class ServerGenerator extends Generator {
       this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
       { entities: [AcRule], manyToMany: [], recycle: [] }
     );
-    this.fs.copyTpl(
-      this.templatePath('database/seeders/EntitySeeder.php.ejs'),
-      this.destinationPath(`server/database/seeders/AcRuleSeeder.php`),
-      { entity: AcRule, recycle: [] }
-    );
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
     this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
     });
     (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
     (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/AcRule.csv.ejs"), this.destinationPath(`server/database/seeders/csv/AcRule.csv`), { entities: [] });
+    this.fs.copyTpl(this.templatePath("database/seeders/csv/.gitkeep"), this.destinationPath(`server/database/seeders/csv/.gitkeep`));
     this.sourceRoot(serverTemplatePath);
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/FileController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/FileController.php`));

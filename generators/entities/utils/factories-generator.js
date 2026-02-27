@@ -89,10 +89,14 @@ export class FactoriesGenerator {
                 manyToMany,
             });
         entities.forEach((entity) => {
+            if (entity.name === 'AcRule') return;
             this.that.fs.copyTpl(this.that.templatePath(`database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
                 entity,
                 recycle,
             });
+        });
+        this.that.fs.copyTpl(this.that.templatePath(`database/seeders/AcRuleSeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/AcRuleSeeder.php`), {
+            entities: entities.filter(e => e.name !== 'AcRule'),
         });
     }
 
