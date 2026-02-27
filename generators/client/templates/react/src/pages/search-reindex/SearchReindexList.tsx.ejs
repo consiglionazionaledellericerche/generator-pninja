@@ -328,13 +328,13 @@ export default function SearchReindexList() {
     if (!state) return null;
     switch (state.status) {
       case 'pending':
-        return <Icon icon="schedule" size={4} className="text-gray-400 animate-pulse" />;
+        return <Icon icon="schedule" size={5} className="text-gray-400 animate-pulse" />;
       case 'running':
-        return <Icon icon="sync" size={4} className="text-blue-500 animate-spin" />;
+        return <Icon icon="sync" size={5} className="text-blue-500 animate-spin" />;
       case 'completed':
-        return <Icon icon="check_circle" size={4} className="text-green-500" />;
+        return <Icon icon="check_circle" size={5} className="text-green-500" />;
       case 'failed':
-        return <Icon icon="error" size={4} className="text-red-500" />;
+        return <Icon icon="error" size={5} className="text-red-500" />;
     }
   };
 
@@ -415,13 +415,13 @@ export default function SearchReindexList() {
               pendingClassName="primary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="refresh" size={4} />
+                  <Icon icon="refresh" size={5} />
                   {t('searchReindex:actions.reindexSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="refresh" size={4} />
+                  <Icon icon="refresh" size={5} />
                   {t('searchReindex:actions.confirmReindexSelected')}
                 </span>
               }
@@ -433,13 +433,13 @@ export default function SearchReindexList() {
               pendingClassName="secondary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="cleaning_services" size={4} />
+                  <Icon icon="cleaning_services" size={5} />
                   {t('searchReindex:actions.flushSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="cleaning_services" size={4} />
+                  <Icon icon="cleaning_services" size={5} />
                   {t('searchReindex:actions.confirmFlushSelected')}
                 </span>
               }
@@ -451,13 +451,13 @@ export default function SearchReindexList() {
               pendingClassName="danger-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="delete_forever" size={4} />
+                  <Icon icon="delete_forever" size={5} />
                   {t('searchReindex:actions.deleteIndexSelected')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="delete_forever" size={4} />
+                  <Icon icon="delete_forever" size={5} />
                   {t('searchReindex:actions.confirmDeleteIndexSelected')}
                 </span>
               }
@@ -471,13 +471,13 @@ export default function SearchReindexList() {
               pendingClassName="secondary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="upgrade" size={4} />
+                  <Icon icon="upgrade" size={5} />
                   {t('searchReindex:engine.elastic.migrate')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="upgrade" size={4} />
+                  <Icon icon="upgrade" size={5} />
                   {t('searchReindex:engine.elastic.confirmMigrate')}
                 </span>
               }
@@ -489,13 +489,13 @@ export default function SearchReindexList() {
               pendingClassName="danger-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="restart_alt" size={4} />
+                  <Icon icon="restart_alt" size={5} />
                   {t('searchReindex:engine.elastic.reset')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="restart_alt" size={4} />
+                  <Icon icon="restart_alt" size={5} />
                   {t('searchReindex:engine.elastic.confirmReset')}
                 </span>
               }
@@ -507,13 +507,13 @@ export default function SearchReindexList() {
               pendingClassName="secondary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="autorenew" size={4} />
+                  <Icon icon="autorenew" size={5} />
                   {t('searchReindex:engine.elastic.refresh')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="autorenew" size={4} />
+                  <Icon icon="autorenew" size={5} />
                   {t('searchReindex:engine.elastic.confirmRefresh')}
                 </span>
               }
@@ -528,13 +528,13 @@ export default function SearchReindexList() {
               pendingClassName="secondary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="settings_backup_restore" size={4} />
+                  <Icon icon="settings_backup_restore" size={5} />
                   {t('searchReindex:engine.meilisearch.sync')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="settings_backup_restore" size={4} />
+                  <Icon icon="settings_backup_restore" size={5} />
                   {t('searchReindex:engine.meilisearch.confirmSync')}
                 </span>
               }
@@ -650,13 +650,13 @@ export default function SearchReindexList() {
                             pendingClassName="primary-button"
                             label={
                               <span className="flex items-center gap-2">
-                                <Icon icon="refresh" size={4} />
+                                <Icon icon="refresh" size={5} />
                                 {t('searchReindex:actions.reindex')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2">
-                                <Icon icon="refresh" size={4} />
+                                <Icon icon="refresh" size={5} />
                                 {t('searchReindex:actions.confirmReindex')}
                               </span>
                             }
@@ -670,13 +670,13 @@ export default function SearchReindexList() {
                             pendingClassName="secondary-button"
                             label={
                               <span className="flex items-center gap-2">
-                                <Icon icon="cleaning_services" size={4} />
+                                <Icon icon="cleaning_services" size={5} />
                                 {t('searchReindex:actions.flush')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2">
-                                <Icon icon="cleaning_services" size={4} />
+                                <Icon icon="cleaning_services" size={5} />
                                 {t('searchReindex:actions.confirmFlush')}
                               </span>
                             }
@@ -690,13 +690,13 @@ export default function SearchReindexList() {
                             pendingClassName="danger-button"
                             label={
                               <span className="flex items-center gap-2">
-                                <Icon icon="delete_forever" size={4} />
+                                <Icon icon="delete_forever" size={5} />
                                 {t('searchReindex:actions.deleteIndex')}
                               </span>
                             }
                             pendingLabel={
                               <span className="flex items-center gap-2">
-                                <Icon icon="delete_forever" size={4} />
+                                <Icon icon="delete_forever" size={5} />
                                 {t('searchReindex:actions.confirmDeleteIndex')}
                               </span>
                             }
