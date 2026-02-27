@@ -1,0 +1,29 @@
+{
+  "title": "Mbushja e Databazës",
+  "selectAll": "Zgjidh të gjithë mbushësit",
+  "selectSeeder": "Zgjidh {{seeder}}",
+  "columns": {
+    "seeder": "Mbushës",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Në pritje...",
+    "running": "Duke u kryer",
+    "completed": "Përfunduar",
+    "failed": "Dështuar"
+  },
+  "actions": {
+    "seed": "Ekzekuto",
+    "confirmSeed": "Konfirmo",
+    "seedSelected": "Ekzekuto të zgjedhurat",
+    "confirmSeedSelected": "Konfirmo",
+    "seedAll": "Ekzekuto db:seed",
+    "confirmSeedAll": "Konfirmo db:seed"
+  },
+  "seedCompleted": "Mbushësi {{seeder}} përfundoi",
+  "seedFailed": "Mbushësi {{seeder}} dështoi",
+  "seedError": "Gabim në fillimin e mbushësit {{seeder}}",
+  "seedAllCompleted": "db:seed përfundoi",
+  "seedAllFailed": "db:seed dështoi",
+  "seedAllError": "Gabim në fillimin e db:seed"
+}

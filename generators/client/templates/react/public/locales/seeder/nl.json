@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Selecteer alle seeders",
+  "selectSeeder": "Selecteer {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "In afwachting...",
+    "running": "Bezig",
+    "completed": "Voltooid",
+    "failed": "Mislukt"
+  },
+  "actions": {
+    "seed": "Uitvoeren",
+    "confirmSeed": "Bevestigen",
+    "seedSelected": "Geselecteerde uitvoeren",
+    "confirmSeedSelected": "Bevestigen",
+    "seedAll": "Run db:seed",
+    "confirmSeedAll": "Bevestig db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} voltooid",
+  "seedFailed": "Seeder {{seeder}} mislukt",
+  "seedError": "Fout bij het starten van seeder {{seeder}}",
+  "seedAllCompleted": "db:seed voltooid",
+  "seedAllFailed": "db:seed mislukt",
+  "seedAllError": "Fout bij het starten van db:seed"
+}

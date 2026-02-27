@@ -1,0 +1,29 @@
+{
+  "title": "تعبئة قاعدة البيانات",
+  "selectAll": "حدد جميع البذور",
+  "selectSeeder": "حدد {{seeder}}",
+  "columns": {
+    "seeder": "بذور",
+    "status": "الحالة"
+  },
+  "status": {
+    "pending": "قيد الانتظار...",
+    "running": "يتم التشغيل",
+    "completed": "اكتمل",
+    "failed": "فشل"
+  },
+  "actions": {
+    "seed": "تشغيل",
+    "confirmSeed": "تأكيد",
+    "seedSelected": "تشغيل المحدد",
+    "confirmSeedSelected": "تأكيد",
+    "seedAll": "تشغيل db:seed",
+    "confirmSeedAll": "تأكيد db:seed"
+  },
+  "seedCompleted": "اكتملت البذور {{seeder}}",
+  "seedFailed": "فشلت البذور {{seeder}}",
+  "seedError": "خطأ في بدء البذور {{seeder}}",
+  "seedAllCompleted": "اكتمل db:seed",
+  "seedAllFailed": "فشل db:seed",
+  "seedAllError": "خطأ في بدء db:seed"
+}

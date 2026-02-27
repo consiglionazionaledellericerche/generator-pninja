@@ -1,0 +1,29 @@
+{
+  "title": "データベースのシーディング",
+  "selectAll": "すべてのシーダーを選択",
+  "selectSeeder": "{{seeder}} を選択",
+  "columns": {
+    "seeder": "シーダー",
+    "status": "ステータス"
+  },
+  "status": {
+    "pending": "保留中...",
+    "running": "実行中",
+    "completed": "完了",
+    "failed": "失敗"
+  },
+  "actions": {
+    "seed": "実行",
+    "confirmSeed": "確認",
+    "seedSelected": "選択されたものを実行",
+    "confirmSeedSelected": "確認",
+    "seedAll": "db:seed を実行",
+    "confirmSeedAll": "db:seed の確認"
+  },
+  "seedCompleted": "シーダー {{seeder}} が完了しました",
+  "seedFailed": "シーダー {{seeder}} が失敗しました",
+  "seedError": "シーダー {{seeder}} の開始エラー",
+  "seedAllCompleted": "db:seed が完了しました",
+  "seedAllFailed": "db:seed が失敗しました",
+  "seedAllError": "db:seed の開始エラー"
+}

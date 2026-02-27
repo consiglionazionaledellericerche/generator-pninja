@@ -1,0 +1,29 @@
+{
+  "title": "தரவுகளை நிரப்புதல்",
+  "selectAll": "எல்லா குறிஞ்சிகளையும் தேர்ந்தெடுக்கவும்",
+  "selectSeeder": "{{seeder}} ஐ தேர்ந்தெடுக்கவும்",
+  "columns": {
+    "seeder": "குறிஞ்சி",
+    "status": "நிலைமை"
+  },
+  "status": {
+    "pending": "காத்திருக்கிறது...",
+    "running": "இறுதிசெய்வதற்காக",
+    "completed": "முடிந்தது",
+    "failed": "தவறானது"
+  },
+  "actions": {
+    "seed": "இயக்கு",
+    "confirmSeed": "உறுதிப்படுத்தவும்",
+    "seedSelected": "தேர்ந்தெடுத்தவற்றை இயக்கு",
+    "confirmSeedSelected": "உறுதிப்படுத்தவும்",
+    "seedAll": "db:seed ஐ இயக்கு",
+    "confirmSeedAll": "db:seed ஐ உறுதிப்படுத்தவும்"
+  },
+  "seedCompleted": "குறிஞ்சி {{seeder}} முடிந்தது",
+  "seedFailed": "குறிஞ்சி {{seeder}} தோல்வி அடைந்தது",
+  "seedError": "குறிஞ்சி {{seeder}} ஐ ஆரம்பிப்பதில் பிழை",
+  "seedAllCompleted": "db:seed முடிந்தது",
+  "seedAllFailed": "db:seed தோல்வி அடைந்தது",
+  "seedAllError": "db:seed ஐ ஆரம்பிப்பதில் பிழை"
+}

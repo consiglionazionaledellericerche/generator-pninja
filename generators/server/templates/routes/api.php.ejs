@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
+use App\Http\Controllers\SeederController;
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>
 use App\Http\Controllers\SearchReindexController;
 <%  } -%>
@@ -64,6 +65,13 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/export', [AuditController::class, 'export']);
         Route::get('/{id}/compare', [AuditController::class, 'compare']);
         Route::get('/{id}', [AuditController::class, 'show']);
+    });
+
+    Route::prefix('seeder')->group(function () {
+        Route::get('/', [SeederController::class, 'index']);
+        Route::post('/all', [SeederController::class, 'seedAll']);
+        Route::post('/{seeder}', [SeederController::class, 'seed']);
+        Route::get('/status/{jobId}', [SeederController::class, 'status']);
     });
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>
 

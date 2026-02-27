@@ -1,0 +1,29 @@
+{
+  "title": "Umplerea bazei de date",
+  "selectAll": "Selectați toți semănătorii",
+  "selectSeeder": "Selectați {{seeder}}",
+  "columns": {
+    "seeder": "Semănător",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "În așteptare...",
+    "running": "Se execută",
+    "completed": "Finalizat",
+    "failed": "Eșuat"
+  },
+  "actions": {
+    "seed": "Rulați",
+    "confirmSeed": "Confirmați",
+    "seedSelected": "Rulați selectat",
+    "confirmSeedSelected": "Confirmați",
+    "seedAll": "Rulați db:seed",
+    "confirmSeedAll": "Confirmați db:seed"
+  },
+  "seedCompleted": "Semănător {{seeder}} finalizat",
+  "seedFailed": "Semănător {{seeder}} eșuat",
+  "seedError": "Eroare la pornirea semănătorului {{seeder}}",
+  "seedAllCompleted": "db:seed finalizat",
+  "seedAllFailed": "db:seed eșuat",
+  "seedAllError": "Eroare la pornirea db:seed"
+}

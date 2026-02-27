@@ -1,0 +1,29 @@
+{
+  "title": "Síolú Bunachais",
+  "selectAll": "Roghnaigh na síoltóirí go léir",
+  "selectSeeder": "Roghnaigh {{seeder}}",
+  "columns": {
+    "seeder": "Síolóir",
+    "status": "Stádas"
+  },
+  "status": {
+    "pending": "Ag fanacht...",
+    "running": "Ag rith",
+    "completed": "Comhluite",
+    "failed": "Teip"
+  },
+  "actions": {
+    "seed": "Rith",
+    "confirmSeed": "Deimhnigh",
+    "seedSelected": "Rith na roghnaithe",
+    "confirmSeedSelected": "Deimhnigh",
+    "seedAll": "Rith db:seed",
+    "confirmSeedAll": "Deimhnigh db:seed"
+  },
+  "seedCompleted": "Críochnaíodh an síolóir {{seeder}}",
+  "seedFailed": "Theip ar an síolóir {{seeder}}",
+  "seedError": "Earráid ag tosú an síolóra {{seeder}}",
+  "seedAllCompleted": "Críochnaíodh db:seed",
+  "seedAllFailed": "Theip ar db:seed",
+  "seedAllError": "Earráid ag tosú db:seed"
+}

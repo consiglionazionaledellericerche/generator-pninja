@@ -1,0 +1,29 @@
+{
+  "title": "Plannu cronfa ddata",
+  "selectAll": "Dewis pob plannwr",
+  "selectSeeder": "Dewis {{seeder}}",
+  "columns": {
+    "seeder": "Plannwr",
+    "status": "Statws"
+  },
+  "status": {
+    "pending": "Ar aros...",
+    "running": "Yn rhedeg",
+    "completed": "Wedi'i gwblhau",
+    "failed": "Methodd"
+  },
+  "actions": {
+    "seed": "Rhedeg",
+    "confirmSeed": "Cadarnhau",
+    "seedSelected": "Rhedeg a ddewiswyd",
+    "confirmSeedSelected": "Cadarnhau",
+    "seedAll": "Rhedeg db:seed",
+    "confirmSeedAll": "Cadarnhau db:seed"
+  },
+  "seedCompleted": "Plannwr {{seeder}} wedi'i gwblhau",
+  "seedFailed": "Plannwr {{seeder}} wedi methu",
+  "seedError": "Gwall wrth ddechrau plannwr {{seeder}}",
+  "seedAllCompleted": "db:seed wedi'i gwblhau",
+  "seedAllFailed": "db:seed wedi methu",
+  "seedAllError": "Gwall wrth ddechrau db:seed"
+}

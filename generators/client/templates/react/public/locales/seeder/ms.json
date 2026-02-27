@@ -1,0 +1,29 @@
+{
+  "title": "Penyemaian Pangkalan Data",
+  "selectAll": "Pilih semua penyemai",
+  "selectSeeder": "Pilih {{seeder}}",
+  "columns": {
+    "seeder": "Penyemai",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Tertunda...",
+    "running": "Sedang berjalan",
+    "completed": "Selesai",
+    "failed": "Gagal"
+  },
+  "actions": {
+    "seed": "Jalankan",
+    "confirmSeed": "Sahkan",
+    "seedSelected": "Jalankan yang dipilih",
+    "confirmSeedSelected": "Sahkan",
+    "seedAll": "Jalankan db:seed",
+    "confirmSeedAll": "Sahkan db:seed"
+  },
+  "seedCompleted": "Penyemai {{seeder}} selesai",
+  "seedFailed": "Penyemai {{seeder}} gagal",
+  "seedError": "Ralat semasa memulakan penyemai {{seeder}}",
+  "seedAllCompleted": "db:seed selesai",
+  "seedAllFailed": "db:seed gagal",
+  "seedAllError": "Ralat semasa memulakan db:seed"
+}

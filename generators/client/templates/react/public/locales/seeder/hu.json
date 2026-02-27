@@ -1,0 +1,29 @@
+{
+  "title": "Adatbázis magvetés",
+  "selectAll": "Összes magvetőt válassza",
+  "selectSeeder": "Válassza ki {{seeder}}",
+  "columns": {
+    "seeder": "Magvető",
+    "status": "Állapot"
+  },
+  "status": {
+    "pending": "Függőben...",
+    "running": "Fut",
+    "completed": "Befejezve",
+    "failed": "Sikertelen"
+  },
+  "actions": {
+    "seed": "Futtatás",
+    "confirmSeed": "Megerősítés",
+    "seedSelected": "Kiválasztott futtatása",
+    "confirmSeedSelected": "Megerősítés",
+    "seedAll": "db:seed futtatása",
+    "confirmSeedAll": "db:seed megerősítése"
+  },
+  "seedCompleted": "Magvető {{seeder}} befejeződött",
+  "seedFailed": "Magvető {{seeder}} meghiúsult",
+  "seedError": "Hiba a {{seeder}} magvető indításakor",
+  "seedAllCompleted": "db:seed befejeződött",
+  "seedAllFailed": "db:seed meghiúsult",
+  "seedAllError": "Hiba a db:seed indításakor"
+}

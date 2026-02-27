@@ -1,0 +1,29 @@
+{
+  "title": "Cài đặt cơ sở dữ liệu",
+  "selectAll": "Chọn tất cả các seeders",
+  "selectSeeder": "Chọn {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Trạng thái"
+  },
+  "status": {
+    "pending": "Đang chờ...",
+    "running": "Đang chạy",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại"
+  },
+  "actions": {
+    "seed": "Chạy",
+    "confirmSeed": "Xác nhận",
+    "seedSelected": "Chạy đã chọn",
+    "confirmSeedSelected": "Xác nhận",
+    "seedAll": "Chạy db:seed",
+    "confirmSeedAll": "Xác nhận db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} đã hoàn thành",
+  "seedFailed": "Seeder {{seeder}} đã thất bại",
+  "seedError": "Lỗi khởi động seeder {{seeder}}",
+  "seedAllCompleted": "db:seed đã hoàn thành",
+  "seedAllFailed": "db:seed đã thất bại",
+  "seedAllError": "Lỗi khởi động db:seed"
+}

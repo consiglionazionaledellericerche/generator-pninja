@@ -1,0 +1,29 @@
+{
+  "title": "ડેટાબેઝ સીડિંગ",
+  "selectAll": "બધા સીડરો પસંદ કરો",
+  "selectSeeder": "{{seeder}} પસંદ કરો",
+  "columns": {
+    "seeder": "સીડર",
+    "status": "સ્થિતિ"
+  },
+  "status": {
+    "pending": "પ્રતીક્ષામાં...",
+    "running": "ચાલુ",
+    "completed": "સમાપ્ત",
+    "failed": "વિફળ"
+  },
+  "actions": {
+    "seed": "ચલાવો",
+    "confirmSeed": "પmacenવી",
+    "seedSelected": "પસંદ કરેલ ચલાવો",
+    "confirmSeedSelected": "પmacenવી",
+    "seedAll": "db:seed ચલાવો",
+    "confirmSeedAll": "db:seed પmacenવું"
+  },
+  "seedCompleted": "સીડર {{seeder}} પૂર્ણ થયું",
+  "seedFailed": "સીડર {{seeder}} નિષ્ફળ ગયું",
+  "seedError": "સીડર {{seeder}} શરૂ કરતી વખતે ભૂલ",
+  "seedAllCompleted": "db:seed પૂર્ણ થયું",
+  "seedAllFailed": "db:seed નિષ્ફળ ગયું",
+  "seedAllError": "db:seed શરૂ કરતી વખતે ભૂલ"
+}

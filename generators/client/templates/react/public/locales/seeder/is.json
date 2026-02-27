@@ -1,0 +1,29 @@
+{
+  "title": "Databasafræi",
+  "selectAll": "Veldu öll fræ",
+  "selectSeeder": "Veldu {{seeder}}",
+  "columns": {
+    "seeder": "Fræ",
+    "status": "Staða"
+  },
+  "status": {
+    "pending": "Bíðandi...",
+    "running": "Í gangi",
+    "completed": "Lokið",
+    "failed": "Misheppnað"
+  },
+  "actions": {
+    "seed": "Keyra",
+    "confirmSeed": "Staðfesta",
+    "seedSelected": "Keyra valið",
+    "confirmSeedSelected": "Staðfesta",
+    "seedAll": "Keyra db:seed",
+    "confirmSeedAll": "Staðfesta db:seed"
+  },
+  "seedCompleted": "Fræ {{seeder}} lokið",
+  "seedFailed": "Fræ {{seeder}} mistókst",
+  "seedError": "Villa við að hefja fræ {{seeder}}",
+  "seedAllCompleted": "db:seed lokið",
+  "seedAllFailed": "db:seed mistókst",
+  "seedAllError": "Villa við að hefja db:seed"
+}

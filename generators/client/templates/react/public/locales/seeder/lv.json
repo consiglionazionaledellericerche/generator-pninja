@@ -1,0 +1,29 @@
+{
+  "title": "Datu bāzes sējums",
+  "selectAll": "Atlasīt visus sējējus",
+  "selectSeeder": "Atlasīt {{seeder}}",
+  "columns": {
+    "seeder": "Sējējs",
+    "status": "Statuss"
+  },
+  "status": {
+    "pending": "Gaida...",
+    "running": "Darbojas",
+    "completed": "Pabeigts",
+    "failed": "Neizdevās"
+  },
+  "actions": {
+    "seed": "Izpildīt",
+    "confirmSeed": "Apstiprināt",
+    "seedSelected": "Izpildīt atlasīto",
+    "confirmSeedSelected": "Apstiprināt",
+    "seedAll": "Izpildīt db:seed",
+    "confirmSeedAll": "Apstiprināt db:seed"
+  },
+  "seedCompleted": "Sējējs {{seeder}} pabeigts",
+  "seedFailed": "Sējējs {{seeder}} neizdevās",
+  "seedError": "Kļūda, startējot sējēju {{seeder}}",
+  "seedAllCompleted": "db:seed pabeigts",
+  "seedAllFailed": "db:seed neizdevās",
+  "seedAllError": "Kļūda, startējot db:seed"
+}

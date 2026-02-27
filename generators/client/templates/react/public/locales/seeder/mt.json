@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Agħżel il-kollha seeders",
+  "selectSeeder": "Agħżel {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Mistenna...",
+    "running": "Qiegħed jaħdem",
+    "completed": "Kkonkluż",
+    "failed": "Utilizzat"
+  },
+  "actions": {
+    "seed": "Esegwi",
+    "confirmSeed": "Ikkonferma",
+    "seedSelected": "Esegwi magħżul",
+    "confirmSeedSelected": "Ikkonferma",
+    "seedAll": "Esegwi db:seed",
+    "confirmSeedAll": "Ikkonferma db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} tlestiet",
+  "seedFailed": "Seeder {{seeder}} ftit",
+  "seedError": "Żball fil-bidu tas-seeder {{seeder}}",
+  "seedAllCompleted": "db:seed tlestiet",
+  "seedAllFailed": "db:seed ftit",
+  "seedAllError": "Żball fil-bidu tad-db:seed"
+}

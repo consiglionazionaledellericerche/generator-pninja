@@ -1,0 +1,29 @@
+{
+  "title": "Semeamento de Banco de Dados",
+  "selectAll": "Selecionar todos os semeadores",
+  "selectSeeder": "Selecionar {{seeder}}",
+  "columns": {
+    "seeder": "Semeador",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Pendente...",
+    "running": "Executando",
+    "completed": "Concluído",
+    "failed": "Falhou"
+  },
+  "actions": {
+    "seed": "Executar",
+    "confirmSeed": "Confirmar",
+    "seedSelected": "Executar selecionados",
+    "confirmSeedSelected": "Confirmar",
+    "seedAll": "Executar db:seed",
+    "confirmSeedAll": "Confirmar db:seed"
+  },
+  "seedCompleted": "Semeador {{seeder}} concluído",
+  "seedFailed": "Semeador {{seeder}} falhou",
+  "seedError": "Erro ao iniciar o semeador {{seeder}}",
+  "seedAllCompleted": "db:seed concluído",
+  "seedAllFailed": "db:seed falhou",
+  "seedAllError": "Erro ao iniciar db:seed"
+}

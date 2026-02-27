@@ -1,0 +1,29 @@
+{
+  "title": "Tietokannan siemennys",
+  "selectAll": "Valitse kaikki siemenet",
+  "selectSeeder": "Valitse {{seeder}}",
+  "columns": {
+    "seeder": "Siemen",
+    "status": "Tila"
+  },
+  "status": {
+    "pending": "Odottaa...",
+    "running": "Suoritetaan",
+    "completed": "Valmis",
+    "failed": "Epätavallinen"
+  },
+  "actions": {
+    "seed": "Suorita",
+    "confirmSeed": "Vahvista",
+    "seedSelected": "Suorita valitut",
+    "confirmSeedSelected": "Vahvista",
+    "seedAll": "Suorita db:seed",
+    "confirmSeedAll": "Vahvista db:seed"
+  },
+  "seedCompleted": "Siemen {{seeder}} suoritettu",
+  "seedFailed": "Siemen {{seeder}} epäonnistui",
+  "seedError": "Virhe siemenen {{seeder}} käynnistämisessä",
+  "seedAllCompleted": "db:seed suoritettu",
+  "seedAllFailed": "db:seed epäonnistui",
+  "seedAllError": "Virhe db:seedin käynnistämisessä"
+}

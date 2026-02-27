@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Select all seeders",
+  "selectSeeder": "Select {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Pending...",
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "actions": {
+    "seed": "Run",
+    "confirmSeed": "Confirm",
+    "seedSelected": "Run selected",
+    "confirmSeedSelected": "Confirm",
+    "seedAll": "Run db:seed",
+    "confirmSeedAll": "Confirm db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} completed",
+  "seedFailed": "Seeder {{seeder}} failed",
+  "seedError": "Error starting seeder {{seeder}}",
+  "seedAllCompleted": "db:seed completed",
+  "seedAllFailed": "db:seed failed",
+  "seedAllError": "Error starting db:seed"
+}

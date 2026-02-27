@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Hitamo abinjiza bose",
+  "selectSeeder": "Hitamo {{seeder}}",
+  "columns": {
+    "seeder": "Umujyanama",
+    "status": "Imiterere"
+  },
+  "status": {
+    "pending": "Birategerejwe...",
+    "running": "Birakorwa",
+    "completed": "Byarangiye",
+    "failed": "Byanze"
+  },
+  "actions": {
+    "seed": "Koresha",
+    "confirmSeed": "Emeza",
+    "seedSelected": "Koresha byatoranyijwe",
+    "confirmSeedSelected": "Emeza",
+    "seedAll": "Koresha db:seed",
+    "confirmSeedAll": "Emeza db:seed"
+  },
+  "seedCompleted": "Umujyanama {{seeder}} warangiye",
+  "seedFailed": "Umujyanama {{seeder}} waraburijwemo",
+  "seedError": "Ikosa ryo gutangiza umujyanama {{seeder}}",
+  "seedAllCompleted": "db:seed yarangiye",
+  "seedAllFailed": "db:seed yaburijwemo",
+  "seedAllError": "Ikosa ryo gutangiza db:seed"
+}

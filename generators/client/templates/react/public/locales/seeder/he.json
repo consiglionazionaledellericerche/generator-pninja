@@ -1,0 +1,29 @@
+{
+  "title": "זריעת בסיס נתונים",
+  "selectAll": "בחר את כל הזרעים",
+  "selectSeeder": "בחר {{seeder}}",
+  "columns": {
+    "seeder": "זרעים",
+    "status": "סטטוס"
+  },
+  "status": {
+    "pending": "ממתין...",
+    "running": "רץ",
+    "completed": "הושלם",
+    "failed": "נכשל"
+  },
+  "actions": {
+    "seed": "רוץ",
+    "confirmSeed": "אשר",
+    "seedSelected": "הרץ שנבחר",
+    "confirmSeedSelected": "אשר",
+    "seedAll": "הרץ db:seed",
+    "confirmSeedAll": "אשר db:seed"
+  },
+  "seedCompleted": "הזרע {{seeder}} הושלם",
+  "seedFailed": "הזרע {{seeder}} נכשל",
+  "seedError": "שגיאה בהפעלת הזרע {{seeder}}",
+  "seedAllCompleted": "db:seed הושלם",
+  "seedAllFailed": "db:seed נכשל",
+  "seedAllError": "שגיאה בהפעלת db:seed"
+}

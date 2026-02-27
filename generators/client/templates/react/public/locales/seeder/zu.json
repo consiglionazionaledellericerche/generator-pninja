@@ -1,0 +1,29 @@
+{
+  "title": "Ithrekhi yeDatabase",
+  "selectAll": "Khetha bonke abseeders",
+  "selectSeeder": "Khetha {{seeder}}",
+  "columns": {
+    "seeder": "Iseeder",
+    "status": "Isimo"
+  },
+  "status": {
+    "pending": "Kulindelwe...",
+    "running": "Kusebenza",
+    "completed": "Kuphelelwe",
+    "failed": "Kwehluleka"
+  },
+  "actions": {
+    "seed": "Sebenza",
+    "confirmSeed": "Qinisekisa",
+    "seedSelected": "Sebenza okhethiweyo",
+    "confirmSeedSelected": "Qinisekisa",
+    "seedAll": "Sebenza db:seed",
+    "confirmSeedAll": "Qinisekisa db:seed"
+  },
+  "seedCompleted": "Iseeder {{seeder}} iphelile",
+  "seedFailed": "Iseeder {{seeder}} yehlulekile",
+  "seedError": "Iphutha ekuqaleni iseeder {{seeder}}",
+  "seedAllCompleted": "db:seed iphelile",
+  "seedAllFailed": "db:seed yehlulekile",
+  "seedAllError": "Iphutha ekuqaleni db:seed"
+}

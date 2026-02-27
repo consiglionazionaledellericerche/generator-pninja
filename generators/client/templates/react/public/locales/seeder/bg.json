@@ -1,0 +1,29 @@
+{
+  "title": "Инициализация на база данни",
+  "selectAll": "Изберете всички семенари",
+  "selectSeeder": "Изберете {{seeder}}",
+  "columns": {
+    "seeder": "Семенар",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "В очакване...",
+    "running": "В процес на изпълнение",
+    "completed": "Завършено",
+    "failed": "Неуспешно"
+  },
+  "actions": {
+    "seed": "Изпълни",
+    "confirmSeed": "Потвърди",
+    "seedSelected": "Изпълни избраните",
+    "confirmSeedSelected": "Потвърди",
+    "seedAll": "Изпълни db:seed",
+    "confirmSeedAll": "Потвърди db:seed"
+  },
+  "seedCompleted": "Семенар {{seeder}} завършен",
+  "seedFailed": "Семенар {{seeder}} неуспешен",
+  "seedError": "Грешка при стартиране на семенар {{seeder}}",
+  "seedAllCompleted": "db:seed завършен",
+  "seedAllFailed": "db:seed неуспешен",
+  "seedAllError": "Грешка при стартиране на db:seed"
+}

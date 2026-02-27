@@ -1,0 +1,29 @@
+{
+  "title": "Databasutsäde",
+  "selectAll": "Välj alla seeders",
+  "selectSeeder": "Välj {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Väntar...",
+    "running": "Kör",
+    "completed": "Avslutad",
+    "failed": "Misslyckad"
+  },
+  "actions": {
+    "seed": "Kör",
+    "confirmSeed": "Bekräfta",
+    "seedSelected": "Kör markerade",
+    "confirmSeedSelected": "Bekräfta",
+    "seedAll": "Kör db:seed",
+    "confirmSeedAll": "Bekräfta db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} slutförd",
+  "seedFailed": "Seeder {{seeder}} misslyckades",
+  "seedError": "Fel vid start av seeder {{seeder}}",
+  "seedAllCompleted": "db:seed slutförd",
+  "seedAllFailed": "db:seed misslyckades",
+  "seedAllError": "Fel vid start av db:seed"
+}

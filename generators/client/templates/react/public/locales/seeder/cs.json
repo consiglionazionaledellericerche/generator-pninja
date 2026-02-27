@@ -1,0 +1,29 @@
+{
+  "title": "Zasévání databáze",
+  "selectAll": "Vybrat všechny seedy",
+  "selectSeeder": "Vybrat {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Stav"
+  },
+  "status": {
+    "pending": "Čekající...",
+    "running": "Probíhá",
+    "completed": "Dokončeno",
+    "failed": "Neúspěšné"
+  },
+  "actions": {
+    "seed": "Spustit",
+    "confirmSeed": "Potvrdit",
+    "seedSelected": "Spustit vybranou",
+    "confirmSeedSelected": "Potvrdit",
+    "seedAll": "Spustit db:seed",
+    "confirmSeedAll": "Potvrdit db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} dokončen",
+  "seedFailed": "Seeder {{seeder}} selhal",
+  "seedError": "Chyba při spouštění seederu {{seeder}}",
+  "seedAllCompleted": "db:seed dokončeno",
+  "seedAllFailed": "db:seed selhalo",
+  "seedAllError": "Chyba při spouštění db:seed"
+}

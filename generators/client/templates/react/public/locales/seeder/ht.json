@@ -1,0 +1,29 @@
+{
+  "title": "Plantasyon Bazdone",
+  "selectAll": "Chwazi tout plante",
+  "selectSeeder": "Chwazi {{seeder}}",
+  "columns": {
+    "seeder": "Plante",
+    "status": "Estati"
+  },
+  "status": {
+    "pending": "An atant...",
+    "running": "Ap kouri",
+    "completed": "Fini",
+    "failed": "Echwe"
+  },
+  "actions": {
+    "seed": "Kouri",
+    "confirmSeed": "Konfime",
+    "seedSelected": "Kouri sa yo chwazi",
+    "confirmSeedSelected": "Konfime",
+    "seedAll": "Kouri db:seed",
+    "confirmSeedAll": "Konfime db:seed"
+  },
+  "seedCompleted": "Plante {{seeder}} fini",
+  "seedFailed": "Plante {{seeder}} echwe",
+  "seedError": "Erè pandan w ap kòmanse plante {{seeder}}",
+  "seedAllCompleted": "db:seed fini",
+  "seedAllFailed": "db:seed echwe",
+  "seedAllError": "Erè pandan w ap kòmanse db:seed"
+}

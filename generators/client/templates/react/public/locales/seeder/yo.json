@@ -1,0 +1,29 @@
+{
+  "title": "Ibi ipamọ data Ikoko",
+  "selectAll": "Yan gbogbo awọn ikoko",
+  "selectSeeder": "Yan {{seeder}}",
+  "columns": {
+    "seeder": "Ikoko",
+    "status": "Ìpèjọ́"
+  },
+  "status": {
+    "pending": "Níbi ìbẹ̀rẹ̀...",
+    "running": "Ṣíṣe",
+    "completed": "Kó parí",
+    "failed": "Fé"
+  },
+  "actions": {
+    "seed": "Ṣiṣe",
+    "confirmSeed": "Mọ",
+    "seedSelected": "Ṣiṣe ti a yan",
+    "confirmSeedSelected": "Mọ",
+    "seedAll": "Ṣiṣe db:seed",
+    "confirmSeedAll": "Mọ db:seed"
+  },
+  "seedCompleted": "Ikoko {{seeder}} pari",
+  "seedFailed": "Ikoko {{seeder}} kuna",
+  "seedError": "Aṣiṣe ti n ṣiṣẹ ikoko {{seeder}}",
+  "seedAllCompleted": "db:seed pari",
+  "seedAllFailed": "db:seed kuna",
+  "seedAllError": "Aṣiṣe ti n ṣiṣẹ db:seed"
+}

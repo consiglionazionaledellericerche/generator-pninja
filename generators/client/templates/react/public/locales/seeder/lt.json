@@ -1,0 +1,29 @@
+{
+  "title": "Duomenų bazės užpildymas",
+  "selectAll": "Pasirinkti visus užpildytojus",
+  "selectSeeder": "Pasirinkti {{seeder}}",
+  "columns": {
+    "seeder": "Užpildytojas",
+    "status": "Būsena"
+  },
+  "status": {
+    "pending": "Laukiama...",
+    "running": "Veikia",
+    "completed": "Baigta",
+    "failed": "Nepavyko"
+  },
+  "actions": {
+    "seed": "Vykdyti",
+    "confirmSeed": "Patvirtinti",
+    "seedSelected": "Vykdyti pasirinktus",
+    "confirmSeedSelected": "Patvirtinti",
+    "seedAll": "Vykdyti db:seed",
+    "confirmSeedAll": "Patvirtinti db:seed"
+  },
+  "seedCompleted": "Užpildytojas {{seeder}} baigtas",
+  "seedFailed": "Užpildytojas {{seeder}} nepavyko",
+  "seedError": "Klaida pradedant užpildytoją {{seeder}}",
+  "seedAllCompleted": "db:seed baigtas",
+  "seedAllFailed": "db:seed nepavyko",
+  "seedAllError": "Klaida pradedant db:seed"
+}

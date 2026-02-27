@@ -1,0 +1,29 @@
+{
+  "title": "Sejanje baze podatkov",
+  "selectAll": "Izberi vse sejalce",
+  "selectSeeder": "Izberi {{seeder}}",
+  "columns": {
+    "seeder": "Sejalec",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Čaka...",
+    "running": "Tek",
+    "completed": "Dokončano",
+    "failed": "Neuspešno"
+  },
+  "actions": {
+    "seed": "Zaženi",
+    "confirmSeed": "Potrdi",
+    "seedSelected": "Zaženi izbrane",
+    "confirmSeedSelected": "Potrdi",
+    "seedAll": "Zaženi db:seed",
+    "confirmSeedAll": "Potrdi db:seed"
+  },
+  "seedCompleted": "Sejalec {{seeder}} zaključen",
+  "seedFailed": "Sejalec {{seeder}} neuspešen",
+  "seedError": "Napaka pri zagonu sejalca {{seeder}}",
+  "seedAllCompleted": "db:seed zaključen",
+  "seedAllFailed": "db:seed neuspešen",
+  "seedAllError": "Napaka pri zagonu db:seed"
+}

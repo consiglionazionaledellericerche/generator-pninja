@@ -1,0 +1,29 @@
+{
+  "title": "Datu-baseak hazitzea",
+  "selectAll": "Hazi guztiak aukeratu",
+  "selectSeeder": "Aukeratu {{seeder}}",
+  "columns": {
+    "seeder": "Hazia",
+    "status": "Egoera"
+  },
+  "status": {
+    "pending": "Aldez aurreko...",
+    "running": "Exekutatzen",
+    "completed": "Osatua",
+    "failed": "Porrot egin du"
+  },
+  "actions": {
+    "seed": "Exekutatu",
+    "confirmSeed": "Berretsi",
+    "seedSelected": "Aukeratutakoak exekutatu",
+    "confirmSeedSelected": "Berretsi",
+    "seedAll": "db:seed exekutatu",
+    "confirmSeedAll": "db:seed berretsi"
+  },
+  "seedCompleted": "Seeder {{seeder}} osatu da",
+  "seedFailed": "Seeder {{seeder}} porrot egin du",
+  "seedError": "Error hazitzea hastean {{seeder}}",
+  "seedAllCompleted": "db:seed osatu da",
+  "seedAllFailed": "db:seed porrot egin du",
+  "seedAllError": "Error db:seed hastean"
+}

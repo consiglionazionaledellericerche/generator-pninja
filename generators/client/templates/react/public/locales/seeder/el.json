@@ -1,0 +1,29 @@
+{
+  "title": "Εισαγωγή δεδομένων στη βάση",
+  "selectAll": "Επιλέξτε όλους τους εισαγωγείς",
+  "selectSeeder": "Επιλέξτε {{seeder}}",
+  "columns": {
+    "seeder": "Εισαγωγέας",
+    "status": "Κατάσταση"
+  },
+  "status": {
+    "pending": "Σε εκκρεμότητα...",
+    "running": "Εκτελούμενη",
+    "completed": "Ολοκληρώθηκε",
+    "failed": "Απέτυχε"
+  },
+  "actions": {
+    "seed": "Εκτέλεση",
+    "confirmSeed": "Επιβεβαίωση",
+    "seedSelected": "Εκτέλεση επιλεγμένων",
+    "confirmSeedSelected": "Επιβεβαίωση",
+    "seedAll": "Εκτέλεση db:seed",
+    "confirmSeedAll": "Επιβεβαίωση db:seed"
+  },
+  "seedCompleted": "Ο εισαγωγέας {{seeder}} ολοκληρώθηκε",
+  "seedFailed": "Ο εισαγωγέας {{seeder}} απέτυχε",
+  "seedError": "Σφάλμα κατά την εκκίνηση του εισαγωγέα {{seeder}}",
+  "seedAllCompleted": "Η db:seed ολοκληρώθηκε",
+  "seedAllFailed": "Η db:seed απέτυχε",
+  "seedAllError": "Σφάλμα κατά την εκκίνηση της db:seed"
+}

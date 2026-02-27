@@ -1,0 +1,29 @@
+{
+  "title": "데이터베이스 시딩",
+  "selectAll": "모든 시더 선택",
+  "selectSeeder": "{{seeder}} 선택",
+  "columns": {
+    "seeder": "시더",
+    "status": "상태"
+  },
+  "status": {
+    "pending": "대기 중...",
+    "running": "실행 중",
+    "completed": "완료",
+    "failed": "실패"
+  },
+  "actions": {
+    "seed": "실행",
+    "confirmSeed": "확인",
+    "seedSelected": "선택한 실행",
+    "confirmSeedSelected": "확인",
+    "seedAll": "db:seed 실행",
+    "confirmSeedAll": "db:seed 확인"
+  },
+  "seedCompleted": "시더 {{seeder}} 완료",
+  "seedFailed": "시더 {{seeder}} 실패",
+  "seedError": "시더 {{seeder}} 시작 오류",
+  "seedAllCompleted": "db:seed 완료",
+  "seedAllFailed": "db:seed 실패",
+  "seedAllError": "db:seed 시작 오류"
+}

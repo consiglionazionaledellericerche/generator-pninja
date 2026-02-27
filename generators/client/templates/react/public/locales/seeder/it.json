@@ -1,0 +1,29 @@
+{
+  "title": "Seeding del database",
+  "selectAll": "Seleziona tutti i seeders",
+  "selectSeeder": "Seleziona {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Stato"
+  },
+  "status": {
+    "pending": "In attesa...",
+    "running": "In esecuzione",
+    "completed": "Completato",
+    "failed": "Fallito"
+  },
+  "actions": {
+    "seed": "Esegui",
+    "confirmSeed": "Conferma",
+    "seedSelected": "Esegui selezionato",
+    "confirmSeedSelected": "Conferma",
+    "seedAll": "Esegui db:seed",
+    "confirmSeedAll": "Conferma db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} completato",
+  "seedFailed": "Seeder {{seeder}} non riuscito",
+  "seedError": "Errore avviando il seeder {{seeder}}",
+  "seedAllCompleted": "db:seed completato",
+  "seedAllFailed": "db:seed non riuscito",
+  "seedAllError": "Errore avviando db:seed"
+}

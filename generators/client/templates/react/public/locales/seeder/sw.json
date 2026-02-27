@@ -1,0 +1,29 @@
+{
+  "title": "Kuweka Usuli wa Database",
+  "selectAll": "chagua wote wa mbegu",
+  "selectSeeder": "chagua {{seeder}}",
+  "columns": {
+    "seeder": "Mbegu",
+    "status": "Hali"
+  },
+  "status": {
+    "pending": "Inasubiri...",
+    "running": "Inafanya kazi",
+    "completed": "Imekamilika",
+    "failed": "Imeshindwa"
+  },
+  "actions": {
+    "seed": "Kimbia",
+    "confirmSeed": "Thibitisha",
+    "seedSelected": "Kimbia iliyo chaguliwa",
+    "confirmSeedSelected": "Thibitisha",
+    "seedAll": "Kimbia db:seed",
+    "confirmSeedAll": "Thibitisha db:seed"
+  },
+  "seedCompleted": "Mbegu {{seeder}} imekamilika",
+  "seedFailed": "Mbegu {{seeder}} imefailure",
+  "seedError": "Kosa katika kuanzisha mbegu {{seeder}}",
+  "seedAllCompleted": "db:seed imekamilika",
+  "seedAllFailed": "db:seed imefailure",
+  "seedAllError": "Kosa katika kuanzisha db:seed"
+}

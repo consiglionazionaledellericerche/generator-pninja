@@ -1,0 +1,29 @@
+{
+  "title": "ዳታበዝ ይቀነባበር",
+  "selectAll": "ሁሉንም ይምረጡ",
+  "selectSeeder": "{{seeder}} ይምረጡ",
+  "columns": {
+    "seeder": "ይቀነባበር",
+    "status": "ሁኔታ"
+  },
+  "status": {
+    "pending": "እንቆቅልሽ።..",
+    "running": "ሂደት",
+    "completed": "ተጠናቅቆ",
+    "failed": "አልቆይ ከፍ ይዞረ"
+  },
+  "actions": {
+    "seed": "እንቅስቃሴ",
+    "confirmSeed": "እንቅስቃሴ",
+    "seedSelected": "የተመረጠ ይነበር",
+    "confirmSeedSelected": "እንቅስቃሴ",
+    "seedAll": "db:seed ይነበር",
+    "confirmSeedAll": "db:seed ይከተለ"
+  },
+  "seedCompleted": "ይቀነባበር {{seeder}} ተጠናቋል",
+  "seedFailed": "ይቀነባበር {{seeder}} ተሳስቷል",
+  "seedError": "የምንከና ይከፈት {{seeder}}",
+  "seedAllCompleted": "db:seed ተጠናቋል",
+  "seedAllFailed": "db:seed ተሳስቷል",
+  "seedAllError": "የምንከና ይከፈት db:seed"
+}

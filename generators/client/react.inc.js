@@ -150,11 +150,12 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath('react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
 
     for (const lang of languages) {
-        that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`), { appName });
-        that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`), { appName });
+        that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`));
+        that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`));
+        that.fs.copyTpl(that.templatePath(`react/public/locales/seeder/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/seeder.json`));
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         if (!['null', 'database'].includes(searchEngine)) {
-            that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`), { appName });
+            that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
         }
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
             entities: [AcRule],
@@ -264,7 +265,11 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/search-reindex/SearchReindexList.tsx.ejs"), that.destinationPath(`client/src/pages/search-reindex/SearchReindexList.tsx`), { searchEngine });
+    that.fs.copyTpl(that.templatePath("react/src/pages/seeder/SeederList.tsx.ejs"), that.destinationPath(`client/src/pages/seeder/SeederList.tsx`));
+
+    if (!['null', 'database'].includes(searchEngine)) {
+        that.fs.copyTpl(that.templatePath("react/src/pages/search-reindex/SearchReindexList.tsx.ejs"), that.destinationPath(`client/src/pages/search-reindex/SearchReindexList.tsx`), { searchEngine });
+    }
 
     that.fs.copyTpl(that.templatePath("react/src/pages/server-logs/LogViewer.tsx.ejs"), that.destinationPath(`client/src/pages/server-logs/LogViewer.tsx`), {});
 

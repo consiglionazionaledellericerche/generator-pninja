@@ -1,0 +1,29 @@
+{
+  "title": "Zasiewanie bazy danych",
+  "selectAll": "Wybierz wszystkie zasiewniki",
+  "selectSeeder": "Wybierz {{seeder}}",
+  "columns": {
+    "seeder": "Zasiewnik",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Oczekiwanie...",
+    "running": "W trakcie",
+    "completed": "Zakończone",
+    "failed": "Niepowodzenie"
+  },
+  "actions": {
+    "seed": "Uruchom",
+    "confirmSeed": "Potwierdź",
+    "seedSelected": "Uruchom wybrane",
+    "confirmSeedSelected": "Potwierdź",
+    "seedAll": "Uruchom db:seed",
+    "confirmSeedAll": "Potwierdź db:seed"
+  },
+  "seedCompleted": "Zasiewnik {{seeder}} zakończony",
+  "seedFailed": "Zasiewnik {{seeder}} nie powiódł się",
+  "seedError": "Błąd podczas uruchamiania zasiewnika {{seeder}}",
+  "seedAllCompleted": "db:seed zakończony",
+  "seedAllFailed": "db:seed nie powiódł się",
+  "seedAllError": "Błąd podczas uruchamiania db:seed"
+}

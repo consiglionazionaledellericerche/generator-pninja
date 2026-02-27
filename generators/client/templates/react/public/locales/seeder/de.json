@@ -1,0 +1,29 @@
+{
+  "title": "Datenbankbefüllung",
+  "selectAll": "Alle Seeder auswählen",
+  "selectSeeder": "{{seeder}} auswählen",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Ausstehend...",
+    "running": "Wird ausgeführt",
+    "completed": "Abgeschlossen",
+    "failed": "Fehlgeschlagen"
+  },
+  "actions": {
+    "seed": "Ausführen",
+    "confirmSeed": "Bestätigen",
+    "seedSelected": "Ausgewählte ausführen",
+    "confirmSeedSelected": "Bestätigen",
+    "seedAll": "db:seed ausführen",
+    "confirmSeedAll": "db:seed bestätigen"
+  },
+  "seedCompleted": "Seeder {{seeder}} abgeschlossen",
+  "seedFailed": "Seeder {{seeder}} fehlgeschlagen",
+  "seedError": "Fehler beim Starten des Seeders {{seeder}}",
+  "seedAllCompleted": "db:seed abgeschlossen",
+  "seedAllFailed": "db:seed fehlgeschlagen",
+  "seedAllError": "Fehler beim Starten von db:seed"
+}

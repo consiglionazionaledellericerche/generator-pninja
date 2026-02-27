@@ -1,0 +1,29 @@
+{
+  "title": "ডাটাবেস শস্য বপন",
+  "selectAll": "সব শস্য বপনকারী নির্বাচন করুন",
+  "selectSeeder": "নির্বাচন করুন {{seeder}}",
+  "columns": {
+    "seeder": "শস্য বপনকারী",
+    "status": "স্থিতি"
+  },
+  "status": {
+    "pending": "অপেক্ষমাণ...",
+    "running": "চলছে",
+    "completed": "সম্পন্ন",
+    "failed": "ব্যর্থ"
+  },
+  "actions": {
+    "seed": "চালান",
+    "confirmSeed": "নিশ্চিত করুন",
+    "seedSelected": "নির্বাচিত চালান",
+    "confirmSeedSelected": "নিশ্চিত করুন",
+    "seedAll": "db:seed চালান",
+    "confirmSeedAll": "db:seed নিশ্চিত করুন"
+  },
+  "seedCompleted": "শস্য বপনকারী {{seeder}} সম্পন্ন",
+  "seedFailed": "শস্য বপনকারী {{seeder}} ব্যর্থ",
+  "seedError": "শস্য বপনকারী {{seeder}} শুরু করতে ত্রুটি",
+  "seedAllCompleted": "db:seed সম্পন্ন",
+  "seedAllFailed": "db:seed ব্যর্থ",
+  "seedAllError": "db:seed শুরু করতে ত্রুটি"
+}

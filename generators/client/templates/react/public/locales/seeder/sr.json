@@ -1,0 +1,29 @@
+{
+  "title": "Сејем базе података",
+  "selectAll": "Изаберите све сејере",
+  "selectSeeder": "Изаберите {{seeder}}",
+  "columns": {
+    "seeder": "Сејер",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "У чекању...",
+    "running": "У току",
+    "completed": "Завршено",
+    "failed": "Неуспешно"
+  },
+  "actions": {
+    "seed": "Покрени",
+    "confirmSeed": "Потврди",
+    "seedSelected": "Покрени изабране",
+    "confirmSeedSelected": "Потврди",
+    "seedAll": "Покрени db:seed",
+    "confirmSeedAll": "Потврди db:seed"
+  },
+  "seedCompleted": "Сејер {{seeder}} завршен",
+  "seedFailed": "Сејер {{seeder}} није успео",
+  "seedError": "Грешка при покретању сејера {{seeder}}",
+  "seedAllCompleted": "db:seed завршен",
+  "seedAllFailed": "db:seed није успео",
+  "seedAllError": "Грешка при покретању db:seed"
+}

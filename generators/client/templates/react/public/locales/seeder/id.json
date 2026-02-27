@@ -1,0 +1,29 @@
+{
+  "title": "Penyemaian Basis Data",
+  "selectAll": "Pilih semua penyemaian",
+  "selectSeeder": "Pilih {{seeder}}",
+  "columns": {
+    "seeder": "Penyemaian",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Menunggu...",
+    "running": "Sedang berjalan",
+    "completed": "Selesai",
+    "failed": "Gagal"
+  },
+  "actions": {
+    "seed": "Jalankan",
+    "confirmSeed": "Konfirmasi",
+    "seedSelected": "Jalankan yang dipilih",
+    "confirmSeedSelected": "Konfirmasi",
+    "seedAll": "Jalankan db:seed",
+    "confirmSeedAll": "Konfirmasi db:seed"
+  },
+  "seedCompleted": "Penyemaian {{seeder}} selesai",
+  "seedFailed": "Penyemaian {{seeder}} gagal",
+  "seedError": "Kesalahan saat memulai penyemaian {{seeder}}",
+  "seedAllCompleted": "db:seed selesai",
+  "seedAllFailed": "db:seed gagal",
+  "seedAllError": "Kesalahan saat memulai db:seed"
+}

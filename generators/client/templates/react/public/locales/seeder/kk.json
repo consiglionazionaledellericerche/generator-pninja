@@ -1,0 +1,29 @@
+{
+  "title": "Дата базасын толтыру",
+  "selectAll": "Барлық сеулерді таңдаңыз",
+  "selectSeeder": "{{seeder}} таңдаңыз",
+  "columns": {
+    "seeder": "Сеулер",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "Күтілуде...",
+    "running": "Жүрудегі",
+    "completed": "Аяқталды",
+    "failed": "Сәтсіз аяқталды"
+  },
+  "actions": {
+    "seed": "Іске қосу",
+    "confirmSeed": "Растау",
+    "seedSelected": "Таңдалғанды іске қосу",
+    "confirmSeedSelected": "Растау",
+    "seedAll": "db:seed іске қосу",
+    "confirmSeedAll": "db:seed-ті растау"
+  },
+  "seedCompleted": "Сеулер {{seeder}} аяқталды",
+  "seedFailed": "Сеулер {{seeder}} сәтсіз аяқталды",
+  "seedError": "Сеулер {{seeder}} іске қосуда қате",
+  "seedAllCompleted": "db:seed аяқталды",
+  "seedAllFailed": "db:seed сәтсіз аяқталды",
+  "seedAllError": "db:seed іске қосуда қате"
+}

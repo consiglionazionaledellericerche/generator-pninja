@@ -1,0 +1,29 @@
+{
+  "title": "Տվյալների բազայի սերմադրում",
+  "selectAll": "Ընտրել բոլոր սերմացուներ",
+  "selectSeeder": "Ընտրել {{seeder}}",
+  "columns": {
+    "seeder": "Սերմացու",
+    "status": "Պատկերակ"
+  },
+  "status": {
+    "pending": "Սպասման մեջ...",
+    "running": "Գործարկվում",
+    "completed": "Ավարտված",
+    "failed": "Չհաջողվեց"
+  },
+  "actions": {
+    "seed": "Ուրախագիր",
+    "confirmSeed": "Հաստատել",
+    "seedSelected": "Անցկացնել ընտրված",
+    "confirmSeedSelected": "Հաստատել",
+    "seedAll": "Անցկացնել db:seed",
+    "confirmSeedAll": "Հաստատել db:seed"
+  },
+  "seedCompleted": "Սերմացու {{seeder}} ավարտվել է",
+  "seedFailed": "Սերմացու {{seeder}} անգամը ձախողվել է",
+  "seedError": "Սխալ, սկսելով սերմացու {{seeder}}",
+  "seedAllCompleted": "db:seed-ը ավարտվել է",
+  "seedAllFailed": "db:seed-ը ձախողվել է",
+  "seedAllError": "Սխալ, սկսելով db:seed"
+}

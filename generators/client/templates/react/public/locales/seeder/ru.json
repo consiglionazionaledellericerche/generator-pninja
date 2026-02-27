@@ -1,0 +1,29 @@
+{
+  "title": "Инициализация базы данных",
+  "selectAll": "Выбрать все семплеры",
+  "selectSeeder": "Выбрать {{seeder}}",
+  "columns": {
+    "seeder": "Семплер",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "В ожидании...",
+    "running": "Выполняется",
+    "completed": "Завершено",
+    "failed": "Неудача"
+  },
+  "actions": {
+    "seed": "Запустить",
+    "confirmSeed": "Подтвердить",
+    "seedSelected": "Запустить выбранные",
+    "confirmSeedSelected": "Подтвердить",
+    "seedAll": "Запустить db:seed",
+    "confirmSeedAll": "Подтвердить db:seed"
+  },
+  "seedCompleted": "Семплер {{seeder}} завершен",
+  "seedFailed": "Семплер {{seeder}} не удался",
+  "seedError": "Ошибка при запуске семплера {{seeder}}",
+  "seedAllCompleted": "db:seed завершен",
+  "seedAllFailed": "db:seed не удался",
+  "seedAllError": "Ошибка при запуске db:seed"
+}

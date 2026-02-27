@@ -1,0 +1,29 @@
+{
+  "title": "ڈیٹا بیس سیڈنگ",
+  "selectAll": "تمام سیڈرز منتخب کریں",
+  "selectSeeder": "{{seeder}} منتخب کریں",
+  "columns": {
+    "seeder": "سیڈر",
+    "status": "حالت"
+  },
+  "status": {
+    "pending": "زیر انتظار...",
+    "running": "چل رہا ہے",
+    "completed": "مکمل",
+    "failed": "ناکام"
+  },
+  "actions": {
+    "seed": "چلائیں",
+    "confirmSeed": "تصدیق کریں",
+    "seedSelected": "منتخب چلائیں",
+    "confirmSeedSelected": "تصدیق کریں",
+    "seedAll": "db:seed چلائیں",
+    "confirmSeedAll": "db:seed کی تصدیق کریں"
+  },
+  "seedCompleted": "سیڈر {{seeder}} مکمل",
+  "seedFailed": "سیڈر {{seeder}} ناکام",
+  "seedError": "سیڈر {{seeder}} شروع کرنے میں خرابی",
+  "seedAllCompleted": "db:seed مکمل",
+  "seedAllFailed": "db:seed ناکام",
+  "seedAllError": "db:seed شروع کرنے میں خرابی"
+}

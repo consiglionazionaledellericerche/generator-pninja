@@ -1,0 +1,29 @@
+{
+  "title": "کاشت پایگاه داده",
+  "selectAll": "انتخاب همه‌ی کاشت‌ها",
+  "selectSeeder": "انتخاب {{seeder}}",
+  "columns": {
+    "seeder": "کاشت‌کننده",
+    "status": "وضعیت"
+  },
+  "status": {
+    "pending": "در حال انتظار...",
+    "running": "در حال اجرا",
+    "completed": "تکمیل شده",
+    "failed": "ناکام"
+  },
+  "actions": {
+    "seed": "اجرا",
+    "confirmSeed": "تأیید",
+    "seedSelected": "اجرا کردن انتخاب‌شده",
+    "confirmSeedSelected": "تأیید",
+    "seedAll": "اجرا db:seed",
+    "confirmSeedAll": "تأیید db:seed"
+  },
+  "seedCompleted": "کاشت‌کننده {{seeder}} به پایان رسید",
+  "seedFailed": "کاشت‌کننده {{seeder}} ناموفق بود",
+  "seedError": "خطا در شروع کاشت‌کننده {{seeder}}",
+  "seedAllCompleted": "db:seed به پایان رسید",
+  "seedAllFailed": "db:seed ناموفق بود",
+  "seedAllError": "خطا در شروع db:seed"
+}

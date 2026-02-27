@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Fayyadamaa hundaa filadhu",
+  "selectSeeder": "Filadhu {{seeder}}",
+  "columns": {
+    "seeder": "Fayyadamaa",
+    "status": "Haala"
+  },
+  "status": {
+    "pending": "Eeggachaa...",
+    "running": "Hojii irra jira",
+    "completed": "Xumuramee",
+    "failed": "Haga'aan"
+  },
+  "actions": {
+    "seed": "Hiriirsi",
+    "confirmSeed": "Mirkaneessi",
+    "seedSelected": "Hiriirsi filatame",
+    "confirmSeedSelected": "Mirkaneessi",
+    "seedAll": "Hiriirsi db:seed",
+    "confirmSeedAll": "Mirkaneessi db:seed"
+  },
+  "seedCompleted": "Fayyadamaa {{seeder}} xumuramee",
+  "seedFailed": "Fayyadamaa {{seeder}} dogoggoraan xumuramee",
+  "seedError": "Balaafaa ni jalqabda seeder {{seeder}}",
+  "seedAllCompleted": "db:seed xumuramee",
+  "seedAllFailed": "db:seed dogoggoraan xumuramee",
+  "seedAllError": "Balaafaa ni jalqabda db:seed"
+}

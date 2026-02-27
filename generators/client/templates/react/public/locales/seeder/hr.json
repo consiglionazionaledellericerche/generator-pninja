@@ -1,0 +1,29 @@
+{
+  "title": "Zasijavanje baze podataka",
+  "selectAll": "Odaberi sve zasijane",
+  "selectSeeder": "Odaberi {{seeder}}",
+  "columns": {
+    "seeder": "Zasijanje",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Na čekanju...",
+    "running": "U tijeku",
+    "completed": "Završeno",
+    "failed": "Neuspjeh"
+  },
+  "actions": {
+    "seed": "Pokreni",
+    "confirmSeed": "Potvrdi",
+    "seedSelected": "Pokreni odabrano",
+    "confirmSeedSelected": "Potvrdi",
+    "seedAll": "Pokreni db:seed",
+    "confirmSeedAll": "Potvrdi db:seed"
+  },
+  "seedCompleted": "Zasijavanje {{seeder}} dovršeno",
+  "seedFailed": "Zasijavanje {{seeder}} neuspješno",
+  "seedError": "Greška pri pokretanju zasijanja {{seeder}}",
+  "seedAllCompleted": "db:seed dovršeno",
+  "seedAllFailed": "db:seed neuspješno",
+  "seedAllError": "Greška pri pokretanju db:seed"
+}

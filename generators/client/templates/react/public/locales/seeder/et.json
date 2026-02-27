@@ -1,0 +1,29 @@
+{
+  "title": "Andmebaasi külvamine",
+  "selectAll": "Vali kõik külvijad",
+  "selectSeeder": "Vali {{seeder}}",
+  "columns": {
+    "seeder": "Külvija",
+    "status": "Staatus"
+  },
+  "status": {
+    "pending": "Ootel...",
+    "running": "Töös",
+    "completed": "Lõpetatud",
+    "failed": "Ebaõnnestus"
+  },
+  "actions": {
+    "seed": "Käivita",
+    "confirmSeed": "Kinnita",
+    "seedSelected": "Käivita valitud",
+    "confirmSeedSelected": "Kinnita",
+    "seedAll": "Käivita db:seed",
+    "confirmSeedAll": "Kinnita db:seed"
+  },
+  "seedCompleted": "Külvija {{seeder}} lõpetatud",
+  "seedFailed": "Külvija {{seeder}} ebaõnnestus",
+  "seedError": "Tõrge külvija {{seeder}} käivitamisel",
+  "seedAllCompleted": "db:seed lõpetatud",
+  "seedAllFailed": "db:seed ebaõnnestus",
+  "seedAllError": "Tõrge db:seed käivitamisel"
+}

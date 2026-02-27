@@ -1,0 +1,29 @@
+{
+  "title": "Database Seeding",
+  "selectAll": "Vælg alle seeders",
+  "selectSeeder": "Vælg {{seeder}}",
+  "columns": {
+    "seeder": "Seeder",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Ventende...",
+    "running": "Kørende",
+    "completed": "Færdig",
+    "failed": "Mislykket"
+  },
+  "actions": {
+    "seed": "Kør",
+    "confirmSeed": "Bekræft",
+    "seedSelected": "Kør valgt",
+    "confirmSeedSelected": "Bekræft",
+    "seedAll": "Kør db:seed",
+    "confirmSeedAll": "Bekræft db:seed"
+  },
+  "seedCompleted": "Seeder {{seeder}} fuldført",
+  "seedFailed": "Seeder {{seeder}} fejlede",
+  "seedError": "Fejl ved opstart af seeder {{seeder}}",
+  "seedAllCompleted": "db:seed fuldført",
+  "seedAllFailed": "db:seed fejlede",
+  "seedAllError": "Fejl ved opstart af db:seed"
+}

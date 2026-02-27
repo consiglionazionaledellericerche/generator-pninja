@@ -1,0 +1,29 @@
+{
+  "title": "Zasiate databázy",
+  "selectAll": "Vybrať všetky zasiate",
+  "selectSeeder": "Vybrať {{seeder}}",
+  "columns": {
+    "seeder": "Zasiate",
+    "status": "Stav"
+  },
+  "status": {
+    "pending": "Čaká...",
+    "running": "Prebieha",
+    "completed": "Dokončené",
+    "failed": "Zlyhané"
+  },
+  "actions": {
+    "seed": "Spustiť",
+    "confirmSeed": "Potvrdiť",
+    "seedSelected": "Spustiť vybrané",
+    "confirmSeedSelected": "Potvrdiť",
+    "seedAll": "Spustiť db:seed",
+    "confirmSeedAll": "Potvrdiť db:seed"
+  },
+  "seedCompleted": "Zasiate {{seeder}} dokončené",
+  "seedFailed": "Zasiate {{seeder}} zlyhalo",
+  "seedError": "Chyba pri spúšťaní zasiateho {{seeder}}",
+  "seedAllCompleted": "db:seed dokončené",
+  "seedAllFailed": "db:seed zlyhalo",
+  "seedAllError": "Chyba pri spúšťaní db:seed"
+}

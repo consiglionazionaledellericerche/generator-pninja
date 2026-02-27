@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class SeedRequest extends FormRequest
+{
+    public static array $seeders = [
+        'ac-rule' => \Database\Seeders\AcRuleSeeder::class,
+<%  entities.forEach(function(entity) { -%>
+        '<%= to.slug(entity.name) %>' => \Database\Seeders\<%= entity.name %>Seeder::class,
+<%  }); -%>
+<%  manyToMany.forEach(function(rel) { -%>
+        '<%= to.slug(`${rel.fromEntity}_${rel.toEntity}`) %>' => \Database\Seeders\<%= rel.fromEntity %>_<%= rel.toEntity %>Seeder::class,
+<%  }); -%>
+    ];
+
+    public function authorize(): bool
+    {
+        return array_key_exists($this->route('seeder'), self::$seeders);
+    }
+
+    public function rules(): array
+    {
+        return [];
+    }
+
+    public function seederClass(): string
+    {
+        return self::$seeders[$this->route('seeder')];
+    }
+}

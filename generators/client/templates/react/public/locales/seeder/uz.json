@@ -1,0 +1,29 @@
+{
+  "title": "Ma'lumotlar bazasini ekish",
+  "selectAll": "Barcha ekishlarni tanlang",
+  "selectSeeder": "{{seeder}} ni tanlang",
+  "columns": {
+    "seeder": "Ekish",
+    "status": "Holat"
+  },
+  "status": {
+    "pending": "Navbatda...",
+    "running": "Ishlayapti",
+    "completed": "Tugallandi",
+    "failed": "Xatoga uchradi"
+  },
+  "actions": {
+    "seed": "Ishga tushirish",
+    "confirmSeed": "Tasdiqlash",
+    "seedSelected": "Tanlanganlarni ishga tushirish",
+    "confirmSeedSelected": "Tasdiqlash",
+    "seedAll": "db:seed ni ishga tushirish",
+    "confirmSeedAll": "db:seed ni tasdiqlash"
+  },
+  "seedCompleted": "Ekish {{seeder}} tugadi",
+  "seedFailed": "Ekish {{seeder}} muvaffaqiyatsiz",
+  "seedError": "Ekish {{seeder}} ni boshlashda xato",
+  "seedAllCompleted": "db:seed tugadi",
+  "seedAllFailed": "db:seed muvaffaqiyatsiz",
+  "seedAllError": "db:seed ni boshlashda xato"
+}

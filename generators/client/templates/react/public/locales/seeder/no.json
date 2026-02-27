@@ -1,0 +1,29 @@
+{
+  "title": "Database frøing",
+  "selectAll": "Velg alle frøplante",
+  "selectSeeder": "Velg {{seeder}}",
+  "columns": {
+    "seeder": "Frøplante",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Venter...",
+    "running": "Kjører",
+    "completed": "Fullført",
+    "failed": "Mislykket"
+  },
+  "actions": {
+    "seed": "Kjør",
+    "confirmSeed": "Bekreft",
+    "seedSelected": "Kjør valgt",
+    "confirmSeedSelected": "Bekreft",
+    "seedAll": "Kjør db:frøing",
+    "confirmSeedAll": "Bekreft db:frøing"
+  },
+  "seedCompleted": "Frøplante {{seeder}} fullført",
+  "seedFailed": "Frøplante {{seeder}} mislyktes",
+  "seedError": "Feil ved oppstart av frøplante {{seeder}}",
+  "seedAllCompleted": "db:frøing fullført",
+  "seedAllFailed": "db:frøing mislyktes",
+  "seedAllError": "Feil ved oppstart av db:frøing"
+}

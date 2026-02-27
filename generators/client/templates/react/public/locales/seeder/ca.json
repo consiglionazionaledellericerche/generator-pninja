@@ -1,0 +1,29 @@
+{
+  "title": "Sembrar la base de dades",
+  "selectAll": "Seleccionar tots els sembradors",
+  "selectSeeder": "Seleccionar {{seeder}}",
+  "columns": {
+    "seeder": "Sembrador",
+    "status": "Estat"
+  },
+  "status": {
+    "pending": "Pendent...",
+    "running": "S'executa",
+    "completed": "Completat",
+    "failed": "Fallat"
+  },
+  "actions": {
+    "seed": "Executar",
+    "confirmSeed": "Confirmar",
+    "seedSelected": "Executar seleccionats",
+    "confirmSeedSelected": "Confirmar",
+    "seedAll": "Executar db:seed",
+    "confirmSeedAll": "Confirmar db:seed"
+  },
+  "seedCompleted": "Sembrador {{seeder}} completat",
+  "seedFailed": "Sembrador {{seeder}} fallit",
+  "seedError": "Error en iniciar el sembrador {{seeder}}",
+  "seedAllCompleted": "db:seed completat",
+  "seedAllFailed": "db:seed fallit",
+  "seedAllError": "Error en iniciar db:seed"
+}

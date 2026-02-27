@@ -1,0 +1,29 @@
+{
+  "title": "Te ako kōrero",
+  "selectAll": "Tīpako i ngā kaiwhakauru katoa",
+  "selectSeeder": "Tīpako {{seeder}}",
+  "columns": {
+    "seeder": "Kaikawe",
+    "status": "Tūnga"
+  },
+  "status": {
+    "pending": "Tētahi wa...",
+    "running": "E whakahaere ana",
+    "completed": "Kua oti",
+    "failed": "I hinga"
+  },
+  "actions": {
+    "seed": "Mahi",
+    "confirmSeed": "Whakaaetanga",
+    "seedSelected": "Mahi i te tīpako",
+    "confirmSeedSelected": "Whakaaetanga",
+    "seedAll": "Mahi db:seed",
+    "confirmSeedAll": "Whakaaetanga db:seed"
+  },
+  "seedCompleted": "Kaihoko {{seeder}} kua mutu",
+  "seedFailed": "Kaihoko {{seeder}} i hinga",
+  "seedError": "Hē tautuhi i te kaikawe {{seeder}}",
+  "seedAllCompleted": "db:seed kua mutu",
+  "seedAllFailed": "db:seed i hinga",
+  "seedAllError": "Hē tautuhi i te db:seed"
+}

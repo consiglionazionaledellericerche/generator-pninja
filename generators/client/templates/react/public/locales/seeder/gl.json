@@ -1,0 +1,29 @@
+{
+  "title": "Semear na base de datos",
+  "selectAll": "Seleccionar todos os sembradores",
+  "selectSeeder": "Seleccionar {{seeder}}",
+  "columns": {
+    "seeder": "Sembrador",
+    "status": "Estado"
+  },
+  "status": {
+    "pending": "Pendiente...",
+    "running": "Executándose",
+    "completed": "Completado",
+    "failed": "Fallou"
+  },
+  "actions": {
+    "seed": "Executar",
+    "confirmSeed": "Confirmar",
+    "seedSelected": "Executar seleccionado",
+    "confirmSeedSelected": "Confirmar",
+    "seedAll": "Executar db:seed",
+    "confirmSeedAll": "Confirmar db:seed"
+  },
+  "seedCompleted": "Sembrador {{seeder}} completado",
+  "seedFailed": "Sembrador {{seeder}} fallido",
+  "seedError": "Erro ao iniciar o sembrador {{seeder}}",
+  "seedAllCompleted": "db:seed completado",
+  "seedAllFailed": "db:seed fallido",
+  "seedAllError": "Erro ao iniciar db:seed"
+}

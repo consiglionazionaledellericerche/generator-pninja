@@ -1,0 +1,29 @@
+{
+  "title": "डेटाबेस बीजिंग",
+  "selectAll": "सभी सीडर्स का चयन करें",
+  "selectSeeder": "{{seeder}} का चयन करें",
+  "columns": {
+    "seeder": "सीडर",
+    "status": "स्थिति"
+  },
+  "status": {
+    "pending": "लंबित...",
+    "running": "चल रहा है",
+    "completed": "पूर्ण",
+    "failed": "विफल"
+  },
+  "actions": {
+    "seed": "चलाएं",
+    "confirmSeed": "पुष्टि करें",
+    "seedSelected": "चयनित चलाएं",
+    "confirmSeedSelected": "पुष्टि करें",
+    "seedAll": "db:seed चलाएं",
+    "confirmSeedAll": "db:seed की पुष्टि करें"
+  },
+  "seedCompleted": "सीडर {{seeder}} पूरा हुआ",
+  "seedFailed": "सीडर {{seeder}} विफल हुआ",
+  "seedError": "सीडर {{seeder}} प्रारंभ करते समय त्रुटि",
+  "seedAllCompleted": "db:seed पूरा हुआ",
+  "seedAllFailed": "db:seed विफल हुआ",
+  "seedAllError": "db:seed प्रारंभ करते समय त्रुटि"
+}

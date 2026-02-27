@@ -1,0 +1,411 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AxiosError, isAxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
+import ConfirmButton from '../../components/ConfirmButton';
+
+const POLL_INTERVAL_MS = 1500;
+
+interface ISeeder {
+  slug: string;
+  label: string;
+}
+
+type JobStatus = 'pending' | 'running' | 'completed' | 'failed';
+
+interface IJobState {
+  status: JobStatus;
+  message?: string;
+}
+
+interface SeederRowState {
+  jobId: string | null;
+  jobState: IJobState | null;
+}
+
+function waitForJobCompletion(jobId: string): Promise<IJobState> {
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(async () => {
+      try {
+        const { data } = await axiosInstance.get<IJobState>(`/api/seeder/status/${jobId}`);
+        if (data.status === 'completed' || data.status === 'failed') {
+          clearInterval(interval);
+          resolve(data);
+        }
+      } catch (e) {
+        clearInterval(interval);
+        reject(e);
+      }
+    }, POLL_INTERVAL_MS);
+  });
+}
+
+export function SeederList() {
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+
+  const [loading, setLoading] = useState(false);
+  const [seeders, setSeeders] = useState<ISeeder[]>([]);
+  const [rowState, setRowState] = useState<Record<string, SeederRowState>>({});
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkSeeding, setBulkSeeding] = useState(false);
+  const [seedingAll, setSeedingAll] = useState(false);
+  const [allJobState, setAllJobState] = useState<IJobState | null>(null);
+  const pollRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+  const completedJobs = useRef<Set<string>>(new Set());
+
+  const updateRow = (slug: string, patch: Partial<SeederRowState>) =>
+    setRowState((prev) => ({
+      ...prev,
+      [slug]: { ...prev[slug], ...patch },
+    }));
+
+  const stopPolling = (key: string) => {
+    if (pollRefs.current[key]) {
+      clearInterval(pollRefs.current[key]);
+      delete pollRefs.current[key];
+    }
+  };
+
+  const startPolling = useCallback(
+    (
+      key: string,
+      jobId: string,
+      onUpdate: (data: IJobState) => void,
+      onDone: (data: IJobState) => void
+    ) => {
+      stopPolling(key);
+      completedJobs.current.delete(key);
+
+      pollRefs.current[key] = setInterval(async () => {
+        try {
+          const { data } = await axiosInstance.get<IJobState>(`/api/seeder/status/${jobId}`);
+
+          if (completedJobs.current.has(key)) return;
+
+          onUpdate(data);
+
+          if (data.status === 'completed' || data.status === 'failed') {
+            completedJobs.current.add(key);
+            stopPolling(key);
+            onDone(data);
+          }
+        } catch {
+          stopPolling(key);
+        }
+      }, POLL_INTERVAL_MS);
+    },
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      Object.values(pollRefs.current).forEach(clearInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.title = t('seeder:title');
+  }, [i18n.language, t]);
+
+  const loadSeeders = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+      .get<ISeeder[]>('/api/seeder')
+      .then(({ data }) => {
+        setSeeders(data);
+        setRowState(
+          Object.fromEntries(data.map(({ slug }) => [slug, { jobId: null, jobState: null }]))
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message, error });
+      })
+      .finally(() => setLoading(false));
+  }, [addNotification]);
+
+  useEffect(() => {
+    loadSeeders();
+  }, [loadSeeders]);
+
+  // Selection
+  const allSlugs = seeders.map((s) => s.slug);
+  const allSelected = allSlugs.length > 0 && allSlugs.every((s) => selected.has(s));
+  const someSelected = allSlugs.some((s) => selected.has(s)) && !allSelected;
+
+  const toggleSelectAll = () => {
+    if (allSelected) setSelected(new Set());
+    else setSelected(new Set(allSlugs));
+  };
+
+  const toggleSelect = (slug: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      return next;
+    });
+  };
+
+  // Single seed
+  const handleSeed = (slug: string) => {
+    axiosInstance
+      .post<{ job_id: string }>(`/api/seeder/${slug}`)
+      .then(({ data }) => {
+        updateRow(slug, { jobId: data.job_id, jobState: { status: 'pending' } });
+        startPolling(
+          slug,
+          data.job_id,
+          (state) => updateRow(slug, { jobState: state }),
+          (state) => {
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('seeder:seedFailed', { seeder: slug }))
+                  : t('seeder:seedCompleted', { seeder: slug }),
+            });
+          }
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: t('seeder:seedError', { seeder: slug }),
+          error,
+        });
+      });
+  };
+
+  // Seed all (db:seed)
+  const handleSeedAll = () => {
+    setSeedingAll(true);
+    setAllJobState({ status: 'pending' });
+    axiosInstance
+      .post<{ job_id: string }>('/api/seeder/all')
+      .then(({ data }) => {
+        startPolling(
+          '__all__',
+          data.job_id,
+          (state) => setAllJobState(state),
+          (state) => {
+            setSeedingAll(false);
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('seeder:seedAllFailed'))
+                  : t('seeder:seedAllCompleted'),
+            });
+          }
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        setSeedingAll(false);
+        setAllJobState(null);
+        addNotification({
+          type: 'error',
+          message: t('seeder:seedAllError'),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      });
+  };
+
+  // Bulk seed selected (serial)
+  const handleBulkSeed = async () => {
+    setBulkSeeding(true);
+    const selectedSeeders = seeders.filter((s) => selected.has(s.slug));
+    for (const seeder of selectedSeeders) {
+      try {
+        const { data } = await axiosInstance.post<{ job_id: string }>(`/api/seeder/${seeder.slug}`);
+        updateRow(seeder.slug, { jobId: data.job_id, jobState: { status: 'pending' } });
+        startPolling(
+          seeder.slug,
+          data.job_id,
+          (state) => updateRow(seeder.slug, { jobState: state }),
+          (state) => {
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('seeder:seedFailed', { seeder: seeder.slug }))
+                  : t('seeder:seedCompleted', { seeder: seeder.slug }),
+            });
+          }
+        );
+        await waitForJobCompletion(data.job_id);
+      } catch (error) {
+        addNotification({
+          type: 'error',
+          message: t('seeder:seedError', { seeder: seeder.slug }),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      }
+    }
+    setBulkSeeding(false);
+  };
+
+  const getStatusIcon = (state: IJobState | null) => {
+    if (!state) return null;
+    switch (state.status) {
+      case 'pending':
+        return <Icon icon="schedule" size={5} className="text-gray-400 animate-pulse" />;
+      case 'running':
+        return <Icon icon="sync" size={5} className="text-blue-500 animate-spin" />;
+      case 'completed':
+        return <Icon icon="check_circle" size={5} className="text-green-500" />;
+      case 'failed':
+        return <Icon icon="error" size={5} className="text-red-500" />;
+    }
+  };
+
+  const isRunning = (slug: string) => {
+    const state = rowState[slug]?.jobState;
+    return state?.status === 'pending' || state?.status === 'running';
+  };
+
+  const anyBusy = bulkSeeding || seedingAll;
+  const noneSelected = selected.size === 0;
+
+  return (
+    <>
+      <h1 className="text-2xl font-bold mb-6">{t('seeder:title')}</h1>
+      <SimpleLoader loading={loading} />
+      {!loading && seeders.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
+      {!loading && seeders.length > 0 && (
+        <>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <ConfirmButton
+              disabled={anyBusy || noneSelected}
+              onConfirm={handleBulkSeed}
+              className="primary-button"
+              pendingClassName="primary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="play_arrow" size={5} />
+                  {t('seeder:actions.seedSelected')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="play_arrow" size={5} />
+                  {t('seeder:actions.confirmSeedSelected')}
+                </span>
+              }
+            />
+            <div className="w-px bg-gray-200 dark:bg-slate-600 self-stretch mx-1" aria-hidden />
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleSeedAll}
+              className="secondary-button"
+              pendingClassName="secondary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="playlist_play" size={5} />
+                  {t('seeder:actions.seedAll')}
+                  {allJobState && <span className="ml-1">{getStatusIcon(allJobState)}</span>}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="playlist_play" size={5} />
+                  {t('seeder:actions.confirmSeedAll')}
+                </span>
+              }
+            />
+          </div>
+
+          <div className="relative overflow-x-auto">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th scope="col" className="w-0">
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected;
+                      }}
+                      onChange={toggleSelectAll}
+                      aria-label={t('seeder:selectAll')}
+                      className="cursor-pointer"
+                    />
+                  </th>
+                  <th scope="col">{t('seeder:columns.seeder')}</th>
+                  <th scope="col">{t('seeder:columns.status')}</th>
+                  <th scope="col">{t('actions.crud.actions')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {seeders.map((seeder) => {
+                  const state = rowState[seeder.slug];
+                  const jobState = state?.jobState ?? null;
+                  const busy = isRunning(seeder.slug);
+                  const isSelected = selected.has(seeder.slug);
+
+                  return (
+                    <tr key={seeder.slug}>
+                      <td className="w-0">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(seeder.slug)}
+                          aria-label={t('seeder:selectSeeder', { seeder: seeder.label })}
+                          className="cursor-pointer"
+                        />
+                      </td>
+                      <td className="font-medium">{seeder.label}</td>
+                      <td className="min-w-48">
+                        {jobState ? (
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(jobState)}
+                            <span
+                              className={`text-sm ${
+                                jobState.status === 'failed'
+                                  ? 'text-red-500'
+                                  : jobState.status === 'completed'
+                                    ? 'text-green-600 dark:text-green-400'
+                                    : 'text-gray-500 dark:text-gray-400'
+                              }`}
+                            >
+                              {t(`seeder:status.${jobState.status}`)}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-sm">—</span>
+                        )}
+                      </td>
+                      <td className="text-nowrap w-0">
+                        <ConfirmButton
+                          disabled={anyBusy || busy}
+                          onConfirm={() => handleSeed(seeder.slug)}
+                          className="primary-button"
+                          pendingClassName="primary-button"
+                          label={
+                            <span className="flex items-center gap-2">
+                              <Icon icon="play_arrow" size={5} />
+                              {t('seeder:actions.seed')}
+                            </span>
+                          }
+                          pendingLabel={
+                            <span className="flex items-center gap-2">
+                              <Icon icon="play_arrow" size={5} />
+                              {t('seeder:actions.confirmSeed')}
+                            </span>
+                          }
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
+    </>
+  );
+}

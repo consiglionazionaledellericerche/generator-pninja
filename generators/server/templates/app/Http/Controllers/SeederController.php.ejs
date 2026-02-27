@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\SeedRequest;
+use App\Jobs\RunSeederJob;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+
+class SeederController extends Controller
+{
+    public function index(): JsonResponse
+    {
+        $seeders = collect(SeedRequest::$seeders)
+            ->map(fn(string $seederClass, string $slug) => [
+                'slug'  => $slug,
+                'label' => class_basename($seederClass),
+            ])
+            ->values();
+
+        return response()->json($seeders);
+    }
+
+    public function seed(SeedRequest $request): JsonResponse
+    {
+        $jobId = (string) Str::uuid();
+
+        Cache::put("seeder:{$jobId}", ['status' => 'pending'], now()->addHours(2));
+
+        RunSeederJob::dispatch($jobId, $request->seederClass());
+
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
+    public function seedAll(): JsonResponse
+    {
+        $jobId = (string) Str::uuid();
+
+        Cache::put("seeder:{$jobId}", ['status' => 'pending'], now()->addHours(2));
+
+        RunSeederJob::dispatch($jobId, \Database\Seeders\DatabaseSeeder::class);
+
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
+    public function status(string $jobId): JsonResponse
+    {
+        $state = Cache::get("seeder:{$jobId}");
+
+        if (!$state) {
+            return response()->json(['message' => 'Job not found or expired'], 404);
+        }
+
+        return response()->json($state);
+    }
+}

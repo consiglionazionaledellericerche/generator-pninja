@@ -1,0 +1,29 @@
+{
+  "title": "Veritabanı Tohumlama",
+  "selectAll": "Bütün tohumlayıcıları seç",
+  "selectSeeder": "{{seeder}} seç",
+  "columns": {
+    "seeder": "Tohumlayıcı",
+    "status": "Status"
+  },
+  "status": {
+    "pending": "Gözləyir...",
+    "running": "İşləyir",
+    "completed": "Tamamlandı",
+    "failed": "Uğursuz"
+  },
+  "actions": {
+    "seed": "İşlet",
+    "confirmSeed": "Təsdiqlə",
+    "seedSelected": "Seçilənləri çalışdır",
+    "confirmSeedSelected": "Təsdiqlə",
+    "seedAll": "db:seed çalışdır",
+    "confirmSeedAll": "Təsdiq et db:seed"
+  },
+  "seedCompleted": "Tohumlayıcı {{seeder}} tamamlandı",
+  "seedFailed": "Tohumlayıcı {{seeder}} uğursuz oldu",
+  "seedError": "Tohumlayıcı {{seeder}} başlayarkən xəta",
+  "seedAllCompleted": "db:seed tamamlandı",
+  "seedAllFailed": "db:seed uğursuz oldu",
+  "seedAllError": "db:seed başlayarkən xəta"
+}

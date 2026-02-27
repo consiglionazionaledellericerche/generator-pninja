@@ -1,0 +1,29 @@
+{
+  "title": "Sémantique de la base de données",
+  "selectAll": "Sélectionner tous les semenciers",
+  "selectSeeder": "Sélectionner {{seeder}}",
+  "columns": {
+    "seeder": "Semencier",
+    "status": "Statut"
+  },
+  "status": {
+    "pending": "En attente...",
+    "running": "En cours",
+    "completed": "Terminé",
+    "failed": "Échoué"
+  },
+  "actions": {
+    "seed": "Exécuter",
+    "confirmSeed": "Confirmer",
+    "seedSelected": "Exécuter sélectionné",
+    "confirmSeedSelected": "Confirmer",
+    "seedAll": "Exécuter db:seed",
+    "confirmSeedAll": "Confirmer db:seed"
+  },
+  "seedCompleted": "Semencier {{seeder}} terminé",
+  "seedFailed": "Semencier {{seeder}} échoué",
+  "seedError": "Erreur de démarrage du semencier {{seeder}}",
+  "seedAllCompleted": "db:seed terminé",
+  "seedAllFailed": "db:seed échoué",
+  "seedAllError": "Erreur de démarrage de db:seed"
+}

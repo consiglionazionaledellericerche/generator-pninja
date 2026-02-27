@@ -1,0 +1,29 @@
+{
+  "title": "Ajiyar Bayanai",
+  "selectAll": "Zaɓi duk rowa",
+  "selectSeeder": "Zaɓi {{seeder}}",
+  "columns": {
+    "seeder": "Ruwa",
+    "status": "Matsayi"
+  },
+  "status": {
+    "pending": "Ana jiran...",
+    "running": "Ana gudanarwa",
+    "completed": "An gama",
+    "failed": "Ya kasa"
+  },
+  "actions": {
+    "seed": "Gudanar",
+    "confirmSeed": "Tabbatar",
+    "seedSelected": "Gudanar da wanda aka zaɓa",
+    "confirmSeedSelected": "Tabbatar",
+    "seedAll": "Gudanar da db:seed",
+    "confirmSeedAll": "Tabbatar db:seed"
+  },
+  "seedCompleted": "Ruwa {{seeder}} an kammala",
+  "seedFailed": "Ruwa {{seeder}} ya gagara",
+  "seedError": "Kuskure wajen kaddamar da ruwa {{seeder}}",
+  "seedAllCompleted": "db:seed an kammala",
+  "seedAllFailed": "db:seed ya gagara",
+  "seedAllError": "Kuskure wajen kaddamar da db:seed"
+}

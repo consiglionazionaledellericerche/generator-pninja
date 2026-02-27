@@ -912,6 +912,17 @@ export default class extends Generator {
             });
         !this.options.fromEntities && this.log(colors.green('Controllers generated successfully\n'));
 
+        this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/SeedRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/SeedRequest.php`), {
+            entities: storedEntities,
+            manyToMany: getEntitiesRelationships(this).filter(relation => (
+                relation.relationshipType === 'many-to-many'
+            )).map(relation => ({
+                fromEntity: relation.entityName,
+                toEntity: relation.otherEntityName,
+            })),
+            to,
+        });
+
         // Generate ReindexRequest
         this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {
             entities: storedEntities,

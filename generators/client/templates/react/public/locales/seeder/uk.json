@@ -1,0 +1,29 @@
+{
+  "title": "Посів бази даних",
+  "selectAll": "Вибрати всі посівники",
+  "selectSeeder": "Вибрати {{seeder}}",
+  "columns": {
+    "seeder": "Посівник",
+    "status": "Статус"
+  },
+  "status": {
+    "pending": "В очікуванні...",
+    "running": "Виконується",
+    "completed": "Завершено",
+    "failed": "Не вдалося"
+  },
+  "actions": {
+    "seed": "Запустити",
+    "confirmSeed": "Підтвердити",
+    "seedSelected": "Запустити вибрані",
+    "confirmSeedSelected": "Підтвердити",
+    "seedAll": "Запустити db:seed",
+    "confirmSeedAll": "Підтвердити db:seed"
+  },
+  "seedCompleted": "Посівник {{seeder}} завершено",
+  "seedFailed": "Посівник {{seeder}} не вдався",
+  "seedError": "Помилка запуску посівника {{seeder}}",
+  "seedAllCompleted": "db:seed завершено",
+  "seedAllFailed": "db:seed не вдався",
+  "seedAllError": "Помилка запуску db:seed"
+}
