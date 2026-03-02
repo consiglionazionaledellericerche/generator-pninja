@@ -18,11 +18,14 @@
     "seedSelected": "Pokreni odabrano",
     "confirmSeedSelected": "Potvrdi",
     "seedAll": "Pokreni db:seed",
-    "confirmSeedAll": "Potvrdi db:seed"
+    "confirmSeedAll": "Potvrdi db:seed",
+    "uploadCsv": "Otpremi CSV"
   },
   "seedCompleted": "Zasijavanje {{seeder}} dovršeno",
   "seedFailed": "Zasijavanje {{seeder}} neuspješno",
   "seedError": "Greška pri pokretanju zasijanja {{seeder}}",
+  "seedCsvCompleted": "CSV zasijavanje {{seeder}} završeno",
+  "seedCsvError": "Pogreška prilikom otpremanja CSV-a za {{seeder}}",
   "seedAllCompleted": "db:seed dovršeno",
   "seedAllFailed": "db:seed neuspješno",
   "seedAllError": "Greška pri pokretanju db:seed"

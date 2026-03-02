@@ -18,11 +18,14 @@
     "seedSelected": "選択されたものを実行",
     "confirmSeedSelected": "確認",
     "seedAll": "db:seed を実行",
-    "confirmSeedAll": "db:seed の確認"
+    "confirmSeedAll": "db:seed の確認",
+    "uploadCsv": "CSVをアップロード"
   },
   "seedCompleted": "シーダー {{seeder}} が完了しました",
   "seedFailed": "シーダー {{seeder}} が失敗しました",
   "seedError": "シーダー {{seeder}} の開始エラー",
+  "seedCsvCompleted": "{{seeder}}のCSVシーディングが完了しました",
+  "seedCsvError": "{{seeder}}のCSVアップロード中にエラーが発生しました",
   "seedAllCompleted": "db:seed が完了しました",
   "seedAllFailed": "db:seed が失敗しました",
   "seedAllError": "db:seed の開始エラー"

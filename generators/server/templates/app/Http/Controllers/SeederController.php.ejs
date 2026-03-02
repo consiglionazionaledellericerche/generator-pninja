@@ -34,6 +34,23 @@ class SeederController extends Controller
         return response()->json(['job_id' => $jobId], 202);
     }
 
+    public function seedFromCsv(SeedRequest $request): JsonResponse
+    {
+        $seederClass = $request->seederClass();
+        $modelName = str_replace('Seeder', '', (new \ReflectionClass($seederClass))->getShortName());
+
+        $request->file('csv')->move(
+            database_path('seeders/csv'),
+            $modelName . '.csv'
+        );
+
+        $jobId = (string) Str::uuid();
+        Cache::put("seeder:{$jobId}", ['status' => 'pending'], now()->addHours(2));
+        RunSeederJob::dispatch($jobId, $seederClass);
+
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
     public function seedAll(): JsonResponse
     {
         $jobId = (string) Str::uuid();

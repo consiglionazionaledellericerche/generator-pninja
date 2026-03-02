@@ -18,11 +18,14 @@
     "seedSelected": "Jalankan yang dipilih",
     "confirmSeedSelected": "Konfirmasi",
     "seedAll": "Jalankan db:seed",
-    "confirmSeedAll": "Konfirmasi db:seed"
+    "confirmSeedAll": "Konfirmasi db:seed",
+    "uploadCsv": "Unggah CSV"
   },
   "seedCompleted": "Penyemaian {{seeder}} selesai",
   "seedFailed": "Penyemaian {{seeder}} gagal",
   "seedError": "Kesalahan saat memulai penyemaian {{seeder}}",
+  "seedCsvCompleted": "Pembibitan CSV {{seeder}} selesai",
+  "seedCsvError": "Kesalahan mengunggah CSV untuk {{seeder}}",
   "seedAllCompleted": "db:seed selesai",
   "seedAllFailed": "db:seed gagal",
   "seedAllError": "Kesalahan saat memulai db:seed"

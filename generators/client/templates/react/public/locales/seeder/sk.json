@@ -18,11 +18,14 @@
     "seedSelected": "Spustiť vybrané",
     "confirmSeedSelected": "Potvrdiť",
     "seedAll": "Spustiť db:seed",
-    "confirmSeedAll": "Potvrdiť db:seed"
+    "confirmSeedAll": "Potvrdiť db:seed",
+    "uploadCsv": "Nahrajte CSV"
   },
   "seedCompleted": "Zasiate {{seeder}} dokončené",
   "seedFailed": "Zasiate {{seeder}} zlyhalo",
   "seedError": "Chyba pri spúšťaní zasiateho {{seeder}}",
+  "seedCsvCompleted": "CSV zasadenie {{seeder}} dokončené",
+  "seedCsvError": "Chyba pri nahrávaní CSV pre {{seeder}}",
   "seedAllCompleted": "db:seed dokončené",
   "seedAllFailed": "db:seed zlyhalo",
   "seedAllError": "Chyba pri spúšťaní db:seed"

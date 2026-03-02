@@ -18,11 +18,14 @@
     "seedSelected": "પસંદ કરેલ ચલાવો",
     "confirmSeedSelected": "પmacenવી",
     "seedAll": "db:seed ચલાવો",
-    "confirmSeedAll": "db:seed પmacenવું"
+    "confirmSeedAll": "db:seed પmacenવું",
+    "uploadCsv": "CSV અપલોડ કરો"
   },
   "seedCompleted": "સીડર {{seeder}} પૂર્ણ થયું",
   "seedFailed": "સીડર {{seeder}} નિષ્ફળ ગયું",
   "seedError": "સીડર {{seeder}} શરૂ કરતી વખતે ભૂલ",
+  "seedCsvCompleted": "{{seeder}} માટે CSV બીજાણું પૂર્ણ થયું",
+  "seedCsvError": "{{seeder}} માટે CSV અપલોડ કરતી વખતે ભૂલ",
   "seedAllCompleted": "db:seed પૂર્ણ થયું",
   "seedAllFailed": "db:seed નિષ્ફળ ગયું",
   "seedAllError": "db:seed શરૂ કરતી વખતે ભૂલ"

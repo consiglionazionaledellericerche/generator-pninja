@@ -71,6 +71,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/', [SeederController::class, 'index']);
         Route::post('/all', [SeederController::class, 'seedAll']);
         Route::post('/{seeder}', [SeederController::class, 'seed']);
+        Route::post('/{seeder}/csv', [SeederController::class, 'seedFromCsv']);
         Route::get('/status/{jobId}', [SeederController::class, 'status']);
     });
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>

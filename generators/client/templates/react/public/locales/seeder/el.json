@@ -18,11 +18,14 @@
     "seedSelected": "Εκτέλεση επιλεγμένων",
     "confirmSeedSelected": "Επιβεβαίωση",
     "seedAll": "Εκτέλεση db:seed",
-    "confirmSeedAll": "Επιβεβαίωση db:seed"
+    "confirmSeedAll": "Επιβεβαίωση db:seed",
+    "uploadCsv": "Ανέβασμα CSV"
   },
   "seedCompleted": "Ο εισαγωγέας {{seeder}} ολοκληρώθηκε",
   "seedFailed": "Ο εισαγωγέας {{seeder}} απέτυχε",
   "seedError": "Σφάλμα κατά την εκκίνηση του εισαγωγέα {{seeder}}",
+  "seedCsvCompleted": "Η σπορά CSV του {{seeder}} ολοκληρώθηκε",
+  "seedCsvError": "Σφάλμα κατά την ανέβασμα CSV για {{seeder}}",
   "seedAllCompleted": "Η db:seed ολοκληρώθηκε",
   "seedAllFailed": "Η db:seed απέτυχε",
   "seedAllError": "Σφάλμα κατά την εκκίνηση της db:seed"

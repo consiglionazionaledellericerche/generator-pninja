@@ -18,11 +18,14 @@
     "seedSelected": "선택한 실행",
     "confirmSeedSelected": "확인",
     "seedAll": "db:seed 실행",
-    "confirmSeedAll": "db:seed 확인"
+    "confirmSeedAll": "db:seed 확인",
+    "uploadCsv": "CSV 업로드"
   },
   "seedCompleted": "시더 {{seeder}} 완료",
   "seedFailed": "시더 {{seeder}} 실패",
   "seedError": "시더 {{seeder}} 시작 오류",
+  "seedCsvCompleted": "{{seeder}}의 CSV 시딩 완료",
+  "seedCsvError": "{{seeder}}에 대한 CSV 업로드 오류",
   "seedAllCompleted": "db:seed 완료",
   "seedAllFailed": "db:seed 실패",
   "seedAllError": "db:seed 시작 오류"

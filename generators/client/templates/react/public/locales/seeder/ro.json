@@ -18,11 +18,14 @@
     "seedSelected": "Rulați selectat",
     "confirmSeedSelected": "Confirmați",
     "seedAll": "Rulați db:seed",
-    "confirmSeedAll": "Confirmați db:seed"
+    "confirmSeedAll": "Confirmați db:seed",
+    "uploadCsv": "Încărcați CSV"
   },
   "seedCompleted": "Semănător {{seeder}} finalizat",
   "seedFailed": "Semănător {{seeder}} eșuat",
   "seedError": "Eroare la pornirea semănătorului {{seeder}}",
+  "seedCsvCompleted": "Seeding CSV pentru {{seeder}} completat",
+  "seedCsvError": "Eroare la încărcarea CSV pentru {{seeder}}",
   "seedAllCompleted": "db:seed finalizat",
   "seedAllFailed": "db:seed eșuat",
   "seedAllError": "Eroare la pornirea db:seed"

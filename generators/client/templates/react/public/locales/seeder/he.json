@@ -18,11 +18,14 @@
     "seedSelected": "הרץ שנבחר",
     "confirmSeedSelected": "אשר",
     "seedAll": "הרץ db:seed",
-    "confirmSeedAll": "אשר db:seed"
+    "confirmSeedAll": "אשר db:seed",
+    "uploadCsv": "העלאת CSV"
   },
   "seedCompleted": "הזרע {{seeder}} הושלם",
   "seedFailed": "הזרע {{seeder}} נכשל",
   "seedError": "שגיאה בהפעלת הזרע {{seeder}}",
+  "seedCsvCompleted": "זריעת CSV של {{seeder}} הושלמה",
+  "seedCsvError": "שגיאה בהעלאת CSV עבור {{seeder}}",
   "seedAllCompleted": "db:seed הושלם",
   "seedAllFailed": "db:seed נכשל",
   "seedAllError": "שגיאה בהפעלת db:seed"

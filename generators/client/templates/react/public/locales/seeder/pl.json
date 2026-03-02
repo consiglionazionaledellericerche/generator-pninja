@@ -18,11 +18,14 @@
     "seedSelected": "Uruchom wybrane",
     "confirmSeedSelected": "Potwierdź",
     "seedAll": "Uruchom db:seed",
-    "confirmSeedAll": "Potwierdź db:seed"
+    "confirmSeedAll": "Potwierdź db:seed",
+    "uploadCsv": "Prześlij CSV"
   },
   "seedCompleted": "Zasiewnik {{seeder}} zakończony",
   "seedFailed": "Zasiewnik {{seeder}} nie powiódł się",
   "seedError": "Błąd podczas uruchamiania zasiewnika {{seeder}}",
+  "seedCsvCompleted": "Zakończono wprowadzanie CSV dla {{seeder}}",
+  "seedCsvError": "Błąd podczas przesyłania CSV dla {{seeder}}",
   "seedAllCompleted": "db:seed zakończony",
   "seedAllFailed": "db:seed nie powiódł się",
   "seedAllError": "Błąd podczas uruchamiania db:seed"

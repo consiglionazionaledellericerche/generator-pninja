@@ -18,11 +18,14 @@
     "seedSelected": "Անցկացնել ընտրված",
     "confirmSeedSelected": "Հաստատել",
     "seedAll": "Անցկացնել db:seed",
-    "confirmSeedAll": "Հաստատել db:seed"
+    "confirmSeedAll": "Հաստատել db:seed",
+    "uploadCsv": "Ցուցադրել CSV"
   },
   "seedCompleted": "Սերմացու {{seeder}} ավարտվել է",
   "seedFailed": "Սերմացու {{seeder}} անգամը ձախողվել է",
   "seedError": "Սխալ, սկսելով սերմացու {{seeder}}",
+  "seedCsvCompleted": "CSV-ի սերմավորում {{seeder}} ավարտվել է",
+  "seedCsvError": "Տվյալների ներբեռնումը սխալ է առաջացել {{seeder}} համար",
   "seedAllCompleted": "db:seed-ը ավարտվել է",
   "seedAllFailed": "db:seed-ը ձախողվել է",
   "seedAllError": "Սխալ, սկսելով db:seed"

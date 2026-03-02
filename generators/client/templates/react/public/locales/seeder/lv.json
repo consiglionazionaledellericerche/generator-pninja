@@ -18,11 +18,14 @@
     "seedSelected": "Izpildīt atlasīto",
     "confirmSeedSelected": "Apstiprināt",
     "seedAll": "Izpildīt db:seed",
-    "confirmSeedAll": "Apstiprināt db:seed"
+    "confirmSeedAll": "Apstiprināt db:seed",
+    "uploadCsv": "Augšupielādēt CSV"
   },
   "seedCompleted": "Sējējs {{seeder}} pabeigts",
   "seedFailed": "Sējējs {{seeder}} neizdevās",
   "seedError": "Kļūda, startējot sējēju {{seeder}}",
+  "seedCsvCompleted": "CSV sēšana {{seeder}} pabeigta",
+  "seedCsvError": "Kļūda augšupielādējot CSV par {{seeder}}",
   "seedAllCompleted": "db:seed pabeigts",
   "seedAllFailed": "db:seed neizdevās",
   "seedAllError": "Kļūda, startējot db:seed"

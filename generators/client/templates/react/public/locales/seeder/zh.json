@@ -18,11 +18,14 @@
     "seedSelected": "运行所选",
     "confirmSeedSelected": "确认",
     "seedAll": "运行 db:seed",
-    "confirmSeedAll": "确认 db:seed"
+    "confirmSeedAll": "确认 db:seed",
+    "uploadCsv": "上传CSV"
   },
   "seedCompleted": "播种器 {{seeder}} 完成",
   "seedFailed": "播种器 {{seeder}} 失败",
   "seedError": "启动播种器 {{seeder}} 时出错",
+  "seedCsvCompleted": "{{seeder}} 的CSV种子已完成",
+  "seedCsvError": "上传{{seeder}}的CSV时出错",
   "seedAllCompleted": "db:seed 完成",
   "seedAllFailed": "db:seed 失败",
   "seedAllError": "启动 db:seed 时出错"

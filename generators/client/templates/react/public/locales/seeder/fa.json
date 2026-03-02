@@ -18,11 +18,14 @@
     "seedSelected": "اجرا کردن انتخاب‌شده",
     "confirmSeedSelected": "تأیید",
     "seedAll": "اجرا db:seed",
-    "confirmSeedAll": "تأیید db:seed"
+    "confirmSeedAll": "تأیید db:seed",
+    "uploadCsv": "بارگذاری CSV"
   },
   "seedCompleted": "کاشت‌کننده {{seeder}} به پایان رسید",
   "seedFailed": "کاشت‌کننده {{seeder}} ناموفق بود",
   "seedError": "خطا در شروع کاشت‌کننده {{seeder}}",
+  "seedCsvCompleted": "کشت CSV برای {{seeder}} به پایان رسید",
+  "seedCsvError": "خطا در بارگذاری CSV برای {{seeder}}",
   "seedAllCompleted": "db:seed به پایان رسید",
   "seedAllFailed": "db:seed ناموفق بود",
   "seedAllError": "خطا در شروع db:seed"

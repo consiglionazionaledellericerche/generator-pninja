@@ -18,11 +18,14 @@
     "seedSelected": "Hiriirsi filatame",
     "confirmSeedSelected": "Mirkaneessi",
     "seedAll": "Hiriirsi db:seed",
-    "confirmSeedAll": "Mirkaneessi db:seed"
+    "confirmSeedAll": "Mirkaneessi db:seed",
+    "uploadCsv": "CSV olka'uu"
   },
   "seedCompleted": "Fayyadamaa {{seeder}} xumuramee",
   "seedFailed": "Fayyadamaa {{seeder}} dogoggoraan xumuramee",
   "seedError": "Balaafaa ni jalqabda seeder {{seeder}}",
+  "seedCsvCompleted": "CSV seeding {{seeder}} xumurame",
+  "seedCsvError": "CSV olka'uu keessatti dogoggora {{seeder}}",
   "seedAllCompleted": "db:seed xumuramee",
   "seedAllFailed": "db:seed dogoggoraan xumuramee",
   "seedAllError": "Balaafaa ni jalqabda db:seed"

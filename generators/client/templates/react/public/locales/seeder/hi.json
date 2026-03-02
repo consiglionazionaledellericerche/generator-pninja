@@ -18,11 +18,14 @@
     "seedSelected": "चयनित चलाएं",
     "confirmSeedSelected": "पुष्टि करें",
     "seedAll": "db:seed चलाएं",
-    "confirmSeedAll": "db:seed की पुष्टि करें"
+    "confirmSeedAll": "db:seed की पुष्टि करें",
+    "uploadCsv": "CSV अपलोड करें"
   },
   "seedCompleted": "सीडर {{seeder}} पूरा हुआ",
   "seedFailed": "सीडर {{seeder}} विफल हुआ",
   "seedError": "सीडर {{seeder}} प्रारंभ करते समय त्रुटि",
+  "seedCsvCompleted": "{{seeder}} के लिए CSV बुआई पूरी हुई",
+  "seedCsvError": "{{seeder}} के लिए CSV अपलोड करते समय त्रुटि हुई",
   "seedAllCompleted": "db:seed पूरा हुआ",
   "seedAllFailed": "db:seed विफल हुआ",
   "seedAllError": "db:seed प्रारंभ करते समय त्रुटि"

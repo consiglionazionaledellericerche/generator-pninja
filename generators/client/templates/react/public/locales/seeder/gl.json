@@ -18,11 +18,14 @@
     "seedSelected": "Executar seleccionado",
     "confirmSeedSelected": "Confirmar",
     "seedAll": "Executar db:seed",
-    "confirmSeedAll": "Confirmar db:seed"
+    "confirmSeedAll": "Confirmar db:seed",
+    "uploadCsv": "Subir CSV"
   },
   "seedCompleted": "Sembrador {{seeder}} completado",
   "seedFailed": "Sembrador {{seeder}} fallido",
   "seedError": "Erro ao iniciar o sembrador {{seeder}}",
+  "seedCsvCompleted": "A semántica CSV de {{seeder}} completouse",
+  "seedCsvError": "Erro ao subir CSV para {{seeder}}",
   "seedAllCompleted": "db:seed completado",
   "seedAllFailed": "db:seed fallido",
   "seedAllError": "Erro ao iniciar db:seed"

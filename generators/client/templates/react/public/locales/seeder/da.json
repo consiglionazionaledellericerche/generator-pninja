@@ -18,11 +18,14 @@
     "seedSelected": "Kør valgt",
     "confirmSeedSelected": "Bekræft",
     "seedAll": "Kør db:seed",
-    "confirmSeedAll": "Bekræft db:seed"
+    "confirmSeedAll": "Bekræft db:seed",
+    "uploadCsv": "Upload CSV"
   },
   "seedCompleted": "Seeder {{seeder}} fuldført",
   "seedFailed": "Seeder {{seeder}} fejlede",
   "seedError": "Fejl ved opstart af seeder {{seeder}}",
+  "seedCsvCompleted": "CSV såning af {{seeder}} fuldført",
+  "seedCsvError": "Fejl ved upload af CSV for {{seeder}}",
   "seedAllCompleted": "db:seed fuldført",
   "seedAllFailed": "db:seed fejlede",
   "seedAllError": "Fejl ved opstart af db:seed"

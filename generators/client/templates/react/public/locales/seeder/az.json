@@ -18,11 +18,14 @@
     "seedSelected": "Seçilənləri çalışdır",
     "confirmSeedSelected": "Təsdiqlə",
     "seedAll": "db:seed çalışdır",
-    "confirmSeedAll": "Təsdiq et db:seed"
+    "confirmSeedAll": "Təsdiq et db:seed",
+    "uploadCsv": "CSV yükləyin"
   },
   "seedCompleted": "Tohumlayıcı {{seeder}} tamamlandı",
   "seedFailed": "Tohumlayıcı {{seeder}} uğursuz oldu",
   "seedError": "Tohumlayıcı {{seeder}} başlayarkən xəta",
+  "seedCsvCompleted": "{{seeder}} üçün CSV əkilməsi tamamlandı",
+  "seedCsvError": "{{seeder}} üçün CSV yükləmədə xəta",
   "seedAllCompleted": "db:seed tamamlandı",
   "seedAllFailed": "db:seed uğursuz oldu",
   "seedAllError": "db:seed başlayarkən xəta"

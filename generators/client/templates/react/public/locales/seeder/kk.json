@@ -18,11 +18,14 @@
     "seedSelected": "Таңдалғанды іске қосу",
     "confirmSeedSelected": "Растау",
     "seedAll": "db:seed іске қосу",
-    "confirmSeedAll": "db:seed-ті растау"
+    "confirmSeedAll": "db:seed-ті растау",
+    "uploadCsv": "CSV жүктеу"
   },
   "seedCompleted": "Сеулер {{seeder}} аяқталды",
   "seedFailed": "Сеулер {{seeder}} сәтсіз аяқталды",
   "seedError": "Сеулер {{seeder}} іске қосуда қате",
+  "seedCsvCompleted": "{{seeder}} үшін CSV егу аяқталды",
+  "seedCsvError": "{{seeder}} үшін CSV жүктеуде қате",
   "seedAllCompleted": "db:seed аяқталды",
   "seedAllFailed": "db:seed сәтсіз аяқталды",
   "seedAllError": "db:seed іске қосуда қате"

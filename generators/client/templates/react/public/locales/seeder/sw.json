@@ -18,11 +18,14 @@
     "seedSelected": "Kimbia iliyo chaguliwa",
     "confirmSeedSelected": "Thibitisha",
     "seedAll": "Kimbia db:seed",
-    "confirmSeedAll": "Thibitisha db:seed"
+    "confirmSeedAll": "Thibitisha db:seed",
+    "uploadCsv": "Pakia CSV"
   },
   "seedCompleted": "Mbegu {{seeder}} imekamilika",
   "seedFailed": "Mbegu {{seeder}} imefailure",
   "seedError": "Kosa katika kuanzisha mbegu {{seeder}}",
+  "seedCsvCompleted": "Kujaza CSV ya {{seeder}} kumekamilika",
+  "seedCsvError": "Kosa la kupakia CSV kwa {{seeder}}",
   "seedAllCompleted": "db:seed imekamilika",
   "seedAllFailed": "db:seed imefailure",
   "seedAllError": "Kosa katika kuanzisha db:seed"

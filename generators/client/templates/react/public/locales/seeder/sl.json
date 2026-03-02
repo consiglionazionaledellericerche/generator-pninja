@@ -18,11 +18,14 @@
     "seedSelected": "Zaženi izbrane",
     "confirmSeedSelected": "Potrdi",
     "seedAll": "Zaženi db:seed",
-    "confirmSeedAll": "Potrdi db:seed"
+    "confirmSeedAll": "Potrdi db:seed",
+    "uploadCsv": "Naloži CSV"
   },
   "seedCompleted": "Sejalec {{seeder}} zaključen",
   "seedFailed": "Sejalec {{seeder}} neuspešen",
   "seedError": "Napaka pri zagonu sejalca {{seeder}}",
+  "seedCsvCompleted": "CSV seeding za {{seeder}} je zaključeno",
+  "seedCsvError": "Napaka pri nalaganju CSV za {{seeder}}",
   "seedAllCompleted": "db:seed zaključen",
   "seedAllFailed": "db:seed neuspešen",
   "seedAllError": "Napaka pri zagonu db:seed"

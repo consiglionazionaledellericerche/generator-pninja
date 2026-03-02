@@ -18,11 +18,14 @@
     "seedSelected": "Rhedeg a ddewiswyd",
     "confirmSeedSelected": "Cadarnhau",
     "seedAll": "Rhedeg db:seed",
-    "confirmSeedAll": "Cadarnhau db:seed"
+    "confirmSeedAll": "Cadarnhau db:seed",
+    "uploadCsv": "Mewngofnodi CSV"
   },
   "seedCompleted": "Plannwr {{seeder}} wedi'i gwblhau",
   "seedFailed": "Plannwr {{seeder}} wedi methu",
   "seedError": "Gwall wrth ddechrau plannwr {{seeder}}",
+  "seedCsvCompleted": "Mewnblaniad CSV o {{seeder}} wedi'i gwblhau",
+  "seedCsvError": "Gwall wrth fuwngofnodi CSV ar gyfer {{seeder}}",
   "seedAllCompleted": "db:seed wedi'i gwblhau",
   "seedAllFailed": "db:seed wedi methu",
   "seedAllError": "Gwall wrth ddechrau db:seed"

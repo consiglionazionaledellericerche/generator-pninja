@@ -18,11 +18,14 @@
     "seedSelected": "Seçilenleri çalıştır",
     "confirmSeedSelected": "Onayla",
     "seedAll": "db:seed çalıştır",
-    "confirmSeedAll": "db:seed onayla"
+    "confirmSeedAll": "db:seed onayla",
+    "uploadCsv": "CSV Yükle"
   },
   "seedCompleted": "Tohumlayıcı {{seeder}} tamamlandı",
   "seedFailed": "Tohumlayıcı {{seeder}} başarısız oldu",
   "seedError": "Tohumlayıcı {{seeder}} başlatmada hata",
+  "seedCsvCompleted": "{{seeder}} için CSV tohumlama tamamlandı",
+  "seedCsvError": "{{seeder}} için CSV yüklerken hata oluştu",
   "seedAllCompleted": "db:seed tamamlandı",
   "seedAllFailed": "db:seed başarısız oldu",
   "seedAllError": "db:seed başlatmada hata"

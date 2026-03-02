@@ -18,11 +18,14 @@
     "seedSelected": "নির্বাচিত চালান",
     "confirmSeedSelected": "নিশ্চিত করুন",
     "seedAll": "db:seed চালান",
-    "confirmSeedAll": "db:seed নিশ্চিত করুন"
+    "confirmSeedAll": "db:seed নিশ্চিত করুন",
+    "uploadCsv": "CSV আপলোড করুন"
   },
   "seedCompleted": "শস্য বপনকারী {{seeder}} সম্পন্ন",
   "seedFailed": "শস্য বপনকারী {{seeder}} ব্যর্থ",
   "seedError": "শস্য বপনকারী {{seeder}} শুরু করতে ত্রুটি",
+  "seedCsvCompleted": "{{seeder}} এর CSV সিডিং সম্পন্ন হয়েছে",
+  "seedCsvError": "{{seeder}} এর জন্য CSV আপলোড করতে ত্রুটি",
   "seedAllCompleted": "db:seed সম্পন্ন",
   "seedAllFailed": "db:seed ব্যর্থ",
   "seedAllError": "db:seed শুরু করতে ত্রুটি"

@@ -18,11 +18,14 @@
     "seedSelected": "Ṣiṣe ti a yan",
     "confirmSeedSelected": "Mọ",
     "seedAll": "Ṣiṣe db:seed",
-    "confirmSeedAll": "Mọ db:seed"
+    "confirmSeedAll": "Mọ db:seed",
+    "uploadCsv": "Gbe CSV silẹ"
   },
   "seedCompleted": "Ikoko {{seeder}} pari",
   "seedFailed": "Ikoko {{seeder}} kuna",
   "seedError": "Aṣiṣe ti n ṣiṣẹ ikoko {{seeder}}",
+  "seedCsvCompleted": "CSV gbin ti {{seeder}} pari",
+  "seedCsvError": "Aṣiṣe nigba ti a n gbe CSV silẹ fun {{seeder}}",
   "seedAllCompleted": "db:seed pari",
   "seedAllFailed": "db:seed kuna",
   "seedAllError": "Aṣiṣe ti n ṣiṣẹ db:seed"

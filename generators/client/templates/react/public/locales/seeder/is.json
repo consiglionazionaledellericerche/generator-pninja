@@ -18,11 +18,14 @@
     "seedSelected": "Keyra valið",
     "confirmSeedSelected": "Staðfesta",
     "seedAll": "Keyra db:seed",
-    "confirmSeedAll": "Staðfesta db:seed"
+    "confirmSeedAll": "Staðfesta db:seed",
+    "uploadCsv": "Hlaða upp CSV"
   },
   "seedCompleted": "Fræ {{seeder}} lokið",
   "seedFailed": "Fræ {{seeder}} mistókst",
   "seedError": "Villa við að hefja fræ {{seeder}}",
+  "seedCsvCompleted": "CSV frægróður fyrir {{seeder}} lokið",
+  "seedCsvError": "Villa við hlaðningu CSV fyrir {{seeder}}",
   "seedAllCompleted": "db:seed lokið",
   "seedAllFailed": "db:seed mistókst",
   "seedAllError": "Villa við að hefja db:seed"

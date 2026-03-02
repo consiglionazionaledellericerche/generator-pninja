@@ -18,11 +18,14 @@
     "seedSelected": "Vykdyti pasirinktus",
     "confirmSeedSelected": "Patvirtinti",
     "seedAll": "Vykdyti db:seed",
-    "confirmSeedAll": "Patvirtinti db:seed"
+    "confirmSeedAll": "Patvirtinti db:seed",
+    "uploadCsv": "Įkelti CSV"
   },
   "seedCompleted": "Užpildytojas {{seeder}} baigtas",
   "seedFailed": "Užpildytojas {{seeder}} nepavyko",
   "seedError": "Klaida pradedant užpildytoją {{seeder}}",
+  "seedCsvCompleted": "CSV sėjimas {{seeder}} baigtas",
+  "seedCsvError": "Klaida kaupiant CSV {{seeder}}",
   "seedAllCompleted": "db:seed baigtas",
   "seedAllFailed": "db:seed nepavyko",
   "seedAllError": "Klaida pradedant db:seed"

@@ -18,11 +18,14 @@
     "seedSelected": "Run selektearre",
     "confirmSeedSelected": "Bevestig",
     "seedAll": "Run db:seed",
-    "confirmSeedAll": "Bevestig db:seed"
+    "confirmSeedAll": "Bevestig db:seed",
+    "uploadCsv": "Upload CSV"
   },
   "seedCompleted": "Seeder {{seeder}} foltôge",
   "seedFailed": "Seeder {{seeder}} mislearre",
   "seedError": "Oops, der is in fout by it starten fan seeder {{seeder}}",
+  "seedCsvCompleted": "CSV seeding fan {{seeder}} kompleet",
+  "seedCsvError": "Fout by it uploaden fan CSV foar {{seeder}}",
   "seedAllCompleted": "db:seed foltôge",
   "seedAllFailed": "db:seed mislearre",
   "seedAllError": "Oops, der is in fout by it starten fan db:seed"

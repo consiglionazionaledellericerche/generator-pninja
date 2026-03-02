@@ -18,11 +18,14 @@
     "seedSelected": "Rith na roghnaithe",
     "confirmSeedSelected": "Deimhnigh",
     "seedAll": "Rith db:seed",
-    "confirmSeedAll": "Deimhnigh db:seed"
+    "confirmSeedAll": "Deimhnigh db:seed",
+    "uploadCsv": "Uaslódáil CSV"
   },
   "seedCompleted": "Críochnaíodh an síolóir {{seeder}}",
   "seedFailed": "Theip ar an síolóir {{seeder}}",
   "seedError": "Earráid ag tosú an síolóra {{seeder}}",
+  "seedCsvCompleted": "Críochnaíodh síniú CSV do {{seeder}}",
+  "seedCsvError": "Earráid ag uaslódáil CSV do {{seeder}}",
   "seedAllCompleted": "Críochnaíodh db:seed",
   "seedAllFailed": "Theip ar db:seed",
   "seedAllError": "Earráid ag tosú db:seed"

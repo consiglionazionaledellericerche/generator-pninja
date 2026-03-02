@@ -18,11 +18,14 @@
     "seedSelected": "Kjør valgt",
     "confirmSeedSelected": "Bekreft",
     "seedAll": "Kjør db:frøing",
-    "confirmSeedAll": "Bekreft db:frøing"
+    "confirmSeedAll": "Bekreft db:frøing",
+    "uploadCsv": "Last opp CSV"
   },
   "seedCompleted": "Frøplante {{seeder}} fullført",
   "seedFailed": "Frøplante {{seeder}} mislyktes",
   "seedError": "Feil ved oppstart av frøplante {{seeder}}",
+  "seedCsvCompleted": "CSV-innlegging av {{seeder}} fullført",
+  "seedCsvError": "Feil ved opplasting av CSV for {{seeder}}",
   "seedAllCompleted": "db:frøing fullført",
   "seedAllFailed": "db:frøing mislyktes",
   "seedAllError": "Feil ved oppstart av db:frøing"

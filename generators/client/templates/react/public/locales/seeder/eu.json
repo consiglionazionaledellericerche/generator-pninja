@@ -18,11 +18,14 @@
     "seedSelected": "Aukeratutakoak exekutatu",
     "confirmSeedSelected": "Berretsi",
     "seedAll": "db:seed exekutatu",
-    "confirmSeedAll": "db:seed berretsi"
+    "confirmSeedAll": "db:seed berretsi",
+    "uploadCsv": "CSV igotzea"
   },
   "seedCompleted": "Seeder {{seeder}} osatu da",
   "seedFailed": "Seeder {{seeder}} porrot egin du",
   "seedError": "Error hazitzea hastean {{seeder}}",
+  "seedCsvCompleted": "{{seeder}}-en CSV haztea amaituta",
+  "seedCsvError": "Errorea CSV igotzean {{seeder}}-entzat",
   "seedAllCompleted": "db:seed osatu da",
   "seedAllFailed": "db:seed porrot egin du",
   "seedAllError": "Error db:seed hastean"

@@ -18,11 +18,14 @@
     "seedSelected": "Покрени изабране",
     "confirmSeedSelected": "Потврди",
     "seedAll": "Покрени db:seed",
-    "confirmSeedAll": "Потврди db:seed"
+    "confirmSeedAll": "Потврди db:seed",
+    "uploadCsv": "Отпреми CSV"
   },
   "seedCompleted": "Сејер {{seeder}} завршен",
   "seedFailed": "Сејер {{seeder}} није успео",
   "seedError": "Грешка при покретању сејера {{seeder}}",
+  "seedCsvCompleted": "CSV сејање {{seeder}} је завршено",
+  "seedCsvError": "Грешка приликом отпремања CSV за {{seeder}}",
   "seedAllCompleted": "db:seed завршен",
   "seedAllFailed": "db:seed није успео",
   "seedAllError": "Грешка при покретању db:seed"

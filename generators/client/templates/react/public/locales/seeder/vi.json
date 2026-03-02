@@ -18,11 +18,14 @@
     "seedSelected": "Chạy đã chọn",
     "confirmSeedSelected": "Xác nhận",
     "seedAll": "Chạy db:seed",
-    "confirmSeedAll": "Xác nhận db:seed"
+    "confirmSeedAll": "Xác nhận db:seed",
+    "uploadCsv": "Tải lên CSV"
   },
   "seedCompleted": "Seeder {{seeder}} đã hoàn thành",
   "seedFailed": "Seeder {{seeder}} đã thất bại",
   "seedError": "Lỗi khởi động seeder {{seeder}}",
+  "seedCsvCompleted": "Hoàn thành việc gieo hạt CSV của {{seeder}}",
+  "seedCsvError": "Lỗi khi tải lên CSV cho {{seeder}}",
   "seedAllCompleted": "db:seed đã hoàn thành",
   "seedAllFailed": "db:seed đã thất bại",
   "seedAllError": "Lỗi khởi động db:seed"

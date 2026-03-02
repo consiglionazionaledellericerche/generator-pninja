@@ -18,11 +18,14 @@
     "seedSelected": "Запустить выбранные",
     "confirmSeedSelected": "Подтвердить",
     "seedAll": "Запустить db:seed",
-    "confirmSeedAll": "Подтвердить db:seed"
+    "confirmSeedAll": "Подтвердить db:seed",
+    "uploadCsv": "Загрузить CSV"
   },
   "seedCompleted": "Семплер {{seeder}} завершен",
   "seedFailed": "Семплер {{seeder}} не удался",
   "seedError": "Ошибка при запуске семплера {{seeder}}",
+  "seedCsvCompleted": "Посев CSV для {{seeder}} завершен",
+  "seedCsvError": "Ошибка загрузки CSV для {{seeder}}",
   "seedAllCompleted": "db:seed завершен",
   "seedAllFailed": "db:seed не удался",
   "seedAllError": "Ошибка при запуске db:seed"

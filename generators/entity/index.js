@@ -922,6 +922,7 @@ export default class extends Generator {
             })),
             to,
         });
+        this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/SeedCsvRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/SeedCsvRequest.php`));
 
         // Generate ReindexRequest
         this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {

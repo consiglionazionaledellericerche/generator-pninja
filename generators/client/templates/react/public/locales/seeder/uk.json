@@ -18,11 +18,14 @@
     "seedSelected": "Запустити вибрані",
     "confirmSeedSelected": "Підтвердити",
     "seedAll": "Запустити db:seed",
-    "confirmSeedAll": "Підтвердити db:seed"
+    "confirmSeedAll": "Підтвердити db:seed",
+    "uploadCsv": "Завантажити CSV"
   },
   "seedCompleted": "Посівник {{seeder}} завершено",
   "seedFailed": "Посівник {{seeder}} не вдався",
   "seedError": "Помилка запуску посівника {{seeder}}",
+  "seedCsvCompleted": "Посів CSV для {{seeder}} завершено",
+  "seedCsvError": "Помилка під час завантаження CSV для {{seeder}}",
   "seedAllCompleted": "db:seed завершено",
   "seedAllFailed": "db:seed не вдався",
   "seedAllError": "Помилка запуску db:seed"

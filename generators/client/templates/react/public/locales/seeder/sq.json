@@ -18,11 +18,14 @@
     "seedSelected": "Ekzekuto të zgjedhurat",
     "confirmSeedSelected": "Konfirmo",
     "seedAll": "Ekzekuto db:seed",
-    "confirmSeedAll": "Konfirmo db:seed"
+    "confirmSeedAll": "Konfirmo db:seed",
+    "uploadCsv": "Ngarko CSV"
   },
   "seedCompleted": "Mbushësi {{seeder}} përfundoi",
   "seedFailed": "Mbushësi {{seeder}} dështoi",
   "seedError": "Gabim në fillimin e mbushësit {{seeder}}",
+  "seedCsvCompleted": "Semenimi i CSV për {{seeder}} u përfundua",
+  "seedCsvError": "Gabim gjatë ngarkimit të CSV për {{seeder}}",
   "seedAllCompleted": "db:seed përfundoi",
   "seedAllFailed": "db:seed dështoi",
   "seedAllError": "Gabim në fillimin e db:seed"

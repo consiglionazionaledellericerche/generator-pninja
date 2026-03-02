@@ -18,11 +18,14 @@
     "seedSelected": "Sebenza okhethiweyo",
     "confirmSeedSelected": "Qinisekisa",
     "seedAll": "Sebenza db:seed",
-    "confirmSeedAll": "Qinisekisa db:seed"
+    "confirmSeedAll": "Qinisekisa db:seed",
+    "uploadCsv": "Layisha i-CSV"
   },
   "seedCompleted": "Iseeder {{seeder}} iphelile",
   "seedFailed": "Iseeder {{seeder}} yehlulekile",
   "seedError": "Iphutha ekuqaleni iseeder {{seeder}}",
+  "seedCsvCompleted": "i-CSV yokuhlwanyela ka-{{seeder}} iphelile",
+  "seedCsvError": "Iphutha ekulayisheni i-CSV ka-{{seeder}}",
   "seedAllCompleted": "db:seed iphelile",
   "seedAllFailed": "db:seed yehlulekile",
   "seedAllError": "Iphutha ekuqaleni db:seed"

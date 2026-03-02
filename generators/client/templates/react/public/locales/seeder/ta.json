@@ -18,11 +18,14 @@
     "seedSelected": "தேர்ந்தெடுத்தவற்றை இயக்கு",
     "confirmSeedSelected": "உறுதிப்படுத்தவும்",
     "seedAll": "db:seed ஐ இயக்கு",
-    "confirmSeedAll": "db:seed ஐ உறுதிப்படுத்தவும்"
+    "confirmSeedAll": "db:seed ஐ உறுதிப்படுத்தவும்",
+    "uploadCsv": "CSV பதிவேற்றவும்"
   },
   "seedCompleted": "குறிஞ்சி {{seeder}} முடிந்தது",
   "seedFailed": "குறிஞ்சி {{seeder}} தோல்வி அடைந்தது",
   "seedError": "குறிஞ்சி {{seeder}} ஐ ஆரம்பிப்பதில் பிழை",
+  "seedCsvCompleted": "{{seeder}} க்கான CSV மேற்செலுத்துதல் முடிந்தது",
+  "seedCsvError": "{{seeder}} க்கான CSV பதிவேற்றுவதில் பிழை",
   "seedAllCompleted": "db:seed முடிந்தது",
   "seedAllFailed": "db:seed தோல்வி அடைந்தது",
   "seedAllError": "db:seed ஐ ஆரம்பிப்பதில் பிழை"

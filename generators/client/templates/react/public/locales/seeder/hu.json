@@ -18,11 +18,14 @@
     "seedSelected": "Kiválasztott futtatása",
     "confirmSeedSelected": "Megerősítés",
     "seedAll": "db:seed futtatása",
-    "confirmSeedAll": "db:seed megerősítése"
+    "confirmSeedAll": "db:seed megerősítése",
+    "uploadCsv": "CSV feltöltése"
   },
   "seedCompleted": "Magvető {{seeder}} befejeződött",
   "seedFailed": "Magvető {{seeder}} meghiúsult",
   "seedError": "Hiba a {{seeder}} magvető indításakor",
+  "seedCsvCompleted": "A {{seeder}} CSV magánosítása befejeződött",
+  "seedCsvError": "Hiba a CSV feltöltésekor a {{seeder}} számára",
   "seedAllCompleted": "db:seed befejeződött",
   "seedAllFailed": "db:seed meghiúsult",
   "seedAllError": "Hiba a db:seed indításakor"

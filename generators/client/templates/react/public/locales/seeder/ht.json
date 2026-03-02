@@ -18,11 +18,14 @@
     "seedSelected": "Kouri sa yo chwazi",
     "confirmSeedSelected": "Konfime",
     "seedAll": "Kouri db:seed",
-    "confirmSeedAll": "Konfime db:seed"
+    "confirmSeedAll": "Konfime db:seed",
+    "uploadCsv": "Telechaje CSV"
   },
   "seedCompleted": "Plante {{seeder}} fini",
   "seedFailed": "Plante {{seeder}} echwe",
   "seedError": "Erè pandan w ap kòmanse plante {{seeder}}",
+  "seedCsvCompleted": "CSV seeding pou {{seeder}} fini",
+  "seedCsvError": "Erè pandan telechaje CSV pou {{seeder}}",
   "seedAllCompleted": "db:seed fini",
   "seedAllFailed": "db:seed echwe",
   "seedAllError": "Erè pandan w ap kòmanse db:seed"

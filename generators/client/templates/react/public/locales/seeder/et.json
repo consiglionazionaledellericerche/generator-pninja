@@ -18,11 +18,14 @@
     "seedSelected": "Käivita valitud",
     "confirmSeedSelected": "Kinnita",
     "seedAll": "Käivita db:seed",
-    "confirmSeedAll": "Kinnita db:seed"
+    "confirmSeedAll": "Kinnita db:seed",
+    "uploadCsv": "Laadi üles CSV"
   },
   "seedCompleted": "Külvija {{seeder}} lõpetatud",
   "seedFailed": "Külvija {{seeder}} ebaõnnestus",
   "seedError": "Tõrge külvija {{seeder}} käivitamisel",
+  "seedCsvCompleted": "CSV külvamine {{seeder}} on lõpetatud",
+  "seedCsvError": "Viga CSV üleslaadimisel {{seeder}} jaoks",
   "seedAllCompleted": "db:seed lõpetatud",
   "seedAllFailed": "db:seed ebaõnnestus",
   "seedAllError": "Tõrge db:seed käivitamisel"

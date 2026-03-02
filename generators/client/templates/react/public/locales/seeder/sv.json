@@ -18,11 +18,14 @@
     "seedSelected": "Kör markerade",
     "confirmSeedSelected": "Bekräfta",
     "seedAll": "Kör db:seed",
-    "confirmSeedAll": "Bekräfta db:seed"
+    "confirmSeedAll": "Bekräfta db:seed",
+    "uploadCsv": "Ladda upp CSV"
   },
   "seedCompleted": "Seeder {{seeder}} slutförd",
   "seedFailed": "Seeder {{seeder}} misslyckades",
   "seedError": "Fel vid start av seeder {{seeder}}",
+  "seedCsvCompleted": "CSV-utsäde av {{seeder}} slutförd",
+  "seedCsvError": "Fel vid uppladdning av CSV för {{seeder}}",
   "seedAllCompleted": "db:seed slutförd",
   "seedAllFailed": "db:seed misslyckades",
   "seedAllError": "Fel vid start av db:seed"

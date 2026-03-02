@@ -18,11 +18,14 @@
     "seedSelected": "Mahi i te tīpako",
     "confirmSeedSelected": "Whakaaetanga",
     "seedAll": "Mahi db:seed",
-    "confirmSeedAll": "Whakaaetanga db:seed"
+    "confirmSeedAll": "Whakaaetanga db:seed",
+    "uploadCsv": "Tāpiri CSV"
   },
   "seedCompleted": "Kaihoko {{seeder}} kua mutu",
   "seedFailed": "Kaihoko {{seeder}} i hinga",
   "seedError": "Hē tautuhi i te kaikawe {{seeder}}",
+  "seedCsvCompleted": "Kua whakamutua te pēhanga CSV o {{seeder}}",
+  "seedCsvError": "He hapa i te tāpiri CSV mō {{seeder}}",
   "seedAllCompleted": "db:seed kua mutu",
   "seedAllFailed": "db:seed i hinga",
   "seedAllError": "Hē tautuhi i te db:seed"

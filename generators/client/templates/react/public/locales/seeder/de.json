@@ -18,11 +18,14 @@
     "seedSelected": "Ausgewählte ausführen",
     "confirmSeedSelected": "Bestätigen",
     "seedAll": "db:seed ausführen",
-    "confirmSeedAll": "db:seed bestätigen"
+    "confirmSeedAll": "db:seed bestätigen",
+    "uploadCsv": "CSV hochladen"
   },
   "seedCompleted": "Seeder {{seeder}} abgeschlossen",
   "seedFailed": "Seeder {{seeder}} fehlgeschlagen",
   "seedError": "Fehler beim Starten des Seeders {{seeder}}",
+  "seedCsvCompleted": "CSV-Besäen von {{seeder}} abgeschlossen",
+  "seedCsvError": "Fehler beim Hochladen der CSV für {{seeder}}",
   "seedAllCompleted": "db:seed abgeschlossen",
   "seedAllFailed": "db:seed fehlgeschlagen",
   "seedAllError": "Fehler beim Starten von db:seed"

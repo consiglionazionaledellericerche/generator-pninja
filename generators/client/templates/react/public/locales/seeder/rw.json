@@ -18,11 +18,14 @@
     "seedSelected": "Koresha byatoranyijwe",
     "confirmSeedSelected": "Emeza",
     "seedAll": "Koresha db:seed",
-    "confirmSeedAll": "Emeza db:seed"
+    "confirmSeedAll": "Emeza db:seed",
+    "uploadCsv": "Ohereza CSV"
   },
   "seedCompleted": "Umujyanama {{seeder}} warangiye",
   "seedFailed": "Umujyanama {{seeder}} waraburijwemo",
   "seedError": "Ikosa ryo gutangiza umujyanama {{seeder}}",
+  "seedCsvCompleted": "Kuzamura CSV kwa {{seeder}} birarangiye",
+  "seedCsvError": "Ikosa mu kohereza CSV kuri {{seeder}}",
   "seedAllCompleted": "db:seed yarangiye",
   "seedAllFailed": "db:seed yaburijwemo",
   "seedAllError": "Ikosa ryo gutangiza db:seed"

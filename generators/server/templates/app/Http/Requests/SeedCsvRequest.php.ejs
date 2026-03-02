@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Http\Requests;
+
+class SeedCsvRequest extends SeedRequest
+{
+    public function rules(): array
+    {
+        return [
+            'csv' => ['required', 'file', 'mimes:csv,txt', 'max:10240'],
+        ];
+    }
+}

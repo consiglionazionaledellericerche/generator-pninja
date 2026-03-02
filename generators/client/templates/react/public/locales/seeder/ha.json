@@ -18,11 +18,14 @@
     "seedSelected": "Gudanar da wanda aka zaɓa",
     "confirmSeedSelected": "Tabbatar",
     "seedAll": "Gudanar da db:seed",
-    "confirmSeedAll": "Tabbatar db:seed"
+    "confirmSeedAll": "Tabbatar db:seed",
+    "uploadCsv": "Loda CSV"
   },
   "seedCompleted": "Ruwa {{seeder}} an kammala",
   "seedFailed": "Ruwa {{seeder}} ya gagara",
   "seedError": "Kuskure wajen kaddamar da ruwa {{seeder}}",
+  "seedCsvCompleted": "An kammala ɗora CSV na {{seeder}}",
+  "seedCsvError": "Kuskure wajen loda CSV don {{seeder}}",
   "seedAllCompleted": "db:seed an kammala",
   "seedAllFailed": "db:seed ya gagara",
   "seedAllError": "Kuskure wajen kaddamar da db:seed"

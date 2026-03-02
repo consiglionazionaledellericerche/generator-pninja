@@ -18,11 +18,14 @@
     "seedSelected": "تشغيل المحدد",
     "confirmSeedSelected": "تأكيد",
     "seedAll": "تشغيل db:seed",
-    "confirmSeedAll": "تأكيد db:seed"
+    "confirmSeedAll": "تأكيد db:seed",
+    "uploadCsv": "رفع ملف CSV"
   },
   "seedCompleted": "اكتملت البذور {{seeder}}",
   "seedFailed": "فشلت البذور {{seeder}}",
   "seedError": "خطأ في بدء البذور {{seeder}}",
+  "seedCsvCompleted": "اكتملت عملية تخزين بيانات CSV لـ {{seeder}}",
+  "seedCsvError": "خطأ في رفع ملف CSV لـ {{seeder}}",
   "seedAllCompleted": "اكتمل db:seed",
   "seedAllFailed": "فشل db:seed",
   "seedAllError": "خطأ في بدء db:seed"

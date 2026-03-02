@@ -18,11 +18,14 @@
     "seedSelected": "Tanlanganlarni ishga tushirish",
     "confirmSeedSelected": "Tasdiqlash",
     "seedAll": "db:seed ni ishga tushirish",
-    "confirmSeedAll": "db:seed ni tasdiqlash"
+    "confirmSeedAll": "db:seed ni tasdiqlash",
+    "uploadCsv": "CSV ni yuklash"
   },
   "seedCompleted": "Ekish {{seeder}} tugadi",
   "seedFailed": "Ekish {{seeder}} muvaffaqiyatsiz",
   "seedError": "Ekish {{seeder}} ni boshlashda xato",
+  "seedCsvCompleted": "{{seeder}} uchun CSV ekish yakunlandi",
+  "seedCsvError": "{{seeder}} uchun CSV ni yuklashda xato",
   "seedAllCompleted": "db:seed tugadi",
   "seedAllFailed": "db:seed muvaffaqiyatsiz",
   "seedAllError": "db:seed ni boshlashda xato"

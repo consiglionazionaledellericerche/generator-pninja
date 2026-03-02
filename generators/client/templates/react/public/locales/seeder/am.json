@@ -18,11 +18,14 @@
     "seedSelected": "የተመረጠ ይነበር",
     "confirmSeedSelected": "እንቅስቃሴ",
     "seedAll": "db:seed ይነበር",
-    "confirmSeedAll": "db:seed ይከተለ"
+    "confirmSeedAll": "db:seed ይከተለ",
+    "uploadCsv": "CSV አውሮጣ"
   },
   "seedCompleted": "ይቀነባበር {{seeder}} ተጠናቋል",
   "seedFailed": "ይቀነባበር {{seeder}} ተሳስቷል",
   "seedError": "የምንከና ይከፈት {{seeder}}",
+  "seedCsvCompleted": "{{seeder}} የCSV ማስተካከል ፈጽሞ የተጠናቀቀ",
+  "seedCsvError": "{{seeder}} የCSV አውሮጣ ስህተት",
   "seedAllCompleted": "db:seed ተጠናቋል",
   "seedAllFailed": "db:seed ተሳስቷል",
   "seedAllError": "የምንከና ይከፈት db:seed"

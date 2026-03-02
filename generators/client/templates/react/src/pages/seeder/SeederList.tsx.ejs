@@ -56,6 +56,7 @@ export function SeederList() {
   const [allJobState, setAllJobState] = useState<IJobState | null>(null);
   const pollRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
   const completedJobs = useRef<Set<string>>(new Set());
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const updateRow = (slug: string, patch: Partial<SeederRowState>) =>
     setRowState((prev) => ({
@@ -248,6 +249,46 @@ export function SeederList() {
     setBulkSeeding(false);
   };
 
+  const handleCsvUpload = (slug: string, file: File) => {
+    const formData = new FormData();
+    formData.append('csv', file);
+
+    updateRow(slug, { jobState: { status: 'pending' } });
+
+    axiosInstance
+      .post<{ job_id: string }>(`/api/seeder/${slug}/csv`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then(({ data }) => {
+        updateRow(slug, { jobId: data.job_id, jobState: { status: 'pending' } });
+        startPolling(
+          slug,
+          data.job_id,
+          (state) => updateRow(slug, { jobState: state }),
+          (state) => {
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('seeder:seedFailed', { seeder: slug }))
+                  : t('seeder:seedCsvCompleted', { seeder: slug }),
+            });
+          }
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        updateRow(slug, { jobState: null });
+        addNotification({
+          type: 'error',
+          message: t('seeder:seedCsvError', { seeder: slug }),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      })
+      .finally(() => {
+        if (fileInputRefs.current[slug]) fileInputRefs.current[slug]!.value = '';
+      });
+  };
+
   const getStatusIcon = (state: IJobState | null) => {
     if (!state) return null;
     switch (state.status) {
@@ -379,24 +420,50 @@ export function SeederList() {
                         )}
                       </td>
                       <td className="text-nowrap w-0">
-                        <ConfirmButton
-                          disabled={anyBusy || busy}
-                          onConfirm={() => handleSeed(seeder.slug)}
-                          className="primary-button"
-                          pendingClassName="primary-button"
-                          label={
+                        <div className="flex items-center gap-2">
+                          <ConfirmButton
+                            disabled={anyBusy || busy}
+                            onConfirm={() => handleSeed(seeder.slug)}
+                            className="primary-button"
+                            pendingClassName="primary-button"
+                            label={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="play_arrow" size={5} />
+                                {t('seeder:actions.seed')}
+                              </span>
+                            }
+                            pendingLabel={
+                              <span className="flex items-center gap-2">
+                                <Icon icon="play_arrow" size={5} />
+                                {t('seeder:actions.confirmSeed')}
+                              </span>
+                            }
+                          />
+                          <input
+                            ref={(el) => {
+                              fileInputRefs.current[seeder.slug] = el;
+                            }}
+                            type="file"
+                            accept=".csv"
+                            className="sr-only"
+                            aria-label={t('seeder:actions.uploadCsv', { seeder: seeder.label })}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleCsvUpload(seeder.slug, file);
+                            }}
+                          />
+                          <button
+                            disabled={anyBusy || busy}
+                            className="secondary-button"
+                            onClick={() => fileInputRefs.current[seeder.slug]?.click()}
+                            title={t('seeder:actions.uploadCsv', { seeder: seeder.label })}
+                          >
                             <span className="flex items-center gap-2">
-                              <Icon icon="play_arrow" size={5} />
-                              {t('seeder:actions.seed')}
+                              <Icon icon="upload_file" size={5} />
+                              {t('seeder:actions.uploadCsv', { seeder: seeder.label })}
                             </span>
-                          }
-                          pendingLabel={
-                            <span className="flex items-center gap-2">
-                              <Icon icon="play_arrow" size={5} />
-                              {t('seeder:actions.confirmSeed')}
-                            </span>
-                          }
-                        />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

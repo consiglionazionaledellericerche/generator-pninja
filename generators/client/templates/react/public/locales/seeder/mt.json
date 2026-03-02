@@ -18,11 +18,14 @@
     "seedSelected": "Esegwi magħżul",
     "confirmSeedSelected": "Ikkonferma",
     "seedAll": "Esegwi db:seed",
-    "confirmSeedAll": "Ikkonferma db:seed"
+    "confirmSeedAll": "Ikkonferma db:seed",
+    "uploadCsv": "Ittella CSV"
   },
   "seedCompleted": "Seeder {{seeder}} tlestiet",
   "seedFailed": "Seeder {{seeder}} ftit",
   "seedError": "Żball fil-bidu tas-seeder {{seeder}}",
+  "seedCsvCompleted": "Il-seeding CSV ta' {{seeder}} komplut",
+  "seedCsvError": "Żball għall-ittellija CSV għal {{seeder}}",
   "seedAllCompleted": "db:seed tlestiet",
   "seedAllFailed": "db:seed ftit",
   "seedAllError": "Żball fil-bidu tad-db:seed"
