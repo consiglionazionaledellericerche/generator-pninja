@@ -14,9 +14,17 @@ export default class AuthGenerator extends Generator {
       type: Boolean,
       default: false
     });
+    this.option('authentication', {
+      type: String,
+      description: 'The type of authentication to use',
+    });
   }
 
   async prompting() {
+    if (this.options.authentication) {
+      this.answers = { authentication: this.options.authentication };
+      return;
+    }
     let prompts = [];
     if (this.options["fromMain"]) {
       prompts = [...prompts, ...[{
@@ -24,6 +32,7 @@ export default class AuthGenerator extends Generator {
         type: "list",
         name: "authentication",
         message: `Which ${colors.yellow('*type*')} of authentication would you like to use?`,
+        default: this.options.authentication || this.config.get('authentication') || 'keycloak',
         choices: [
           { name: 'Keycloak', value: 'keycloak' },
           { name: 'Sanctum', value: 'sanctum', disabled: "Not implemented yet" },

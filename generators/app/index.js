@@ -12,10 +12,34 @@ const __dirname = path.dirname(__filename);
 export default class extends Generator {
   constructor(args, opts) {
     super(args, opts);
-    this.option('fromMain', {
-      type: Boolean,
-      default: false
+    this.option('name', {
+      type: String,
+      description: 'Your project name'
     });
+    this.option('dmbs', {
+      type: String,
+      description: 'Your DBMS'
+    });
+    this.option('authentication', {
+      type: String,
+      description: 'The type of authentication to use',
+    });
+    this.option('clientType', {
+      type: String,
+      description: 'The type of client to use',
+    });
+    this.option('nativeLanguage', {
+      type: String,
+      description: 'The native language of the application',
+    });
+    this.option('languages', {
+      type: String,
+      description: 'Additional languages to install (comma separated)',
+    });
+    this.option('searchEngine', {
+      type: String,
+      description: 'The search engine to use (database, algolia, elastic, meilisearch, typesense, solr, null)',
+    })
   }
   async initializing() {
     hello(this.log, true);
@@ -31,6 +55,7 @@ export default class extends Generator {
     }, {
       fromMain: true,
       env: this.env,
+      authentication: this.options.authentication,
       resolved: authGeneratorPath,
       namespace: 'pninja:auth'
     });
@@ -58,6 +83,9 @@ export default class extends Generator {
     }, {
       fromMain: true,
       env: this.env,
+      clientType: this.options.clientType,
+      nativeLanguage: this.options.nativeLanguage,
+      languages: this.options.languages,
       resolved: clientGeneratorPath,
       namespace: 'pninja:client'
     });
@@ -73,6 +101,7 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: searchGeneratorPath,
+      searchEngine: this.options.searchEngine,
       namespace: 'pninja:search'
     });
 
@@ -105,18 +134,25 @@ export default class extends Generator {
     });
   }
   async prompting() {
+    if (this.options.name && this.options.dbms) {
+      this.answers = {
+        name: this.options.name,
+        dbms: this.options.dbms
+      };
+      return;
+    }
     this.answers = await this.prompt([
       {
         type: "input",
         name: "name",
         message: "Your project name",
-        default: this.config.get('name') || this.appname // Default to current folder name
+        default: this.options.name || this.config.get('name') || this.appname // Default to current folder name
       }, {
         store: true,
         type: "list",
         name: "dbms",
         message: "Your DBMS",
-        default: this.config.get('dbms') || 'sqlite',
+        default: this.options.dbms || this.config.get('dbms') || 'sqlite',
         choices: [
           {
             name: `SQLite ${colors.dim('(Lightweight, serverless, file-based)')}`,

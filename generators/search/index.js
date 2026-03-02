@@ -19,10 +19,18 @@ export default class SearchGenerator extends Generator {
       type: Boolean,
       default: false
     });
+    this.option('searchEngine', {
+      type: String,
+      description: 'The search engine to use (database, algolia, elastic, meilisearch, typesense, solr, null)',
+    });
     if (!this.options.fromMain && !this.options.fromEntities) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
   }
 
   async prompting() {
+    if (this.options.searchEngine) {
+      this.answers = { searchEngine: this.options.searchEngine };
+      return;
+    }
     if (this.options.fromMain) {
       this.answers = await this.prompt([
         {

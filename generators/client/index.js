@@ -12,9 +12,29 @@ export default class AuthGenerator extends Generator {
             type: Boolean,
             default: false
         });
+        this.option('clientType', {
+            type: String,
+            description: 'The type of client to use',
+        });
+        this.option('nativeLanguage', {
+            type: String,
+            description: 'The native language of the application',
+        });
+        this.option('languages', {
+            type: String,
+            description: 'Additional languages to install (comma separated)',
+        });
         if (!this.options.fromMain) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
     }
     async prompting() {
+        if (this.options.clientType && this.options.nativeLanguage && this.options.languages) {
+            this.answers = {
+                clientType: this.options.clientType,
+                nativeLanguage: this.options.nativeLanguage,
+                languages: this.options.languages.split(',').map(lang => lang.trim())
+            };
+            return;
+        }
         let prompts = [];
         if (this.options["fromMain"] || true) {
             prompts = [...prompts, ...[{
@@ -22,7 +42,7 @@ export default class AuthGenerator extends Generator {
                 type: "list",
                 name: "clientType",
                 message: `Which ${colors.yellow('*Framework*')} would you like to use for the client?`,
-                default: this.config.get('clientType') || 'vue',
+                default: this.options.clientType || this.config.get('clientType') || 'react',
                 choices: [
                     { name: 'React', value: 'react' },
                     { name: 'Vue', value: 'vue', disabled: "Not implemented yet" },
@@ -34,14 +54,14 @@ export default class AuthGenerator extends Generator {
                 type: "list",
                 name: "nativeLanguage",
                 message: `Please choose the ${colors.yellow('*native language*')} of the application`,
-                default: this.config.get('nativeLanguage') || DEFAULT_LANGUAGE,
+                default: this.options.nativeLanguage || this.config.get('nativeLanguage') || DEFAULT_LANGUAGE,
                 choices: LANGUAGES
             }, {
                 store: true,
                 type: 'checkbox',
                 name: 'languages',
                 message: 'Please choose additional languages to install',
-                default: this.config.get('languages') || [],
+                default: this.options.languages.split(',').map(lang => lang.trim()) || this.config.get('languages') || [],
                 choices: (answers) => {
                     return getAvailableLanguages(answers.nativeLanguage);
                 },
