@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\File;
 
 trait SeederHelpers
 {
-    public function seedFromCsv(string $modelClass): bool
+    private function seedFromCsv(string $modelClass): bool
     {
         $csvPath = database_path("seeders/csv/" . ((new \ReflectionClass($modelClass))->getShortName()) . ".csv");
         if (!File::exists($csvPath)) return false;
