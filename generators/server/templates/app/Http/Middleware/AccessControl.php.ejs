@@ -20,6 +20,9 @@ class AccessControl
             'delete' => 'delete'
         };
         $result = $this->userHasPermission($resource, $action);
+        if (!$result && in_array($resource, ['AcRule', 'Audit', 'Log', 'Seeder', 'SearchReindex'])) {
+            \Log::warning("AccessControl: User '{$request?->user()?->username}' attempting to {$action} on {$resource} - Permission: " . ($result ? 'granted' : 'denied'));
+        }
         if (!$result) {
             return response()->json([
                 'error' => 'Forbidden',
