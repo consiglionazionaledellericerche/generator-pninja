@@ -34,7 +34,7 @@ export default class extends Generator {
     });
     this.option('languages', {
       type: String,
-      description: 'Additional languages to install (comma separated)',
+      description: 'Additional languages to install (comma separated OR "none")',
     });
     this.option('searchEngine', {
       type: String,
