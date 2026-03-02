@@ -301,9 +301,48 @@ By default, **only `superadmin` role** can access the search index management. T
 
 ```csv
 p,admin,SearchReindex,read
+p,admin,SearchReindex,create
 ```
 
 <%  } -%>
+## Database Seeding Administration
+
+The application includes a **seeding administration interface** accessible at `/seeder`. It allows you to run seeders without using the command line, individually or in bulk.
+
+**Features:**
+
+- **Per-seeder execution**: run any seeder individually with a confirmation step
+- **CSV upload**: upload a CSV file directly from the browser to seed an entity — the file is saved to `server/database/seeders/csv/` with the correct name and the seeder is executed immediately
+- **Bulk execution**: select multiple seeders via checkbox and run them in series
+- **Run db:seed**: execute the global `DatabaseSeeder` (equivalent to `php artisan db:seed`) from the toolbar
+- **Real-time status**: each row shows the current job status (`pending`, `running`, `completed`, `failed`)
+
+**CSV format for entities:**
+```csv
+column_a,column_b,column_c,column_d,related_id
+colA001,colB001,colC001,colD001,1
+colA002,colB002,colC002,colD002,2
+```
+
+**CSV format for many-to-many relationships:**
+```csv
+model_id,related_id
+1,1
+1,2
+2,3
+```
+
+> ⚠️ **Warning**: running a seeder does not truncate the table first. If you want to reseed from scratch, run `npm run migrate:fresh:seed` or truncate the table manually beforehand.
+
+**Access control:**
+
+By default, **only `superadmin` role** can access the seeding administration. To grant access to other roles, add policies to the `ac_rules` table:
+
+```csv
+p,admin,Seeder,read
+p,admin,Seeder,create
+```
+
 ## Docker composition
 
 To start the **Docker composition**:
