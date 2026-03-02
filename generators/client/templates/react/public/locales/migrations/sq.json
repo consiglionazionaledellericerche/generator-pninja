@@ -1,0 +1,42 @@
+{
+  "title": "Migrimet e Databazës",
+  "status": {
+    "pending": "Në pritje...",
+    "running": "Duke u kryer",
+    "completed": "Përfunduar",
+    "failed": "Dështuar",
+    "title": "Statusi i Migrimit",
+    "description": "Trego statusin e të gjitha migrimeve.",
+    "action": "Trego statusin",
+    "error": "Gabim në marrjen e statusit të migrimit"
+  },
+  "migrate": {
+    "title": "Ekzekuto Migrimet",
+    "description": "Ekzekuto të gjitha migrimet e papërfunduara të databazës.",
+    "action": "Migrimi",
+    "confirm": "Konfirmo migrimin"
+  },
+  "rollback": {
+    "title": "Rindiz",
+    "description": "Rindiz lotin e fundit të migrimeve.",
+    "action": "Rindiz",
+    "confirm": "Konfirmo rindizjen",
+    "step": "Hapi",
+    "stepPlaceholder": "p.sh. 1",
+    "stepHint": "Lëri bosh për të rindizur lotin e fundit"
+  },
+  "fresh": {
+    "title": "Migrim i Ri",
+    "description": "⚠️ Fshij të gjitha tabelat dhe ekzekuto përsëri të gjitha migrimet. Të dhënat do të humbasin.",
+    "action": "Migrim i ri",
+    "confirm": "Konfirmo — të gjitha të dhënat do të humbasin"
+  },
+  "migrateCompleted": "Migrimi përfundoi",
+  "migrateFailed": "Migrimi dështoi",
+  "migrateError": "Gabim gjatë fillimit të migrimit",
+  "freshCompleted": "Migrimi i ri përfundoi",
+  "freshFailed": "Migrimi i ri dështoi",
+  "freshError": "Gabim gjatë fillimit të migrimit të ri",
+  "rollbackCompleted": "Rindizja përfundoi",
+  "rollbackError": "Gabim gjatë rindizjes"
+}

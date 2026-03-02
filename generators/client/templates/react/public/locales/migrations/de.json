@@ -1,0 +1,42 @@
+{
+  "title": "Datenbankmigrationen",
+  "status": {
+    "pending": "Ausstehend...",
+    "running": "Wird ausgeführt",
+    "completed": "Abgeschlossen",
+    "failed": "Fehlgeschlagen",
+    "title": "Migrationsstatus",
+    "description": "Zeige den Status aller Migrationen an.",
+    "action": "Status anzeigen",
+    "error": "Fehler beim Abrufen des Migrationsstatus"
+  },
+  "migrate": {
+    "title": "Migrationen ausführen",
+    "description": "Alle ausstehenden Datenbankmigrationen ausführen.",
+    "action": "Migrieren",
+    "confirm": "Migration bestätigen"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Die letzte Gruppe von Migrationen zurücksetzen.",
+    "action": "Rollback",
+    "confirm": "Rollback bestätigen",
+    "step": "Schritt",
+    "stepPlaceholder": "z.B. 1",
+    "stepHint": "Leer lassen, um die letzte Gruppe zurückzusetzen"
+  },
+  "fresh": {
+    "title": "Frische Migration",
+    "description": "⚠️ Alle Tabellen löschen und alle Migrationen erneut ausführen. Alle Daten werden verloren gehen.",
+    "action": "Frisch migrieren",
+    "confirm": "Bestätigen – alle Daten werden verloren gehen"
+  },
+  "migrateCompleted": "Migration abgeschlossen",
+  "migrateFailed": "Migration fehlgeschlagen",
+  "migrateError": "Fehler beim Starten der Migration",
+  "freshCompleted": "Frische Migration abgeschlossen",
+  "freshFailed": "Frische Migration fehlgeschlagen",
+  "freshError": "Fehler beim Starten der frischen Migration",
+  "rollbackCompleted": "Rollback abgeschlossen",
+  "rollbackError": "Fehler während des Rollbacks"
+}

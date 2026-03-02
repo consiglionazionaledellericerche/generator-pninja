@@ -1,0 +1,42 @@
+{
+  "title": "Mahamiradi ya Hifadhidata",
+  "status": {
+    "pending": "Inasubiri...",
+    "running": "Inafanya kazi",
+    "completed": "Imekamilika",
+    "failed": "Imeshindwa",
+    "title": "Hali ya Uhamiraji",
+    "description": "Onyesha hali ya mahamiradi yote.",
+    "action": "Onyesha hali",
+    "error": "Kosa wakati wa kupata hali ya uhamiraji"
+  },
+  "migrate": {
+    "title": "Kimbia Mahamiradi",
+    "description": "Kimbia mahamiradi yote yaliyosalia.",
+    "action": "Hamisha",
+    "confirm": "thibitisha uhamasishaji"
+  },
+  "rollback": {
+    "title": "Rudi nyuma",
+    "description": "Rudisha kundi la mwisho la mahamiradi.",
+    "action": "Rudi nyuma",
+    "confirm": "Thibitisha kurudi nyuma",
+    "step": "Hatua",
+    "stepPlaceholder": "mfano 1",
+    "stepHint": "Acha wazi ili kurudi nyuma kundi la mwisho"
+  },
+  "fresh": {
+    "title": "Uhamiraji Mpya",
+    "description": "⚠️ Futa meza zote na uhamasishe mahamiradi yote upya. Data zote zitapotea.",
+    "action": "Hamisha mpya",
+    "confirm": "Thibitisha - data zote zitapotea"
+  },
+  "migrateCompleted": "Uhamiraji umekamilika",
+  "migrateFailed": "Uhamiraji umeshindwa",
+  "migrateError": "Kosa wakati wa kuanzisha uhamiraji",
+  "freshCompleted": "Uhamiraji mpya umekamilika",
+  "freshFailed": "Uhamiraji mpya umeshindwa",
+  "freshError": "Kosa wakati wa kuanzisha uhamiraji mpya",
+  "rollbackCompleted": "Rudisha nyuma kumalizika",
+  "rollbackError": "Kosa wakati wa kurudi nyuma"
+}

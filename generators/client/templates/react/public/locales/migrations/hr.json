@@ -1,0 +1,42 @@
+{
+  "title": "Migracije baze podataka",
+  "status": {
+    "pending": "Na čekanju...",
+    "running": "U tijeku",
+    "completed": "Završeno",
+    "failed": "Neuspjeh",
+    "title": "Status migracije",
+    "description": "Prikaži status svih migracija.",
+    "action": "Prikaži status",
+    "error": "Greška pri dohvaćanju statusa migracije"
+  },
+  "migrate": {
+    "title": "Pokreni migracije",
+    "description": "Pokreni sve neizvršene migracije baze podataka.",
+    "action": "Migrirati",
+    "confirm": "Potvrdi migraciju"
+  },
+  "rollback": {
+    "title": "Poništenje",
+    "description": "Poništi posljednju seriju migracija.",
+    "action": "Poništenje",
+    "confirm": "Potvrdi poništavanje",
+    "step": "Korak",
+    "stepPlaceholder": "npr. 1",
+    "stepHint": "Ostavi prazno za poništavanje posljednje serije"
+  },
+  "fresh": {
+    "title": "Svježa migracija",
+    "description": "⚠️ Izbriši sve tablice i ponovo pokreni sve migracije. Svi podaci će biti izgubljeni.",
+    "action": "Migriraj svježe",
+    "confirm": "Potvrdi — svi podaci će biti izgubljeni"
+  },
+  "migrateCompleted": "Migracija dovršena",
+  "migrateFailed": "Migracija nije uspjela",
+  "migrateError": "Greška pri pokretanju migracije",
+  "freshCompleted": "Svježa migracija dovršena",
+  "freshFailed": "Svježa migracija nije uspjela",
+  "freshError": "Greška pri pokretanju svježe migracije",
+  "rollbackCompleted": "Poništavanje dovršeno",
+  "rollbackError": "Greška tijekom poništavanja"
+}

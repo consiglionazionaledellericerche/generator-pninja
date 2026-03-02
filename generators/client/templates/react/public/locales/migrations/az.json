@@ -1,0 +1,42 @@
+{
+  "title": "Verilənlər bazası köçürmələri",
+  "status": {
+    "pending": "Gözləyir...",
+    "running": "İşləyir",
+    "completed": "Tamamlandı",
+    "failed": "Uğursuz",
+    "title": "Köçürmə statusu",
+    "description": "Bütün köçürmələrin statusunu göstərin.",
+    "action": "Statusu göstərin",
+    "error": "Köçürmə statusunu əldə edərkən xətası"
+  },
+  "migrate": {
+    "title": "Köçürmələri icra edin",
+    "description": "Bütün gözləyən verilənlər bazası köçürmələrini icra edin.",
+    "action": "Köçür",
+    "confirm": "Köçürməni təsdiqlə"
+  },
+  "rollback": {
+    "title": "Geri çevirmək",
+    "description": "Son dəstə köçürmələrini geri çevirin.",
+    "action": "Geri çevirmək",
+    "confirm": "Geri çevirməni təsdiq edin",
+    "step": "Addım",
+    "stepPlaceholder": "məsələn. 1",
+    "stepHint": "Son dəstə geri çevirmək üçün boş buraxın"
+  },
+  "fresh": {
+    "title": "Təzə köçürmə",
+    "description": "⚠️ Bütün cədvəlləri silin və bütün köçürmələri yenidən icra edin. Bütün məlumatlar itəcək.",
+    "action": "Təzə köçürməni icra edin",
+    "confirm": "Təsdiqləyin — bütün məlumatlar itəcək"
+  },
+  "migrateCompleted": "Köçürmə tamamlandı",
+  "migrateFailed": "Köçürmə uğursuz oldu",
+  "migrateError": "Köçürməni başlamaqda xətası",
+  "freshCompleted": "Təzə köçürmə tamamlandı",
+  "freshFailed": "Təzə köçürmə uğursuz oldu",
+  "freshError": "Təzə köçürməni başlamaqda xətası",
+  "rollbackCompleted": "Geri çevirmə tamamlandı",
+  "rollbackError": "Geri çevirmə zamanı xətası"
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Migrações de Banco de Dados",
+  "status": {
+    "pending": "Pendente...",
+    "running": "Executando",
+    "completed": "Concluído",
+    "failed": "Falhou",
+    "title": "Status da Migração",
+    "description": "Exibir o status de todas as migrações.",
+    "action": "Mostrar status",
+    "error": "Erro ao recuperar o status da migração"
+  },
+  "migrate": {
+    "title": "Executar Migrações",
+    "description": "Executar todas as migrações pendentes do banco de dados.",
+    "action": "Migrar",
+    "confirm": "Confirmar migração"
+  },
+  "rollback": {
+    "title": "Reversão",
+    "description": "Reverter o último lote de migrações.",
+    "action": "Reversão",
+    "confirm": "Confirmar reversão",
+    "step": "Etapa",
+    "stepPlaceholder": "ex. 1",
+    "stepHint": "Deixe em branco para reverter o último lote"
+  },
+  "fresh": {
+    "title": "Migração Nova",
+    "description": "⚠️ Excluir todas as tabelas e reexecutar todas as migrações. Todos os dados serão perdidos.",
+    "action": "Migrar novo",
+    "confirm": "Confirmar — todos os dados serão perdidos"
+  },
+  "migrateCompleted": "Migração concluída",
+  "migrateFailed": "Migração falhou",
+  "migrateError": "Erro ao iniciar a migração",
+  "freshCompleted": "Migração nova concluída",
+  "freshFailed": "Migração nova falhou",
+  "freshError": "Erro ao iniciar a migração nova",
+  "rollbackCompleted": "Reversão concluída",
+  "rollbackError": "Erro durante a reversão"
+}

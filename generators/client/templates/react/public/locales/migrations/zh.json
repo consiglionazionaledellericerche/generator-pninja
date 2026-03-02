@@ -1,0 +1,42 @@
+{
+  "title": "数据库迁移",
+  "status": {
+    "pending": "等待中...",
+    "running": "运行中",
+    "completed": "已完成",
+    "failed": "失败",
+    "title": "迁移状态",
+    "description": "显示所有迁移的状态。",
+    "action": "显示状态",
+    "error": "获取迁移状态时出错"
+  },
+  "migrate": {
+    "title": "运行迁移",
+    "description": "运行所有待处理的数据库迁移。",
+    "action": "迁移",
+    "confirm": "确认迁移"
+  },
+  "rollback": {
+    "title": "回滚",
+    "description": "回滚最后一批迁移。",
+    "action": "回滚",
+    "confirm": "确认回滚",
+    "step": "步骤",
+    "stepPlaceholder": "例如 1",
+    "stepHint": "留空以回滚最后一批"
+  },
+  "fresh": {
+    "title": "全新迁移",
+    "description": "⚠️ 删除所有表并重新运行所有迁移。所有数据将丢失。",
+    "action": "全新迁移",
+    "confirm": "确认 — 所有数据将丢失"
+  },
+  "migrateCompleted": "迁移已完成",
+  "migrateFailed": "迁移失败",
+  "migrateError": "启动迁移时出错",
+  "freshCompleted": "全新迁移已完成",
+  "freshFailed": "全新迁移失败",
+  "freshError": "启动全新迁移时出错",
+  "rollbackCompleted": "回滚已完成",
+  "rollbackError": "回滚过程中出错"
+}

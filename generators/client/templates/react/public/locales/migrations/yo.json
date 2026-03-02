@@ -1,0 +1,42 @@
+{
+  "title": "Ìkànsí Ìsopọ́",
+  "status": {
+    "pending": "Níbi ìbẹ̀rẹ̀...",
+    "running": "Ṣíṣe",
+    "completed": "Kó parí",
+    "failed": "Fé",
+    "title": "Ipo Ìsopọ́",
+    "description": "Fi ipo gbogbo ìsopọ́ hàn.",
+    "action": "Fi ipo hàn",
+    "error": "Aṣiṣe n'ibè lórúkọ ìsopọ́"
+  },
+  "migrate": {
+    "title": "Ṣe Ìsopọ́",
+    "description": "Ṣe gbogbo ìsopọ́ àìka.",
+    "action": "Ṣíṣe Ìsopọ́",
+    "confirm": "Jẹrisi ìkó"
+  },
+  "rollback": {
+    "title": "Padà sẹ́yìn",
+    "description": "Tẹ́ ẹ́ síi padà́ sẹ́yìn ti ìkànsí tó kẹhin.",
+    "action": "Padà sẹ́yìn",
+    "confirm": "Ẹ̀sùn padà sẹ́yìn",
+    "step": "Igbese",
+    "stepPlaceholder": "àpẹẹrẹ 1",
+    "stepHint": "Fi sílẹ̀ láti padà sẹ́yìn ti ìkànsí tó kẹhin"
+  },
+  "fresh": {
+    "title": "Ìsopọ́ Títun",
+    "description": "⚠️ Pa gbogbo tábili run kí o sì tun ṣe gbogbo ìsopọ́. Gbogbo data yóò sọnu.",
+    "action": "Migrate títun",
+    "confirm": "Ẹ̀sùn — gbogbo data yóò sọnu"
+  },
+  "migrateCompleted": "Ìsopọ́ parí",
+  "migrateFailed": "Ìsopọ́ kúnlè",
+  "migrateError": "Aṣiṣe n'ibè tí ń bẹ lórúkọ ìsopọ́",
+  "freshCompleted": "Ìsopọ́ títun parí",
+  "freshFailed": "Ìsopọ́ títun kúnlè",
+  "freshError": "Aṣiṣe n'ibè tí ń bẹ lórúkọ ìsopọ́ títun",
+  "rollbackCompleted": "Padà sẹ́yìn parí",
+  "rollbackError": "Aṣiṣe nígbà padà sẹ́yìn"
+}

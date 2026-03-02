@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+
+class RunMigrationsJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $timeout = 3600;
+
+    public function __construct(
+        private readonly string $jobId,
+        private readonly string $command,
+    ) {}
+
+    public function handle(): void
+    {
+        $cacheKey = "migration:{$this->jobId}";
+
+        try {
+            Cache::put($cacheKey, ['status' => 'running'], now()->addHours(2));
+
+            Artisan::call($this->command, ['--force' => true]);
+
+            Cache::put($cacheKey, [
+                'status' => 'completed',
+                'output' => Artisan::output(),
+            ], now()->addHours(2));
+        } catch (\Throwable $e) {
+            Cache::put($cacheKey, [
+                'status'  => 'failed',
+                'message' => $e->getMessage(),
+            ], now()->addHours(2));
+
+            throw $e;
+        }
+    }
+}

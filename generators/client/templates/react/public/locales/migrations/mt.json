@@ -1,0 +1,42 @@
+{
+  "title": "Migrazzjonijiet tad-Database",
+  "status": {
+    "pending": "Mistenna...",
+    "running": "Qiegħed jaħdem",
+    "completed": "Kkonkluż",
+    "failed": "Utilizzat",
+    "title": "Status tal-Migrazzjoni",
+    "description": "Uri l-istatus ta' kull migrazzjoni.",
+    "action": "Uri l-istatus",
+    "error": "Żball meta niġbor l-istatus tal-migrazzjoni"
+  },
+  "migrate": {
+    "title": "Esegwi l-Migrazzjonijiet",
+    "description": "Esegwi l-migrazzjonijiet tad-database pendenti kollha.",
+    "action": "Migra",
+    "confirm": "Ikkonferma l-migrazzjoni"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Irreġistra l-aħħar grupp ta' migrazzjonijiet.",
+    "action": "Rollback",
+    "confirm": "Ikkonferma l-rollback",
+    "step": "Pass",
+    "stepPlaceholder": "e.g. 1",
+    "stepHint": "Ħalli vojt biex tirreġistra l-aħħar grupp"
+  },
+  "fresh": {
+    "title": "Migraġġ Frisk",
+    "description": "⚠️ M ġib il-mezz kollha u rriġenera l-migrazzjonijiet kollha. Id-dejta kollha se tintilef.",
+    "action": "Migra frisk",
+    "confirm": "Ikkonferma — id-dejta kollha se tintilef"
+  },
+  "migrateCompleted": "Migrazzjoni kompluta",
+  "migrateFailed": "Migrazzjoni fallita",
+  "migrateError": "Żball meta bdejt il-migrazzjoni",
+  "freshCompleted": "Migrazzjoni frisk kompluta",
+  "freshFailed": "Migrazzjoni frisk fallita",
+  "freshError": "Żball meta bdejt il-migrazzjoni friska",
+  "rollbackCompleted": "Rollback komplut",
+  "rollbackError": "Żball waqt il-rollback"
+}

@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Jobs\RunMigrationsJob;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+
+class MigrationsController extends Controller
+{
+    public function migrate(): JsonResponse
+    {
+        $jobId = (string) Str::uuid();
+        Cache::put("migration:{$jobId}", ['status' => 'pending'], now()->addHours(2));
+        RunMigrationsJob::dispatch($jobId, 'migrate');
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
+    public function fresh(): JsonResponse
+    {
+        $jobId = (string) Str::uuid();
+        Cache::put("migration:{$jobId}", ['status' => 'pending'], now()->addHours(2));
+        RunMigrationsJob::dispatch($jobId, 'migrate:fresh');
+        return response()->json(['job_id' => $jobId], 202);
+    }
+
+    public function rollback(Request $request): JsonResponse
+    {
+        $params = ['--force' => true];
+        if ($request->filled('step')) {
+            $params['--step'] = (int) $request->input('step');
+        }
+
+        Artisan::call('migrate:rollback', $params);
+
+        return response()->json(['output' => Artisan::output()]);
+    }
+
+    public function status(): JsonResponse
+    {
+        Artisan::call('migrate:status');
+        return response()->json(['output' => Artisan::output()]);
+    }
+
+    public function jobStatus(string $jobId): JsonResponse
+    {
+        $state = Cache::get("migration:{$jobId}");
+        if (!$state) {
+            return response()->json(['message' => 'Job not found or expired'], 404);
+        }
+        return response()->json($state);
+    }
+}

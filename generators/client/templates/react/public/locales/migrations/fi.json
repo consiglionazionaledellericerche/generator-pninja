@@ -1,0 +1,42 @@
+{
+  "title": "Tietokannan siirrot",
+  "status": {
+    "pending": "Odottaa...",
+    "running": "Suoritetaan",
+    "completed": "Valmis",
+    "failed": "Epätavallinen",
+    "title": "Siirtojen tila",
+    "description": "Näytä kaikkien siirtojen tila.",
+    "action": "Näytä tila",
+    "error": "Virhe siirron tilan hakemisessa"
+  },
+  "migrate": {
+    "title": "Suorita siirrot",
+    "description": "Suorita kaikki odottavat tietokannan siirrot.",
+    "action": "Siirrä",
+    "confirm": "Vahvista siirto"
+  },
+  "rollback": {
+    "title": "Palautus",
+    "description": "Palauta viimeinen siirtopaketti.",
+    "action": "Palautus",
+    "confirm": "Vahvista palautus",
+    "step": "Askella",
+    "stepPlaceholder": "esim. 1",
+    "stepHint": "Jätä tyhjäksi palauttaaksesi viimeinen siirtopaketti"
+  },
+  "fresh": {
+    "title": "Uusi siirto",
+    "description": "⚠️ Poista kaikki taulut ja suorita kaikki siirrot uudelleen. Kaikki tiedot menetetään.",
+    "action": "Siirrä uusi",
+    "confirm": "Vahvista — kaikki tiedot menetetään"
+  },
+  "migrateCompleted": "Siirto suoritettu",
+  "migrateFailed": "Siirto epäonnistui",
+  "migrateError": "Virhe siirron aloittamisessa",
+  "freshCompleted": "Uuden siirron suoritus onnistui",
+  "freshFailed": "Uuden siirron suoritus epäonnistui",
+  "freshError": "Virhe uuden siirron aloittamisessa",
+  "rollbackCompleted": "Palautus suoritettu",
+  "rollbackError": "Virhe palautuksen aikana"
+}

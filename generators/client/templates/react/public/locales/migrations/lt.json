@@ -1,0 +1,42 @@
+{
+  "title": "Duomenų bazės migracijos",
+  "status": {
+    "pending": "Laukiama...",
+    "running": "Veikia",
+    "completed": "Baigta",
+    "failed": "Nepavyko",
+    "title": "Migracijos būsenos",
+    "description": "Rodyti visų migracijų būseną.",
+    "action": "Rodyti būseną",
+    "error": "Klaida gaunant migracijos būseną"
+  },
+  "migrate": {
+    "title": "Vykdyti migracijas",
+    "description": "Vykdyti visas laukiantįs duomenų bazės migracijas.",
+    "action": "Migracija",
+    "confirm": "Patvirtinti migraciją"
+  },
+  "rollback": {
+    "title": "Atsukimas",
+    "description": "Atsukti paskutinį migracijų partiją.",
+    "action": "Atsukimas",
+    "confirm": "Patvirtinti atsukimą",
+    "step": "Žingsnis",
+    "stepPlaceholder": "pvz. 1",
+    "stepHint": "Palikite tuščią, kad atsuktumėte paskutinį partiją"
+  },
+  "fresh": {
+    "title": "Nauja migracija",
+    "description": "⚠️ Pašalinkite visas lenteles ir dar kartą vykdykite visas migracijas. Visi duomenys bus prarasti.",
+    "action": "Vykdyti naują",
+    "confirm": "Patvirtinti — visi duomenys bus prarasti"
+  },
+  "migrateCompleted": "Migracija baigta",
+  "migrateFailed": "Migracija nepavyko",
+  "migrateError": "Klaida pradedant migraciją",
+  "freshCompleted": "Nauja migracija baigta",
+  "freshFailed": "Nauja migracija nepavyko",
+  "freshError": "Klaida pradedant naują migraciją",
+  "rollbackCompleted": "Atsukimas baigtas",
+  "rollbackError": "Klaida vykdant atsukimą"
+}

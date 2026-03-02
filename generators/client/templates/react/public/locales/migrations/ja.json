@@ -1,0 +1,42 @@
+{
+  "title": "データベースマイグレーション",
+  "status": {
+    "pending": "保留中...",
+    "running": "実行中",
+    "completed": "完了",
+    "failed": "失敗",
+    "title": "マイグレーションステータス",
+    "description": "すべてのマイグレーションのステータスを表示します。",
+    "action": "ステータスを表示",
+    "error": "マイグレーションステータスの取得エラー"
+  },
+  "migrate": {
+    "title": "マイグレーションを実行",
+    "description": "保留中のすべてのデータベースマイグレーションを実行します。",
+    "action": "マイグレーション",
+    "confirm": "移行を確認"
+  },
+  "rollback": {
+    "title": "ロールバック",
+    "description": "最後のマイグレーションバッチをロールバックします。",
+    "action": "ロールバック",
+    "confirm": "ロールバックを確認",
+    "step": "ステップ",
+    "stepPlaceholder": "例：1",
+    "stepHint": "最後のバッチをロールバックするには空白のままにしてください"
+  },
+  "fresh": {
+    "title": "新しいマイグレーション",
+    "description": "⚠️ すべてのテーブルを削除し、すべてのマイグレーションを再実行します。すべてのデータが失われます。",
+    "action": "新しいマイグレーションを実行",
+    "confirm": "確認 — すべてのデータが失われます"
+  },
+  "migrateCompleted": "マイグレーション完了",
+  "migrateFailed": "マイグレーション失敗",
+  "migrateError": "マイグレーションの開始エラー",
+  "freshCompleted": "新しいマイグレーション完了",
+  "freshFailed": "新しいマイグレーション失敗",
+  "freshError": "新しいマイグレーションの開始エラー",
+  "rollbackCompleted": "ロールバック完了",
+  "rollbackError": "ロールバック中のエラー"
+}

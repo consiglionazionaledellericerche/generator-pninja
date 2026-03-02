@@ -1,0 +1,42 @@
+{
+  "title": "Migracije podatkov",
+  "status": {
+    "pending": "Čaka...",
+    "running": "Tek",
+    "completed": "Dokončano",
+    "failed": "Neuspešno",
+    "title": "Status migracije",
+    "description": "Prikaži status vseh migracij.",
+    "action": "Prikaži status",
+    "error": "Napaka pri pridobivanju statusa migracije"
+  },
+  "migrate": {
+    "title": "Zagnaj migracije",
+    "description": "Zagnaj vse čakajoče migracije podatkov.",
+    "action": "Migriraj",
+    "confirm": "Potrdite migracijo"
+  },
+  "rollback": {
+    "title": "Vrnitev",
+    "description": "Vrni zadnjo serijo migracij.",
+    "action": "Vrnitev",
+    "confirm": "Potrdite vračilo",
+    "step": "Korak",
+    "stepPlaceholder": "npr. 1",
+    "stepHint": "Pustite prazno za vračilo zadnje serije"
+  },
+  "fresh": {
+    "title": "Sveža migracija",
+    "description": "⚠️ Odstranite vse tabele in ponovno zaženite vse migracije. Vsi podatki bodo izgubljeni.",
+    "action": "Sveža migracija",
+    "confirm": "Potrdite — vsi podatki bodo izgubljeni"
+  },
+  "migrateCompleted": "Migracija zaključena",
+  "migrateFailed": "Migracija ni uspela",
+  "migrateError": "Napaka pri zagonu migracije",
+  "freshCompleted": "Sveža migracija zaključena",
+  "freshFailed": "Sveža migracija ni uspela",
+  "freshError": "Napaka pri zagonu sveže migracije",
+  "rollbackCompleted": "Vrnitev zaključena",
+  "rollbackError": "Napaka med vračilom"
+}

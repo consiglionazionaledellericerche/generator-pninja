@@ -1,0 +1,42 @@
+{
+  "title": "Di chuyển cơ sở dữ liệu",
+  "status": {
+    "pending": "Đang chờ...",
+    "running": "Đang chạy",
+    "completed": "Hoàn thành",
+    "failed": "Thất bại",
+    "title": "Trạng thái di chuyển",
+    "description": "Hiển thị trạng thái của tất cả các di chuyển.",
+    "action": "Hiển thị trạng thái",
+    "error": "Lỗi khi truy xuất trạng thái di chuyển"
+  },
+  "migrate": {
+    "title": "Chạy di chuyển",
+    "description": "Chạy tất cả các di chuyển cơ sở dữ liệu đang chờ.",
+    "action": "Di chuyển",
+    "confirm": "Xác nhận di chuyển"
+  },
+  "rollback": {
+    "title": "Hoàn tác",
+    "description": "Hoàn tác lô di chuyển cuối cùng.",
+    "action": "Hoàn tác",
+    "confirm": "Xác nhận hoàn tác",
+    "step": "Bước",
+    "stepPlaceholder": "ví dụ: 1",
+    "stepHint": "Để trống để hoàn tác lô cuối cùng"
+  },
+  "fresh": {
+    "title": "Di chuyển mới",
+    "description": "⚠️ Xóa tất cả các bảng và chạy lại tất cả các di chuyển. Tất cả dữ liệu sẽ bị mất.",
+    "action": "Di chuyển mới",
+    "confirm": "Xác nhận — tất cả dữ liệu sẽ bị mất"
+  },
+  "migrateCompleted": "Di chuyển đã hoàn thành",
+  "migrateFailed": "Di chuyển thất bại",
+  "migrateError": "Lỗi khi bắt đầu di chuyển",
+  "freshCompleted": "Di chuyển mới đã hoàn thành",
+  "freshFailed": "Di chuyển mới thất bại",
+  "freshError": "Lỗi khi bắt đầu di chuyển mới",
+  "rollbackCompleted": "Hoàn tác đã hoàn thành",
+  "rollbackError": "Lỗi trong quá trình hoàn tác"
+}

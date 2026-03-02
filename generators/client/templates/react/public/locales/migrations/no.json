@@ -1,0 +1,42 @@
+{
+  "title": "Database Migreringer",
+  "status": {
+    "pending": "Venter...",
+    "running": "Kjører",
+    "completed": "Fullført",
+    "failed": "Mislykket",
+    "title": "Migreringsstatus",
+    "description": "Vis status for alle migreringer.",
+    "action": "Vis status",
+    "error": "Feil ved henting av migreringsstatus"
+  },
+  "migrate": {
+    "title": "Kjør migreringer",
+    "description": "Kjør alle ventende databasemigreringer.",
+    "action": "Migrer",
+    "confirm": "Bekreft migrering"
+  },
+  "rollback": {
+    "title": "Tilbakeføring",
+    "description": "Rull tilbake den siste omgangen med migreringer.",
+    "action": "Tilbakeføring",
+    "confirm": "Bekreft tilbakeføring",
+    "step": "Trinn",
+    "stepPlaceholder": "f.eks. 1",
+    "stepHint": "La stå tomt for å rulle tilbake siste omgang"
+  },
+  "fresh": {
+    "title": "Fersk migrering",
+    "description": "⚠️ Slett alle tabeller og kjør alle migreringer på nytt. Alle data vil gå tapt.",
+    "action": "Migrer ferskt",
+    "confirm": "Bekreft — alle data vil gå tapt"
+  },
+  "migrateCompleted": "Migrering fullført",
+  "migrateFailed": "Migrering mislyktes",
+  "migrateError": "Feil ved oppstart av migrering",
+  "freshCompleted": "Fersk migrering fullført",
+  "freshFailed": "Fersk migrering mislyktes",
+  "freshError": "Feil ved oppstart av fersk migrering",
+  "rollbackCompleted": "Tilbakeføring fullført",
+  "rollbackError": "Feil under tilbakeføring"
+}

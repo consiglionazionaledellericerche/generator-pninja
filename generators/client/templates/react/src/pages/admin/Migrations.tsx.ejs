@@ -1,0 +1,385 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AxiosError, isAxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
+import ConfirmButton from '../../components/ConfirmButton';
+
+const POLL_INTERVAL_MS = 1500;
+
+type JobStatus = 'pending' | 'running' | 'completed' | 'failed';
+
+interface IJobState {
+  status: JobStatus;
+  output?: string;
+  message?: string;
+}
+
+interface IAsyncOp {
+  jobId: string;
+  jobState: IJobState;
+}
+
+export function Migrations() {
+  const { t, i18n } = useTranslation();
+  const { addNotification } = useNotifications();
+
+  const [migrateOp, setMigrateOp] = useState<IAsyncOp | null>(null);
+  const [freshOp, setFreshOp] = useState<IAsyncOp | null>(null);
+  const [rollbackOutput, setRollbackOutput] = useState<string | null>(null);
+  const [statusOutput, setStatusOutput] = useState<string | null>(null);
+  const [rollbackStep, setRollbackStep] = useState<string>('');
+  const [loadingRollback, setLoadingRollback] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
+
+  const pollRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+  const completedJobs = useRef<Set<string>>(new Set());
+
+  const stopPolling = (key: string) => {
+    if (pollRefs.current[key]) {
+      clearInterval(pollRefs.current[key]);
+      delete pollRefs.current[key];
+    }
+  };
+
+  const startPolling = useCallback(
+    (
+      key: string,
+      jobId: string,
+      onUpdate: (data: IJobState) => void,
+      onDone: (data: IJobState) => void
+    ) => {
+      stopPolling(key);
+      completedJobs.current.delete(key);
+
+      pollRefs.current[key] = setInterval(async () => {
+        try {
+          const { data } = await axiosInstance.get<IJobState>(
+            `/api/admin/migrations/job-status/${jobId}`
+          );
+
+          if (completedJobs.current.has(key)) return;
+
+          onUpdate(data);
+
+          if (data.status === 'completed' || data.status === 'failed') {
+            completedJobs.current.add(key);
+            stopPolling(key);
+            onDone(data);
+          }
+        } catch {
+          stopPolling(key);
+        }
+      }, POLL_INTERVAL_MS);
+    },
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      Object.values(pollRefs.current).forEach(clearInterval);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.title = t('migrations:title');
+  }, [i18n.language, t]);
+
+  const handleMigrate = () => {
+    axiosInstance
+      .post<{ job_id: string }>('/api/admin/migrations/migrate')
+      .then(({ data }) => {
+        const op: IAsyncOp = { jobId: data.job_id, jobState: { status: 'pending' } };
+        setMigrateOp(op);
+        startPolling(
+          'migrate',
+          data.job_id,
+          (state) => setMigrateOp({ jobId: data.job_id, jobState: state }),
+          (state) => {
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('migrations:migrateFailed'))
+                  : t('migrations:migrateCompleted'),
+            });
+          }
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: t('migrations:migrateError'),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      });
+  };
+
+  const handleFresh = () => {
+    axiosInstance
+      .post<{ job_id: string }>('/api/admin/migrations/fresh')
+      .then(({ data }) => {
+        const op: IAsyncOp = { jobId: data.job_id, jobState: { status: 'pending' } };
+        setFreshOp(op);
+        startPolling(
+          'fresh',
+          data.job_id,
+          (state) => setFreshOp({ jobId: data.job_id, jobState: state }),
+          (state) => {
+            addNotification({
+              type: state.status === 'failed' ? 'error' : 'success',
+              message:
+                state.status === 'failed'
+                  ? (state.message ?? t('migrations:freshFailed'))
+                  : t('migrations:freshCompleted'),
+            });
+          }
+        );
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: t('migrations:freshError'),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      });
+  };
+
+  const handleRollback = () => {
+    setLoadingRollback(true);
+    setRollbackOutput(null);
+    const params: Record<string, unknown> = {};
+    if (rollbackStep !== '' && !isNaN(parseInt(rollbackStep))) {
+      params.step = parseInt(rollbackStep);
+    }
+    axiosInstance
+      .post<{ output: string }>('/api/admin/migrations/rollback', params)
+      .then(({ data }) => {
+        setRollbackOutput(data.output);
+        addNotification({ type: 'success', message: t('migrations:rollbackCompleted') });
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: t('migrations:rollbackError'),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      })
+      .finally(() => setLoadingRollback(false));
+  };
+
+  const handleStatus = () => {
+    setLoadingStatus(true);
+    setStatusOutput(null);
+    axiosInstance
+      .get<{ output: string }>('/api/admin/migrations/status')
+      .then(({ data }) => setStatusOutput(data.output))
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({
+          type: 'error',
+          message: t('migrations:statusError'),
+          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+        });
+      })
+      .finally(() => setLoadingStatus(false));
+  };
+
+  const getStatusIcon = (state: IJobState) => {
+    switch (state.status) {
+      case 'pending':
+        return <Icon icon="schedule" size={4} className="text-gray-400 animate-pulse" />;
+      case 'running':
+        return <Icon icon="sync" size={4} className="text-blue-500 animate-spin" />;
+      case 'completed':
+        return <Icon icon="check_circle" size={4} className="text-green-500" />;
+      case 'failed':
+        return <Icon icon="error" size={4} className="text-red-500" />;
+    }
+  };
+
+  const isRunning = (op: IAsyncOp | null) =>
+    op?.jobState.status === 'pending' || op?.jobState.status === 'running';
+
+  const anyBusy = isRunning(migrateOp) || isRunning(freshOp) || loadingRollback || loadingStatus;
+
+  return (
+    <>
+      <h1 className="text-2xl font-bold mb-6">{t('migrations:title')}</h1>
+
+      <div className="flex flex-col gap-6">
+        {/* migrate */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-semibold mb-1">{t('migrations:migrate.title')}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t('migrations:migrate.description')}
+              </p>
+            </div>
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleMigrate}
+              className="primary-button shrink-0"
+              pendingClassName="primary-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="play_arrow" size={4} />
+                  {t('migrations:migrate.action')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="play_arrow" size={4} />
+                  {t('migrations:migrate.confirm')}
+                </span>
+              }
+            />
+          </div>
+          {migrateOp && (
+            <div className="mt-3 flex items-center gap-2">
+              {getStatusIcon(migrateOp.jobState)}
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {t(`migrations:status.${migrateOp.jobState.status}`)}
+              </span>
+            </div>
+          )}
+          {migrateOp?.jobState.output && (
+            <pre className="mt-3 text-xs bg-gray-50 dark:bg-slate-900 rounded p-3 overflow-x-auto whitespace-pre-wrap">
+              {migrateOp.jobState.output}
+            </pre>
+          )}
+        </div>
+
+        {/* rollback */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="grow">
+              <h2 className="font-semibold mb-1">{t('migrations:rollback.title')}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                {t('migrations:rollback.description')}
+              </p>
+              <div className="flex items-center gap-3">
+                <label className="text-sm shrink-0" htmlFor="rollback-step">
+                  {t('migrations:rollback.step')}
+                </label>
+                <input
+                  id="rollback-step"
+                  type="number"
+                  min={1}
+                  value={rollbackStep}
+                  onChange={(e) => setRollbackStep(e.target.value)}
+                  placeholder={t('migrations:rollback.stepPlaceholder')}
+                  className="w-24 p-1.5 text-sm border rounded dark:bg-slate-700 dark:border-slate-600"
+                />
+                <span className="text-xs text-gray-400">{t('migrations:rollback.stepHint')}</span>
+              </div>
+            </div>
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleRollback}
+              className="danger-button shrink-0"
+              pendingClassName="danger-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="undo" size={4} />
+                  {t('migrations:rollback.action')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="undo" size={4} />
+                  {t('migrations:rollback.confirm')}
+                </span>
+              }
+            />
+          </div>
+          {loadingRollback && (
+            <div className="mt-3">
+              <SimpleLoader loading={true} />
+            </div>
+          )}
+          {rollbackOutput && (
+            <pre className="mt-3 text-xs bg-gray-50 dark:bg-slate-900 rounded p-3 overflow-x-auto whitespace-pre-wrap">
+              {rollbackOutput}
+            </pre>
+          )}
+        </div>
+
+        {/* migrate:fresh */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-red-200 dark:border-red-900 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-semibold mb-1 text-red-600 dark:text-red-400">
+                {t('migrations:fresh.title')}
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t('migrations:fresh.description')}
+              </p>
+            </div>
+            <ConfirmButton
+              disabled={anyBusy}
+              onConfirm={handleFresh}
+              className="danger-button shrink-0"
+              pendingClassName="danger-button"
+              label={
+                <span className="flex items-center gap-2">
+                  <Icon icon="delete_sweep" size={4} />
+                  {t('migrations:fresh.action')}
+                </span>
+              }
+              pendingLabel={
+                <span className="flex items-center gap-2">
+                  <Icon icon="delete_sweep" size={4} />
+                  {t('migrations:fresh.confirm')}
+                </span>
+              }
+            />
+          </div>
+          {freshOp && (
+            <div className="mt-3 flex items-center gap-2">
+              {getStatusIcon(freshOp.jobState)}
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {t(`migrations:status.${freshOp.jobState.status}`)}
+              </span>
+            </div>
+          )}
+          {freshOp?.jobState.output && (
+            <pre className="mt-3 text-xs bg-gray-50 dark:bg-slate-900 rounded p-3 overflow-x-auto whitespace-pre-wrap">
+              {freshOp.jobState.output}
+            </pre>
+          )}
+        </div>
+
+        {/* migrate:status */}
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="font-semibold mb-1">{t('migrations:status.title')}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {t('migrations:status.description')}
+              </p>
+            </div>
+            <button disabled={anyBusy} onClick={handleStatus} className="secondary-button shrink-0">
+              <span className="flex items-center gap-2">
+                <Icon icon="list_alt" size={4} />
+                {t('migrations:status.action')}
+              </span>
+            </button>
+          </div>
+          {loadingStatus && (
+            <div className="mt-3">
+              <SimpleLoader loading={true} />
+            </div>
+          )}
+          {statusOutput && (
+            <pre className="mt-3 text-xs bg-gray-50 dark:bg-slate-900 rounded p-3 overflow-x-auto whitespace-pre-wrap">
+              {statusOutput}
+            </pre>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}

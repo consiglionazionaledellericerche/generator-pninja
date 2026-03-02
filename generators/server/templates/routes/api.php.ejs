@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\SessionAuthController;
 use App\Http\Controllers\SeederController;
+use App\Http\Controllers\MigrationsController;
+use App\Http\Controllers\LogController;
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>
 use App\Http\Controllers\SearchReindexController;
 <%  } -%>
@@ -12,7 +14,6 @@ use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
-use App\Http\Controllers\LogController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -73,6 +74,14 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::post('/{seeder}', [SeederController::class, 'seed']);
         Route::post('/{seeder}/csv', [SeederController::class, 'seedFromCsv']);
         Route::get('/status/{jobId}', [SeederController::class, 'status']);
+    });
+
+    Route::prefix('admin/migrations')->group(function () {
+        Route::post('/migrate',          [MigrationsController::class, 'migrate']);
+        Route::post('/fresh',            [MigrationsController::class, 'fresh']);
+        Route::post('/rollback',         [MigrationsController::class, 'rollback']);
+        Route::get('/status',            [MigrationsController::class, 'status']);
+        Route::get('/job-status/{jobId}',[MigrationsController::class, 'jobStatus']);
     });
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>
 

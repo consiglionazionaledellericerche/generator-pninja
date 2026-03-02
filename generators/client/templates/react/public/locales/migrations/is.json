@@ -1,0 +1,42 @@
+{
+  "title": "Gagnagrunns flutningar",
+  "status": {
+    "pending": "Bíðandi...",
+    "running": "Í gangi",
+    "completed": "Lokið",
+    "failed": "Misheppnað",
+    "title": "Flutningastaða",
+    "description": "Sýna stöðu allra flutninga.",
+    "action": "Sýna stöðu",
+    "error": "Villa við að sækja flutningstöðu"
+  },
+  "migrate": {
+    "title": "Keyra flutninga",
+    "description": "Keyra alla beiðandi gagnagrunns flutninga.",
+    "action": "Flutningur",
+    "confirm": "Staðfesta flutning"
+  },
+  "rollback": {
+    "title": "Afturkalla",
+    "description": "Afturkalla síðasta flutninga pakka.",
+    "action": "Afturkalla",
+    "confirm": "Staðfesta afturkall",
+    "step": "Skref",
+    "stepPlaceholder": "t.d. 1",
+    "stepHint": "Láttu laust til að afturkalla síðasta pakka"
+  },
+  "fresh": {
+    "title": "Nýr flutningur",
+    "description": "⚠️ Fella allar töflur og endurkeyra alla flutninga. Öll gögn verða týnd.",
+    "action": "Flutningur nýr",
+    "confirm": "Staðfesta - öll gögn verða týnd"
+  },
+  "migrateCompleted": "Flutningur lokið",
+  "migrateFailed": "Flutningur misheppnaðist",
+  "migrateError": "Villa við að hefja flutning",
+  "freshCompleted": "Nýr flutningur lokið",
+  "freshFailed": "Nýr flutningur misheppnaðist",
+  "freshError": "Villa við að hefja nýjan flutning",
+  "rollbackCompleted": "Afturköllun lokið",
+  "rollbackError": "Villa við afturkallningu"
+}

@@ -28,6 +28,8 @@ import AuditUserActivity from './pages/audit/AuditUserActivity';
 import { LogViewer } from './pages/server-logs/LogViewer';
 
 import { SeederList } from './pages/seeder/SeederList';
+
+import { Migrations } from './pages/admin/Migrations';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 
 import SearchReindexList from './pages/search-reindex/SearchReindexList';
@@ -154,6 +156,14 @@ function App() {
               element={
                 <Can resource="Seeder" action="read" fallback={<Err403 />} force_login={true}>
                   <SeederList />
+                </Can>
+              }
+            />
+            <Route
+              path="admin/migrations"
+              element={
+                <Can resource="Migrations" action="read" fallback={<Err403 />} force_login={true}>
+                  <Migrations />
                 </Can>
               }
             />

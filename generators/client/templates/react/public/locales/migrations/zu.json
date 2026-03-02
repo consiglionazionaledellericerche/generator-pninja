@@ -1,0 +1,42 @@
+{
+  "title": "Ukufuduka kweDatabase",
+  "status": {
+    "pending": "Kulindelwe...",
+    "running": "Kusebenza",
+    "completed": "Kuphelelwe",
+    "failed": "Kwehluleka",
+    "title": "Isimo Sokufuduka",
+    "description": "Bonisa isimo sokufuduka sonke.",
+    "action": "Bonisa isimo",
+    "error": "Iphutha lokuthola isimo sokufuduka"
+  },
+  "migrate": {
+    "title": "Gijima Ukufuduka",
+    "description": "Gijima zonke izinto ezilinda zokufuduka kweDatabase.",
+    "action": "Fuduka",
+    "confirm": "Qinisekisa ukufudukela"
+  },
+  "rollback": {
+    "title": "Phendulela",
+    "description": "Phendula emuva ibhatch elilandelayo lokufuduka.",
+    "action": "Phendulela",
+    "confirm": "Qinisekisa ukuphendula emuva",
+    "step": "Isinyathelo",
+    "stepPlaceholder": "isb. 1",
+    "stepHint": "Shiya ingenalwazi ukuze uphinde ubuyise ibhatch yokugcina"
+  },
+  "fresh": {
+    "title": "Ukufuduka Okusha",
+    "description": "⚠️ Susa zonke amatafula bese uphinda uhambise zonke izinto zokufuduka. Yonke idatha izolahleka.",
+    "action": "Fuduka okusha",
+    "confirm": "Qinisekisa — yonke idatha izolahleka"
+  },
+  "migrateCompleted": "Ukufuduka kuphelelisiwe",
+  "migrateFailed": "Ukufuduka kuhlulekile",
+  "migrateError": "Iphutha ekuqaleni kokufuduka",
+  "freshCompleted": "Ukufuduka okusha kuphelelisiwe",
+  "freshFailed": "Ukufuduka okusha kuhlulekile",
+  "freshError": "Iphutha ekuqaleni kokufuduka okusha",
+  "rollbackCompleted": "Ukuphendula emuva kuphelelisiwe",
+  "rollbackError": "Iphutha ngesikhathi sokuphendula emuva"
+}

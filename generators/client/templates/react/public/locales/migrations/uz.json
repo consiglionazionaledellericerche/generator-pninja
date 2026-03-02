@@ -1,0 +1,42 @@
+{
+  "title": "Ma'lumotlar bazasi migratsiyalari",
+  "status": {
+    "pending": "Navbatda...",
+    "running": "Ishlayapti",
+    "completed": "Tugallandi",
+    "failed": "Xatoga uchradi",
+    "title": "Migratsiya holati",
+    "description": "Barcha migratsiyalarning holatini ko'rsatish.",
+    "action": "Holatni ko'rsatish",
+    "error": "Migratsiya holatini olishda xato"
+  },
+  "migrate": {
+    "title": "Migratsiyalarni bajarish",
+    "description": "Barcha kutayotgan ma'lumotlar bazasi migratsiyalarini bajarish.",
+    "action": "Migratsiya",
+    "confirm": "Ko'chirishni tasdiqlang"
+  },
+  "rollback": {
+    "title": "Qaytarish",
+    "description": "So'ngi migratsiyalar guruhini qaytaring.",
+    "action": "Qaytarish",
+    "confirm": "Qaytarishni tasdiqlang",
+    "step": "Qadam",
+    "stepPlaceholder": "masalan, 1",
+    "stepHint": "So'ngi guruhni qaytarish uchun bo'sh qoldiring"
+  },
+  "fresh": {
+    "title": "Yangi migratsiya",
+    "description": "⚠️ Barcha jadvallarni o'chirib, barcha migratsiyalarni qayta bajarish. Barcha ma'lumot yo'qoladi.",
+    "action": "Yangi migratsiyani amalga oshirish",
+    "confirm": "Tasdiqlash — barcha ma'lumot yo'qoladi"
+  },
+  "migrateCompleted": "Migratsiya tugallandi",
+  "migrateFailed": "Migratsiya muvaffaqiyatsiz",
+  "migrateError": "Migratsiyani boshlashda xato",
+  "freshCompleted": "Yangi migratsiya tugallandi",
+  "freshFailed": "Yangi migratsiya muvaffaqiyatsiz",
+  "freshError": "Yangi migratsiyani boshlashda xato",
+  "rollbackCompleted": "Qaytarish tugallandi",
+  "rollbackError": "Qaytarish vaqtida xato"
+}

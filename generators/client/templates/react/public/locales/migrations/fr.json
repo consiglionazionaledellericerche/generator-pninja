@@ -1,0 +1,42 @@
+{
+  "title": "Migrations de base de données",
+  "status": {
+    "pending": "En attente...",
+    "running": "En cours",
+    "completed": "Terminé",
+    "failed": "Échoué",
+    "title": "État de la migration",
+    "description": "Afficher l'état de toutes les migrations.",
+    "action": "Afficher l'état",
+    "error": "Erreur lors de la récupération de l'état de la migration"
+  },
+  "migrate": {
+    "title": "Exécuter les migrations",
+    "description": "Exécuter toutes les migrations de base de données en attente.",
+    "action": "Migrer",
+    "confirm": "Confirmer la migration"
+  },
+  "rollback": {
+    "title": "Annulation",
+    "description": "Revenir en arrière sur le dernier lot de migrations.",
+    "action": "Annulation",
+    "confirm": "Confirmer l'annulation",
+    "step": "Étape",
+    "stepPlaceholder": "c'est-à-dire 1",
+    "stepHint": "Laisser vide pour revenir en arrière sur le dernier lot"
+  },
+  "fresh": {
+    "title": "Migration fraîche",
+    "description": "⚠️ Supprimer toutes les tables et relancer toutes les migrations. Toutes les données seront perdues.",
+    "action": "Migrer frais",
+    "confirm": "Confirmer — toutes les données seront perdues"
+  },
+  "migrateCompleted": "Migration terminée",
+  "migrateFailed": "Échec de la migration",
+  "migrateError": "Erreur lors du démarrage de la migration",
+  "freshCompleted": "Migration fraîche terminée",
+  "freshFailed": "Échec de la migration fraîche",
+  "freshError": "Erreur lors du démarrage de la migration fraîche",
+  "rollbackCompleted": "Annulation terminée",
+  "rollbackError": "Erreur lors de l'annulation"
+}

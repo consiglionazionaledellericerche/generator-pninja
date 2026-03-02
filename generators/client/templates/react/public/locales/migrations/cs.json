@@ -1,0 +1,42 @@
+{
+  "title": "Databázové migrace",
+  "status": {
+    "pending": "Čekající...",
+    "running": "Probíhá",
+    "completed": "Dokončeno",
+    "failed": "Neúspěšné",
+    "title": "Stav migrace",
+    "description": "Zobrazit stav všech migrací.",
+    "action": "Zobrazit stav",
+    "error": "Chyba při načítání stavu migrace"
+  },
+  "migrate": {
+    "title": "Spustit migrace",
+    "description": "Spustit všechny čekající databázové migrace.",
+    "action": "Migrace",
+    "confirm": "Potvrdit migraci"
+  },
+  "rollback": {
+    "title": "Vrátit zpět",
+    "description": "Vrátit poslední dávku migrací.",
+    "action": "Vrátit zpět",
+    "confirm": "Potvrdit vrácení",
+    "step": "Krok",
+    "stepPlaceholder": "např. 1",
+    "stepHint": "Nechte prázdné pro vrácení poslední dávky"
+  },
+  "fresh": {
+    "title": "Čerstvá migrace",
+    "description": "⚠️ Smazat všechny tabulky a znovu spustit všechny migrace. Všechna data budou ztracena.",
+    "action": "Migrace čerstvé",
+    "confirm": "Potvrdit — všechna data budou ztracena"
+  },
+  "migrateCompleted": "Migrace dokončena",
+  "migrateFailed": "Migrace selhala",
+  "migrateError": "Chyba při spouštění migrace",
+  "freshCompleted": "Čerstvá migrace dokončena",
+  "freshFailed": "Čerstvá migrace selhala",
+  "freshError": "Chyba při spouštění čerstvé migrace",
+  "rollbackCompleted": "Vrácení dokončeno",
+  "rollbackError": "Chyba během vrácení"
+}

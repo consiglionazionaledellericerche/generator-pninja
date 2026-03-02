@@ -1,0 +1,42 @@
+{
+  "title": "Datu bāzes migrācija",
+  "status": {
+    "pending": "Gaida...",
+    "running": "Darbojas",
+    "completed": "Pabeigts",
+    "failed": "Neizdevās",
+    "title": "Migrācijas statuss",
+    "description": "Rādīt visu migrāciju statusu.",
+    "action": "Rādīt statusu",
+    "error": "Kļūda, iegūstot migrācijas statusu"
+  },
+  "migrate": {
+    "title": "Izpildīt migrācijas",
+    "description": "Izpildīt visas gaidošās datu bāzes migrācijas.",
+    "action": "Migrēt",
+    "confirm": "Apstiprināt migrāciju"
+  },
+  "rollback": {
+    "title": "Atcelt",
+    "description": "Atcelt pēdējo migrāciju grupu.",
+    "action": "Atcelt",
+    "confirm": "Apstiprināt atcelšanu",
+    "step": "Solīt",
+    "stepPlaceholder": "piem. 1",
+    "stepHint": "Atstājiet tukšu, lai atceltu pēdējo grupu"
+  },
+  "fresh": {
+    "title": "Jauna migrācija",
+    "description": "⚠️ Izdzēst visas tabulas un atkārtoti izpildīt visas migrācijas. Visas dati tiks zaudēti.",
+    "action": "Migrēt jaunu",
+    "confirm": "Apstiprināt — visus datus zaudēsiet"
+  },
+  "migrateCompleted": "Migrācija pabeigta",
+  "migrateFailed": "Migrācija neizdevās",
+  "migrateError": "Kļūda migrācijas sākšanā",
+  "freshCompleted": "Jauna migrācija pabeigta",
+  "freshFailed": "Jauna migrācija neizdevās",
+  "freshError": "Kļūda jaunas migrācijas sākšanā",
+  "rollbackCompleted": "Atcelšana pabeigta",
+  "rollbackError": "Kļūda atcelšanas laikā"
+}

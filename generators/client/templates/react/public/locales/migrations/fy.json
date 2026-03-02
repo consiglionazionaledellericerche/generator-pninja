@@ -1,0 +1,42 @@
+{
+  "title": "Database Migrations",
+  "status": {
+    "pending": "Wachtsjend...",
+    "running": "Rinnend",
+    "completed": "Kombinearre",
+    "failed": "Mislukt",
+    "title": "Migration Status",
+    "description": "Toon de status fan alle migraasjes.",
+    "action": "Toon status",
+    "error": "Fout by it opheljen fan migraasjestatus"
+  },
+  "migrate": {
+    "title": "Rin Migraasjes",
+    "description": "Rin alle te wachten database migraasjes.",
+    "action": "Migrearje",
+    "confirm": "Beëinigje migraasje"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Rol de lêste batch fan migraasjes werom.",
+    "action": "Rollback",
+    "confirm": "Bevestig rollback",
+    "step": "Stap",
+    "stepPlaceholder": "bv. 1",
+    "stepHint": "Lit leeg om lêste batch werom te rollaazjen"
+  },
+  "fresh": {
+    "title": "Freonlike Migraasje",
+    "description": "⚠️ Foarby ûntslach alle tabellen en rinne alle migraasjes wer. Alle gegevens sille ferlern gean.",
+    "action": "Migrearje freonlik",
+    "confirm": "Bevestig — alle gegevens sille ferlern gean"
+  },
+  "migrateCompleted": "Migraasje foltôge",
+  "migrateFailed": "Migraasje ferfalske",
+  "migrateError": "Fout by it begjinen fan migraasje",
+  "freshCompleted": "Freonlike migraasje foltôge",
+  "freshFailed": "Freonlike migraasje ferfalske",
+  "freshError": "Fout by it begjinen fan freonlike migraasje",
+  "rollbackCompleted": "Rollback foltôge",
+  "rollbackError": "Fout tidens rollback"
+}

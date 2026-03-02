@@ -1,0 +1,42 @@
+{
+  "title": "Migrations Database",
+  "status": {
+    "pending": "Eeggachaa...",
+    "running": "Hojii irra jira",
+    "completed": "Xumuramee",
+    "failed": "Haga'aan",
+    "title": "Haala Migi",
+    "description": "Haala migi hunda agarsiisi.",
+    "action": "Haala agarsiisi",
+    "error": "Dogoggora haala migi argachuuf"
+  },
+  "migrate": {
+    "title": "Migi Hojii Itti Fufi",
+    "description": "Migi hunda mana galmee dhaabuu.",
+    "action": "Migi",
+    "confirm": "Confirm migration"
+  },
+  "rollback": {
+    "title": "Gadi Deebisi",
+    "description": "Sarara dhumaa migi gad deebisi.",
+    "action": "Gadi Deebisi",
+    "confirm": "Gadi deebisuu mirkaneessi",
+    "step": "Taphni",
+    "stepPlaceholder": "fakkeenya 1",
+    "stepHint": "Sarara dhumaa gad deebisuuf iddoo cufaa kaayuu"
+  },
+  "fresh": {
+    "title": "Migi Haaraa",
+    "description": "⚠️ Teessoo hundaa dhiisii fi migi hunda deebi'aa. Odeeffannoo hundi badu.",
+    "action": "Migi haaraa",
+    "confirm": "Mirkaneessi — odeeffannoo hundi ni badu"
+  },
+  "migrateCompleted": "Migi xumuramee",
+  "migrateFailed": "Migi kufaa'ee",
+  "migrateError": "Dogoggora migi jalqabuuf",
+  "freshCompleted": "Migi haaraa xumuramee",
+  "freshFailed": "Migi haaraa kufaa'ee",
+  "freshError": "Dogoggora migi haaraa jalqabuuf",
+  "rollbackCompleted": "Gadi deebisi xumuramee",
+  "rollbackError": "Dogoggora gadi deebisuu keessatti"
+}

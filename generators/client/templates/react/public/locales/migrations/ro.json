@@ -1,0 +1,42 @@
+{
+  "title": "Migrarea bazei de date",
+  "status": {
+    "pending": "În așteptare...",
+    "running": "Se execută",
+    "completed": "Finalizat",
+    "failed": "Eșuat",
+    "title": "Starea migrației",
+    "description": "Afișează starea tuturor migrațiilor.",
+    "action": "Afișează starea",
+    "error": "Eroare în recuperarea stării migrației"
+  },
+  "migrate": {
+    "title": "Execută migrații",
+    "description": "Execută toate migrațiile de bază de date restante.",
+    "action": "Migrare",
+    "confirm": "Confirmați migrarea"
+  },
+  "rollback": {
+    "title": "Revocare",
+    "description": "Revocare ultimului lot de migrații.",
+    "action": "Revocare",
+    "confirm": "Confirmă revocarea",
+    "step": "Pas",
+    "stepPlaceholder": "de ex. 1",
+    "stepHint": "Lasă liber pentru a revoca ultimul lot"
+  },
+  "fresh": {
+    "title": "Migrare proaspătă",
+    "description": "⚠️ Șterge toate tabelele și reluare toate migrațiile. Toate datele vor fi pierdute.",
+    "action": "Migrare proaspătă",
+    "confirm": "Confirmă - toate datele vor fi pierdute"
+  },
+  "migrateCompleted": "Migrarea finalizată",
+  "migrateFailed": "Migrarea eșuată",
+  "migrateError": "Eroare la începutul migrației",
+  "freshCompleted": "Migrarea proaspătă finalizată",
+  "freshFailed": "Migrarea proaspătă eșuată",
+  "freshError": "Eroare la începutul migrației proaspete",
+  "rollbackCompleted": "Revocarea finalizată",
+  "rollbackError": "Eroare în timpul revocării"
+}

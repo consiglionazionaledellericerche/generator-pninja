@@ -1,0 +1,42 @@
+{
+  "title": "Databasöverföringar",
+  "status": {
+    "pending": "Väntar...",
+    "running": "Kör",
+    "completed": "Avslutad",
+    "failed": "Misslyckad",
+    "title": "Överföringsstatus",
+    "description": "Visa status för alla överföringar.",
+    "action": "Visa status",
+    "error": "Fel vid hämtning av överföringsstatus"
+  },
+  "migrate": {
+    "title": "Kör överföringar",
+    "description": "Kör alla väntande databasöverföringar.",
+    "action": "Migrera",
+    "confirm": "Bekräfta migrering"
+  },
+  "rollback": {
+    "title": "Återställning",
+    "description": "Återställ den senaste batchen av överföringar.",
+    "action": "Återställning",
+    "confirm": "Bekräfta återställning",
+    "step": "Steg",
+    "stepPlaceholder": "t.ex. 1",
+    "stepHint": "Lämna tomt för att återställa senaste batchen"
+  },
+  "fresh": {
+    "title": "Ny överföring",
+    "description": "⚠️ Ta bort alla tabeller och kör alla överföringar igen. All data kommer att gå förlorad.",
+    "action": "Migrera nytt",
+    "confirm": "Bekräfta — all data kommer att gå förlorad"
+  },
+  "migrateCompleted": "Överföring slutförd",
+  "migrateFailed": "Överföring misslyckades",
+  "migrateError": "Fel vid start av överföring",
+  "freshCompleted": "Ny överföring slutförd",
+  "freshFailed": "Ny överföring misslyckades",
+  "freshError": "Fel vid start av ny överföring",
+  "rollbackCompleted": "Återställning slutförd",
+  "rollbackError": "Fel under återställning"
+}

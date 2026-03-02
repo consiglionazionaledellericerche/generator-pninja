@@ -66,10 +66,12 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/FileController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/FileController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/LogController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/LogController.php`));
+    this.fs.copyTpl(this.templatePath("app/Http/Controllers/MigrationsController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/MigrationsController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/ScoutQuerySanitizer.php.ejs"), this.destinationPath(`server/app/Http/Controllers/ScoutQuerySanitizer.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/SeederController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SeederController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Requests/SeedRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/SeedRequest.php`), { entities: [], manyToMany: [] });
     this.fs.copyTpl(this.templatePath("app/Jobs/RunSeederJob.php.ejs"), this.destinationPath(`server/app/Jobs/RunSeederJob.php`));
+    this.fs.copyTpl(this.templatePath("app/Jobs/RunMigrationsJob.php.ejs"), this.destinationPath(`server/app/Jobs/RunMigrationsJob.php`));
     if (!['null', 'database'].includes(searchEngine)) {
       this.fs.copyTpl(this.templatePath("app/Http/Controllers/SearchReindexController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/SearchReindexController.php`), { searchEngine });
       this.fs.copyTpl(this.templatePath("app/Http/Requests/ReindexRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/ReindexRequest.php`), {

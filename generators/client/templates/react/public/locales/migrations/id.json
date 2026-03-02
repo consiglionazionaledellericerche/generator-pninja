@@ -1,0 +1,42 @@
+{
+  "title": "Migrasi Basis Data",
+  "status": {
+    "pending": "Menunggu...",
+    "running": "Sedang berjalan",
+    "completed": "Selesai",
+    "failed": "Gagal",
+    "title": "Status Migrasi",
+    "description": "Tampilkan status semua migrasi.",
+    "action": "Tampilkan status",
+    "error": "Kesalahan mengambil status migrasi"
+  },
+  "migrate": {
+    "title": "Jalankan Migrasi",
+    "description": "Jalankan semua migrasi basis data yang tertunda.",
+    "action": "Migrasi",
+    "confirm": "Konfirmasi migrasi"
+  },
+  "rollback": {
+    "title": "Kembali",
+    "description": "Kembalikan batch terakhir dari migrasi.",
+    "action": "Kembali",
+    "confirm": "Konfirmasi kembalikan",
+    "step": "Langkah",
+    "stepPlaceholder": "mis. 1",
+    "stepHint": "Biarkan kosong untuk mengembalikan batch terakhir"
+  },
+  "fresh": {
+    "title": "Migrasi Segar",
+    "description": "⚠️ Hapus semua tabel dan jalankan kembali semua migrasi. Semua data akan hilang.",
+    "action": "Migrasi segar",
+    "confirm": "Konfirmasi — semua data akan hilang"
+  },
+  "migrateCompleted": "Migrasi selesai",
+  "migrateFailed": "Migrasi gagal",
+  "migrateError": "Kesalahan saat memulai migrasi",
+  "freshCompleted": "Migrasi segar selesai",
+  "freshFailed": "Migrasi segar gagal",
+  "freshError": "Kesalahan saat memulai migrasi segar",
+  "rollbackCompleted": "Kembali selesai",
+  "rollbackError": "Kesalahan selama pengembalian"
+}

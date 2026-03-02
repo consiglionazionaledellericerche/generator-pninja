@@ -1,0 +1,42 @@
+{
+  "title": "데이터베이스 마이그레이션",
+  "status": {
+    "pending": "대기 중...",
+    "running": "실행 중",
+    "completed": "완료",
+    "failed": "실패",
+    "title": "마이그레이션 상태",
+    "description": "모든 마이그레이션의 상태를 표시합니다.",
+    "action": "상태 표시",
+    "error": "마이그레이션 상태를 가져오는 중 오류 발생"
+  },
+  "migrate": {
+    "title": "마이그레이션 실행",
+    "description": "보류 중인 모든 데이터베이스 마이그레이션을 실행합니다.",
+    "action": "마이그레이션",
+    "confirm": "마이그레이션 확인"
+  },
+  "rollback": {
+    "title": "롤백",
+    "description": "마이그레이션의 마지막 배치를 롤백합니다.",
+    "action": "롤백",
+    "confirm": "롤백 확인",
+    "step": "단계",
+    "stepPlaceholder": "예: 1",
+    "stepHint": "마지막 배치를 롤백하려면 비워 두세요"
+  },
+  "fresh": {
+    "title": "새로운 마이그레이션",
+    "description": "⚠️ 모든 테이블을 삭제하고 모든 마이그레이션을 다시 실행합니다. 모든 데이터가 손실됩니다.",
+    "action": "새로운 마이그레이션 실행",
+    "confirm": "확인 — 모든 데이터가 손실됩니다"
+  },
+  "migrateCompleted": "마이그레이션 완료",
+  "migrateFailed": "마이그레이션 실패",
+  "migrateError": "마이그레이션 시작 중 오류",
+  "freshCompleted": "새로운 마이그레이션 완료",
+  "freshFailed": "새로운 마이그레이션 실패",
+  "freshError": "새로운 마이그레이션 시작 중 오류",
+  "rollbackCompleted": "롤백 완료",
+  "rollbackError": "롤백 중 오류 발생"
+}

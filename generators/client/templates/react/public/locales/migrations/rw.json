@@ -1,0 +1,42 @@
+{
+  "title": "Ihinduka mu bubiko",
+  "status": {
+    "pending": "Birategerejwe...",
+    "running": "Birakorwa",
+    "completed": "Byarangiye",
+    "failed": "Byanze",
+    "title": "Status y'ihindura",
+    "description": "Erekanisha status y'ihindura zose.",
+    "action": "Erekanisha status",
+    "error": "Ikosa mu kubona status y'ihindura"
+  },
+  "migrate": {
+    "title": "Tangira ihindura",
+    "description": "Tangira ihindura zose ziri mu mutwe.",
+    "action": "Hindura",
+    "confirm": "Emeza kohereza"
+  },
+  "rollback": {
+    "title": "Subira inyuma",
+    "description": "Subira inyuma ikigega cya nyuma cy'ihindura.",
+    "action": "Subira inyuma",
+    "confirm": "Emeza subira inyuma",
+    "step": "Intambwe",
+    "stepPlaceholder": "nko 1",
+    "stepHint": "Siga ubusa kugira ngo usubire inyuma ikigega cya nyuma"
+  },
+  "fresh": {
+    "title": "Ihindura rishya",
+    "description": "⚠️ Siba imbonerahamwe zose kandi utangize ihindura zose. Amakuru yose azatakara.",
+    "action": "Hindura rishya",
+    "confirm": "Emeza — amakuru yose azatakara"
+  },
+  "migrateCompleted": "Ihindura ryarangiye",
+  "migrateFailed": "Ihindura ryapfuye",
+  "migrateError": "Ikosa mu gutangiza ihindura",
+  "freshCompleted": "Ihindura rishya ryarangiye",
+  "freshFailed": "Ihindura rishya ryapfuye",
+  "freshError": "Ikosa mu gutangiza ihindura rishya",
+  "rollbackCompleted": "Subira inyuma yarangiye",
+  "rollbackError": "Ikosa mu gihe cyo gusubira inyuma"
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Migrasi Pangkalan Data",
+  "status": {
+    "pending": "Tertunda...",
+    "running": "Sedang berjalan",
+    "completed": "Selesai",
+    "failed": "Gagal",
+    "title": "Status Migrasi",
+    "description": "Tunjukkan status semua migrasi.",
+    "action": "Tunjukkan status",
+    "error": "Ralat mendapat status migrasi"
+  },
+  "migrate": {
+    "title": "Jalankan Migrasi",
+    "description": "Jalankan semua migrasi pangkalan data yang tertunda.",
+    "action": "Migrasi",
+    "confirm": "Sahkan migrasi"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Kembalikan batch migrasi terakhir.",
+    "action": "Rollback",
+    "confirm": "Sahkan rollback",
+    "step": "Langkah",
+    "stepPlaceholder": "cth. 1",
+    "stepHint": "Biarkan kosong untuk mengembalikan batch terakhir"
+  },
+  "fresh": {
+    "title": "Migrasi Segar",
+    "description": "⚠️ Hapus semua jadual dan jalankan semua migrasi semula. Semua data akan hilang.",
+    "action": "Migrasi segar",
+    "confirm": "Sahkan — semua data akan hilang"
+  },
+  "migrateCompleted": "Migrasi selesai",
+  "migrateFailed": "Migrasi gagal",
+  "migrateError": "Ralat memulakan migrasi",
+  "freshCompleted": "Migrasi segar selesai",
+  "freshFailed": "Migrasi segar gagal",
+  "freshError": "Ralat memulakan migrasi segar",
+  "rollbackCompleted": "Rollback selesai",
+  "rollbackError": "Ralat semasa rollback"
+}

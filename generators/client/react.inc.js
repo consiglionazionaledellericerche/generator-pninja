@@ -153,6 +153,7 @@ export async function createReactClient(that) {
         that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`));
         that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`));
         that.fs.copyTpl(that.templatePath(`react/public/locales/seeder/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/seeder.json`));
+        that.fs.copyTpl(that.templatePath(`react/public/locales/migrations/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/migrations.json`));
         that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         if (!['null', 'database'].includes(searchEngine)) {
             that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
@@ -266,6 +267,8 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/pages/seeder/SeederList.tsx.ejs"), that.destinationPath(`client/src/pages/seeder/SeederList.tsx`));
+
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/Migrations.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Migrations.tsx`));
 
     if (!['null', 'database'].includes(searchEngine)) {
         that.fs.copyTpl(that.templatePath("react/src/pages/search-reindex/SearchReindexList.tsx.ejs"), that.destinationPath(`client/src/pages/search-reindex/SearchReindexList.tsx`), { searchEngine });

@@ -1,0 +1,42 @@
+{
+  "title": "Ngā Whakawhiti Raraunga",
+  "status": {
+    "pending": "Tētahi wa...",
+    "running": "E whakahaere ana",
+    "completed": "Kua oti",
+    "failed": "I hinga",
+    "title": "Te Kōwhiringa Whakawhiti",
+    "description": "Whakaatu i te kōwhiringa o ngā whakawhiti katoa.",
+    "action": "Whakaatu i te kōwhiringa",
+    "error": "Hapa e hiahiatia ana te kōwhiringa"
+  },
+  "migrate": {
+    "title": "Tīmata Whakawhiti",
+    "description": "Tīmata i ngā whakawhiti raraunga kāore e hiahiatia ana.",
+    "action": "Whakawhiti",
+    "confirm": "Whakauaua te rerenga"
+  },
+  "rollback": {
+    "title": "Hokona i muri",
+    "description": "Hokona te rūri whakamutunga o ngā whakawhiti.",
+    "action": "Hokona i muri",
+    "confirm": "Whakatūpato i te hokonga",
+    "step": "Hipanga",
+    "stepPlaceholder": "e.g. 1",
+    "stepHint": "Tukua hei wāhi hei hokonga i te rūri whakamutunga"
+  },
+  "fresh": {
+    "title": "Whakawhiti Whakahoungia",
+    "description": "⚠️ Tukua ngā tepu katoa me te rehita i ngā whakawhiti katoa. Ka ngaro katoa ngā raraunga.",
+    "action": "Whakawhiti whakahou",
+    "confirm": "Whakatūpato — ka ngaro katoa ngā raraunga"
+  },
+  "migrateCompleted": "Kua oti te whakawhiti",
+  "migrateFailed": "Kua hē te whakawhiti",
+  "migrateError": "Hapa e tīmata ana te whakawhiti",
+  "freshCompleted": "Kua oti te whakawhiti whakahou",
+  "freshFailed": "Kua hē te whakawhiti whakahou",
+  "freshError": "Hapa e tīmata ana te whakawhiti whakahou",
+  "rollbackCompleted": "Kua oti te hokonga",
+  "rollbackError": "Hapa i te wa e hoko ana"
+}

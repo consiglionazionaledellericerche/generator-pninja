@@ -1,0 +1,42 @@
+{
+  "title": "Migraciones de base de datos",
+  "status": {
+    "pending": "Pendiente...",
+    "running": "En ejecución",
+    "completed": "Completado",
+    "failed": "Fallido",
+    "title": "Estado de migración",
+    "description": "Mostrar el estado de todas las migraciones.",
+    "action": "Mostrar estado",
+    "error": "Error al recuperar el estado de migración"
+  },
+  "migrate": {
+    "title": "Ejecutar migraciones",
+    "description": "Ejecutar todas las migraciones pendientes de la base de datos.",
+    "action": "Migrar",
+    "confirm": "Confirmar migración"
+  },
+  "rollback": {
+    "title": "Revertir",
+    "description": "Revertir el último lote de migraciones.",
+    "action": "Revertir",
+    "confirm": "Confirmar reversión",
+    "step": "Paso",
+    "stepPlaceholder": "p. ej. 1",
+    "stepHint": "Dejar vacío para revertir el último lote"
+  },
+  "fresh": {
+    "title": "Migración fresca",
+    "description": "⚠️ Eliminar todas las tablas y volver a ejecutar todas las migraciones. Se perderán todos los datos.",
+    "action": "Migrar fresco",
+    "confirm": "Confirmar — se perderán todos los datos"
+  },
+  "migrateCompleted": "Migración completada",
+  "migrateFailed": "Falló la migración",
+  "migrateError": "Error al iniciar la migración",
+  "freshCompleted": "Migración fresca completada",
+  "freshFailed": "Falló la migración fresca",
+  "freshError": "Error al iniciar la migración fresca",
+  "rollbackCompleted": "Reversión completada",
+  "rollbackError": "Error durante la reversión"
+}

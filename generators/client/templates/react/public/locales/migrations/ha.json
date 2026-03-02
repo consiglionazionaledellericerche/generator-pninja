@@ -1,0 +1,42 @@
+{
+  "title": "Canje-canje na bayanai",
+  "status": {
+    "pending": "Ana jiran...",
+    "running": "Ana gudanarwa",
+    "completed": "An gama",
+    "failed": "Ya kasa",
+    "title": "Matsayin canje-canje",
+    "description": "Nuna matsayin dukkan canje-canje.",
+    "action": "Nuna matsayin",
+    "error": "Kuskure wajen samun matsayin canje-canje"
+  },
+  "migrate": {
+    "title": "Gudanar da canje-canje",
+    "description": "Gudanar da dukkan canje-canje da ba a kammala ba.",
+    "action": "Canja wuri",
+    "confirm": "Tabbatar da canja"
+  },
+  "rollback": {
+    "title": "Komawa",
+    "description": "Koma daga ƙarshe ɗakin canje-canje.",
+    "action": "Komawa",
+    "confirm": "Tabbatar da dawowa",
+    "step": "Mataki",
+    "stepPlaceholder": "misali 1",
+    "stepHint": "Bar shi fata don koma daga ƙarshe ɗakin"
+  },
+  "fresh": {
+    "title": "Sabon Canje-canje",
+    "description": "⚠️ Zubar da dukkan teburin kuma sake gudanar da dukkan canje-canje. Duk bayanai za a rasa.",
+    "action": "Canja wuri sabo",
+    "confirm": "Tabbatar — duk bayanai za a rasa"
+  },
+  "migrateCompleted": "Canje-canje an gama",
+  "migrateFailed": "Canje-canje sun kasa",
+  "migrateError": "Kuskure wajen farawa canje-canje",
+  "freshCompleted": "Sabon canje-canje an kammala",
+  "freshFailed": "Sabon canje-canje sun kasa",
+  "freshError": "Kuskure wajen farawa sabon canje-canje",
+  "rollbackCompleted": "Komawa an kammala",
+  "rollbackError": "Kuskure yayin komawa"
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Migrations de la base de dades",
+  "status": {
+    "pending": "Pendent...",
+    "running": "S'executa",
+    "completed": "Completat",
+    "failed": "Fallat",
+    "title": "Estat de la migració",
+    "description": "Mostra l'estat de totes les migracions.",
+    "action": "Mostra estat",
+    "error": "Error en recuperar l'estat de la migració"
+  },
+  "migrate": {
+    "title": "Executar migracions",
+    "description": "Executar totes les migracions pendents de la base de dades.",
+    "action": "Migrar",
+    "confirm": "Confirmar migració"
+  },
+  "rollback": {
+    "title": "Revertir",
+    "description": "Revertir el darrer lot de migracions.",
+    "action": "Revertir",
+    "confirm": "Confirmar la reversió",
+    "step": "Pas",
+    "stepPlaceholder": "p.ex. 1",
+    "stepHint": "Deixa buit per revertir l'últim lot"
+  },
+  "fresh": {
+    "title": "Migració nova",
+    "description": "⚠️ Eliminem totes les taules i tornem a executar totes les migracions. Totes les dades es perdran.",
+    "action": "Migrar novament",
+    "confirm": "Confirmar — totes les dades es perdran"
+  },
+  "migrateCompleted": "Migració completada",
+  "migrateFailed": "Migració fallida",
+  "migrateError": "Error en iniciar la migració",
+  "freshCompleted": "Migració nova completada",
+  "freshFailed": "Migració nova fallida",
+  "freshError": "Error en iniciar la migració nova",
+  "rollbackCompleted": "Reversió completada",
+  "rollbackError": "Error durant la reversió"
+}

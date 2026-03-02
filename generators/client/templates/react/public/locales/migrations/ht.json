@@ -1,0 +1,42 @@
+{
+  "title": "Migrasyon Bazdone",
+  "status": {
+    "pending": "An atant...",
+    "running": "Ap kouri",
+    "completed": "Fini",
+    "failed": "Echwe",
+    "title": "Kondisyon Migrasyon",
+    "description": "Montre kondisyon tout migrasyon yo.",
+    "action": "Montre kondisyon",
+    "error": "Erè ki fèt pandan w ap chèche kondisyon migrasyon"
+  },
+  "migrate": {
+    "title": "Kouri Migrasyon",
+    "description": "Kouri tout migrasyon bazdone ki an atant.",
+    "action": "Migrate",
+    "confirm": "Konfime migrasyon"
+  },
+  "rollback": {
+    "title": "Rale tounen",
+    "description": "Rale tounen dènye pakèt migrasyon yo.",
+    "action": "Rale tounen",
+    "confirm": "Konfime rale tounen",
+    "step": "Etap",
+    "stepPlaceholder": "pa egzanp 1",
+    "stepHint": "Kite vid pou rale tounen dènye pakèt la"
+  },
+  "fresh": {
+    "title": "Migrasyon Fre",
+    "description": "⚠️ Efase tout tab yo ak re-kouri tout migrasyon yo. Tout done yo ap pèdi.",
+    "action": "Migrate fre",
+    "confirm": "Konfime — tout done yo ap pèdi"
+  },
+  "migrateCompleted": "Migrasyon fini",
+  "migrateFailed": "Migrasyon echwe",
+  "migrateError": "Erè pandan w ap kòmanse migrasyon",
+  "freshCompleted": "Migrasyon fre fini",
+  "freshFailed": "Migrasyon fre echwe",
+  "freshError": "Erè pandan w ap kòmanse migrasyon fre",
+  "rollbackCompleted": "Rale tounen fini",
+  "rollbackError": "Erè pandan rale tounen"
+}

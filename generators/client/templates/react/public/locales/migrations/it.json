@@ -1,0 +1,42 @@
+{
+  "title": "Migrazioni del database",
+  "status": {
+    "pending": "In attesa...",
+    "running": "In esecuzione",
+    "completed": "Completato",
+    "failed": "Fallito",
+    "title": "Stato della migrazione",
+    "description": "Mostra lo stato di tutte le migrazioni.",
+    "action": "Mostra stato",
+    "error": "Errore nel recupero dello stato della migrazione"
+  },
+  "migrate": {
+    "title": "Esegui migrazioni",
+    "description": "Esegui tutte le migrazioni del database in attesa.",
+    "action": "Migra",
+    "confirm": "Conferma migrazione"
+  },
+  "rollback": {
+    "title": "Ripristina",
+    "description": "Annulla l'ultimo lotto di migrazioni.",
+    "action": "Ripristina",
+    "confirm": "Conferma ripristino",
+    "step": "Passo",
+    "stepPlaceholder": "ad es. 1",
+    "stepHint": "Lascia vuoto per ripristinare l'ultimo lotto"
+  },
+  "fresh": {
+    "title": "Migrazione fresca",
+    "description": "⚠️ Cancella tutte le tabelle e riesegui tutte le migrazioni. Tutti i dati andranno persi.",
+    "action": "Migra fresca",
+    "confirm": "Conferma — tutti i dati andranno persi"
+  },
+  "migrateCompleted": "Migrazione completata",
+  "migrateFailed": "Migrazione fallita",
+  "migrateError": "Errore durante l'avvio della migrazione",
+  "freshCompleted": "Migrazione fresca completata",
+  "freshFailed": "Migrazione fresca fallita",
+  "freshError": "Errore durante l'avvio della migrazione fresca",
+  "rollbackCompleted": "Ripristino completato",
+  "rollbackError": "Errore durante il ripristino"
+}

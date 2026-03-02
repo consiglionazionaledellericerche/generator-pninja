@@ -1,0 +1,42 @@
+{
+  "title": "የዳበይስ ማዋል",
+  "status": {
+    "pending": "እንቆቅልሽ።..",
+    "running": "ሂደት",
+    "completed": "ተጠናቅቆ",
+    "failed": "አልቆይ ከፍ ይዞረ",
+    "title": "የማዋል ሁኔታ",
+    "description": "የሁሉም ማዋል ሁኔታ አሳይ.",
+    "action": "ሁኔታን አሳይ",
+    "error": "የማዋል ሁኔታን ማግኘት በስንቀት"
+  },
+  "migrate": {
+    "title": "የማዋል ማንበብ",
+    "description": "ሁሉንም የቆረጥ ዳበይስ ማዋል ያንቀሳቅሱ.",
+    "action": "ማዋል",
+    "confirm": "እቅፍ በግብአት"
+  },
+  "rollback": {
+    "title": "ተወው",
+    "description": "የማዋል መስመር እንደተዘዋወር እንደገና ይደርግ.",
+    "action": "ተወው",
+    "confirm": "ተመልስ",
+    "step": "የአንደኛው ማዋል ባበሬ ይመልስ.",
+    "stepPlaceholder": "ግምገማ ያድርግ",
+    "stepHint": "የአንደኛው ባበሬ ኑሮ አሳይ."
+  },
+  "fresh": {
+    "title": "አይታል ይህ እንደ ቆርጦ ገድበዋል.",
+    "description": "የማዋል ሂደት ተጠናቋል",
+    "action": "የማዋል ሂደት ሞተ",
+    "confirm": "ማዋል መጀመር ውስጥ እንቀሴ"
+  },
+  "migrateCompleted": "የአዲስ ማዋል ሂደት ተጠናቋል",
+  "migrateFailed": "የአዲስ ማዋል ሂደት ሞተ",
+  "migrateError": "የአዲስ ማዋል መጀመር ውስጥ እንቀሴ",
+  "freshCompleted": "ተወው ተጠናቀቀ",
+  "freshFailed": "በየመጀመር ላይ ችግኝ",
+  "freshError": "Error starting fresh migration",
+  "rollbackCompleted": "Rollback completed",
+  "rollbackError": "Error during rollback"
+}

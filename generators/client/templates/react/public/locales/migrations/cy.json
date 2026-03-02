@@ -1,0 +1,42 @@
+{
+  "title": "Symudiadau Cronfa Ddata",
+  "status": {
+    "pending": "Ar aros...",
+    "running": "Yn rhedeg",
+    "completed": "Wedi'i gwblhau",
+    "failed": "Methodd",
+    "title": "Statws Symudiad",
+    "description": "Dangos statws pob symudiad.",
+    "action": "Dangos statws",
+    "error": "Gwall wrth ddod o hyd i statws y symudiad"
+  },
+  "migrate": {
+    "title": "Rhedeg Symudiadau",
+    "description": "Rhedeg pob symudiad cronfa ddata sydd ar fin.",
+    "action": "Symud",
+    "confirm": "Cadarnhewch y mudo"
+  },
+  "rollback": {
+    "title": "Rolyn yn ôl",
+    "description": "Rolyn yn ôl y dosbarth diwethaf o symudiadau.",
+    "action": "Rolyn yn ôl",
+    "confirm": "Cadarnhau'r rolyn yn ôl",
+    "step": "Cam",
+    "stepPlaceholder": "e.e. 1",
+    "stepHint": "Gadewch yn wag i rolyn yn ôl y dosbarth diwethaf"
+  },
+  "fresh": {
+    "title": "Symudiad Newydd",
+    "description": "⚠️ Daliwch unrhyw dablau ac adferwch bob symudiad. Bydd yr holl ddata'n mynd ar goll.",
+    "action": "Symud yn ffres",
+    "confirm": "Cadarnhau — bydd yr holl ddata yn mynd ar goll"
+  },
+  "migrateCompleted": "Symudiad wedi'i gwblhau",
+  "migrateFailed": "Methiant symudiad",
+  "migrateError": "Gwall wrth ddechrau'r symudiad",
+  "freshCompleted": "Symudiad newydd wedi'i gwblhau",
+  "freshFailed": "Methiant symudiad newydd",
+  "freshError": "Gwall wrth ddechrau'r symudiad newydd",
+  "rollbackCompleted": "Rolyn yn ôl wedi'i gwblhau",
+  "rollbackError": "Gwall yn ystod y rolyn yn ôl"
+}

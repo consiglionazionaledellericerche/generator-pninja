@@ -1,0 +1,42 @@
+{
+  "title": "Adatbázis Migrációk",
+  "status": {
+    "pending": "Függőben...",
+    "running": "Fut",
+    "completed": "Befejezve",
+    "failed": "Sikertelen",
+    "title": "Migráció Állapot",
+    "description": "Mutassa az összes migráció állapotát.",
+    "action": "Állapot megjelenítése",
+    "error": "Hiba a migráció állapotának lekérésekor"
+  },
+  "migrate": {
+    "title": "Migrációk futtatása",
+    "description": "Futtassa az összes függőben lévő adatbázis migrációt.",
+    "action": "Migrálás",
+    "confirm": "Migráció megerősítése"
+  },
+  "rollback": {
+    "title": "Visszagörgetés",
+    "description": "Görgesse vissza az utolsó migrációs tételt.",
+    "action": "Visszagörgetés",
+    "confirm": "Visszagörgetés megerősítése",
+    "step": "Lépés",
+    "stepPlaceholder": "pl. 1",
+    "stepHint": "Hagyja üresen az utolsó tétel visszagörgetéséhez"
+  },
+  "fresh": {
+    "title": "Friss migráció",
+    "description": "⚠️ Törölje az összes táblát és futtassa újra az összes migrációt. Minden adat elvész.",
+    "action": "Friss migrálás",
+    "confirm": "Megerősítés - minden adat elvész"
+  },
+  "migrateCompleted": "Migráció befejeződött",
+  "migrateFailed": "Migráció meghiúsult",
+  "migrateError": "Hiba a migráció megkezdésekor",
+  "freshCompleted": "Friss migráció befejeződött",
+  "freshFailed": "Friss migráció meghiúsult",
+  "freshError": "Hiba a friss migráció megkezdésekor",
+  "rollbackCompleted": "Visszagörgetés befejeződött",
+  "rollbackError": "Hiba a visszagörgetés során"
+}

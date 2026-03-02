@@ -1,0 +1,42 @@
+{
+  "title": "Migracións da base de datos",
+  "status": {
+    "pending": "Pendiente...",
+    "running": "Executándose",
+    "completed": "Completado",
+    "failed": "Fallou",
+    "title": "Estado da migración",
+    "description": "Amosa o estado de todas as migracións.",
+    "action": "Amosar estado",
+    "error": "Error ao recuperar o estado da migración"
+  },
+  "migrate": {
+    "title": "Executar migracións",
+    "description": "Executar todas as migracións pendentes da base de datos.",
+    "action": "Migrar",
+    "confirm": "Confirmar migración"
+  },
+  "rollback": {
+    "title": "Retroceso",
+    "description": "Reverter o último lote de migracións.",
+    "action": "Retroceso",
+    "confirm": "Confirmar retroceso",
+    "step": "Paso",
+    "stepPlaceholder": "p.ex. 1",
+    "stepHint": "Deixar en branco para reverter o último lote"
+  },
+  "fresh": {
+    "title": "Migración nova",
+    "description": "⚠️ Eliminar todas as táboas e volver executar todas as migracións. Todos os datos perderanse.",
+    "action": "Migrar novo",
+    "confirm": "Confirmar — todos os datos perderanse"
+  },
+  "migrateCompleted": "Migración completada",
+  "migrateFailed": "Migración fallida",
+  "migrateError": "Error ao iniciar a migración",
+  "freshCompleted": "Migración nova completada",
+  "freshFailed": "Migración nova fallida",
+  "freshError": "Error ao iniciar a migración nova",
+  "rollbackCompleted": "Retroceso completado",
+  "rollbackError": "Erro durante o retroceso"
+}

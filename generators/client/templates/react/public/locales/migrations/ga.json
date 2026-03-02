@@ -1,0 +1,42 @@
+{
+  "title": "Miondátaí Bunachairte",
+  "status": {
+    "pending": "Ag fanacht...",
+    "running": "Ag rith",
+    "completed": "Comhluite",
+    "failed": "Teip",
+    "title": "Stádas Miondáití",
+    "description": "Taispeáin stádas na miondáití uile.",
+    "action": "Taispeáin stádas",
+    "error": "Earráid ag fáil stádas miondáití"
+  },
+  "migrate": {
+    "title": "Rith Miondáití",
+    "description": "Rith na miondáití bunachar sonraí atá le déanamh.",
+    "action": "Miondú",
+    "confirm": "Deimhnigh aistriú"
+  },
+  "rollback": {
+    "title": "Aisghabháil",
+    "description": "Aisghabháil an grúpa deireanach miondáití.",
+    "action": "Aisghabháil",
+    "confirm": "Deimhniú aisghabhála",
+    "step": "Céim",
+    "stepPlaceholder": "m.sh. 1",
+    "stepHint": "Fág folamh le haisghabháil an grúpa deireanach"
+  },
+  "fresh": {
+    "title": "Miondú úr",
+    "description": "⚠️ Scrios gach tábla agus tú ag rith na miondáití arís. Ábhar ar fad a chailleadh.",
+    "action": "Miondú úr a dhéanamh",
+    "confirm": "Deimhniú — cailleann ábhar ar fad"
+  },
+  "migrateCompleted": "Comhoibriú miondú",
+  "migrateFailed": "Thit miondú",
+  "migrateError": "Earráid ag tosú miondú",
+  "freshCompleted": "Comhoibriú miondú úr críochnaithe",
+  "freshFailed": "Thit miondú úr",
+  "freshError": "Earráid ag tosú miondú úr",
+  "rollbackCompleted": "Aisghabháil críochnaithe",
+  "rollbackError": "Earráid le linn aisghabhála"
+}

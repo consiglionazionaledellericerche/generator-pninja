@@ -1,0 +1,42 @@
+{
+  "title": "Databasemigrationer",
+  "status": {
+    "pending": "Ventende...",
+    "running": "Kørende",
+    "completed": "Færdig",
+    "failed": "Mislykket",
+    "title": "Migrationsstatus",
+    "description": "Vis status for alle migrationer.",
+    "action": "Vis status",
+    "error": "Fejl ved hentning af migrationsstatus"
+  },
+  "migrate": {
+    "title": "Kør migrationer",
+    "description": "Kør alle ventende databasemigrationer.",
+    "action": "Migrer",
+    "confirm": "Bekræft migration"
+  },
+  "rollback": {
+    "title": "Tilbagefør",
+    "description": "Tilbagefør den sidste batch af migrationer.",
+    "action": "Tilbagefør",
+    "confirm": "Bekræft tilbageførsel",
+    "step": "Trin",
+    "stepPlaceholder": "f.eks. 1",
+    "stepHint": "Lad være tom for at tilbageføre den sidste batch"
+  },
+  "fresh": {
+    "title": "Frisk migration",
+    "description": "⚠️ Slet alle tabeller og kør alle migrationer igen. Alle data vil gå tabt.",
+    "action": "Migrer frisk",
+    "confirm": "Bekræft — alle data vil gå tabt"
+  },
+  "migrateCompleted": "Migration afsluttet",
+  "migrateFailed": "Migration fejlede",
+  "migrateError": "Fejl ved opstart af migration",
+  "freshCompleted": "Frisk migration afsluttet",
+  "freshFailed": "Frisk migration fejlede",
+  "freshError": "Fejl ved opstart af frisk migration",
+  "rollbackCompleted": "Tilbageførsel afsluttet",
+  "rollbackError": "Fejl under tilbageførsel"
+}

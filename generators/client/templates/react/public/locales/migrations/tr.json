@@ -1,0 +1,42 @@
+{
+  "title": "Veritabanı Göçleri",
+  "status": {
+    "pending": "Beklemede...",
+    "running": "Yürütülüyor",
+    "completed": "Tamamlandı",
+    "failed": "Başarısız",
+    "title": "Göç Durumu",
+    "description": "Tüm göçlerin durumunu göster.",
+    "action": "Durumu göster",
+    "error": "Göç durumunu alırken hata"
+  },
+  "migrate": {
+    "title": "Göçleri Çalıştır",
+    "description": "Bekleyen tüm veritabanı göçlerini çalıştır.",
+    "action": "Göç et",
+    "confirm": "Taşımayı onayla"
+  },
+  "rollback": {
+    "title": "Geri Al",
+    "description": "Son göç grubunu geri al.",
+    "action": "Geri Al",
+    "confirm": "Geri alma işlemini onayla",
+    "step": "Adım",
+    "stepPlaceholder": "örneğin 1",
+    "stepHint": "Son grubu geri almak için boş bırak"
+  },
+  "fresh": {
+    "title": "Temiz Göç",
+    "description": "⚠️ Tüm tabloları sil ve tüm göçleri yeniden çalıştır. Tüm veriler kaybolacak.",
+    "action": "Temiz göç et",
+    "confirm": "Onayla - tüm veriler kaybolacak"
+  },
+  "migrateCompleted": "Göç tamamlandı",
+  "migrateFailed": "Göç başarısız oldu",
+  "migrateError": "Göç başlatılırken hata",
+  "freshCompleted": "Temiz göç tamamlandı",
+  "freshFailed": "Temiz göç başarısız oldu",
+  "freshError": "Temiz göç başlatılırken hata",
+  "rollbackCompleted": "Geri alma tamamlandı",
+  "rollbackError": "Geri alma işlemi sırasında hata"
+}

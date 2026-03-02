@@ -1,0 +1,42 @@
+{
+  "title": "Datubase Migratekin",
+  "status": {
+    "pending": "Aldez aurreko...",
+    "running": "Exekutatzen",
+    "completed": "Osatua",
+    "failed": "Porrot egin du",
+    "title": "Migrazio egoera",
+    "description": "Erakutsi migrazioen egoera guztiak.",
+    "action": "Egoera erakutsi",
+    "error": "Errorea migrazio egoera berreskuratzerakoan"
+  },
+  "migrate": {
+    "title": "Migratekin abiatu",
+    "description": "Hurrengo datu-base migrazio guztiak exekutatu.",
+    "action": "Migrazioa",
+    "confirm": "Migrazioa baieztatu"
+  },
+  "rollback": {
+    "title": "Atzera bota",
+    "description": "Azken migrazio multzoa atzera bota.",
+    "action": "Atzera bota",
+    "confirm": "Atzera botatzeko baieztatu",
+    "step": "Pauso",
+    "stepPlaceholder": "adib. 1",
+    "stepHint": "Utzi hutsik azken multzoa atzera botatzeko"
+  },
+  "fresh": {
+    "title": "Migrazio freskoa",
+    "description": "⚠️ Taula guztiak ezabatu eta migrazio guztiak berriro exekutatu. Datu guztiak galduko dira.",
+    "action": "Migrazio freskoa egin",
+    "confirm": "Baieztatu - datu guztiak galduko dira"
+  },
+  "migrateCompleted": "Migrazioa amaitu da",
+  "migrateFailed": "Migrazioa porrot egin du",
+  "migrateError": "Errorea migrazioa abian",
+  "freshCompleted": "Migrazio freskoa amaitu da",
+  "freshFailed": "Migrazio freskoa porrot egin du",
+  "freshError": "Errorea migrazio freskoa abian",
+  "rollbackCompleted": "Atzera botatzea amaitu da",
+  "rollbackError": "Errorea atzera botatzean"
+}

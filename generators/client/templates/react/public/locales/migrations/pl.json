@@ -1,0 +1,42 @@
+{
+  "title": "Migracje bazy danych",
+  "status": {
+    "pending": "Oczekiwanie...",
+    "running": "W trakcie",
+    "completed": "Zakończone",
+    "failed": "Niepowodzenie",
+    "title": "Status migracji",
+    "description": "Pokaż status wszystkich migracji.",
+    "action": "Pokaż status",
+    "error": "Błąd podczas pobierania statusu migracji"
+  },
+  "migrate": {
+    "title": "Uruchom migracje",
+    "description": "Uruchom wszystkie oczekujące migracje bazy danych.",
+    "action": "Migracja",
+    "confirm": "Potwierdź migrację"
+  },
+  "rollback": {
+    "title": "Cofnięcie",
+    "description": "Cofnij ostatnią partię migracji.",
+    "action": "Cofnięcie",
+    "confirm": "Potwierdź cofnięcie",
+    "step": "Krok",
+    "stepPlaceholder": "np. 1",
+    "stepHint": "Pozostaw puste, aby cofnąć ostatnią partię"
+  },
+  "fresh": {
+    "title": "Świeża migracja",
+    "description": "⚠️ Zdrobnij wszystkie tabele i ponownie uruchom wszystkie migracje. Wszystkie dane zostaną utracone.",
+    "action": "Migracja świeża",
+    "confirm": "Potwierdź — wszystkie dane zostaną utracone"
+  },
+  "migrateCompleted": "Migracja zakończona",
+  "migrateFailed": "Migracja nie powiodła się",
+  "migrateError": "Błąd podczas uruchamiania migracji",
+  "freshCompleted": "Świeża migracja zakończona",
+  "freshFailed": "Świeża migracja nie powiodła się",
+  "freshError": "Błąd podczas uruchamiania świeżej migracji",
+  "rollbackCompleted": "Cofnięcie zakończone",
+  "rollbackError": "Błąd podczas cofania"
+}

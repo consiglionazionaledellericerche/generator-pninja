@@ -1,0 +1,42 @@
+{
+  "title": "Andmebaasi migreerimised",
+  "status": {
+    "pending": "Ootel...",
+    "running": "Töös",
+    "completed": "Lõpetatud",
+    "failed": "Ebaõnnestus",
+    "title": "Migreerimise seisund",
+    "description": "Kuva kõikide migratsioonide seisund.",
+    "action": "Kuva seisund",
+    "error": "Viga migratsiooni staatuse küsimisel"
+  },
+  "migrate": {
+    "title": "Käivita migreerimised",
+    "description": "Käivita kõik ootel olevad andmebaasi migratsioonid.",
+    "action": "Migreeri",
+    "confirm": "Kinnita migratsioon"
+  },
+  "rollback": {
+    "title": "Tagasi rulli",
+    "description": "Taga rulli viimane migreerimise partii.",
+    "action": "Tagasi rulli",
+    "confirm": "Kinnita tagasivõtmine",
+    "step": "Samm",
+    "stepPlaceholder": "nt. 1",
+    "stepHint": "Jäta tühi, et tagasivõtta viimane partii"
+  },
+  "fresh": {
+    "title": "Uus migratsioon",
+    "description": "⚠️ Kustuta kõik tabelid ja käivita kõik migratsioonid uuesti. Kõik andmed kaovad.",
+    "action": "Migreeri uus",
+    "confirm": "Kinnita — kõik andmed kaovad"
+  },
+  "migrateCompleted": "Migratsioon lõpetatud",
+  "migrateFailed": "Migratsioon ebaõnnestus",
+  "migrateError": "Viga migratsiooni alustamisel",
+  "freshCompleted": "Uus migratsioon lõpetatud",
+  "freshFailed": "Uus migratsioon ebaõnnestus",
+  "freshError": "Viga uue migratsiooni alustamisel",
+  "rollbackCompleted": "Tagasi rullimine lõpetatud",
+  "rollbackError": "Viga tagasivõtmise ajal"
+}

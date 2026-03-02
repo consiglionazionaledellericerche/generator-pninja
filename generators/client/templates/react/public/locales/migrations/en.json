@@ -1,0 +1,42 @@
+{
+  "title": "Database Migrations",
+  "status": {
+    "pending": "Pending...",
+    "running": "Running",
+    "completed": "Completed",
+    "failed": "Failed",
+    "title": "Migration Status",
+    "description": "Show the status of all migrations.",
+    "action": "Show status",
+    "error": "Error retrieving migration status"
+  },
+  "migrate": {
+    "title": "Run Migrations",
+    "description": "Run all pending database migrations.",
+    "action": "Migrate",
+    "confirm": "Confirm migration"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Roll back the last batch of migrations.",
+    "action": "Rollback",
+    "confirm": "Confirm rollback",
+    "step": "Step",
+    "stepPlaceholder": "e.g. 1",
+    "stepHint": "Leave empty to rollback last batch"
+  },
+  "fresh": {
+    "title": "Fresh Migration",
+    "description": "⚠️ Drop all tables and re-run all migrations. All data will be lost.",
+    "action": "Migrate fresh",
+    "confirm": "Confirm — all data will be lost"
+  },
+  "migrateCompleted": "Migration completed",
+  "migrateFailed": "Migration failed",
+  "migrateError": "Error starting migration",
+  "freshCompleted": "Fresh migration completed",
+  "freshFailed": "Fresh migration failed",
+  "freshError": "Error starting fresh migration",
+  "rollbackCompleted": "Rollback completed",
+  "rollbackError": "Error during rollback"
+}

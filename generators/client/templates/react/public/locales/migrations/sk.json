@@ -1,0 +1,42 @@
+{
+  "title": "Migrácie databázy",
+  "status": {
+    "pending": "Čaká...",
+    "running": "Prebieha",
+    "completed": "Dokončené",
+    "failed": "Zlyhané",
+    "title": "Stav migrácie",
+    "description": "Zobraziť stav všetkých migrácií.",
+    "action": "Zobraziť stav",
+    "error": "Chyba pri získavaní stavu migrácie"
+  },
+  "migrate": {
+    "title": "Spustiť migrácie",
+    "description": "Spustiť všetky čakajúce migrácie databázy.",
+    "action": "Migrovať",
+    "confirm": "Potvrdiť migráciu"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Vrátiť poslednú dávku migrácií.",
+    "action": "Rollback",
+    "confirm": "Potvrdiť rollback",
+    "step": "Krok",
+    "stepPlaceholder": "napr. 1",
+    "stepHint": "Nechať prázdne na vrátenie poslednej dávky"
+  },
+  "fresh": {
+    "title": "Čerstvá migrácia",
+    "description": "⚠️ Zmazať všetky tabulky a znovu spustiť všetky migrácie. Všetky údaje budú stratené.",
+    "action": "Migrovať čerstvo",
+    "confirm": "Potvrdiť — všetky údaje budú stratené"
+  },
+  "migrateCompleted": "Migrácia dokončená",
+  "migrateFailed": "Migrácia zlyhala",
+  "migrateError": "Chyba pri spúšťaní migrácie",
+  "freshCompleted": "Čerstvá migrácia dokončená",
+  "freshFailed": "Čerstvá migrácia zlyhala",
+  "freshError": "Chyba pri spúšťaní čerstvej migrácie",
+  "rollbackCompleted": "Rollback dokončený",
+  "rollbackError": "Chyba počas rollbacku"
+}

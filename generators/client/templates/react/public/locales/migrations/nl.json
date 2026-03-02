@@ -1,0 +1,42 @@
+{
+  "title": "Database Migrations",
+  "status": {
+    "pending": "In afwachting...",
+    "running": "Bezig",
+    "completed": "Voltooid",
+    "failed": "Mislukt",
+    "title": "Migratiestatus",
+    "description": "Toon de status van alle migraties.",
+    "action": "Toon status",
+    "error": "Fout bij het ophalen van de migratiestatus"
+  },
+  "migrate": {
+    "title": "Voer migraties uit",
+    "description": "Voer alle hangende database-migraties uit.",
+    "action": "Migreer",
+    "confirm": "Migratie bevestigen"
+  },
+  "rollback": {
+    "title": "Rollback",
+    "description": "Rol de laatste batch migraties terug.",
+    "action": "Rollback",
+    "confirm": "Bevestig rollback",
+    "step": "Stap",
+    "stepPlaceholder": "bijv. 1",
+    "stepHint": "Laat leeg om de laatste batch terug te rollen"
+  },
+  "fresh": {
+    "title": "Verse migratie",
+    "description": "⚠️ Verwijder alle tabellen en voer alle migraties opnieuw uit. Alle gegevens gaan verloren.",
+    "action": "Migreer vers",
+    "confirm": "Bevestig — alle gegevens gaan verloren"
+  },
+  "migrateCompleted": "Migratie voltooid",
+  "migrateFailed": "Migratie mislukt",
+  "migrateError": "Fout bij het starten van de migratie",
+  "freshCompleted": "Verse migratie voltooid",
+  "freshFailed": "Verse migratie mislukt",
+  "freshError": "Fout bij het starten van de verse migratie",
+  "rollbackCompleted": "Rollback voltooid",
+  "rollbackError": "Fout tijdens rollback"
+}
