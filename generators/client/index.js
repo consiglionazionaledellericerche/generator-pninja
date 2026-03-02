@@ -22,16 +22,26 @@ export default class AuthGenerator extends Generator {
         });
         this.option('languages', {
             type: String,
-            description: 'Additional languages to install (comma separated OR "none")',
+            description: 'Additional languages to install (comma separated)',
         });
         if (!this.options.fromMain) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
     }
     async prompting() {
-        if (this.options.clientType && this.options.nativeLanguage && this.options.languages) {
+        if (this.options.clientType && this.options.nativeLanguage && this.options.languages !== undefined) {
+            let languages = [];
+            if (this.options.languages === "false") {
+                languages = [];
+            }
+            else {
+                languages = this.options.languages
+                    .split(',')
+                    .map(l => l.trim())
+                    .filter(Boolean);
+            }
             this.answers = {
                 clientType: this.options.clientType,
                 nativeLanguage: this.options.nativeLanguage,
-                languages: this.options.languages === "none" ? [] : this.options.languages.split(',').map(lang => lang.trim())
+                languages
             };
             return;
         }
@@ -61,7 +71,11 @@ export default class AuthGenerator extends Generator {
                 type: 'checkbox',
                 name: 'languages',
                 message: 'Please choose additional languages to install',
-                default: this.options.languages ? (this.options.languages === "none" ? [] : this.options.languages.split(',').map(lang => lang.trim())) : (this.config.get('languages') || []),
+                default: this.options['no-languages']
+                    ? []
+                    : this.options.languages
+                        ? this.options.languages.split(',').map(lang => lang.trim())
+                        : (this.config.get('languages') || []),
                 choices: (answers) => {
                     return getAvailableLanguages(answers.nativeLanguage);
                 },
