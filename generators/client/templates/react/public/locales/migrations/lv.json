@@ -8,7 +8,8 @@
     "title": "Migrācijas statuss",
     "description": "Rādīt visu migrāciju statusu.",
     "action": "Rādīt statusu",
-    "error": "Kļūda, iegūstot migrācijas statusu"
+    "error": "Kļūda, iegūstot migrācijas statusu",
+    "refresh": "Atjaunot statusu"
   },
   "migrate": {
     "title": "Izpildīt migrācijas",

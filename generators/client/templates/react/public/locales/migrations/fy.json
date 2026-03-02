@@ -8,7 +8,8 @@
     "title": "Migration Status",
     "description": "Toon de status fan alle migraasjes.",
     "action": "Toon status",
-    "error": "Fout by it opheljen fan migraasjestatus"
+    "error": "Fout by it opheljen fan migraasjestatus",
+    "refresh": "Status opnij ynladen"
   },
   "migrate": {
     "title": "Rin Migraasjes",

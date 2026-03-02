@@ -8,7 +8,8 @@
     "title": "Siirtojen tila",
     "description": "Näytä kaikkien siirtojen tila.",
     "action": "Näytä tila",
-    "error": "Virhe siirron tilan hakemisessa"
+    "error": "Virhe siirron tilan hakemisessa",
+    "refresh": "Päivitä tila"
   },
   "migrate": {
     "title": "Suorita siirrot",

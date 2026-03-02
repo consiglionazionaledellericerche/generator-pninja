@@ -8,7 +8,8 @@
     "title": "Migrazio egoera",
     "description": "Erakutsi migrazioen egoera guztiak.",
     "action": "Egoera erakutsi",
-    "error": "Errorea migrazio egoera berreskuratzerakoan"
+    "error": "Errorea migrazio egoera berreskuratzerakoan",
+    "refresh": "Eguneratu egoera"
   },
   "migrate": {
     "title": "Migratekin abiatu",

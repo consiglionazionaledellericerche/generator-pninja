@@ -8,7 +8,8 @@
     "title": "Migratsiya holati",
     "description": "Barcha migratsiyalarning holatini ko'rsatish.",
     "action": "Holatni ko'rsatish",
-    "error": "Migratsiya holatini olishda xato"
+    "error": "Migratsiya holatini olishda xato",
+    "refresh": "Holatni yangilang"
   },
   "migrate": {
     "title": "Migratsiyalarni bajarish",

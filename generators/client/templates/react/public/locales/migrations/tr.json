@@ -8,7 +8,8 @@
     "title": "Göç Durumu",
     "description": "Tüm göçlerin durumunu göster.",
     "action": "Durumu göster",
-    "error": "Göç durumunu alırken hata"
+    "error": "Göç durumunu alırken hata",
+    "refresh": "Durumu yenile"
   },
   "migrate": {
     "title": "Göçleri Çalıştır",

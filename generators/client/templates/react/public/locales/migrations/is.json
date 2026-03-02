@@ -8,7 +8,8 @@
     "title": "Flutningastaða",
     "description": "Sýna stöðu allra flutninga.",
     "action": "Sýna stöðu",
-    "error": "Villa við að sækja flutningstöðu"
+    "error": "Villa við að sækja flutningstöðu",
+    "refresh": "Endurnýja stöðu"
   },
   "migrate": {
     "title": "Keyra flutninga",

@@ -8,7 +8,8 @@
     "title": "Matsayin canje-canje",
     "description": "Nuna matsayin dukkan canje-canje.",
     "action": "Nuna matsayin",
-    "error": "Kuskure wajen samun matsayin canje-canje"
+    "error": "Kuskure wajen samun matsayin canje-canje",
+    "refresh": "Sabunta matsayi"
   },
   "migrate": {
     "title": "Gudanar da canje-canje",

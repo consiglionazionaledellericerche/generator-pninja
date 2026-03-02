@@ -8,7 +8,8 @@
     "title": "Status y'ihindura",
     "description": "Erekanisha status y'ihindura zose.",
     "action": "Erekanisha status",
-    "error": "Ikosa mu kubona status y'ihindura"
+    "error": "Ikosa mu kubona status y'ihindura",
+    "refresh": "Sukura status"
   },
   "migrate": {
     "title": "Tangira ihindura",

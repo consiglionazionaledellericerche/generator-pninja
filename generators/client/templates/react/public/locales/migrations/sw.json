@@ -8,7 +8,8 @@
     "title": "Hali ya Uhamiraji",
     "description": "Onyesha hali ya mahamiradi yote.",
     "action": "Onyesha hali",
-    "error": "Kosa wakati wa kupata hali ya uhamiraji"
+    "error": "Kosa wakati wa kupata hali ya uhamiraji",
+    "refresh": "Sasisha hali"
   },
   "migrate": {
     "title": "Kimbia Mahamiradi",

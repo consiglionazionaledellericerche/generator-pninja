@@ -8,7 +8,8 @@
     "title": "迁移状态",
     "description": "显示所有迁移的状态。",
     "action": "显示状态",
-    "error": "获取迁移状态时出错"
+    "error": "获取迁移状态时出错",
+    "refresh": "刷新状态"
   },
   "migrate": {
     "title": "运行迁移",

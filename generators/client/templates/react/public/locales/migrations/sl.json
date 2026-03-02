@@ -8,7 +8,8 @@
     "title": "Status migracije",
     "description": "Prikaži status vseh migracij.",
     "action": "Prikaži status",
-    "error": "Napaka pri pridobivanju statusa migracije"
+    "error": "Napaka pri pridobivanju statusa migracije",
+    "refresh": "Osveži stanje"
   },
   "migrate": {
     "title": "Zagnaj migracije",

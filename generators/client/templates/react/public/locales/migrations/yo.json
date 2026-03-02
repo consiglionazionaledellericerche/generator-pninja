@@ -8,7 +8,8 @@
     "title": "Ipo Ìsopọ́",
     "description": "Fi ipo gbogbo ìsopọ́ hàn.",
     "action": "Fi ipo hàn",
-    "error": "Aṣiṣe n'ibè lórúkọ ìsopọ́"
+    "error": "Aṣiṣe n'ibè lórúkọ ìsopọ́",
+    "refresh": "Ṣe àtúnṣe ipo"
   },
   "migrate": {
     "title": "Ṣe Ìsopọ́",

@@ -8,7 +8,8 @@
     "title": "Migrationsstatus",
     "description": "Vis status for alle migrationer.",
     "action": "Vis status",
-    "error": "Fejl ved hentning af migrationsstatus"
+    "error": "Fejl ved hentning af migrationsstatus",
+    "refresh": "Opdater status"
   },
   "migrate": {
     "title": "Kør migrationer",

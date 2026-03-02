@@ -8,7 +8,8 @@
     "title": "Status tal-Migrazzjoni",
     "description": "Uri l-istatus ta' kull migrazzjoni.",
     "action": "Uri l-istatus",
-    "error": "Żball meta niġbor l-istatus tal-migrazzjoni"
+    "error": "Żball meta niġbor l-istatus tal-migrazzjoni",
+    "refresh": "Aġġorna l-istat"
   },
   "migrate": {
     "title": "Esegwi l-Migrazzjonijiet",

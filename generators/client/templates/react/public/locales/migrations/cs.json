@@ -8,7 +8,8 @@
     "title": "Stav migrace",
     "description": "Zobrazit stav všech migrací.",
     "action": "Zobrazit stav",
-    "error": "Chyba při načítání stavu migrace"
+    "error": "Chyba při načítání stavu migrace",
+    "refresh": "Aktualizovat stav"
   },
   "migrate": {
     "title": "Spustit migrace",

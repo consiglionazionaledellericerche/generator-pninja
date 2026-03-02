@@ -8,7 +8,8 @@
     "title": "Migratiestatus",
     "description": "Toon de status van alle migraties.",
     "action": "Toon status",
-    "error": "Fout bij het ophalen van de migratiestatus"
+    "error": "Fout bij het ophalen van de migratiestatus",
+    "refresh": "Vernieuw status"
   },
   "migrate": {
     "title": "Voer migraties uit",

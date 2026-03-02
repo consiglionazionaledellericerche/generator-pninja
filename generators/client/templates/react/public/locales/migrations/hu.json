@@ -8,7 +8,8 @@
     "title": "Migráció Állapot",
     "description": "Mutassa az összes migráció állapotát.",
     "action": "Állapot megjelenítése",
-    "error": "Hiba a migráció állapotának lekérésekor"
+    "error": "Hiba a migráció állapotának lekérésekor",
+    "refresh": "Frissítési állapot"
   },
   "migrate": {
     "title": "Migrációk futtatása",

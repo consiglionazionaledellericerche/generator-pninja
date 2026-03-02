@@ -8,7 +8,8 @@
     "title": "Stav migrácie",
     "description": "Zobraziť stav všetkých migrácií.",
     "action": "Zobraziť stav",
-    "error": "Chyba pri získavaní stavu migrácie"
+    "error": "Chyba pri získavaní stavu migrácie",
+    "refresh": "Obnoviť stav"
   },
   "migrate": {
     "title": "Spustiť migrácie",

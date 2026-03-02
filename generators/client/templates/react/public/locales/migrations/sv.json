@@ -8,7 +8,8 @@
     "title": "Överföringsstatus",
     "description": "Visa status för alla överföringar.",
     "action": "Visa status",
-    "error": "Fel vid hämtning av överföringsstatus"
+    "error": "Fel vid hämtning av överföringsstatus",
+    "refresh": "Uppdatera status"
   },
   "migrate": {
     "title": "Kör överföringar",

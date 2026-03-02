@@ -8,7 +8,8 @@
     "title": "Stádas Miondáití",
     "description": "Taispeáin stádas na miondáití uile.",
     "action": "Taispeáin stádas",
-    "error": "Earráid ag fáil stádas miondáití"
+    "error": "Earráid ag fáil stádas miondáití",
+    "refresh": "Athnuaigh stádas"
   },
   "migrate": {
     "title": "Rith Miondáití",

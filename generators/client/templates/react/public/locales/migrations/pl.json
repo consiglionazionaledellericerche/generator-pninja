@@ -8,7 +8,8 @@
     "title": "Status migracji",
     "description": "Pokaż status wszystkich migracji.",
     "action": "Pokaż status",
-    "error": "Błąd podczas pobierania statusu migracji"
+    "error": "Błąd podczas pobierania statusu migracji",
+    "refresh": "Odśwież status"
   },
   "migrate": {
     "title": "Uruchom migracje",

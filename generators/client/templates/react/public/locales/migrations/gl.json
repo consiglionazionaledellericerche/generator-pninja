@@ -8,7 +8,8 @@
     "title": "Estado da migración",
     "description": "Amosa o estado de todas as migracións.",
     "action": "Amosar estado",
-    "error": "Error ao recuperar o estado da migración"
+    "error": "Error ao recuperar o estado da migración",
+    "refresh": "Actualizar estado"
   },
   "migrate": {
     "title": "Executar migracións",

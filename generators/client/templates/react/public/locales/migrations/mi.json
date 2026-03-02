@@ -8,7 +8,8 @@
     "title": "Te Kōwhiringa Whakawhiti",
     "description": "Whakaatu i te kōwhiringa o ngā whakawhiti katoa.",
     "action": "Whakaatu i te kōwhiringa",
-    "error": "Hapa e hiahiatia ana te kōwhiringa"
+    "error": "Hapa e hiahiatia ana te kōwhiringa",
+    "refresh": "Whakanuia te āhua"
   },
   "migrate": {
     "title": "Tīmata Whakawhiti",

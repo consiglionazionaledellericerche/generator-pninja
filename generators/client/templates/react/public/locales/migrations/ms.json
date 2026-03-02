@@ -8,7 +8,8 @@
     "title": "Status Migrasi",
     "description": "Tunjukkan status semua migrasi.",
     "action": "Tunjukkan status",
-    "error": "Ralat mendapat status migrasi"
+    "error": "Ralat mendapat status migrasi",
+    "refresh": "Menyegarkan status"
   },
   "migrate": {
     "title": "Jalankan Migrasi",

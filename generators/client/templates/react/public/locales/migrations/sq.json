@@ -8,7 +8,8 @@
     "title": "Statusi i Migrimit",
     "description": "Trego statusin e të gjitha migrimeve.",
     "action": "Trego statusin",
-    "error": "Gabim në marrjen e statusit të migrimit"
+    "error": "Gabim në marrjen e statusit të migrimit",
+    "refresh": "Rifresko statusin"
   },
   "migrate": {
     "title": "Ekzekuto Migrimet",

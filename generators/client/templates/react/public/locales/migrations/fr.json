@@ -8,7 +8,8 @@
     "title": "État de la migration",
     "description": "Afficher l'état de toutes les migrations.",
     "action": "Afficher l'état",
-    "error": "Erreur lors de la récupération de l'état de la migration"
+    "error": "Erreur lors de la récupération de l'état de la migration",
+    "refresh": "Actualiser le statut"
   },
   "migrate": {
     "title": "Exécuter les migrations",

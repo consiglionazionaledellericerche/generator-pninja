@@ -8,7 +8,8 @@
     "title": "Statws Symudiad",
     "description": "Dangos statws pob symudiad.",
     "action": "Dangos statws",
-    "error": "Gwall wrth ddod o hyd i statws y symudiad"
+    "error": "Gwall wrth ddod o hyd i statws y symudiad",
+    "refresh": "Ail-adnewyddu statws"
   },
   "migrate": {
     "title": "Rhedeg Symudiadau",

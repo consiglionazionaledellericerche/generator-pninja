@@ -8,7 +8,8 @@
     "title": "Migracijos būsenos",
     "description": "Rodyti visų migracijų būseną.",
     "action": "Rodyti būseną",
-    "error": "Klaida gaunant migracijos būseną"
+    "error": "Klaida gaunant migracijos būseną",
+    "refresh": "Atnaujinti būseną"
   },
   "migrate": {
     "title": "Vykdyti migracijas",

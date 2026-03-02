@@ -8,7 +8,8 @@
     "title": "Starea migrației",
     "description": "Afișează starea tuturor migrațiilor.",
     "action": "Afișează starea",
-    "error": "Eroare în recuperarea stării migrației"
+    "error": "Eroare în recuperarea stării migrației",
+    "refresh": "Actualizează starea"
   },
   "migrate": {
     "title": "Execută migrații",

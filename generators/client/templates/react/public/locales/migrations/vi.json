@@ -8,7 +8,8 @@
     "title": "Trạng thái di chuyển",
     "description": "Hiển thị trạng thái của tất cả các di chuyển.",
     "action": "Hiển thị trạng thái",
-    "error": "Lỗi khi truy xuất trạng thái di chuyển"
+    "error": "Lỗi khi truy xuất trạng thái di chuyển",
+    "refresh": "Làm mới trạng thái"
   },
   "migrate": {
     "title": "Chạy di chuyển",

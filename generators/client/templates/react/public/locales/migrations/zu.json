@@ -8,7 +8,8 @@
     "title": "Isimo Sokufuduka",
     "description": "Bonisa isimo sokufuduka sonke.",
     "action": "Bonisa isimo",
-    "error": "Iphutha lokuthola isimo sokufuduka"
+    "error": "Iphutha lokuthola isimo sokufuduka",
+    "refresh": "Buyisela isimo"
   },
   "migrate": {
     "title": "Gijima Ukufuduka",

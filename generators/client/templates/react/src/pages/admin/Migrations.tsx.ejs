@@ -87,6 +87,22 @@ export function Migrations() {
     document.title = t('migrations:title');
   }, [i18n.language, t]);
 
+  const handleStatus = useCallback(() => {
+    setLoadingStatus(true);
+    setStatusOutput(null);
+    axiosInstance
+      .get<{ output: string }>('/api/admin/migrations/status')
+      .then(({ data }) => setStatusOutput(data.output))
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message });
+      })
+      .finally(() => setLoadingStatus(false));
+  }, [addNotification]);
+
+  useEffect(() => {
+    handleStatus();
+  }, [handleStatus]);
+
   const handleMigrate = () => {
     axiosInstance
       .post<{ job_id: string }>('/api/admin/migrations/migrate')
@@ -105,6 +121,7 @@ export function Migrations() {
                   ? (state.message ?? t('migrations:migrateFailed'))
                   : t('migrations:migrateCompleted'),
             });
+            handleStatus();
           }
         );
       })
@@ -135,6 +152,7 @@ export function Migrations() {
                   ? (state.message ?? t('migrations:freshFailed'))
                   : t('migrations:freshCompleted'),
             });
+            handleStatus();
           }
         );
       })
@@ -159,6 +177,7 @@ export function Migrations() {
       .then(({ data }) => {
         setRollbackOutput(data.output);
         addNotification({ type: 'success', message: t('migrations:rollbackCompleted') });
+        handleStatus();
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
@@ -170,32 +189,16 @@ export function Migrations() {
       .finally(() => setLoadingRollback(false));
   };
 
-  const handleStatus = () => {
-    setLoadingStatus(true);
-    setStatusOutput(null);
-    axiosInstance
-      .get<{ output: string }>('/api/admin/migrations/status')
-      .then(({ data }) => setStatusOutput(data.output))
-      .catch((error: AxiosError<ErrorResponseData>) => {
-        addNotification({
-          type: 'error',
-          message: t('migrations:statusError'),
-          ...(isAxiosError<ErrorResponseData>(error) && { error }),
-        });
-      })
-      .finally(() => setLoadingStatus(false));
-  };
-
   const getStatusIcon = (state: IJobState) => {
     switch (state.status) {
       case 'pending':
-        return <Icon icon="schedule" size={4} className="text-gray-400 animate-pulse" />;
+        return <Icon icon="schedule" size={5} className="text-gray-400 animate-pulse" />;
       case 'running':
-        return <Icon icon="sync" size={4} className="text-blue-500 animate-spin" />;
+        return <Icon icon="sync" size={5} className="text-blue-500 animate-spin" />;
       case 'completed':
-        return <Icon icon="check_circle" size={4} className="text-green-500" />;
+        return <Icon icon="check_circle" size={5} className="text-green-500" />;
       case 'failed':
-        return <Icon icon="error" size={4} className="text-red-500" />;
+        return <Icon icon="error" size={5} className="text-red-500" />;
     }
   };
 
@@ -225,13 +228,13 @@ export function Migrations() {
               pendingClassName="primary-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="play_arrow" size={4} />
+                  <Icon icon="play_arrow" size={5} />
                   {t('migrations:migrate.action')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="play_arrow" size={4} />
+                  <Icon icon="play_arrow" size={5} />
                   {t('migrations:migrate.confirm')}
                 </span>
               }
@@ -283,13 +286,13 @@ export function Migrations() {
               pendingClassName="danger-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="undo" size={4} />
+                  <Icon icon="undo" size={5} />
                   {t('migrations:rollback.action')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="undo" size={4} />
+                  <Icon icon="undo" size={5} />
                   {t('migrations:rollback.confirm')}
                 </span>
               }
@@ -325,13 +328,13 @@ export function Migrations() {
               pendingClassName="danger-button"
               label={
                 <span className="flex items-center gap-2">
-                  <Icon icon="delete_sweep" size={4} />
+                  <Icon icon="delete_sweep" size={5} />
                   {t('migrations:fresh.action')}
                 </span>
               }
               pendingLabel={
                 <span className="flex items-center gap-2">
-                  <Icon icon="delete_sweep" size={4} />
+                  <Icon icon="delete_sweep" size={5} />
                   {t('migrations:fresh.confirm')}
                 </span>
               }
@@ -363,12 +366,12 @@ export function Migrations() {
             </div>
             <button disabled={anyBusy} onClick={handleStatus} className="secondary-button shrink-0">
               <span className="flex items-center gap-2">
-                <Icon icon="list_alt" size={4} />
-                {t('migrations:status.action')}
+                <Icon icon="refresh" size={5} className={loadingStatus ? 'animate-spin' : ''} />
+                {t('migrations:status.refresh')}
               </span>
             </button>
           </div>
-          {loadingStatus && (
+          {loadingStatus && !statusOutput && (
             <div className="mt-3">
               <SimpleLoader loading={true} />
             </div>

@@ -8,7 +8,8 @@
     "title": "Haala Migi",
     "description": "Haala migi hunda agarsiisi.",
     "action": "Haala agarsiisi",
-    "error": "Dogoggora haala migi argachuuf"
+    "error": "Dogoggora haala migi argachuuf",
+    "refresh": "Haala haaromsuu"
   },
   "migrate": {
     "title": "Migi Hojii Itti Fufi",

@@ -8,7 +8,8 @@
     "title": "Köçürmə statusu",
     "description": "Bütün köçürmələrin statusunu göstərin.",
     "action": "Statusu göstərin",
-    "error": "Köçürmə statusunu əldə edərkən xətası"
+    "error": "Köçürmə statusunu əldə edərkən xətası",
+    "refresh": "Statusu yenilə"
   },
   "migrate": {
     "title": "Köçürmələri icra edin",

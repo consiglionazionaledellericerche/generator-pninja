@@ -8,7 +8,8 @@
     "title": "Kondisyon Migrasyon",
     "description": "Montre kondisyon tout migrasyon yo.",
     "action": "Montre kondisyon",
-    "error": "Erè ki fèt pandan w ap chèche kondisyon migrasyon"
+    "error": "Erè ki fèt pandan w ap chèche kondisyon migrasyon",
+    "refresh": "Rafrechi estati"
   },
   "migrate": {
     "title": "Kouri Migrasyon",

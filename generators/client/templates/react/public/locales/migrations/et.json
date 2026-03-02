@@ -8,7 +8,8 @@
     "title": "Migreerimise seisund",
     "description": "Kuva kõikide migratsioonide seisund.",
     "action": "Kuva seisund",
-    "error": "Viga migratsiooni staatuse küsimisel"
+    "error": "Viga migratsiooni staatuse küsimisel",
+    "refresh": "Uuenda olek"
   },
   "migrate": {
     "title": "Käivita migreerimised",
