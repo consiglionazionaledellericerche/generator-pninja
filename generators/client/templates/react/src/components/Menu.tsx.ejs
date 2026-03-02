@@ -134,6 +134,7 @@ const Menu: React.FC = () => {
             any={[
               { resource: 'AcRule', action: 'read' },
               { resource: 'Audit', action: 'read' },
+              { resource: 'Log', action: 'read' },
               { resource: 'Seeder', action: 'read' },
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
               { resource: 'SearchReindex', action: 'read' },
