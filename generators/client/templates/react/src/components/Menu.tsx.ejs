@@ -134,6 +134,10 @@ const Menu: React.FC = () => {
             any={[
               { resource: 'AcRule', action: 'read' },
               { resource: 'Audit', action: 'read' },
+              { resource: 'Seeder', action: 'read' },
+<%  if (!['null', 'database'].includes(searchEngine)) { -%>
+              { resource: 'SearchReindex', action: 'read' },
+<%  }-%>
 <%  entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
               { resource: 'Trashed<%- entity.name %>', action: 'read' },
 <%  });-%>
