@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError, InternalAxiosRequestConfig, isAxiosError } from 'axios';
 import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
@@ -69,7 +69,12 @@ export function Migrations() {
             stopPolling(key);
             onDone(data);
           }
-        } catch {
+        } catch (error) {
+          addNotification({
+            type: 'error',
+            message: error instanceof Error ? error.message : 'Unknown error',
+            ...(isAxiosError<ErrorResponseData>(error) && { error }),
+          });
           stopPolling(key);
         }
       }, POLL_INTERVAL_MS);
@@ -94,7 +99,7 @@ export function Migrations() {
       .get<{ output: string }>('/api/admin/migrations/status')
       .then(({ data }) => setStatusOutput(data.output))
       .catch((error: AxiosError<ErrorResponseData>) => {
-        addNotification({ type: 'error', message: error.message });
+        addNotification({ type: 'error', message: error.message, error });
       })
       .finally(() => setLoadingStatus(false));
   }, [addNotification]);
@@ -116,10 +121,28 @@ export function Migrations() {
           (state) => {
             addNotification({
               type: state.status === 'failed' ? 'error' : 'success',
-              message:
+              message: t(
                 state.status === 'failed'
-                  ? (state.message ?? t('migrations:migrateFailed'))
-                  : t('migrations:migrateCompleted'),
+                  ? 'migrations:migrateFailed'
+                  : 'migrations:migrateCompleted'
+              ),
+              ...(state.status === 'failed' && {
+                error: new AxiosError<ErrorResponseData>(
+                  t('migrations:migrateFailed'),
+                  undefined, // code
+                  undefined, // config
+                  undefined, // request
+                  {
+                    data: {
+                      message: state.message,
+                    },
+                    status: 500,
+                    statusText: 'Internal Server Error',
+                    headers: {},
+                    config: {} as InternalAxiosRequestConfig,
+                  }
+                ),
+              }),
             });
             handleStatus();
           }
@@ -129,7 +152,7 @@ export function Migrations() {
         addNotification({
           type: 'error',
           message: t('migrations:migrateError'),
-          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+          error,
         });
       });
   };
@@ -147,10 +170,26 @@ export function Migrations() {
           (state) => {
             addNotification({
               type: state.status === 'failed' ? 'error' : 'success',
-              message:
-                state.status === 'failed'
-                  ? (state.message ?? t('migrations:freshFailed'))
-                  : t('migrations:freshCompleted'),
+              message: t(
+                state.status === 'failed' ? 'migrations:freshFailed' : 'migrations:freshCompleted'
+              ),
+              ...(state.status === 'failed' && {
+                error: new AxiosError<ErrorResponseData>(
+                  t('migrations:freshFailed'),
+                  undefined, // code
+                  undefined, // config
+                  undefined, // request
+                  {
+                    data: {
+                      message: state.message,
+                    },
+                    status: 500,
+                    statusText: 'Internal Server Error',
+                    headers: {},
+                    config: {} as InternalAxiosRequestConfig,
+                  }
+                ),
+              }),
             });
             handleStatus();
           }
@@ -160,7 +199,7 @@ export function Migrations() {
         addNotification({
           type: 'error',
           message: t('migrations:freshError'),
-          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+          error,
         });
       });
   };
@@ -183,7 +222,7 @@ export function Migrations() {
         addNotification({
           type: 'error',
           message: t('migrations:rollbackError'),
-          ...(isAxiosError<ErrorResponseData>(error) && { error }),
+          error,
         });
       })
       .finally(() => setLoadingRollback(false));

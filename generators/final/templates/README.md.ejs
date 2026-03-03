@@ -305,6 +305,30 @@ p,admin,SearchReindex,create
 ```
 
 <%  } -%>
+## Database Migrations
+
+The application includes a **migration administration interface** accessible at `/admin/migrations`. It allows you to manage database migrations without using the command line.
+
+**Available operations:**
+
+- **Run migrations**: runs all pending migrations (`php artisan migrate`)
+- **Rollback**: rolls back the last batch of migrations (`php artisan migrate:rollback`), with an optional step parameter to roll back multiple batches
+- **Fresh migration**: drops all tables and re-runs all migrations (`php artisan migrate:fresh`) — **all data will be lost**
+- **Migration status**: shows the status of all migrations, loaded automatically on page open and refreshable on demand
+
+Migrate and migrate:fresh run as **asynchronous background jobs** — the page polls for completion and shows the output when done. Rollback runs synchronously and returns the output immediately.
+
+> ⚠️ **Warning**: `migrate:fresh` is a destructive operation. All data in the database will be permanently deleted.
+
+**Access control:**
+
+By default, **only `superadmin` role** can access the migration administration. To grant access to other roles, add policies to the `ac_rules` table:
+
+```csv
+p,admin,Migrations,read
+p,admin,Migrations,create
+```
+
 ## Database Seeding Administration
 
 The application includes a **seeding administration interface** accessible at `/seeder`. It allows you to run seeders without using the command line, individually or in bulk.
