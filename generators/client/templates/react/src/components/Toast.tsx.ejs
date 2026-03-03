@@ -106,8 +106,8 @@ export function Toast({ notification }: { notification: INotification }) {
         pauseNotification(notification.id);
       }}
     >
-      <div className="p-4 flex justify-between items-start flex-row-reverse">
-        <div className="flex items-center ms-2 gap-2 shrink-0">
+      <div className="p-4 relative">
+        <div className="absolute top-4 right-4">
           <button
             ref={closeRef}
             aria-label={t('actions.closeNotification')}
@@ -124,7 +124,7 @@ export function Toast({ notification }: { notification: INotification }) {
           </div>
           {notification?.error?.response?.data?.message && (
             <div className={`${colors.details} mt-2 text-sm p-2 rounded`}>
-              <div>
+              <div className="overflow-auto">
                 {notification?.error?.response?.data?.message}
                 {notification?.error?.response?.data?.details &&
                   notification?.error?.response?.data?.details !==
