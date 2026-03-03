@@ -124,6 +124,8 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 ```
 
 - **CSV Database Seeding** - Populate your database from CSV files
+- **Seeding Administration** - Web interface to run seeders individually or in bulk, with direct CSV upload from the browser
+- **Migration Administration** - Web interface to run `migrate`, `rollback`, `migrate:fresh` and check `migrate:status` without the command line
 - **Audit Logging** - Complete change tracking for all entity modifications
 - **Interactive Entity Generator** - Create and modify entities through CLI prompts
 - **Incremental Migrations** - Automatic database migrations for entity changes
@@ -132,6 +134,7 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 
 - **Multiple Search Engines** - Choose from Database, Algolia, Elasticsearch, Meilisearch, Typesense, or Solr
 - **Laravel Scout Integration** - Seamless search engine configuration
+- **Search Index Management** - Web interface to reindex, flush, and delete indexes per entity, with engine-specific actions for Elasticsearch (`elastic:migrate`, `migrate:reset`, `migrate:refresh`) and Meilisearch (`scout:sync-index-settings`)
 
 ### Accessibility & UX
 
