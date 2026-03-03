@@ -14,7 +14,8 @@ import {
   Cell,
 } from 'recharts';
 import axiosInstance from '../../shared/axiosInstance';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Icon } from '../../components/Icon';
 
@@ -122,12 +123,13 @@ export default function AuditUserActivity() {
         setSessions(sessionsRes.data);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         console.error('ERR:', error);
         setLoading(false);
         addNotification({
           type: 'error',
           message: error.message,
+          error,
         });
       });
   }, [userId, dateFrom, dateTo, addNotification]);
@@ -219,7 +221,6 @@ export default function AuditUserActivity() {
           </div>
         </div>
       </div>
-
       {/* Date Range Filter */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4 mb-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
@@ -249,7 +250,6 @@ export default function AuditUserActivity() {
           </div>
         </div>
       </div>
-
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
@@ -306,7 +306,6 @@ export default function AuditUserActivity() {
           </div>
         </div>
       </div>
-
       {/* Sessions Summary */}
       {sessions && sessions.total_sessions > 0 && (
         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg shadow-lg p-6 mb-6">
@@ -331,7 +330,6 @@ export default function AuditUserActivity() {
           </div>
         </div>
       )}
-
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Events Distribution */}
@@ -433,7 +431,6 @@ export default function AuditUserActivity() {
           </ResponsiveContainer>
         </div>
       </div>
-
       {/* Detailed Sessions List */}
       {sessions && sessions.sessions && sessions.sessions.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6 mb-6">
@@ -541,7 +538,6 @@ export default function AuditUserActivity() {
           </div>
         </div>
       )}
-
       {/* Recent Activity Timeline */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
         <h2 className="text-lg font-semibold mb-4">{t('audit:recentActivity')}</h2>

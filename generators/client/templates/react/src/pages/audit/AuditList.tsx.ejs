@@ -6,7 +6,8 @@ import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { SearchInput } from '../../components/SearchInput';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { Icon } from '../../components/Icon';
 
@@ -96,12 +97,13 @@ export default function AuditList() {
         setPage(page);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         console.error('ERR:', error);
         setLoading(false);
         addNotification({
           type: 'error',
           message: error.message,
+          error,
         });
       });
   }, [addNotification, sortConfig, currentPage, debouncedSearchTerm, filters]);

@@ -15,7 +15,8 @@ import {
   Cell,
 } from 'recharts';
 import axiosInstance from '../../shared/axiosInstance';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Icon } from '../../components/Icon';
 interface TooltipPayload {
@@ -168,12 +169,13 @@ export default function AuditStatistics() {
 
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         console.error('ERR:', error);
         setLoading(false);
         addNotification({
           type: 'error',
           message: error.message,
+          error,
         });
       });
   }, [dateFrom, dateTo, fillMissingPeriods, addNotification]);

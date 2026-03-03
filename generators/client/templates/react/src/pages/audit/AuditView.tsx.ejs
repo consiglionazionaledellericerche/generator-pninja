@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axiosInstance from '../../shared/axiosInstance';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Icon } from '../../components/Icon';
 
@@ -41,12 +42,13 @@ export default function AuditView() {
         setAudit(response.data);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((error: AxiosError<ErrorResponseData>) => {
         console.error('ERR:', error);
         setLoading(false);
         addNotification({
           type: 'error',
           message: error.message,
+          error,
         });
       });
   }, [id, addNotification]);

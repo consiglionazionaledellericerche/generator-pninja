@@ -12,7 +12,8 @@ import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { SearchInput } from '../../components/SearchInput';
 <% } -%>
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
-import { useNotifications } from '../../contexts/NotificationContext';
+import { AxiosError } from 'axios';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
 import { Can } from '../../components/Can';
@@ -56,12 +57,12 @@ export default function <%= entity.name %>List() {
         setPage(page);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error('ERR:', error);
+      .catch((error: AxiosError<ErrorResponseData>) => {
         setLoading(false);
         addNotification({
           type: 'error',
           message: error.message,
+          error,
         });
       });
   }, [addNotification, sortConfig, currentPage<% if (searchEngine !== 'null' ) { -%>, debouncedSearchTerm<% } -%>]);
