@@ -218,14 +218,6 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 - [SQL Server][sqlserver-url] support
 - [Oracle][oracle-url] support
 
-### Features
-
-- **Multi-tenancy Support** - Isolated data per tenant
-- **API Versioning** - Version management for APIs
-- **Real-time Features** - WebSockets/Pusher integration
-- **GraphQL Support** - Alternative API layer
-- **Advanced Caching** - Redis integration with cache strategies
-
 ### DevOps
 
 - **GitHub Actions CI/CD** - Automated testing and deployment
