@@ -4,7 +4,7 @@ import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntityByName, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
-const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja';
 
 function convertFieldType(jhipsterType, enums) {
     const typeMap = {
@@ -84,7 +84,6 @@ function getFieldsNames(fields, enums) {
 export class MigrationsGenerator {
     constructor(that) {
         this.that = that;
-        this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
     }
 
     addColumns({ entity, enums }) {

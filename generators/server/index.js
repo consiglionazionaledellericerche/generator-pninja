@@ -39,7 +39,7 @@ export default class ServerGenerator extends Generator {
       type: Boolean,
       default: false
     });
-    this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_entity';
+    this.baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja';
     if (!this.options.fromMain) throw new Error("This generator should not be run directly. Please use the main generator to run this.");
   }
 
@@ -55,7 +55,7 @@ export default class ServerGenerator extends Generator {
       { entities: [AcRule], manyToMany: [], recycle: [] }
     );
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
-    this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_001_${randomstring.generate(5)}_create_audits_table.php`), {
+    this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_000_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
     });
     (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
