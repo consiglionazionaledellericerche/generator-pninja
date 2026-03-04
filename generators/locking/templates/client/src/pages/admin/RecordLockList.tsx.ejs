@@ -1,0 +1,145 @@
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AxiosError } from 'axios';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
+import ConfirmButton from '../../components/ConfirmButton';
+
+interface IRecordLock {
+  id: number;
+  lockable_type: string;
+  lockable_id: number;
+  resource_type: string;
+  user_id: string;
+  locked_at: string;
+  expires_at: string;
+}
+
+export function RecordLockList() {
+  const { t, i18n } = useTranslation('locking');
+  const { addNotification } = useNotifications();
+
+  const [loading, setLoading] = useState(false);
+  const [locks, setLocks] = useState<IRecordLock[]>([]);
+  const [releasing, setReleasing] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    document.title = t('admin.title');
+  }, [i18n.language, t]);
+
+  const loadLocks = useCallback(() => {
+    setLoading(true);
+    axiosInstance
+      .get<IRecordLock[]>('/api/locks')
+      .then(({ data }) => setLocks(data))
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: error.message, error });
+      })
+      .finally(() => setLoading(false));
+  }, [addNotification]);
+
+  useEffect(() => {
+    loadLocks();
+  }, [loadLocks]);
+
+  const handleForceRelease = (lock: IRecordLock) => {
+    setReleasing((prev) => new Set(prev).add(lock.id));
+    axiosInstance
+      .delete(`/api/locks/${lock.resource_type}/${lock.lockable_id}/force`)
+      .then(() => {
+        addNotification({ type: 'success', message: t('admin.releaseSuccess') });
+        setLocks((prev) => prev.filter((l) => l.id !== lock.id));
+      })
+      .catch((error: AxiosError<ErrorResponseData>) => {
+        addNotification({ type: 'error', message: t('admin.releaseError'), error });
+      })
+      .finally(() => {
+        setReleasing((prev) => {
+          const next = new Set(prev);
+          next.delete(lock.id);
+          return next;
+        });
+      });
+  };
+
+  const formatDate = (iso: string) => new Date(iso).toLocaleString();
+
+  const isExpired = (iso: string) => new Date(iso) < new Date();
+
+  return (
+    <>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">{t('admin.title')}</h1>
+        <button className="secondary-button" onClick={loadLocks} disabled={loading}>
+          <span className="flex items-center gap-2">
+            <Icon icon="refresh" size={5} />
+            {t('admin.refresh')}
+          </span>
+        </button>
+      </div>
+
+      <SimpleLoader loading={loading} />
+
+      {!loading && locks.length === 0 && <p className="text-2xl">{t('admin.noLocks')}</p>}
+
+      {!loading && locks.length > 0 && (
+        <div className="relative overflow-x-auto">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th scope="col">{t('admin.columns.resource')}</th>
+                <th scope="col">{t('admin.columns.recordId')}</th>
+                <th scope="col">{t('admin.columns.lockedBy')}</th>
+                <th scope="col">{t('admin.columns.lockedAt')}</th>
+                <th scope="col">{t('admin.columns.expiresAt')}</th>
+                <th scope="col">{t('admin.actions.actions')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {locks.map((lock) => {
+                const expired = isExpired(lock.expires_at);
+                const busy = releasing.has(lock.id);
+                return (
+                  <tr key={lock.id} className={expired ? 'opacity-50' : ''}>
+                    <td className="font-medium">{lock.lockable_type}</td>
+                    <td>{lock.lockable_id}</td>
+                    <td>{lock.user_id}</td>
+                    <td className="text-nowrap">{formatDate(lock.locked_at)}</td>
+                    <td className="text-nowrap">
+                      <span className={expired ? 'text-red-500' : ''}>
+                        {formatDate(lock.expires_at)}
+                        {expired && <span className="ml-2 text-xs">({t('admin.expired')})</span>}
+                      </span>
+                    </td>
+                    <td className="w-0">
+                      <ConfirmButton
+                        disabled={busy}
+                        onConfirm={() => handleForceRelease(lock)}
+                        className="danger-button"
+                        pendingClassName="danger-button"
+                        label={
+                          <span className="flex items-center gap-2">
+                            <Icon icon="lock_open" size={5} />
+                            {t('admin.actions.forceRelease')}
+                          </span>
+                        }
+                        pendingLabel={
+                          <span className="flex items-center gap-2">
+                            <Icon icon="lock_open" size={5} />
+                            {t('admin.actions.confirmForceRelease')}
+                          </span>
+                        }
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
+  );
+}

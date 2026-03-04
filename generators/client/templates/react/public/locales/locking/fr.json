@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Cet enregistrement est en cours de modification par {{user}} jusqu'à {{expires}}.",
+  "forceRelease": "Forcer la libération du verrou",
+  "conflict": {
+    "title": "Conflit de modification",
+    "description": "Cet enregistrement a été modifié par un autre utilisateur pendant que vous l'éditiez. Veuillez examiner les différences ci-dessous.",
+    "diffTable": "Différences entre votre version et la version du serveur",
+    "field": "Champ",
+    "yourVersion": "Votre version",
+    "serverVersion": "Version du serveur",
+    "keepMine": "Conserver ma version",
+    "useServer": "Utiliser la version du serveur",
+    "dismiss": "Annuler"
+  },
+  "admin": {
+    "title": "Verroux d'enregistrement",
+    "refresh": "Rafraîchir",
+    "noLocks": "Aucun verrou actif.",
+    "expired": "expiré",
+    "releaseSuccess": "Verrou libéré avec succès.",
+    "releaseError": "Échec de la libération du verrou.",
+    "columns": {
+      "resource": "Ressource",
+      "recordId": "Identifiant d'enregistrement",
+      "lockedBy": "Verrouillé par",
+      "lockedAt": "Verrouillé à",
+      "expiresAt": "Expire à"
+    },
+    "actions": {
+      "forceRelease": "Libération forcée",
+      "confirmForceRelease": "Confirmer la libération"
+    }
+  }
+}

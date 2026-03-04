@@ -1,0 +1,34 @@
+{
+  "lockedBy": "ይህ መዝገብ {{user}} በማቅረብ ላይ ነው እስከ {{expires}}.",
+  "forceRelease": "ተገውዝ ቃል እንደ ኃላፊነት እንደ መሆኑ ይተቀበል",
+  "conflict": {
+    "title": "ማስተካከያ ግጭት",
+    "description": "ይህ መዝገብ ከሌላ ተጠቃሚ በማቅረብ ላይ መሻሻለኝ ነበር ትንበይ ይበል ያለው ውስጥ ይርዝም።",
+    "diffTable": "ከእርስዎ በመቀመጡ ገፅ እና ከአገልግሎት ገፅ መልኩ",
+    "field": "የዕቅፍ ስፍራ",
+    "yourVersion": "የእርዳታ መልክ",
+    "serverVersion": "የአገልግሎት መልክ",
+    "keepMine": "የእኔን ስፍራ ይዘው",
+    "useServer": "የአገልግሎት መልክ ይጠቀሙ",
+    "dismiss": "ወዲ በአዲስ መስክ ይክፈት"
+  },
+  "admin": {
+    "title": "መዝግቦች ይደገፉ",
+    "refresh": "ዳግመ ይቀየር",
+    "noLocks": "ምንም እንቅስቃሴ የለም።",
+    "expired": "የጊዜ ድምጽ ተወያይዞ እንደገና",
+    "releaseSuccess": "ማስታወሻ በተሳካ ሁኔታ ተመለስቷል።",
+    "releaseError": "ማስታወሻ ማስታወሽ አልቻልኩም።",
+    "columns": {
+      "resource": "ዕቅፍ",
+      "recordId": "መዝግቦች መታወቂያ",
+      "lockedBy": "ይዘት በ",
+      "lockedAt": "የተከፈተበት ዕለት",
+      "expiresAt": "ያሉበት ቀን"
+    },
+    "actions": {
+      "forceRelease": "ወቅቱ የሚያርማ",
+      "confirmForceRelease": "ይረዳ"
+    }
+  }
+}

@@ -40,6 +40,10 @@ export default class extends Generator {
       type: String,
       description: 'The search engine to use (database, algolia, elastic, meilisearch, typesense, solr, null)',
     })
+    this.option('locking', {
+      type: String,
+      description: 'The locking strategy to use (none, optimistic, pessimistic, both)',
+    });
   }
   async initializing() {
     hello(this.log, true);
@@ -103,6 +107,21 @@ export default class extends Generator {
       resolved: searchGeneratorPath,
       searchEngine: this.options.searchEngine,
       namespace: 'pninja:search'
+    });
+
+    // sub generator Locking
+    const lockingGeneratorPath = path.resolve(__dirname, '../locking/index.js');
+    const { default: LockingGenerator } = await import(lockingGeneratorPath);
+
+    await this.composeWith({
+      Generator: LockingGenerator,
+      path: path.dirname(lockingGeneratorPath)
+    }, {
+      fromMain: true,
+      env: this.env,
+      resolved: lockingGeneratorPath,
+      locking: this.options.locking,
+      namespace: 'pninja:locking'
     });
 
     // sub generator Docker

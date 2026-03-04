@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Dieser Datensatz wird von {{user}} bis {{expires}} bearbeitet.",
+  "forceRelease": "Sperre zwangsweise aufheben",
+  "conflict": {
+    "title": "Bearbeitungskonflikt",
+    "description": "Dieser Datensatz wurde von einem anderen Benutzer geändert, während Sie ihn bearbeitet haben. Bitte überprüfen Sie die Unterschiede unten.",
+    "diffTable": "Unterschiede zwischen Ihrer Version und der Serverversion",
+    "field": "Feld",
+    "yourVersion": "Ihre Version",
+    "serverVersion": "Serverversion",
+    "keepMine": "Meine Version beibehalten",
+    "useServer": "Serverversion verwenden",
+    "dismiss": "Abbrechen"
+  },
+  "admin": {
+    "title": "Datensatzsperren",
+    "refresh": "Aktualisieren",
+    "noLocks": "Keine aktiven Sperren.",
+    "expired": "abgelaufen",
+    "releaseSuccess": "Sperre erfolgreich freigegeben.",
+    "releaseError": "Freigabe der Sperre fehlgeschlagen.",
+    "columns": {
+      "resource": "Ressource",
+      "recordId": "Datensatz-ID",
+      "lockedBy": "Gesperrt von",
+      "lockedAt": "Gesperrt am",
+      "expiresAt": "Läuft ab am"
+    },
+    "actions": {
+      "forceRelease": "Zwangsfreigabe",
+      "confirmForceRelease": "Freigabe bestätigen"
+    }
+  }
+}

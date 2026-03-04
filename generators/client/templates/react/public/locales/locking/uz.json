@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Ushbu yozuvni {{user}} tahrirlamoqda {{expires}} gacha.",
+  "forceRelease": "Boshqa foydalanuvchi siz uni tahrirlayotganda ushbu yozuv o'zgartirildi. Iltimos, quyidagi farqlarni ko'rib chiqing.",
+  "conflict": {
+    "title": "Sizning versiyangiz va server versiyasi o'rtasidagi farqlar",
+    "description": "Maydon",
+    "diffTable": "Sizning versiyangiz",
+    "field": "Server versiyasi",
+    "yourVersion": "Mening versiyamni saqlash",
+    "serverVersion": "Server versiyasini ishlatish",
+    "keepMine": "Keep my version",
+    "useServer": "Use server version",
+    "dismiss": "Bekor qilish"
+  },
+  "admin": {
+    "title": "Yozuv qulflari",
+    "refresh": "Yangilash",
+    "noLocks": "Faol qulflar yo'q.",
+    "expired": "amalga oshgan",
+    "releaseSuccess": "Qulf muvaffaqiyatli ochildi.",
+    "releaseError": "Qulfni ochishda xato.",
+    "columns": {
+      "resource": "Resurs",
+      "recordId": "Yozuv ID",
+      "lockedBy": "Qulfda",
+      "lockedAt": "Qulflangan vaqt",
+      "expiresAt": "Amal qilish muddati"
+    },
+    "actions": {
+      "forceRelease": "Qulfni kuch bilan ochish",
+      "confirmForceRelease": "Ochilishini tasdiqlash"
+    }
+  }
+}

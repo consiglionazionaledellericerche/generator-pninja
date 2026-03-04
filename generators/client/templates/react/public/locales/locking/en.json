@@ -1,0 +1,35 @@
+{
+  "lockedBy": "This record is being edited by {{user}} until {{expires}}.",
+  "forceRelease": "Force release lock",
+  "conflict": {
+    "title": "Edit Conflict",
+    "description": "This record was modified by another user while you were editing it. Please review the differences below.",
+    "diffTable": "Differences between your version and the server version",
+    "field": "Field",
+    "yourVersion": "Your version",
+    "serverVersion": "Server version",
+    "keepMine": "Keep my version",
+    "useServer": "Use server version",
+    "dismiss": "Cancel"
+  },
+  "admin": {
+    "title": "Record Locks",
+    "refresh": "Refresh",
+    "noLocks": "No active locks.",
+    "expired": "expired",
+    "releaseSuccess": "Lock released successfully.",
+    "releaseError": "Failed to release lock.",
+    "columns": {
+      "resource": "Resource",
+      "recordId": "Record ID",
+      "lockedBy": "Locked by",
+      "lockedAt": "Locked at",
+      "expiresAt": "Expires at"
+    },
+    "actions": {
+      "forceRelease": "Force release",
+      "confirmForceRelease": "Confirm release",
+      "actions": "Actions"
+    }
+  }
+}

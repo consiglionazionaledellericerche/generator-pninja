@@ -1,0 +1,34 @@
+{
+  "lockedBy": "يتم تعديل هذا السجل بواسطة {{user}} حتى {{expires}}.",
+  "forceRelease": "إجبار على تحرير القفل",
+  "conflict": {
+    "title": "تعارض في التعديل",
+    "description": "تم تعديل هذا السجل بواسطة مستخدم آخر أثناء تحريرك له. يرجى مراجعة الفروقات أدناه.",
+    "diffTable": "الفروقات بين نسختك والنسخة الموجودة على الخادم",
+    "field": "حقل",
+    "yourVersion": "نسختك",
+    "serverVersion": "نسخة الخادم",
+    "keepMine": "احتفظ بنسختي",
+    "useServer": "استخدم نسخة الخادم",
+    "dismiss": "إلغاء"
+  },
+  "admin": {
+    "title": "قفل السجل",
+    "refresh": "تحديث",
+    "noLocks": "لا يوجد أقفال نشطة.",
+    "expired": "منتهي الصلاحية",
+    "releaseSuccess": "تم الإفراج عن القفل بنجاح.",
+    "releaseError": "فشل في الإفراج عن القفل.",
+    "columns": {
+      "resource": "الموارد",
+      "recordId": "معرف السجل",
+      "lockedBy": "مغلق بواسطة",
+      "lockedAt": "مغلق في",
+      "expiresAt": "تنتهي صلاحيته في"
+    },
+    "actions": {
+      "forceRelease": "إفراج اضطراري",
+      "confirmForceRelease": "تأكيد الإفراج"
+    }
+  }
+}

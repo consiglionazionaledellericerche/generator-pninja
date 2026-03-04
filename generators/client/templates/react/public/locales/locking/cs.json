@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Tento záznam je upravován uživatelem {{user}} do {{expires}}.",
+  "forceRelease": "Nuceně uvolnit zámek",
+  "conflict": {
+    "title": "Konflikt při úpravě",
+    "description": "Tento záznam byl změněn jiným uživatelem, zatímco jste ho upravovali. Prosím, zkontrolujte rozdíly níže.",
+    "diffTable": "Rozdíly mezi vaší verzí a verzí serveru",
+    "field": "Pole",
+    "yourVersion": "Vaše verze",
+    "serverVersion": "Verze serveru",
+    "keepMine": "Udržet mou verzi",
+    "useServer": "Použít verzi serveru",
+    "dismiss": "Zrušit"
+  },
+  "admin": {
+    "title": "Zámky záznamů",
+    "refresh": "Obnovit",
+    "noLocks": "Žádné aktivní zámky.",
+    "expired": "vypršelo",
+    "releaseSuccess": "Zámek byl úspěšně uvolněn.",
+    "releaseError": "Nešlo uvolnit zámek.",
+    "columns": {
+      "resource": "Zdroje",
+      "recordId": "ID záznamu",
+      "lockedBy": "Zamčeno od",
+      "lockedAt": "Zamčeno v",
+      "expiresAt": "Vyprší v"
+    },
+    "actions": {
+      "forceRelease": "Nucené uvolnění",
+      "confirmForceRelease": "Potvrdit uvolnění"
+    }
+  }
+}

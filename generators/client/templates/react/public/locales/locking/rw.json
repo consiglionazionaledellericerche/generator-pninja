@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Iyi rekodi iri guhindurwa na {{user}} kugeza {{expires}}.",
+  "forceRelease": "Kurekura imikandara byihutirwa",
+  "conflict": {
+    "title": "Ikibazo cyo guhindura",
+    "description": "Iyi rekodi yahinduwe n'undi mukoresha mugihe waberaga uyihindura. Nyamuneka reba itandukaniro riri hasi.",
+    "diffTable": "Itandukaniro hagati y'ubwoko bwawe n'ubwoko bw'urugero",
+    "field": "Ikibanza",
+    "yourVersion": "Ubwoko bwawe",
+    "serverVersion": "Ubwoko bw'urugero",
+    "keepMine": "Bika ubwoko bwanjye",
+    "useServer": "Koresha ubwoko bw'urugero",
+    "dismiss": "Kureka"
+  },
+  "admin": {
+    "title": "Ibyakiriwe",
+    "refresh": "Garura",
+    "noLocks": "Nta bikiriwe by'akazi.",
+    "expired": "byarangiye",
+    "releaseSuccess": "Urufunguzo rwakoreshejwe neza.",
+    "releaseError": "Guhabwa urufunguzo byanze.",
+    "columns": {
+      "resource": "Ikoreshwa",
+      "recordId": "ID y'ibyanditswe",
+      "lockedBy": "Byakiriwe na",
+      "lockedAt": "Byakiriwe kuri",
+      "expiresAt": "Birangiriye kuri"
+    },
+    "actions": {
+      "forceRelease": "Kohereza burundu",
+      "confirmForceRelease": "Gushingira ku gutanga"
+    }
+  }
+}

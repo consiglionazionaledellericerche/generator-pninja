@@ -84,7 +84,8 @@ export async function createEntityPages({
             pluralize,
             columns: entity.fields.map(c => to.snake(c.name)),
             foreignIds: getModelForeignIds(entity, relationships),
-            relatedEntities: getModelRelatedEntities(entity, relationships)
+            relatedEntities: getModelRelatedEntities(entity, relationships).length,
+            locking: that.config.get('locking')
         });
     that.fs.copyTpl(
         that.templatePath("react/src/components/entities/EntityForm.tsx.ejs"),
@@ -103,7 +104,8 @@ export async function createEntityPages({
             ).map(rel => to.snake(rel.relationshipName || rel.otherEntityName)),
             to,
             pluralize,
-            searchEngine
+            searchEngine,
+            locking: that.config.get('locking')
         }
     );
     that.fs.copyTpl(
@@ -131,6 +133,7 @@ export async function createEntityPages({
 
 export async function createReactClient(that) {
     const searchEngine = that.config.get('searchEngine');
+    const locking = that.config.get('locking');
     const entities = getEntities(that);
     const appName = that.config.get('name');
     const nativeLanguage = that.config.get('nativeLanguage') || 'en';
@@ -158,6 +161,9 @@ export async function createReactClient(that) {
         if (!['null', 'database'].includes(searchEngine)) {
             that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
         }
+        if (locking !== 'none') {
+            that.fs.copyTpl(that.templatePath(`react/public/locales/locking/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/locking.json`));
+        }
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
             entities: [AcRule],
             relationships: [],
@@ -175,11 +181,12 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
 
     that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize, searchEngine });
+    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize, searchEngine, locking });
     that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {
         supportedLngs: JSON.stringify(languages).replaceAll(`"`, `'`),
         fallbackLng: nativeLanguage,
-        searchEngine
+        searchEngine,
+        locking
     });
     that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), { navbarStartcolor });
     that.fs.copyTpl(that.templatePath("react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
@@ -238,7 +245,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+    that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine, locking });
     that.fs.copyTpl(that.templatePath("react/src/components/LoginRedirector.tsx.ejs"), that.destinationPath(`client/src/components/LoginRedirector.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.css"), that.destinationPath(`client/src/components/SearchInput.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});

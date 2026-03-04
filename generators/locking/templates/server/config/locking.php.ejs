@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'models' => [
+<% entities.forEach(({name, tableName}) => {-%>
+        '<%- tableName %>' => \App\Models\<%- name %>::class,
+<% }); -%>
+    ],
+];

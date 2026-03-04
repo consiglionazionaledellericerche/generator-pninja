@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+class RecordLock extends Model
+{
+    protected $fillable = [
+        'lockable_type',
+        'lockable_id',
+        'user_id',
+        'user_name',
+<% if (usePessimistic) { -%>
+        'locked_at',
+        'expires_at',
+<% } -%>
+<% if (useOptimistic) { -%>
+        'lock_version',
+<% } -%>
+    ];
+
+    protected $casts = [
+<% if (usePessimistic) { -%>
+        'locked_at'  => 'datetime',
+        'expires_at' => 'datetime',
+<% } -%>
+    ];
+
+    public function lockable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+<% if (usePessimistic) { -%>
+    public function isExpired(): bool
+    {
+        return $this->expires_at->isPast();
+    }
+<% } -%>
+}

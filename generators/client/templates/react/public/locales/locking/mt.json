@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Dan ir-rekord qed jiġi aġġustat minn {{user}} sa {{expires}}.",
+  "forceRelease": "Forza ħalli l-blokk",
+  "conflict": {
+    "title": "Kunflitt tal-Modifika",
+    "description": "Dan ir-rekord ġie modifikat minn utent ieħor waqt li inti kont qed tagħmel aġġustamenti fih. Jekk jogħġbok, iktar lura l-differenzi hawn taħt.",
+    "diffTable": "Differenzi bejn il-verżjoni tiegħek u l-verżjoni tas-server",
+    "field": "Qasam",
+    "yourVersion": "Il-verżjoni tiegħek",
+    "serverVersion": "Il-verżjoni tas-server",
+    "keepMine": "Ħalli l-verżjoni tiegħi",
+    "useServer": "Uża l-verżjoni tas-server",
+    "dismiss": "Annulla"
+  },
+  "admin": {
+    "title": "Rekordijiet Ekkel",
+    "refresh": "Aġġorna",
+    "noLocks": "M’hemmx eċċezzjonijiet attivi.",
+    "expired": "skaduta",
+    "releaseSuccess": "Eċċezzjoni maħruġa b’suċċess.",
+    "releaseError": "Falliment fl-eċċezzjoni li tinħeles.",
+    "columns": {
+      "resource": "Riżorsa",
+      "recordId": "ID tal-Kuntratt",
+      "lockedBy": "Ekkel minn",
+      "lockedAt": "Ekkel fi",
+      "expiresAt": "Skadijiet fi"
+    },
+    "actions": {
+      "forceRelease": "Forza eċċezzjoni",
+      "confirmForceRelease": "Ikkonferma eċċezzjoni"
+    }
+  }
+}

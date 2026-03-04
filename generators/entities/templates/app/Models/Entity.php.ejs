@@ -15,6 +15,9 @@ use Laravel\Scout\Searchable;
 <% if (hasBlobs) { -%>
 use App\Casts\Base64BinaryCast;
 <% }; -%>
+<% if (locking !== 'none') { -%>
+use App\Traits\Lockable;
+<% } -%>
 <% enums.forEach(function(enm) { %>use App\Enums\<%- enm %>;
 <% }); %>
 class <%- className %> extends Model implements Auditable
@@ -27,6 +30,9 @@ class <%- className %> extends Model implements Auditable
     use SoftDeletes;
 <% }; -%>
     use \OwenIt\Auditing\Auditable;
+<% if (locking !== 'none') { -%>
+    use Lockable;
+<% } -%>
 
     protected $table = '<%- tableName %>';
 <%  if(hidden) {-%>

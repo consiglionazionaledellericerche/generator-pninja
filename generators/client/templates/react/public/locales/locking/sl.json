@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Ta zapis ureja {{user}} do {{expires}}.",
+  "forceRelease": "Z forced release lock",
+  "conflict": {
+    "title": "Konflikt pri urejanju",
+    "description": "Ta zapis je bil spremenjen s strani drugega uporabnika, medtem ko ste ga urejali. Prosimo, da pregledate razlike spodaj.",
+    "diffTable": "Razlike med vašo različico in različico strežnika",
+    "field": "Polje",
+    "yourVersion": "Vaša različica",
+    "serverVersion": "Različica strežnika",
+    "keepMine": "Obdrži mojo različico",
+    "useServer": "Uporabi različico strežnika",
+    "dismiss": "Prekliči"
+  },
+  "admin": {
+    "title": "Zaklenitve zapisov",
+    "refresh": "Osveži",
+    "noLocks": "Ni aktivnih zaklenitev.",
+    "expired": "izteka",
+    "releaseSuccess": "Zaklenitev uspešno sproščena.",
+    "releaseError": "Sprostitev zaklenitve ni uspela.",
+    "columns": {
+      "resource": "Vir",
+      "recordId": "ID zapisa",
+      "lockedBy": "Zaklenjeno od",
+      "lockedAt": "Zaklenjeno ob",
+      "expiresAt": "Izteče ob"
+    },
+    "actions": {
+      "forceRelease": "Silovna sprostitev",
+      "confirmForceRelease": "Potrdi sprostitev"
+    }
+  }
+}

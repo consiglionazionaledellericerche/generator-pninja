@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Rekod ini sedang diubah suai oleh {{user}} sehingga {{expires}}.",
+  "forceRelease": "Lepaskan kunci secara paksa",
+  "conflict": {
+    "title": "Konflik pengeditan",
+    "description": "Rekod ini telah diubah oleh pengguna lain semasa anda mengeditnya. Sila semak perbezaan di bawah.",
+    "diffTable": "Perbezaan antara versi anda dan versi pelayan",
+    "field": "Medan",
+    "yourVersion": "Versi anda",
+    "serverVersion": "Versi pelayan",
+    "keepMine": "Simpan versi saya",
+    "useServer": "Gunakan versi pelayan",
+    "dismiss": "Batal"
+  },
+  "admin": {
+    "title": "Kunci Rekod",
+    "refresh": "Segarkan",
+    "noLocks": "Tiada kunci aktif.",
+    "expired": "tamat",
+    "releaseSuccess": "Kunci berjaya dilepaskan.",
+    "releaseError": "Gagal untuk melepaskan kunci.",
+    "columns": {
+      "resource": "Sumber",
+      "recordId": "ID Rekod",
+      "lockedBy": "Dikunci oleh",
+      "lockedAt": "Dikunci pada",
+      "expiresAt": "Tamat pada"
+    },
+    "actions": {
+      "forceRelease": "Lepaskan secara paksa",
+      "confirmForceRelease": "Sahkan pelepasan"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Mae’r cofrestr hon yn cael ei phriodoli gan {{user}} nes {{expires}}.",
+  "forceRelease": "Rhyddhau cloi grym",
+  "conflict": {
+    "title": "Gwrthdaro golygu",
+    "description": "Cafodd y cofrestr hon ei modified gan ddefnyddiwr arall tra oeddech chi'n ei golygu. Os gwelwch yn dda adolygwch y gwahaniaethau isod.",
+    "diffTable": "Gwahaniaethau rhwng eich fersiwn chi a fersiwn y gweinydd",
+    "field": "Maes",
+    "yourVersion": "Eich fersiwn chi",
+    "serverVersion": "Fersiwn y gweinydd",
+    "keepMine": "Cadwch fy fersiwn",
+    "useServer": "Defnyddiwch fersiwn y gweinydd",
+    "dismiss": "Diddymu"
+  },
+  "admin": {
+    "title": "Cloi Cofrestr",
+    "refresh": "Adnewyndeo",
+    "noLocks": "Dim cloiau gweithredol.",
+    "expired": "wedi dod i ben",
+    "releaseSuccess": "Cloi wedi’i ryddhau’n llwyddiannus.",
+    "releaseError": "Method i ryddhau clo.",
+    "columns": {
+      "resource": "Adresource",
+      "recordId": "ID y Cofrestr",
+      "lockedBy": "Cloi gan",
+      "lockedAt": "Cloi ar",
+      "expiresAt": "Ddod i ben ar"
+    },
+    "actions": {
+      "forceRelease": "Gorfod rhyddhau",
+      "confirmForceRelease": "Cadarnhau rhyddhad"
+    }
+  }
+}

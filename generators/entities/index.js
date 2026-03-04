@@ -117,13 +117,14 @@ export default class extends Generator {
     const entitiesTemplatePath = this.templatePath();
     const clientTemplatePath = entitiesTemplatePath + '/../../client/templates';
     const searchEngine = this.config.get('searchEngine');
+    const locking = this.config.get('locking');
     this.sourceRoot(clientTemplatePath);
     if (this.config.get('clientType') === 'react') {
       // Update entity icons
       this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
 
       // Update Menu
-      this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+      this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine, locking });
 
       for (const lang of languages) {
         this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
@@ -135,7 +136,7 @@ export default class extends Generator {
           getModelRelatedEntities
         });
       };
-      this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize, searchEngine });
+      this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize, searchEngine, locking });
       for (const enumeration of getEnumsConfig(parsedJDL)) {
         this.fs.copyTpl(this.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
       }

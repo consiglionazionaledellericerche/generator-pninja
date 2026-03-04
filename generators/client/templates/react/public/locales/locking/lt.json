@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Šis įrašas redaguojamas {{user}} iki {{expires}}.",
+  "forceRelease": "Priverstinai atleisti užrakto",
+  "conflict": {
+    "title": "Redagavimo konfliktas",
+    "description": "Šį įrašą pakeitė kitas vartotojas, kol jį redagavote. Prašome peržiūrėti skirtumus žemiau.",
+    "diffTable": "Skirtumai tarp jūsų versijos ir serverio versijos",
+    "field": "Laukas",
+    "yourVersion": "Jūsų versija",
+    "serverVersion": "Serverio versija",
+    "keepMine": "Išlaikyti mano versiją",
+    "useServer": "Naudoti serverio versiją",
+    "dismiss": "Atšaukti"
+  },
+  "admin": {
+    "title": "Įrašų užraktai",
+    "refresh": "Atsinaujinti",
+    "noLocks": "Nėra aktyvių užraktų.",
+    "expired": "pasibaigęs",
+    "releaseSuccess": "Užraktas sėkmingai atlaisvintas.",
+    "releaseError": "Nepavyko atlaisvinti užrakto.",
+    "columns": {
+      "resource": "Ištekliai",
+      "recordId": "Įrašo ID",
+      "lockedBy": "Užrakinti pagal",
+      "lockedAt": "Užrakinta",
+      "expiresAt": "Pasibaigia"
+    },
+    "actions": {
+      "forceRelease": "Priverstinis atlaisvinimas",
+      "confirmForceRelease": "Patvirtinti atlaisvinimą"
+    }
+  }
+}

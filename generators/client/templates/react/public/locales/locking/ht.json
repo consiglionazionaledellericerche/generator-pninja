@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Dosye sa a ap modifye pa {{user}} jiskaske {{expires}}.",
+  "forceRelease": "Fòse lage bloke a",
+  "conflict": {
+    "title": "Konflit pou edite",
+    "description": "Dosye sa a te modifye pa yon lòt itilizatè pandan w ap edite li. Tanpri revize diferans ki anba a.",
+    "diffTable": "Diferans ki genyen ant vèsyon ou ak vèsyon sèvè a",
+    "field": "Jaden",
+    "yourVersion": "Vèsyon ou",
+    "serverVersion": "Vèsyon sèvè a",
+    "keepMine": "Kenbe vèsyon mwen",
+    "useServer": "Sèvi ak vèsyon sèvè a",
+    "dismiss": "Anile"
+  },
+  "admin": {
+    "title": "Kle Rekò",
+    "refresh": "Rafrechi",
+    "noLocks": "Pa gen okenn kle aktif.",
+    "expired": "ekspire",
+    "releaseSuccess": "Kle a libere avèk siksè.",
+    "releaseError": "Te echwe pou libere kle a.",
+    "columns": {
+      "resource": "Resous",
+      "recordId": "ID Rekò",
+      "lockedBy": "Bloke pa",
+      "lockedAt": "Bloke nan",
+      "expiresAt": "Ekspire nan"
+    },
+    "actions": {
+      "forceRelease": "Libere fòse",
+      "confirmForceRelease": "Konfime liberasyon"
+    }
+  }
+}

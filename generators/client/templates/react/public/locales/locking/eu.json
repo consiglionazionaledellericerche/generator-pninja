@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Este fitxategia {{user}}-k editatzen ari da {{expires}}-ra arte.",
+  "forceRelease": "Indartu atzipena",
+  "conflict": {
+    "title": "Editatzeko gatazka",
+    "description": "Beste erabiltzaileren batek fitxategi hau aldatzen zuen zuk editatzen ari zinen bitartean. Mesedez, aztertu beheko desberdintasunak.",
+    "diffTable": "Zure bertsioaren eta zerbitzari bertsioaren arteko desberdintasunak",
+    "field": "Eremua",
+    "yourVersion": "Zure bertsioa",
+    "serverVersion": "Zerbitzari bertsioa",
+    "keepMine": "Gorde nire bertsioa",
+    "useServer": "Erabili zerbitzari bertsioa",
+    "dismiss": "Ezeztatu"
+  },
+  "admin": {
+    "title": "Erregistro blokeak",
+    "refresh": "Freskatu",
+    "noLocks": "Bloke aktiborik ez.",
+    "expired": "iraungi",
+    "releaseSuccess": "Blokea arrakastaz askatu da.",
+    "releaseError": "Blokea askatzeko huts egin da.",
+    "columns": {
+      "resource": "Baliabidea",
+      "recordId": "Erregistro ID",
+      "lockedBy": "Blokeatu du",
+      "lockedAt": "Blokeatuta",
+      "expiresAt": "Iraungitzen da"
+    },
+    "actions": {
+      "forceRelease": "Indarrez askatu",
+      "confirmForceRelease": "Askatu baieztatu"
+    }
+  }
+}

@@ -183,6 +183,22 @@ class <%- className %>Controller extends Controller
 <%  } else { -%>
             $<%- entityName %> = <%- className %>::findOrFail($id);
 <%  } -%>
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+            $clientVersion = $request->input('lock_version');
+            $currentVersion = $<%- entityName %>->currentLockVersion();
+            if ($clientVersion !== null && (int)$clientVersion !== $currentVersion) {
+                return response()->json([
+                    'message'      => 'Conflict: record was modified by another user.',
+                    'lock_version' => $currentVersion,
+                    'server_data'  => $<%- entityName %>,
+                ], 409);
+            }
+<% } -%>
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+            if ($<%- entityName %>->isLockedByOther($request->user()->id)) {
+                return response()->json(['message' => 'Record is locked by another user.'], 423);
+            }
+<% } -%>
 
 <%  if(isEmpty(validationsUpdate)) {-%>
             $data = $request->all();
@@ -242,6 +258,12 @@ class <%- className %>Controller extends Controller
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+            $<%- entityName %>->incrementLockVersion();
+<% } -%>
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+            $<%- entityName %>->recordLock?->delete();
+<% } -%>
             return response()->json($<%- entityName %>, 200);
         } catch (\Exception $e) {
             return $this->handleUpdateError($e);
@@ -252,7 +274,15 @@ class <%- className %>Controller extends Controller
     {
         try {
             $<%- entityName %> = <%- className %>::findOrFail($id);
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+            if ($<%- entityName %>->isLockedByOther(request()->user()->id)) {
+                return response()->json(['message' => 'Record is locked by another user.'], 423);
+            }
+<% } -%>
             $<%- entityName %>->delete();
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+            $<%- entityName %>->recordLock?->delete();
+<% } -%>
             return response(null, 200);
         } catch (\Exception $e) {
             return $this->handleDeleteError($e);
@@ -273,7 +303,7 @@ class <%- className %>Controller extends Controller
                 return response()->json(['error' => 'File not found'], 404);
             }
 
-            $content = $<%- entityName %>->$blobField; // byte puri se usi il cast Base64
+            $content = $<%- entityName %>->$blobField;
             $name = $<%- entityName %>->$nameField ?? 'file';
             $mime = $<%- entityName %>->$mimeField ?? 'application/octet-stream';
 

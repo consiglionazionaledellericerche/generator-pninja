@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Ky regjistër po redaktohet nga {{user}} deri në {{expires}}.",
+  "forceRelease": "Zhblloko forcërisht",
+  "conflict": {
+    "title": "Konflikti i redaktimit",
+    "description": "Ky regjistër u modifikua nga një përdorues tjetër ndërsa po e redaktoje. Të lutem rishiko ndryshimet më poshtë.",
+    "diffTable": "Ndryshimet midis versionit tënd dhe versionit të serverit",
+    "field": "Fusha",
+    "yourVersion": "Versioni yt",
+    "serverVersion": "Versioni i serverit",
+    "keepMine": "Ruaj versionin tim",
+    "useServer": "Përdor versionin e serverit",
+    "dismiss": "Anulo"
+  },
+  "admin": {
+    "title": "Bllokime Rekordesh",
+    "refresh": "Rinovo",
+    "noLocks": "Nuk ka bllokime aktive.",
+    "expired": "skaduar",
+    "releaseSuccess": "Bllokimi u lirua me sukses.",
+    "releaseError": "Dështoi të lirojë bllokimin.",
+    "columns": {
+      "resource": "Burimi",
+      "recordId": "ID e Rekordit",
+      "lockedBy": "Bllokuar nga",
+      "lockedAt": "Bllokuar në",
+      "expiresAt": "Skadon në"
+    },
+    "actions": {
+      "forceRelease": "Forco lirimin",
+      "confirmForceRelease": "Konfirmo lirimin"
+    }
+  }
+}

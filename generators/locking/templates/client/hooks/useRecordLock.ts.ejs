@@ -1,0 +1,120 @@
+import { useEffect, useRef, useCallback, useState } from 'react';
+import axios from 'axios';
+
+export type LockStatus =
+  | { state: 'idle' }
+  | { state: 'owned'; expiresAt: string }
+  | { state: 'locked'; lockedBy: string; expiresAt: string }
+  | { state: 'error'; message: string };
+
+interface UseRecordLockOptions {
+  entityType: string;
+  entityId: number | null;
+  enabled?: boolean;
+}
+
+const HEARTBEAT_MS = <%- heartbeatSeconds %> * 1000;
+<%_ if (useOptimistic) { _%>
+
+export interface ConflictData {
+  serverVersion: Record<string, unknown>;
+  clientVersion: Record<string, unknown>;
+}
+<%_ } _%>
+
+export function useRecordLock({ entityType, entityId, enabled = true }: UseRecordLockOptions) {
+  const [lockStatus, setLockStatus] = useState<LockStatus>({ state: 'idle' });
+<%_ if (useOptimistic) { _%>
+  const [lockVersion, setLockVersion] = useState<number | null>(null);
+  const [conflict, setConflict] = useState<ConflictData | null>(null);
+<%_ } _%>
+
+  const baseUrlRef = useRef<string | null>(null);
+  baseUrlRef.current = entityId ? `/api/locks/${entityType}/${entityId}` : null;
+<%_ if (usePessimistic) { _%>
+
+  useEffect(() => {
+    if (!enabled || !entityId) return;
+
+    axios
+      .post(`${baseUrlRef.current}/acquire`)
+      .then(({ data }) => setLockStatus({ state: 'owned', expiresAt: data.expires_at }))
+      .catch((err: any) => {
+        if (err.response?.status === 423) {
+          setLockStatus({
+            state: 'locked',
+            lockedBy: err.response.data.locked_by,
+            expiresAt: err.response.data.expires_at,
+          });
+        } else {
+          setLockStatus({ state: 'error', message: err.message });
+        }
+      });
+
+    const interval = setInterval(() => {
+      axios.post(`${baseUrlRef.current}/renew`).catch(() => clearInterval(interval));
+    }, HEARTBEAT_MS);
+
+    return () => {
+      clearInterval(interval);
+      axios.delete(baseUrlRef.current!).finally(() => setLockStatus({ state: 'idle' }));
+    };
+  }, [entityId, enabled]);
+<%_ } _%>
+<%_ if (useOptimistic) { _%>
+
+  const fetchVersion = useCallback(async () => {
+    if (!baseUrlRef.current) return;
+    const { data } = await axios.get(`${baseUrlRef.current}/version`);
+    setLockVersion(data.lock_version);
+  }, []);
+
+  const checkConflict = useCallback(
+    (
+      clientData: Record<string, unknown>,
+      serverData: Record<string, unknown>,
+      serverVersion: number
+    ): boolean => {
+      if (lockVersion !== null && serverVersion > lockVersion) {
+        setConflict({ serverVersion: serverData, clientVersion: clientData });
+        return true;
+      }
+      return false;
+    },
+    [lockVersion]
+  );
+
+  const resolveConflict = useCallback(() => {
+    setConflict(null);
+    fetchVersion();
+  }, [fetchVersion]);
+
+  useEffect(() => {
+    if (enabled && entityId) fetchVersion();
+  }, [entityId, enabled]);
+<%_ } _%>
+<%_ if (usePessimistic) { _%>
+
+  const release = useCallback(async () => {
+    if (!baseUrlRef.current) return;
+    try {
+      await axios.delete(baseUrlRef.current);
+    } finally {
+      setLockStatus({ state: 'idle' });
+    }
+  }, []);
+<%_ } _%>
+
+  return {
+    lockStatus,
+<%_ if (usePessimistic) { _%>
+    release,
+<%_ } _%>
+<%_ if (useOptimistic) { _%>
+    lockVersion,
+    conflict,
+    checkConflict,
+    resolveConflict,
+<%_ } _%>
+  };
+}

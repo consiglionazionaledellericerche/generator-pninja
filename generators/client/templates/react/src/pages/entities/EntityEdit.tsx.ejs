@@ -7,6 +7,15 @@ import { ErrorResponseData, useNotifications } from '../../contexts/Notification
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { <%= entity.name %>Form } from '../../components/entities/<%= entity.name %>Form';
+<% if (locking !== 'none') { -%>
+import { useRecordLock } from '../../hooks/useRecordLock';
+<% } -%>
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+import { LockBanner } from '../../components/LockBanner';
+<% } -%>
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+import { ConflictDiffModal } from '../../components/ConflictDiffModal';
+<% } -%>
 
 interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
@@ -19,6 +28,26 @@ export default function <%= entity.name %>Edit() {
   const { addNotification } = useNotifications();
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>({} as I<%= entity.name %>);
   const [loading, setLoading] = useState(false);
+<% if (locking !== 'none') { -%>
+  const {
+    lockStatus,
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+    release,
+<% } -%>
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+    lockVersion,
+    conflict,
+    checkConflict,
+    resolveConflict,
+<% } -%>
+  } = useRecordLock({
+    entityType: '<%=to.slug(pluralize(entity.name))%>',
+    entityId: id ? Number(id) : null,
+    enabled: !!id,
+  });
+
+  const isReadOnly = lockStatus.state === 'locked';
+<% } -%>
 
   useEffect(() => {
     if (id) {
@@ -44,9 +73,20 @@ export default function <%= entity.name %>Edit() {
   }, [id, addNotification, navigate, t]);
 
   const handleSubmit = (data: I<%= entity.name %>) => {
-    (id ? axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, data) : axiosInstance.post('/api/<%=to.slug(pluralize(entity.name))%>', data))
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+    const payload = { ...data, lock_version: lockVersion };
+<% } else { -%>
+    const payload = data;
+<% } -%>
+    (id
+      ? axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, payload)
+      : axiosInstance.post('/api/<%=to.slug(pluralize(entity.name))%>', payload)
+    )
       .then((response) => response?.data)
       .then((data: I<%= entity.name %>) => {
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+        release();
+<% } -%>
         addNotification({
           type: 'success',
           message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
@@ -55,13 +95,30 @@ export default function <%= entity.name %>Edit() {
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       })
-      .catch((error: AxiosError<ErrorResponseData>) =>
+      .catch((error: AxiosError<ErrorResponseData>) => {
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+        if (error.response?.status === 409) {
+          checkConflict(
+            data as Record<string, unknown>,
+            error.response.data.server_data as Record<string, unknown>,
+            error.response.data.lock_version as number
+          );
+          return;
+        }
+<% } -%>
         addNotification({
           type: 'error',
           message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
           error,
-        })
-      );
+        });
+      });
+  };
+
+  const handleCancel = () => {
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+    release();
+<% } -%>
+    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
   };
 
   useEffect(() => {
@@ -74,14 +131,36 @@ export default function <%= entity.name %>Edit() {
         {t(`actions.crud.${id ? 'update' : 'create'}`)} {t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}
         {id ? ` ID ${id}` : ''}
       </h1>
+<% if (locking === 'pessimistic' || locking === 'both') { -%>
+      <LockBanner lockStatus={lockStatus} />
+<% } -%>
       <SimpleLoader loading={loading} />
       {!loading && (
         <<%= entity.name %>Form
           <%-to.camel(entity.name)%>={<%-to.camel(entity.name)%>}
           onSubmit={handleSubmit}
-          onCancel={() => navigate('/entities/<%=to.slug(pluralize(entity.name))%>')}
+          onCancel={handleCancel}
+<% if (locking !== 'none') { -%>
+          readOnly={isReadOnly}
+<% } -%>
         />
       )}
+<% if (locking === 'optimistic' || locking === 'both') { -%>
+      {conflict && (
+        <ConflictDiffModal
+          conflict={conflict}
+          onKeepMine={() => {
+            resolveConflict();
+            handleSubmit(<%=to.camel(entity.name)%>);
+          }}
+          onUseServer={() => {
+            set<%= entity.name %>(conflict.serverVersion as I<%= entity.name %>);
+            resolveConflict();
+          }}
+          onDismiss={resolveConflict}
+        />
+      )}
+<% } -%>
     </div>
   );
 }

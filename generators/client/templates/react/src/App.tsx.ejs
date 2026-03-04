@@ -30,6 +30,9 @@ import { LogViewer } from './pages/server-logs/LogViewer';
 import { SeederList } from './pages/seeder/SeederList';
 
 import { Migrations } from './pages/admin/Migrations';
+<%  if (locking !== 'none') { -%>
+import { RecordLockList } from './pages/admin/RecordLockList';
+<%  } -%>
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 
 import SearchReindexList from './pages/search-reindex/SearchReindexList';
@@ -178,6 +181,21 @@ function App() {
                   force_login={true}
                 >
                   <SearchReindexList />
+                </Can>
+              }
+            />
+<%  } -%>
+<%  if (locking !== 'none') { -%>
+            <Route
+              path="admin/record-lock-list"
+              element={
+                <Can
+                  resource="RecordLockList"
+                  action="read"
+                  fallback={<Err403 />}
+                  force_login={true}
+                >
+                  <RecordLockList />
                 </Can>
               }
             />

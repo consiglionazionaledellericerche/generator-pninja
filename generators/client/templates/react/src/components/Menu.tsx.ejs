@@ -217,6 +217,17 @@ const Menu: React.FC = () => {
                     </MenuItem>
                   </Can>
 <%    } -%>
+<%    if (locking !== 'none') { -%>
+                  <Can action="read" resource="RecordLockList">
+                    <MenuItem
+                      href="/admin/record-lock-list"
+                      id="record-lock-list"
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/record-lock-list') ? menuItemIsActiveClass : ''}`}
+                    >
+                      <Icon icon="lock" size={5} /> {t('locking:admin.title')}
+                    </MenuItem>
+                  </Can>
+<%    } -%>
 <%    if (hasTrashMenu) { -%>
                   <Can
                     any={[

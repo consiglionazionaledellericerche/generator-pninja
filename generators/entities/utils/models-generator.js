@@ -200,6 +200,7 @@ export class ModelsGenerator {
                 typesenseSearchParameters,
                 getSolrSuffix,
                 hasSoftDelete,
+                locking: this.that.config.get('locking'),
             });
     }
 

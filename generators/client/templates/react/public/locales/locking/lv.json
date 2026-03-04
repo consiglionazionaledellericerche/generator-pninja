@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Šo ierakstu rediģē {{user}} līdz {{expires}}.",
+  "forceRelease": "Piespiedu atslēgt aizsardzību",
+  "conflict": {
+    "title": "Rediģēšanas konflikti",
+    "description": "Šo ierakstu modificēja cits lietotājs, kamēr tu to rediģēji. Lūdzu, pārskati atšķirības zemāk.",
+    "diffTable": "Atšķirības starp tavu versiju un servera versiju",
+    "field": "Lauks",
+    "yourVersion": "Tava versija",
+    "serverVersion": "Servera versija",
+    "keepMine": "Saglabāt manu versiju",
+    "useServer": "Izmantot servera versiju",
+    "dismiss": "Atcelt"
+  },
+  "admin": {
+    "title": "Reģistra slēgumi",
+    "refresh": "Atjaunot",
+    "noLocks": "Nav aktīvu slēgumu.",
+    "expired": "beidzies",
+    "releaseSuccess": "Slēgums veiksmīgi atbrīvots.",
+    "releaseError": "Neizdevās atbrīvot slēgumu.",
+    "columns": {
+      "resource": "Resurss",
+      "recordId": "Reģistra ID",
+      "lockedBy": "Slēdzis",
+      "lockedAt": "Slēgts plkst.",
+      "expiresAt": "Beidzas plkst."
+    },
+    "actions": {
+      "forceRelease": "Spēcīgi atbrīvot",
+      "confirmForceRelease": "Apstiprināt atbrīvošanu"
+    }
+  }
+}

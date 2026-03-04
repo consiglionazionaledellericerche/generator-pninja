@@ -1,4 +1,6 @@
 import Generator from 'yeoman-generator';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import ora from 'ora';
 import colors from 'ansi-colors';
 import to from 'to-case';
@@ -786,6 +788,7 @@ export default class extends Generator {
         storedEntities.sort((a, b) => a.name.localeCompare(b.name));
         const storedRelationships = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceRelationships(getEntitiesRelationships(this), this.entityConfig) : [...getEntitiesRelationships(this), ...this.entityConfig.relationships];
         const searchEngine = this.config.get('searchEngine');
+        const locking = this.config.get('locking');
 
         // Save entity configuration to .pninja/<EntityName>.json
         if (!this.options.fromEntities) {
@@ -963,7 +966,7 @@ export default class extends Generator {
             this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
 
             // Update Menu
-            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine, locking });
 
             // Create entity pages
             await createEntityPages({
@@ -1000,8 +1003,15 @@ export default class extends Generator {
                     });
                 });
             // Update App.tsx
-            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine });
+            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine, locking });
         }
+
+        const __dirname = path.dirname(fileURLToPath(import.meta.url));
+        await this.composeWith(path.resolve(__dirname, '../locking'), {
+            fromEntity: true,
+            locking: this.config.get('locking'),
+        });
+
         // README update
         this.fs.copyTpl(
             this.templatePath(`../../final/templates/README.md.ejs`),

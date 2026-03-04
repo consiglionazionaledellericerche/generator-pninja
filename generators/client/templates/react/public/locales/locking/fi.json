@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Tätä tietuetta muokkaa {{user}} kunnes {{expires}}.",
+  "forceRelease": "Vapauta lukitus pakolla",
+  "conflict": {
+    "title": "Muokkauskonflikti",
+    "description": "Tätä tietuetta muokattiin toisen käyttäjän toimesta samalla kun muokkasit sitä. Tarkista alla olevat erot.",
+    "diffTable": "Erot versiisi ja palvelimen versiosta",
+    "field": "Kenttä",
+    "yourVersion": "Sinun versiosi",
+    "serverVersion": "Palvelimen versio",
+    "keepMine": "Pidä versiosi",
+    "useServer": "Käytä palvelimen versiota",
+    "dismiss": "Peruuta"
+  },
+  "admin": {
+    "title": "Tietueiden lukot",
+    "refresh": "Päivitä",
+    "noLocks": "Ei aktiivisia lukkoja.",
+    "expired": "vanhentunut",
+    "releaseSuccess": "Lukko vapautettu onnistuneesti.",
+    "releaseError": "Luvun vapauttaminen epäonnistui.",
+    "columns": {
+      "resource": "Resurssi",
+      "recordId": "Tietueen tunnus",
+      "lockedBy": "Lukittu käyttäjältä",
+      "lockedAt": "Lukittu ajassa",
+      "expiresAt": "Vanhenee ajassa"
+    },
+    "actions": {
+      "forceRelease": "Pakotettu vapautus",
+      "confirmForceRelease": "Vahvista vapautus"
+    }
+  }
+}

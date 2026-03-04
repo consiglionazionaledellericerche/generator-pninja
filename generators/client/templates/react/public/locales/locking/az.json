@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Bu qeyd {{user}} tərəfindən {{expires}} tarixinə qədər redaktə olunur.",
+  "forceRelease": "Sıxmağı zorla boşalt",
+  "conflict": {
+    "title": "Redaktə münaqişəsi",
+    "description": "Bu qeyd, siz onu redaktə edərkən, başqa bir istifadəçi tərəfindən dəyişdirildi. Aşağıdakı fərqləri nəzərdən keçirin.",
+    "diffTable": "Sizin versiyanız ilə server versiyası arasındakı fərqlər",
+    "field": "Sahə",
+    "yourVersion": "Sizin versiyanız",
+    "serverVersion": "Server versiyası",
+    "keepMine": "Mənim versiyamı saxla",
+    "useServer": "Server versiyasını istifadə et",
+    "dismiss": "İmtina et"
+  },
+  "admin": {
+    "title": "Qeydlərin kilidləri",
+    "refresh": "Təzələmə",
+    "noLocks": "Aktiv kilid yoxdur.",
+    "expired": "müddəti bitmiş",
+    "releaseSuccess": "Kilid uğurla azad edildi.",
+    "releaseError": "Kilidi azad etmək mümkün olmadı.",
+    "columns": {
+      "resource": "Resurs",
+      "recordId": "Qeyd ID",
+      "lockedBy": "Kilidləyən",
+      "lockedAt": "Kilid qoyulma tarixi",
+      "expiresAt": "Müddət bitəcək"
+    },
+    "actions": {
+      "forceRelease": "Zorla azad et",
+      "confirmForceRelease": "Azad etməni təsdiq et"
+    }
+  }
+}

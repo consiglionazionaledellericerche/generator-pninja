@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Tá an taifead seo á eagarthóireacht ag {{user}} go dtí {{expires}}.",
+  "forceRelease": "Saor an cniotáil",
+  "conflict": {
+    "title": "Conflachtaí Eagarthóireachta",
+    "description": "Tugadh mionathrú ar an taifead seo ag úsáideoir eile agus tú ag éagarthóireacht air. Léigh na difríochtaí thíos le do thoil.",
+    "diffTable": "Difríochtaí idir do leagan agus leagan an freastalaí",
+    "field": "Réimse",
+    "yourVersion": "Do leagan",
+    "serverVersion": "Leagan an freastalaí",
+    "keepMine": "Coimeád mo leagan",
+    "useServer": "Úsáid leagan an freastalaí",
+    "dismiss": "Cealaigh"
+  },
+  "admin": {
+    "title": "Cuailleanna Taifead",
+    "refresh": "Athnuachan",
+    "noLocks": "Níl cuailleanna gníomhacha ann.",
+    "expired": "díthéarmann",
+    "releaseSuccess": "Scaoiltear cuaille go rathúil.",
+    "releaseError": "Theip ar cuaille a scaoileadh.",
+    "columns": {
+      "resource": "Acmhainn",
+      "recordId": "ID Taifead",
+      "lockedBy": "Conas atá gafa",
+      "lockedAt": "Gafa ag",
+      "expiresAt": "Gafa ag"
+    },
+    "actions": {
+      "forceRelease": "Gheobhaidh sé deireadh",
+      "confirmForceRelease": "Saoirse a chinntiú"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Dit rekord wurdt bewerkt troch {{user}} oant {{expires}}.",
+  "forceRelease": "Force release lock",
+  "conflict": {
+    "title": "Edit Conflict",
+    "description": "Dit rekord is feroare troch in oare brûker wylst jo it bewerkten. Mercys beoardielje de ferskillen hjirûnder.",
+    "diffTable": "Ferskillen tusken jo ferzje en de serverferzje",
+    "field": "Feld",
+    "yourVersion": "Jo ferzje",
+    "serverVersion": "Serverferzje",
+    "keepMine": "Hâld myn ferzje",
+    "useServer": "Brûk serverferzje",
+    "dismiss": "Ferlitte"
+  },
+  "admin": {
+    "title": "Record Locks",
+    "refresh": "Fers refresh",
+    "noLocks": "Gjin aktuele locks.",
+    "expired": "ferfallen",
+    "releaseSuccess": "Lock mei sukses frijjûn.",
+    "releaseError": "Ferkeard om lock frij te jaan.",
+    "columns": {
+      "resource": "Boarne",
+      "recordId": "Record ID",
+      "lockedBy": "Slotten troch",
+      "lockedAt": "Slotten op",
+      "expiresAt": "Ferfallen op"
+    },
+    "actions": {
+      "forceRelease": "Force frijlitting",
+      "confirmForceRelease": "Bevestig frijlitting"
+    }
+  }
+}

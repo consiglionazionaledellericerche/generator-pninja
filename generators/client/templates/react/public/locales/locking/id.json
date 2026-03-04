@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Rekam ini sedang diedit oleh {{user}} hingga {{expires}}.",
+  "forceRelease": "Paksakan lepas kunci",
+  "conflict": {
+    "title": "Konflik Edit",
+    "description": "Rekam ini telah dimodifikasi oleh pengguna lain sementara Anda sedang mengeditnya. Silakan tinjau perbedaan di bawah.",
+    "diffTable": "Perbedaan antara versi Anda dan versi server",
+    "field": "Bidang",
+    "yourVersion": "Versi Anda",
+    "serverVersion": "Versi server",
+    "keepMine": "Pertahankan versi saya",
+    "useServer": "Gunakan versi server",
+    "dismiss": "Batalkan"
+  },
+  "admin": {
+    "title": "Kunci Rekaman",
+    "refresh": "Segarkan",
+    "noLocks": "Tidak ada kunci aktif.",
+    "expired": "kedaluwarsa",
+    "releaseSuccess": "Kunci berhasil dirilis.",
+    "releaseError": "Gagal merilis kunci.",
+    "columns": {
+      "resource": "Sumber daya",
+      "recordId": "ID Rekaman",
+      "lockedBy": "Terkunci oleh",
+      "lockedAt": "Terkunci pada",
+      "expiresAt": "Kedaluwarsa pada"
+    },
+    "actions": {
+      "forceRelease": "Paksakan rilis",
+      "confirmForceRelease": "Konfirmasi rilis"
+    }
+  }
+}

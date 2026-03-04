@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Dit record wordt bewerkt door {{user}} tot {{expires}}.",
+  "forceRelease": "Forceer vrijgave van vergrendeling",
+  "conflict": {
+    "title": "Bewerkingsconflict",
+    "description": "Dit record is door een andere gebruiker gewijzigd terwijl je het aan het bewerken was. Bekijk de verschillen hieronder.",
+    "diffTable": "Verschillen tussen jouw versie en de serverversie",
+    "field": "Veld",
+    "yourVersion": "Jouw versie",
+    "serverVersion": "Serverversie",
+    "keepMine": "Houd mijn versie",
+    "useServer": "Gebruik serverversie",
+    "dismiss": "Annuleren"
+  },
+  "admin": {
+    "title": "Recordvergrendelingen",
+    "refresh": "Vernieuw",
+    "noLocks": "Geen actieve vergrendelingen.",
+    "expired": "verlopen",
+    "releaseSuccess": "Vergrendeling succesvol vrijgegeven.",
+    "releaseError": "Mislukt om vergrendeling vrij te geven.",
+    "columns": {
+      "resource": "Hulpbron",
+      "recordId": "Record-ID",
+      "lockedBy": "Vergrendeld door",
+      "lockedAt": "Vergrendeld op",
+      "expiresAt": "Verloopt op"
+    },
+    "actions": {
+      "forceRelease": "Dwangvrijgave",
+      "confirmForceRelease": "Bevestig vrijgave"
+    }
+  }
+}

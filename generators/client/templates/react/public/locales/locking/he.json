@@ -1,0 +1,34 @@
+{
+  "lockedBy": "הקלט הזה נערך על ידי {{user}} עד {{expires}}.",
+  "forceRelease": "שחרר בכוח את הנעילה",
+  "conflict": {
+    "title": "קונפליקט בעריכה",
+    "description": "הקלט הזה שונה על ידי משתמש אחר בזמן שאתה ערכת אותו. אנא בדוק את ההבדלים למטה.",
+    "diffTable": "הבדלים בין הגרסה שלך וגרסת השרת",
+    "field": "שדה",
+    "yourVersion": "הגרסה שלך",
+    "serverVersion": "גרסת השרת",
+    "keepMine": "שמור את הגרסה שלי",
+    "useServer": "השתמש בגרסת השרת",
+    "dismiss": "בטל"
+  },
+  "admin": {
+    "title": "נעילת רשומות",
+    "refresh": "רענן",
+    "noLocks": "אין נעילות פעילות.",
+    "expired": "פג",
+    "releaseSuccess": "הנעילה שוחררה בהצלחה.",
+    "releaseError": "שחרור הנעילה נכשל.",
+    "columns": {
+      "resource": "משאב",
+      "recordId": "מזהה רשומה",
+      "lockedBy": "נעול על ידי",
+      "lockedAt": "נעול בשעה",
+      "expiresAt": "פג תוקף בשעה"
+    },
+    "actions": {
+      "forceRelease": "שחרור בכוח",
+      "confirmForceRelease": "אשר שחרור"
+    }
+  }
+}

@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\RecordLock;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class RecordLockController extends Controller
+{
+    private const TTL_MINUTES = 15;
+
+    public function index(): JsonResponse
+    {
+        $map = array_flip(config('locking.models'));
+        $locks = RecordLock::all()->map(function ($lock) use ($map) {
+            $lock->resource_type = $map[$lock->lockable_type] ?? $lock->lockable_type;
+            return $lock;
+        });
+        return response()->json($locks);
+    }
+
+    public function acquire(Request $request, string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        $username = $request->user()->username;
+
+        $existing = $record->recordLock;
+        if ($existing && !$existing->isExpired() && $existing->user_id !== $username) {
+            return response()->json([
+                'locked'     => true,
+                'locked_by'  => $existing->user_id,
+                'expires_at' => $existing->expires_at,
+            ], 423);
+        }
+
+        $lock = $record->recordLock()->updateOrCreate([], [
+            'user_id'    => $username,
+            'locked_at'  => now(),
+            'expires_at' => now()->addMinutes(self::TTL_MINUTES),
+        ]);
+
+        return response()->json([
+            'locked'     => false,
+            'expires_at' => $lock->expires_at,
+        ]);
+    }
+
+    public function renew(Request $request, string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        $username = $request->user()->username;
+
+        $lock = $record->recordLock;
+        if (!$lock || $lock->user_id !== $username) {
+            return response()->json(['message' => 'Lock not owned by you.'], 403);
+        }
+
+        $lock->update(['expires_at' => now()->addMinutes(self::TTL_MINUTES)]);
+
+        return response()->json(['expires_at' => $lock->expires_at]);
+    }
+
+    public function release(Request $request, string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        $username = $request->user()->username;
+
+        $lock = $record->recordLock;
+        if (!$lock) return response()->json(['message' => 'No lock found.'], 404);
+
+        if ($lock->user_id !== $username && !$request->user()->hasRole('admin')) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        $lock->delete();
+        return response()->json(['message' => 'Lock released.']);
+    }
+
+    public function status(Request $request, string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        $username = $request->user()->username;
+        $lock = $record->recordLock;
+
+        if (!$lock || $lock->isExpired()) {
+            return response()->json(['locked' => false]);
+        }
+
+        return response()->json([
+            'locked'     => $lock->user_id !== $username,
+            'owned'      => $lock->user_id === $username,
+            'locked_by'  => $lock->user_id,
+            'expires_at' => $lock->expires_at,
+        ]);
+    }
+
+    public function forceRelease(string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        $record->recordLock?->delete();
+        return response()->json(['message' => 'Lock force-released.']);
+    }
+
+    public function version(string $type, int $id): JsonResponse
+    {
+        $modelClass = $this->resolveModel($type);
+        $record = $modelClass::findOrFail($id);
+        return response()->json(['lock_version' => $record->currentLockVersion()]);
+    }
+
+    private function resolveModel(string $type): string
+    {
+        $map = config('locking.models', []);
+        if (!isset($map[$type])) abort(404, "Unknown resource type: {$type}");
+        return $map[$type];
+    }
+}

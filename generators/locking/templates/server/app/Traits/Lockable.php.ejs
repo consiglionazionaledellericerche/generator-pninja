@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Traits;
+
+use App\Models\RecordLock;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+
+trait Lockable
+{
+    public function recordLock(): MorphOne
+    {
+        return $this->morphOne(RecordLock::class, 'lockable');
+    }
+<% if (usePessimistic) { %>
+    public function isLockedByOther(int $userId): bool
+    {
+        $lock = $this->recordLock;
+        if (!$lock) return false;
+        if ($lock->isExpired()) return false;
+        return $lock->user_id !== $userId;
+    }
+
+    public function isLockedBy(int $userId): bool
+    {
+        $lock = $this->recordLock;
+        if (!$lock || $lock->isExpired()) return false;
+        return $lock->user_id === $userId;
+    }
+<% } %>
+<% if (useOptimistic) { %>
+    public function currentLockVersion(): int
+    {
+        return $this->recordLock?->lock_version ?? 1;
+    }
+
+    public function incrementLockVersion(): void
+    {
+        $lock = $this->recordLock()->firstOrCreate(
+            [],
+            ['user_id' => auth()->id(), 'user_name' => auth()->user()->name, 'lock_version' => 1]
+        );
+        $lock->increment('lock_version');
+    }
+<% } %>
+}

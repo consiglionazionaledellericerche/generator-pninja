@@ -1,0 +1,34 @@
+{
+  "lockedBy": "Questo record è in fase di modifica da {{user}} fino a {{expires}}.",
+  "forceRelease": "Forza rilascio blocco",
+  "conflict": {
+    "title": "Conflitto di modifica",
+    "description": "Questo record è stato modificato da un altro utente mentre lo stavi modificando. Si prega di rivedere le differenze di seguito.",
+    "diffTable": "Differenze tra la tua versione e la versione del server",
+    "field": "Campo",
+    "yourVersion": "La tua versione",
+    "serverVersion": "Versione del server",
+    "keepMine": "Mantieni la mia versione",
+    "useServer": "Usa la versione del server",
+    "dismiss": "Annulla"
+  },
+  "admin": {
+    "title": "Blocchi di registrazione",
+    "refresh": "Aggiorna",
+    "noLocks": "Nessun blocco attivo.",
+    "expired": "scaduto",
+    "releaseSuccess": "Blocco rilasciato con successo.",
+    "releaseError": "Impossibile rilasciare il blocco.",
+    "columns": {
+      "resource": "Risorsa",
+      "recordId": "ID registrazione",
+      "lockedBy": "Bloccato da",
+      "lockedAt": "Bloccato a",
+      "expiresAt": "Scade a"
+    },
+    "actions": {
+      "forceRelease": "Rilascio forzato",
+      "confirmForceRelease": "Conferma rilascio"
+    }
+  }
+}
