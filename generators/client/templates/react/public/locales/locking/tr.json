@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Bu kayıt {{user}} tarafından {{expires}}'e kadar düzenleniyor.",
+  "lockedBy": "Bu kayıt <strong>{{user}}</strong> tarafından <strong>{{expires}}</strong>'e kadar düzenleniyor.",
   "forceRelease": "Kilidi zorla aç",
   "conflict": {
     "title": "Düzenleme Çatışması",

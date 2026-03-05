@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Este fitxategia {{user}}-k editatzen ari da {{expires}}-ra arte.",
+  "lockedBy": "Este fitxategia <strong>{{user}}</strong>-k editatzen ari da <strong>{{expires}}</strong>-ra arte.",
   "forceRelease": "Indartu atzipena",
   "conflict": {
     "title": "Editatzeko gatazka",

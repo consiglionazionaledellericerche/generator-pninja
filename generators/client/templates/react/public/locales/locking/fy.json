@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Dit rekord wurdt bewerkt troch {{user}} oant {{expires}}.",
+  "lockedBy": "Dit rekord wurdt bewerkt troch <strong>{{user}}</strong> oant <strong>{{expires}}</strong>.",
   "forceRelease": "Force release lock",
   "conflict": {
     "title": "Edit Conflict",

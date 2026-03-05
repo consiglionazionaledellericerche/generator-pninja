@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ova evidencija se uređuje od strane {{user}} do {{expires}}.",
+  "lockedBy": "Ova evidencija se uređuje od strane <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Prisilno otpusti zaključavanje",
   "conflict": {
     "title": "Sukob uređivanja",

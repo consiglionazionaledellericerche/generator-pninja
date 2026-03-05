@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ten rekord jest edytowany przez {{user}} do {{expires}}.",
+  "lockedBy": "Ten rekord jest edytowany przez <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Wymuś zwolnienie blokady",
   "conflict": {
     "title": "Konflikt edycji",

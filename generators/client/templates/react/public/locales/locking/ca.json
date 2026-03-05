@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Aquest registre s'està editant per {{user}} fins a {{expires}}.",
+  "lockedBy": "Aquest registre s'està editant per <strong>{{user}}</strong> fins a <strong>{{expires}}</strong>.",
   "forceRelease": "Forçar la libertat del bloqueig",
   "conflict": {
     "title": "Conflicte d'edició",

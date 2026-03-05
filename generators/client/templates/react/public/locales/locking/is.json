@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Þetta skrá er að vera breytt af {{user}} þar til {{expires}}.",
+  "lockedBy": "Þetta skrá er að vera breytt af <strong>{{user}}</strong> þar til <strong>{{expires}}</strong>.",
   "forceRelease": "Þvinga losun á læsingu",
   "conflict": {
     "title": "Ritdeilur",

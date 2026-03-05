@@ -1,5 +1,5 @@
 {
-  "lockedBy": "এই রেকর্ডটি {{user}} দ্বারা সম্পাদনা করা হচ্ছে {{expires}} পর্যন্ত।",
+  "lockedBy": "এই রেকর্ডটি <strong>{{user}}</strong> দ্বারা সম্পাদনা করা হচ্ছে <strong>{{expires}}</strong> পর্যন্ত।",
   "forceRelease": "জোরপূর্বক লক মুক্ত করুন",
   "conflict": {
     "title": "সম্পাদনা সংঘাত",

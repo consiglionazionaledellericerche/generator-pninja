@@ -1,5 +1,5 @@
 {
-  "lockedBy": "이 레코드는 {{user}}가 {{expires}}까지 편집 중입니다.",
+  "lockedBy": "이 레코드는 <strong>{{user}}</strong>가 <strong>{{expires}}</strong>까지 편집 중입니다.",
   "forceRelease": "잠금 강제 해제",
   "conflict": {
     "title": "편집 충돌",

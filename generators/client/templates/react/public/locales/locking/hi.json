@@ -1,5 +1,5 @@
 {
-  "lockedBy": "यह रिकॉर्ड {{user}} द्वारा {{expires}} तक संपादित किया जा रहा है।",
+  "lockedBy": "यह रिकॉर्ड <strong>{{user}}</strong> द्वारा <strong>{{expires}}</strong> तक संपादित किया जा रहा है।",
   "forceRelease": "ताला मजबूरन खोलें",
   "conflict": {
     "title": "संपादन संघर्ष",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ushbu yozuvni {{user}} tahrirlamoqda {{expires}} gacha.",
+  "lockedBy": "Ushbu yozuvni <strong>{{user}}</strong> tahrirlamoqda <strong>{{expires}}</strong> gacha.",
   "forceRelease": "Boshqa foydalanuvchi siz uni tahrirlayotganda ushbu yozuv o'zgartirildi. Iltimos, quyidagi farqlarni ko'rib chiqing.",
   "conflict": {
     "title": "Sizning versiyangiz va server versiyasi o'rtasidagi farqlar",

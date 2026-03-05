@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Cet enregistrement est en cours de modification par {{user}} jusqu'à {{expires}}.",
+  "lockedBy": "Cet enregistrement est en cours de modification par <strong>{{user}}</strong> jusqu'à <strong>{{expires}}</strong>.",
   "forceRelease": "Forcer la libération du verrou",
   "conflict": {
     "title": "Conflit de modification",

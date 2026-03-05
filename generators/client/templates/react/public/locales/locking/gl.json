@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Este rexistro está sendo editado por {{user}} ata {{expires}}.",
+  "lockedBy": "Este rexistro está sendo editado por <strong>{{user}}</strong> ata <strong>{{expires}}</strong>.",
   "forceRelease": "Forzar liberar bloqueo",
   "conflict": {
     "title": "Conflito de edición",

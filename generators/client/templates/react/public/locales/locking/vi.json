@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Bản ghi này đang được chỉnh sửa bởi {{user}} cho đến {{expires}}.",
+  "lockedBy": "Bản ghi này đang được chỉnh sửa bởi <strong>{{user}}</strong> cho đến <strong>{{expires}}</strong>.",
   "forceRelease": "Thả khóa cưỡng chế",
   "conflict": {
     "title": "Xung đột chỉnh sửa",

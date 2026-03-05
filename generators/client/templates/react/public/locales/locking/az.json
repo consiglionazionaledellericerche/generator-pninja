@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Bu qeyd {{user}} tərəfindən {{expires}} tarixinə qədər redaktə olunur.",
+  "lockedBy": "Bu qeyd <strong>{{user}}</strong> tərəfindən <strong>{{expires}}</strong> tarixinə qədər redaktə olunur.",
   "forceRelease": "Sıxmağı zorla boşalt",
   "conflict": {
     "title": "Redaktə münaqişəsi",

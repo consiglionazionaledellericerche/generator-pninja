@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Iwe àkọọlẹ yìí ń ṣe àtúnṣe nipasẹ {{user}} titi di {{expires}}.",
+  "lockedBy": "Iwe àkọọlẹ yìí ń ṣe àtúnṣe nipasẹ <strong>{{user}}</strong> titi di <strong>{{expires}}</strong>.",
   "forceRelease": "Ìpinnu ìdáwọlé",
   "conflict": {
     "title": "Ìjàsùn Àtúnṣe",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "このレコードは{{user}}によって{{expires}}まで編集されています。",
+  "lockedBy": "このレコードは<strong>{{user}}</strong>によって<strong>{{expires}}</strong>まで編集されています。",
   "forceRelease": "ロックを強制的に解除",
   "conflict": {
     "title": "編集の競合",

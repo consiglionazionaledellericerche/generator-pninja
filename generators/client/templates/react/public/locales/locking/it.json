@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Questo record è in fase di modifica da {{user}} fino a {{expires}}.",
+  "lockedBy": "Questo record è in fase di modifica da <strong>{{user}}</strong> fino a <strong>{{expires}}</strong>.",
   "forceRelease": "Forza rilascio blocco",
   "conflict": {
     "title": "Conflitto di modifica",

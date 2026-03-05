@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Tätä tietuetta muokkaa {{user}} kunnes {{expires}}.",
+  "lockedBy": "Tätä tietuetta muokkaa <strong>{{user}}</strong> kunnes <strong>{{expires}}</strong>.",
   "forceRelease": "Vapauta lukitus pakolla",
   "conflict": {
     "title": "Muokkauskonflikti",

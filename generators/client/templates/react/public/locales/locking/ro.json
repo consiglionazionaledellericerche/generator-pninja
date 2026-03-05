@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Acest registru este editat de {{user}} până la {{expires}}.",
+  "lockedBy": "Acest registru este editat de <strong>{{user}}</strong> până la <strong>{{expires}}</strong>.",
   "forceRelease": "Forțează eliberarea blocării",
   "conflict": {
     "title": "Conflict de editare",

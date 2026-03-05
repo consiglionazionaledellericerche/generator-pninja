@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Тази запис е редактиран от {{user}} до {{expires}}.",
+  "lockedBy": "Тази запис е редактиран от <strong>{{user}}</strong> до <strong>{{expires}}</strong>.",
   "forceRelease": "Принудително освобождаване на заключването",
   "conflict": {
     "title": "Конфликт при редактиране",

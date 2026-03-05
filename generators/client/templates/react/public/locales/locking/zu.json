@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Lo mbhalo uhunyushwa ngu-{{user}} kuze kube {{expires}}.",
+  "lockedBy": "Lo mbhalo uhunyushwa ngu-<strong>{{user}}</strong> kuze kube <strong>{{expires}}</strong>.",
   "forceRelease": "Zama ukukhipha ivaliwe",
   "conflict": {
     "title": "Ukuphikisana kokuhlela",

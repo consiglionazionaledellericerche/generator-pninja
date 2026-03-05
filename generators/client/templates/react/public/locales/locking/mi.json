@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Kei te whakatika tēnei tuhinga e {{user}} i mua i {{expires}}.",
+  "lockedBy": "Kei te whakatika tēnei tuhinga e <strong>{{user}}</strong> i mua i <strong>{{expires}}</strong>.",
   "forceRelease": "Mā te kaha e tukuna te mokowā",
   "conflict": {
     "title": "Tūkino whakatika",

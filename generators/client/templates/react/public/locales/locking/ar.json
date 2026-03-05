@@ -1,5 +1,5 @@
 {
-  "lockedBy": "يتم تعديل هذا السجل بواسطة {{user}} حتى {{expires}}.",
+  "lockedBy": "يتم تعديل هذا السجل بواسطة <strong>{{user}}</strong> حتى <strong>{{expires}}</strong>.",
   "forceRelease": "إجبار على تحرير القفل",
   "conflict": {
     "title": "تعارض في التعديل",

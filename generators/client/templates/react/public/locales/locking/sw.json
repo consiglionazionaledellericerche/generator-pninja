@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Rekodi hii inahaririwa na {{user}} hadi {{expires}}.",
+  "lockedBy": "Rekodi hii inahaririwa na <strong>{{user}}</strong> hadi <strong>{{expires}}</strong>.",
   "forceRelease": "Zuilia kufungua lock",
   "conflict": {
     "title": "Mzozano wa Hariri",

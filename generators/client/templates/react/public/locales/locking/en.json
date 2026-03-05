@@ -1,5 +1,5 @@
 {
-  "lockedBy": "This record is being edited by {{user}} until {{expires}}.",
+  "lockedBy": "This record is being edited by <strong>{{user}}</strong> until <strong>{{expires}}</strong>.",
   "forceRelease": "Force release lock",
   "conflict": {
     "title": "Edit Conflict",

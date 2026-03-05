@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Бұл жазба {{user}} тарапынан {{expires}} дейін өңделіп жатыр.",
+  "lockedBy": "Бұл жазба <strong>{{user}}</strong> тарапынан <strong>{{expires}}</strong> дейін өңделіп жатыр.",
   "forceRelease": "Блокировка күшпен босату",
   "conflict": {
     "title": "Өзгеріс қақтығысы",

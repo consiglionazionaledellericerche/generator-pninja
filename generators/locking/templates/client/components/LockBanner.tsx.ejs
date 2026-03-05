@@ -1,34 +1,40 @@
-import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import type { LockStatus } from '../hooks/useRecordLock';
+import { Icon } from './Icon';
 
 interface LockBannerProps {
   lockStatus: LockStatus;
-  onForceRelease?: () => void;
-  isAdmin?: boolean;
 }
 
-export function LockBanner({ lockStatus, onForceRelease, isAdmin }: LockBannerProps) {
-  const { t } = useTranslation('locking');
-
+export function LockBanner({ lockStatus }: LockBannerProps) {
   if (lockStatus.state !== 'locked') return null;
 
   const expiresAt = new Date(lockStatus.expiresAt).toLocaleTimeString();
 
   return (
-    <div role="alert" aria-live="polite" className="lock-banner">
-      <span className="lock-banner__icon" aria-hidden="true">🔒</span>
-      <span className="lock-banner__message">
-        {t('lockedBy', { user: lockStatus.lockedBy, expires: expiresAt })}
-      </span>
-      {isAdmin && onForceRelease && (
-        <button
-          type="button"
-          className="lock-banner__force"
-          onClick={onForceRelease}
-        >
-          {t('forceRelease')}
-        </button>
-      )}
+    <div
+      role="alert"
+      aria-live="polite"
+      className="bg-yellow-500 text-yellow-900 rounded-lg shadow-lg dark:shadow-lg/70 p-4 mb-4"
+    >
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <Icon icon="lock" size={8} className="me-2" />
+          <div>
+            <Trans
+              ns="locking"
+              i18nKey="lockedBy"
+              values={{
+                user: lockStatus.lockedBy,
+                expires: expiresAt,
+              }}
+              components={{
+                strong: <strong />,
+              }}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

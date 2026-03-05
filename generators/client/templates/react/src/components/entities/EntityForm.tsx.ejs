@@ -116,6 +116,9 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
+<% if (locking) { -%>
+import { <%= entity.name %>DataView } from '../../pages/entities/<%= entity.name %>View';
+<% } -%>
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { Can } from '../../components/Can';
 import <%= entity.name %>DeleteButton from './<%= entity.name %>DeleteButton';
@@ -183,7 +186,7 @@ interface <%= entity.name %>FormProps {
 <% } -%>
 }
 
-export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel }: <%= entity.name%>FormProps) {
+export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel<%- locking ? ', readOnly' : ''  %> }: <%= entity.name%>FormProps) {
   useAutoShortcuts();
   const [disableButtons, setDisableButtons] = useState(false);
   const { t } = useTranslation();
@@ -215,6 +218,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       });
     }
   }, [<%= to.camel(entity.name)%>, reset]);
+<% if (locking) { -%>
+
+  if (readOnly) {
+    return <<%= entity.name %>DataView data={<%= to.camel(entity.name) %>} />;
+  }
+<% } -%>
 
   return (
     <FormProvider {...formMethods}>

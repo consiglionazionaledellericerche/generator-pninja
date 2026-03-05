@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ta zapis ureja {{user}} do {{expires}}.",
+  "lockedBy": "Ta zapis ureja <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Z forced release lock",
   "conflict": {
     "title": "Konflikt pri urejanju",

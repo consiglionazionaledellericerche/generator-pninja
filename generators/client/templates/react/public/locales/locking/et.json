@@ -1,5 +1,5 @@
 {
-  "lockedBy": "See rekordit redigeerib {{user}} kuni {{expires}}.",
+  "lockedBy": "See rekordit redigeerib <strong>{{user}}</strong> kuni <strong>{{expires}}</strong>.",
   "forceRelease": "Sundige lukku vabastama",
   "conflict": {
     "title": "Redigeerimise konflikt",

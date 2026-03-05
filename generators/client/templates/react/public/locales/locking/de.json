@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Dieser Datensatz wird von {{user}} bis {{expires}} bearbeitet.",
+  "lockedBy": "Dieser Datensatz wird von <strong>{{user}}</strong> bis <strong>{{expires}}</strong> bearbeitet.",
   "forceRelease": "Sperre zwangsweise aufheben",
   "conflict": {
     "title": "Bearbeitungskonflikt",

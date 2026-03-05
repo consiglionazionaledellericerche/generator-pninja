@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Dan ir-rekord qed jiġi aġġustat minn {{user}} sa {{expires}}.",
+  "lockedBy": "Dan ir-rekord qed jiġi aġġustat minn <strong>{{user}}</strong> sa <strong>{{expires}}</strong>.",
   "forceRelease": "Forza ħalli l-blokk",
   "conflict": {
     "title": "Kunflitt tal-Modifika",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Այս գրառումը խմբագրվում է {{user}}-ի կողմից մինչև {{expires}}:",
+  "lockedBy": "Այս գրառումը խմբագրվում է <strong>{{user}}</strong>-ի կողմից մինչև <strong>{{expires}}</strong>:",
   "forceRelease": "Ուժով արձակել փակումը",
   "conflict": {
     "title": "Խմբագրել հակասություն",

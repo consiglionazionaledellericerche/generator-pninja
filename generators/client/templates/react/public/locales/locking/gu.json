@@ -1,5 +1,5 @@
 {
-  "lockedBy": "આ રેકોર્ડ {{user}} દ્વારા {{expires}} સુધી સંપાદિત કરવામાં આવી રહી છે.",
+  "lockedBy": "આ રેકોર્ડ <strong>{{user}}</strong> દ્વારા <strong>{{expires}}</strong> સુધી સંપાદિત કરવામાં આવી રહી છે.",
   "forceRelease": "લોક કાચો છોડી દો",
   "conflict": {
     "title": "તોતા કુટબ",

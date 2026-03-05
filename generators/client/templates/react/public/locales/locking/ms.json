@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Rekod ini sedang diubah suai oleh {{user}} sehingga {{expires}}.",
+  "lockedBy": "Rekod ini sedang diubah suai oleh <strong>{{user}}</strong> sehingga <strong>{{expires}}</strong>.",
   "forceRelease": "Lepaskan kunci secara paksa",
   "conflict": {
     "title": "Konflik pengeditan",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Цей запис редагується {{user}} до {{expires}}.",
+  "lockedBy": "Цей запис редагується <strong>{{user}}</strong> до <strong>{{expires}}</strong>.",
   "forceRelease": "Примусове зняття блокування",
   "conflict": {
     "title": "Конфлікт редагування",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Šo ierakstu rediģē {{user}} līdz {{expires}}.",
+  "lockedBy": "Šo ierakstu rediģē <strong>{{user}}</strong> līdz <strong>{{expires}}</strong>.",
   "forceRelease": "Piespiedu atslēgt aizsardzību",
   "conflict": {
     "title": "Rediģēšanas konflikti",

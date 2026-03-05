@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Rekam ini sedang diedit oleh {{user}} hingga {{expires}}.",
+  "lockedBy": "Rekam ini sedang diedit oleh <strong>{{user}}</strong> hingga <strong>{{expires}}</strong>.",
   "forceRelease": "Paksakan lepas kunci",
   "conflict": {
     "title": "Konflik Edit",

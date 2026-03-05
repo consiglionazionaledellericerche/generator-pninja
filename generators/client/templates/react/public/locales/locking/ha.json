@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Wannan rikodin ana gyara shi daga {{user}} har zuwa {{expires}}.",
+  "lockedBy": "Wannan rikodin ana gyara shi daga <strong>{{user}}</strong> har zuwa <strong>{{expires}}</strong>.",
   "forceRelease": "Tilasta sakin kulle",
   "conflict": {
     "title": "Sabani na gyare-gyare",

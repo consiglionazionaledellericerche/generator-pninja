@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Dosye sa a ap modifye pa {{user}} jiskaske {{expires}}.",
+  "lockedBy": "Dosye sa a ap modifye pa <strong>{{user}}</strong> jiskaske <strong>{{expires}}</strong>.",
   "forceRelease": "Fòse lage bloke a",
   "conflict": {
     "title": "Konflit pou edite",

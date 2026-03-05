@@ -1,5 +1,5 @@
 {
-  "lockedBy": "یہ ریکارڈ {{user}} کے ذریعے {{expires}} تک ترمیم ہو رہا ہے۔",
+  "lockedBy": "یہ ریکارڈ <strong>{{user}}</strong> کے ذریعے <strong>{{expires}}</strong> تک ترمیم ہو رہا ہے۔",
   "forceRelease": "لاک کو زبردستی چھوڑیں",
   "conflict": {
     "title": "ترمیمی تضاد",

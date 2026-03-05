@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ez a rekord {{user}} által szerkesztés alatt áll {{expires}}-ig.",
+  "lockedBy": "Ez a rekord <strong>{{user}}</strong> által szerkesztés alatt áll <strong>{{expires}}</strong>-ig.",
   "forceRelease": "Zár feloldása",
   "conflict": {
     "title": "Szerkesztési ütközés",

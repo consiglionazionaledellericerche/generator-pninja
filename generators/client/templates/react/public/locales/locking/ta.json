@@ -1,5 +1,5 @@
 {
-  "lockedBy": "இந்த பதிவு {{user}} இல் இருந்து {{expires}} வரை திருத்தமாகிறது.",
+  "lockedBy": "இந்த பதிவு <strong>{{user}}</strong> இல் இருந்து <strong>{{expires}}</strong> வரை திருத்தமாகிறது.",
   "forceRelease": "இழுப்பு இடையை கட்டாயமாக விடுங்கள்",
   "conflict": {
     "title": "திருத்த மோதல்",

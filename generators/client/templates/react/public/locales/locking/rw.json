@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Iyi rekodi iri guhindurwa na {{user}} kugeza {{expires}}.",
+  "lockedBy": "Iyi rekodi iri guhindurwa na <strong>{{user}}</strong> kugeza <strong>{{expires}}</strong>.",
   "forceRelease": "Kurekura imikandara byihutirwa",
   "conflict": {
     "title": "Ikibazo cyo guhindura",

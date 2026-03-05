@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Dit record wordt bewerkt door {{user}} tot {{expires}}.",
+  "lockedBy": "Dit record wordt bewerkt door <strong>{{user}}</strong> tot <strong>{{expires}}</strong>.",
   "forceRelease": "Forceer vrijgave van vergrendeling",
   "conflict": {
     "title": "Bewerkingsconflict",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Овај запис уређује {{user}} до {{expires}}.",
+  "lockedBy": "Овај запис уређује <strong>{{user}}</strong> до <strong>{{expires}}</strong>.",
   "forceRelease": "Присилно отпустите закључавање",
   "conflict": {
     "title": "Конфликт у уређивању",

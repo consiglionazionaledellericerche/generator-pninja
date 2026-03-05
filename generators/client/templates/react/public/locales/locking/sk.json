@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Tento záznam upravuje {{user}} až do {{expires}}.",
+  "lockedBy": "Tento záznam upravuje <strong>{{user}}</strong> až do <strong>{{expires}}</strong>.",
   "forceRelease": "Nútené uvoľnenie zámku",
   "conflict": {
     "title": "Konflikt pri úprave",

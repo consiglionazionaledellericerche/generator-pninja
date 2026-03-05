@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Tá an taifead seo á eagarthóireacht ag {{user}} go dtí {{expires}}.",
+  "lockedBy": "Tá an taifead seo á eagarthóireacht ag <strong>{{user}}</strong> go dtí <strong>{{expires}}</strong>.",
   "forceRelease": "Saor an cniotáil",
   "conflict": {
     "title": "Conflachtaí Eagarthóireachta",

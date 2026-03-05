@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Denne posten redigeres av {{user}} til {{expires}}.",
+  "lockedBy": "Denne posten redigeres av <strong>{{user}}</strong> til <strong>{{expires}}</strong>.",
   "forceRelease": "Tvangslås opp",
   "conflict": {
     "title": "Redigeringskonflikt",

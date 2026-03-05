@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Mae’r cofrestr hon yn cael ei phriodoli gan {{user}} nes {{expires}}.",
+  "lockedBy": "Mae’r cofrestr hon yn cael ei phriodoli gan <strong>{{user}}</strong> nes <strong>{{expires}}</strong>.",
   "forceRelease": "Rhyddhau cloi grym",
   "conflict": {
     "title": "Gwrthdaro golygu",

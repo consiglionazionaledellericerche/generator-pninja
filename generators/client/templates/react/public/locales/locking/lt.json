@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Šis įrašas redaguojamas {{user}} iki {{expires}}.",
+  "lockedBy": "Šis įrašas redaguojamas <strong>{{user}}</strong> iki <strong>{{expires}}</strong>.",
   "forceRelease": "Priverstinai atleisti užrakto",
   "conflict": {
     "title": "Redagavimo konfliktas",

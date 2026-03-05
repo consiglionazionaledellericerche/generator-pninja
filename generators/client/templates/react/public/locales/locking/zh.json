@@ -1,5 +1,5 @@
 {
-  "lockedBy": "此记录正在被{{user}}编辑，直到{{expires}}。",
+  "lockedBy": "此记录正在被<strong>{{user}}</strong>编辑，直到<strong>{{expires}}</strong>。",
   "forceRelease": "强制释放锁定",
   "conflict": {
     "title": "编辑冲突",

@@ -1,5 +1,5 @@
 {
-  "lockedBy": "این رکورد توسط {{user}} در حال ویرایش است تا {{expires}}.",
+  "lockedBy": "این رکورد توسط <strong>{{user}}</strong> در حال ویرایش است تا <strong>{{expires}}</strong>.",
   "forceRelease": "اجبار در آزادسازی قفل",
   "conflict": {
     "title": "تعارض ویرایش",

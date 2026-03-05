@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Ky regjistër po redaktohet nga {{user}} deri në {{expires}}.",
+  "lockedBy": "Ky regjistër po redaktohet nga <strong>{{user}}</strong> deri në <strong>{{expires}}</strong>.",
   "forceRelease": "Zhblloko forcërisht",
   "conflict": {
     "title": "Konflikti i redaktimit",

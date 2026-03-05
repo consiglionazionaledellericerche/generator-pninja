@@ -1,5 +1,5 @@
 {
-  "lockedBy": "הקלט הזה נערך על ידי {{user}} עד {{expires}}.",
+  "lockedBy": "הקלט הזה נערך על ידי <strong>{{user}}</strong> עד <strong>{{expires}}</strong>.",
   "forceRelease": "שחרר בכוח את הנעילה",
   "conflict": {
     "title": "קונפליקט בעריכה",

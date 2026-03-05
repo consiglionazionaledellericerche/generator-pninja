@@ -1,5 +1,5 @@
 {
-  "lockedBy": "ይህ መዝገብ {{user}} በማቅረብ ላይ ነው እስከ {{expires}}.",
+  "lockedBy": "ይህ መዝገብ <strong>{{user}}</strong> በማቅረብ ላይ ነው እስከ <strong>{{expires}}</strong>.",
   "forceRelease": "ተገውዝ ቃል እንደ ኃላፊነት እንደ መሆኑ ይተቀበል",
   "conflict": {
     "title": "ማስተካከያ ግጭት",

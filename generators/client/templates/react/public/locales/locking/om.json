@@ -1,5 +1,5 @@
 {
-  "lockedBy": "Kitaabni kuni {{user}} irraa hanga {{expires}} tti fooyya’amaa jira.",
+  "lockedBy": "Kitaabni kuni <strong>{{user}}</strong> irraa hanga <strong>{{expires}}</strong> tti fooyya’amaa jira.",
   "forceRelease": "Garaagarummaa cufaa kaawwachu",
   "conflict": {
     "title": "Wal qixxummaa gulaalaa",
