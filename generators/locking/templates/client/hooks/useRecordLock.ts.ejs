@@ -14,24 +14,13 @@ interface UseRecordLockOptions {
 }
 
 const HEARTBEAT_MS = <%- heartbeatSeconds %> * 1000;
-<%_ if (useOptimistic) { _%>
-
-export interface ConflictData {
-  serverVersion: Record<string, unknown>;
-  clientVersion: Record<string, unknown>;
-}
-<%_ } _%>
 
 export function useRecordLock({ entityType, entityId, enabled = true }: UseRecordLockOptions) {
   const [lockStatus, setLockStatus] = useState<LockStatus>({ state: 'idle' });
-<%_ if (useOptimistic) { _%>
-  const [lockVersion, setLockVersion] = useState<number | null>(null);
-  const [conflict, setConflict] = useState<ConflictData | null>(null);
-<%_ } _%>
 
   const baseUrlRef = useRef<string | null>(null);
   baseUrlRef.current = entityId ? `/api/locks/${entityType}/${entityId}` : null;
-<%_ if (usePessimistic) { _%>
+<%_ if (locking) { _%>
 
   useEffect(() => {
     if (!enabled || !entityId) return;
@@ -61,39 +50,7 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
     };
   }, [entityId, enabled]);
 <%_ } _%>
-<%_ if (useOptimistic) { _%>
-
-  const fetchVersion = useCallback(async () => {
-    if (!baseUrlRef.current) return;
-    const { data } = await axios.get(`${baseUrlRef.current}/version`);
-    setLockVersion(data.lock_version);
-  }, []);
-
-  const checkConflict = useCallback(
-    (
-      clientData: Record<string, unknown>,
-      serverData: Record<string, unknown>,
-      serverVersion: number
-    ): boolean => {
-      if (lockVersion !== null && serverVersion > lockVersion) {
-        setConflict({ serverVersion: serverData, clientVersion: clientData });
-        return true;
-      }
-      return false;
-    },
-    [lockVersion]
-  );
-
-  const resolveConflict = useCallback(() => {
-    setConflict(null);
-    fetchVersion();
-  }, [fetchVersion]);
-
-  useEffect(() => {
-    if (enabled && entityId) fetchVersion();
-  }, [entityId, enabled]);
-<%_ } _%>
-<%_ if (usePessimistic) { _%>
+<%_ if (locking) { _%>
 
   const release = useCallback(async () => {
     if (!baseUrlRef.current) return;
@@ -107,14 +64,8 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
 
   return {
     lockStatus,
-<%_ if (usePessimistic) { _%>
+<%_ if (locking) { _%>
     release,
-<%_ } _%>
-<%_ if (useOptimistic) { _%>
-    lockVersion,
-    conflict,
-    checkConflict,
-    resolveConflict,
 <%_ } _%>
   };
 }

@@ -178,7 +178,7 @@ interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>: I<%= entity.name %>;
   onSubmit: (data: I<%= entity.name %>) => void | Promise<void>;
   onCancel: () => void;
-<% if (locking !== 'none') { -%>
+<% if (locking) { -%>
   readOnly?: boolean;
 <% } -%>
 }

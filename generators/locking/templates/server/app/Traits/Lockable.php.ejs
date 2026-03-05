@@ -11,35 +11,20 @@ trait Lockable
     {
         return $this->morphOne(RecordLock::class, 'lockable');
     }
-<% if (usePessimistic) { %>
-    public function isLockedByOther(int $userId): bool
+
+    public function lockedByOther(string $username): ?string
     {
         $lock = $this->recordLock;
-        if (!$lock) return false;
-        if ($lock->isExpired()) return false;
-        return $lock->user_id !== $userId;
+        if (!$lock) return null;
+        if ($lock->isExpired()) return null;
+        if ($lock->user_id === $username) return null;
+        return $lock->user_id;
     }
 
-    public function isLockedBy(int $userId): bool
+    public function isLockedBy(string $username): bool
     {
         $lock = $this->recordLock;
         if (!$lock || $lock->isExpired()) return false;
-        return $lock->user_id === $userId;
+        return $lock->user_id === $username;
     }
-<% } %>
-<% if (useOptimistic) { %>
-    public function currentLockVersion(): int
-    {
-        return $this->recordLock?->lock_version ?? 1;
-    }
-
-    public function incrementLockVersion(): void
-    {
-        $lock = $this->recordLock()->firstOrCreate(
-            [],
-            ['user_id' => auth()->id(), 'user_name' => auth()->user()->name, 'lock_version' => 1]
-        );
-        $lock->increment('lock_version');
-    }
-<% } %>
 }

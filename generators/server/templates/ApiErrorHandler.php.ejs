@@ -11,6 +11,8 @@ class ApiErrorHandler
 {
     public static function handle(\Exception $e): JsonResponse
     {
+        \Log::error("API Exception: " . $e->getMessage(), ['exception' => $e]);
+
         if ($e instanceof QueryException) {
             return DatabaseErrorHandler::handle($e);
         }

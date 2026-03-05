@@ -12,18 +12,14 @@ class RecordLock extends Model
         'lockable_type',
         'lockable_id',
         'user_id',
-        'user_name',
-<% if (usePessimistic) { -%>
+<% if (locking) { -%>
         'locked_at',
         'expires_at',
-<% } -%>
-<% if (useOptimistic) { -%>
-        'lock_version',
 <% } -%>
     ];
 
     protected $casts = [
-<% if (usePessimistic) { -%>
+<% if (locking) { -%>
         'locked_at'  => 'datetime',
         'expires_at' => 'datetime',
 <% } -%>
@@ -38,7 +34,7 @@ class RecordLock extends Model
     {
         return $this->belongsTo(User::class);
     }
-<% if (usePessimistic) { -%>
+<% if (locking) { -%>
     public function isExpired(): bool
     {
         return $this->expires_at->isPast();

@@ -9,7 +9,7 @@ use App\Http\Controllers\LogController;
 <%  if (!['null', 'database'].includes(searchEngine)) {-%>
 use App\Http\Controllers\SearchReindexController;
 <%  } -%>
-<%  if (locking !== 'none') {-%>
+<%  if (locking) {-%>
 use App\Http\Controllers\RecordLockController;
 <%  } -%>
 <% eRoutes.forEach(({className}) => {-%>
@@ -102,7 +102,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
 <%      } -%>
     });
 <%  } -%>
-<%  if (locking === 'pessimistic' || locking === 'both') {-%>
+<%  if (locking) {-%>
     Route::prefix('locks')->group(function () {
         Route::get('/',                     [RecordLockController::class, 'index']);
         Route::post('/{type}/{id}/acquire', [RecordLockController::class, 'acquire'])->where('id', '[0-9]+');
@@ -113,10 +113,6 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::delete('/{type}/{id}/force', [RecordLockController::class, 'forceRelease'])->where('id', '[0-9]+');
         Route::delete('/{type}/{id}',       [RecordLockController::class, 'release'])->where('id', '[0-9]+');
         Route::get('/{type}/{id}',          [RecordLockController::class, 'status'])->where('id', '[0-9]+');
-    });
-<%  } else if (locking === 'optimistic') {-%>
-    Route::prefix('locks')->group(function () {
-        Route::get('/{type}/{id}/version',  [RecordLockController::class, 'version'])->where('id', '[0-9]+');
     });
 <%  } -%>
 

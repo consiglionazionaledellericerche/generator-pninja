@@ -12,8 +12,9 @@ export default class LockingGenerator extends Generator {
         this.option('fromMain', { type: Boolean, default: false });
         this.option('fromEntity', { type: Boolean, default: false });
         this.option('locking', {
-            type: String,
-            description: 'The locking strategy to use (none, optimistic, pessimistic, both)',
+            type: Boolean,
+            description: 'Enable (pessimistic) record locking',
+            default: false,
         });
         if (!this.options.fromMain && !this.options.fromEntity) {
             throw new Error("This generator should not be run directly. Please use the main generator to run this.");
@@ -28,16 +29,10 @@ export default class LockingGenerator extends Generator {
         if (this.options.fromMain) {
             this.answers = await this.prompt([{
                 store: true,
-                type: 'list',
+                type: 'confirm',
                 name: 'locking',
-                message: `Which ${colors.yellow('*Record Locking*')} strategy would you like to use?`,
-                default: this.config.get('locking') || 'none',
-                choices: [
-                    { name: `None ${colors.dim('(No locking - last write wins)')}`, value: 'none' },
-                    { name: `Optimistic ${colors.dim('(Conflict detected at save time, diff shown to user)')}`, value: 'optimistic' },
-                    { name: `Pessimistic ${colors.dim('(Record locked on open, read-only for others until released)')}`, value: 'pessimistic' },
-                    { name: `Both ${colors.dim('(Pessimistic lock + optimistic version check as safety net)')}`, value: 'both' },
-                ]
+                message: `Do you want to enable (pessimistic) ${colors.yellow('*Record Locking*')}?`,
+                default: this.config.get('locking') || false,
             }]);
         }
     }
@@ -51,39 +46,36 @@ export default class LockingGenerator extends Generator {
 
     async writing() {
         const locking = this.config.get('locking');
-        if (locking === 'none') return;
+        if (!locking) return;
 
         const spinner = ora('Generating locking configuration').start();
-        const usePessimistic = locking === 'pessimistic' || locking === 'both';
-        const useOptimistic = locking === 'optimistic' || locking === 'both';
         const ttlMinutes = 15;
         const heartbeatSeconds = 120;
         const baseTimestamp = new Date().toISOString().replace(/[-T]/g, '_').replace(/:/g, '').slice(0, 17) + '_pninja_000_' + randomstring.generate(5);
-
 
         if (this.options.fromMain) {
             this.fs.copyTpl(
                 this.templatePath('server/database/migrations/create_record_locks_table.php.ejs'),
                 this.destinationPath(`server/database/migrations/${baseTimestamp}_create_record_locks_table.php`),
-                { usePessimistic, useOptimistic }
+                { locking }
             );
         }
         this.fs.copyTpl(
             this.templatePath('server/app/Models/RecordLock.php.ejs'),
             this.destinationPath('server/app/Models/RecordLock.php'),
-            { usePessimistic, useOptimistic, ttlMinutes }
+            { locking, ttlMinutes }
         );
         this.fs.copyTpl(
             this.templatePath('server/app/Traits/Lockable.php.ejs'),
             this.destinationPath('server/app/Traits/Lockable.php'),
-            { usePessimistic, useOptimistic }
+            { locking }
         );
         this.fs.copyTpl(
             this.templatePath('server/app/Http/Controllers/RecordLockController.php.ejs'),
             this.destinationPath('server/app/Http/Controllers/RecordLockController.php'),
-            { usePessimistic, useOptimistic, ttlMinutes }
+            { locking, ttlMinutes }
         );
-        if (usePessimistic) {
+        if (locking) {
             this.fs.copyTpl(
                 this.templatePath('server/app/Jobs/CleanExpiredLocksJob.php.ejs'),
                 this.destinationPath('server/app/Jobs/CleanExpiredLocksJob.php'),
@@ -93,20 +85,13 @@ export default class LockingGenerator extends Generator {
         this.fs.copyTpl(
             this.templatePath('client/hooks/useRecordLock.ts.ejs'),
             this.destinationPath('client/src/hooks/useRecordLock.ts'),
-            { usePessimistic, useOptimistic, ttlMinutes, heartbeatSeconds }
+            { locking, ttlMinutes, heartbeatSeconds }
         );
-        if (usePessimistic) {
+        if (locking) {
             this.fs.copyTpl(
                 this.templatePath('client/components/LockBanner.tsx.ejs'),
                 this.destinationPath('client/src/components/LockBanner.tsx'),
                 { ttlMinutes }
-            );
-        }
-        if (useOptimistic) {
-            this.fs.copyTpl(
-                this.templatePath('client/components/ConflictDiffModal.tsx.ejs'),
-                this.destinationPath('client/src/components/ConflictDiffModal.tsx'),
-                {}
             );
         }
         this.fs.copyTpl(

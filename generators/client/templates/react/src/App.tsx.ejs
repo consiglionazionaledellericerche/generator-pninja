@@ -30,7 +30,7 @@ import { LogViewer } from './pages/server-logs/LogViewer';
 import { SeederList } from './pages/seeder/SeederList';
 
 import { Migrations } from './pages/admin/Migrations';
-<%  if (locking !== 'none') { -%>
+<%  if (locking) { -%>
 import { RecordLockList } from './pages/admin/RecordLockList';
 <%  } -%>
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
@@ -185,7 +185,7 @@ function App() {
               }
             />
 <%  } -%>
-<%  if (locking !== 'none') { -%>
+<%  if (locking) { -%>
             <Route
               path="admin/record-lock-list"
               element={

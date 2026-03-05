@@ -161,7 +161,7 @@ export async function createReactClient(that) {
         if (!['null', 'database'].includes(searchEngine)) {
             that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
         }
-        if (locking !== 'none') {
+        if (locking) {
             that.fs.copyTpl(that.templatePath(`react/public/locales/locking/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/locking.json`));
         }
         that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {

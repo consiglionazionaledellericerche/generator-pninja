@@ -41,8 +41,9 @@ export default class extends Generator {
       description: 'The search engine to use (database, algolia, elastic, meilisearch, typesense, solr, null)',
     })
     this.option('locking', {
-      type: String,
-      description: 'The locking strategy to use (none, optimistic, pessimistic, both)',
+      type: Boolean,
+      description: 'Enable (pessimistic) record locking',
+      default: false,
     });
   }
   async initializing() {

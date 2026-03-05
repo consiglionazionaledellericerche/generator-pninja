@@ -107,13 +107,6 @@ class RecordLockController extends Controller
         return response()->json(['message' => 'Lock force-released.']);
     }
 
-    public function version(string $type, int $id): JsonResponse
-    {
-        $modelClass = $this->resolveModel($type);
-        $record = $modelClass::findOrFail($id);
-        return response()->json(['lock_version' => $record->currentLockVersion()]);
-    }
-
     private function resolveModel(string $type): string
     {
         $map = config('locking.models', []);

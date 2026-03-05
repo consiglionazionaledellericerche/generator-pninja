@@ -217,7 +217,7 @@ const Menu: React.FC = () => {
                     </MenuItem>
                   </Can>
 <%    } -%>
-<%    if (locking !== 'none') { -%>
+<%    if (locking) { -%>
                   <Can action="read" resource="RecordLockList">
                     <MenuItem
                       href="/admin/record-lock-list"

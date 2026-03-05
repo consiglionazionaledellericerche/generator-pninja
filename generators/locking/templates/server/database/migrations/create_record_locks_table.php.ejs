@@ -12,12 +12,9 @@ return new class extends Migration
             $table->id();
             $table->morphs('lockable'); // lockable_type + lockable_id
             $table->string('user_id');
-<% if (usePessimistic) { %>
+<% if (locking) { %>
             $table->timestamp('locked_at');
             $table->timestamp('expires_at');
-<% } %>
-<% if (useOptimistic) { %>
-            $table->unsignedBigInteger('lock_version')->default(1);
 <% } %>
             $table->timestamps();
 
