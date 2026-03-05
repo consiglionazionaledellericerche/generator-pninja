@@ -24,12 +24,7 @@ export default function <%= entity.name %>Edit() {
   const [<%=to.camel(entity.name)%>, <%=to.camel(`set${entity.name}`)%>] = useState<I<%= entity.name %>>({} as I<%= entity.name %>);
   const [loading, setLoading] = useState(false);
 <% if (locking) { -%>
-  const {
-    lockStatus,
-<% if (locking) { -%>
-    release,
-<% } -%>
-  } = useRecordLock({
+  const { lockStatus, release } = useRecordLock({
     entityType: '<%=to.slug(pluralize(entity.name))%>',
     entityId: id ? Number(id) : null,
     enabled: !!id,
