@@ -1,0 +1,27 @@
+import axiosInstance from '../../shared/axiosInstance';
+import { ApiResponsePage } from '../../types/api-response.types';
+import { I<%= entity.name %> } from '../model/<%= to.slug(entity.name) %>.model';
+
+export interface <%= entity.name %>ListParams {
+  page: number;
+  sort_by: string;
+  sort_direction: string;
+<% if (searchEngine !== 'null') { -%>
+  search?: string;
+<% } -%>
+}
+
+export const <%= entity.name %>Service = {
+  list: (params: <%= entity.name %>ListParams) =>
+    axiosInstance
+      .get('/api/<%=to.slug(pluralize(entity.name))%>', { params })
+      .then((r) => r.data as ApiResponsePage<I<%= entity.name %>>),
+  get: (id: number) =>
+    axiosInstance.get(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`).then((r) => r.data as I<%= entity.name %>),
+  create: (data: I<%= entity.name %>) =>
+    axiosInstance.post('/api/<%=to.slug(pluralize(entity.name))%>', data).then((r) => r.data as I<%= entity.name %>),
+  update: (id: number, data: I<%= entity.name %>) =>
+    axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, data).then((r) => r.data as I<%= entity.name %>),
+  remove: (id: number) =>
+    axiosInstance.delete(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`),
+};

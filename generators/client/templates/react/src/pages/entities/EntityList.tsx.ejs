@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axiosInstance from '../../shared/axiosInstance';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 <% if(durationColumns.length) {-%>
@@ -14,6 +13,7 @@ import { SearchInput } from '../../components/SearchInput';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { AxiosError } from 'axios';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
 import { Can } from '../../components/Can';
@@ -48,13 +48,16 @@ export default function <%= entity.name %>List() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    axiosInstance
-      .get(
-        `/api/<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}<% if (searchEngine !== 'null' ) { -%>${debouncedSearchTerm ? '&search=' + encodeURIComponent(debouncedSearchTerm) : ''}<% } -%>`
-      )
-      .then((response) => response?.data)
-      .then((page: ApiResponsePage<I<%= entity.name %>>) => {
-        setPage(page);
+    <%= entity.name %>Service.list({
+      page: currentPage,
+      sort_by: sortConfig.field,
+      sort_direction: sortConfig.direction,
+<% if (searchEngine !== 'null' ) { -%>
+      ...(debouncedSearchTerm ? { search: debouncedSearchTerm } : {}),
+<% } -%>
+    })
+      .then((data: ApiResponsePage<I<%= entity.name %>>) => {
+        setPage(data);
         setLoading(false);
       })
       .catch((error: AxiosError<ErrorResponseData>) => {

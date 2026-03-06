@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Can } from '../../components/Can';
@@ -13,6 +12,7 @@ import { DurationFieldViewer } from '../../components/formElements/DurationField
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { Icon } from '../../components/Icon';
 import <%= entity.name %>DeleteButton from '../../components/entities/<%= entity.name %>DeleteButton';
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 <%relatedEntities
     .map(r => r.related)
     .filter(r => r !== entity.name)
@@ -125,9 +125,7 @@ export default function <%= entity.name %>View() {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    axiosInstance
-      .get(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
-      .then((response) => response?.data)
+    <%= entity.name %>Service.get(Number(id))
       .then((data: I<%= entity.name %>) => {
         <%=to.camel(`set${entity.name}`)%>(data);
         setLoading(false);
@@ -145,6 +143,10 @@ export default function <%= entity.name %>View() {
   useEffect(() => {
     document.title = `${t('entities:<%-to.snake(entity.name)%>.<%-entity.name%>')} ID ${id}`;
   }, [id, i18n.language, t]);
+
+  const handleDelete = () => {
+    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+  };
 
   return (
     <>
@@ -165,7 +167,7 @@ export default function <%= entity.name %>View() {
           </Link>
         </Can>
         <Can resource="<%= entity.name %>" action="delete">
-          <<%= entity.name %>DeleteButton id={id} />
+          <<%= entity.name %>DeleteButton id={id} onDelete={handleDelete} />
         </Can>
       </div>
       )}

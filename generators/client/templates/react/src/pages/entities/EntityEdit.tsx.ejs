@@ -2,11 +2,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { <%= entity.name %>Form } from '../../components/entities/<%= entity.name %>Form';
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 
 interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
@@ -23,9 +23,7 @@ export default function <%= entity.name %>Edit() {
   useEffect(() => {
     if (id) {
       setLoading(true);
-      axiosInstance
-        .get(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
-        .then((response) => response?.data)
+      <%= entity.name %>Service.get(Number(id))
         .then((data: I<%= entity.name %>) => {
           set<%= entity.name %>(data);
         })
@@ -44,8 +42,10 @@ export default function <%= entity.name %>Edit() {
   }, [id, addNotification, navigate, t]);
 
   const handleSubmit = (data: I<%= entity.name %>) => {
-    (id ? axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, data) : axiosInstance.post('/api/<%=to.slug(pluralize(entity.name))%>', data))
-      .then((response) => response?.data)
+    (id
+      ? <%= entity.name %>Service.update(Number(id), data)
+      : <%= entity.name %>Service.create(data)
+    )
       .then((data: I<%= entity.name %>) => {
         addNotification({
           type: 'success',
@@ -55,13 +55,21 @@ export default function <%= entity.name %>Edit() {
         });
         navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
       })
-      .catch((error: AxiosError<ErrorResponseData>) =>
+      .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
           type: 'error',
           message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
           error,
-        })
-      );
+        });
+      });
+  };
+
+  const handleCancel = () => {
+    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+  };
+
+  const handleDelete = () => {
+    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
   };
 
   useEffect(() => {
@@ -79,7 +87,8 @@ export default function <%= entity.name %>Edit() {
         <<%= entity.name %>Form
           <%-to.camel(entity.name)%>={<%-to.camel(entity.name)%>}
           onSubmit={handleSubmit}
-          onCancel={() => navigate('/entities/<%=to.slug(pluralize(entity.name))%>')}
+          onCancel={handleCancel}
+          onDelete={handleDelete}
         />
       )}
     </div>

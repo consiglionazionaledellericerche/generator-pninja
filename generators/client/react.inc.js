@@ -33,6 +33,11 @@ export async function createEntityPages({
 }) {
     const hasSoftDelete = entity.softDelete;
     that.fs.copyTpl(
+        that.templatePath("react/src/shared/services/entity.service.ts.ejs"),
+        that.destinationPath(`client/src/shared/services/${to.slug(entity.name)}.service.ts`),
+        { entity, to, pluralize, searchEngine }
+    );
+    that.fs.copyTpl(
         that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
         that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
         {
