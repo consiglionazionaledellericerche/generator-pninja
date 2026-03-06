@@ -2,8 +2,8 @@
 
 return [
     'models' => [
-<% entities.forEach(({name, tableName}) => {-%>
-        '<%- tableName %>' => \App\Models\<%- name %>::class,
+<% entities.forEach(({name}) => {-%>
+        '<%- to.slug(pluralize(name)) %>' => \App\Models\<%- name %>::class,
 <% }); -%>
     ],
 ];

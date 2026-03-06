@@ -414,7 +414,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 id={<%= to.camel(entity.name)-%>.id}
                 disabled={isSubmitting || disableButtons}
                 onConfirm={() => setDisableButtons(true)}
-                onDelete={() => onDelete()}
+                onDelete={onDelete}
                 onError={() => setDisableButtons(false)}
               />
             </Can>

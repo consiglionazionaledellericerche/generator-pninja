@@ -1,15 +1,20 @@
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import ConfirmButton from '../ConfirmButton';
+import import { AcRuleService } from '../../shared/services/ac-rule.service';
 
 interface DeleteButtonProps {
   id: string | number | null | undefined;
 }
 
-const AcRuleDeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
+const AcRuleDeleteButton: React.FC<DeleteButtonProps> = ({
+  id,
+  disabled = false,
+  onConfirm = () => {},
+  onDelete = () => {},
+  onError = () => {},
+}) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -17,14 +22,13 @@ const AcRuleDeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
 
   const deleteRecord = (id: string | number | null | undefined) => {
     if (!id) return;
-    axiosInstance
-      .delete(`/api/ac-rules/${id}`)
+    AcRuleService.remove(Number(id))
       .then(() => {
         addNotification({
           type: 'success',
           message: t(`actions.crud.successfullyDeleted`, { id }),
         });
-        navigate('/entities/ac-rules');
+        onDelete();
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
@@ -32,12 +36,17 @@ const AcRuleDeleteButton: React.FC<DeleteButtonProps> = ({ id }) => {
           message: `${t('errors.entities.delete')} ${t('entities:ac_rule.AcRule')} ID ${id}`,
           error,
         });
+        onError();
       });
   };
 
   return (
     <ConfirmButton
-      onConfirm={() => deleteRecord(Number(id))}
+      disabled={disabled}
+      onConfirm={() => {
+        onConfirm();
+        deleteRecord(Number(id));
+      }}
       className="danger-button"
       pendingClassName="danger-button"
       label={t('actions.crud.delete')}

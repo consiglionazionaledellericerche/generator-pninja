@@ -2,7 +2,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
@@ -11,6 +10,7 @@ import { <%= entity.name %>Form } from '../../components/entities/<%= entity.nam
 import { useRecordLock } from '../../hooks/useRecordLock';
 import { LockBanner } from '../../components/LockBanner';
 <% } -%>
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 
 interface <%= entity.name %>ViewParams extends Record<string, string | undefined> {
   id: string;
@@ -36,9 +36,7 @@ export default function <%= entity.name %>Edit() {
   useEffect(() => {
     if (id) {
       setLoading(true);
-      axiosInstance
-        .get(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
-        .then((response) => response?.data)
+      <%= entity.name %>Service.get(Number(id))
         .then((data: I<%= entity.name %>) => {
           set<%= entity.name %>(data);
         })
@@ -58,10 +56,9 @@ export default function <%= entity.name %>Edit() {
 
   const handleSubmit = (data: I<%= entity.name %>) => {
     (id
-      ? axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, data)
-      : axiosInstance.post('/api/<%=to.slug(pluralize(entity.name))%>', data)
+      ? <%= entity.name %>Service.update(Number(id), data)
+      : <%= entity.name %>Service.create(data)
     )
-      .then((response) => response?.data)
       .then((data: I<%= entity.name %>) => {
 <% if (locking) { -%>
         release();

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import axiosInstance from '../../shared/axiosInstance';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
 import ConfirmButton from '../ConfirmButton';
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 
 interface DeleteButtonProps {
   id: string | number | null | undefined;
@@ -20,13 +20,11 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({
   onError = () => {},
 }) => {
   const { t } = useTranslation();
-
   const { addNotification } = useNotifications();
 
   const deleteRecord = (id: string | number | null | undefined) => {
     if (!id) return;
-    axiosInstance
-      .delete(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`)
+    <%= entity.name %>Service.remove(Number(id))
       .then(() => {
         addNotification({
           type: 'success',

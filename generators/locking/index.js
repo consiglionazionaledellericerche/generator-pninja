@@ -3,6 +3,9 @@ import ora from 'ora';
 import colors from 'ansi-colors';
 import randomstring from 'randomstring';
 import { getEntities } from '../utils/entities-utils.js';
+import { AcRule } from '../utils/AcRule.js';
+import to from 'to-case';
+import pluralize from 'pluralize';
 
 export default class LockingGenerator extends Generator {
     static namespace = 'pninja:locking';
@@ -97,7 +100,7 @@ export default class LockingGenerator extends Generator {
         this.fs.copyTpl(
             this.templatePath('server/config/locking.php.ejs'),
             this.destinationPath('server/config/locking.php'),
-            { entities: getEntities(this) }
+            { entities: [AcRule, ...getEntities(this)], to, pluralize }
         );
         this.fs.copyTpl(
             this.templatePath('client/src/pages/admin/RecordLockList.tsx.ejs'),
