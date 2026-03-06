@@ -65,14 +65,14 @@ class RecordLockController extends Controller
 
     public function release(Request $request, string $type, int $id): JsonResponse
     {
-        $modelClass = $this->resolveModel($type);
-        $record = $modelClass::findOrFail($id);
-        $username = $request->user()->username;
+        $lock = RecordLock::where('lockable_type', $this->resolveModel($type))
+            ->where('lockable_id', $id)
+            ->first();
 
-        $lock = $record->recordLock;
         if (!$lock) return response()->json(['message' => 'No lock found.'], 404);
 
-        if ($lock->user_id !== $username && !$request->user()->hasRole('admin')) {
+        $username = $request->user()->username;
+        if ($lock->user_id !== $username) {
             return response()->json(['message' => 'Forbidden.'], 403);
         }
 
@@ -101,9 +101,9 @@ class RecordLockController extends Controller
 
     public function forceRelease(string $type, int $id): JsonResponse
     {
-        $modelClass = $this->resolveModel($type);
-        $record = $modelClass::findOrFail($id);
-        $record->recordLock?->delete();
+        RecordLock::where('lockable_type', $this->resolveModel($type))
+            ->where('lockable_id', $id)
+            ->delete();
         return response()->json(['message' => 'Lock force-released.']);
     }
 

@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import axiosInstance from '../../shared/axiosInstance';
@@ -9,16 +8,19 @@ interface DeleteButtonProps {
   id: string | number | null | undefined;
   disabled?: boolean;
   onConfirm?: () => void;
+  onDelete?: () => void;
+  onError?: () => void;
 }
 
 const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({
   id,
   disabled = false,
   onConfirm = () => {},
+  onDelete = () => {},
+  onError = () => {},
 }) => {
   const { t } = useTranslation();
 
-  const navigate = useNavigate();
   const { addNotification } = useNotifications();
 
   const deleteRecord = (id: string | number | null | undefined) => {
@@ -30,7 +32,7 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({
           type: 'success',
           message: t(`actions.crud.successfullyDeleted`, { id }),
         });
-        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+        onDelete();
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
@@ -38,6 +40,7 @@ const <%= entity.name %>DeleteButton: React.FC<DeleteButtonProps> = ({
           message: `${t('errors.entities.delete')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
+        onError();
       });
   };
 

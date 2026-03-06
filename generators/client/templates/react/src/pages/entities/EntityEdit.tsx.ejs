@@ -90,6 +90,13 @@ export default function <%= entity.name %>Edit() {
     navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
   };
 
+  const handleDelete = () => {
+<% if (locking) { -%>
+    release();
+<% } -%>
+    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+  };
+
   useEffect(() => {
     document.title = `${t(`actions.crud.${id ? 'update' : 'create'}`)} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`;
   }, [id, i18n.language, t]);
@@ -109,6 +116,7 @@ export default function <%= entity.name %>Edit() {
           <%-to.camel(entity.name)%>={<%-to.camel(entity.name)%>}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+          onDelete={handleDelete}
 <% if (locking) { -%>
           readOnly={isReadOnly}
 <% } -%>

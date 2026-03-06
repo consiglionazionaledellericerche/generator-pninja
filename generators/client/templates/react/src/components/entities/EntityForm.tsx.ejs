@@ -181,12 +181,13 @@ interface <%= entity.name %>FormProps {
   <%= to.camel(entity.name)%>: I<%= entity.name %>;
   onSubmit: (data: I<%= entity.name %>) => void | Promise<void>;
   onCancel: () => void;
+  onDelete: () => void;
 <% if (locking) { -%>
   readOnly?: boolean;
 <% } -%>
 }
 
-export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel<%- locking ? ', readOnly' : ''  %> }: <%= entity.name%>FormProps) {
+export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel, onDelete<%- locking ? ', readOnly' : ''  %> }: <%= entity.name%>FormProps) {
   useAutoShortcuts();
   const [disableButtons, setDisableButtons] = useState(false);
   const { t } = useTranslation();
@@ -413,6 +414,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
                 id={<%= to.camel(entity.name)-%>.id}
                 disabled={isSubmitting || disableButtons}
                 onConfirm={() => setDisableButtons(true)}
+                onDelete={() => onDelete()}
+                onError={() => setDisableButtons(false)}
               />
             </Can>
           )}

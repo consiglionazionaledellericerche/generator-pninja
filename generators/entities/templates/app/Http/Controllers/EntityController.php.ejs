@@ -248,9 +248,6 @@ class <%- className %>Controller extends Controller
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
 <%          } -%>
-<% if (locking) { -%>
-            $<%- entityName %>->recordLock?->delete();
-<% } -%>
             return response()->json($<%- entityName %>, 200);
         } catch (\Exception $e) {
             return $this->handleUpdateError($e);
@@ -268,9 +265,6 @@ class <%- className %>Controller extends Controller
             }
 <% } -%>
             $<%- entityName %>->delete();
-<% if (locking) { -%>
-            $<%- entityName %>->recordLock?->delete();
-<% } -%>
             return response(null, 200);
         } catch (\Exception $e) {
             return $this->handleDeleteError($e);

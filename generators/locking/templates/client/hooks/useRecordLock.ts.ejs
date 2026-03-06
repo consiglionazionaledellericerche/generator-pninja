@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../shared/axiosInstance';
 
 export type LockStatus =
   | { state: 'idle' }
@@ -20,12 +20,15 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
 
   const baseUrlRef = useRef<string | null>(null);
   baseUrlRef.current = entityId ? `/api/locks/${entityType}/${entityId}` : null;
-<%_ if (locking) { _%>
+
+  const releasedRef = useRef(false);
 
   useEffect(() => {
     if (!enabled || !entityId) return;
 
-    axios
+    releasedRef.current = false;
+
+    axiosInstance
       .post(`${baseUrlRef.current}/acquire`)
       .then(({ data }) => setLockStatus({ state: 'owned', expiresAt: data.expires_at }))
       .catch((err: any) => {
@@ -41,31 +44,29 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
       });
 
     const interval = setInterval(() => {
-      axios.post(`${baseUrlRef.current}/renew`).catch(() => clearInterval(interval));
+      axiosInstance.post(`${baseUrlRef.current}/renew`).catch(() => clearInterval(interval));
     }, HEARTBEAT_MS);
 
     return () => {
       clearInterval(interval);
-      axios.delete(baseUrlRef.current!).finally(() => setLockStatus({ state: 'idle' }));
+      if (!releasedRef.current) {
+        axiosInstance.delete(baseUrlRef.current!).finally(() => setLockStatus({ state: 'idle' }));
+      }
     };
   }, [entityId, enabled]);
-<%_ } _%>
-<%_ if (locking) { _%>
 
   const release = useCallback(async () => {
-    if (!baseUrlRef.current) return;
+    if (!baseUrlRef.current || releasedRef.current) return;
+    releasedRef.current = true;
     try {
-      await axios.delete(baseUrlRef.current);
+      await axiosInstance.delete(baseUrlRef.current);
     } finally {
       setLockStatus({ state: 'idle' });
     }
   }, []);
-<%_ } _%>
 
   return {
     lockStatus,
-<%_ if (locking) { _%>
     release,
-<%_ } _%>
   };
 }
