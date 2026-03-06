@@ -1019,7 +1019,8 @@ export default class extends Generator {
             appName: this.config.get('name'),
             entities: getEntities(this),
             relationships: getEntitiesRelationships(this),
-            searchEngine: this.config.get('searchEngine')
+            searchEngine: this.config.get('searchEngine'),
+            locking: this.config.get('locking'),
         });
         spinner.succeed(`Files for entity ${this.entityConfig.name} successfully generated`);
     }

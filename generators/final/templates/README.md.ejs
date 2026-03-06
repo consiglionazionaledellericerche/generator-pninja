@@ -367,6 +367,74 @@ p,admin,Seeder,read
 p,admin,Seeder,create
 ```
 
+<%_ if (locking) { _%>
+## Record Locking
+
+The application includes a **pessimistic record locking** system that prevents concurrent edits on the same record. When a user opens a record for editing, a lock is acquired and held until the user saves, cancels, deletes, or navigates away.
+
+**How it works:**
+
+- When a user opens the edit form, `POST /api/locks/{type}/{id}/acquire` is called automatically
+- The lock is renewed every 2 minutes via a heartbeat (`POST /api/locks/{type}/{id}/renew`)
+- If another user tries to open the same record, they see it in **read-only mode** with a banner showing who holds the lock and when it expires
+- The lock is released explicitly on Save, Cancel, or Delete via `DELETE /api/locks/{type}/{id}`
+- When the user navigates away within the application, the lock is released immediately by the `useEffect` cleanup
+- If the user closes the page or browser, the lock expires automatically after **15 minutes**
+- A scheduled job (`CleanExpiredLocksJob`) runs every 5 minutes to purge expired locks from the database — requires a system cron calling `php artisan schedule:run` every minute:
+```sh
+* * * * * cd /path/to/project/server && php artisan schedule:run >> /dev/null 2>&1
+```
+
+**Lock lifecycle:**
+
+| Action | Lock released by |
+|---|---|
+| Save | `release()` in frontend after successful save |
+| Cancel | `release()` in frontend |
+| Delete | `release()` in frontend after successful delete |
+| Navigate away | `useEffect` cleanup |
+| Close page or browser | TTL expiration (15 minutes) |
+
+**Admin interface:**
+
+Access the lock administration interface at `/admin/locks`. It shows all active locks with the resource type, record ID, username, lock time, and expiry. Administrators can force-release any lock.
+
+**API usage:**
+
+If you interact with the API directly and want to participate in the locking protocol:
+```sh
+# Acquire lock
+POST /api/locks/{type}/{id}/acquire
+
+# Renew lock (heartbeat)
+POST /api/locks/{type}/{id}/renew
+
+# Release lock
+DELETE /api/locks/{type}/{id}
+
+# Check lock status
+GET /api/locks/{type}/{id}
+```
+
+Where `{type}` is the resource slug (e.g. `employees`) and `{id}` is the record ID.
+
+Clients that do not acquire a lock before writing are accepted — locking is cooperative, not enforced for direct API calls.
+
+**Access control:**
+
+By default, **only `superadmin` role** can access the lock administration and force-release locks. To grant access to other roles, add policies to the `ac_rules` table:
+```csv
+p,admin,RecordLock,read
+p,admin,RecordLock,delete
+```
+
+> ⚠️ **React Strict Mode and lock behavior in development**
+>
+> In development, React Strict Mode intentionally mounts, unmounts, and remounts every component to help detect side effects. This causes `useRecordLock` to execute twice — resulting in the sequence: `acquire → DELETE (cleanup) → acquire`. Depending on network timing, the DELETE may arrive after the second acquire, leaving the record in an unlocked state in the browser.
+>
+> This is expected behavior in development only. In production, Strict Mode has no effect and the lock lifecycle works correctly. Do not disable `<StrictMode>` to work around this — it provides valuable development-time checks.
+
+<%_ } _%>
 ## Docker composition
 
 To start the **Docker composition**:

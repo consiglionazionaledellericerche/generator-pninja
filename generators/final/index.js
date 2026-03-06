@@ -16,7 +16,7 @@ export default class FinalGenerator extends Generator {
   end() {
     const entities = getEntities(this);
     const relationships = getEntitiesRelationships(this);
-    this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine') });
+    this.fs.copyTpl(this.templatePath(`README.md.ejs`), this.destinationPath(`README.md`), { appName: this.config.get('name'), entities, relationships, searchEngine: this.config.get('searchEngine'), locking: this.config.get('locking') });
     this.log(colors.bold.green(`\nApplication generated successfully with `) + colors.bold.red('♥️') + colors.bold.green(`  & `) + colors.bold.blueBright(`PNinja`) + '!\n');
     this.log(`${colors.green(`Set database in server/.env and create tables with:`)}\n  ${colors.yellowBright(`npm run migrate`)}  # or npm run migrate:fresh or npm run migrate:fresh:seed\n`);
     this.log(`${colors.green(`Start your development server with:`)}\n  ${colors.yellowBright(`npm run server`)}\n`);
