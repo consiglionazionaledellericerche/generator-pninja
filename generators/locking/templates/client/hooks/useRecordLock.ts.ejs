@@ -13,7 +13,7 @@ interface UseRecordLockOptions {
   enabled?: boolean;
 }
 
-const HEARTBEAT_MS = <%- heartbeatSeconds %> * 1000;
+const HEARTBEAT_MS = 120 * 1000;
 
 export function useRecordLock({ entityType, entityId, enabled = true }: UseRecordLockOptions) {
   const [lockStatus, setLockStatus] = useState<LockStatus>({ state: 'idle' });
@@ -22,41 +22,56 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
   baseUrlRef.current = entityId ? `/api/locks/${entityType}/${entityId}` : null;
 
   const releasedRef = useRef(false);
+  const acquiredRef = useRef(false);
 
   useEffect(() => {
     if (!enabled || !entityId) return;
 
     releasedRef.current = false;
+    acquiredRef.current = false;
 
-    axiosInstance
-      .post(`${baseUrlRef.current}/acquire`)
-      .then(({ data }) => setLockStatus({ state: 'owned', expiresAt: data.expires_at }))
-      .catch((err: any) => {
-        if (err.response?.status === 423) {
-          setLockStatus({
-            state: 'locked',
-            lockedBy: err.response.data.locked_by,
-            expiresAt: err.response.data.expires_at,
-          });
-        } else {
-          setLockStatus({ state: 'error', message: err.message });
-        }
-      });
+    let interval: ReturnType<typeof setInterval> | null = null;
 
-    const interval = setInterval(() => {
-      axiosInstance.post(`${baseUrlRef.current}/renew`).catch(() => clearInterval(interval));
-    }, HEARTBEAT_MS);
+    // setTimeout(..., 0) defers the acquire to the next event loop tick,
+    // allowing React Strict Mode's synchronous mount/unmount/mount cycle
+    // to cancel the timeout before it fires, preventing a double acquire.
+    const timeout = setTimeout(() => {
+      axiosInstance
+        .post(`${baseUrlRef.current}/acquire`)
+        .then(({ data }) => {
+          acquiredRef.current = true;
+          setLockStatus({ state: 'owned', expiresAt: data.expires_at });
+
+          interval = setInterval(() => {
+            axiosInstance.post(`${baseUrlRef.current}/renew`).catch(() => {
+              if (interval) clearInterval(interval);
+            });
+          }, HEARTBEAT_MS);
+        })
+        .catch((err: any) => {
+          if (err.response?.status === 423) {
+            setLockStatus({
+              state: 'locked',
+              lockedBy: err.response.data.locked_by,
+              expiresAt: err.response.data.expires_at,
+            });
+          } else {
+            setLockStatus({ state: 'error', message: err.message });
+          }
+        });
+    }, 0);
 
     return () => {
-      clearInterval(interval);
-      if (!releasedRef.current) {
-        axiosInstance.delete(baseUrlRef.current!).finally(() => setLockStatus({ state: 'idle' }));
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+      if (!releasedRef.current && acquiredRef.current) {
+        axiosInstance.delete(baseUrlRef.current!).catch(() => {});
       }
     };
   }, [entityId, enabled]);
 
   const release = useCallback(async () => {
-    if (!baseUrlRef.current || releasedRef.current) return;
+    if (!baseUrlRef.current || releasedRef.current || !acquiredRef.current) return;
     releasedRef.current = true;
     try {
       await axiosInstance.delete(baseUrlRef.current);

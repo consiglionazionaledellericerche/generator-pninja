@@ -428,12 +428,6 @@ p,admin,RecordLock,read
 p,admin,RecordLock,delete
 ```
 
-> ⚠️ **React Strict Mode and lock behavior in development**
->
-> In development, React Strict Mode intentionally mounts, unmounts, and remounts every component to help detect side effects. This causes `useRecordLock` to execute twice — resulting in the sequence: `acquire → DELETE (cleanup) → acquire`. Depending on network timing, the DELETE may arrive after the second acquire, leaving the record in an unlocked state in the browser.
->
-> This is expected behavior in development only. In production, Strict Mode has no effect and the lock lifecycle works correctly. Do not disable `<StrictMode>` to work around this — it provides valuable development-time checks.
-
 <%_ } _%>
 ## Docker composition
 
