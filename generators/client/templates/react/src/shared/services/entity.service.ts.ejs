@@ -11,6 +11,14 @@ export interface <%= entity.name %>ListParams {
 <% } -%>
 }
 
+<% if (entity.softDelete) { -%>
+export interface <%= entity.name %>TrashedListParams {
+  page: number;
+  sort_by: string;
+  sort_direction: string;
+}
+
+<% } -%>
 export const <%= entity.name %>Service = {
   list: (params: <%= entity.name %>ListParams) =>
     axiosInstance
@@ -24,4 +32,14 @@ export const <%= entity.name %>Service = {
     axiosInstance.put(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`, data).then((r) => r.data as I<%= entity.name %>),
   remove: (id: number) =>
     axiosInstance.delete(`/api/<%=to.slug(pluralize(entity.name))%>/${id}`),
+<% if (entity.softDelete) { -%>
+  listTrashed: (params: <%= entity.name %>TrashedListParams) =>
+    axiosInstance
+      .get('/api/trashed-<%=to.slug(pluralize(entity.name))%>', { params })
+      .then((r) => r.data as ApiResponsePage<I<%= entity.name %>>),
+  restore: (id: number) =>
+    axiosInstance.post('/api/trashed-<%=to.slug(pluralize(entity.name))%>/', { id }),
+  forceDelete: (id: number) =>
+    axiosInstance.delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`),
+<% } -%>
 };

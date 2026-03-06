@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../../components/Icon';
-import axiosInstance from '../../shared/axiosInstance';
 import { AxiosError } from 'axios';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
@@ -12,6 +11,7 @@ import { DurationFieldViewer } from '../../components/formElements/DurationField
 import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { Can } from '../../components/Can';
 import ConfirmButton from '../../components/ConfirmButton';
@@ -42,13 +42,13 @@ export default function <%= entity.name %>Trash() {
 
   const loadRecords = useCallback(() => {
     setLoading(true);
-    axiosInstance
-      .get(
-        `/api/trashed-<%=to.slug(pluralize(entity.name))%>?page=${currentPage}&sort_by=${sortConfig.field}&sort_direction=${sortConfig.direction}`
-      )
-      .then((response) => response?.data)
-      .then((page: ApiResponsePage<I<%= entity.name %>>) => {
-        setPage(page);
+    <%= entity.name %>Service.listTrashed({
+      page: currentPage,
+      sort_by: sortConfig.field,
+      sort_direction: sortConfig.direction,
+    })
+      .then((data: ApiResponsePage<I<%= entity.name %>>) => {
+        setPage(data);
         setLoading(false);
       })
       .catch((error) => {
@@ -73,8 +73,7 @@ export default function <%= entity.name %>Trash() {
   const handleRestore = async (id: number | undefined | null) => {
     if (!id) return;
     setDisableButtons(true);
-    axiosInstance
-      .post(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/`, { id })
+    <%= entity.name %>Service.restore(id)
       .then(() => {
         addNotification({
           type: 'success',
@@ -95,8 +94,7 @@ export default function <%= entity.name %>Trash() {
   const handleForceDelete = async (id: number | undefined | null) => {
     if (!id) return;
     setDisableButtons(true);
-    axiosInstance
-      .delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`)
+    <%= entity.name %>Service.forceDelete(id)
       .then(() => {
         addNotification({
           type: 'success',
@@ -119,7 +117,7 @@ export default function <%= entity.name %>Trash() {
     if (ids.length === 0) return;
     setDisableButtons(true);
     try {
-      await Promise.all(ids.map((id) => axiosInstance.post(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/`, { id })));
+      await Promise.all(ids.map((id) => <%= entity.name %>Service.restore(id)));
       addNotification({
         type: 'success',
         message: t('actions.crud.successfullyRestoredCount', { count: ids.length }),
@@ -141,7 +139,7 @@ export default function <%= entity.name %>Trash() {
     if (ids.length === 0) return;
     setDisableButtons(true);
     try {
-      await Promise.all(ids.map((id) => axiosInstance.delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`)));
+      await Promise.all(ids.map((id) => <%= entity.name %>Service.forceDelete(id)));
       addNotification({
         type: 'success',
         message: t('actions.crud.successfullyForceDeletedCount', { count: ids.length }),
