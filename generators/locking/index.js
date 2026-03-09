@@ -25,7 +25,7 @@ export default class LockingGenerator extends Generator {
     }
 
     async prompting() {
-        if (this.options.locking) {
+        if (this.options.locking !== undefined) {
             this.answers = { locking: this.options.locking };
             return;
         }
