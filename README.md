@@ -123,6 +123,8 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
   }
 ```
 
+> ⚠️ When `@softDelete` is used, unique constraints are enforced at the application level only — no unique index is generated in the migration.
+
 - **CSV Database Seeding** - Populate your database from CSV files
 - **Seeding Administration** - Web interface to run seeders individually or in bulk, with direct CSV upload from the browser
 - **Migration Administration** - Web interface to run `migrate`, `rollback`, `migrate:fresh` and check `migrate:status` without the command line
