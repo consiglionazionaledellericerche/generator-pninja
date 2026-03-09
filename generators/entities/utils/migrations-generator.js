@@ -200,7 +200,7 @@ export class MigrationsGenerator {
                 const unique = true;
                 up.push(`$table->foreignId('${foreignId}')${(unique && !entity.softDelete) ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                if (unique) down.push(`$table->dropUnique(['${foreignId}']);`);
+                if (unique && !entity.softDelete) down.push(`$table->dropUnique(['${foreignId}']);`);
                 down.push(`$table->dropColumn('${foreignId}');`);
             });
         // OneToMany Relations
