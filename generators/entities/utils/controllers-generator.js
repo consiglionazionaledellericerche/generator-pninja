@@ -70,8 +70,8 @@ const getValidations = (that, e, relationships, op) => {
                 acc[foreignId] = [`Rule::exists('${toTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
-                if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
+                if (unique && op === 'store') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}`);
+                if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
         ...relationships

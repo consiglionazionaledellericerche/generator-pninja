@@ -198,7 +198,7 @@ export class MigrationsGenerator {
                 const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
                 const unique = true;
-                up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
+                up.push(`$table->foreignId('${foreignId}')${(unique && !entity.softDelete) ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
                 if (unique) down.push(`$table->dropUnique(['${foreignId}']);`);
                 down.push(`$table->dropColumn('${foreignId}');`);
