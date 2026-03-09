@@ -424,9 +424,11 @@ Clients that do not acquire a lock before writing are accepted — locking is co
 
 By default, **only `superadmin` role** can access the lock administration and force-release locks. To grant access to other roles, add policies to the `ac_rules` table:
 ```csv
-p,admin,RecordLock,read
-p,admin,RecordLock,delete
+p,admin,RecordLock,read      # view all active locks at /admin/locks
+p,admin,RecordLock,delete    # force-release any lock
 ```
+
+All authenticated users who have `update` permission on an entity can automatically acquire, renew, and release locks on that entity — no additional policy is required.
 
 <%_ } _%>
 ## Docker composition

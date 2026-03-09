@@ -174,12 +174,7 @@ function App() {
             <Route
               path="/search-reindex"
               element={
-                <Can
-                  resource="SearchReindex"
-                  action="read"
-                  fallback={<Err403 />}
-                  force_login={true}
-                >
+                <Can resource="SearchReindex" action="read" fallback={<Err403 />} force_login={true}>
                   <SearchReindexList />
                 </Can>
               }
@@ -189,12 +184,7 @@ function App() {
             <Route
               path="admin/record-lock-list"
               element={
-                <Can
-                  resource="RecordLockList"
-                  action="read"
-                  fallback={<Err403 />}
-                  force_login={true}
-                >
+                <Can resource="RecordLock" action="read" fallback={<Err403 />} force_login={true}>
                   <RecordLockList />
                 </Can>
               }

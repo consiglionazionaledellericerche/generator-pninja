@@ -6,6 +6,7 @@ import { ErrorResponseData, useNotifications } from '../../contexts/Notification
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { Icon } from '../../components/Icon';
 import ConfirmButton from '../../components/ConfirmButton';
+import { Can } from '../../components/Can';
 
 interface IRecordLock {
   id: number;
@@ -114,24 +115,26 @@ export function RecordLockList() {
                       </span>
                     </td>
                     <td className="w-0">
-                      <ConfirmButton
-                        disabled={busy}
-                        onConfirm={() => handleForceRelease(lock)}
-                        className="danger-button"
-                        pendingClassName="danger-button"
-                        label={
-                          <span className="flex items-center gap-2">
-                            <Icon icon="lock_open" size={5} />
-                            {t('admin.actions.forceRelease')}
-                          </span>
-                        }
-                        pendingLabel={
-                          <span className="flex items-center gap-2">
-                            <Icon icon="lock_open" size={5} />
-                            {t('admin.actions.confirmForceRelease')}
-                          </span>
-                        }
-                      />
+                      <Can action="delete" resource="RecordLock">
+                        <ConfirmButton
+                          disabled={busy}
+                          onConfirm={() => handleForceRelease(lock)}
+                          className="danger-button"
+                          pendingClassName="danger-button"
+                          label={
+                            <span className="flex items-center gap-2">
+                              <Icon icon="lock_open" size={5} />
+                              {t('admin.actions.forceRelease')}
+                            </span>
+                          }
+                          pendingLabel={
+                            <span className="flex items-center gap-2">
+                              <Icon icon="lock_open" size={5} />
+                              {t('admin.actions.confirmForceRelease')}
+                            </span>
+                          }
+                        />
+                      </Can>
                     </td>
                   </tr>
                 );
