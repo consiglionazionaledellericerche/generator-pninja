@@ -823,7 +823,8 @@ export default class extends Generator {
                 entity: {
                     name: this.entityConfig.name,
                     tableName: this.entityConfig.tableName,
-                    fields: this.fieldsToAdd
+                    fields: this.fieldsToAdd,
+                    softDelete: this.entityConfig.softDelete
                 },
                 enums
             });
@@ -836,7 +837,8 @@ export default class extends Generator {
                 entity: {
                     name: this.entityConfig.name,
                     tableName: this.entityConfig.tableName,
-                    fields: this.fieldsToRemove
+                    fields: this.fieldsToRemove,
+                    softDelete: this.entityConfig.softDelete
                 },
                 enums
             });
@@ -853,7 +855,8 @@ export default class extends Generator {
                 migrationsGenerator.createRelation({
                     entity: {
                         name: rel.otherEntityName,
-                        tableName: getEntityByName(this, rel.otherEntityName).tableName
+                        tableName: getEntityByName(this, rel.otherEntityName).tableName,
+                        softDelete: this.entityConfig.softDelete
                     },
                     relationships: [rel],
                 });
@@ -866,6 +869,7 @@ export default class extends Generator {
             migrationsGenerator.removeRelation({
                 entity: this.entityConfig,
                 relationships: this.relationshipsToRemove.filter(rel => rel.relationshipType === 'one-to-one' || rel.relationshipType === 'many-to-one'),
+                softDelete: this.entityConfig.softDelete
             });
             this.relationshipsToRemove.filter(rel => rel.relationshipType === 'one-to-many').forEach(rel => {
                 migrationsGenerator.removeRelation({

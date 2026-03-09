@@ -27,10 +27,10 @@ const getValidations = (that, e, relationships, op) => {
                         return `'nullable'`;
                     }
                     if (key === 'unique' && op === 'store') {
-                        return `'unique:${entity.tableName},${to.snake(name)}'`;
+                        return `Rule::unique('${entity.tableName}', '${to.snake(name)}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}`;
                     }
                     if (key === 'unique' && op === 'update') {
-                        return `Rule::unique('${entity.tableName}', '${to.snake(name)}')->ignore($${to.camel(entity.name)}->id)`;
+                        return `Rule::unique('${entity.tableName}', '${to.snake(name)}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}->ignore($${to.camel(entity.name)}->id)`;
                     }
                     if (key === 'fieldType') {
                         return `'${value}'`;
@@ -65,13 +65,12 @@ const getValidations = (that, e, relationships, op) => {
                 const fromTabName = getEntityByName(that, relation.entityName).tableName;
                 const toTabName = getEntityByName(that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = true;
                 const nullable = !relation.relationshipRequired;
                 acc[foreignId] = [`Rule::exists('${toTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}`);
-                if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}->ignore($${to.camel(entity.name)}->id)`);
+                if (op === 'store') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}`);
+                if (op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')${entity.softDelete ? "->whereNull('deleted_at')" : ''}->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
         ...relationships
@@ -80,13 +79,10 @@ const getValidations = (that, e, relationships, op) => {
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
                 const fromTabName = getEntityByName(that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
-                const unique = false;
                 const nullable = !relation.inverseRelationshipRequired;
                 acc[foreignId] = [`Rule::exists('${fromTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
-                if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
         ...relationships
@@ -96,13 +92,10 @@ const getValidations = (that, e, relationships, op) => {
                 const fromTabName = getEntityByName(that, relation.entityName).tableName;
                 const toTabName = getEntityByName(that, relation.otherEntityName).tableName;;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = false;
                 const nullable = !relation.relationshipRequired;
                 acc[foreignId] = [`Rule::exists('${toTabName}', 'id')`];
                 if (nullable) acc[foreignId].push(`'nullable'`);
                 if (!nullable) acc[foreignId].push(`'required'`);
-                if (unique && op === 'store') acc[foreignId].push(`'unique:${entity.tableName},${foreignId}'`);
-                if (unique && op === 'update') acc[foreignId].push(`Rule::unique('${fromTabName}', '${foreignId}')->ignore($${to.camel(entity.name)}->id)`);
                 return acc;
             }, {}),
         ...relationships

@@ -36,7 +36,7 @@ function convertFieldType(jhipsterType, enums) {
     return typeMap[jhipsterType] || enm || 'string';
 }
 
-function convertFields(fields, enums) {
+function convertFields({ softDelete, fields }, enums) {
     return fields.reduce((res, field) => {
         const fieldName = to.snake(field.name);
         const fieldType = convertFieldType(field.type, enums);
@@ -53,7 +53,7 @@ function convertFields(fields, enums) {
         if (fieldType !== 'binary') {
             let fieldDefinition = typeof fieldType === 'string' ? `$table->${fieldType}('${fieldName}'${fieldTypeParams})` : `$table->string('${fieldName}', 255)`;
             fieldDefinition += '->nullable()'; // required will be handled by the controller
-            if (field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)) {
+            if (!softDelete && field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)) {
                 fieldDefinition += '->unique()';
             }
             res.push(`${fieldDefinition};`);
@@ -88,8 +88,10 @@ export class MigrationsGenerator {
 
     addColumns({ entity, enums }) {
         const tabName = entity.tableName;
-        const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
-        const upColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
+        console.log('Generating migration for adding columns to', tabName, 'table');
+        console.log({ entity });
+        const uniqueFieldsNames = entity.softDelete ? [] : entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
+        const upColumns = convertFields(entity, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("migration_add_columns_to_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_add_columns_to_${tabName}_table.php`),
             {
@@ -102,8 +104,8 @@ export class MigrationsGenerator {
 
     removeColumns({ entity, enums }) {
         const tabName = entity.tableName;
-        const uniqueFieldsNames = entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
-        const downColumns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
+        const uniqueFieldsNames = entity.softDelete ? [] : entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
+        const downColumns = convertFields(entity, enums).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_remove_columns_from_${tabName}_table.php`),
             {
@@ -116,7 +118,7 @@ export class MigrationsGenerator {
 
     createTable({ entity, enums }) {
         const tabName = entity.tableName;
-        const columns = convertFields(entity.fields, enums).join(`\n${tab(3)}`);
+        const columns = convertFields(entity, enums).join(`\n${tab(3)}`);
         const softDelete = !!entity?.softDelete;
         this.that.fs.copyTpl(this.that.templatePath("migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_${randomstring.generate(5)}_create_${tabName}_table.php`),
             {
@@ -145,7 +147,7 @@ export class MigrationsGenerator {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = true;
+                const unique = !entity.softDelete;
                 down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
                 if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
@@ -158,10 +160,8 @@ export class MigrationsGenerator {
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
                 const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
-                const unique = false;
-                down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
+                down.push(`$table->foreignId('${foreignId}')->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
-                if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
                 up.push(`$table->dropColumn('${foreignId}');`);
             });
         // ManyToOne Relations
@@ -171,10 +171,8 @@ export class MigrationsGenerator {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = false;
-                down.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
+                down.push(`$table->foreignId('${foreignId}')->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 up.push(`$table->dropForeign(['${foreignId}']);`);
-                if (unique) up.push(`$table->dropUnique(['${foreignId}']);`);
                 up.push(`$table->dropColumn('${foreignId}');`);
             });
         this.that.fs.copyTpl(this.that.templatePath("migration_create_relations.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_005_${randomstring.generate(5)}_remove_relationships_from_${entityTable}_table.php`),
@@ -197,7 +195,7 @@ export class MigrationsGenerator {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = true;
+                const unique = !entity.softDelete;
                 up.push(`$table->foreignId('${foreignId}')${(unique && !entity.softDelete) ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
                 if (unique && !entity.softDelete) down.push(`$table->dropUnique(['${foreignId}']);`);
@@ -210,10 +208,8 @@ export class MigrationsGenerator {
                 const toInjectedField = to.snake(relation.otherEntityRelationshipName || relation.entityName);
                 const fromTabName = getEntityByName(this.that, relation.entityName).tableName;
                 const foreignId = `${toInjectedField}_id`;
-                const unique = false;
-                up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
+                up.push(`$table->foreignId('${foreignId}')->nullable()->constrained('${fromTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                if (unique) down.push(`$table->dropUnique(['${foreignId}']);`);
                 down.push(`$table->dropColumn('${foreignId}');`);
             });
         // ManyToOne Relations
@@ -223,10 +219,8 @@ export class MigrationsGenerator {
                 const fromInjectedField = to.snake(relation.relationshipName || relation.otherEntityName);
                 const toTabName = getEntityByName(this.that, relation.otherEntityName).tableName;
                 const foreignId = `${fromInjectedField}_id`;
-                const unique = false;
-                up.push(`$table->foreignId('${foreignId}')${unique ? '->unique()' : ''}->nullable()->constrained('${toTabName}')->nullOnDelete();`);
+                up.push(`$table->foreignId('${foreignId}')->nullable()->constrained('${toTabName}')->nullOnDelete();`);
                 down.push(`$table->dropForeign(['${foreignId}']);`);
-                if (unique) down.push(`$table->dropUnique(['${foreignId}']);`);
                 down.push(`$table->dropColumn('${foreignId}');`);
             });
         if (up.length === 0) return;
