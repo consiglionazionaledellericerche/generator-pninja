@@ -195,6 +195,12 @@ export function NotificationProvider({
     }
   }, [notifications, removeNotification, maxNotifications]);
 
+  useEffect(() => {
+    return () => {
+      Object.values(timeoutsRef.current).forEach(({ timeoutId }) => clearTimeout(timeoutId));
+    };
+  }, []);
+
   return (
     <NotificationContext.Provider
       value={{

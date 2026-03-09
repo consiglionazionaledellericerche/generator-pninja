@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect, useRef } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from './Icon';
 
@@ -25,7 +25,6 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   const [countdown, setCountdown] = useState(0);
   const [perc, setPerc] = useState(0);
   const { t } = useTranslation();
-  const confirmTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (pendingLaunch) {
@@ -51,21 +50,14 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
         setPendingLaunch(false);
       }, timeout);
 
-      confirmTimer.current = timer;
+      return () => {
+        clearInterval(updateTimer);
+        clearTimeout(timer);
+      };
     } else {
-      if (confirmTimer.current) {
-        clearTimeout(confirmTimer.current);
-        confirmTimer.current = null;
-      }
       setCountdown(0);
       setPerc(0);
     }
-
-    return () => {
-      if (confirmTimer.current) {
-        clearTimeout(confirmTimer.current);
-      }
-    };
   }, [pendingLaunch, timeout]);
 
   return (
