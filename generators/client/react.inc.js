@@ -282,7 +282,7 @@ export async function createReactClient(that) {
         that.fs.copyTpl(that.templatePath("react/src/pages/search-reindex/SearchReindexList.tsx.ejs"), that.destinationPath(`client/src/pages/search-reindex/SearchReindexList.tsx`), { searchEngine });
     }
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/server-logs/LogViewer.tsx.ejs"), that.destinationPath(`client/src/pages/server-logs/LogViewer.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/server-logs/LogViewer.tsx.ejs"), that.destinationPath(`client/src/pages/admin/server-logs/LogViewer.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
