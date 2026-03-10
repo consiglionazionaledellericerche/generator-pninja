@@ -12,17 +12,13 @@ class RecordLock extends Model
         'lockable_type',
         'lockable_id',
         'user_id',
-<% if (locking) { -%>
         'locked_at',
         'expires_at',
-<% } -%>
     ];
 
     protected $casts = [
-<% if (locking) { -%>
         'locked_at'  => 'datetime',
         'expires_at' => 'datetime',
-<% } -%>
     ];
 
     public function lockable(): MorphTo
@@ -34,10 +30,8 @@ class RecordLock extends Model
     {
         return $this->belongsTo(User::class);
     }
-<% if (locking) { -%>
     public function isExpired(): bool
     {
         return $this->expires_at->isPast();
     }
-<% } -%>
 }

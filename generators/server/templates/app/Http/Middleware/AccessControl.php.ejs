@@ -19,14 +19,12 @@ class AccessControl
             'put','patch' => 'update',
             'delete' => 'delete'
         };
-<%_ if (locking) { _%>
         if ($resource === 'RecordLock' && $request->route('type') && !str_ends_with($request->path(), '/force')) {
             $map = config('locking.models', []);
             $type = $request->route('type');
             $resource = isset($map[$type]) ? class_basename($map[$type]) : 'RecordLock';
             $action = 'update';
         }
-<%_ } _%>
         $result = $this->userHasPermission($resource, $action);
         if ($request?->user()?->username && !$result && in_array($resource, ['AcRule', 'Audit', 'Log', 'Seeder', 'Migrations', 'RecordLock', 'SearchReindex'])) {
             \Log::warning("AccessControl: User '{$request?->user()?->username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));

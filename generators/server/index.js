@@ -47,7 +47,6 @@ export default class ServerGenerator extends Generator {
     const serverTemplatePath = this.templatePath();
     const entitiesTemplatePath = serverTemplatePath + '/../../entities/templates';
     const searchEngine = this.config.get('searchEngine');
-    const locking = this.config.get('locking');
     this.sourceRoot(entitiesTemplatePath);
     (new FactoriesGenerator(this)).generateFactories([AcRule], [], []);
     this.fs.copyTpl(
@@ -87,7 +86,6 @@ export default class ServerGenerator extends Generator {
       eRoutes: [{ className: 'AcRule', rootPath: 'ac-rules', hasBlob: false }],
       paths: ['ac-rules'],
       searchEngine,
-      locking,
     });
     this.fs.copyTpl(this.templatePath("routes/console.php.ejs"), this.destinationPath(`server/routes/console.php`), {
       searchEngine,
@@ -100,12 +98,12 @@ export default class ServerGenerator extends Generator {
     this.fs.copyTpl(this.templatePath("Providers/AppServiceProvider.php.ejs"), this.destinationPath(`server/app/Providers/AppServiceProvider.php`), {});
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/private/uploads/.gitkeep`));
     this.fs.copyTpl(this.templatePath(".gitkeep.ejs"), this.destinationPath(`server/storage/app/public/uploads/.gitkeep`));
-    this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`), { locking: this.config.get('locking') });
+    this.fs.copyTpl(this.templatePath("app/Http/Middleware/AccessControl.php.ejs"), this.destinationPath(`server/app/Http/Middleware/AccessControl.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Middleware/SessionAuth.php.ejs"), this.destinationPath(`server/app/Http/Middleware/SessionAuth.php`));
     this.fs.copyTpl(this.templatePath("app/Traits/HandlesApiErrors.php.ejs"), this.destinationPath(`server/app/Traits/HandlesApiErrors.php`));
     this.fs.copyTpl(this.templatePath("app/Traits/HandlesUserRoles.php.ejs"), this.destinationPath(`server/app/Traits/HandlesUserRoles.php`));
     this.fs.copyTpl(this.templatePath("app/Traits/SeederHelpers.php.ejs"), this.destinationPath(`server/app/Traits/SeederHelpers.php`));
-    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`), { locking });
+    this.fs.copyTpl(this.templatePath("app.php.ejs"), this.destinationPath(`server/bootstrap/app.php`));
     this.fs.copyTpl(this.templatePath("filesystems.php.ejs"), this.destinationPath(`server/config/filesystems.php`));
     this.fs.copyTpl(this.templatePath("config/audit.php.ejs"), this.destinationPath('server/config/audit.php'), {
       authenticationProvider: this.config.get('authentication')

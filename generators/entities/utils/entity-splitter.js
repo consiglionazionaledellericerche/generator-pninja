@@ -12,6 +12,7 @@ export function getEntitiesConfig(entitiesData) {
             name: entity.name,
             tableName: entity.name === entity.tableName ? to.snake(pluralize(entity.name)) : entity.tableName,
             softDelete: entity.annotations?.some(a => a.optionName === 'softDelete') || false,
+            pessimisticLock: entity.annotations?.some(a => a.optionName === 'pessimisticLock') || false,
             icon: entity.annotations?.find(a => a.optionName === 'icon')?.optionValue || null,
             fields: [],
             relationships: []
@@ -107,6 +108,7 @@ export function splitEntitiesFile(entitiesData, fs, destinationPath) {
             name: entity.name,
             tableName: entity.name === entity.tableName ? to.snake(pluralize(entity.name)) : entity.tableName,
             softDelete: entity.annotations?.some(a => a.optionName === 'softDelete') || false,
+            pessimisticLock: entity.annotations?.some(a => a.optionName === 'pessimisticLock') || false,
             icon: entity.annotations?.find(a => a.optionName === 'icon')?.optionValue || null,
             fields: [],
             relationships: []

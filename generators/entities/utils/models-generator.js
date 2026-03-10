@@ -7,7 +7,6 @@ export class ModelsGenerator {
     tab = (n = 1) => (Array(n)).fill('    ').join('');
 
     generateModel(entity, enums, relationships, searchEngine) {
-        const hasSoftDelete = !!entity.softDelete;
         const className = entity.name;
         const tableName = entity.tableName;
         // fillable from entity property
@@ -199,8 +198,8 @@ export class ModelsGenerator {
                 searchEngine,
                 typesenseSearchParameters,
                 getSolrSuffix,
-                hasSoftDelete,
-                locking: this.that.config.get('locking'),
+                hasSoftDelete: entity.softDelete,
+                locking: entity.pessimisticLock,
             });
     }
 

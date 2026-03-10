@@ -26,11 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'access.control' => \App\Http\Middleware\AccessControl::class,
         ]);
     })
-<%  if (locking) {-%>
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
         $schedule->job(new \App\Jobs\CleanExpiredLocksJob)->everyFiveMinutes();
     })
-<%  } -%>
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

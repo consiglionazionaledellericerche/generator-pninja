@@ -47,7 +47,6 @@ export class RoutersGenerator {
                 eRoutes,
                 paths: [...entities, AcRule].map(entity => to.slug(pluralize(entity.name))),
                 searchEngine: this.that.config.get('searchEngine'),
-                locking: this.that.config.get('locking'),
             });
     }
 }

@@ -137,9 +137,7 @@ const Menu: React.FC = () => {
               { resource: 'Log', action: 'read' },
               { resource: 'Seeder', action: 'read' },
               { resource: 'Migrations', action: 'read' },
-<%  if (locking) { -%>
               { resource: 'RecordLock', action: 'read' },
-<%  } -%>
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
               { resource: 'SearchReindex', action: 'read' },
 <%  }-%>
@@ -220,7 +218,6 @@ const Menu: React.FC = () => {
                     </MenuItem>
                   </Can>
 <%    } -%>
-<%    if (locking) { -%>
                   <Can action="read" resource="RecordLock">
                     <MenuItem
                       href="/admin/record-lock-list"
@@ -230,7 +227,6 @@ const Menu: React.FC = () => {
                       <Icon icon="lock" size={5} /> {t('locking:admin.title')}
                     </MenuItem>
                   </Can>
-<%    } -%>
 <%    if (hasTrashMenu) { -%>
                   <Can
                     any={[

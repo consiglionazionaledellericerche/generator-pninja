@@ -367,7 +367,6 @@ p,admin,Seeder,read
 p,admin,Seeder,create
 ```
 
-<%_ if (locking) { _%>
 ## Record Locking
 
 The application includes a **pessimistic record locking** system that prevents concurrent edits on the same record. When a user opens a record for editing, a lock is acquired and held until the user saves, cancels, deletes, or navigates away.
@@ -430,7 +429,6 @@ p,admin,RecordLock,delete    # force-release any lock
 
 All authenticated users who have `update` permission on an entity can automatically acquire, renew, and release locks on that entity — no additional policy is required.
 
-<%_ } _%>
 ## Unique Constraints and Soft Delete
 
 For entities annotated with `@softDelete`, **unique constraints are enforced at the application level only** (controller validation). No unique index is created in the migration.

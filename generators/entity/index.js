@@ -648,6 +648,8 @@ export default class extends Generator {
 
         const softDeleteStatus = this.entityConfig.softDelete ? 'enabled' : 'disabled';
         this.log(`${colors.bold('Soft delete:')} ${colors.yellow(softDeleteStatus)}`);
+        const pessimisticLockStatus = this.entityConfig.pessimisticLock ? 'enabled' : 'disabled';
+        this.log(`${colors.bold('Pessimistic lock:')} ${colors.yellow(pessimisticLockStatus)}`);
         this.log(`${colors.bold('Icon:')} ${colors.yellow(this.entityConfig.icon)}`);
 
         this.log(colors.bold('Fields:'));
@@ -788,7 +790,6 @@ export default class extends Generator {
         storedEntities.sort((a, b) => a.name.localeCompare(b.name));
         const storedRelationships = (this.isRegenerate || this.isAdd || this.isRemove) ? replaceRelationships(getEntitiesRelationships(this), this.entityConfig) : [...getEntitiesRelationships(this), ...this.entityConfig.relationships];
         const searchEngine = this.config.get('searchEngine');
-        const locking = this.config.get('locking');
 
         // Save entity configuration to .pninja/<EntityName>.json
         if (!this.options.fromEntities) {
@@ -970,7 +971,7 @@ export default class extends Generator {
             this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
 
             // Update Menu
-            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine, locking });
+            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
 
             // Create entity pages
             await createEntityPages({
@@ -1007,13 +1008,12 @@ export default class extends Generator {
                     });
                 });
             // Update App.tsx
-            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine, locking });
+            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine });
         }
 
         const __dirname = path.dirname(fileURLToPath(import.meta.url));
         await this.composeWith(path.resolve(__dirname, '../locking'), {
             fromEntity: true,
-            locking: this.config.get('locking'),
         });
 
         // README update
@@ -1024,7 +1024,6 @@ export default class extends Generator {
             entities: getEntities(this),
             relationships: getEntitiesRelationships(this),
             searchEngine: this.config.get('searchEngine'),
-            locking: this.config.get('locking'),
         });
         spinner.succeed(`Files for entity ${this.entityConfig.name} successfully generated`);
     }

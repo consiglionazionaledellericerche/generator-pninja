@@ -39,11 +39,6 @@ export default class extends Generator {
     this.option('searchEngine', {
       type: String,
       description: 'The search engine to use (database, algolia, elastic, meilisearch, typesense, solr, null)',
-    })
-    this.option('locking', {
-      type: Boolean,
-      description: 'Enable (pessimistic) record locking',
-      default: false,
     });
   }
   async initializing() {
@@ -121,7 +116,6 @@ export default class extends Generator {
       fromMain: true,
       env: this.env,
       resolved: lockingGeneratorPath,
-      locking: this.options.locking,
       namespace: 'pninja:locking'
     });
 

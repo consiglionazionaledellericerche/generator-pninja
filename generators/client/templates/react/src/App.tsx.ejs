@@ -30,9 +30,7 @@ import { LogViewer } from './pages/server-logs/LogViewer';
 import { SeederList } from './pages/seeder/SeederList';
 
 import { Migrations } from './pages/admin/Migrations';
-<%  if (locking) { -%>
 import { RecordLockList } from './pages/admin/RecordLockList';
-<%  } -%>
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 
 import SearchReindexList from './pages/search-reindex/SearchReindexList';
@@ -180,7 +178,6 @@ function App() {
               }
             />
 <%  } -%>
-<%  if (locking) { -%>
             <Route
               path="admin/record-lock-list"
               element={
@@ -189,7 +186,6 @@ function App() {
                 </Can>
               }
             />
-<%  } -%>
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<Err404 />} />

@@ -239,7 +239,7 @@ export class ControllersGenerator {
                 createRelated: createRelated.join(''),
                 relatedEntitiesForFilters,
                 searchEngine,
-                locking: this.that.config.get('locking'),
+                locking: entity.pessimisticLock,
                 to,
                 getSolrSuffix,
                 toSearchableArray,
