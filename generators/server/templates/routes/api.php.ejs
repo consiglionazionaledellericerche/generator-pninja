@@ -69,7 +69,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{id}', [AuditController::class, 'show']);
     });
 
-    Route::prefix('seeder')->group(function () {
+    Route::prefix('admin/seeder')->group(function () {
         Route::get('/', [SeederController::class, 'index']);
         Route::post('/all', [SeederController::class, 'seedAll']);
         Route::post('/{seeder}', [SeederController::class, 'seed']);
