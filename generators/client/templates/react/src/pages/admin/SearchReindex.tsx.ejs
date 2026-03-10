@@ -36,7 +36,7 @@ function waitForJobCompletion(jobId: string): Promise<IJobState> {
   return new Promise((resolve, reject) => {
     const interval = setInterval(async () => {
       try {
-        const { data } = await axiosInstance.get<IJobState>(`/api/search/reindex/status/${jobId}`);
+        const { data } = await axiosInstance.get<IJobState>(`/api/admin/search-reindex/status/${jobId}`);
         if (data.status === 'completed' || data.status === 'failed') {
           clearInterval(interval);
           resolve(data);
@@ -84,7 +84,7 @@ export default function SearchReindex() {
       pollRefs.current[slug] = setInterval(async () => {
         try {
           const { data } = await axiosInstance.get<IJobState>(
-            `/api/search/reindex/status/${jobId}`
+            `/api/admin/search-reindex/status/${jobId}`
           );
 
           if (completedJobs.current.has(slug)) return;
@@ -123,7 +123,7 @@ export default function SearchReindex() {
   const loadEntities = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get<ISearchEntity[]>('/api/search/reindex')
+      .get<ISearchEntity[]>('/api/admin/search-reindex')
       .then(({ data }) => {
         setEntities(data);
         setRowState(
@@ -170,7 +170,7 @@ export default function SearchReindex() {
   // Single actions
   const handleReindex = (slug: string) => {
     axiosInstance
-      .post<{ job_id: string }>(`/api/search/reindex/${slug}`)
+      .post<{ job_id: string }>(`/api/admin/search-reindex/${slug}`)
       .then(({ data }) => {
         updateRow(slug, {
           jobId: data.job_id,
@@ -190,7 +190,7 @@ export default function SearchReindex() {
   const handleFlush = (slug: string) => {
     updateRow(slug, { loadingFlush: true });
     axiosInstance
-      .delete(`/api/search/reindex/${slug}`)
+      .delete(`/api/admin/search-reindex/${slug}`)
       .then(() => {
         addNotification({
           type: 'success',
@@ -210,7 +210,7 @@ export default function SearchReindex() {
   const handleDeleteIndex = (slug: string) => {
     updateRow(slug, { loadingDelete: true });
     axiosInstance
-      .delete(`/api/search/reindex/${slug}/index`)
+      .delete(`/api/admin/search-reindex/${slug}/index`)
       .then(() => {
         addNotification({
           type: 'success',
@@ -235,7 +235,7 @@ export default function SearchReindex() {
     for (const entity of selectedEntities) {
       try {
         const { data } = await axiosInstance.post<{ job_id: string }>(
-          `/api/search/reindex/${entity.slug}`
+          `/api/admin/search-reindex/${entity.slug}`
         );
         updateRow(entity.slug, {
           jobId: data.job_id,
@@ -267,7 +267,7 @@ export default function SearchReindex() {
     await Promise.allSettled(
       selectedEntities.map((entity) =>
         axiosInstance
-          .delete(`/api/search/reindex/${entity.slug}`)
+          .delete(`/api/admin/search-reindex/${entity.slug}`)
           .catch((error: AxiosError<ErrorResponseData>) => {
             addNotification({
               type: 'error',
@@ -302,7 +302,7 @@ export default function SearchReindex() {
     await Promise.allSettled(
       selectedEntities.map((entity) =>
         axiosInstance
-          .delete(`/api/search/reindex/${entity.slug}/index`)
+          .delete(`/api/admin/search-reindex/${entity.slug}/index`)
           .catch((error: AxiosError<ErrorResponseData>) => {
             addNotification({
               type: 'error',
@@ -350,7 +350,7 @@ export default function SearchReindex() {
   const handleElasticMigrate = (command: 'migrate' | 'reset' | 'refresh') => {
     setEngineLoading(command);
     axiosInstance
-      .post('/api/search/reindex/engine/elastic-migrate', { command })
+      .post('/api/admin/search-reindex/engine/elastic-migrate', { command })
       .then(() => {
         addNotification({
           type: 'success',
@@ -371,7 +371,7 @@ export default function SearchReindex() {
   const handleMeiliSyncSettings = () => {
     setEngineLoading('meilisearch-sync-settings');
     axiosInstance
-      .post('/api/search/reindex/engine/meilisearch-sync-settings')
+      .post('/api/admin/search-reindex/engine/meilisearch-sync-settings')
       .then(() => {
         addNotification({
           type: 'success',
