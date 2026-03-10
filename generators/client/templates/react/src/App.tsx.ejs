@@ -4,6 +4,7 @@ const hasSoftDelete = (entity) => entity.softDelete;
 import { Routes, Route, type NavigateOptions, useHref, useNavigate } from 'react-router-dom';
 import { RouterProvider } from 'react-aria-components';
 import { NotificationProvider } from './contexts/NotificationContext';
+
 import Footer from './components/Footer';
 import Menu from './components/Menu';
 import Home from './pages/Home';
@@ -24,15 +25,11 @@ import Audits from './pages/admin/audit/Audits';
 import AuditView from './pages/admin/audit/AuditView';
 import AuditHistory from './pages/admin/audit/AuditHistory';
 import AuditUserActivity from './pages/admin/audit/AuditUserActivity';
-
 import { LogViewer } from './pages/admin/server-logs/LogViewer';
-
 import { SeederList } from './pages/admin/seeder/SeederList';
-
 import { Migrations } from './pages/admin/Migrations';
 import { RecordLockList } from './pages/admin/RecordLockList';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
-
 import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>
 
