@@ -56,6 +56,7 @@ export default class extends Generator {
             name: undefined,
             tableName: undefined,
             softDelete: undefined,
+            pessimisticLock: undefined,
             icon: undefined,
             fields: [],
             relationships: []
@@ -270,6 +271,13 @@ export default class extends Generator {
             default: true
         }]);
 
+        const pessimisticLockAnswer = await this.prompt([{
+            type: 'confirm',
+            name: 'pessimisticLock',
+            message: 'Do you want to enable pessimistic record locking?',
+            default: false
+        }]);
+
         const iconAnswer = await this.prompt([{
             type: 'input',
             name: 'icon',
@@ -280,6 +288,7 @@ export default class extends Generator {
         this.entityConfig.name = this.entityName;
         this.entityConfig.tableName = tableNameAnswer.tableName;
         this.entityConfig.softDelete = softDeleteAnswer.softDelete;
+        this.entityConfig.pessimisticLock = pessimisticLockAnswer.pessimisticLock;
         this.entityConfig.icon = iconAnswer.icon || null;
 
         this._loadExistingEntities();
