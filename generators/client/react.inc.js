@@ -274,7 +274,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/seeder/SeederList.tsx.ejs"), that.destinationPath(`client/src/pages/seeder/SeederList.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/seeder/SeederList.tsx.ejs"), that.destinationPath(`client/src/pages/admin/seeder/SeederList.tsx`));
 
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/Migrations.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Migrations.tsx`));
 
