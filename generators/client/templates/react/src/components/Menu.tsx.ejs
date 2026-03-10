@@ -220,9 +220,9 @@ const Menu: React.FC = () => {
 <%    } -%>
                   <Can action="read" resource="RecordLock">
                     <MenuItem
-                      href="/admin/record-lock-list"
-                      id="record-lock-list"
-                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/record-lock-list') ? menuItemIsActiveClass : ''}`}
+                      href="/admin/records-locks"
+                      id="records-locks"
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/records-locks') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="lock" size={5} /> {t('locking:admin.title')}
                     </MenuItem>

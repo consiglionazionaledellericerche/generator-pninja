@@ -28,7 +28,7 @@ import AuditUserActivity from './pages/admin/audit/AuditUserActivity';
 import { Logs } from './pages/admin/Logs';
 import { Seeder } from './pages/admin/Seeder';
 import { Migrations } from './pages/admin/Migrations';
-import { RecordLockList } from './pages/admin/RecordLockList';
+import { RecordsLocks } from './pages/admin/RecordsLocks';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>
@@ -176,10 +176,10 @@ function App() {
             />
 <%  } -%>
             <Route
-              path="/admin/record-lock-list"
+              path="/admin/records-locks"
               element={
                 <Can resource="RecordLock" action="read" fallback={<Err403 />} force_login={true}>
-                  <RecordLockList />
+                  <RecordsLocks />
                 </Can>
               }
             />

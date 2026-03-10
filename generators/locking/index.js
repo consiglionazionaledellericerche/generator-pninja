@@ -66,8 +66,8 @@ export default class LockingGenerator extends Generator {
             { entities: [AcRule, ...getEntities(this).filter(entity => entity.pessimisticLock)], to, pluralize }
         );
         this.fs.copyTpl(
-            this.templatePath('client/src/pages/admin/RecordLockList.tsx.ejs'),
-            this.destinationPath('client/src/pages/admin/RecordLockList.tsx'),
+            this.templatePath('client/src/pages/admin/RecordsLocks.tsx.ejs'),
+            this.destinationPath('client/src/pages/admin/RecordsLocks.tsx'),
         );
 
         spinner.succeed('Locking configuration successfully generated');
