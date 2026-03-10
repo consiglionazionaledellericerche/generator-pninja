@@ -419,6 +419,14 @@ Where `{type}` is the resource slug (e.g. `employees`) and `{id}` is the record 
 
 Clients that do not acquire a lock before writing are accepted — locking is cooperative, not enforced for direct API calls.
 
+Locking is enabled per entity using the `@pessimisticLock` annotation in JDL:
+```jdl
+@pessimisticLock
+entity MyEntity {
+  name String required
+}
+```
+
 **Access control:**
 
 By default, **only `superadmin` role** can access the lock administration and force-release locks. To grant access to other roles, add policies to the `ac_rules` table:

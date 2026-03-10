@@ -113,7 +113,7 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 
 ### Data Management
 
-- **Soft Delete Support** - Logical deletion with `deleted_at` timestamps (use `@softDelete` annotation in JDL)
+- **Soft Delete Support** - Logical deletion with `deleted_at` timestamps; includes a web interface to view, restore, or permanently delete soft-deleted records. Unique constraints are enforced at the application level. Use `@softDelete` annotation in JDL.
 
 ```jdl
   @softDelete
@@ -124,6 +124,16 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 ```
 
 > ⚠️ When `@softDelete` is used, unique constraints are enforced at the application level only — no unique index is generated in the migration.
+
+- **Pessimistic Record Locking** - Records are locked when opened for editing, preventing concurrent modifications. Locks expire automatically after 15 minutes, are renewed every 2 minutes via heartbeat, and can be force-released from the lock administration interface. Use `@pessimisticLock` annotation in JDL.
+
+```jdl
+  @pessimisticLock
+  entity MyEntity {
+    name String required
+    description String
+  }
+```
 
 - **CSV Database Seeding** - Populate your database from CSV files
 - **Seeding Administration** - Web interface to run seeders individually or in bulk, with direct CSV upload from the browser
