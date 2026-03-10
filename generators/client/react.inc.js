@@ -279,7 +279,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/Migrations.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Migrations.tsx`));
 
     if (!['null', 'database'].includes(searchEngine)) {
-        that.fs.copyTpl(that.templatePath("react/src/pages/search-reindex/SearchReindexList.tsx.ejs"), that.destinationPath(`client/src/pages/search-reindex/SearchReindexList.tsx`), { searchEngine });
+        that.fs.copyTpl(that.templatePath("react/src/pages/admin/SearchReindex.tsx.ejs"), that.destinationPath(`client/src/pages/admin/SearchReindex.tsx`), { searchEngine });
     }
 
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/server-logs/LogViewer.tsx.ejs"), that.destinationPath(`client/src/pages/admin/server-logs/LogViewer.tsx`), {});

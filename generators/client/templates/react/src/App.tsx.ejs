@@ -33,7 +33,7 @@ import { Migrations } from './pages/admin/Migrations';
 import { RecordLockList } from './pages/admin/RecordLockList';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 
-import SearchReindexList from './pages/search-reindex/SearchReindexList';
+import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>
 
 import { SimpleLoader } from './components/SimpleLoader';
@@ -173,7 +173,7 @@ function App() {
               path="/admin/search-reindex"
               element={
                 <Can resource="SearchReindex" action="read" fallback={<Err403 />} force_login={true}>
-                  <SearchReindexList />
+                  <SearchReindex />
                 </Can>
               }
             />
