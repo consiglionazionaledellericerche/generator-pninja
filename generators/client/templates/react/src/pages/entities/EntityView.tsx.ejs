@@ -37,7 +37,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
         <tr>
           <th scope="row">{t('entities:<%-to.snake(entity.name)%>.id')}</th>
           <td>
-            <Link className="text-link" to={`/entities/<%=to.slug(pluralize(entity.name))%>/view/${data?.id}`}>
+            <Link className="text-link" to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/view/${data?.id}`}>
               {data?.id}
             </Link>
           </td>
@@ -136,7 +136,7 @@ export default function <%= entity.name %>View() {
           message: `${t('errors.entities.read')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')} ID ${id}`,
           error,
         });
-        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+        navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
       });
   }, [id, navigate, t, addNotification]);
 
@@ -145,7 +145,7 @@ export default function <%= entity.name %>View() {
   }, [id, i18n.language, t]);
 
   const handleDelete = () => {
-    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+    navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
   };
 
   return (
@@ -157,12 +157,12 @@ export default function <%= entity.name %>View() {
       {!loading && <<%= entity.name %>DataView data={<%=to.camel(entity.name)%>} />}
       {!loading && (
       <div className="flex justify-center gap-4 mt-4">
-        <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>`} className="cancel-button">
+        <Link to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%-to.slug(pluralize(entity.name))%>`} className="cancel-button">
             <Icon icon="arrow_left_alt" size={5} />
           {t('actions.crud.back')}
         </Link>
         <Can resource="<%= entity.name %>" action="update">
-          <Link to={`/entities/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
+          <Link to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
             {t('actions.crud.edit')}
           </Link>
         </Can>

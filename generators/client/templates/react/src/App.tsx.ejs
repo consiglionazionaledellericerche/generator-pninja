@@ -70,7 +70,7 @@ function App() {
             <Route path="/" element={<Home />} />
 <%  for (const entity of entities) {-%>
             <Route
-              path="/entities/<%=to.slug(pluralize(entity.name))%>"
+              path="/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>"
               element={
                 <Can resource="<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
                   <<%=entity.name%>List />
@@ -79,7 +79,7 @@ function App() {
             />
 <%    if (hasSoftDelete(entity)) {-%>
             <Route
-              path="/entities/<%=to.slug(pluralize(entity.name))%>/trash"
+              path="/admin/<%=to.slug(pluralize(entity.name))%>/trash"
               element={
                 <Can resource="Trashed<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
                   <<%=entity.name%>Trash />
@@ -88,7 +88,7 @@ function App() {
             />
 <%    }-%>
             <Route
-              path="/entities/<%=to.slug(pluralize(entity.name))%>/view/:id"
+              path="/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/view/:id"
               element={
                 <Can resource="<%=entity.name%>" action="read" fallback={<Err403 />} force_login={true}>
                   <<%=entity.name%>View />
@@ -96,7 +96,7 @@ function App() {
               }
             />
             <Route
-              path="/entities/<%=to.slug(pluralize(entity.name))%>/edit/:id"
+              path="/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/edit/:id"
               element={
                 <Can resource="<%=entity.name%>" action="update" fallback={<Err403 />} force_login={true}>
                   <<%=entity.name%>Edit />
@@ -104,7 +104,7 @@ function App() {
               }
             />
             <Route
-              path="/entities/<%=to.slug(pluralize(entity.name))%>/new"
+              path="/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/new"
               element={
                 <Can resource="<%=entity.name%>" action="create" fallback={<Err403 />} force_login={true}>
                   <<%=entity.name%>Edit />
@@ -113,7 +113,7 @@ function App() {
             />
 <%  }-%>
             <Route
-              path="/audits"
+              path="/admin/audits"
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <Audits />
@@ -121,7 +121,7 @@ function App() {
               }
             />
             <Route
-              path="/audits/view/:id"
+              path="/admin/audits/view/:id"
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <AuditView />
@@ -129,7 +129,7 @@ function App() {
               }
             />
             <Route
-              path="/audits/entity/:type/:id"
+              path="/admin/audits/entity/:type/:id"
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <AuditHistory />
@@ -137,7 +137,7 @@ function App() {
               }
             />
             <Route
-              path="/audits/user/:userId"
+              path="/admin/audits/user/:userId"
               element={
                 <Can resource="Audit" action="read" fallback={<Err403 />} force_login={true}>
                   <AuditUserActivity />
@@ -145,7 +145,7 @@ function App() {
               }
             />
             <Route
-              path="/logs/stream"
+              path="/admin/logs"
               element={
                 <Can resource="Log" action="read" fallback={<Err403 />} force_login={true}>
                   <LogViewer />
@@ -153,7 +153,7 @@ function App() {
               }
             />
             <Route
-              path="/seeder"
+              path="/admin/seeder"
               element={
                 <Can resource="Seeder" action="read" fallback={<Err403 />} force_login={true}>
                   <SeederList />
@@ -161,7 +161,7 @@ function App() {
               }
             />
             <Route
-              path="admin/migrations"
+              path="/admin/migrations"
               element={
                 <Can resource="Migrations" action="read" fallback={<Err403 />} force_login={true}>
                   <Migrations />
@@ -170,7 +170,7 @@ function App() {
             />
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
             <Route
-              path="/search-reindex"
+              path="/admin/search-reindex"
               element={
                 <Can resource="SearchReindex" action="read" fallback={<Err403 />} force_login={true}>
                   <SearchReindexList />
@@ -179,7 +179,7 @@ function App() {
             />
 <%  } -%>
             <Route
-              path="admin/record-lock-list"
+              path="/admin/record-lock-list"
               element={
                 <Can resource="RecordLock" action="read" fallback={<Err403 />} force_login={true}>
                   <RecordLockList />

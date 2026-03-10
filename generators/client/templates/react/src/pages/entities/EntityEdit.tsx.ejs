@@ -46,7 +46,7 @@ export default function <%= entity.name %>Edit() {
             message: `${t('errors.entities.read')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
             error,
           });
-          navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+          navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
         })
         .finally(() => {
           setLoading(false);
@@ -69,7 +69,7 @@ export default function <%= entity.name %>Edit() {
             id: id || data.id,
           }),
         });
-        navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+        navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({
@@ -84,14 +84,14 @@ export default function <%= entity.name %>Edit() {
 <% if (locking) { -%>
     release();
 <% } -%>
-    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+    navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
   };
 
   const handleDelete = () => {
 <% if (locking) { -%>
     release();
 <% } -%>
-    navigate('/entities/<%=to.slug(pluralize(entity.name))%>');
+    navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
   };
 
   useEffect(() => {

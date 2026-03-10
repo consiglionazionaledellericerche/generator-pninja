@@ -83,7 +83,7 @@ export default function AuditView() {
     return (
       <div className="text-center py-12">
         <p className="text-xl text-gray-600 dark:text-gray-400">{t('audit:notFound')}</p>
-        <Link to="/audits" className="text-link mt-4 inline-block">
+        <Link to="/admin/audits" className="text-link mt-4 inline-block">
           {t('audit:backToList')}
         </Link>
       </div>
@@ -119,7 +119,7 @@ export default function AuditView() {
             {t('audit:logTitle')} #{audit.id}
           </h1>
           <Link
-            to={`/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
+            to={`/admin/audits/entity/${encodeURIComponent(audit.auditable_type)}/${audit.auditable_id}`}
             className="secondary-button"
           >
             <Icon icon="history" size={6} />
@@ -163,7 +163,7 @@ export default function AuditView() {
               <p className="text-sm text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
               <p className="font-medium">
                 {audit.user_id ? (
-                  <Link to={`/audits/user/${audit.user_id}`} className="text-link">
+                  <Link to={`/admin/audits/user/${audit.user_id}`} className="text-link">
                     {audit.user_id}
                   </Link>
                 ) : (

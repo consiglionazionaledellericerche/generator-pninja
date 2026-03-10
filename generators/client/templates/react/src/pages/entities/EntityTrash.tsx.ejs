@@ -357,7 +357,7 @@ export default function <%= entity.name %>Trash() {
                     <td className="w-0">
                       <Link
                         className="text-link"
-                        to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
+                        to={`/admin/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
                       >
                         {row.id}
                       </Link>
@@ -382,7 +382,7 @@ export default function <%= entity.name %>Trash() {
                       <div className="flex space-x-2">
                         <Can resource="Audit" action="read">
                           <Link
-                            to={`/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
+                            to={`/admin/audits/entity/${encodeURIComponent(`App\\Models\\<%= entity.name %>`)}/${row?.id}`}
                             className="secondary-button"
                           >
                             <Icon icon="history" size={5} />

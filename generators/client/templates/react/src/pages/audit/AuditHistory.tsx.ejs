@@ -102,7 +102,7 @@ export default function AuditHistory() {
                   <span className="text-sm text-gray-600 dark:text-gray-400">#{audit.id}</span>
                 </div>
                 <div className="flex gap-2">
-                  <Link to={`/audits/view/${audit.id}`} className="secondary-button">
+                  <Link to={`/admin/audits/view/${audit.id}`} className="secondary-button">
                     <Icon icon="info" size={5} />
 
                     {t('audit:viewDetails')}
@@ -130,7 +130,7 @@ export default function AuditHistory() {
                     <p className="text-gray-600 dark:text-gray-400">{t('audit:user')}</p>
                     <p className="font-medium">
                       {audit.user_id ? (
-                        <Link to={`/audits/user/${audit.user_id}`} className="text-link">
+                        <Link to={`/admin/audits/user/${audit.user_id}`} className="text-link">
                           {audit.user_id}
                         </Link>
                       ) : (

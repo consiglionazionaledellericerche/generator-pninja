@@ -353,7 +353,7 @@ export default function AuditList() {
                 {page?.data.map((row, key) => (
                   <tr key={key}>
                     <td className="w-0">
-                      <Link className="text-link" to={`/audits/view/${row.id}`}>
+                      <Link className="text-link" to={`/admin/audits/view/${row.id}`}>
                         {row.id}
                       </Link>
                     </td>
@@ -368,7 +368,7 @@ export default function AuditList() {
                     <td className="w-0">{row.auditable_id}</td>
                     <td>
                       {row.user_id ? (
-                        <Link to={`/audits/user/${row.user_id}`} className="text-link">
+                        <Link to={`/admin/audits/user/${row.user_id}`} className="text-link">
                           {row.user_id}
                         </Link>
                       ) : (
@@ -380,7 +380,7 @@ export default function AuditList() {
                     </td>
                     <td className="text-nowrap w-0 uppercase">
                       <div className="flex space-x-2">
-                        <Link to={`/audits/view/${row.id}`} className="text-link">
+                        <Link to={`/admin/audits/view/${row.id}`} className="text-link">
                           {t('actions.crud.view')}
                         </Link>
                       </div>
