@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import axiosInstance from '../../shared/axiosInstance';
-import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
-import { ApiResponsePagination } from '../../components/ApiResponsePagination';
-import { TableSkeletonLoader } from '../../components/TableSkeletonLoader';
-import { SearchInput } from '../../components/SearchInput';
+import axiosInstance from '../../../shared/axiosInstance';
+import { ApiResponsePage, SortConfig } from '../../../types/api-response.types';
+import { ApiResponsePagination } from '../../../components/ApiResponsePagination';
+import { TableSkeletonLoader } from '../../../components/TableSkeletonLoader';
+import { SearchInput } from '../../../components/SearchInput';
 import { AxiosError } from 'axios';
-import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
-import useAutoShortcuts from '../../hooks/useAutoShortcuts';
-import { Icon } from '../../components/Icon';
+import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
+import useAutoShortcuts from '../../../hooks/useAutoShortcuts';
+import { Icon } from '../../../components/Icon';
 
 type SortableField = 'id' | 'event' | 'auditable_type' | 'auditable_id' | 'user_id' | 'created_at';
 

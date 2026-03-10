@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axiosInstance from '../../shared/axiosInstance';
+import axiosInstance from '../../../shared/axiosInstance';
 import { AxiosError } from 'axios';
-import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
-import { SimpleLoader } from '../../components/SimpleLoader';
-import { Icon } from '../../components/Icon';
+import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
+import { SimpleLoader } from '../../../components/SimpleLoader';
+import { Icon } from '../../../components/Icon';
 
 interface IAudit {
   id: number;

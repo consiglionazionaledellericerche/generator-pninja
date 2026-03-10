@@ -293,12 +293,12 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
     that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/audit/Audits.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditHistory.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditList.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditStatistics.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditUserActivity.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/audit/AuditView.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/Audits.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditHistory.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditList.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditStatistics.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditUserActivity.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditView.tsx`));
 
     createEntityPages({ that, entity: AcRule, enums: [], relationships: [], searchEngine });
 

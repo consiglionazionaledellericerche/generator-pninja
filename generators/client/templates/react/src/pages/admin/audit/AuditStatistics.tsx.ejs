@@ -14,11 +14,11 @@ import {
   Pie,
   Cell,
 } from 'recharts';
-import axiosInstance from '../../shared/axiosInstance';
+import axiosInstance from '../../../shared/axiosInstance';
 import { AxiosError } from 'axios';
-import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
-import { SimpleLoader } from '../../components/SimpleLoader';
-import { Icon } from '../../components/Icon';
+import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
+import { SimpleLoader } from '../../../components/SimpleLoader';
+import { Icon } from '../../../components/Icon';
 interface TooltipPayload {
   name: string;
   value: number;
