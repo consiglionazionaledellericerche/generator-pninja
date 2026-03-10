@@ -26,7 +26,7 @@ import AuditView from './pages/admin/audit/AuditView';
 import AuditHistory from './pages/admin/audit/AuditHistory';
 import AuditUserActivity from './pages/admin/audit/AuditUserActivity';
 import { Logs } from './pages/admin/Logs';
-import { SeederList } from './pages/admin/seeder/SeederList';
+import { Seeder } from './pages/admin/Seeder';
 import { Migrations } from './pages/admin/Migrations';
 import { RecordLockList } from './pages/admin/RecordLockList';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
@@ -153,7 +153,7 @@ function App() {
               path="/admin/seeder"
               element={
                 <Can resource="Seeder" action="read" fallback={<Err403 />} force_login={true}>
-                  <SeederList />
+                  <Seeder />
                 </Can>
               }
             />

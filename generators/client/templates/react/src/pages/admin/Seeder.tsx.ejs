@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError, isAxiosError } from 'axios';
-import axiosInstance from '../../../shared/axiosInstance';
-import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
-import { SimpleLoader } from '../../../components/SimpleLoader';
-import { Icon } from '../../../components/Icon';
-import ConfirmButton from '../../../components/ConfirmButton';
+import axiosInstance from '../../shared/axiosInstance';
+import { ErrorResponseData, useNotifications } from '../../contexts/NotificationContext';
+import { SimpleLoader } from '../../components/SimpleLoader';
+import { Icon } from '../../components/Icon';
+import ConfirmButton from '../../components/ConfirmButton';
 
 const POLL_INTERVAL_MS = 1500;
 
@@ -43,7 +43,7 @@ function waitForJobCompletion(jobId: string): Promise<IJobState> {
   });
 }
 
-export function SeederList() {
+export function Seeder() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
 
