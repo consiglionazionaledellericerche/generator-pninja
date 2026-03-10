@@ -18,7 +18,7 @@ interface IRecordLock {
   expires_at: string;
 }
 
-export function RecordsLocks() {
+export default function RecordsLocks() {
   const { t, i18n } = useTranslation('locking');
   const { addNotification } = useNotifications();
 

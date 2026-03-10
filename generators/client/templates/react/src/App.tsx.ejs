@@ -21,14 +21,11 @@ import <%=entity.name%>Trash from './pages/entities/<%=entity.name%>Trash';
 <%    }-%>
 <%  }-%>
 
-import Audits from './pages/admin/audit/Audits';
-import AuditView from './pages/admin/audit/AuditView';
-import AuditHistory from './pages/admin/audit/AuditHistory';
-import AuditUserActivity from './pages/admin/audit/AuditUserActivity';
-import { Logs } from './pages/admin/Logs';
-import { Seeder } from './pages/admin/Seeder';
-import { Migrations } from './pages/admin/Migrations';
-import { RecordsLocks } from './pages/admin/RecordsLocks';
+import { Audits, AuditView, AuditHistory, AuditUserActivity } from './pages/admin/audit';
+import Logs from './pages/admin/Logs';
+import Seeder from './pages/admin/Seeder';
+import Migrations from './pages/admin/Migrations';
+import RecordsLocks from './pages/admin/RecordsLocks';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>

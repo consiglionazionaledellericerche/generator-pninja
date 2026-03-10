@@ -293,6 +293,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
     that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/index.ts.ejs"), that.destinationPath(`client/src/pages/admin/audit/index.ts`));
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/Audits.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditHistory.tsx`));
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditList.tsx`));

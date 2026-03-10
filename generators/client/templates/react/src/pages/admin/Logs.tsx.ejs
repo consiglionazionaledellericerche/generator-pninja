@@ -67,7 +67,7 @@ const LogEntry: React.FC<LogEntryProps> = ({ log }) => {
   );
 };
 
-export function Logs({ maxLines = 1000, pollInterval = 1000 }: LogsProps) {
+export default function Logs({ maxLines = 1000, pollInterval = 1000 }: LogsProps) {
   const { t } = useTranslation('log');
   const [logs, setLogs] = useState<string[]>([]);
   const [isPolling, setIsPolling] = useState(true);

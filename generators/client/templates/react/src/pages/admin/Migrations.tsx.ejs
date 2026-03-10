@@ -22,7 +22,7 @@ interface IAsyncOp {
   jobState: IJobState;
 }
 
-export function Migrations() {
+export default function Migrations() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
 

@@ -43,7 +43,7 @@ function waitForJobCompletion(jobId: string): Promise<IJobState> {
   });
 }
 
-export function Seeder() {
+export default function Seeder() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
 
