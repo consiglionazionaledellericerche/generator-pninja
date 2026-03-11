@@ -33,7 +33,7 @@ export default function RecordsLocks() {
   const loadLocks = useCallback(() => {
     setLoading(true);
     axiosInstance
-      .get<IRecordLock[]>('/api/locks')
+      .get<IRecordLock[]>('/api/admin/locks')
       .then(({ data }) => setLocks(data))
       .catch((error: AxiosError<ErrorResponseData>) => {
         addNotification({ type: 'error', message: error.message, error });
@@ -48,7 +48,7 @@ export default function RecordsLocks() {
   const handleForceRelease = (lock: IRecordLock) => {
     setReleasing((prev) => new Set(prev).add(lock.id));
     axiosInstance
-      .delete(`/api/locks/${lock.resource_type}/${lock.lockable_id}/force`)
+      .delete(`/api/admin/locks/${lock.resource_type}/${lock.lockable_id}/force`)
       .then(() => {
         addNotification({ type: 'success', message: t('admin.releaseSuccess') });
         setLocks((prev) => prev.filter((l) => l.id !== lock.id));

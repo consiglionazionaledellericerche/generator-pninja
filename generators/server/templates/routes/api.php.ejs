@@ -100,11 +100,15 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
 <%      } -%>
     });
 <%  } -%>
-    Route::prefix('locks')->group(function () {
+
+    Route::prefix('admin/locks')->group(function () {
         Route::get('/',                     [RecordLockController::class, 'index']);
+        Route::delete('/{type}/{id}/force', [RecordLockController::class, 'forceRelease'])->where('id', '[0-9]+');
+    });
+
+    Route::prefix('locks')->group(function () {
         Route::post('/{type}/{id}/acquire', [RecordLockController::class, 'acquire'])->where('id', '[0-9]+');
         Route::post('/{type}/{id}/renew',   [RecordLockController::class, 'renew'])->where('id', '[0-9]+');
-        Route::delete('/{type}/{id}/force', [RecordLockController::class, 'forceRelease'])->where('id', '[0-9]+');
         Route::delete('/{type}/{id}',       [RecordLockController::class, 'release'])->where('id', '[0-9]+');
         Route::get('/{type}/{id}',          [RecordLockController::class, 'status'])->where('id', '[0-9]+');
     });
