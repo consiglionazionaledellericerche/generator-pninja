@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Овај запис уређује <strong>{{user}}</strong> до <strong>{{expires}}</strong>.",
+  "lockedBy": "Овај запис се уређује од стране <strong>{{user}}</strong> до <strong>{{expires}}</strong>.",
   "forceRelease": "Присилно отпустите закључавање",
-  "conflict": {
-    "title": "Конфликт у уређивању",
-    "description": "Овај запис је модификовао други корисник док сте га уређивали. Молимо вас да прегледате разлике испод.",
-    "diffTable": "Разлике између ваше верзије и верзије на серверу",
-    "field": "Поље",
-    "yourVersion": "Ваша верзија",
-    "serverVersion": "Верзија сервера",
-    "keepMine": "Задржи моју верзију",
-    "useServer": "Користите верзију сервера",
-    "dismiss": "Otkaži"
-  },
+  "locked": "Закључано",
   "admin": {
     "title": "Закључавање записа",
     "refresh": "Освежи",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Закључавање успешно ослобођено.",
     "releaseError": "Неуспешно ослобађање закључавања.",
     "columns": {
+      "lock": "Закључај",
       "resource": "Ресурс",
       "recordId": "ИД записа",
       "lockedBy": "Закључано од",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Присилно ослобађање",
-      "confirmForceRelease": "Потврди ослобађање"
+      "confirmForceRelease": "Потврди ослобађање",
+      "actions": "Akcije"
     }
   }
 }

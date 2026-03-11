@@ -1,17 +1,7 @@
 {
   "lockedBy": "Este rexistro está sendo editado por <strong>{{user}}</strong> ata <strong>{{expires}}</strong>.",
   "forceRelease": "Forzar liberar bloqueo",
-  "conflict": {
-    "title": "Conflito de edición",
-    "description": "Este rexistro foi modificado por outro usuario mentres o estabas editando. Por favor, revisa as diferenzas abaixo.",
-    "diffTable": "Diferenzas entre a túa versión e a versión do servidor",
-    "field": "Campo",
-    "yourVersion": "A túa versión",
-    "serverVersion": "Versión do servidor",
-    "keepMine": "Manter a miña versión",
-    "useServer": "Usar versión do servidor",
-    "dismiss": "Cancelar"
-  },
+  "locked": "Bloqueado",
   "admin": {
     "title": "Bloqueos de rexistros",
     "refresh": "Actualizar",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Bloqueo liberado con éxito.",
     "releaseError": "Fallou ao liberar o bloqueo.",
     "columns": {
+      "lock": "Bloquear",
       "resource": "Recurso",
       "recordId": "ID do rexistro",
       "lockedBy": "Bloqueado por",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Liberación forzada",
-      "confirmForceRelease": "Confirmar liberación"
+      "confirmForceRelease": "Confirmar liberación",
+      "actions": "Accións"
     }
   }
 }

@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Tento záznam upravuje <strong>{{user}}</strong> až do <strong>{{expires}}</strong>.",
+  "lockedBy": "Tento záznam upravuje <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Nútené uvoľnenie zámku",
-  "conflict": {
-    "title": "Konflikt pri úprave",
-    "description": "Tento záznam bol upravený iným používateľom, zatiaľ čo ste ho upravovali. Skontrolujte rozdiely nižšie.",
-    "diffTable": "Rozdiely medzi vašou verziou a verziou na serveri",
-    "field": "Pole",
-    "yourVersion": "Vaša verzia",
-    "serverVersion": "Verzia servera",
-    "keepMine": "Zachovať moju verziu",
-    "useServer": "Použiť verziu servera",
-    "dismiss": "Zrušiť"
-  },
+  "locked": "Zamknuté",
   "admin": {
     "title": "Zamknutia záznamu",
     "refresh": "Obnoviť",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Zamknutie bolo úspešne uvoľnené.",
     "releaseError": "Nepodarilo sa uvoľniť zamknutie.",
     "columns": {
+      "lock": "Zamknúť",
       "resource": "Zdroje",
       "recordId": "ID záznamu",
       "lockedBy": "Zamknuté používateľom",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Nútené uvoľnenie",
-      "confirmForceRelease": "Potvrdiť uvoľnenie"
+      "confirmForceRelease": "Potvrdiť uvoľnenie",
+      "actions": "Akcie"
     }
   }
 }

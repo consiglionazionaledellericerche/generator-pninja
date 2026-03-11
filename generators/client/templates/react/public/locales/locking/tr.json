@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Bu kayıt <strong>{{user}}</strong> tarafından <strong>{{expires}}</strong>'e kadar düzenleniyor.",
+  "lockedBy": "Bu kayıt <strong>{{user}}</strong> tarafından <strong>{{expires}}</strong> tarihine kadar düzenleniyor.",
   "forceRelease": "Kilidi zorla aç",
-  "conflict": {
-    "title": "Düzenleme Çatışması",
-    "description": "Bu kayıt, düzenleme yaparken başka bir kullanıcı tarafından değiştirilmiştir. Lütfen aşağıdaki farkları inceleyin.",
-    "diffTable": "Sizin sürümünüz ile sunucu sürümü arasındaki farklar",
-    "field": "Alan",
-    "yourVersion": "Sizin sürümünüz",
-    "serverVersion": "Sunucu sürümü",
-    "keepMine": "Benim sürümümü koru",
-    "useServer": "Sunucu sürümünü kullan",
-    "dismiss": "İptal"
-  },
+  "locked": "Kilitli",
   "admin": {
     "title": "Kayıt Kilitleri",
     "refresh": "Yenile",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Kilit başarıyla serbest bırakıldı.",
     "releaseError": "Kilit serbest bırakma başarısız oldu.",
     "columns": {
+      "lock": "Kilit aç",
       "resource": "Kaynak",
       "recordId": "Kayıt Kimliği",
       "lockedBy": "Kilitleyen",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Zorla serbest bırak",
-      "confirmForceRelease": "Serbest bırakmayı onayla"
+      "confirmForceRelease": "Serbest bırakmayı onayla",
+      "actions": "Eylemler"
     }
   }
 }

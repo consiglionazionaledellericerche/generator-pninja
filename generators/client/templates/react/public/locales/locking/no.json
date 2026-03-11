@@ -1,17 +1,7 @@
 {
   "lockedBy": "Denne posten redigeres av <strong>{{user}}</strong> til <strong>{{expires}}</strong>.",
   "forceRelease": "Tvangslås opp",
-  "conflict": {
-    "title": "Redigeringskonflikt",
-    "description": "Denne posten ble endret av en annen bruker mens du redigerte den. Vennligst gjennomgå forskjellene nedenfor.",
-    "diffTable": "Forskjeller mellom din versjon og serverversjonen",
-    "field": "Felt",
-    "yourVersion": "Din versjon",
-    "serverVersion": "Serverversjonen",
-    "keepMine": "Behold min versjon",
-    "useServer": "Bruk serverversjonen",
-    "dismiss": "Avbryt"
-  },
+  "locked": "Låst",
   "admin": {
     "title": "Postlås",
     "refresh": "Oppdater",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Lås frigitt vellykket.",
     "releaseError": "Feilet å frigjøre lås.",
     "columns": {
+      "lock": "Lås",
       "resource": "Ressurs",
       "recordId": "Post-ID",
       "lockedBy": "Låst av",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Tving frigivelse",
-      "confirmForceRelease": "Bekreft frigivelse"
+      "confirmForceRelease": "Bekreft frigivelse",
+      "actions": "Handlinger"
     }
   }
 }

@@ -1,17 +1,7 @@
 {
-  "lockedBy": "این رکورد توسط <strong>{{user}}</strong> در حال ویرایش است تا <strong>{{expires}}</strong>.",
+  "lockedBy": "این رکورد در حال ویرایش توسط <strong>{{user}}</strong> تا <strong>{{expires}}</strong> است.",
   "forceRelease": "اجبار در آزادسازی قفل",
-  "conflict": {
-    "title": "تعارض ویرایش",
-    "description": "این رکورد توسط کاربر دیگری در حین ویرایش شما تغییر کرده است. لطفاً تفاوت‌ها را در زیر بررسی کنید.",
-    "diffTable": "تفاوت‌ها بین نسخه شما و نسخه سرور",
-    "field": "فیلد",
-    "yourVersion": "نسخه شما",
-    "serverVersion": "نسخه سرور",
-    "keepMine": "نسخه من را نگه‌دار",
-    "useServer": "نسخه سرور را استفاده کن",
-    "dismiss": "لغو"
-  },
+  "locked": "قفل شده",
   "admin": {
     "title": "کسب قفل‌ها",
     "refresh": "به‌روزرسانی",
@@ -20,6 +10,7 @@
     "releaseSuccess": "قفلی با موفقیت آزاد شد.",
     "releaseError": "آزاد کردن قفل ناموفق بود.",
     "columns": {
+      "lock": "قفل کردن",
       "resource": "منبع",
       "recordId": "شناسه رکورد",
       "lockedBy": "قفل‌شده توسط",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "آزاد کردن اجباری",
-      "confirmForceRelease": "تأیید آزاد سازی"
+      "confirmForceRelease": "تأیید آزاد سازی",
+      "actions": "اقدامات"
     }
   }
 }

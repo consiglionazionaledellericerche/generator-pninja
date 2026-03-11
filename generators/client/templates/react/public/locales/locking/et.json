@@ -1,17 +1,7 @@
 {
-  "lockedBy": "See rekordit redigeerib <strong>{{user}}</strong> kuni <strong>{{expires}}</strong>.",
+  "lockedBy": "Seda rekordit redigeerib <strong>{{user}}</strong> kuni <strong>{{expires}}</strong>.",
   "forceRelease": "Sundige lukku vabastama",
-  "conflict": {
-    "title": "Redigeerimise konflikt",
-    "description": "Seda rekordit muutis teine kasutaja, samal ajal kui te seda redigeerisite. Palun vaadake allpool erinevusi.",
-    "diffTable": "Erinevused teie versiooni ja serveri versiooni vahel",
-    "field": "Väli",
-    "yourVersion": "Teie versioon",
-    "serverVersion": "Serveri versioon",
-    "keepMine": "Hoia minu versioon",
-    "useServer": "Kasutage serveri versiooni",
-    "dismiss": "Tühista"
-  },
+  "locked": "Lukustatud",
   "admin": {
     "title": "Kandmislukud",
     "refresh": "Uuenda",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Lukustus edukalt vabastatud.",
     "releaseError": "Lukust vabastamine ebaõnnestus.",
     "columns": {
+      "lock": "Lukusta",
       "resource": "Ressurss",
       "recordId": "Kandmise ID",
       "lockedBy": "Lukustatud poolt",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Sundvabastus",
-      "confirmForceRelease": "Kinnita vabastus"
+      "confirmForceRelease": "Kinnita vabastus",
+      "actions": "Tegevused"
     }
   }
 }

@@ -1,17 +1,7 @@
 {
   "lockedBy": "Rekodi hii inahaririwa na <strong>{{user}}</strong> hadi <strong>{{expires}}</strong>.",
   "forceRelease": "Zuilia kufungua lock",
-  "conflict": {
-    "title": "Mzozano wa Hariri",
-    "description": "Rekodi hii ilibadilishwa na mtumiaji nyingine wakati ulikuwa unahariri. Tafadhali angalia tofauti zilizo hapa chini.",
-    "diffTable": "Tofauti kati ya toleo lako na toleo la seva",
-    "field": "Sehemu",
-    "yourVersion": "Toleo lako",
-    "serverVersion": "Toleo la seva",
-    "keepMine": "Hifadhi toleo langu",
-    "useServer": "Tumia toleo la seva",
-    "dismiss": "Futa"
-  },
+  "locked": "Imefungwa",
   "admin": {
     "title": "Vizuwi vya Rekodi",
     "refresh": "Fanya upya",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Vizuwi viliachiliwa kwa mafanikio.",
     "releaseError": "Imeshindikana kuachilia vizuwi.",
     "columns": {
+      "lock": "Funga",
       "resource": "Rasilimali",
       "recordId": "Kitambulisho cha Rekodi",
       "lockedBy": "Imewekwa na",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Acha kwa nguvu",
-      "confirmForceRelease": "Thibitisha kuachilia"
+      "confirmForceRelease": "Thibitisha kuachilia",
+      "actions": "Hatua"
     }
   }
 }

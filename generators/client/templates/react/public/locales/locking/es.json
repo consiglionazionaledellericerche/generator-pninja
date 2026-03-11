@@ -1,17 +1,7 @@
 {
   "lockedBy": "Este registro está siendo editado por <strong>{{user}}</strong> hasta <strong>{{expires}}</strong>.",
   "forceRelease": "Liberar forzosamente el bloqueo",
-  "conflict": {
-    "title": "Conflicto de edición",
-    "description": "Este registro fue modificado por otro usuario mientras lo editabas. Por favor, revisa las diferencias a continuación.",
-    "diffTable": "Diferencias entre tu versión y la versión del servidor",
-    "field": "Campo",
-    "yourVersion": "Tu versión",
-    "serverVersion": "Versión del servidor",
-    "keepMine": "Mantener mi versión",
-    "useServer": "Utilizar la versión del servidor",
-    "dismiss": "Cancelar"
-  },
+  "locked": "Bloqueado",
   "admin": {
     "title": "Bloqueos de registros",
     "refresh": "Actualizar",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Bloqueo liberado con éxito.",
     "releaseError": "Error al liberar el bloqueo.",
     "columns": {
+      "lock": "Bloquear",
       "resource": "Recurso",
       "recordId": "ID de registro",
       "lockedBy": "Bloqueado por",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Liberación forzada",
-      "confirmForceRelease": "Confirmar liberación"
+      "confirmForceRelease": "Confirmar liberación",
+      "actions": "Acciones"
     }
   }
 }

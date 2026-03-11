@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Ez a rekord <strong>{{user}}</strong> által szerkesztés alatt áll <strong>{{expires}}</strong>-ig.",
+  "lockedBy": "Ez a rekord <strong>{{user}}</strong> által szerkesztés alatt áll <strong>{{expires}}</strong> időpontig.",
   "forceRelease": "Zár feloldása",
-  "conflict": {
-    "title": "Szerkesztési ütközés",
-    "description": "Ezt a rekordot egy másik felhasználó módosította, miközben Ön szerkesztette. Kérjük, nézze át az alábbi eltéréseket.",
-    "diffTable": "Eltérések az Ön verziója és a szerver verziója között",
-    "field": "Mező",
-    "yourVersion": "Az Ön verziója",
-    "serverVersion": "Szerver verzió",
-    "keepMine": "Megőrzi az én verziómat",
-    "useServer": "Használja a szerver verziót",
-    "dismiss": "Mégse"
-  },
+  "locked": "Zárolva",
   "admin": {
     "title": "Rekordzárak",
     "refresh": "Frissítés",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Zár sikeresen feloldva.",
     "releaseError": "A zárolás feloldása nem sikerült.",
     "columns": {
+      "lock": "Zárolás",
       "resource": "Erőforrás",
       "recordId": "Rekord azonosító",
       "lockedBy": "Zárolva általa",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Kényszerített feloldás",
-      "confirmForceRelease": "Feloldás megerősítése"
+      "confirmForceRelease": "Feloldás megerősítése",
+      "actions": "Akciók"
     }
   }
 }

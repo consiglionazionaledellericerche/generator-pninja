@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Kei te whakatika tēnei tuhinga e <strong>{{user}}</strong> i mua i <strong>{{expires}}</strong>.",
+  "lockedBy": "Kei te whakarerekē tēnei tohu e <strong>{{user}}</strong> tae atu ki te <strong>{{expires}}</strong>.",
   "forceRelease": "Mā te kaha e tukuna te mokowā",
-  "conflict": {
-    "title": "Tūkino whakatika",
-    "description": "I whakarerekē tēnei tuhinga e tetahi atu kaiwhakamahi i te wā e whakatika ana koe. Tena koa tirohia ngā rerekētanga kei raro.",
-    "diffTable": "Ngā rerekētanga i waenga i tō kōwae me te kōwae tūmau",
-    "field": "Kōwae",
-    "yourVersion": "Tō kōwae",
-    "serverVersion": "Kōwae tūmau",
-    "keepMine": "Tūtohu i taku kōwae",
-    "useServer": "Whakamātauria te kōwae tūmau",
-    "dismiss": "Whakakore"
-  },
+  "locked": "Kua āta tū",
   "admin": {
     "title": "Rūnanga Tangi",
     "refresh": "Tāhui",
@@ -20,6 +10,7 @@
     "releaseSuccess": "I whakarewahia te tangi i runga i te angitū.",
     "releaseError": "I hē te whakarewatanga o te tangi.",
     "columns": {
+      "lock": "Pūrua",
       "resource": "Kāwanatanga",
       "recordId": "ID Rūnanga",
       "lockedBy": "Kāinga e haere ana",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Akoranga whakaū",
-      "confirmForceRelease": "Whakaū i te release"
+      "confirmForceRelease": "Whakaū i te release",
+      "actions": "Mahi"
     }
   }
 }

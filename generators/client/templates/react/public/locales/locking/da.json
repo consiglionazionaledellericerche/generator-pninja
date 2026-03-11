@@ -1,17 +1,7 @@
 {
   "lockedBy": "Denne post redigeres af <strong>{{user}}</strong> indtil <strong>{{expires}}</strong>.",
   "forceRelease": "Tvangsfrigiv lås",
-  "conflict": {
-    "title": "Redigeringskonflikt",
-    "description": "Denne post blev ændret af en anden bruger, mens du redigerede den. Venligst gennemgå forskellene nedenfor.",
-    "diffTable": "Forskelle mellem din version og serverversionen",
-    "field": "Felt",
-    "yourVersion": "Din version",
-    "serverVersion": "Serverversion",
-    "keepMine": "Behold min version",
-    "useServer": "Brug serverversionen",
-    "dismiss": "Annulér"
-  },
+  "locked": "Låst",
   "admin": {
     "title": "Optagelseskil låse",
     "refresh": "Opdater",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Lås frigivet med succes.",
     "releaseError": "Fejl ved frigivelse af lås.",
     "columns": {
+      "lock": "Lås",
       "resource": "Ressource",
       "recordId": "Optagelses-ID",
       "lockedBy": "Låst af",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Tvangsfrigivelse",
-      "confirmForceRelease": "Bekræft frigivelse"
+      "confirmForceRelease": "Bekræft frigivelse",
+      "actions": "Handlinger"
     }
   }
 }

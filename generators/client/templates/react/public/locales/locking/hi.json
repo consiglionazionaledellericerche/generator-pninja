@@ -1,17 +1,7 @@
 {
   "lockedBy": "यह रिकॉर्ड <strong>{{user}}</strong> द्वारा <strong>{{expires}}</strong> तक संपादित किया जा रहा है।",
   "forceRelease": "ताला मजबूरन खोलें",
-  "conflict": {
-    "title": "संपादन संघर्ष",
-    "description": "इस रिकॉर्ड को किसी अन्य उपयोगकर्ता ने संपादित करते समय संशोधित किया था। कृपया नीचे के अंतर की समीक्षा करें।",
-    "diffTable": "आपके संस्करण और सर्वर संस्करण के बीच के विभिन्नताएँ",
-    "field": "क्षेत्र",
-    "yourVersion": "आपका संस्करण",
-    "serverVersion": "सर्वर संस्करण",
-    "keepMine": "मेरा संस्करण रखें",
-    "useServer": "सर्वर संस्करण का उपयोग करें",
-    "dismiss": "रद्द करें"
-  },
+  "locked": "लॉकर",
   "admin": {
     "title": "रिकॉर्ड लॉक",
     "refresh": "रिफ्रेश",
@@ -20,6 +10,7 @@
     "releaseSuccess": "लॉक सफलतापूर्वक छोड़ दिया गया।",
     "releaseError": "लॉक छोड़ने में विफल।",
     "columns": {
+      "lock": "लॉck",
       "resource": "स्रोत",
       "recordId": "रिकॉर्ड आईडी",
       "lockedBy": "द्वारा लॉक किया गया",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "ज़ब्ती छोड़ना",
-      "confirmForceRelease": "रिलीज की पुष्टि करें"
+      "confirmForceRelease": "रिलीज की पुष्टि करें",
+      "actions": "क्रियाएँ"
     }
   }
 }

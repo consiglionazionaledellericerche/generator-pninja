@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Iwe àkọọlẹ yìí ń ṣe àtúnṣe nipasẹ <strong>{{user}}</strong> titi di <strong>{{expires}}</strong>.",
+  "lockedBy": "Iwe ìwé yìí ń ṣe àtúnṣe nipasẹ <strong>{{user}}</strong> títí di <strong>{{expires}}</strong>.",
   "forceRelease": "Ìpinnu ìdáwọlé",
-  "conflict": {
-    "title": "Ìjàsùn Àtúnṣe",
-    "description": "Iwe àkọọlẹ yìí ti yipada nipasẹ olumulo míràn nígbà tí o ń ṣe àtúnṣe rẹ. Jọ, wo àyípadà tó wà ní isalẹ.",
-    "diffTable": "Àyípadà laarin ìtọ́sẹ rẹ àti àtúnṣe ìkànsí",
-    "field": "Àkọsílẹ",
-    "yourVersion": "Ìtọ́sẹ rẹ",
-    "serverVersion": "Ìkànsí",
-    "keepMine": "Pa ìtọ́sẹ mi mọ",
-    "useServer": "Lo ìkànsí",
-    "dismiss": "Fagilé"
-  },
+  "locked": "Dídá",
   "admin": {
     "title": "Ikatọ́ àkọsílẹ̀",
     "refresh": "Túnṣe",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Ikatọ́ ti freed ni aṣeyọri.",
     "releaseError": "Ko le free ikatọ́.",
     "columns": {
+      "lock": "Dá ẹnu.",
       "resource": "Orisun",
       "recordId": "ID àkọsílẹ̀",
       "lockedBy": "Ikatọ́ nipasẹ",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Jẹ́ kí ó free",
-      "confirmForceRelease": "Jẹ́ kí ó dájú pé ó free"
+      "confirmForceRelease": "Jẹ́ kí ó dájú pé ó free",
+      "actions": "Iṣẹ́"
     }
   }
 }

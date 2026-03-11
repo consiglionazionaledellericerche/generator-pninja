@@ -1,17 +1,7 @@
 {
   "lockedBy": "此记录正在被<strong>{{user}}</strong>编辑，直到<strong>{{expires}}</strong>。",
   "forceRelease": "强制释放锁定",
-  "conflict": {
-    "title": "编辑冲突",
-    "description": "在您编辑此记录时，该记录已被另一个用户修改。请查看下面的差异。",
-    "diffTable": "您版本与服务器版本之间的差异",
-    "field": "字段",
-    "yourVersion": "您的版本",
-    "serverVersion": "服务器版本",
-    "keepMine": "保留我的版本",
-    "useServer": "使用服务器版本",
-    "dismiss": "取消"
-  },
+  "locked": "已锁定",
   "admin": {
     "title": "记录锁",
     "refresh": "刷新",
@@ -20,6 +10,7 @@
     "releaseSuccess": "锁定成功释放。",
     "releaseError": "释放锁定失败。",
     "columns": {
+      "lock": "锁定",
       "resource": "资源",
       "recordId": "记录 ID",
       "lockedBy": "被锁定者",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "强制释放",
-      "confirmForceRelease": "确认释放"
+      "confirmForceRelease": "确认释放",
+      "actions": "操作"
     }
   }
 }

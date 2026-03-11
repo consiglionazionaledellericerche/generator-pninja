@@ -1,17 +1,7 @@
 {
   "lockedBy": "Ova evidencija se uređuje od strane <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Prisilno otpusti zaključavanje",
-  "conflict": {
-    "title": "Sukob uređivanja",
-    "description": "Ova evidencija je izmijenjena od strane drugog korisnika dok ste je uređivali. Molimo pregledajte razlike u nastavku.",
-    "diffTable": "Razlike između vaše verzije i verzije poslužitelja",
-    "field": "Polje",
-    "yourVersion": "Vaša verzija",
-    "serverVersion": "Verzija poslužitelja",
-    "keepMine": "Zadrži moju verziju",
-    "useServer": "Upotrijebi verziju poslužitelja",
-    "dismiss": "Otkaži"
-  },
+  "locked": "Zaključano",
   "admin": {
     "title": "Zaključavanje zapisa",
     "refresh": "Osvježi",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Zaključavanje uspješno otpušteno.",
     "releaseError": "Neuspješno otpuštanje zaključavanja.",
     "columns": {
+      "lock": "Zaključaj",
       "resource": "Resurs",
       "recordId": "ID zapisa",
       "lockedBy": "Zaključano od",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Primorano otpuštanje",
-      "confirmForceRelease": "Potvrdi otpuštanje"
+      "confirmForceRelease": "Potvrdi otpuštanje",
+      "actions": "Radnje"
     }
   }
 }

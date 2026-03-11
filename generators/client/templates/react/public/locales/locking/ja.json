@@ -1,17 +1,7 @@
 {
-  "lockedBy": "このレコードは<strong>{{user}}</strong>によって<strong>{{expires}}</strong>まで編集されています。",
+  "lockedBy": "このレコードは<strong>{{user}}</strong>によって<strong>{{expires}}</strong>まで編集中です。",
   "forceRelease": "ロックを強制的に解除",
-  "conflict": {
-    "title": "編集の競合",
-    "description": "このレコードは、あなたが編集している間に別のユーザーによって修正されました。以下の違いを確認してください。",
-    "diffTable": "あなたのバージョンとサーバーバージョンとの違い",
-    "field": "フィールド",
-    "yourVersion": "あなたのバージョン",
-    "serverVersion": "サーバーバージョン",
-    "keepMine": "私のバージョンを保持",
-    "useServer": "サーバーバージョンを使用",
-    "dismiss": "キャンセル"
-  },
+  "locked": "ロック中",
   "admin": {
     "title": "レコードロック",
     "refresh": "リフレッシュ",
@@ -20,6 +10,7 @@
     "releaseSuccess": "ロックが正常に解除されました。",
     "releaseError": "ロックの解除に失敗しました。",
     "columns": {
+      "lock": "ロック",
       "resource": "リソース",
       "recordId": "レコードID",
       "lockedBy": "ロック中",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "強制解除",
-      "confirmForceRelease": "解除を確認"
+      "confirmForceRelease": "解除を確認",
+      "actions": "アクション"
     }
   }
 }

@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Acest registru este editat de <strong>{{user}}</strong> până la <strong>{{expires}}</strong>.",
+  "lockedBy": "Acest înregistrare este editat de <strong>{{user}}</strong> până la <strong>{{expires}}</strong>.",
   "forceRelease": "Forțează eliberarea blocării",
-  "conflict": {
-    "title": "Conflict de editare",
-    "description": "Acest registru a fost modificat de un alt utilizator în timp ce îl editai. Te rog să verifici diferențele de mai jos.",
-    "diffTable": "Diferențe între versiunea ta și versiunea serverului",
-    "field": "Câmp",
-    "yourVersion": "Versiunea ta",
-    "serverVersion": "Versiunea serverului",
-    "keepMine": "Păstrează versiunea mea",
-    "useServer": "Utilizează versiunea serverului",
-    "dismiss": "Anulare"
-  },
+  "locked": "Blocat",
   "admin": {
     "title": "Blocări de înregistrare",
     "refresh": "Reîmprospătare",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Blocarea a fost eliberată cu succes.",
     "releaseError": "Eliberarea blocării a eșuat.",
     "columns": {
+      "lock": "Blochează",
       "resource": "Resursă",
       "recordId": "IDul înregistrării",
       "lockedBy": "Blocat de",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Eliberare forțată",
-      "confirmForceRelease": "Confirmă eliberarea"
+      "confirmForceRelease": "Confirmă eliberarea",
+      "actions": "Acțiuni"
     }
   }
 }

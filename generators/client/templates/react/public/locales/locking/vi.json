@@ -1,17 +1,7 @@
 {
   "lockedBy": "Bản ghi này đang được chỉnh sửa bởi <strong>{{user}}</strong> cho đến <strong>{{expires}}</strong>.",
   "forceRelease": "Thả khóa cưỡng chế",
-  "conflict": {
-    "title": "Xung đột chỉnh sửa",
-    "description": "Bản ghi này đã được một người dùng khác sửa đổi trong khi bạn đang chỉnh sửa nó. Vui lòng xem xét các khác biệt bên dưới.",
-    "diffTable": "Khác biệt giữa phiên bản của bạn và phiên bản trên máy chủ",
-    "field": "Trường",
-    "yourVersion": "Phiên bản của bạn",
-    "serverVersion": "Phiên bản trên máy chủ",
-    "keepMine": "Giữ phiên bản của tôi",
-    "useServer": "Sử dụng phiên bản trên máy chủ",
-    "dismiss": "Hủy"
-  },
+  "locked": "Đã khóa",
   "admin": {
     "title": "Khóa bản ghi",
     "refresh": "Làm mới",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Khóa đã được giải phóng thành công.",
     "releaseError": "Không thể giải phóng khóa.",
     "columns": {
+      "lock": "Khóa",
       "resource": "Tài nguyên",
       "recordId": "ID bản ghi",
       "lockedBy": "Bị khóa bởi",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Giải phóng ép buộc",
-      "confirmForceRelease": "Xác nhận giải phóng"
+      "confirmForceRelease": "Xác nhận giải phóng",
+      "actions": "Hành động"
     }
   }
 }

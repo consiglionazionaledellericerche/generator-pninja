@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Wannan rikodin ana gyara shi daga <strong>{{user}}</strong> har zuwa <strong>{{expires}}</strong>.",
+  "lockedBy": "Wannan rikodin ana gyara ta <strong>{{user}}</strong> har zuwa <strong>{{expires}}</strong>.",
   "forceRelease": "Tilasta sakin kulle",
-  "conflict": {
-    "title": "Sabani na gyare-gyare",
-    "description": "Wannan rikodin an canza shi daga wani mai amfani yayin da kake gyarawa. Don Allah a duba bambance-bambancen da ke ƙasa.",
-    "diffTable": "Bambance-bambancen tsakanin sigar ku da sigar uwar garken",
-    "field": "Filin",
-    "yourVersion": "Sigar ku",
-    "serverVersion": "Sigar uwar garken",
-    "keepMine": "Tsaftace sigar nawa",
-    "useServer": "Amfani da sigar uwar garken",
-    "dismiss": "Soke"
-  },
+  "locked": "An kulle",
   "admin": {
     "title": "Ajiyar Rikodi",
     "refresh": "Sabunta",
@@ -20,6 +10,7 @@
     "releaseSuccess": "An saki ajiyar nasara.",
     "releaseError": "An kasa sakin ajiyar.",
     "columns": {
+      "lock": "Kulle",
       "resource": "Albarkatu",
       "recordId": "ID na Rikodi",
       "lockedBy": "An rufe ta",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Sakin daga ƙarfi",
-      "confirmForceRelease": "Tabbatar da sakin"
+      "confirmForceRelease": "Tabbatar da sakin",
+      "actions": "Ayyuka"
     }
   }
 }

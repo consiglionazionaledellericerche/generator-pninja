@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Kitaabni kuni <strong>{{user}}</strong> irraa hanga <strong>{{expires}}</strong> tti fooyya’amaa jira.",
+  "lockedBy": "Galmeen kun <strong>{{user}}</strong>'n hanga <strong>{{expires}}</strong> faallaa'aa jira.",
   "forceRelease": "Garaagarummaa cufaa kaawwachu",
-  "conflict": {
-    "title": "Wal qixxummaa gulaalaa",
-    "description": "Kitaabni kuni kullan biroo si’atti fooyya’ame. Maalummaa garaagarummaa armaan gadii ilaali.",
-    "diffTable": "Garaagarummaa keetiin fi bifa server gidduutti jiru",
-    "field": "Garaacha",
-    "yourVersion": "Garaacha kooti",
-    "serverVersion": "Garaacha server",
-    "keepMine": "Garaacha kooti eegu",
-    "useServer": "Garaacha server fayyadamu",
-    "dismiss": "Haqaa"
-  },
+  "locked": "Cufame",
   "admin": {
     "title": "Galmee Qabachuu",
     "refresh": "Dachaasu",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Qabachuu milkaa'inaan gad lakkise.",
     "releaseError": "Qabachuu gad lakkisuuf hojii dhabu.",
     "columns": {
+      "lock": "Cufaa",
       "resource": "Qabeenya",
       "recordId": "Galmee ID",
       "lockedBy": "Qabachuuf",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Ciminaan gad lakkisu",
-      "confirmForceRelease": "Gad lakkisuu mirkaneessi"
+      "confirmForceRelease": "Gad lakkisuu mirkaneessi",
+      "actions": "Hojiiwwan"
     }
   }
 }

@@ -1,17 +1,7 @@
 {
-  "lockedBy": "یہ ریکارڈ <strong>{{user}}</strong> کے ذریعے <strong>{{expires}}</strong> تک ترمیم ہو رہا ہے۔",
+  "lockedBy": "یہ ریکارڈ <strong>{{user}}</strong> کی طرف سے <strong>{{expires}}</strong> تک ایڈٹ کیا جا رہا ہے۔",
   "forceRelease": "لاک کو زبردستی چھوڑیں",
-  "conflict": {
-    "title": "ترمیمی تضاد",
-    "description": "یہ ریکارڈ کسی اور صارف نے اس وقت تبدیل کیا جب آپ اسے ترمیم کر رہے تھے۔ براہ کرم نیچے اختلافات کا جائزہ لیں۔",
-    "diffTable": "آپ ورژن اور سرور ورژن کے درمیان اختلافات",
-    "field": "فیلڈ",
-    "yourVersion": "آپ کا ورژن",
-    "serverVersion": "سرور ورژن",
-    "keepMine": "میرا ورژن رکھیں",
-    "useServer": "سرور ورژن استعمال کریں",
-    "dismiss": "ختم کریں"
-  },
+  "locked": "لاکڈ",
   "admin": {
     "title": "ریکارڈ لاکس",
     "refresh": "تازہ کریں",
@@ -20,6 +10,7 @@
     "releaseSuccess": "لاک کامیابی سے جاری کیا گیا۔",
     "releaseError": "لاک جاری کرنے میں ناکامی۔",
     "columns": {
+      "lock": "لاک",
       "resource": "وسائل",
       "recordId": "ریکارڈ آئی ڈی",
       "lockedBy": "لاکڈ توسط",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "زور زبردستی جاری کریں",
-      "confirmForceRelease": "جاری کرنے کی تصدیق کریں"
+      "confirmForceRelease": "جاری کرنے کی تصدیق کریں",
+      "actions": "عملیاں"
     }
   }
 }

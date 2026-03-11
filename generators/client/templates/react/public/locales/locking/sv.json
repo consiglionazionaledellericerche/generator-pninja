@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Denna post redigeras av <strong>{{user}}</strong> tills <strong>{{expires}}</strong>.",
+  "lockedBy": "Detta rekord redigeras av <strong>{{user}}</strong> tills <strong>{{expires}}</strong>.",
   "forceRelease": "Tvinga att frigöra lås",
-  "conflict": {
-    "title": "Redigeringskonflikt",
-    "description": "Denna post ändrades av en annan användare medan du redigerade den. Vänligen granska skillnaderna nedan.",
-    "diffTable": "Skillnader mellan din version och serverversionen",
-    "field": "Fält",
-    "yourVersion": "Din version",
-    "serverVersion": "Serverversion",
-    "keepMine": "Behåll min version",
-    "useServer": "Använd serverversion",
-    "dismiss": "Avbryt"
-  },
+  "locked": "Låst",
   "admin": {
     "title": "Postlås",
     "refresh": "Uppdatera",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Lås släppt framgångsrikt.",
     "releaseError": "Misslyckades med att släppa lås.",
     "columns": {
+      "lock": "Låsa",
       "resource": "Resurs",
       "recordId": "Post-ID",
       "lockedBy": "Låst av",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Tvinga släpp",
-      "confirmForceRelease": "Bekräfta släpp"
+      "confirmForceRelease": "Bekräfta släpp",
+      "actions": "Åtgärder"
     }
   }
 }

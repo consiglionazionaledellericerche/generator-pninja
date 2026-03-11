@@ -1,17 +1,7 @@
 {
-  "lockedBy": "이 레코드는 <strong>{{user}}</strong>가 <strong>{{expires}}</strong>까지 편집 중입니다.",
+  "lockedBy": "이 기록은 <strong>{{user}}</strong>에 의해 <strong>{{expires}}</strong>까지 편집되고 있습니다.",
   "forceRelease": "잠금 강제 해제",
-  "conflict": {
-    "title": "편집 충돌",
-    "description": "이 레코드는 당신이 편집하는 동안 다른 사용자에 의해 수정되었습니다. 아래의 차이를 검토해 주세요.",
-    "diffTable": "당신의 버전과 서버 버전 간의 차이",
-    "field": "필드",
-    "yourVersion": "당신의 버전",
-    "serverVersion": "서버 버전",
-    "keepMine": "내 버전 유지",
-    "useServer": "서버 버전 사용",
-    "dismiss": "취소"
-  },
+  "locked": "잠김",
   "admin": {
     "title": "레코드 잠금",
     "refresh": "새로 고침",
@@ -20,6 +10,7 @@
     "releaseSuccess": "잠금이 성공적으로 해제되었습니다.",
     "releaseError": "잠금을 해제하지 못했습니다.",
     "columns": {
+      "lock": "잠금",
       "resource": "리소스",
       "recordId": "레코드 ID",
       "lockedBy": "잠금된 사용자",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "강제 해제",
-      "confirmForceRelease": "해제 확인"
+      "confirmForceRelease": "해제 확인",
+      "actions": "동작"
     }
   }
 }

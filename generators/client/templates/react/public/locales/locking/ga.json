@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Tá an taifead seo á eagarthóireacht ag <strong>{{user}}</strong> go dtí <strong>{{expires}}</strong>.",
+  "lockedBy": "Tá an taifead seo á chur in eagar ag <strong>{{user}}</strong> go dtí <strong>{{expires}}</strong>.",
   "forceRelease": "Saor an cniotáil",
-  "conflict": {
-    "title": "Conflachtaí Eagarthóireachta",
-    "description": "Tugadh mionathrú ar an taifead seo ag úsáideoir eile agus tú ag éagarthóireacht air. Léigh na difríochtaí thíos le do thoil.",
-    "diffTable": "Difríochtaí idir do leagan agus leagan an freastalaí",
-    "field": "Réimse",
-    "yourVersion": "Do leagan",
-    "serverVersion": "Leagan an freastalaí",
-    "keepMine": "Coimeád mo leagan",
-    "useServer": "Úsáid leagan an freastalaí",
-    "dismiss": "Cealaigh"
-  },
+  "locked": "Screadaigh",
   "admin": {
     "title": "Cuailleanna Taifead",
     "refresh": "Athnuachan",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Scaoiltear cuaille go rathúil.",
     "releaseError": "Theip ar cuaille a scaoileadh.",
     "columns": {
+      "lock": "Screadadh",
       "resource": "Acmhainn",
       "recordId": "ID Taifead",
       "lockedBy": "Conas atá gafa",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Gheobhaidh sé deireadh",
-      "confirmForceRelease": "Saoirse a chinntiú"
+      "confirmForceRelease": "Saoirse a chinntiú",
+      "actions": "Gníomhartha"
     }
   }
 }

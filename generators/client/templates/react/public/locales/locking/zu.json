@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Lo mbhalo uhunyushwa ngu-<strong>{{user}}</strong> kuze kube <strong>{{expires}}</strong>.",
+  "lockedBy": "Le rekhodi ihlaziywa ngu<strong>{{user}}</strong} kuze kube<strong>{{expires}}</strong>.",
   "forceRelease": "Zama ukukhipha ivaliwe",
-  "conflict": {
-    "title": "Ukuphikisana kokuhlela",
-    "description": "Lo mbhalo ushintshwe omunye umsebenzisi ngenkathi uhlela. Sicela ubheke umehluko ngezansi.",
-    "diffTable": "Umehluko phakathi kwenguqulo yakho nenguqulo ye-server",
-    "field": "Insimu",
-    "yourVersion": "Unguqulo yakho",
-    "serverVersion": "Unguqulo ye-server",
-    "keepMine": "Gcina inguqulo yami",
-    "useServer": "Sebenzisa inguqulo ye-server",
-    "dismiss": "Cancela"
-  },
+  "locked": "Ivuliwe",
   "admin": {
     "title": "Izinqamuleli zeRekhodi",
     "refresh": "Buyisa",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Ukukhululwa kwe-lock kuphumelele.",
     "releaseError": "Isehlakalo lokukhulula.",
     "columns": {
+      "lock": "Vula",
       "resource": "Umthombo",
       "recordId": "ID yeRekhodi",
       "lockedBy": "I-lockwe ngu",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Khulula ngamandla",
-      "confirmForceRelease": "Qinisekisa ukukhululwa"
+      "confirmForceRelease": "Qinisekisa ukukhululwa",
+      "actions": "Izinyathelo"
     }
   }
 }

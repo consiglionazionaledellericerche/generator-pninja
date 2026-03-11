@@ -1,17 +1,7 @@
 {
   "lockedBy": "Ten rekord jest edytowany przez <strong>{{user}}</strong> do <strong>{{expires}}</strong>.",
   "forceRelease": "Wymuś zwolnienie blokady",
-  "conflict": {
-    "title": "Konflikt edycji",
-    "description": "Ten rekord został zmodyfikowany przez innego użytkownika podczas edytowania. Proszę zapoznać się z różnicami poniżej.",
-    "diffTable": "Różnice między twoją wersją a wersją serwera",
-    "field": "Pole",
-    "yourVersion": "Twoja wersja",
-    "serverVersion": "Wersja serwera",
-    "keepMine": "Zachowaj moją wersję",
-    "useServer": "Użyj wersji serwera",
-    "dismiss": "Anuluj"
-  },
+  "locked": "Zablokowane",
   "admin": {
     "title": "Blokady rekordów",
     "refresh": "Odśwież",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Blokada pomyślnie zwolniona.",
     "releaseError": "Nie udało się zwolnić blokady.",
     "columns": {
+      "lock": "Zablokować",
       "resource": "Zasób",
       "recordId": "ID rekordu",
       "lockedBy": "Zablokowane przez",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Wymuszone zwolnienie",
-      "confirmForceRelease": "Potwierdź zwolnienie"
+      "confirmForceRelease": "Potwierdź zwolnienie",
+      "actions": "Akcje"
     }
   }
 }

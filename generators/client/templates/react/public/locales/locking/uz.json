@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Ushbu yozuvni <strong>{{user}}</strong> tahrirlamoqda <strong>{{expires}}</strong> gacha.",
+  "lockedBy": "Ushbu yozuv <strong>{{user}}</strong> tomonidan <strong>{{expires}}</strong>gacha tahrirlanmoqda.",
   "forceRelease": "Boshqa foydalanuvchi siz uni tahrirlayotganda ushbu yozuv o'zgartirildi. Iltimos, quyidagi farqlarni ko'rib chiqing.",
-  "conflict": {
-    "title": "Sizning versiyangiz va server versiyasi o'rtasidagi farqlar",
-    "description": "Maydon",
-    "diffTable": "Sizning versiyangiz",
-    "field": "Server versiyasi",
-    "yourVersion": "Mening versiyamni saqlash",
-    "serverVersion": "Server versiyasini ishlatish",
-    "keepMine": "Keep my version",
-    "useServer": "Use server version",
-    "dismiss": "Bekor qilish"
-  },
+  "locked": "Boshqa hech kim tahrirlay olmaydi.",
   "admin": {
     "title": "Yozuv qulflari",
     "refresh": "Yangilash",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Qulf muvaffaqiyatli ochildi.",
     "releaseError": "Qulfni ochishda xato.",
     "columns": {
+      "lock": "Yopiq",
       "resource": "Resurs",
       "recordId": "Yozuv ID",
       "lockedBy": "Qulfda",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Qulfni kuch bilan ochish",
-      "confirmForceRelease": "Ochilishini tasdiqlash"
+      "confirmForceRelease": "Ochilishini tasdiqlash",
+      "actions": "Harakatlar"
     }
   }
 }

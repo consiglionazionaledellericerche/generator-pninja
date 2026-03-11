@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Þetta skrá er að vera breytt af <strong>{{user}}</strong> þar til <strong>{{expires}}</strong>.",
+  "lockedBy": "Þetta skjal er verið að breyta af <strong>{{user}}</strong> þar til <strong>{{expires}}</strong>.",
   "forceRelease": "Þvinga losun á læsingu",
-  "conflict": {
-    "title": "Ritdeilur",
-    "description": "Þetta skrá var breytt af öðrum notanda á meðan þú varst að breyta því. Vinsamlegast skoðaðu muninn hér að neðan.",
-    "diffTable": "Munur á þinni útgáfu og þjónustunarútgáfu",
-    "field": "Reitur",
-    "yourVersion": "Þín útgáfa",
-    "serverVersion": "Þjónustunarútgáfa",
-    "keepMine": "Halda minni útgáfu",
-    "useServer": "Nota þjónustunarútgáfu",
-    "dismiss": "Hætta við"
-  },
+  "locked": "Læst",
   "admin": {
     "title": "Skráarlok",
     "refresh": "Endurnýja",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Loki var sleppt með góðum árangri.",
     "releaseError": "Mistókst að sleppa loku.",
     "columns": {
+      "lock": "Læsa",
       "resource": "Heild",
       "recordId": "Skráarauðkenni",
       "lockedBy": "Lokað af",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Þvingu sleppir",
-      "confirmForceRelease": "Staðfesta frelsun"
+      "confirmForceRelease": "Staðfesta frelsun",
+      "actions": "Aðgerðir"
     }
   }
 }

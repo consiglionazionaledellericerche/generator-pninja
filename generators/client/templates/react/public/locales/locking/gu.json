@@ -1,17 +1,7 @@
 {
-  "lockedBy": "આ રેકોર્ડ <strong>{{user}}</strong> દ્વારા <strong>{{expires}}</strong> સુધી સંપાદિત કરવામાં આવી રહી છે.",
+  "lockedBy": "આ રેકોર્ડને <strong>{{user}}</strong> દ્વારા <strong>{{expires}}</strong> સુધી સંપાદિત કરવામાં આવી રહ્યું છે.",
   "forceRelease": "લોક કાચો છોડી દો",
-  "conflict": {
-    "title": "તોતા કુટબ",
-    "description": "આ રેકોર્ડ જ્યારે તમે તેને સંપાદિત કરી રહ્યા હતા ત્યારે બીજા યુઝર દ્વારા ફેરફાર કરવામાં આવ્યો. કૃપા કરીને નીચેના તફાવતોને જોઈને સમીક્ષા કરો.",
-    "diffTable": "તમારા સંસ્કરણ અને સર્ઝર સંસ્કરણ વચ્ચે તફાવતો",
-    "field": "ક્ષેત્ર",
-    "yourVersion": "તમારો સંસ્કરણ",
-    "serverVersion": "સર્ઝર સંસ્કરણ",
-    "keepMine": "મારો સંસ્કરણ રાખો",
-    "useServer": "સર્ઝર સંસ્કરણ ઉપયોગ કરો",
-    "dismiss": "રદ કરવો"
-  },
+  "locked": "લૉક્ડ",
   "admin": {
     "title": "કેદીઓના નોંધો",
     "refresh": "ફરત કરો",
@@ -20,6 +10,7 @@
     "releaseSuccess": "કેદી સફળતાપૂર્વક છોડવામાં આવી.",
     "releaseError": "કેદી છોડી આપવા માં ASP.NET થઇ ગયું.",
     "columns": {
+      "lock": "લૉક",
       "resource": "સ્રોત",
       "recordId": "નોંધ આઈડી",
       "lockedBy": "કેદો કર્યો",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "બળજબરીથી છોડો",
-      "confirmForceRelease": "રીલીઝની પુષ્ટિ કરો"
+      "confirmForceRelease": "રીલીઝની પુષ્ટિ કરો",
+      "actions": "ક્રિયાઓ"
     }
   }
 }

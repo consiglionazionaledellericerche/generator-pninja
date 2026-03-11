@@ -1,17 +1,7 @@
 {
-  "lockedBy": "Aquest registre s'està editant per <strong>{{user}}</strong> fins a <strong>{{expires}}</strong>.",
+  "lockedBy": "Aquesta registració s'està editant per <strong>{{user}}</strong> fins a <strong>{{expires}}</strong>.",
   "forceRelease": "Forçar la libertat del bloqueig",
-  "conflict": {
-    "title": "Conflicte d'edició",
-    "description": "Aquest registre va ser modificat per un altre usuari mentre l'estaves editant. Si us plau, revisa les diferències a continuació.",
-    "diffTable": "Diferències entre la teva versió i la versió del servidor",
-    "field": "Camp",
-    "yourVersion": "La teva versió",
-    "serverVersion": "Versió del servidor",
-    "keepMine": "Mantingues la meva versió",
-    "useServer": "Utilitza la versió del servidor",
-    "dismiss": "Anul·lar"
-  },
+  "locked": "Bloquejat",
   "admin": {
     "title": "Bloquejos d'enregistrament",
     "refresh": "Refrescar",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Bloqueig alliberat amb èxit.",
     "releaseError": "No s'ha pogut alliberar el bloqueig.",
     "columns": {
+      "lock": "Bloquejar",
       "resource": "Recurs",
       "recordId": "ID d'enregistrament",
       "lockedBy": "Bloquejat per",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Alliberament forçat",
-      "confirmForceRelease": "Confirmar alliberament"
+      "confirmForceRelease": "Confirmar alliberament",
+      "actions": "Accions"
     }
   }
 }

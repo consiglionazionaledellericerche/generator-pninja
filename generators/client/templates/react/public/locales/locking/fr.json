@@ -1,17 +1,7 @@
 {
   "lockedBy": "Cet enregistrement est en cours de modification par <strong>{{user}}</strong> jusqu'à <strong>{{expires}}</strong>.",
   "forceRelease": "Forcer la libération du verrou",
-  "conflict": {
-    "title": "Conflit de modification",
-    "description": "Cet enregistrement a été modifié par un autre utilisateur pendant que vous l'éditiez. Veuillez examiner les différences ci-dessous.",
-    "diffTable": "Différences entre votre version et la version du serveur",
-    "field": "Champ",
-    "yourVersion": "Votre version",
-    "serverVersion": "Version du serveur",
-    "keepMine": "Conserver ma version",
-    "useServer": "Utiliser la version du serveur",
-    "dismiss": "Annuler"
-  },
+  "locked": "Verrouillé",
   "admin": {
     "title": "Verroux d'enregistrement",
     "refresh": "Rafraîchir",
@@ -20,6 +10,7 @@
     "releaseSuccess": "Verrou libéré avec succès.",
     "releaseError": "Échec de la libération du verrou.",
     "columns": {
+      "lock": "Verrouiller",
       "resource": "Ressource",
       "recordId": "Identifiant d'enregistrement",
       "lockedBy": "Verrouillé par",
@@ -28,7 +19,8 @@
     },
     "actions": {
       "forceRelease": "Libération forcée",
-      "confirmForceRelease": "Confirmer la libération"
+      "confirmForceRelease": "Confirmer la libération",
+      "actions": "Actions"
     }
   }
 }
