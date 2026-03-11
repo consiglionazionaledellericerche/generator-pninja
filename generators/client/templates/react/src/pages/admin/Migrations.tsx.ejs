@@ -248,7 +248,10 @@ export default function Migrations() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">{t('migrations:title')}</h1>
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <Icon icon="database" size={8} />
+        {t('migrations:title')}
+      </h1>
 
       <div className="flex flex-col gap-6">
         {/* migrate */}

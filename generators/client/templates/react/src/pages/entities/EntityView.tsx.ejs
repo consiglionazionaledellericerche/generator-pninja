@@ -11,6 +11,7 @@ import { DurationFieldViewer } from '../../components/formElements/DurationField
 <% } -%>
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { Icon } from '../../components/Icon';
+import { IconEntity<%= entity.name %> } from '../../shared/entitiesIcons';
 import <%= entity.name %>DeleteButton from '../../components/entities/<%= entity.name %>DeleteButton';
 import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
 <%relatedEntities
@@ -150,7 +151,8 @@ export default function <%= entity.name %>View() {
 
   return (
     <>
-      <h1 className="text-2xl mb-4">
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <IconEntity<%=entity.name%> size={8} />
         {t('entities:<%-to.snake(entity.name)%>.<%- entity.name%>')} ID {id}
       </h1>
       <SimpleLoader loading={loading} />

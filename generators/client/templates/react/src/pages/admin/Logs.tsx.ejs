@@ -159,7 +159,10 @@ export default function Logs({ maxLines = 1000, pollInterval = 1000 }: LogsProps
   return (
     <div className="flex flex-col h-full">
       <header className="flex flex-col gap-3 p-4 border-b lg:flex-row lg:items-center lg:justify-between">
-        <h1 className="text-lg font-semibold">{t('title')}</h1>
+        <h1 className="flex items-center gap-2 text-2xl">
+          <Icon icon="notes" size={8} />
+          {t('title')}
+        </h1>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center lg:gap-4">
           {/* Filtri livello log */}

@@ -71,7 +71,8 @@ export default function AuditHistory() {
           <Icon icon="arrow_left_alt" size={6} />
           {t('actions.back')}
         </button>
-        <h1 className="text-2xl font-bold">
+        <h1 className="flex items-center gap-2 text-2xl mb-4">
+          <Icon icon="browse_activity" size={8} />
           {t('audit:changeHistory')} - {type ? formatModelName(type) : ''} #{id}
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">

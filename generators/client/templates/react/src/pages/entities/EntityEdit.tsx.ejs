@@ -6,6 +6,7 @@ import { ErrorResponseData, useNotifications } from '../../contexts/Notification
 import { SimpleLoader } from '../../components/SimpleLoader';
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { <%= entity.name %>Form } from '../../components/entities/<%= entity.name %>Form';
+import { IconEntity<%= entity.name %> } from '../../shared/entitiesIcons';
 <%_ if (entity.pessimisticLock) { _%>
 import { useRecordLock } from '../../hooks/useRecordLock';
 import { LockBanner } from '../../components/LockBanner';
@@ -100,7 +101,8 @@ export default function <%= entity.name %>Edit() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-2xl my-8">
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <IconEntity<%=entity.name%> size={8} />
         {t(`actions.crud.${id ? 'update' : 'create'}`)} {t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}
         {id ? ` ID ${id}` : ''}
       </h1>

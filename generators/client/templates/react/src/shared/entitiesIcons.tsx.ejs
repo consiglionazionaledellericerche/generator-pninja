@@ -5,6 +5,9 @@ import { Icon, IconProps } from '../components/Icon';
 export function IconEntities(props: Omit<IconProps, 'icon'>) {
   return <Icon icon="asterisk" {...props} />;
 }
+export function IconEntityAcRule(props: Omit<IconProps, 'icon'>) {
+  return <Icon icon="shield_person" {...props} />;
+}
 <%  for (const entity of entities) {-%>
 export function IconEntity<%=entity.name%>(props: Omit<IconProps, 'icon'>) {
   return <Icon icon="<%- getIcon(entity) %>" {...props} />;

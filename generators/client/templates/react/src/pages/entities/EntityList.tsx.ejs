@@ -22,6 +22,7 @@ import useAutoShortcuts from '../../hooks/useAutoShortcuts';
 import { detect } from 'detect-browser';
 import { Can } from '../../components/Can';
 import { Icon } from '../../components/Icon';
+import { IconEntity<%= entity.name %> } from '../../shared/entitiesIcons';
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
 type SortableField = 'id'<%for(column of columns) { %><% if (!fileColumns.includes(column)) { %> | '<%=column%>'<% } %><% } %>;
@@ -173,7 +174,10 @@ export default function <%= entity.name %>List() {
 
   return (
     <>
-      <h1 className="text-2xl mb-4">{t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}</h1>
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <IconEntity<%=entity.name%> size={8} />
+        {t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>')}
+      </h1>
       <div className={`flex gap-4 mb-4`}>
 <% if (searchEngine !== 'null' ) { -%>
         <SearchInput onChange={(value) => setSearchTerm(value)} onClear={() => setSearchTerm('')} />

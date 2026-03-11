@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useAuthState } from '../../hooks/useAuthState';
+import { Icon } from '../../components/Icon';
 export default function Err403() {
   const { t, i18n } = useTranslation();
   const { user } = useAuthState();
@@ -10,23 +11,26 @@ export default function Err403() {
     });
   }, [t, i18n.language, user]);
   return (
-    <>
-      <h1 className="text-2xl mb-4">
-        {t('errors.403.title', {
-          username:
-            user?.name || user?.username || user?.preferred_username || user?.email || '???',
-        })}
-      </h1>
-      <p>
-        <Trans
-          i18nKey="errors.403.message"
-          values={{
+    <div className="flex items-center gap-4">
+      <Icon icon="sentiment_dissatisfied" size={32} />
+      <div>
+        <h1 className="text-2xl mb-4">
+          {t('errors.403.title', {
             username:
               user?.name || user?.username || user?.preferred_username || user?.email || '???',
-          }}
-          components={{ 1: <strong /> }}
-        />
-      </p>
-    </>
+          })}
+        </h1>
+        <p>
+          <Trans
+            i18nKey="errors.403.message"
+            values={{
+              username:
+                user?.name || user?.username || user?.preferred_username || user?.email || '???',
+            }}
+            components={{ 1: <strong /> }}
+          />
+        </p>
+      </div>
+    </div>
   );
 }

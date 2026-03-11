@@ -72,7 +72,10 @@ export default function RecordsLocks() {
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">{t('admin.title')}</h1>
+        <h1 className="flex items-center gap-2 text-2xl mb-4">
+          <Icon icon="lock" size={8} />
+          {t('admin.title')}
+        </h1>
         <button className="secondary-button" onClick={loadLocks} disabled={loading}>
           <span className="flex items-center gap-2">
             <Icon icon="refresh" size={5} />

@@ -313,7 +313,10 @@ export default function Seeder() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">{t('seeder:title')}</h1>
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <Icon icon="playlist_play" size={8} />
+        {t('seeder:title')}
+      </h1>
       <SimpleLoader loading={loading} />
       {!loading && seeders.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
       {!loading && seeders.length > 0 && (

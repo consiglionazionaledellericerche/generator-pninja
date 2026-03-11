@@ -389,7 +389,10 @@ export default function SearchReindex() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6">{t('searchReindex:title')}</h1>
+      <h1 className="flex items-center gap-2 text-2xl mb-4">
+        <Icon icon="search_gear" size={8} />
+        {t('searchReindex:title')}
+      </h1>
       <SimpleLoader loading={loading} />
       {!loading && entities.length === 0 && <p className="mb-4 text-2xl">{t('messages.noData')}</p>}
       {!loading && entities.length > 0 && (

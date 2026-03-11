@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '../../components/Icon';
 export default function Err404() {
   const { t, i18n } = useTranslation();
   useEffect(() => {
     document.title = t('errors.404.title');
   }, [t, i18n.language]);
   return (
-    <>
-      <h1 className="text-2xl mb-4">{t('errors.404.title')}</h1>
-      <p>{t('errors.404.message')}</p>
-    </>
+    <div className="flex items-center gap-4">
+      <Icon icon="sentiment_very_dissatisfied" size={32} />
+      <div>
+        <h1 className="text-2xl mb-4">{t('errors.404.title')}</h1>
+        <p>{t('errors.404.message')}</p>
+      </div>
+    </div>
   );
 }
