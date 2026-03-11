@@ -1,9 +1,9 @@
 <%
-const getIcon = (entity) => entity.icon ?? "deployed_code";
+const getIcon = (entity) => entity.icon ?? "asterisk";
 -%>
 import { Icon, IconProps } from '../components/Icon';
 export function IconEntities(props: Omit<IconProps, 'icon'>) {
-  return <Icon icon="deployed_code" {...props} />;
+  return <Icon icon="asterisk" {...props} />;
 }
 <%  for (const entity of entities) {-%>
 export function IconEntity<%=entity.name%>(props: Omit<IconProps, 'icon'>) {
