@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom';
+<%_ if (entity.pessimisticLock) { _%>
+import { TooltipTrigger, Button } from 'react-aria-components';
+import { Tooltip } from '../../components/Tooltip';
+<%_ } _%>
 import { Fragment, useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation<%- entity.pessimisticLock ? ', Trans' : '' %> } from 'react-i18next';
 import { ApiResponsePage, SortConfig } from '../../types/api-response.types';
 import { ApiResponsePagination } from '../../components/ApiResponsePagination';
 <% if(durationColumns.length) {-%>
@@ -26,6 +30,9 @@ export default function <%= entity.name %>List() {
   const { t, i18n } = useTranslation();
   const { addNotification } = useNotifications();
   const [loading, setLoading] = useState(false);
+<%_ if (entity.pessimisticLock) { _%>
+  const [lockMap, setLockMap] = useState<Map<number, { lockedBy: string; expiresAt: string }>>(new Map());
+<%_ } _%>
 <% if (searchEngine !== 'null' ) { -%>
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
@@ -140,6 +147,26 @@ export default function <%= entity.name %>List() {
 
   useEffect(() => loadRecords(), [loadRecords]);
 
+<%_ if (entity.pessimisticLock) { _%>
+  useEffect(() => {
+    if (!page?.data?.length) return;
+    Promise.all(
+      page.data.map((row) =>
+        <%= entity.name %>Service.lockStatus(row.id)
+          .then(({ data }) => ({ id: row.id, data }))
+          .catch(() => ({ id: row.id, data: { locked: false } }))
+      )
+    ).then((results) => {
+      const map = new Map<number, { lockedBy: string; expiresAt: string }>();
+      results.forEach(({ id, data }) => {
+        if (data.locked) map.set(id, { lockedBy: data.locked_by, expiresAt: data.expires_at });
+      });
+      setLockMap(map);
+    });
+  }, [page]);
+
+<%_ } _%>
+
   useEffect(() => {
     document.title = t('entities:<%-to.snake(entity.name)%>.<%- pluralize(entity.name)%>');
   }, [i18n.language, t]);
@@ -191,6 +218,13 @@ export default function <%= entity.name %>List() {
 <%                for(r of relatedEntities) { -%>
                   <th scope="col">{t('entities:<%-to.snake(entity.name)%>.<%-r.field%>')}</th>
 <%                } -%>
+<%_ if (entity.pessimisticLock) { _%>
+                  {!!lockMap.size && (
+                    <th scope="col" className="w-0" aria-label={t('locking:admin.columns.lock')}>
+                      <Icon icon="lock" size={5} />
+                    </th>
+                  )}
+<%_ } _%>
                   <th scope="col">{t('actions.crud.actions')}</th>
                 </tr>
               </thead>
@@ -227,6 +261,34 @@ export default function <%= entity.name %>List() {
 <%                    } -%>
                     </td>
 <%                  } -%>
+<%_ if (entity.pessimisticLock) { _%>
+                    {!!lockMap.size && (
+                      <td>
+                        {lockMap.has(row.id) && (
+                          <TooltipTrigger delay={500}>
+                            <Button aria-label={t('locking:admin.columns.lock')}>
+                              <Icon icon="lock" size={5} className="text-amber-500" />
+                            </Button>
+                            <Tooltip>
+                              <Trans
+                                ns="locking"
+                                i18nKey="lockedBy"
+                                values={{
+                                  user: lockMap.get(row.id)?.lockedBy,
+                                  expires: new Date(
+                                    lockMap.get(row.id)?.expiresAt ?? ''
+                                  ).toLocaleString(),
+                                }}
+                                components={{
+                                  strong: <strong />,
+                                }}
+                              />
+                            </Tooltip>
+                          </TooltipTrigger>
+                        )}
+                      </td>
+                    )}
+<%_ } _%>
                     <td className="text-nowrap w-0 uppercase">
                       <div className="flex space-x-2">
                         <Can resource="<%= entity.name %>" action="read">
@@ -235,9 +297,15 @@ export default function <%= entity.name %>List() {
                           </Link>
                         </Can>
                         <Can resource="<%= entity.name %>" action="update">
+<%_ if (entity.pessimisticLock) { _%>
+                          <Link to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className={`text-link${ lockMap.has(row.id) ? ' opacity-40 pointer-events-none' : ''}`}>
+                            {lockMap.has(row.id) ? t('locking:locked') : t('actions.crud.edit')}
+                          </Link>
+<%_ } else { _%>
                           <Link to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>/edit/${row.id}`} className="text-link">
                             {t('actions.crud.edit')}
                           </Link>
+<%_ } _%>
                         </Can>
                       </div>
                     </td>

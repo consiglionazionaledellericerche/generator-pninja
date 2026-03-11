@@ -42,4 +42,14 @@ export const <%= entity.name %>Service = {
   forceDelete: (id: number) =>
     axiosInstance.delete(`/api/trashed-<%=to.slug(pluralize(entity.name))%>/${id}`),
 <% } -%>
+<% if (entity.pessimisticLock) { -%>
+  acquireLock: (id: number) =>
+    axiosInstance.post(`/api/locks/<%=to.slug(pluralize(entity.name))%>/${id}/acquire`),
+  renewLock: (id: number) =>
+    axiosInstance.post(`/api/locks/<%=to.slug(pluralize(entity.name))%>/${id}/renew`),
+  removeLock: (id: number) =>
+    axiosInstance.delete(`/api/locks/<%=to.slug(pluralize(entity.name))%>/${id}`),
+  lockStatus: (id: number) =>
+    axiosInstance.get(`/api/locks/<%=to.slug(pluralize(entity.name))%>/${id}`),
+<% } -%>
 };

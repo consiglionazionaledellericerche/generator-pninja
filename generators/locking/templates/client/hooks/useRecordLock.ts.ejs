@@ -1,5 +1,4 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import axiosInstance from '../shared/axiosInstance';
 
 export type LockStatus =
   | { state: 'idle' }
@@ -7,19 +6,22 @@ export type LockStatus =
   | { state: 'locked'; lockedBy: string; expiresAt: string }
   | { state: 'error'; message: string };
 
+export interface EntityLockService {
+  acquireLock: (id: number) => Promise<any>;
+  renewLock: (id: number) => Promise<any>;
+  removeLock: (id: number) => Promise<any>;
+}
+
 interface UseRecordLockOptions {
-  entityType: string;
+  entityService: EntityLockService;
   entityId: number | null;
   enabled?: boolean;
 }
 
 const HEARTBEAT_MS = 120 * 1000;
 
-export function useRecordLock({ entityType, entityId, enabled = true }: UseRecordLockOptions) {
+export function useRecordLock({ entityService, entityId, enabled = true }: UseRecordLockOptions) {
   const [lockStatus, setLockStatus] = useState<LockStatus>({ state: 'idle' });
-
-  const baseUrlRef = useRef<string | null>(null);
-  baseUrlRef.current = entityId ? `/api/locks/${entityType}/${entityId}` : null;
 
   const releasedRef = useRef(false);
   const acquiredRef = useRef(false);
@@ -36,14 +38,14 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
     // allowing React Strict Mode's synchronous mount/unmount/mount cycle
     // to cancel the timeout before it fires, preventing a double acquire.
     const timeout = setTimeout(() => {
-      axiosInstance
-        .post(`${baseUrlRef.current}/acquire`)
+      entityService
+        .acquireLock(entityId)
         .then(({ data }) => {
           acquiredRef.current = true;
           setLockStatus({ state: 'owned', expiresAt: data.expires_at });
 
           interval = setInterval(() => {
-            axiosInstance.post(`${baseUrlRef.current}/renew`).catch(() => {
+            entityService.renewLock(entityId).catch(() => {
               if (interval) clearInterval(interval);
             });
           }, HEARTBEAT_MS);
@@ -65,20 +67,20 @@ export function useRecordLock({ entityType, entityId, enabled = true }: UseRecor
       clearTimeout(timeout);
       if (interval) clearInterval(interval);
       if (!releasedRef.current && acquiredRef.current) {
-        axiosInstance.delete(baseUrlRef.current!).catch(() => {});
+        entityService.removeLock(entityId).catch(() => {});
       }
     };
   }, [entityId, enabled]);
 
   const release = useCallback(async () => {
-    if (!baseUrlRef.current || releasedRef.current || !acquiredRef.current) return;
+    if (!entityId || releasedRef.current || !acquiredRef.current) return;
     releasedRef.current = true;
     try {
-      await axiosInstance.delete(baseUrlRef.current);
+      await entityService.removeLock(entityId);
     } finally {
       setLockStatus({ state: 'idle' });
     }
-  }, []);
+  }, [entityId, entityService]);
 
   return {
     lockStatus,

@@ -252,7 +252,8 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`));
+    that.fs.copyTpl(that.templatePath("react/src/components/Tooltip.tsx.ejs"), that.destinationPath(`client/src/components/Tooltip.tsx`));
 
     that.fs.copyTpl(that.templatePath("react/src/config/languages.ts.ejs"), that.destinationPath(`client/src/config/languages.ts`), {
         languages: JSON.stringify(languages).replaceAll(`"`, `'`),
