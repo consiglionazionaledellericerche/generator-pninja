@@ -152,8 +152,8 @@ export default function AuditStatistics() {
     setLoading(true);
 
     Promise.all([
-      axiosInstance.get(`/api/audits/statistics?date_from=${dateFrom}&date_to=${dateTo}`),
-      axiosInstance.get(`/api/audits/timeline?date_from=${dateFrom}&date_to=${dateTo}`),
+      axiosInstance.get(`/api/admin/audits/statistics?date_from=${dateFrom}&date_to=${dateTo}`),
+      axiosInstance.get(`/api/admin/audits/timeline?date_from=${dateFrom}&date_to=${dateTo}`),
     ])
       .then(([statsResponse, timelineResponse]) => {
         setStats(statsResponse.data);

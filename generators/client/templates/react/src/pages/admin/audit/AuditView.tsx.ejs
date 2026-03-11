@@ -37,7 +37,7 @@ export default function AuditView() {
     if (!id) return;
 
     axiosInstance
-      .get(`/api/audits/${id}`)
+      .get(`/api/admin/audits/${id}`)
       .then((response) => {
         setAudit(response.data);
         setLoading(false);

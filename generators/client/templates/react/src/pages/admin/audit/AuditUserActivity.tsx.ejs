@@ -100,19 +100,19 @@ export default function AuditUserActivity() {
 
     Promise.all([
       axiosInstance.get(
-        `/api/audits/user/${userId}/profile?date_from=${dateFrom}&date_to=${dateTo}`
+        `/api/admin/audits/user/${userId}/profile?date_from=${dateFrom}&date_to=${dateTo}`
       ),
       axiosInstance.get(
-        `/api/audits/user/${userId}/timeline?date_from=${dateFrom}&date_to=${dateTo}&per_page=10`
+        `/api/admin/audits/user/${userId}/timeline?date_from=${dateFrom}&date_to=${dateTo}&per_page=10`
       ),
       axiosInstance.get(
-        `/api/audits/user/${userId}/hourly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
+        `/api/admin/audits/user/${userId}/hourly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
       ),
       axiosInstance.get(
-        `/api/audits/user/${userId}/weekly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
+        `/api/admin/audits/user/${userId}/weekly-pattern?date_from=${dateFrom}&date_to=${dateTo}`
       ),
       axiosInstance.get(
-        `/api/audits/user/${userId}/sessions?date_from=${dateFrom}&date_to=${dateTo}`
+        `/api/admin/audits/user/${userId}/sessions?date_from=${dateFrom}&date_to=${dateTo}`
       ),
     ])
       .then(([profileRes, timelineRes, hourlyRes, weeklyRes, sessionsRes]) => {

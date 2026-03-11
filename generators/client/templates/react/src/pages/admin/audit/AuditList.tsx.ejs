@@ -68,8 +68,8 @@ export default function AuditList() {
 
   // Load lists for filters
   useEffect(() => {
-    axiosInstance.get('/api/audits/models').then((response) => setModels(response.data));
-    axiosInstance.get('/api/audits/users').then((response) => setUsers(response.data));
+    axiosInstance.get('/api/admin/audits/models').then((response) => setModels(response.data));
+    axiosInstance.get('/api/admin/audits/users').then((response) => setUsers(response.data));
   }, []);
 
   const loadRecords = useCallback(() => {
@@ -91,7 +91,7 @@ export default function AuditList() {
     });
 
     axiosInstance
-      .get(`/api/audits?${params.toString()}`)
+      .get(`/api/admin/audits?${params.toString()}`)
       .then((response) => response?.data)
       .then((page: ApiResponsePage<IAudit>) => {
         setPage(page);
@@ -214,7 +214,7 @@ export default function AuditList() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params.append(key, value);
     });
-    const url = `/api/audits/export?${params.toString()}`;
+    const url = `/api/admin/audits/export?${params.toString()}`;
     window.location.href = url;
   };
 

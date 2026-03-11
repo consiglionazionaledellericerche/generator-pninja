@@ -52,7 +52,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
 <%  }; -%>
 <% }); -%>
 
-    Route::prefix('audits')->group(function () {
+    Route::prefix('admin/audits')->group(function () {
         Route::get('/', [AuditController::class, 'index']);
         Route::get('/statistics', [AuditController::class, 'statistics']);
         Route::get('/timeline', [AuditController::class, 'timeline']);

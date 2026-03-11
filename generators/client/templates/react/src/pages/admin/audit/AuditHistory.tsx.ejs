@@ -29,7 +29,7 @@ export default function AuditHistory() {
     if (!type || !id) return;
 
     axiosInstance
-      .get(`/api/audits/entity/${encodeURIComponent(type)}/${id}`)
+      .get(`/api/admin/audits/entity/${encodeURIComponent(type)}/${id}`)
       .then((response) => {
         setAudits(response.data);
         setLoading(false);
