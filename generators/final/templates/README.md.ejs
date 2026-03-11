@@ -262,7 +262,7 @@ For high-traffic applications, consider:
 <%  if (['solr','meilisearch','elastic','algolia','typesense'].includes(searchEngine)) { -%>
 ## Search Index Management
 
-The application includes a **search index management interface** accessible at `/search/reindex`. It allows you to manage the search indexes for all indexable entities without using the command line.
+The application includes a **search index management interface** accessible at `/admin/search-reindex`. It allows you to manage the search indexes for all indexable entities without using the command line.
 
 **Features:**
 
@@ -331,7 +331,7 @@ p,admin,Migrations,create
 
 ## Database Seeding Administration
 
-The application includes a **seeding administration interface** accessible at `/seeder`. It allows you to run seeders without using the command line, individually or in bulk.
+The application includes a **seeding administration interface** accessible at `/admin/seeder`. It allows you to run seeders without using the command line, individually or in bulk.
 
 **Features:**
 
@@ -396,7 +396,7 @@ The application includes a **pessimistic record locking** system that prevents c
 
 **Admin interface:**
 
-Access the lock administration interface at `/admin/locks`. It shows all active locks with the resource type, record ID, username, lock time, and expiry. Administrators can force-release any lock.
+Access the lock administration interface at `/admin/records-locks`. It shows all active locks with the resource type, record ID, username, lock time, and expiry. Administrators can force-release any lock.
 
 **API usage:**
 
@@ -431,7 +431,7 @@ entity MyEntity {
 
 By default, **only `superadmin` role** can access the lock administration and force-release locks. To grant access to other roles, add policies to the `ac_rules` table:
 ```csv
-p,admin,RecordLock,read      # view all active locks at /admin/locks
+p,admin,RecordLock,read      # view all active locks at /admin/records-locks
 p,admin,RecordLock,delete    # force-release any lock
 ```
 
