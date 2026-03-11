@@ -85,7 +85,7 @@ export default function Logs({ maxLines = 1000, pollInterval = 1000 }: LogsProps
 
   const fetchLogs = async () => {
     try {
-      const response = await axios.get('/api/logs/tail', {
+      const response = await axios.get('/api/admin/logs', {
         params: {
           offset: fileOffsetRef.current,
           lines: fileOffsetRef.current === 0 ? 100 : undefined,

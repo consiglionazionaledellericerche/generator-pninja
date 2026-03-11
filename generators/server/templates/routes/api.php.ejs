@@ -109,7 +109,7 @@ Route::middleware(['session.auth', 'access.control'])->group(function () {
         Route::get('/{type}/{id}',          [RecordLockController::class, 'status'])->where('id', '[0-9]+');
     });
 
-    Route::get('/logs/tail', [LogController::class, 'tail']);
+    Route::get('/admin/logs', [LogController::class, 'tail']);
 
     Route::get('/files/private/{path}', [FileController::class, 'serveFile'])
         ->where('path', '.*')
