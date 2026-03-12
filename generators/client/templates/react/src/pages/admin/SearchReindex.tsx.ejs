@@ -351,10 +351,11 @@ export default function SearchReindex() {
     setEngineLoading(command);
     axiosInstance
       .post('/api/admin/search-reindex/engine/elastic-migrate', { command })
-      .then(() => {
+      .then(({ data }) => {
         addNotification({
           type: 'success',
           message: t(`searchReindex:engine.elastic.${command}Completed`),
+          details: data?.message,
         });
       })
       .catch((error: AxiosError<ErrorResponseData>) => {
@@ -384,7 +385,7 @@ export default function SearchReindex() {
       .finally(() => setEngineLoading(null));
   };
 <% } -%>
-  const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex || engineLoading !== null;
+  const anyBusy = bulkReindexing || bulkFlushing || bulkDeletingIndex<% ['elastic', 'meilisearch'].includes(searchEngine) ? ' || engineLoading !== null' : ''%>;
   const noneSelected = selected.size === 0;
 
   return (
