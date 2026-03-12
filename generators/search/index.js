@@ -69,25 +69,26 @@ export default class SearchGenerator extends Generator {
     const searchEngine = this.config.get('searchEngine');
     if (this.options.fromMain) {
       if (searchEngine !== 'null') {
-        await this.spawn('composer', ['require', 'laravel/scout'], { cwd: 'server' });
+        const scoutVersion = searchEngine === 'solr' ? 'laravel/scout:^10.0' : 'laravel/scout:^11.0';
+        await this.spawn('composer', ['require', scoutVersion], { cwd: 'server' });
       }
       if (searchEngine === 'elastic') {
-        await this.spawn('composer', ['require', 'babenkoivan/elastic-migrations'], { cwd: 'server' });
-        await this.spawn('composer', ['require', 'babenkoivan/elastic-scout-driver'], { cwd: 'server' });
-        await this.spawn('php', ['artisan', 'vendor:publish', '--provider="Elastic\Migrations\ServiceProvider"'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'babenkoivan/elastic-migrations:^3.0'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'babenkoivan/elastic-scout-driver:^3.0'], { cwd: 'server' });
+        await this.spawn('php', ['artisan', 'vendor:publish', '--provider="Elastic\\Migrations\\ServiceProvider"'], { cwd: 'server' });
       }
       if (searchEngine === 'meilisearch') {
-        await this.spawn('composer', ['require', 'meilisearch/meilisearch-php'], { cwd: 'server' });
-        await this.spawn('composer', ['require', 'http-interop/http-factory-guzzle'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'meilisearch/meilisearch-php:^1.0'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'http-interop/http-factory-guzzle:^1.0'], { cwd: 'server' });
       }
       if (searchEngine === 'typesense') {
-        await this.spawn('composer', ['require', 'typesense/typesense-php'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'typesense/typesense-php:^4.0'], { cwd: 'server' });
       }
       if (searchEngine === 'algolia') {
-        await this.spawn('composer', ['require', 'algolia/algoliasearch-client-php'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'algolia/algoliasearch-client-php:^3.0'], { cwd: 'server' });
       }
       if (searchEngine === 'solr') {
-        await this.spawn('composer', ['require', 'klaasie/scout-solr-engine'], { cwd: 'server' });
+        await this.spawn('composer', ['require', 'klaasie/scout-solr-engine:^3.0'], { cwd: 'server' });
       }
       spinner.text = `Generating search configuration: setting up environment variables for ${searchEngine}`;
       let searchEngineConfig = `
