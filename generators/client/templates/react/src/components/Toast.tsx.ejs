@@ -117,13 +117,22 @@ export function Toast({ notification }: { notification: INotification }) {
             <Icon icon="close" size={6} />
           </button>
         </div>
-        <div className="flex-1">
+        <div>
           <div className="flex items-center gap-2">
             <Icon icon={toastIcons[notification.type]} size={8} className="me-2" />
-            <div>{notification.message}</div>
+            <div className="flex-1">{notification.message}</div>
           </div>
+          {notification.details && (
+            <div
+              className={`${colors.details} mt-2 font-mono text-xs whitespace-pre-wrap p-2 rounded`}
+            >
+              {notification.details}
+            </div>
+          )}
           {notification?.error?.response?.data?.message && (
-            <div className={`${colors.details} mt-2 text-sm p-2 rounded`}>
+            <div
+              className={`${colors.details} mt-2 font-mono text-xs whitespace-pre-wrap p-2 rounded`}
+            >
               <div className="overflow-auto">
                 {notification?.error?.response?.data?.message}
                 {notification?.error?.response?.data?.details &&

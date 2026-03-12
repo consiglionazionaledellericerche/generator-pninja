@@ -21,6 +21,7 @@ export interface INotification {
   id: string;
   type: NotificationType;
   message: string;
+  details?: string;
   duration?: number | null;
   error?: AxiosError<ErrorResponseData>;
 }
