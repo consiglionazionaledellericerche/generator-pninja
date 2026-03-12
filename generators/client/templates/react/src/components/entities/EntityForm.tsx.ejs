@@ -7,10 +7,12 @@ for({type} of entity.fields) {
 }
 const isEmail = (name) => name.toLowerCase().includes('email');
 const isPassword = (name) => name.toLowerCase().includes('password');
+const isPassphrase = (name) => name.toLowerCase().includes('passphrase');
 const isTel = (name) => /(phone|phonenumber)$/.test(name.toLowerCase());
 const isUrl = (name) => /url$/.test(name.toLowerCase());
 const hasEmail = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isEmail(name)), false);
 const hasPassword = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isPassword(name)), false);
+const hasPassphrase = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isPassphrase(name)), false);
 const hasTel = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isTel(name)), false);
 const hasUrl = entity?.fields.reduce((res, {type,name}) => res || (type === 'String' && isUrl(name)), false);
 const hasText = entity?.fields.reduce((res, {type}) => res || type === 'String', false);
@@ -36,7 +38,7 @@ const hasRequiredBlob = entity?.fields
   );
 const getStringFieldType = (name) => {
   if (isEmail(name)) return 'EmailField';
-  if (isPassword(name)) return 'PasswordField';
+  if (isPassword(name) || isPassphrase(name)) return 'PasswordField';
   if (isTel(name)) return 'TelField';
   if (isUrl(name)) return 'UrlField';
   return 'TextField';
@@ -145,7 +147,7 @@ import {
 <% if (hasNumber) {-%>
   NumberField,
 <% } -%>
-<% if (hasPassword) {-%>
+<% if (hasPassword || hasPassphrase) {-%>
   PasswordField,
 <% } -%>
 <% if (hasRadioGroup) {-%>

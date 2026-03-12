@@ -175,12 +175,8 @@ export async function createReactClient(that) {
             getModelRelatedEntities
         });
     };
-    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-outlined.woff2"), that.destinationPath(`client/public/fonts/material-symbols-outlined.woff2`));
-    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-rounded.woff2"), that.destinationPath(`client/public/fonts/material-symbols-rounded.woff2`));
-    that.fs.copyTpl(that.templatePath("react/public/fonts/material-symbols-sharp.woff2"), that.destinationPath(`client/public/fonts/material-symbols-sharp.woff2`));
-    that.fs.copyTpl(that.templatePath("react/public/fonts/IBMPlexMono-Regular.ttf"), that.destinationPath(`client/public/fonts/IBMPlexMono-Regular.ttf`));
-    that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable-Italic.woff2"), that.destinationPath(`client/public/fonts/InterVariable-Italic.woff2`));
-    that.fs.copyTpl(that.templatePath("react/public/fonts/InterVariable.woff2"), that.destinationPath(`client/public/fonts/InterVariable.woff2`));
+    that.fs.copy(that.templatePath("react/public/fonts"), that.destinationPath("client/public/fonts"));
+    that.fs.copy(that.templatePath("react/public/wordlists"), that.destinationPath("client/public/wordlists"));
 
     that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
     that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize, searchEngine });
