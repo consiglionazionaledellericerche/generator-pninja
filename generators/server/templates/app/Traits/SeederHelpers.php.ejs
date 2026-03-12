@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 trait SeederHelpers
 {
@@ -19,17 +20,105 @@ trait SeederHelpers
 
                 $data = array_combine($headers, $row);
                 $data = array_filter($data, fn($value) => $value !== '' && $value !== null);
+                $data = $this->resolveBlobFields($data, $headers);
 
                 try {
                     $modelClass::create($data);
                 } catch (\Throwable $th) {
-                    $this->command->error("Failed to create {$modelClass}. Error: " . $th->getMessage());
+                    $message = "Failed to create {$modelClass}. Error: " . $th->getMessage();
+                    $this->command?->error($message);
+                    Log::error($message);
                 }
             }
             return true;
         } catch (\Throwable $th) {
+            $message = "seedFromCsv failed for {$modelClass}: " . $th->getMessage();
+            $this->command?->error($message);
+            Log::error($message);
             return false;
         }
+    }
+
+    /**
+     * Resolve blob fields in a CSV row.
+     *
+     * A column ending in `_blob` is treated as a blob only if both companion
+     * columns `_name` and `_type` are present in the CSV headers. This avoids
+     * false positives for fields whose name happens to end in `_blob`.
+     *
+     * The blob value is interpreted as:
+     * - a data URI  (data:<mime>;base64,<data>) → decoded binary + mime extracted
+     * - a plain base64 string                   → decoded binary
+     * - an absolute or relative filesystem path → file contents read from disk
+     *
+     * Companion columns present in the CSV always take precedence over inferred
+     * values. Empty / absent blob values are left as-is (NULL).
+     */
+    private function resolveBlobFields(array $data, array $headers): array
+    {
+        foreach ($data as $key => $value) {
+            if (!str_ends_with($key, '_blob')) continue;
+
+            $fieldPrefix = substr($key, 0, -5); // strip '_blob'
+            $nameKey     = $fieldPrefix . '_name';
+            $typeKey     = $fieldPrefix . '_type';
+
+            // Only treat as blob if both companion columns exist in the CSV headers
+            if (!in_array($nameKey, $headers) || !in_array($typeKey, $headers)) continue;
+
+            if ($value === '' || $value === null) continue;
+
+            // ── data URI: data:<mime>;base64,<payload> ──────────────────────────
+            if (str_starts_with($value, 'data:')) {
+                if (preg_match('/^data:([^;]+);base64,(.+)$/s', $value, $m)) {
+                    $data[$key] = base64_decode($m[2]);
+
+                    if (empty($data[$typeKey])) {
+                        $data[$typeKey] = $m[1];
+                    }
+                }
+                continue;
+            }
+
+            // ── filesystem path ──────────────────────────────────────────────────
+            $looksLikePath = str_contains($value, DIRECTORY_SEPARATOR)
+                || str_contains($value, '/')
+                || preg_match('/\.[a-zA-Z0-9]{1,10}$/', $value);
+
+            if ($looksLikePath) {
+                $resolved = str_starts_with($value, '/') ? $value : base_path($value);
+
+                if (File::exists($resolved)) {
+                    $data[$key] = File::get($resolved);
+
+                    if (empty($data[$nameKey])) {
+                        $data[$nameKey] = basename($resolved);
+                    }
+                    if (empty($data[$typeKey])) {
+                        $data[$typeKey] = mime_content_type($resolved) ?: 'application/octet-stream';
+                    }
+                } else {
+                    $message = "SeederHelpers: blob file not found, field [{$key}] set to NULL: {$resolved}";
+                    $this->command?->warn($message);
+                    Log::warning($message);
+                    unset($data[$key]);
+                }
+                continue;
+            }
+
+            // ── plain base64 ─────────────────────────────────────────────────────
+            $decoded = base64_decode($value, strict: true);
+            if ($decoded !== false) {
+                $data[$key] = $decoded;
+            } else {
+                $message = "SeederHelpers: could not decode base64 value for field [{$key}], field set to NULL.";
+                $this->command?->warn($message);
+                Log::warning($message);
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
     }
 
     private function seedManyToManyFromCsv(string $modelClass, string $relatedClass, string $relationName): bool
