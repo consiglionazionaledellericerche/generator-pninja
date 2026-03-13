@@ -137,7 +137,7 @@ export class FactoriesGenerator {
                 } else if (to.snake(field.name).includes('password')) {
                     return `fake()->unique()->password(${minlength || 16}, ${maxlength || 32})`;
                 } else if (to.snake(field.name).includes('passphrase')) {
-                    return `implode('-', array_unique(fake->words(4)))`;
+                    return `implode('-', array_unique(fake()->words(5)))`;
                 } else if (field.name.toLowerCase().includes('phone')) {
                     return `substr(str_pad(fake()->unique()->phoneNumber(), ${minlength || 0}, '0', STR_PAD_RIGHT), 0, ${maxlength || 255})`;
                 } else if (field.name.toLowerCase().includes('address')) {

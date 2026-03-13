@@ -118,6 +118,10 @@
       "specialChars": "A special character (!@#$%&*...)"
     }
   },
+  "passphrase": {
+    "generate": "Generate passphrase",
+    "wordCount": "{{count}} word(s) (minimum {{min}})"
+  },
   "errors": {
     "401": {
       "title": "Error 401 – Unauthorized",
@@ -162,6 +166,9 @@
       "password": {
         "weakPassword": "Password is too weak"
       },
+      "passphrase": {
+        "minwords": "Passphrase must contain at least {{accepted}} words#"
+      },
       "pattern": "Invalid format",
       "required": "Required",
       "url": "Invalid URL format"
@@ -185,6 +192,7 @@
     "validations": {
       "min": "Number must be greater than or equal to {{accepted}}",
       "minlength": "String must contain at least {{accepted}} character(s)",
+      "minwords": "Passphrase must contain at least {{accepted}} words$",
       "minbytes": "The file must be at least {{accepted}}",
       "max": "Number must be less than or equal to {{accepted}}",
       "maxlength": "String must contain at most {{accepted}} character(s)",

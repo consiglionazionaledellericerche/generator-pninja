@@ -309,6 +309,9 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%        } else if (type === 'String') {-%>
             <<%- getStringFieldType(name) %>
               fieldName="<%-to.snake(name)%>"
+<%_ if (getStringFieldType(name) === 'PasswordField') { _%>
+              mode="<%- isPassphrase(name) ? 'passphrase' : 'password' %>"
+<%_ } _%>
               label={t('entities:<%-to.snake(entity.name)%>.<%-to.snake(name)%>')}
 <%          if(getValidationsFromValidations(validations)) {-%>
               validations={<%- getValidationsFromValidations(validations) %>}

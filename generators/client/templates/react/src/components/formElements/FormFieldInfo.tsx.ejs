@@ -13,6 +13,7 @@ interface IFormFieldInfo {
   max?: number;
   maxbytes?: number;
   maxlength?: number;
+  minwords?: number;
   pattern?: string | RegExp;
   required?: boolean;
   unique?: boolean;
@@ -24,7 +25,7 @@ const FormFieldInfoContents: React.FC<FormFieldInfoProps> = ({ validations }) =>
     .filter((key) => !['pattern', 'strength'].includes(key))
     .map((key) => {
       const typedKey = key as keyof IFormFieldInfo;
-      if (['min', 'max', 'minlength', 'maxlength'].includes(typedKey)) {
+      if (['min', 'max', 'minlength', 'maxlength', 'minwords'].includes(typedKey)) {
         return t(`info.validations.${typedKey}`, { accepted: validations[typedKey] });
       }
       if (['minbytes', 'maxbytes'].includes(typedKey)) {
