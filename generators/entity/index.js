@@ -11,7 +11,7 @@ import { AcRule } from '../utils/AcRule.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
-import { SwaggerGenerator } from '../entities/utils/swagger-generator.js';
+import { OpenApiGenerator } from '../entities/utils/openapi-generator.js';
 import { RoutersGenerator } from '../entities/utils/routers-generator.js';
 import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
@@ -930,9 +930,9 @@ export default class extends Generator {
             });
         !this.options.fromEntities && this.log(colors.green('Controllers generated successfully\n'));
 
-        // Swagger generator
-        const swaggerGen = new SwaggerGenerator(this);
-        swaggerGen.generateSwagger([AcRule, ...storedEntities]);
+        // OpenApi generator
+        const openApiGen = new OpenApiGenerator(this);
+        openApiGen.generateOpenApi([AcRule, ...storedEntities]);
 
         this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/SeedRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/SeedRequest.php`), {
             entities: storedEntities,

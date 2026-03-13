@@ -567,12 +567,12 @@ function buildEntityPaths(entity, relationships, enums, searchEngine) {
     return paths;
 }
 
-export class SwaggerGenerator {
+export class OpenApiGenerator {
     constructor(that) {
         this.that = that;
     }
 
-    async generateSwagger(entities = null, relationships = null, enums = null) {
+    async generateOpenApi(entities = null, relationships = null, enums = null) {
         entities = entities ?? getEntities(this.that);
         relationships = relationships ?? getEntitiesRelationships(this.that);
         enums = enums ?? getEnums(this.that);

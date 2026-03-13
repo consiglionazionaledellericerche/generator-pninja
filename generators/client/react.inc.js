@@ -5,7 +5,7 @@ import { getModelForeignIds } from './utils/getModelForeignIds.js';
 import { getLanguageData } from './config/languages.js';
 import { AcRule } from '../utils/AcRule.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
-import { SwaggerGenerator } from '../entities/utils/swagger-generator.js';
+import { OpenApiGenerator } from '../entities/utils/openapi-generator.js';
 
 const colors = [
     "lime",
@@ -282,7 +282,7 @@ export async function createReactClient(that) {
 
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/Logs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Logs.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/Swagger.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Swagger.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/admin/ApiDocs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/ApiDocs.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
@@ -310,8 +310,8 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("blobs/dummy.pdf"), that.destinationPath(`server/database/factories/dummy.pdf`));
     that.fs.copyTpl(that.templatePath("blobs/dummy.png"), that.destinationPath(`server/database/factories/dummy.png`));
 
-    // Swagger generation
+    // Api Docs generation
     that.sourceRoot(that.templatePath() + '/../../client/templates');
-    const swaggerGen = new SwaggerGenerator(that);
-    swaggerGen.generateSwagger([AcRule]);
+    const openApiGen = new OpenApiGenerator(that);
+    openApiGen.generateOpenApi([AcRule]);
 }

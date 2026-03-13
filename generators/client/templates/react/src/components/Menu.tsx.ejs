@@ -144,7 +144,7 @@ const Menu: React.FC = () => {
 <%  entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
               { resource: 'Trashed<%- entity.name %>', action: 'read' },
 <%  });-%>
-              { resource: 'Swagger', action: 'read' },
+              { resource: 'ApiDocs', action: 'read' },
             ]}
           >
             <MenuTrigger>
@@ -277,14 +277,14 @@ const Menu: React.FC = () => {
                     </SubmenuTrigger>
                   </Can>
 <%    } -%>
-                  <Can action="read" resource="Swagger">
+                  <Can action="read" resource="ApiDocs">
                     <MenuItem
-                      href="/admin/swagger"
+                      href="/admin/api-docs"
                       target="_blank"
-                      id="admin-swagger"
-                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/swagger') ? menuItemIsActiveClass : ''}`}
+                      id="admin-api-docs"
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/api-docs') ? menuItemIsActiveClass : ''}`}
                     >
-                      <Icon icon="api" size={5} /> Swagger
+                      <Icon icon="api" size={5} /> Api Docs
                     </MenuItem>
                   </Can>
                 </MenuItems>

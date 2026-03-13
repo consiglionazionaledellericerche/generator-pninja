@@ -29,7 +29,7 @@ import RecordsLocks from './pages/admin/RecordsLocks';
 <%  if (!['null', 'database'].includes(searchEngine)) { -%>
 import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>
-import Swagger from './pages/admin/Swagger';
+import ApiDocs from './pages/admin/ApiDocs';
 
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
@@ -61,10 +61,10 @@ function App() {
       <NotificationProvider position="top-center">
         <Routes>
             <Route
-              path="/admin/swagger"
+              path="/admin/api-docs"
               element={
-                <Can resource="Swagger" action="read" fallback={<Err403 />} force_login={true}>
-                  <Swagger />
+                <Can resource="ApiDocs" action="read" fallback={<Err403 />} force_login={true}>
+                  <ApiDocs />
                 </Can>
               }
             />
