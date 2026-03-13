@@ -10,7 +10,6 @@ import { parseJDL } from '../utils/jdlParser.js';
 import { getEntitiesConfig, getEnumsConfig, splitEntitiesFile } from './utils/entity-splitter.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
 import { createEntityPages } from '../client/react.inc.js';
-import { SwaggerGenerator } from './utils/swagger-generator.js';
 import { AcRule } from '../utils/AcRule.js';
 import { validateJDL } from './utils/validateJDL.js';
 
@@ -150,11 +149,6 @@ export default class extends Generator {
       fromEntities: true,
       entities: entitiesConfig,
     });
-
-    // Swagger generation
-    this.sourceRoot(entitiesTemplatePath);
-    const swaggerGen = new SwaggerGenerator(this);
-    swaggerGen.generateSwagger(entitiesConfig);
 
     // README update
     this.fs.copyTpl(

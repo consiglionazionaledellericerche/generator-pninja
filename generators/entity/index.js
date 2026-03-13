@@ -11,6 +11,7 @@ import { AcRule } from '../utils/AcRule.js';
 import { MigrationsGenerator } from '../entities/utils/migrations-generator.js';
 import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
+import { SwaggerGenerator } from '../entities/utils/swagger-generator.js';
 import { RoutersGenerator } from '../entities/utils/routers-generator.js';
 import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { getModelForeignIds } from '../client/utils/getModelForeignIds.js';
@@ -268,7 +269,7 @@ export default class extends Generator {
             type: 'confirm',
             name: 'softDelete',
             message: 'Do you want to enable soft delete?',
-            default: true
+            default: false
         }]);
 
         const pessimisticLockAnswer = await this.prompt([{
@@ -928,6 +929,10 @@ export default class extends Generator {
                 controllersGenerator.generateEntityController(relEntity, storedRelationships, searchEngine)
             });
         !this.options.fromEntities && this.log(colors.green('Controllers generated successfully\n'));
+
+        // Swagger generator
+        const swaggerGen = new SwaggerGenerator(this);
+        swaggerGen.generateSwagger([AcRule, ...storedEntities]);
 
         this.fs.copyTpl(this.templatePath("../../server/templates/app/Http/Requests/SeedRequest.php.ejs"), this.destinationPath(`server/app/Http/Requests/SeedRequest.php`), {
             entities: storedEntities,

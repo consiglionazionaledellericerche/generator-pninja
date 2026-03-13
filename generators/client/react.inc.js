@@ -5,6 +5,7 @@ import { getModelForeignIds } from './utils/getModelForeignIds.js';
 import { getLanguageData } from './config/languages.js';
 import { AcRule } from '../utils/AcRule.js';
 import { getEntities, getEntitiesRelationships, getEnums } from '../utils/entities-utils.js';
+import { SwaggerGenerator } from '../entities/utils/swagger-generator.js';
 
 const colors = [
     "lime",
@@ -308,4 +309,9 @@ export async function createReactClient(that) {
 
     that.fs.copyTpl(that.templatePath("blobs/dummy.pdf"), that.destinationPath(`server/database/factories/dummy.pdf`));
     that.fs.copyTpl(that.templatePath("blobs/dummy.png"), that.destinationPath(`server/database/factories/dummy.png`));
+
+    // Swagger generation
+    that.sourceRoot(that.templatePath() + '/../../client/templates');
+    const swaggerGen = new SwaggerGenerator(that);
+    swaggerGen.generateSwagger([AcRule]);
 }
