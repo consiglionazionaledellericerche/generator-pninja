@@ -144,6 +144,7 @@ const Menu: React.FC = () => {
 <%  entities.filter(entity => hasSoftDelete(entity)).forEach((entity, index) => {-%>
               { resource: 'Trashed<%- entity.name %>', action: 'read' },
 <%  });-%>
+              { resource: 'Swagger', action: 'read' },
             ]}
           >
             <MenuTrigger>
@@ -164,7 +165,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="AcRule">
                     <MenuItem
                       href="/admin/ac-rules"
-                      id="ac-rules"
+                      id="admin-ac-rules"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/ac-rules') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="shield_person" fill size={5} />
@@ -174,7 +175,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="Audit">
                     <MenuItem
                       href="/admin/audits"
-                      id="audits"
+                      id="admin-audits"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/audits') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="browse_activity" size={5} /> {t('audit:system')}
@@ -183,7 +184,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="Log">
                     <MenuItem
                       href="/admin/logs"
-                      id="logs"
+                      id="admin-logs"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/logs') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="notes" size={5} /> {t('log:title')}
@@ -192,7 +193,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="Seeder">
                     <MenuItem
                       href="/admin/seeder"
-                      id="seeder"
+                      id="admin-seeder"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/seeder') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="playlist_play" size={5} /> {t('seeder:title')}
@@ -201,7 +202,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="Migrations">
                     <MenuItem
                       href="/admin/migrations"
-                      id="migrations"
+                      id="admin-migrations"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/migrations/admin') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="database" size={5} /> {t('migrations:title')}
@@ -211,7 +212,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="SearchReindex">
                     <MenuItem
                       href="/admin/search-reindex"
-                      id="search-reindex"
+                      id="admin-search-reindex"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/search-reindex') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="search_gear" size={5} /> {t('searchReindex:title')}
@@ -221,7 +222,7 @@ const Menu: React.FC = () => {
                   <Can action="read" resource="RecordLock">
                     <MenuItem
                       href="/admin/records-locks"
-                      id="records-locks"
+                      id="admin-records-locks"
                       className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/records-locks') ? menuItemIsActiveClass : ''}`}
                     >
                       <Icon icon="lock" size={5} /> {t('locking:admin.title')}
@@ -252,7 +253,7 @@ const Menu: React.FC = () => {
                           <Can action="read" resource="TrashedAcRule">
                             <MenuItem
                               href="/admin/ac-rules/trash"
-                              id="ac-rules-trash"
+                              id="admin-ac-rules-trash"
                               className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/ac-rules') ? menuItemIsActiveClass : ''}`}
                             >
                               <Icon icon="shield_person" fill size={5} />
@@ -263,7 +264,7 @@ const Menu: React.FC = () => {
                           <Can action="read" resource="Trashed<%- entity.name %>">
                             <MenuItem
                               href="/admin/<%- to.slug(pluralize(entity.name)) %>/trash"
-                              id="<%- to.slug(pluralize(entity.name)) %>-trash"
+                              id="admin-<%- to.slug(pluralize(entity.name)) %>-trash"
                               className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/entities/<%- to.slug(pluralize(entity.name)) %>') ? menuItemIsActiveClass : ''}`}
                             >
                               <IconEntity<%- entity.name %> size={5} />
@@ -276,6 +277,16 @@ const Menu: React.FC = () => {
                     </SubmenuTrigger>
                   </Can>
 <%    } -%>
+                  <Can action="read" resource="Swagger">
+                    <MenuItem
+                      href="/admin/swagger"
+                      target="_blank"
+                      id="admin-swagger"
+                      className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/swagger') ? menuItemIsActiveClass : ''}`}
+                    >
+                      <Icon icon="api" size={5} /> Swagger
+                    </MenuItem>
+                  </Can>
                 </MenuItems>
               </Popover>
             </MenuTrigger>
