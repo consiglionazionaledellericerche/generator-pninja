@@ -76,10 +76,16 @@ function applyValidations(schema, validations, fieldType) {
     return schema;
 }
 
-// Builds the schema properties for an entity (fields + FK ids from relationships)
+// Builds the schema properties for an entity READ response (fields + FK ids from relationships).
+// Blobs: _blob is in $hidden on the model (Base64BinaryCast), not exposed in JSON responses.
+// Only _type and _name are returned. Binary content is served via the serveBlob endpoint.
+// Write payloads use a separate schema (EntityNameWrite) with nested objects per field.
 function buildEntityProperties(entity, relationships, enums) {
     const properties = {
-        id: { type: 'integer', format: 'int64', readOnly: true }
+        id: { type: 'integer', format: 'int64', readOnly: true },
+        created_at: { type: 'string', format: 'date-time', readOnly: true, nullable: true },
+        updated_at: { type: 'string', format: 'date-time', readOnly: true, nullable: true },
+        ...(entity.softDelete ? { deleted_at: { type: 'string', format: 'date-time', readOnly: true, nullable: true } } : {}),
     };
     const required = [];
 
@@ -88,16 +94,18 @@ function buildEntityProperties(entity, relationships, enums) {
         const isRequired = field.validations.some(v => v.key === 'required');
 
         if (isBlob) {
-            // Blobs are split into _blob, _type, _name
-            properties[`${to.snake(field.name)}_blob`] = applyValidations(
-                { type: 'string', format: 'byte', description: 'Base64 encoded binary content' },
-                field.validations,
-                field.type
-            );
-            properties[`${to.snake(field.name)}_type`] = { type: 'string', description: 'MIME type of the binary content' };
-            properties[`${to.snake(field.name)}_name`] = { type: 'string', description: 'File name of the binary content' };
+            // _blob is in model $hidden — only _type and _name appear in GET responses
+            properties[`${to.snake(field.name)}_type`] = {
+                type: 'string',
+                nullable: !isRequired,
+                description: 'MIME type of the stored file',
+            };
+            properties[`${to.snake(field.name)}_name`] = {
+                type: 'string',
+                nullable: !isRequired,
+                description: 'Original file name',
+            };
             if (isRequired) {
-                required.push(`${to.snake(field.name)}_blob`);
                 required.push(`${to.snake(field.name)}_type`);
                 required.push(`${to.snake(field.name)}_name`);
             }
@@ -170,13 +178,133 @@ function buildEntityProperties(entity, relationships, enums) {
     return { properties, required };
 }
 
-// Builds a "WriteRequest" schema (no id, no readOnly) for store/update
-function buildWriteSchema(entityName, readSchema) {
-    const { id, ...writeProperties } = readSchema.properties;
+// Builds the write schema properties for POST/PUT payloads.
+// Blob fields are sent as nested objects { data, mimeType, originalName, delete }
+// matching the FileField.tsx → controller contract.
+function buildWriteProperties(entity, relationships, enums) {
+    const properties = {};
+    const required = [];
+
+    for (const field of entity.fields) {
+        const isBlob = ['Blob', 'AnyBlob', 'ImageBlob'].includes(field.type);
+        const isImageBlob = field.type === 'ImageBlob';
+        const isRequired = field.validations.some(v => v.key === 'required');
+        const minbytes = field.validations.find(v => v.key === 'minbytes')?.value;
+        const maxbytes = field.validations.find(v => v.key === 'maxbytes')?.value;
+
+        if (isBlob) {
+            // Nested object mirroring FileField.tsx TransformedFileData shape.
+            // Controller validates: field.data, field.mimeType, field.originalName, field.delete
+            const nestedRequired = [];
+            if (isRequired) nestedRequired.push('data', 'mimeType', 'originalName');
+
+            const dataSchema = {
+                type: 'string',
+                format: 'byte',
+                description: 'Base64 encoded file content (without data URI prefix)',
+            };
+            if (minbytes) dataSchema['x-minBytes'] = Number(minbytes);
+            if (maxbytes) dataSchema['x-maxBytes'] = Number(maxbytes);
+
+            properties[to.snake(field.name)] = {
+                type: 'object',
+                description: isRequired
+                    ? `Required file upload for ${field.name}`
+                    : `Optional file upload for ${field.name}. Send { delete: true } to remove the existing file.`,
+                properties: {
+                    data: dataSchema,
+                    mimeType: {
+                        type: 'string',
+                        description: 'MIME type of the file',
+                        ...(isImageBlob ? { pattern: '^image/' } : {}),
+                    },
+                    originalName: {
+                        type: 'string',
+                        description: 'Original file name',
+                    },
+                    size: {
+                        type: 'integer',
+                        format: 'int64',
+                        description: 'File size in bytes',
+                    },
+                    delete: {
+                        type: 'boolean',
+                        description: 'Set to true to delete the existing file without uploading a new one',
+                        default: false,
+                    },
+                },
+                ...(nestedRequired.length ? { required: nestedRequired } : {}),
+            };
+            if (isRequired) required.push(to.snake(field.name));
+        } else {
+            const schema = applyValidations(
+                jdlTypeToOpenApi(field.type, enums),
+                field.validations,
+                field.type
+            );
+            properties[to.snake(field.name)] = schema;
+            if (isRequired) required.push(to.snake(field.name));
+        }
+    }
+
+    // FK ids (same logic as read schema, blobs excluded)
+    relationships
+        .filter(r =>
+            (r.relationshipType === 'one-to-one' || r.relationshipType === 'many-to-one')
+            && r.entityName === entity.name
+        )
+        .forEach(r => {
+            const fkName = `${to.snake(r.relationshipName || r.otherEntityName)}_id`;
+            properties[fkName] = { type: 'integer', format: 'int64' };
+            if (r.relationshipRequired) required.push(fkName);
+        });
+
+    relationships
+        .filter(r => r.relationshipType === 'one-to-many' && r.otherEntityName === entity.name)
+        .forEach(r => {
+            const fkName = `${to.snake(r.otherEntityRelationshipName || r.entityName)}_id`;
+            if (!properties[fkName]) {
+                properties[fkName] = { type: 'integer', format: 'int64' };
+                if (r.inverseRelationshipRequired) required.push(fkName);
+            }
+        });
+
+    relationships
+        .filter(r => r.relationshipType === 'many-to-many' && r.entityName === entity.name)
+        .forEach(r => {
+            const fieldName = to.snake(r.relationshipName || r.otherEntityName);
+            properties[fieldName] = {
+                type: 'array',
+                items: { type: 'integer', format: 'int64' },
+                description: `IDs of related ${r.otherEntityName} records`,
+            };
+            if (r.relationshipRequired) required.push(fieldName);
+        });
+
+    relationships
+        .filter(r => r.relationshipType === 'many-to-many' && r.otherEntityName === entity.name && r.bidirectional)
+        .forEach(r => {
+            const fieldName = to.snake(r.otherEntityRelationshipName || r.entityName);
+            if (!properties[fieldName]) {
+                properties[fieldName] = {
+                    type: 'array',
+                    items: { type: 'integer', format: 'int64' },
+                    description: `IDs of related ${r.entityName} records`,
+                };
+                if (r.inverseRelationshipRequired) required.push(fieldName);
+            }
+        });
+
+    return { properties, required };
+}
+
+// Builds a "WriteRequest" schema (no id) for store/update, with nested blob objects
+function buildWriteSchema(entity, relationships, enums) {
+    const { properties, required } = buildWriteProperties(entity, relationships, enums);
     return {
         type: 'object',
-        properties: writeProperties,
-        required: readSchema.required?.length ? readSchema.required : undefined,
+        properties,
+        ...(required?.length ? { required } : {}),
     };
 }
 
@@ -409,6 +537,33 @@ function buildEntityPaths(entity, relationships, enums, searchEngine) {
         };
     }
 
+    // serveBlob endpoint: GET /{entity}/{id}/{fieldName}/{filename}
+    // Generated only when entity has at least one blob field
+    const blobFields = entity.fields.filter(f => ['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type));
+    for (const blobField of blobFields) {
+        paths[`/${rootPath}/{id}/${to.snake(blobField.name)}/{filename}`] = {
+            get: {
+                tags: [tag],
+                summary: `Serve binary content of ${entity.name}.${blobField.name}`,
+                description: 'Returns the raw binary file (inline). Used by FileField.tsx to preview/download.',
+                parameters: [
+                    idParam,
+                    { name: 'filename', in: 'path', required: true, schema: { type: 'string' }, description: 'Original file name (for Content-Disposition)' },
+                    ...commonParams,
+                ],
+                responses: {
+                    200: {
+                        description: 'Binary file content',
+                        content: { '*/*': { schema: { type: 'string', format: 'binary' } } },
+                    },
+                    401: { $ref: '#/components/responses/Unauthorized' },
+                    403: { $ref: '#/components/responses/Forbidden' },
+                    404: { $ref: '#/components/responses/NotFound' },
+                }
+            }
+        };
+    }
+
     return paths;
 }
 
@@ -453,8 +608,8 @@ export class SwaggerGenerator {
                 ...(required?.length ? { required } : {}),
             };
 
-            // Write schema (store/update)
-            schemas[`${entity.name}Write`] = buildWriteSchema(entity.name, schemas[entity.name]);
+            // Write schema (store/update) — blob fields as nested objects
+            schemas[`${entity.name}Write`] = buildWriteSchema(entity, entityRelationships, enums);
 
             // Paginated schema
             schemas[`${entity.name}Paginated`] = buildPaginatedSchema(entity.name);
@@ -572,21 +727,6 @@ export class SwaggerGenerator {
         };
 
         const jsonString = JSON.stringify(openApiDoc, null, 2);
-
-        // // YAML via js-yaml if available, otherwise fall back to JSON (both are valid OpenAPI)
-        // let yamlString;
-        // try {
-        //     const { default: yaml } = await import('js-yaml');
-        //     yamlString = yaml.dump(openApiDoc, { lineWidth: 120, noRefs: false });
-        // } catch (e) {
-        //     yamlString = jsonString;
-        // }
-
-        // this.that.fs.copyTpl(
-        //     this.that.templatePath("openapi.yaml.ejs"),
-        //     this.that.destinationPath(`client/public/openapi.yaml`),
-        //     { openApiDoc: yamlString }
-        // );
 
         this.that.fs.write(
             this.that.destinationPath(`client/public/openapi.json`),
