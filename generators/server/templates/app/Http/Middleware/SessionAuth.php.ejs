@@ -34,6 +34,8 @@ class SessionAuth
                 $this->setAuthenticatedUser($userInfo);
                 return $next($request);
             }
+            // Token is present but invalid - return 401 for API requests, redirect to login for others
+            return response()->json(['error' => 'Unauthorized', 'message' => 'Token is invalid or expired'], 401);
         }
 
         // 3. Not authenticated - return appropriate error

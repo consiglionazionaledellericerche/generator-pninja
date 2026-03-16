@@ -4,7 +4,15 @@ import 'swagger-ui-react/swagger-ui.css';
 export default function ApiDocs() {
   return (
     <div className="bg-slate-50 text-slate-900">
-      <SwaggerUI url="/openapi.json" />
+      <SwaggerUI
+        url="/api/openapi.json"
+        oauth2RedirectUrl={`${window.location.origin}/oauth2-redirect.html`}
+        onComplete={(system) => {
+          system.initOAuth({
+            clientId: 'uas-app',
+          });
+        }}
+      />
     </div>
   );
 }

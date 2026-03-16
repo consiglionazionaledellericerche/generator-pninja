@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Traits\HandlesUserRoles;
 
 class AccessControl
@@ -26,8 +27,11 @@ class AccessControl
             $action = 'update';
         }
         $result = $this->userHasPermission($resource, $action);
-        if ($request?->user()?->username && !$result && in_array($resource, ['AcRule', 'Audit', 'Log', 'Seeder', 'Migrations', 'RecordLock', 'SearchReindex'])) {
-            \Log::warning("AccessControl: User '{$request?->user()?->username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
+        $sessionUser = Session::get('authenticated_user');
+        $username = $sessionUser['preferred_username'] ?? null;
+        // if ($resource !== 'Log') \Log::debug("AccessControl: User '{$username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
+        if ($username && !$result && in_array($resource, ['AcRule', 'Audit', 'Seeder', 'Migrations', 'RecordLock', 'SearchReindex'])) {
+            \Log::warning("AccessControl: User '{$username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
         }
         if (!$result) {
             return response()->json([

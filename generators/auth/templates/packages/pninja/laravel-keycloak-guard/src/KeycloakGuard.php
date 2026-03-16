@@ -48,7 +48,7 @@ class KeycloakGuard implements Guard
 
         try {
             $claims = $this->getDecodedToken();
-        } catch (InvalidTokenException) {
+        } catch (\Throwable) {
             return null;
         }
 
@@ -167,8 +167,12 @@ class KeycloakGuard implements Guard
             return null;
         }
 
-        $plain             = $this->decoder->decode($rawToken);
-        $this->decodedToken = $this->decoder->claims($plain);
+        try {
+            $plain = $this->decoder->decode($rawToken);
+            $this->decodedToken = $this->decoder->claims($plain);
+        } catch (InvalidTokenException) {
+            return null;
+        }
 
         return $this->decodedToken;
     }

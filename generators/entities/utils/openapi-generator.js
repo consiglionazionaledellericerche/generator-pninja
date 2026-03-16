@@ -38,7 +38,6 @@ function jdlTypeToOpenApi(type, enums = []) {
         case 'ImageBlob':
             return { type: 'string', format: 'byte', description: 'Base64 encoded binary content' };
         default:
-            // Could be an enum
             if (enums.find(e => e.name === type)) {
                 return { $ref: `#/components/schemas/${type}` };
             }
@@ -179,7 +178,7 @@ function buildEntityProperties(entity, relationships, enums) {
 }
 
 // Builds the write schema properties for POST/PUT payloads.
-// Blob fields are sent as nested objects { data, mimeType, originalName, delete }
+// Blob fields are sent as nested objects { data, mimeType, originalName, size, delete }
 // matching the FileField.tsx → controller contract.
 function buildWriteProperties(entity, relationships, enums) {
     const properties = {};
@@ -193,8 +192,6 @@ function buildWriteProperties(entity, relationships, enums) {
         const maxbytes = field.validations.find(v => v.key === 'maxbytes')?.value;
 
         if (isBlob) {
-            // Nested object mirroring FileField.tsx TransformedFileData shape.
-            // Controller validates: field.data, field.mimeType, field.originalName, field.delete
             const nestedRequired = [];
             if (isRequired) nestedRequired.push('data', 'mimeType', 'originalName');
 
@@ -579,7 +576,7 @@ export class OpenApiGenerator {
 
         const appName = this.that.config.get('name') || 'PNinja App';
         const searchEngine = this.that.config.get('searchEngine');
-        const useKeycloak = !!this.that.config.get('keycloak');
+        const useKeycloak = this.that.config.get('authentication') === 'keycloak';
 
         const schemas = {};
         const paths = {};
@@ -629,10 +626,12 @@ export class OpenApiGenerator {
                 },
                 OAuth2: {
                     type: 'oauth2',
+                    'x-tokenName': 'access_token',
+                    'x-clientId': '__KEYCLOAK_CLIENT_ID__',
                     flows: {
                         authorizationCode: {
-                            authorizationUrl: '{keycloakUrl}/auth',
-                            tokenUrl: '{keycloakUrl}/token',
+                            authorizationUrl: '__KEYCLOAK_AUTH_URL__',
+                            tokenUrl: '__KEYCLOAK_TOKEN_URL__',
                             scopes: {
                                 openid: 'OpenID Connect scope',
                                 profile: 'User profile',
@@ -716,7 +715,7 @@ export class OpenApiGenerator {
             servers: [
                 { url: '/api', description: 'API base path' }
             ],
-            security: [{ BearerAuth: [] }],
+            security: [{ OAuth2: ['openid', 'profile', 'email'] }],
             tags: entities.map(e => ({ name: e.name, description: `${e.name} management` })),
             paths,
             components: {
@@ -728,8 +727,25 @@ export class OpenApiGenerator {
 
         const jsonString = JSON.stringify(openApiDoc, null, 2);
 
+        // OpenApiController — serves openapi.json dynamically with env vars resolved
+        this.that.fs.copyTpl(
+            this.that.templatePath('../../server/templates/app/Http/Controllers/OpenApiController.php.ejs'),
+            this.that.destinationPath('server/app/Http/Controllers/OpenApiController.php'),
+            {}
+        );
+
+        // OAuth2 redirect page for Keycloak auth code flow (used by Swagger UI's "Authorize" button)
+        this.that.fs.copyTpl(
+            this.that.templatePath('../../client/templates/react/public/oauth2-redirect.html'),
+            this.that.destinationPath('client/public/oauth2-redirect.html'),
+            {}
+        );
+
+
+        // Served dynamically by OpenApiController which replaces
+        // __KEYCLOAK_*__ placeholders with real .env values at runtime
         this.that.fs.write(
-            this.that.destinationPath(`client/public/openapi.json`),
+            this.that.destinationPath('server/resources/openapi.json'),
             jsonString
         );
     }

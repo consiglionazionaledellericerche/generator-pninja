@@ -7,6 +7,8 @@ namespace Pninja\KeycloakGuard;
 use DateInterval;
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Token\Parser;
 use Lcobucci\JWT\Signer;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Plain;
@@ -33,8 +35,7 @@ class TokenDecoder
         $signer = $this->getSigner();
 
         // Parse without verification first so we can read the header (kid, alg)
-        $insecureParser = Configuration::forUnsecuredSigner();
-        $parsed         = $insecureParser->parser()->parse($tokenString);
+        $parsed = (new Parser(new JoseEncoder()))->parse($tokenString);
 
         if (! $parsed instanceof Plain) {
             throw InvalidTokenException::invalidSignature();

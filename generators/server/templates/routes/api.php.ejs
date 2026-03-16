@@ -15,6 +15,7 @@ use App\Http\Controllers\<%- className %>Controller;
 <% }); -%>
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\OpenApiController;
 
 Route::get('/health', function () {
     return response()->json([
@@ -22,6 +23,8 @@ Route::get('/health', function () {
         'timestamp' => now()->toIso8601String()
     ]);
 });
+
+Route::get('/openapi.json', [OpenApiController::class, 'show']);
 
 Route::prefix('auth')->group(function () {
     Route::get('/check-session', [SessionAuthController::class, 'checkSession']);

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en-US">
+<body onload="run()">
+  <script>
+    'use strict';
+    function run() {
+      var oauth2 = window.opener.swaggerUIRedirectOauth2;
+      var sentState = oauth2.state;
+      var redirectUrl = oauth2.redirectUrl;
+      var qp = new URLSearchParams(location.search);
+      var isValid = sentState === qp.get('state');
+      if (!isValid) {
+        oauth2.errCb({
+          authId: oauth2.auth.name,
+          source: 'auth',
+          level: 'warning',
+          message: 'Authorization may be unsafe, passed state was changed in server.'
+        });
+      }
+      if (qp.get('code')) {
+        delete oauth2.state;
+        oauth2.auth.code = qp.get('code');
+        oauth2.callback({ auth: oauth2.auth, redirectUrl: redirectUrl });
+        window.close();
+      } else {
+        oauth2.errCb({
+          authId: oauth2.auth.name,
+          source: 'auth',
+          level: 'error',
+          message: 'Authorization code is absent.'
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -60,14 +60,7 @@ function App() {
     <RouterProvider navigate={navigate} useHref={useHref}>
       <NotificationProvider position="top-center">
         <Routes>
-            <Route
-              path="/admin/api-docs"
-              element={
-                <Can resource="ApiDocs" action="read" fallback={<Err403 />} force_login={true}>
-                  <ApiDocs />
-                </Can>
-              }
-            />
+          <Route path="/admin/api-docs" element={<ApiDocs />} />
           <Route path="*" element={
             <>
               <Menu />
@@ -201,7 +194,6 @@ function App() {
             </>
           } />
         </Routes>
-        
       </NotificationProvider>
     </RouterProvider>
   );

@@ -19,7 +19,8 @@ trait HandlesUserRoles
      */
     protected function getUserRoles(): array
     {
-        $username = auth()->user()->username ?? '__GUEST__';
+        $userData = Session::get('authenticated_user');
+        $username = $userData['preferred_username'] ?? '__GUEST__';
         return Enforcer::getRolesForUser($username);
     }
 
@@ -84,7 +85,8 @@ trait HandlesUserRoles
 
     protected function userHasPermission(string $resource, string $action): bool
     {
-        $username = auth()->user()->username ?? '__GUEST__';
+        $userData = Session::get('authenticated_user');
+        $username = $userData['preferred_username'] ?? '__GUEST__';
         return Enforcer::enforce($username, $resource, $action);
     }
 }
