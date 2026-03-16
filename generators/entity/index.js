@@ -53,6 +53,26 @@ export default class extends Generator {
             description: 'Entity name'
         });
 
+        this.option('table-name', {
+            type: String,
+            description: 'Entity table name (snake_case, plural)'
+        });
+
+        this.option('soft-delete', {
+            type: Boolean,
+            description: 'Enable soft delete'
+        });
+
+        this.option('pessimistic-lock', {
+            type: Boolean,
+            description: 'Enable pessimistic record locking'
+        });
+
+        this.option('icon', {
+            type: String,
+            description: 'Icon name'
+        });
+
         this.entityConfig = {
             name: undefined,
             tableName: undefined,
@@ -65,6 +85,9 @@ export default class extends Generator {
 
         this.fieldCounter = 0;
         this.relationshipCounter = 0;
+    }
+
+    async initializing() {
         if (!this.options.fromEntities) {
             hello(this.log);
         }
@@ -246,45 +269,54 @@ export default class extends Generator {
 
         // Normal flow for new entity or regenerate
 
-        const tableNameAnswer = await this.prompt([{
-            type: 'input',
-            name: 'tableName',
-            message: 'Entity table name:',
-            default: to.snake(pluralize(this.entityName)),
-            validate: input => {
-                if (input === '') {
-                    return 'Table name cannot be empty';
+        const tableName = this.options['table-name'];
+        const tableNameAnswer = tableName
+            ? { tableName }
+            : await this.prompt([{
+                type: 'input',
+                name: 'tableName',
+                message: 'Entity table name:',
+                default: to.snake(pluralize(this.entityName)),
+                validate: input => {
+                    if (input === '') {
+                        return 'Table name cannot be empty';
+                    }
+                    if (!/^[a-z][a-z0-9_]*$/.test(input)) {
+                        return `Your table name must start with a lower case letter and can only contain lowercase letters, numbers and underscores: /^[a-z][a-z0-9_]*$/`;
+                    }
+                    if (isReservedTableName(input)) {
+                        return `'${input}' is a reserved word and cannot be used as a table name`;
+                    }
+                    return true
                 }
-                if (!/^[a-z][a-z0-9_]*$/.test(input)) {
-                    return `Your table name must start with a lower case letter and can only contain lowercase letters, numbers and underscores: /^[a-z][a-z0-9_]*$/`;
-                }
-                if (isReservedTableName(input)) {
-                    return `'${input}' is a reserved word and cannot be used as a table name`;
-                }
-                return true
-            }
-        }]);
+            }]);
 
-        const softDeleteAnswer = await this.prompt([{
-            type: 'confirm',
-            name: 'softDelete',
-            message: 'Do you want to enable soft delete?',
-            default: false
-        }]);
+        const softDeleteAnswer = this.options['soft-delete'] !== undefined
+            ? { softDelete: this.options['soft-delete'] }
+            : await this.prompt([{
+                type: 'confirm',
+                name: 'softDelete',
+                message: 'Do you want to enable soft delete?',
+                default: false
+            }]);
 
-        const pessimisticLockAnswer = await this.prompt([{
-            type: 'confirm',
-            name: 'pessimisticLock',
-            message: 'Do you want to enable pessimistic record locking?',
-            default: false
-        }]);
+        const pessimisticLockAnswer = this.options['pessimistic-lock'] !== undefined
+            ? { pessimisticLock: this.options['pessimistic-lock'] }
+            : await this.prompt([{
+                type: 'confirm',
+                name: 'pessimisticLock',
+                message: 'Do you want to enable pessimistic record locking?',
+                default: false
+            }]);
 
-        const iconAnswer = await this.prompt([{
-            type: 'input',
-            name: 'icon',
-            message: 'Icon name:',
-            default: 'asterisk'
-        }]);
+        const iconAnswer = this.options['icon']
+            ? { icon: this.options['icon'] }
+            : await this.prompt([{
+                type: 'input',
+                name: 'icon',
+                message: 'Icon name:',
+                default: 'asterisk'
+            }]);
 
         this.entityConfig.name = this.entityName;
         this.entityConfig.tableName = tableNameAnswer.tableName;
