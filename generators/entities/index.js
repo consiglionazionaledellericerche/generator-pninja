@@ -45,7 +45,6 @@ export default class extends Generator {
       type: Boolean,
       default: false
     });
-    if (!this.options.fromMain) hello(this.log);
     this.argument('entitiesFilePath', {
       type: String,
       required: !this.options.fromMain,
@@ -58,6 +57,12 @@ export default class extends Generator {
       this.config.set(key, this.answers[key]);
     }
     this.config.save();
+  }
+
+  async initializing() {
+    if (!this.options.fromMain) {
+      hello(this.log);
+    }
   }
 
   async writing() {
