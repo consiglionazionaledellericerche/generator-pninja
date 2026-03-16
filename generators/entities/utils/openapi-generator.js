@@ -93,7 +93,6 @@ function buildEntityProperties(entity, relationships, enums) {
         const isRequired = field.validations.some(v => v.key === 'required');
 
         if (isBlob) {
-            // _blob is in model $hidden — only _type and _name appear in GET responses
             properties[`${to.snake(field.name)}_type`] = {
                 type: 'string',
                 nullable: !isRequired,
@@ -357,7 +356,6 @@ function buildEntityPaths(entity, relationships, enums, searchEngine) {
 
     const paths = {};
 
-    // GET /entity + POST /entity
     paths[`/${rootPath}`] = {
         get: {
             tags: [tag],
@@ -715,7 +713,7 @@ export class OpenApiGenerator {
             servers: [
                 { url: '/api', description: 'API base path' }
             ],
-            security: [{ OAuth2: ['openid', 'profile', 'email'] }],
+            security: [{ BearerAuth: [] }, { OAuth2: ['openid', 'profile', 'email'] }],
             tags: entities.map(e => ({ name: e.name, description: `${e.name} management` })),
             paths,
             components: {
@@ -740,7 +738,6 @@ export class OpenApiGenerator {
             this.that.destinationPath('client/public/oauth2-redirect.html'),
             {}
         );
-
 
         // Served dynamically by OpenApiController which replaces
         // __KEYCLOAK_*__ placeholders with real .env values at runtime
