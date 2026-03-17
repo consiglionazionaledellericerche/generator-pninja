@@ -788,6 +788,112 @@ export class OpenApiGenerator {
             },
         });
 
+        // auth/* endpoints
+        Object.assign(paths, {
+            '/auth/check-session': {
+                get: {
+                    tags: ['Auth'],
+                    summary: 'Check if the current session is authenticated',
+                    responses: {
+                        200: {
+                            description: 'Session status',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object', properties: {
+                                            isAuthenticated: { type: 'boolean' },
+                                            user: { type: 'object', nullable: true },
+                                            session: {
+                                                type: 'object', nullable: true, properties: {
+                                                    id: { type: 'string' },
+                                                    login_time: { type: 'string', nullable: true },
+                                                    login_method: { type: 'string' },
+                                                }
+                                            },
+                                            message: { type: 'string', nullable: true },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            },
+            '/auth/initiate-login': {
+                post: {
+                    tags: ['Auth'],
+                    summary: 'Initiate Keycloak OAuth2 login flow (PKCE)',
+                    description: 'Browser/SPA flow only. Returns the Keycloak authorization URL. The user must be redirected there in a browser. For machine-to-machine use the Client Credentials flow directly against Keycloak instead.',
+                    requestBody: {
+                        required: false,
+                        content: { 'application/json': { schema: { type: 'object', properties: { redirect_url: { type: 'string', format: 'uri' } } } } }
+                    },
+                    responses: {
+                        200: {
+                            description: 'Authorization URL to redirect the user to',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object', properties: {
+                                            authUrl: { type: 'string', format: 'uri' },
+                                            state: { type: 'string' },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            },
+            '/auth/callback': {
+                get: {
+                    tags: ['Auth'],
+                    summary: 'OAuth2 callback — exchanges authorization code for session',
+                    description: 'Browser/SPA flow only. Called automatically by Keycloak after user authentication. Creates a server-side session and redirects to the frontend. Not callable directly via API.',
+                    parameters: [
+                        { name: 'code', in: 'query', required: true, schema: { type: 'string' } },
+                        { name: 'state', in: 'query', required: true, schema: { type: 'string' } },
+                    ],
+                    responses: {
+                        302: { description: 'Redirect to frontend with auth_success=true or error query param' },
+                    }
+                }
+            },
+            '/auth/logout': {
+                post: {
+                    tags: ['Auth'],
+                    summary: 'Destroy the current session and return Keycloak logout URL',
+                    responses: {
+                        200: {
+                            description: 'Session destroyed',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object', properties: {
+                                            success: { type: 'boolean' },
+                                            logoutUrl: { type: 'string', format: 'uri', description: 'Keycloak logout URL to redirect the user to' },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            },
+            '/auth/csrf-token': {
+                get: {
+                    tags: ['Auth'],
+                    summary: 'Get CSRF token',
+                    responses: {
+                        200: {
+                            description: 'CSRF token',
+                            content: { 'application/json': { schema: { type: 'object', properties: { csrf_token: { type: 'string' } } } } }
+                        },
+                    }
+                }
+            },
+        });
+
         // Security scheme
         const securitySchemes = useKeycloak
             ? {
@@ -893,6 +999,7 @@ export class OpenApiGenerator {
                 ...entities.map(e => ({ name: e.name, description: `${e.name} management` })),
                 { name: 'User', description: 'Authenticated user info and permission checks' },
                 { name: 'Locks', description: 'Pessimistic record locking' },
+                { name: 'Auth', description: 'Authentication and session management' },
             ],
             paths,
             components: {
