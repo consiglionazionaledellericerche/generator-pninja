@@ -82,7 +82,8 @@ class SessionAuth
     }
 
     /**
-     * Verify token with Keycloak
+     * Verify token with Keycloak.
+     * Tries /userinfo first (user tokens), falls back to /token/introspect (client credentials tokens).
      */
     private function verifyTokenWithKeycloak($token)
     {
@@ -90,11 +91,26 @@ class SessionAuth
             $keycloakBaseUrl = env('KEYCLOAK_BASE_URL');
             $realm = env('KEYCLOAK_REALM', 'CNR');
 
+            // Try userinfo first (works for user tokens)
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token
             ])->timeout(10)->get("{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/userinfo");
 
             if ($response->successful()) {
+                return $response->json();
+            }
+
+            // Fallback: introspect (works for client credentials tokens)
+            $response = Http::asForm()->timeout(10)->post(
+                "{$keycloakBaseUrl}/realms/{$realm}/protocol/openid-connect/token/introspect",
+                [
+                    'token'         => $token,
+                    'client_id'     => env('KEYCLOAK_CLIENT_ID'),
+                    'client_secret' => env('KEYCLOAK_CLIENT_SECRET'),
+                ]
+            );
+
+            if ($response->successful() && $response->json('active') === true) {
                 return $response->json();
             }
 
@@ -113,7 +129,6 @@ class SessionAuth
      */
     private function createUserSession($userInfo, $token, $request)
     {
-
         // Save user data in session
         Session::put('authenticated_user', $userInfo);
 
