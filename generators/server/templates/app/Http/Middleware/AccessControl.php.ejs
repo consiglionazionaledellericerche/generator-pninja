@@ -29,8 +29,8 @@ class AccessControl
         $result = $this->userHasPermission($resource, $action);
         $sessionUser = Session::get('authenticated_user');
         $username = $sessionUser['preferred_username'] ?? null;
-        // if ($resource !== 'Log') \Log::debug("AccessControl: User '{$username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
-        if ($username && !$result && in_array($resource, ['AcRule', 'Audit', 'Seeder', 'Migrations', 'RecordLock', 'SearchReindex'])) {
+        if ($resource !== 'Log' && app()->environment("local")) \Log::debug("AccessControl: User '{$username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
+        if ($username && !$result && in_array($resource, ['AcRule', 'Audit', 'Seeder', 'Migrations', 'RecordLock', 'SearchReindex', 'Log'])) {
             \Log::warning("AccessControl: User '{$username}' attempting to {$action} on {$resource} (URL: {$request->fullUrl()}) - Permission: " . ($result ? 'granted' : 'denied'));
         }
         if (!$result) {
