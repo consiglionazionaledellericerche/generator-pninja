@@ -13,3 +13,11 @@ Artisan::command('add-role {role} {username}', function ($role, $username) {
     \Artisan::call('scout:import', ['model' => AcRule::class]);
 <% } -%>
 })->purpose('Add a role to a user');
+
+Artisan::command('add-permission {username} {v1} {v2}', function ($username, $v1, $v2) {
+    Enforcer::addPermissionForUser($username, $v1, $v2);
+    $this->info("Permission $v1, $v2 added to user: $username");
+<% if (false && searchEngine !== "null") { -%>
+    \Artisan::call('scout:import', ['model' => AcRule::class]);
+<% } -%>
+})->purpose('Add a permission to a user');

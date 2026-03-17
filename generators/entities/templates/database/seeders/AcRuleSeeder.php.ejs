@@ -22,36 +22,9 @@ class AcRuleSeeder extends Seeder
 <%  entities.forEach((entity, index) => {-%>
             AcRule::create([
                 'ptype' => 'p',
-                'v0' => '__AUTHUSER__',
+                'v0' => '__LOGGEDUSER__',
                 'v1' => '<%- entity.name %>',
-                'v2' => 'create',
-                'v3' => '',
-                'v4' => '',
-                'v5' => '',
-            ]);
-            AcRule::create([
-                'ptype' => 'p',
-                'v0' => '__AUTHUSER__',
-                'v1' => '<%- entity.name %>',
-                'v2' => 'read',
-                'v3' => '',
-                'v4' => '',
-                'v5' => '',
-            ]);
-            AcRule::create([
-                'ptype' => 'p',
-                'v0' => '__AUTHUSER__',
-                'v1' => '<%- entity.name %>',
-                'v2' => 'update',
-                'v3' => '',
-                'v4' => '',
-                'v5' => '',
-            ]);
-            AcRule::create([
-                'ptype' => 'p',
-                'v0' => '__AUTHUSER__',
-                'v1' => '<%- entity.name %>',
-                'v2' => 'delete',
+                'v2' => '*',
                 'v3' => '',
                 'v4' => '',
                 'v5' => '',
@@ -59,7 +32,7 @@ class AcRuleSeeder extends Seeder
 <%  });-%>
             AcRule::create([
                 'ptype' => 'p',
-                'v0' => '__AUTHUSER__',
+                'v0' => '__LOGGEDUSER__',
                 'v1' => 'File',
                 'v2' => 'read',
                 'v3' => '',

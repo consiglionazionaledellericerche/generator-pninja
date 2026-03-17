@@ -149,7 +149,7 @@ The application uses **[Casbin](https://casbin.org/)** for **role-based access c
 **Default roles and permissions:**
 
 - **`superadmin`**: Full access to all resources and does not require policies based on the model in `server/config/lauthz-rbac-model.conf`
-- **`__AUTHUSER__`**: Authenticated users can perform all actions on generated entities
+- **`__LOGGEDUSER__`**: Authenticated users can perform all actions on generated entities
 - **`__GUEST__`**: Unauthenticated users have read-only access to generated entities
 
 **Policy format:**
@@ -166,16 +166,16 @@ Where:
 **Examples:**
 ```csv
 <% if (entities.length > 0) { -%>
-p,__AUTHUSER__,<%- entities[0].name %>,create
-p,__AUTHUSER__,<%- entities[0].name %>,read
-p,__AUTHUSER__,<%- entities[0].name %>,update
-p,__AUTHUSER__,<%- entities[0].name %>,delete
+p,__LOGGEDUSER__,<%- entities[0].name %>,create
+p,__LOGGEDUSER__,<%- entities[0].name %>,read
+p,__LOGGEDUSER__,<%- entities[0].name %>,update
+p,__LOGGEDUSER__,<%- entities[0].name %>,delete
 <% } -%>
 <% if (entities.length > 1) { -%>
-p,__AUTHUSER__,<%- entities[1].name %>,create
-p,__AUTHUSER__,<%- entities[1].name %>,read
-p,__AUTHUSER__,<%- entities[1].name %>,update
-p,__AUTHUSER__,<%- entities[1].name %>,delete
+p,__LOGGEDUSER__,<%- entities[1].name %>,create
+p,__LOGGEDUSER__,<%- entities[1].name %>,read
+p,__LOGGEDUSER__,<%- entities[1].name %>,update
+p,__LOGGEDUSER__,<%- entities[1].name %>,delete
 <% } -%>
 <% if (entities.length > 0) { -%>
 p,__GUEST__,<%- entities[0].name %>,read
@@ -183,10 +183,7 @@ p,__GUEST__,<%- entities[0].name %>,read
 <% if (entities.length > 1) { -%>
 p,__GUEST__,<%- entities[1].name %>,read
 <% } -%>
-p,admin,AcRule,create
-p,admin,AcRule,read
-p,admin,AcRule,update
-p,admin,AcRule,delete
+p,admin,AcRule,*
 g,john.doe,superadmin
 g,emma.johnson,admin
 ```
@@ -200,7 +197,16 @@ To assign the first role `superadmin`, or any other role, to a user, you can use
 ```sh
 cd ./server/
 php artisan add-role superadmin <username>
-php artisan add-role admin <another_username>
+php artisan add-role <another_role> <another_username>
+```
+
+To assign permissions to user or roles via the command line, you can use:
+
+```sh
+cd ./server/
+php artisan add-permission <username> <MyEntityName> read
+php artisan add-permission <role> <MyEntityName> create
+php artisan add-permission role-manager AcRule "*"
 ```
 
 ## Audit Logging
