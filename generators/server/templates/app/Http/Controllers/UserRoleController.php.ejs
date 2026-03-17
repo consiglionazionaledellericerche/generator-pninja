@@ -39,7 +39,7 @@ class UserRoleController extends Controller
         }
 
         return response()->json([
-            'hasRole' => $this->userHasRole($role),
+            'result' => $this->userHasRole($role),
         ]);
     }
 
@@ -60,7 +60,7 @@ class UserRoleController extends Controller
         }
 
         return response()->json([
-            'hasAnyRole' => $this->userHasAnyRole($roles),
+            'result' => $this->userHasAnyRole($roles),
         ]);
     }
 
@@ -81,7 +81,7 @@ class UserRoleController extends Controller
         }
 
         return response()->json([
-            'hasAllRoles' => $this->userHasAllRoles($roles),
+            'result' => $this->userHasAllRoles($roles),
         ]);
     }
 

@@ -29,7 +29,7 @@ class RecordLockController extends Controller
         $existing = $record->recordLock;
         if ($existing && !$existing->isExpired() && $existing->user_id !== $username) {
             return response()->json([
-                'locked'     => true,
+                'acquired'   => false,
                 'locked_by'  => $existing->user_id,
                 'expires_at' => $existing->expires_at,
             ], 423);
@@ -42,7 +42,7 @@ class RecordLockController extends Controller
         ]);
 
         return response()->json([
-            'locked'     => false,
+            'acquired'   => true,
             'expires_at' => $lock->expires_at,
         ]);
     }

@@ -93,6 +93,7 @@ function buildEntityProperties(entity, relationships, enums) {
         const isRequired = field.validations.some(v => v.key === 'required');
 
         if (isBlob) {
+            // _blob is in model $hidden — only _type and _name appear in GET responses
             properties[`${to.snake(field.name)}_type`] = {
                 type: 'string',
                 nullable: !isRequired,
@@ -356,6 +357,7 @@ function buildEntityPaths(entity, relationships, enums, searchEngine) {
 
     const paths = {};
 
+    // GET /entity + POST /entity
     paths[`/${rootPath}`] = {
         get: {
             tags: [tag],
@@ -613,6 +615,179 @@ export class OpenApiGenerator {
             Object.assign(paths, buildEntityPaths(entity, entityRelationships, enums, searchEngine));
         }
 
+        // user/* endpoints
+        Object.assign(paths, {
+            '/user/roles': {
+                get: {
+                    tags: ['User'],
+                    summary: 'Get roles of the authenticated user',
+                    responses: {
+                        200: {
+                            description: 'List of roles',
+                            content: { 'application/json': { schema: { type: 'object', properties: { roles: { type: 'array', items: { type: 'string' } } } } } }
+                        },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                    }
+                }
+            },
+            '/user/has-role': {
+                post: {
+                    tags: ['User'],
+                    summary: 'Check if the authenticated user has a specific role',
+                    requestBody: {
+                        required: true,
+                        content: { 'application/json': { schema: { type: 'object', required: ['role'], properties: { role: { type: 'string' } } } } }
+                    },
+                    responses: {
+                        200: {
+                            description: 'Boolean result',
+                            content: { 'application/json': { schema: { type: 'object', properties: { result: { type: 'boolean' } } } } }
+                        },
+                        400: { $ref: '#/components/responses/ValidationError' },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                    }
+                }
+            },
+            '/user/has-any-role': {
+                post: {
+                    tags: ['User'],
+                    summary: 'Check if the authenticated user has any of the specified roles',
+                    requestBody: {
+                        required: true,
+                        content: { 'application/json': { schema: { type: 'object', required: ['roles'], properties: { roles: { type: 'array', items: { type: 'string' } } } } } }
+                    },
+                    responses: {
+                        200: {
+                            description: 'Boolean result',
+                            content: { 'application/json': { schema: { type: 'object', properties: { result: { type: 'boolean' } } } } }
+                        },
+                        400: { $ref: '#/components/responses/ValidationError' },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                    }
+                }
+            },
+            '/user/has-all-roles': {
+                post: {
+                    tags: ['User'],
+                    summary: 'Check if the authenticated user has all of the specified roles',
+                    requestBody: {
+                        required: true,
+                        content: { 'application/json': { schema: { type: 'object', required: ['roles'], properties: { roles: { type: 'array', items: { type: 'string' } } } } } }
+                    },
+                    responses: {
+                        200: {
+                            description: 'Boolean result',
+                            content: { 'application/json': { schema: { type: 'object', properties: { result: { type: 'boolean' } } } } }
+                        },
+                        400: { $ref: '#/components/responses/ValidationError' },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                    }
+                }
+            },
+            '/user/can': {
+                post: {
+                    tags: ['User'],
+                    summary: 'Check if the authenticated user can perform an action on a resource',
+                    requestBody: {
+                        required: true,
+                        content: { 'application/json': { schema: { type: 'object', required: ['resource', 'action'], properties: { resource: { type: 'string' }, action: { type: 'string' } } } } }
+                    },
+                    responses: {
+                        200: {
+                            description: 'Permission check result',
+                            content: { 'application/json': { schema: { type: 'object', properties: { allowed: { type: 'boolean' } } } } }
+                        },
+                        400: { $ref: '#/components/responses/ValidationError' },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                    }
+                }
+            },
+        });
+
+        // locks/* endpoints
+        Object.assign(paths, {
+            '/locks/{type}/{id}/acquire': {
+                post: {
+                    tags: ['Locks'],
+                    summary: 'Acquire a pessimistic lock on a record',
+                    parameters: [
+                        { name: 'type', in: 'path', required: true, schema: { type: 'string' }, description: 'Entity type (kebab-case, e.g. ac-rules)' },
+                        { name: 'id', in: 'path', required: true, schema: { type: 'integer', format: 'int64' } },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Lock acquired',
+                            content: { 'application/json': { schema: { type: 'object', properties: { acquired: { type: 'boolean', example: true }, expires_at: { type: 'string', format: 'date-time' } } } } }
+                        },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                        403: { $ref: '#/components/responses/Forbidden' },
+                        423: {
+                            description: 'Record is already locked by another user',
+                            content: { 'application/json': { schema: { type: 'object', properties: { acquired: { type: 'boolean', example: false }, locked_by: { type: 'string' }, expires_at: { type: 'string', format: 'date-time' } } } } }
+                        },
+                    }
+                }
+            },
+            '/locks/{type}/{id}/renew': {
+                post: {
+                    tags: ['Locks'],
+                    summary: 'Renew an existing pessimistic lock',
+                    parameters: [
+                        { name: 'type', in: 'path', required: true, schema: { type: 'string' }, description: 'Entity type (kebab-case, e.g. ac-rules)' },
+                        { name: 'id', in: 'path', required: true, schema: { type: 'integer', format: 'int64' } },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Lock renewed',
+                            content: { 'application/json': { schema: { type: 'object', properties: { expires_at: { type: 'string', format: 'date-time' } } } } }
+                        },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                        403: {
+                            description: 'Lock not owned by you',
+                            content: { 'application/json': { schema: { type: 'object', properties: { message: { type: 'string' } } } } }
+                        },
+                    }
+                }
+            },
+            '/locks/{type}/{id}': {
+                get: {
+                    tags: ['Locks'],
+                    summary: 'Get lock status for a record',
+                    parameters: [
+                        { name: 'type', in: 'path', required: true, schema: { type: 'string' }, description: 'Entity type (kebab-case, e.g. ac-rules)' },
+                        { name: 'id', in: 'path', required: true, schema: { type: 'integer', format: 'int64' } },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Lock status — unlocked: { locked: false }; locked by other: { locked: true, owned: false, locked_by, expires_at }; locked by self: { locked: false, owned: true, locked_by, expires_at }',
+                            content: { 'application/json': { schema: { type: 'object', properties: { locked: { type: 'boolean' }, owned: { type: 'boolean' }, locked_by: { type: 'string' }, expires_at: { type: 'string', format: 'date-time' } } } } }
+                        },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                        403: { $ref: '#/components/responses/Forbidden' },
+                    }
+                },
+                delete: {
+                    tags: ['Locks'],
+                    summary: 'Release a pessimistic lock',
+                    parameters: [
+                        { name: 'type', in: 'path', required: true, schema: { type: 'string' }, description: 'Entity type (kebab-case, e.g. ac-rules)' },
+                        { name: 'id', in: 'path', required: true, schema: { type: 'integer', format: 'int64' } },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'Lock released',
+                            content: { 'application/json': { schema: { type: 'object', properties: { message: { type: 'string' } } } } }
+                        },
+                        401: { $ref: '#/components/responses/Unauthorized' },
+                        403: {
+                            description: 'Forbidden',
+                            content: { 'application/json': { schema: { type: 'object', properties: { message: { type: 'string' } } } } }
+                        },
+                    }
+                }
+            },
+        });
+
         // Security scheme
         const securitySchemes = useKeycloak
             ? {
@@ -714,7 +889,11 @@ export class OpenApiGenerator {
                 { url: '/api', description: 'API base path' }
             ],
             security: [{ BearerAuth: [] }, { OAuth2: ['openid', 'profile', 'email'] }],
-            tags: entities.map(e => ({ name: e.name, description: `${e.name} management` })),
+            tags: [
+                ...entities.map(e => ({ name: e.name, description: `${e.name} management` })),
+                { name: 'User', description: 'Authenticated user info and permission checks' },
+                { name: 'Locks', description: 'Pessimistic record locking' },
+            ],
             paths,
             components: {
                 schemas,
