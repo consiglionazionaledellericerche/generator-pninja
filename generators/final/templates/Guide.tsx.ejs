@@ -1,0 +1,11 @@
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import guideContent from './guide.md?raw';
+
+export default function Guide() {
+  return (
+    <div className="basic-html-formatting">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{guideContent}</ReactMarkdown>
+    </div>
+  );
+}

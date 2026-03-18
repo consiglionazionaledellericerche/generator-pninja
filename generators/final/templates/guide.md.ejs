@@ -1,0 +1,140 @@
+# User Guide
+
+This guide covers the main features available in your application.
+
+## Authentication
+
+The application uses **Keycloak** for authentication. Login is handled via the OAuth2 Authorization Code flow with PKCE.
+
+- Click **Login** to be redirected to Keycloak
+- After successful authentication you are redirected back to the application with an active session
+- Click **Logout** to destroy the session and be redirected to the Keycloak logout page
+- Sessions expire after **24 hours** of inactivity
+
+## Access Control
+
+Access control is managed via **Casbin** with a role-based model (RBAC).
+
+- Permissions are stored in the `ac_rules` table and managed at `/admin/ac-rules`
+- Each permission is a combination of **role**, **resource**, and **action** (`create`, `read`, `update`, `delete`)
+- Users are assigned roles via the `g` (grouping) policy type
+
+**Built-in roles:**
+
+| Role | Description |
+|---|---|
+| `superadmin` | Full access to everything, bypasses all policy checks |
+| `__LOGGEDUSER__` | Any authenticated user |
+| `__GUEST__` | Unauthenticated user |
+
+## Entities
+
+The application manages the following entities:
+
+<%_  entities.forEach(entity => { _%>
+- **<%= entity.name %>** — `/entities/<%= to.slug(pluralize(entity.name)) %>`<% if (entity.softDelete) { %> *(soft delete)*<% } %><% if (entity.pessimisticLock) { %> *(record locking)*<% } %>
+<%_  }); _%>
+
+Each entity has a full CRUD interface:
+
+- **List view** — paginated table with sorting<%  if (['solr','meilisearch','elastic','algolia','typesense'].includes(searchEngine)) { %> and full-text search<% } %>
+- **Detail view** — read-only view of a single record
+- **Edit form** — create and update records with validation
+- **Delete** — with confirmation dialog
+
+<%_  if (entities.some(e => e.softDelete)) { _%>
+## Soft Delete
+
+The following entities support logical deletion — records are not permanently removed from the database but marked with a `deleted_at` timestamp:
+
+<%_     entities.filter(e => e.softDelete).forEach(entity => { _%>
+- **<%= entity.name %>**
+<%_     }); _%>
+
+**How it works:**
+
+- Deleted records disappear from the main list view
+- They are accessible at the **Trash** section (`/entities/{entity-name}/trash`)
+- From the trash you can **restore** a record or **permanently delete** it
+- Unique constraints are enforced at the application level only
+<%_  } _%>
+<%_  if (entities.some(e => e.pessimisticLock)) { _%>
+
+## Record Locking
+
+The following entities use cooperative pessimistic locking to prevent concurrent edits:
+
+<%_  entities.filter(e => e.pessimisticLock).forEach(entity => { _%>
+- **<%= entity.name %>**
+<%_  }); _%>
+
+**How it works:**
+
+- When you open a record for editing, a lock is automatically acquired
+- The lock is renewed every **2 minutes** via a background heartbeat
+- If another user already holds the lock, the record opens in **read-only mode** with a banner showing who holds the lock and when it expires
+- The lock is released automatically when you save, cancel, delete, or navigate away
+- If you close the browser tab without saving, the lock expires after **15 minutes**
+
+Active locks are visible at `/admin/records-locks`. Administrators can force-release any lock.
+<%_  } _%>
+
+## Audit Logging
+
+All create, update, delete, and restore operations on entities are automatically logged.
+
+Access the audit interface at `/admin/audits`:
+
+- **Audit Logs** tab — browse, filter, and compare changes; view complete history for any record
+- **Statistics** tab — activity timeline, events breakdown, most modified models, top active users
+
+Each audit record stores the old and new values, the user who made the change, IP address, user agent, and timestamp (UTC).
+
+## Database Seeding
+
+The seeding administration interface at `/admin/seeder` allows you to:
+
+- Run any seeder individually
+- Upload a CSV file directly from the browser
+- Run multiple seeders in bulk
+- Execute the full database seeder
+
+> Running a seeder does not truncate the table first. To reseed from scratch, contact your administrator.
+
+## Database Migrations
+
+The migration administration interface at `/admin/migrations` allows you to manage database migrations:
+
+| Operation | Description |
+|---|---|
+| **Migrate** | Run all pending migrations |
+| **Rollback** | Roll back the last batch of migrations |
+| **Fresh** | Drop all tables and re-run all migrations (**all data will be lost**) |
+| **Status** | Show the current migration status |
+
+> `migrate:fresh` is a destructive operation. All data will be permanently deleted.
+<%_  if (['solr','meilisearch','elastic','algolia','typesense'].includes(searchEngine)) { _%>
+
+## Search Index Management
+
+The search index management interface at `/admin/search-reindex` allows you to manage search indexes per entity:
+
+| Action | Description |
+|---|---|
+| **Reindex** | Create the index if needed, then index all records |
+| **Flush** | Remove all records from the index, keeping the structure |
+| **Delete index** | Permanently remove the index |
+
+Bulk operations are available via checkbox selection.
+<%_  } _%>
+
+## API Documentation
+
+An interactive API documentation interface is available at `/support/api-docs`, powered by Swagger UI and an OpenAPI 3.0 specification.
+
+**Authenticating in Swagger UI:**
+
+- **Bearer token** — paste a valid JWT in the Authorize dialog
+- **OAuth2** — click Authorize, select OAuth2, and log in via Keycloak
+
+**For machine-to-machine integrations**, use the Client Credentials flow to obtain a token directly from Keycloak, then pass it as a `Bearer` header in all API calls.

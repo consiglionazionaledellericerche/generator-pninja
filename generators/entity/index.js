@@ -1071,6 +1071,17 @@ export default class extends Generator {
             relationships: getEntitiesRelationships(this),
             searchEngine: this.config.get('searchEngine'),
         });
+        this.fs.copyTpl(this.templatePath(`../../final/templates/Guide.tsx.ejs`), this.destinationPath(`client/src/pages/support/Guide.tsx`));
+        this.fs.copyTpl(
+            this.templatePath(`../../final/templates/guide.md.ejs`),
+            this.destinationPath(`client/src/pages/support/guide.md`),
+            {
+                to,
+                pluralize,
+                entities: [AcRule, ...getEntities(this)],
+                searchEngine: this.config.get('searchEngine')
+            }
+        );
         spinner.succeed(`Files for entity ${this.entityConfig.name} successfully generated`);
     }
 }

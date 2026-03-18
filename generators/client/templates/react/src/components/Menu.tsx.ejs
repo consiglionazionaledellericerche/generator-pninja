@@ -276,10 +276,17 @@ const Menu: React.FC = () => {
 <% } -%>
           <MenuTrigger>
             <Button aria-label={t('support')} className="nav-bar-link rounded-full p-2">
-              <Icon icon="support" fill size={5} />
+              <Icon icon="info_i" size={5} />
             </Button>
             <Popover className="w-full md:w-auto max-w-[80%] md:min-w-60 rounded-md bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 ring-1 ring-black/25 dark:ring-white/25 shadow-md dark:shadow-md/70 max-h-[60vh] overflow-y-auto thin-scrollbar">
               <MenuItems className="outline-0">
+                <MenuItem
+                  href="/support/guide"
+                  id="support-guide"
+                  className={`flex items-center gap-2 cursor-pointer outline-0 rounded-md m-1 focus:ring-4 focus:ring-blue-600 focus:dark:ring-sky-300 block p-2${isActive('/admin/api-docs') ? menuItemIsActiveClass : ''}`}
+                >
+                  <Icon icon="help" size={5} /> {t('userGuide')}
+                </MenuItem>
                 <MenuItem
                   href="/support/api-docs"
                   target="_blank"

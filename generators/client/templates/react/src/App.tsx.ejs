@@ -31,6 +31,8 @@ import SearchReindex from './pages/admin/SearchReindex';
 <%  } -%>
 import ApiDocs from './pages/admin/ApiDocs';
 
+import Guide from './pages/support/Guide';
+
 import { SimpleLoader } from './components/SimpleLoader';
 import { useAuthState } from './hooks/useAuthState';
 import { Can } from './components/Can';
@@ -67,6 +69,7 @@ function App() {
               <div className="p-8 min-h-[50vh]">
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/support/guide" element={<Guide />} />
 <%  for (const entity of entities) {-%>
                   <Route
                     path="/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>"
