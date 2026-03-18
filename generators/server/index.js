@@ -44,24 +44,20 @@ export default class ServerGenerator extends Generator {
   }
 
   async writing() {
-    const serverTemplatePath = this.templatePath();
-    const entitiesTemplatePath = serverTemplatePath + '/../../entities/templates';
     const searchEngine = this.config.get('searchEngine');
-    this.sourceRoot(entitiesTemplatePath);
     (new FactoriesGenerator(this)).generateFactories([AcRule], [], []);
     this.fs.copyTpl(
-      this.templatePath('database/seeders/DatabaseSeeder.php.ejs'),
+      this.templatePath('../../entities/templates/database/seeders/DatabaseSeeder.php.ejs'),
       this.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
       { entities: [AcRule], manyToMany: [], recycle: [] }
     );
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
-    this.fs.copyTpl(this.templatePath("database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_000_${randomstring.generate(5)}_create_audits_table.php`), {
+    this.fs.copyTpl(this.templatePath("../../entities/templates/database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_000_${randomstring.generate(5)}_create_audits_table.php`), {
       authentication: this.config.get('authentication'),
     });
     (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
     (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
-    this.fs.copyTpl(this.templatePath("database/seeders/csv/.gitkeep"), this.destinationPath(`server/database/seeders/csv/.gitkeep`));
-    this.sourceRoot(serverTemplatePath);
+    this.fs.copyTpl(this.templatePath("../../entities/templates/database/seeders/csv/.gitkeep"), this.destinationPath(`server/database/seeders/csv/.gitkeep`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/AuditController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/AuditController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/FileController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/FileController.php`));
     this.fs.copyTpl(this.templatePath("app/Http/Controllers/KeycloakProxyController.php.ejs"), this.destinationPath(`server/app/Http/Controllers/KeycloakProxyController.php`));

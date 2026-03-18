@@ -226,7 +226,7 @@ export class ControllersGenerator {
             return acc;
         }, {});
 
-        this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
+        this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/app/Http/Controllers/EntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/${entity.name}Controller.php`),
             {
                 className: entity.name,
                 entityName: to.camel(entity.name),
@@ -246,7 +246,7 @@ export class ControllersGenerator {
                 toSearchableArrayTypes,
             });
         if (hasSoftDelete) {
-            this.that.fs.copyTpl(this.that.templatePath("app/Http/Controllers/TrashedEntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/Trashed${entity.name}Controller.php`),
+            this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/app/Http/Controllers/TrashedEntityController.php.ejs"), this.that.destinationPath(`server/app/Http/Controllers/Trashed${entity.name}Controller.php`),
                 {
                     className: entity.name,
                     entityName: to.camel(entity.name),

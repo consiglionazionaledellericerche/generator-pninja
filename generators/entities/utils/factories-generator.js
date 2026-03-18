@@ -57,7 +57,7 @@ export class FactoriesGenerator {
                 }
                 params.push(`${tab(3)}'${to.snake(relation.relationshipName || relation.otherEntityName)}_id' => \\App\\Models\\${relation.otherEntityName}::factory(),`);
             });
-            this.that.fs.copyTpl(this.that.templatePath("EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
+            this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/EntityFactory.php.ejs"), this.that.destinationPath(`server/database/factories/${entity.name}Factory.php`),
                 {
                     entityName: entity.name,
                     params: params.join("\n"),
@@ -82,7 +82,7 @@ export class FactoriesGenerator {
                 }
             });
         }
-        this.that.fs.copyTpl(this.that.templatePath("database/seeders/DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
+        this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/database/seeders/DatabaseSeeder.php.ejs"), this.that.destinationPath(`server/database/seeders/DatabaseSeeder.php`),
             {
                 entities,
                 recycle,
@@ -90,17 +90,17 @@ export class FactoriesGenerator {
             });
         entities.forEach((entity) => {
             if (entity.name === 'AcRule') return;
-            this.that.fs.copyTpl(this.that.templatePath(`database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
+            this.that.fs.copyTpl(this.that.templatePath(`../../entities/templates/database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
                 entity,
                 recycle,
             });
         });
         manyToMany.forEach((relation) => {
-            this.that.fs.copyTpl(this.that.templatePath(`database/seeders/ManyToManySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${relation.fromEntity}_${relation.toEntity}Seeder.php`), {
+            this.that.fs.copyTpl(this.that.templatePath(`../../entities/templates/database/seeders/ManyToManySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${relation.fromEntity}_${relation.toEntity}Seeder.php`), {
                 relation,
             });
         });
-        this.that.fs.copyTpl(this.that.templatePath(`database/seeders/AcRuleSeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/AcRuleSeeder.php`), {
+        this.that.fs.copyTpl(this.that.templatePath(`../../entities/templates/database/seeders/AcRuleSeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/AcRuleSeeder.php`), {
             entities: entities.filter(e => e.name !== 'AcRule'),
         });
     }

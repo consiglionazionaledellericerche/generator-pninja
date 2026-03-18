@@ -119,19 +119,16 @@ export default class extends Generator {
 
     // Generate client
     const appName = this.config.get('name');
-    const entitiesTemplatePath = this.templatePath();
-    const clientTemplatePath = entitiesTemplatePath + '/../../client/templates';
     const searchEngine = this.config.get('searchEngine');
-    this.sourceRoot(clientTemplatePath);
     if (this.config.get('clientType') === 'react') {
       // Update entity icons
-      this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
+      this.fs.copyTpl(this.templatePath("../../client/templates/react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
 
       // Update Menu
-      this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+      this.fs.copyTpl(this.templatePath("../../client/templates/react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
 
       for (const lang of languages) {
-        this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
+        this.fs.copyTpl(this.templatePath(`../../client/templates/react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
           entities: [AcRule, ...entities],
           relationships,
           to,
@@ -140,9 +137,9 @@ export default class extends Generator {
           getModelRelatedEntities
         });
       };
-      this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize, searchEngine });
+      this.fs.copyTpl(this.templatePath("../../client/templates/react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...entities, AcRule], to, pluralize, searchEngine });
       for (const enumeration of getEnumsConfig(parsedJDL)) {
-        this.fs.copyTpl(this.templatePath("react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
+        this.fs.copyTpl(this.templatePath("../../client/templates/react/src/shared/model/enumerations/enumeration.model.ts.ejs"), this.destinationPath(`client/src/shared/model/enumerations/${to.slug(enumeration.name)}.model.ts`), { enumeration });
       }
       for (const entity of getEntitiesConfig(parsedJDL)) {
         await createEntityPages({ that: this, entity, enums, relationships, searchEngine });

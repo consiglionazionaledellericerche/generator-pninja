@@ -180,7 +180,7 @@ export class ModelsGenerator {
             'infix' => '${entity.fields.filter(f => !['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type)).map(f => ['String', 'TextBlob', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration', 'LocalTime'].includes(f.type) ? 'always' : 'off').join(",")}',
         ];
     }` : '';
-        this.that.fs.copyTpl(this.that.templatePath("app/Models/Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
+        this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/app/Models/Entity.php.ejs"), this.that.destinationPath(`server/app/Models/${className}.php`),
             {
                 className,
                 tableName,
@@ -212,7 +212,7 @@ export class ModelsGenerator {
             this.generateModel(entity, enums, relationships, searchEngine);
         }
         for (const enm of enums) {
-            this.that.fs.copyTpl(this.that.templatePath("Enum.php.ejs"), this.that.destinationPath(`server/app/Enums/${enm.name}.php`), {
+            this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/Enum.php.ejs"), this.that.destinationPath(`server/app/Enums/${enm.name}.php`), {
                 name: enm.name,
                 values: enm.values,
             })

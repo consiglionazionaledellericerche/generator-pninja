@@ -845,7 +845,6 @@ export default class extends Generator {
         // Generate migrations
         if (!this.isRegenerate && !this.isAdd && !this.isRemove) {
             const migrationsGenerator = new MigrationsGenerator(this);
-            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.createTable({ entity: this.entityConfig, enums });
             if (relationships.length > 0) {
                 migrationsGenerator.createRelation({ entity: this.entityConfig, relationships });
@@ -861,7 +860,6 @@ export default class extends Generator {
         }
         if (this.fieldsToAdd.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
-            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.addColumns({
                 entity: {
                     name: this.entityConfig.name,
@@ -875,7 +873,6 @@ export default class extends Generator {
         }
         if (this.fieldsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
-            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.removeColumns({
                 entity: {
                     name: this.entityConfig.name,
@@ -889,7 +886,6 @@ export default class extends Generator {
         }
         if (this.relationshipsToAdd.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
-            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.createRelation({
                 entity: this.entityConfig,
                 relationships: this.relationshipsToAdd.filter(rel => rel.relationshipType === 'one-to-one' || rel.relationshipType === 'many-to-one'),
@@ -908,7 +904,6 @@ export default class extends Generator {
         }
         if (this.relationshipsToRemove.length > 0) {
             const migrationsGenerator = new MigrationsGenerator(this);
-            migrationsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
             migrationsGenerator.removeRelation({
                 entity: this.entityConfig,
                 relationships: this.relationshipsToRemove.filter(rel => rel.relationshipType === 'one-to-one' || rel.relationshipType === 'many-to-one'),
@@ -928,7 +923,6 @@ export default class extends Generator {
 
         // Generate models
         const modelsGenerator = new ModelsGenerator(this);
-        modelsGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         modelsGenerator.generateModel(this.entityConfig, enums, storedRelationships, searchEngine);
 
         [...relationships, ...this.relationshipsToRemove]
@@ -944,7 +938,6 @@ export default class extends Generator {
 
         // Generate controllers
         const controllersGenerator = new ControllersGenerator(this);
-        controllersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         controllersGenerator.generateEntityController(this.entityConfig, storedRelationships, searchEngine);
         [...relationships, ...this.relationshipsToRemove]
             .filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'many-to-many')
@@ -986,25 +979,22 @@ export default class extends Generator {
 
         // Generate routes
         const routersGenerator = new RoutersGenerator(this);
-        routersGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         routersGenerator.generateRouters([AcRule, ...storedEntities]);
         !this.options.fromEntities && this.log(colors.green('Routers generated successfully\n'));
 
         // Generate Factories and DatabaseSeeder
         const factoriesGenerator = new FactoriesGenerator(this);
-        factoriesGenerator.that.sourceRoot(`${this.templatePath()}/../../entities/templates`);
         factoriesGenerator.generateFactories([AcRule, ...storedEntities], storedRelationships, enums);
         !this.options.fromEntities && this.log(colors.green('Factories and DatabaseSeeder generated successfully\n'));
 
         // Generate client
-        this.sourceRoot(`${this.templatePath()}/../../client/templates`);
         const appName = this.config.get('name');
         const nativeLanguage = this.config.get('nativeLanguage') || 'en';
         const languages = [nativeLanguage, ...this.config.get('languages')];
         if (this.config.get('clientType') === 'react') {
             // Copy locale files
             for (const lang of languages) {
-                this.fs.copyTpl(this.templatePath(`react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
+                this.fs.copyTpl(this.templatePath(`../../client/templates/react/public/locales/entities/entities.json.ejs`), this.destinationPath(`client/public/locales/${lang}/entities.json`), {
                     entities: [AcRule, ...storedEntities],
                     relationships: storedRelationships,
                     to,
@@ -1014,10 +1004,10 @@ export default class extends Generator {
                 });
             };
             // Update entity icons
-            this.fs.copyTpl(this.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
+            this.fs.copyTpl(this.templatePath("../../client/templates/react/src/shared/entitiesIcons.tsx.ejs"), this.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities: storedEntities });
 
             // Update Menu
-            this.fs.copyTpl(this.templatePath("react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+            this.fs.copyTpl(this.templatePath("../../client/templates/react/src/components/Menu.tsx.ejs"), this.destinationPath(`client/src/components/Menu.tsx`), { appName, entities: storedEntities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
 
             // Create entity pages
             await createEntityPages({
@@ -1054,7 +1044,7 @@ export default class extends Generator {
                     });
                 });
             // Update App.tsx
-            this.fs.copyTpl(this.templatePath("react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine });
+            this.fs.copyTpl(this.templatePath("../../client/templates/react/src/App.tsx.ejs"), this.destinationPath(`client/src/App.tsx`), { entities: [...storedEntities, AcRule], to, pluralize, searchEngine });
         }
 
         const __dirname = path.dirname(fileURLToPath(import.meta.url));

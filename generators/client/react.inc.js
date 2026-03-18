@@ -34,12 +34,12 @@ export async function createEntityPages({
 }) {
     const hasSoftDelete = entity.softDelete;
     that.fs.copyTpl(
-        that.templatePath("react/src/shared/services/entity.service.ts.ejs"),
+        that.templatePath("../../client/templates/react/src/shared/services/entity.service.ts.ejs"),
         that.destinationPath(`client/src/shared/services/${to.slug(entity.name)}.service.ts`),
         { entity, to, pluralize, searchEngine }
     );
     that.fs.copyTpl(
-        that.templatePath("react/src/pages/entities/EntityList.tsx.ejs"),
+        that.templatePath("../../client/templates/react/src/pages/entities/EntityList.tsx.ejs"),
         that.destinationPath(`client/src/pages/entities/${entity.name}List.tsx`),
         {
             entity,
@@ -54,7 +54,7 @@ export async function createEntityPages({
         });
     if (hasSoftDelete) {
         that.fs.copyTpl(
-            that.templatePath("react/src/pages/entities/EntityTrash.tsx.ejs"),
+            that.templatePath("../../client/templates/react/src/pages/entities/EntityTrash.tsx.ejs"),
             that.destinationPath(`client/src/pages/entities/${entity.name}Trash.tsx`),
             {
                 entity,
@@ -69,7 +69,7 @@ export async function createEntityPages({
             });
     }
     that.fs.copyTpl(
-        that.templatePath("react/src/pages/entities/EntityView.tsx.ejs"),
+        that.templatePath("../../client/templates/react/src/pages/entities/EntityView.tsx.ejs"),
         that.destinationPath(`client/src/pages/entities/${entity.name}View.tsx`),
         {
             entity,
@@ -82,7 +82,7 @@ export async function createEntityPages({
             relatedEntities: getModelRelatedEntities(entity, relationships)
         });
     that.fs.copyTpl(
-        that.templatePath("react/src/pages/entities/EntityEdit.tsx.ejs"),
+        that.templatePath("../../client/templates/react/src/pages/entities/EntityEdit.tsx.ejs"),
         that.destinationPath(`client/src/pages/entities/${entity.name}Edit.tsx`),
         {
             entity,
@@ -94,7 +94,7 @@ export async function createEntityPages({
             locking: entity.pessimisticLock
         });
     that.fs.copyTpl(
-        that.templatePath("react/src/components/entities/EntityForm.tsx.ejs"),
+        that.templatePath("../../client/templates/react/src/components/entities/EntityForm.tsx.ejs"),
         that.destinationPath(`client/src/components/entities/${entity.name}Form.tsx`),
         {
             entity,
@@ -115,7 +115,7 @@ export async function createEntityPages({
         }
     );
     that.fs.copyTpl(
-        that.templatePath("react/src/components/entities/EntityDeleteButton.tsx.ejs"),
+        that.templatePath("../../client/templates/react/src/components/entities/EntityDeleteButton.tsx.ejs"),
         that.destinationPath(`client/src/components/entities/${entity.name}DeleteButton.tsx`),
         {
             entity,
@@ -124,7 +124,7 @@ export async function createEntityPages({
         }
     );
     that.fs.copyTpl(
-        that.templatePath("react/src/shared/model/entity.model.ts.ejs"),
+        that.templatePath("../../client/templates/react/src/shared/model/entity.model.ts.ejs"),
         that.destinationPath(`client/src/shared/model/${to.slug(entity.name)}.model.ts`),
         {
             entity,
@@ -146,28 +146,28 @@ export async function createReactClient(that) {
 
     await that.spawn('npm', ['create', 'vite@6.1.1', 'client', '--', '--template', 'react-ts', '--no-install']);
 
-    that.fs.copyTpl(that.templatePath('react/.env.ejs'), that.destinationPath('client/.env'), { searchEngine });
-    that.fs.copyTpl(that.templatePath('react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
-    that.fs.copyTpl(that.templatePath('react/eslint.config.js.ejs'), that.destinationPath('client/eslint.config.js'), {});
-    that.fs.copyTpl(that.templatePath('react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
-    that.fs.copyTpl(that.templatePath('react/package.json.ejs'), that.destinationPath('client/package.json'), { name: to.slug(appName) });
-    that.fs.copyTpl(that.templatePath('react/package-lock.json.ejs'), that.destinationPath('client/package-lock.json'), { name: to.slug(appName) });
-    that.fs.copyTpl(that.templatePath('react/tsconfig.app.json.ejs'), that.destinationPath('client/tsconfig.app.json'), {});
-    that.fs.copyTpl(that.templatePath('react/tsconfig.json.ejs'), that.destinationPath('client/tsconfig.json'), {});
-    that.fs.copyTpl(that.templatePath('react/tsconfig.node.json.ejs'), that.destinationPath('client/tsconfig.node.json'), {});
-    that.fs.copyTpl(that.templatePath('react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/.env.ejs'), that.destinationPath('client/.env'), { searchEngine });
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/.gitignore.ejs'), that.destinationPath('client/.gitignore'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/eslint.config.js.ejs'), that.destinationPath('client/eslint.config.js'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/index.html.ejs'), that.destinationPath('client/index.html'), { appName });
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/package.json.ejs'), that.destinationPath('client/package.json'), { name: to.slug(appName) });
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/package-lock.json.ejs'), that.destinationPath('client/package-lock.json'), { name: to.slug(appName) });
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/tsconfig.app.json.ejs'), that.destinationPath('client/tsconfig.app.json'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/tsconfig.json.ejs'), that.destinationPath('client/tsconfig.json'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/tsconfig.node.json.ejs'), that.destinationPath('client/tsconfig.node.json'), {});
+    that.fs.copyTpl(that.templatePath('../../client/templates/react/vite.config.ts.ejs'), that.destinationPath('client/vite.config.ts'), {});
 
     for (const lang of languages) {
-        that.fs.copyTpl(that.templatePath(`react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`));
-        that.fs.copyTpl(that.templatePath(`react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`));
-        that.fs.copyTpl(that.templatePath(`react/public/locales/seeder/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/seeder.json`));
-        that.fs.copyTpl(that.templatePath(`react/public/locales/migrations/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/migrations.json`));
-        that.fs.copyTpl(that.templatePath(`react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/log/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/log.json`));
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/audit/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/audit.json`));
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/seeder/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/seeder.json`));
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/migrations/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/migrations.json`));
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/common/${lang}.json.ejs`), that.destinationPath(`client/public/locales/${lang}/common.json`), { appName });
         if (!['null', 'database'].includes(searchEngine)) {
-            that.fs.copyTpl(that.templatePath(`react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
+            that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/searchReindex/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/searchReindex.json`));
         }
-        that.fs.copyTpl(that.templatePath(`react/public/locales/locking/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/locking.json`));
-        that.fs.copyTpl(that.templatePath(`react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/locking/${lang}.json`), that.destinationPath(`client/public/locales/${lang}/locking.json`));
+        that.fs.copyTpl(that.templatePath(`../../client/templates/react/public/locales/entities/entities.json.ejs`), that.destinationPath(`client/public/locales/${lang}/entities.json`), {
             entities: [AcRule],
             relationships: [],
             to,
@@ -176,142 +176,141 @@ export async function createReactClient(that) {
             getModelRelatedEntities
         });
     };
-    that.fs.copy(that.templatePath("react/public/fonts"), that.destinationPath("client/public/fonts"));
-    that.fs.copy(that.templatePath("react/public/wordlists"), that.destinationPath("client/public/wordlists"));
+    that.fs.copy(that.templatePath("../../client/templates/react/public/fonts"), that.destinationPath("client/public/fonts"));
+    that.fs.copy(that.templatePath("../../client/templates/react/public/wordlists"), that.destinationPath("client/public/wordlists"));
 
-    that.fs.copyTpl(that.templatePath("react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize, searchEngine });
-    that.fs.copyTpl(that.templatePath("react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/App.css.ejs"), that.destinationPath(`client/src/App.css`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/App.tsx.ejs"), that.destinationPath(`client/src/App.tsx`), { entities: [AcRule], to, pluralize, searchEngine });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/i18n.js.ejs"), that.destinationPath(`client/src/i18n.js`), {
         supportedLngs: JSON.stringify(languages).replaceAll(`"`, `'`),
         fallbackLng: nativeLanguage,
         searchEngine,
     });
-    that.fs.copyTpl(that.templatePath("react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), { navbarStartcolor });
-    that.fs.copyTpl(that.templatePath("react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/index.css.ejs"), that.destinationPath(`client/src/index.css`), { navbarStartcolor });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/main.tsx.ejs"), that.destinationPath(`client/src/main.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("assets/icon.png"), that.destinationPath(`client/public/icon.png`));
-    that.fs.copyTpl(that.templatePath("assets/icon.svg"), that.destinationPath(`client/public/icon.svg`));
-    that.fs.copyTpl(that.templatePath("assets/algolia-logo.svg"), that.destinationPath(`client/src/assets/algolia-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/elastic-logo.svg"), that.destinationPath(`client/src/assets/elastic-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/meilisearch-logo.svg"), that.destinationPath(`client/src/assets/meilisearch-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/pninja-logo-dark.svg"), that.destinationPath(`client/src/assets/pninja-logo-dark.svg`));
-    that.fs.copyTpl(that.templatePath("assets/pninja-logo-light.svg"), that.destinationPath(`client/src/assets/pninja-logo-light.svg`));
-    that.fs.copyTpl(that.templatePath("assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
-    that.fs.copyTpl(that.templatePath("assets/solr-logo.svg"), that.destinationPath(`client/src/assets/solr-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/typesense-logo.svg"), that.destinationPath(`client/src/assets/typesense-logo.svg`));
-    that.fs.copyTpl(that.templatePath("assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
-    that.fs.copyTpl(that.templatePath("assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/icon.png"), that.destinationPath(`client/public/icon.png`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/icon.svg"), that.destinationPath(`client/public/icon.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/algolia-logo.svg"), that.destinationPath(`client/src/assets/algolia-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/elastic-logo.svg"), that.destinationPath(`client/src/assets/elastic-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/laravel-logo.svg"), that.destinationPath(`client/src/assets/laravel-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/logo.svg"), that.destinationPath(`client/src/assets/logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/mariadb-logo.svg"), that.destinationPath(`client/src/assets/mariadb-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/meilisearch-logo.svg"), that.destinationPath(`client/src/assets/meilisearch-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/mysql-logo.svg"), that.destinationPath(`client/src/assets/mysql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/pgsql-logo.svg"), that.destinationPath(`client/src/assets/pgsql-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/pninja-logo-dark.svg"), that.destinationPath(`client/src/assets/pninja-logo-dark.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/pninja-logo-light.svg"), that.destinationPath(`client/src/assets/pninja-logo-light.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/react.svg"), that.destinationPath(`client/src/assets/react.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/solr-logo.svg"), that.destinationPath(`client/src/assets/solr-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/sqlite-logo.svg"), that.destinationPath(`client/src/assets/sqlite-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/typesense-logo.svg"), that.destinationPath(`client/src/assets/typesense-logo.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/vite.svg"), that.destinationPath(`client/src/assets/vite.svg`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/assets/vue.svg"), that.destinationPath(`client/src/assets/vue.svg`));
 
-    that.fs.copyTpl(that.templatePath("react/src/components/ApiResponsePagination.tsx.ejs"), that.destinationPath(`client/src/components/ApiResponsePagination.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Can.tsx.ejs"), that.destinationPath(`client/src/components/Can.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
-    that.fs.copyTpl(that.templatePath("react/src/components/Footer.tsx.ejs"), that.destinationPath(`client/src/components/Footer.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/index.ts.ejs"), that.destinationPath(`client/src/components/formElements/index.ts`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/Checkbox.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Checkbox.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/ColorField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/ColorField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/DateField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DateField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/DateTimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DateTimeField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/DurationField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DurationField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/EmailField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/EmailField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FileField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FileField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormErrors.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormFieldInfo.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormFieldInfo.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormLabel.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/formElements/InfoValidations.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/NumberField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/NumberField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/PasswordField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/PasswordField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), { searchEngine });
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/TelField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TelField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/Textarea.css"), that.destinationPath(`client/src/components/formElements/Textarea.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TimeField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/UrlField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UrlField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/HtmlViewer.tsx.ejs"), that.destinationPath(`client/src/components/HtmlViewer.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Icon.tsx.ejs"), that.destinationPath(`client/src/components/Icon.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
-    that.fs.copyTpl(that.templatePath("react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
-    that.fs.copyTpl(that.templatePath("react/src/components/LoginRedirector.tsx.ejs"), that.destinationPath(`client/src/components/LoginRedirector.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.css"), that.destinationPath(`client/src/components/SearchInput.css`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/components/Tooltip.tsx.ejs"), that.destinationPath(`client/src/components/Tooltip.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/ApiResponsePagination.tsx.ejs"), that.destinationPath(`client/src/components/ApiResponsePagination.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Can.tsx.ejs"), that.destinationPath(`client/src/components/Can.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/ConfirmButton.tsx.ejs"), that.destinationPath(`client/src/components/ConfirmButton.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/DarkModeToggle.tsx.ejs"), that.destinationPath(`client/src/components/DarkModeToggle.tsx`), { to });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Footer.tsx.ejs"), that.destinationPath(`client/src/components/Footer.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/index.ts.ejs"), that.destinationPath(`client/src/components/formElements/index.ts`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/Checkbox.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Checkbox.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/ColorField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/ColorField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/DateField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DateField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/DateTimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DateTimeField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/DurationField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/DurationField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/EmailField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/EmailField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/FileField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FileField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/FormErrors.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormErrors.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/FormFieldInfo.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormFieldInfo.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/FormLabel.tsx.ejs"), that.destinationPath(`client/src/components/formElements/FormLabel.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/InfoValidations.tsx.ejs"), that.destinationPath(`client/src/components/formElements/InfoValidations.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/NumberField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/NumberField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/PasswordField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/PasswordField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/RadioGroup.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RadioGroup.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/RangeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/RangeField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/SelectField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/SelectField.tsx`), { searchEngine });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/TelField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TelField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/Textarea.tsx.ejs"), that.destinationPath(`client/src/components/formElements/Textarea.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/Textarea.css"), that.destinationPath(`client/src/components/formElements/Textarea.css`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/TextField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TextField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/TimeField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/TimeField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/UrlField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UrlField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/formElements/UuidField.tsx.ejs"), that.destinationPath(`client/src/components/formElements/UuidField.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/HtmlViewer.tsx.ejs"), that.destinationPath(`client/src/components/HtmlViewer.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Icon.tsx.ejs"), that.destinationPath(`client/src/components/Icon.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/JsonPrint.tsx.ejs"), that.destinationPath(`client/src/components/JsonPrint.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/LangSelect.tsx.ejs"), that.destinationPath(`client/src/components/LangSelect.tsx`), { to });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/LoginButton.tsx.ejs"), that.destinationPath(`client/src/components/LoginButton.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/LogoutButton.tsx.ejs"), that.destinationPath(`client/src/components/LogoutButton.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Menu.tsx.ejs"), that.destinationPath(`client/src/components/Menu.tsx`), { appName, entities, to, pluralize, withLangSelect: languages.length > 1, searchEngine });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/LoginRedirector.tsx.ejs"), that.destinationPath(`client/src/components/LoginRedirector.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SearchInput.css"), that.destinationPath(`client/src/components/SearchInput.css`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Tooltip.tsx.ejs"), that.destinationPath(`client/src/components/Tooltip.tsx`));
 
-    that.fs.copyTpl(that.templatePath("react/src/config/languages.ts.ejs"), that.destinationPath(`client/src/config/languages.ts`), {
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/config/languages.ts.ejs"), that.destinationPath(`client/src/config/languages.ts`), {
         languages: JSON.stringify(languages).replaceAll(`"`, `'`),
         languagesData: JSON.stringify(languages.map(lng => getLanguageData(lng)), null, 2)
     });
 
-    that.fs.copyTpl(that.templatePath("react/src/contexts/AuthContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthContext.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/contexts/AuthorizationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthorizationContext.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/contexts/NotificationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/NotificationContext.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/contexts/AuthContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthContext.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/contexts/AuthorizationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthorizationContext.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/contexts/AuthProvider.tsx.ejs"), that.destinationPath(`client/src/contexts/AuthProvider.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/contexts/NotificationContext.tsx.ejs"), that.destinationPath(`client/src/contexts/NotificationContext.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), {
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/Home.tsx.ejs"), that.destinationPath(`client/src/pages/Home.tsx`), {
         dbms: that.config.get('dbms'),
         searchEngine: that.config.get('searchEngine')
     });
-    that.fs.copyTpl(that.templatePath("react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/Logout.tsx.ejs"), that.destinationPath(`client/src/pages/Logout.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/Login.tsx.ejs"), that.destinationPath(`client/src/pages/Login.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/Logout.tsx.ejs"), that.destinationPath(`client/src/pages/Logout.tsx`));
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/errors/Err403.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err403.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/errors/Err404.tsx.ejs"), that.destinationPath(`client/src/pages/errors/Err404.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/Seeder.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Seeder.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/Seeder.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Seeder.tsx`));
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/Migrations.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Migrations.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/Migrations.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Migrations.tsx`));
 
     if (!['null', 'database'].includes(searchEngine)) {
-        that.fs.copyTpl(that.templatePath("react/src/pages/admin/SearchReindex.tsx.ejs"), that.destinationPath(`client/src/pages/admin/SearchReindex.tsx`), { searchEngine });
+        that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/SearchReindex.tsx.ejs"), that.destinationPath(`client/src/pages/admin/SearchReindex.tsx`), { searchEngine });
     }
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/Logs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Logs.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/Logs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Logs.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/support/ApiDocs.tsx.ejs"), that.destinationPath(`client/src/pages/support/ApiDocs.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/support/ApiDocs.tsx.ejs"), that.destinationPath(`client/src/pages/support/ApiDocs.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
-    that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
-    that.fs.copyTpl(that.templatePath("react/src/hooks/useRoles.ts.ejs"), that.destinationPath(`client/src/hooks/useRoles.ts`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/hooks/useRoles.ts.ejs"), that.destinationPath(`client/src/hooks/useRoles.ts`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/shared/axiosInstance.ts.ejs"), that.destinationPath(`client/src/shared/axiosInstance.ts`));
-    that.fs.copyTpl(that.templatePath("react/src/shared/axiosInterceptors.ts.ejs"), that.destinationPath(`client/src/shared/axiosInterceptors.ts`));
-    that.fs.copyTpl(that.templatePath("react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
-    that.fs.copyTpl(that.templatePath("react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/shared/axiosInstance.ts.ejs"), that.destinationPath(`client/src/shared/axiosInstance.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/shared/axiosInterceptors.ts.ejs"), that.destinationPath(`client/src/shared/axiosInterceptors.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/shared/entitiesIcons.tsx.ejs"), that.destinationPath(`client/src/shared/entitiesIcons.tsx`), { entities });
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/shared/model/ac-rule.model.ts.ejs"), that.destinationPath(`client/src/shared/model/ac-rule.model.ts`));
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/index.ts.ejs"), that.destinationPath(`client/src/pages/admin/audit/index.ts`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/Audits.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditHistory.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditList.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditStatistics.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditUserActivity.tsx`));
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditView.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/index.ts.ejs"), that.destinationPath(`client/src/pages/admin/audit/index.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/Audits.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/Audits.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/AuditHistory.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditHistory.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/AuditList.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditList.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/AuditStatistics.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditStatistics.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/AuditUserActivity.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditUserActivity.tsx`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/pages/admin/audit/AuditView.tsx.ejs"), that.destinationPath(`client/src/pages/admin/audit/AuditView.tsx`));
 
     createEntityPages({ that, entity: AcRule, enums: [], relationships: [], searchEngine });
 
-    that.fs.copyTpl(that.templatePath("react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
-    that.fs.copyTpl(that.templatePath("react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`));
-    that.fs.copyTpl(that.templatePath("react/src/types/authorization.ts.ejs"), that.destinationPath(`client/src/types/authorization.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/types/api-response.types.ts.ejs"), that.destinationPath(`client/src/types/api-response.types.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/types/auth.ts.ejs"), that.destinationPath(`client/src/types/auth.ts`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/types/authorization.ts.ejs"), that.destinationPath(`client/src/types/authorization.ts`));
 
-    that.fs.copyTpl(that.templatePath("blobs/dummy.pdf"), that.destinationPath(`server/database/factories/dummy.pdf`));
-    that.fs.copyTpl(that.templatePath("blobs/dummy.png"), that.destinationPath(`server/database/factories/dummy.png`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/blobs/dummy.pdf"), that.destinationPath(`server/database/factories/dummy.pdf`));
+    that.fs.copyTpl(that.templatePath("../../client/templates/blobs/dummy.png"), that.destinationPath(`server/database/factories/dummy.png`));
 
     // Api Docs generation
-    that.sourceRoot(that.templatePath() + '/../../client/templates');
     const openApiGen = new OpenApiGenerator(that);
     openApiGen.generateOpenApi([AcRule]);
 }
