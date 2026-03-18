@@ -282,7 +282,7 @@ export async function createReactClient(that) {
 
     that.fs.copyTpl(that.templatePath("react/src/pages/admin/Logs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/Logs.tsx`), {});
 
-    that.fs.copyTpl(that.templatePath("react/src/pages/admin/ApiDocs.tsx.ejs"), that.destinationPath(`client/src/pages/admin/ApiDocs.tsx`), {});
+    that.fs.copyTpl(that.templatePath("react/src/pages/support/ApiDocs.tsx.ejs"), that.destinationPath(`client/src/pages/support/ApiDocs.tsx`), {});
 
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAuthState.ts.ejs"), that.destinationPath(`client/src/hooks/useAuthState.ts`), {});
     that.fs.copyTpl(that.templatePath("react/src/hooks/useAutoShortcuts.tsx.ejs"), that.destinationPath(`client/src/hooks/useAutoShortcuts.tsx`), {});
