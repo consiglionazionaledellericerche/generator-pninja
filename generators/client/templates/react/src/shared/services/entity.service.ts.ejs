@@ -6,9 +6,6 @@ export interface <%= entity.name %>ListParams {
   page: number;
   sort_by: string;
   sort_direction: string;
-<% if (searchEngine !== 'null') { -%>
-  search?: string;
-<% } -%>
 }
 
 <% if (entity.softDelete) { -%>
