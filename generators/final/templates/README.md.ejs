@@ -449,6 +449,42 @@ For entities annotated with `@softDelete`, **unique constraints are enforced at 
 
 For entities **without** `@softDelete`, unique constraints are enforced both at the database level (migration index) and at the application level (controller validation).
 
+## API Documentation
+
+The application exposes an interactive **API documentation interface** powered by **[Swagger UI](https://swagger.io/tools/swagger-ui/)** and generated automatically from the OpenAPI 3.0 specification.
+
+Access it at:
+
+```
+http://localhost:5173/support/api-docs
+```
+
+**Features:**
+
+- **Interactive console** — execute API calls directly from the browser
+- **Authentication** — supports both Bearer token and OAuth2 (Keycloak) login via the **Authorize** button
+- **Full endpoint coverage** — all generated entities, auth, user, locks endpoints are documented
+- **Schema reference** — read and write schemas for every entity, including blob fields
+
+**Authenticating via Swagger UI:**
+
+- **Bearer token** (machine-to-machine): paste a valid JWT in the Authorize dialog
+- **OAuth2** (interactive login): click Authorize → select OAuth2 → click Authorize to log in via Keycloak
+
+**For machine-to-machine integrations**, obtain a token via Client Credentials:
+
+```sh
+curl -X POST '${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=client_credentials' \
+  -d 'client_id=YOUR_CLIENT_ID' \
+  -d 'client_secret=YOUR_CLIENT_SECRET'
+```
+
+Then use the returned `access_token` as Bearer header in all API calls.
+
+The OpenAPI specification is served dynamically at `/api/openapi.json` with Keycloak URLs resolved from `server/.env` at runtime.
+
 ## Docker composition
 
 To start the **Docker composition**:

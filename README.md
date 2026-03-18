@@ -218,6 +218,47 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
 
 - [i18next][i18next-url]
 
+## API Documentation
+
+PNinja generates an interactive **API documentation interface** powered by **[Swagger UI](https://swagger.io/tools/swagger-ui/)** and an **OpenAPI 3.0 specification** built automatically from your JDL model.
+
+### In the generated application
+
+The API docs are accessible at `/support/api-docs` in the generated React client.
+
+**Features:**
+
+- **Interactive console** — execute API calls directly from the browser
+- **Authentication** — supports both Bearer token and OAuth2 (Keycloak) login via the **Authorize** button
+- **Full endpoint coverage** — all generated entities, auth, user, and locks endpoints are documented
+- **Schema reference** — read and write schemas for every entity, including blob field handling
+
+**Authenticating via Swagger UI:**
+
+- **Bearer token** (machine-to-machine): paste a valid JWT in the Authorize dialog
+- **OAuth2** (interactive login): click Authorize → select OAuth2 → log in via Keycloak
+
+**For machine-to-machine integrations**, use the Client Credentials flow:
+
+```sh
+curl -X POST 'https://<keycloak-host>/realms/<realm>/protocol/openid-connect/token' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=client_credentials' \
+  -d 'client_id=YOUR_CLIENT_ID' \
+  -d 'client_secret=YOUR_CLIENT_SECRET'
+```
+
+Then use the returned `access_token` as Bearer header in all API calls.
+
+### How it works
+
+The OpenAPI specification is:
+
+- **Generated** by `generators/entities/utils/openapi-generator.js` from your JDL entities
+- **Stored** as `server/resources/openapi.json` with Keycloak URL placeholders
+- **Served dynamically** at `GET /api/openapi.json` by `OpenApiController`, which resolves the Keycloak URLs from `server/.env` at runtime
+- **Rendered** by `swagger-ui-react` in the React client at `/support/api-docs`
+
 ## Roadmap
 
 ### Frontend Frameworks
