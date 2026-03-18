@@ -1071,9 +1071,9 @@ export default class extends Generator {
             relationships: getEntitiesRelationships(this),
             searchEngine: this.config.get('searchEngine'),
         });
-        this.fs.copyTpl(this.templatePath(`../../final/templates/Guide.tsx.ejs`), this.destinationPath(`client/src/pages/support/Guide.tsx`));
+        this.fs.copyTpl(this.templatePath(`../../client/templates/react/src/pages/support/Guide.tsx.ejs`), this.destinationPath(`client/src/pages/support/Guide.tsx`));
         this.fs.copyTpl(
-            this.templatePath(`../../final/templates/guide.md.ejs`),
+            this.templatePath(`../../client/templates/react/src/pages/support/guide.md.ejs`),
             this.destinationPath(`client/src/pages/support/guide.md`),
             {
                 to,
