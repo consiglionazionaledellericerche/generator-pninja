@@ -96,7 +96,7 @@ const FileField: React.FC<FileFieldProps> = ({
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
-    setValue(fieldName, mark ? null : undefined);
+    setValue(fieldName, mark ? null : existingBlob);
     setTimeout(() => {
       trigger(fieldName);
     }, 0);
@@ -157,7 +157,7 @@ const FileField: React.FC<FileFieldProps> = ({
 
   const undoEdit = () => {
     setShouldShowInput(false);
-    setValue(fieldName, null);
+    setValue(fieldName, existingBlob);
     const input = document.querySelector(`[name=${fieldName}]`) as HTMLInputElement;
     if (input) input.value = '';
     setTimeout(() => {
