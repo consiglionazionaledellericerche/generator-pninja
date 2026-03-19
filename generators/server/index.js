@@ -5,7 +5,6 @@ import { ModelsGenerator } from '../entities/utils/models-generator.js';
 import { FactoriesGenerator } from '../entities/utils/factories-generator.js';
 import { ControllersGenerator } from '../entities/utils/controllers-generator.js';
 import { AcRule } from '../utils/AcRule.js';
-import e from 'express';
 
 function sortJdlStructure(jdl) {
   // Create a deep copy to avoid modifying the original
