@@ -238,14 +238,16 @@ export default function <%= entity.name %>List() {
                     <td><% if (!durationColumns.includes(column)) { %>{row.<%- column %>?.toString()}<% } else { %><DurationFieldViewer duration={row.<%- column %>} format="iso"/><% } %></td>
 <%                    } else { -%>
                     <td>
-                      <a
-                        href={`/api/<%=to.slug(pluralize(entity.name))%>/${row.id}/<%- column %>/${row.<%- column %>_name}`}
-                        className="text-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {row.<%- column %>_name?.toString()}
-                      </a>
+                      {row.<%- column %>?.name && (
+                        <a
+                          href={`/api/<%=to.slug(pluralize(entity.name))%>/${row.id}/<%- column %>/${row.<%- column %>?.name}`}
+                          className="text-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {row.<%- column %>?.name}
+                        </a>
+                      )}
                     </td>
 <%                    } -%>
 <%                  } -%>

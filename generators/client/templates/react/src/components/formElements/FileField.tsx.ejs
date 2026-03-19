@@ -6,12 +6,11 @@ import { useFormContext, useController, FieldError } from 'react-hook-form';
 import { FormLabel, FormFieldInfo } from './index';
 import { useId } from 'react-aria';
 
-type TransformedFileData = {
+type BlobValue = {
   data: string;
-  mimeType: string;
-  originalName: string;
+  type: string;
+  name: string;
   size: number;
-  delete: boolean;
 };
 
 interface FileFieldProps {
@@ -73,7 +72,8 @@ const FileField: React.FC<FileFieldProps> = ({
 }) => {
   const { t } = useTranslation();
   const entityData = entity as Record<string, unknown>;
-  const hasFile = entityData?.[`${fieldName}_name`] || false;
+  const existingBlob = entityData?.[fieldName] as BlobValue | null | undefined;
+  const hasFile = !!existingBlob?.name;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
   const { required, minbytes, maxbytes } = validations || {};
@@ -96,7 +96,7 @@ const FileField: React.FC<FileFieldProps> = ({
 
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
-    setValue(fieldName, mark ? { delete: true } : null);
+    setValue(fieldName, mark ? null : undefined);
     setTimeout(() => {
       trigger(fieldName);
     }, 0);
@@ -104,10 +104,10 @@ const FileField: React.FC<FileFieldProps> = ({
 
   const registerProps = register(fieldName, {
     validate: (value: unknown | undefined) => {
-      const fileData = value as TransformedFileData | null;
+      const fileData = value as BlobValue | null;
 
-      if (fileData?.mimeType && !fileData.mimeType.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
-        return `errors.validations.file.invalidType:${accept}:${fileData.mimeType}`;
+      if (fileData?.type && !fileData.type.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
+        return `errors.validations.file.invalidType:${accept}:${fileData.type}`;
       }
       if (typeof fileData?.size === 'number' && minbytes && fileData?.size < minbytes) {
         return `errors.validations.file.minSize:${prettyBytes(minbytes)}:${prettyBytes(fileData?.size)}`;
@@ -115,14 +115,13 @@ const FileField: React.FC<FileFieldProps> = ({
       if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
         return `errors.validations.file.maxSize:${prettyBytes(maxbytes)}:${prettyBytes(fileData?.size)}`;
       }
-      if (required && (fileData?.delete || (!fileData && !entityData?.[`${fieldName}_name`]))) {
+      if (required && (isMarkedForDeletion || (!fileData && !existingBlob?.name))) {
         return 'errors.validations.file.required';
       }
       return true;
     },
   });
 
-  // Handler personalizzato per trasformare e salvare
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
 
@@ -136,15 +135,14 @@ const FileField: React.FC<FileFieldProps> = ({
 
     try {
       const fileData = await fileToBase64(file);
-      const transformedValue: TransformedFileData = {
+      const blobValue: BlobValue = {
         data: fileData,
-        mimeType: file.type,
-        originalName: file.name,
+        type: file.type,
+        name: file.name,
         size: file.size,
-        delete: isMarkedForDeletion,
       };
 
-      setValue(fieldName, transformedValue);
+      setValue(fieldName, blobValue);
       setTimeout(() => {
         trigger(fieldName);
       }, 0);
@@ -160,7 +158,6 @@ const FileField: React.FC<FileFieldProps> = ({
   const undoEdit = () => {
     setShouldShowInput(false);
     setValue(fieldName, null);
-    // Reset the input value
     const input = document.querySelector(`[name=${fieldName}]`) as HTMLInputElement;
     if (input) input.value = '';
     setTimeout(() => {
@@ -183,15 +180,15 @@ const FileField: React.FC<FileFieldProps> = ({
           <div className="p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md">
             <div className="flex items-center justify-between">
               <a
-                href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${entityData?.[`${fieldName}_name`]}`}
+                href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${existingBlob?.name}`}
                 className="hover:underline flex items-center gap-2"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${t('actions.crud.file.viewOrDownload')} ${entityData?.[`${fieldName}_name`]} (${t('common.opensInNewWindow')})`}
+                aria-label={`${t('actions.crud.file.viewOrDownload')} ${existingBlob?.name} (${t('common.opensInNewWindow')})`}
               >
-                {getFileIcon(entityData?.[`${fieldName}_type`] as string)}
+                {getFileIcon(existingBlob?.type)}
                 {t('actions.crud.file.viewOrDownload')}{' '}
-                {entityData?.[`${fieldName}_name`] as string} ({t('common.opensInNewWindow')})
+                {existingBlob?.name} ({t('common.opensInNewWindow')})
               </a>
               <div className="flex items-center gap-2">
                 <button

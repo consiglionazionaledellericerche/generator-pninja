@@ -6,6 +6,18 @@ function isEmpty(obj) {
   }
   return true;
 }
+function stripBlobData(fileFields, to) {
+    if (!fileFields.length) return '';
+    const lines = fileFields.map(field => `            foreach ($data['data'] as &$item) {
+                if (!empty($item['${to.snake(field)}'])) {
+                    $item['${to.snake(field)}'] = array_diff_key($item['${to.snake(field)}'], ['data' => '']);
+                }
+            }
+            unset($item);`).join('\n');
+    return `$data = $result->toArray();
+${lines}
+            return response()->json($data);`;
+}
 -%>
 namespace App\Http\Controllers;
 
@@ -41,7 +53,11 @@ class <%- className %>Controller extends Controller
 <%  } -%>
                     ->orderBy($sortBy, $sortDirection)
                     ->paginate($perPage);
+<%  if (fileFields.length) { -%>
+            <%- stripBlobData(fileFields, to) %>
+<%  } else { -%>
                 return response()->json($result);
+<%  } -%>
             }
 
 <%  if (relatedEntitiesForFilters && relatedEntitiesForFilters.length) {-%>
@@ -96,8 +112,11 @@ class <%- className %>Controller extends Controller
                 ->orderBy($sortBy, $sortDirection)
                 ->paginate($perPage);
 <%  } -%>
-
+<%  if (fileFields.length) { -%>
+            <%- stripBlobData(fileFields, to) %>
+<%  } else { -%>
             return response()->json($result);
+<%  } -%>
         } catch (\Exception $e) {
             return $this->handleIndexError($e);
         }
@@ -125,42 +144,15 @@ class <%- className %>Controller extends Controller
 <%  } else {-%>
             $validated = $request->validate([
 <%      for (field in validationsStore) {-%>
-<%          if(!fileFields.includes(field)) { -%>
                 '<%- field %>' => [
 <%          validationsStore[field].forEach(validation => {-%>
                     <%- validation %>,
 <%          })-%>
                 ],
-<%          } else {-%>
-                '<%- field %>.data' => [
-<%          validationsStore[field].forEach(validation => {-%>
-                    <%- validation %>,
-<%          })-%>
-                ],
-                '<%- field %>.mimeType' => [
-                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
-<%                  if (imageFields.includes(field)) { -%>
-                    'image_mimetype',
-<%                  } -%>
-                ],
-                '<%- field %>.originalName' => [
-                    '<%- validationsStore[field].includes("'required'") ? 'required' : 'nullable' %>',
-                ],
-                '<%- field %>.delete' => [
-                    'boolean',
-                ],
-<%          } -%>
 <%      }-%>
             ]);
             $data = $validated;
 <%  }-%>
-<%  fileFields.forEach((field) => {-%>
-            if (!empty($data['<%-to.snake(field)%>']['data'])) {
-                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
-                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
-                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
-            }
-<%  });-%>
 
             $<%- entityName %> = <%- className %>::create($data);
 <%          if (createRelated) { -%>
@@ -195,55 +187,16 @@ class <%- className %>Controller extends Controller
 <%  } else {-%>
             $validated = $request->validate([
 <%      for (field in validationsUpdate) {-%>
-<%          if(!fileFields.includes(field)) { -%>
                 '<%- field %>' => [
 <%          validationsUpdate[field].forEach(validation => {-%>
                     <%- validation %>,
 <%          })-%>
                 ],
-<%          } else {-%>
-                '<%- field %>.data' => [
-<%          validationsStore[field].forEach(validation => {-%>
-<%              if (validation === `'required'`) { -%>
-                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
-<%              } else {-%>
-                    <%- validation %>,
-<%              } -%>
-<%          })-%>
-                ],
-                '<%- field %>.mimeType' => [
-                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_type'] ? 'nullable' : 'required'` : `'nullable'` %>,
-<%                  if (imageFields.includes(field)) { -%>
-                    'image_mimetype',
-<%                  } -%>
-                ],
-                '<%- field %>.originalName' => [
-                    <%- validationsStore[field].includes("'required'") ? `$${entityName}['${field}_name'] ? 'nullable' : 'required'` : `'nullable'` %>,
-                ],
-                '<%- field %>.delete' => [
-                    'boolean',
-                ],
-<%          } -%>
 <%      }-%>
             ]);
             $data = $validated;
 <%  }-%>
-<%  if(!isEmpty(fileFields)) {-%>
 
-<%      fileFields.forEach((field) => {-%>
-            if (!empty($data['<%-to.snake(field)%>']['data'])) {
-                $data['<%-to.snake(field)%>_type'] = $data['<%-to.snake(field)%>']['mimeType'] ?? null;
-                $data['<%-to.snake(field)%>_name'] = $data['<%-to.snake(field)%>']['originalName'] ?? null;
-                $data['<%-to.snake(field)%>_blob'] = base64_decode($data['<%-to.snake(field)%>']['data']);
-            }
-            if (!empty($data['<%-to.snake(field)%>']['delete']) && $data['<%-to.snake(field)%>']['delete']) {
-                $<%- entityName %>-><%-to.snake(field)%>_type = null;
-                $<%- entityName %>-><%-to.snake(field)%>_name = null;
-                $<%- entityName %>-><%-to.snake(field)%>_blob = null;
-            }
-
-<%      });-%>
-<%  }-%>
             $<%- entityName %>->update($data);
 <%          if (createRelated) { -%>
 <%- createRelated.split("\n").map(line => line.replace(/ \/\/ only-update$/,'')).join("\n") %>
@@ -271,27 +224,21 @@ class <%- className %>Controller extends Controller
         }
     }
 
-<%  if(!isEmpty(fileFields)) {-%>
+<%  if(fileFields.length) {-%>
     public function serveBlob($id, string $field)
     {
         try {
             $<%- entityName %> = <%- className %>::findOrFail($id);
 
-            $blobField = $field . '_blob';
-            $nameField = $field . '_name';
-            $mimeField = $field . '_type';
+            $blob = $<%- entityName %>->$field;
 
-            if (!$<%- entityName %>->$blobField) {
+            if (!$blob || empty($blob['data'])) {
                 return response()->json(['error' => 'File not found'], 404);
             }
 
-            $content = $<%- entityName %>->$blobField;
-            $name = $<%- entityName %>->$nameField ?? 'file';
-            $mime = $<%- entityName %>->$mimeField ?? 'application/octet-stream';
-
-            return response($content, 200)
-                ->header('Content-Type', $mime)
-                ->header('Content-Disposition', "inline; filename=\"$name\"");
+            return response(base64_decode($blob['data']), 200)
+                ->header('Content-Type', $blob['type'] ?? 'application/octet-stream')
+                ->header('Content-Disposition', 'inline; filename="' . ($blob['name'] ?? 'file') . '"');
 
         } catch (\Exception $e) {
             return $this->handleShowError($e);

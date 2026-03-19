@@ -6,6 +6,7 @@ const getValidations = (that, e, relationships, op) => {
     const entity = structuredClone(e);
     return {
         ...entity.fields
+            .filter(field => !['Blob', 'AnyBlob', 'ImageBlob'].includes(field.type))
             .map(field => {
                 const { validations } = field;
                 if (field.type === 'UUID') field.validations.unshift({ key: 'pattern', value: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' });
@@ -40,12 +41,6 @@ const getValidations = (that, e, relationships, op) => {
                     }
                     if (key === 'maxlength' || key === 'max') {
                         return `'max:${value}'`;
-                    }
-                    if (key === 'minbytes') {
-                        return `'base64_min_size:${value}'`;
-                    }
-                    if (key === 'maxbytes') {
-                        return `'base64_max_size:${value}'`;
                     }
                     if (key === 'pattern') {
                         return `'regex:\/${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"')}\/'`;
@@ -122,6 +117,31 @@ const getValidations = (that, e, relationships, op) => {
                 if (!nullable) acc[fromInjectedField].push(`'required'`);
                 if (!nullable) acc[fromInjectedField].push(`'min:1'`);
                 acc[`${fromInjectedField}.*`] = [`'integer'`, `'exists:${toTabName},id'`];
+                return acc;
+            }, {}),
+        ...entity.fields
+            .filter(field => ['Blob', 'AnyBlob', 'ImageBlob'].includes(field.type))
+            .reduce((acc, field) => {
+                const colName = to.snake(field.name);
+                const isImage = field.type === 'ImageBlob';
+                const minBytes = field.validations.find(v => v.key === 'minbytes');
+                const maxBytes = field.validations.find(v => v.key === 'maxbytes');
+                acc[colName] = [`'nullable'`, `'array'`];
+                acc[`${colName}.data`] = [
+                    `'required_with:${colName}'`,
+                    `'string'`,
+                    ...(minBytes ? [`'blob_min_size:${minBytes.value}'`] : []),
+                    ...(maxBytes ? [`'blob_max_size:${maxBytes.value}'`] : []),
+                ];
+                acc[`${colName}.type`] = [
+                    `'required_with:${colName}'`,
+                    `'string'`,
+                    isImage
+                        ? `'image_mimetype'`
+                        : `'max:255'`,
+                ];
+                acc[`${colName}.name`] = [`'required_with:${colName}'`, `'string'`, `'max:255'`];
+                acc[`${colName}.size`] = [`'nullable'`, `'integer'`, `'min:0'`];
                 return acc;
             }, {}),
     };

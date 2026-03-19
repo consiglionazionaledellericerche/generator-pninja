@@ -54,24 +54,24 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
 <%          }-%>
 <%        } else {-%>
           <td>
-            {data?.<%= column%>_name && (
+            {data?.<%= column%>?.name && (
               <div>
-                <p>{data.<%= column%>_name}</p>
-                {data.<%= column%>_type?.startsWith('image/') ? (
+                <p>{data.<%= column%>?.name}</p>
+                {data.<%= column%>?.type?.startsWith('image/') ? (
                   <a
-                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
+                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <img
-                      src={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
-                      alt={data.<%= column%>_name}
+                      src={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
+                      alt={data.<%= column%>?.name}
                       className="max-w-xs mt-2"
                     />
                   </a>
                 ) : (
                   <a
-                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>_name}`}
+                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
                     className="text-link"
                     target="_blank"
                     rel="noopener noreferrer"

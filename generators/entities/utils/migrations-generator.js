@@ -1,6 +1,5 @@
 import to from 'to-case';
 import randomstring from 'randomstring';
-import { AcRule } from '../../utils/AcRule.js';
 import { getEntities, getEntityByName, getEntitiesRelationships, getEnums } from '../../utils/entities-utils.js';
 
 const tab = (n) => (Array(n)).fill('    ').join('');
@@ -36,7 +35,7 @@ function convertFieldType(jhipsterType, enums) {
     return typeMap[jhipsterType] || enm || 'string';
 }
 
-function convertFields({ softDelete, fields }, enums) {
+function convertFields({ softDelete, fields }, enums, database) {
     return fields.reduce((res, field) => {
         const fieldName = to.snake(field.name);
         const fieldType = convertFieldType(field.type, enums);
@@ -58,9 +57,11 @@ function convertFields({ softDelete, fields }, enums) {
             }
             res.push(`${fieldDefinition};`);
         } else {
-            res.push(`$table->longText('${fieldName}_blob')->nullable();`);
-            res.push(`$table->string('${fieldName}_type')->nullable();`);
-            res.push(`$table->string('${fieldName}_name')->nullable();`);
+            if (database === 'postgresql') {
+                res.push(`$table->addColumn('jsonb', '${fieldName}')->nullable();`);
+            } else {
+                res.push(`$table->json('${fieldName}')->nullable();`);
+            }
         }
         return res;
     }, []);
@@ -84,12 +85,13 @@ function getFieldsNames(fields, enums) {
 export class MigrationsGenerator {
     constructor(that) {
         this.that = that;
+        this.database = this.that.config.get('database');
     }
 
     addColumns({ entity, enums }) {
         const tabName = entity.tableName;
         const uniqueFieldsNames = entity.softDelete ? [] : entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
-        const upColumns = convertFields(entity, enums).join(`\n${tab(3)}`);
+        const upColumns = convertFields(entity, enums, this.database).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/migration_add_columns_to_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_add_columns_to_${tabName}_table.php`),
             {
@@ -103,7 +105,7 @@ export class MigrationsGenerator {
     removeColumns({ entity, enums }) {
         const tabName = entity.tableName;
         const uniqueFieldsNames = entity.softDelete ? [] : entity.fields.filter(field => field.validations.reduce((unique, validation) => unique || validation.key === 'unique', false)).map(field => to.snake(field.name));
-        const downColumns = convertFields(entity, enums).join(`\n${tab(3)}`);
+        const downColumns = convertFields(entity, enums, this.database).join(`\n${tab(3)}`);
         const columnsNames = getFieldsNames(entity.fields, enums);
         this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/migration_remove_columns_from_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_004_${randomstring.generate(5)}_remove_columns_from_${tabName}_table.php`),
             {
@@ -116,7 +118,7 @@ export class MigrationsGenerator {
 
     createTable({ entity, enums }) {
         const tabName = entity.tableName;
-        const columns = convertFields(entity, enums).join(`\n${tab(3)}`);
+        const columns = convertFields(entity, enums, this.database).join(`\n${tab(3)}`);
         const softDelete = !!entity?.softDelete;
         this.that.fs.copyTpl(this.that.templatePath("../../entities/templates/migration_create_table.php.ejs"), this.that.destinationPath(`server/database/migrations/${baseTimestamp}_001_${randomstring.generate(5)}_create_${tabName}_table.php`),
             {

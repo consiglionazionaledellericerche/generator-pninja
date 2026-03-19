@@ -11,23 +11,17 @@ export class ModelsGenerator {
         const tableName = entity.tableName;
         // fillable from entity property
         const fillable = entity.fields.reduce((acc, prop) => {
-            if (prop.type !== 'Blob' && prop.type !== 'AnyBlob' && prop.type !== 'ImageBlob') {
-                acc.push(`'${to.snake(prop.name)}'`);
-            } else {
-                acc.push(`'${to.snake(prop.name)}_blob'`);
-                acc.push(`'${to.snake(prop.name)}_type'`);
-                acc.push(`'${to.snake(prop.name)}_name'`);
-            }
+            acc.push(`'${to.snake(prop.name)}'`);
             return acc;
         }, []);
         // blob columns from entity property
         const blobs = entity.fields.reduce((acc, prop) => {
             if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
-                acc.push(`'${to.snake(prop.name)}_blob'`);
+                acc.push(`'${to.snake(prop.name)}'`);
             }
             return acc;
         }, []);
-        // blob columns from entity property
+        // boolean columns from entity property
         const booleans = entity.fields.reduce((acc, prop) => {
             if (prop.type === 'Boolean') {
                 acc.push(`'${to.snake(prop.name)}'`);
@@ -130,9 +124,9 @@ export class ModelsGenerator {
                 className: e.name
             }
         });
-        const castsB64 = blobs.map(c => ({
+        const castsBlob = blobs.map(c => ({
             attrsName: [c.replace(/'/g, '')],
-            className: 'Base64BinaryCast'
+            className: 'BlobCast'
         }));
         const castsBoolean = booleans.map(c => ({
             attrsName: [c.replace(/'/g, '')],
@@ -186,14 +180,14 @@ export class ModelsGenerator {
                 tableName,
                 hasBlobs: blobs.length > 0,
                 fillable: fillable.join(",\n" + this.tab(2)),
-                hidden: blobs.join(", "),
+                hidden: null,
                 toSearchableArray,
                 toSearchableArrayTypes,
                 relations: relations.join(`\n${this.tab(1)}`),
                 relationsType: [...new Set(relationsType)],
                 enums: enumsInEntity,
                 enumColumns,
-                castsClasses: [...castsClasses, ...castsB64],
+                castsClasses: [...castsClasses, ...castsBlob],
                 casts: [...castsBoolean],
                 searchEngine,
                 typesenseSearchParameters,

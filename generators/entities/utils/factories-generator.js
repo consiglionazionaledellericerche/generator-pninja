@@ -15,13 +15,9 @@ export class FactoriesGenerator {
         let manyToMany = [];
         for (const entity of entities) {
             const params = entity.fields.filter(c => c.type !== 'Blob' && c.type !== 'AnyBlob' && c.type !== 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ${this._getFakerRule(prop, enums)},`);
-            const paramsBlobBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.pdf'),`);
-            const paramsBlobType = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'application/pdf',`);
-            const paramsBlobName = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.pdf",`);
-            const paramsImageBlob = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_blob' => file_get_contents(__DIR__ . '/dummy.png'),`);
-            const paramsImageType = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_type' => 'image/png',`);
-            const paramsImageName = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}_name' => fake()->unique()->regexify('[a-z]{8}') . "_dummy.png",`);
-            params.push(...([...paramsBlobBlob, ...paramsBlobType, ...paramsBlobName, ...paramsImageBlob, ...paramsImageType, ...paramsImageName].sort()));
+            const paramsBlob = entity.fields.filter(c => ['Blob', 'AnyBlob'].includes(c.type)).map(prop => `${tab(3)}'${to.snake(prop.name)}' => ['data' => base64_encode(file_get_contents(__DIR__ . '/dummy.pdf')), 'type' => 'application/pdf', 'name' => fake()->unique()->regexify('[a-z]{8}') . '_dummy.pdf', 'size' => filesize(__DIR__ . '/dummy.pdf')],`);
+            const paramsImageBlob = entity.fields.filter(c => c.type === 'ImageBlob').map(prop => `${tab(3)}'${to.snake(prop.name)}' => ['data' => base64_encode(file_get_contents(__DIR__ . '/dummy.png')), 'type' => 'image/png', 'name' => fake()->unique()->regexify('[a-z]{8}') . '_dummy.png', 'size' => filesize(__DIR__ . '/dummy.png')],`);
+            params.push(...([...paramsBlob, ...paramsImageBlob].sort()));
 
             // Relationships one-to-one
             true && relationships.filter(relation => (
@@ -93,6 +89,9 @@ export class FactoriesGenerator {
             this.that.fs.copyTpl(this.that.templatePath(`../../entities/templates/database/seeders/EntitySeeder.php.ejs`), this.that.destinationPath(`server/database/seeders/${entity.name}Seeder.php`), {
                 entity,
                 recycle,
+                blobFields: entity.fields
+                    .filter(f => ['Blob', 'AnyBlob', 'ImageBlob'].includes(f.type))
+                    .map(f => to.snake(f.name)),
             });
         });
         manyToMany.forEach((relation) => {

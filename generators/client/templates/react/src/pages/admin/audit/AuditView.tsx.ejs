@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axiosInstance from '../../../shared/axiosInstance';
@@ -6,6 +6,82 @@ import { AxiosError } from 'axios';
 import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
 import { SimpleLoader } from '../../../components/SimpleLoader';
 import { Icon } from '../../../components/Icon';
+
+type BlobValue = {
+  data: string;
+  type: string;
+  name: string;
+  size?: number | null;
+};
+
+const normalizeBlobValue = (value: unknown): BlobValue | null => {
+  if (typeof value !== 'string') return null;
+  try {
+    const parsed = JSON.parse(value);
+    if (
+      typeof parsed === 'object' &&
+      parsed !== null &&
+      'data' in parsed &&
+      'type' in parsed &&
+      'name' in parsed
+    ) return parsed as BlobValue;
+  } catch {
+    // not a blob JSON string
+  }
+  return null;
+};
+
+const BlobValueRenderer: React.FC<{ value: BlobValue; colorClass: string }> = ({ value, colorClass }) => {
+  const [objectUrl, setObjectUrl] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!value?.data) return;
+    try {
+      const binary = atob(value.data);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: value.type });
+      const url = URL.createObjectURL(blob);
+      setObjectUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } catch {
+      setObjectUrl(null);
+    }
+  }, [value?.data, value?.type]);
+
+  const isImage = value?.type?.startsWith('image/');
+
+  return (
+    <div className="space-y-2">
+      <p className={`font-mono text-xs ${colorClass}`}>{value.name}</p>
+      {value.size != null && (
+        <p className={`font-mono text-xs opacity-70 ${colorClass}`}>{value.size.toLocaleString()} bytes</p>
+      )}
+      {objectUrl && isImage && (
+        <a href={objectUrl} target="_blank" rel="noopener noreferrer">
+          <img
+            src={objectUrl}
+            alt={value.name}
+            className="max-w-xs max-h-48 rounded border border-gray-200 dark:border-gray-700 mt-1"
+          />
+        </a>
+      )}
+      {objectUrl && !isImage && (
+        <a
+          href={objectUrl}
+          download={value.name}
+          className={`inline-flex items-center gap-1 text-xs underline ${colorClass}`}
+        >
+          <Icon icon="download" size={4} />
+          {value.name}
+        </a>
+      )}
+      {!objectUrl && (
+        <p className={`font-mono text-xs opacity-50 ${colorClass}`}>—</p>
+      )}
+    </div>
+  );
+};
 
 interface IAudit {
   id: number;
@@ -244,33 +320,45 @@ export default function AuditView() {
                   </td>
                 </tr>
               ) : (
-                changesArray.map(([field, change]) => (
-                  <tr key={String(field)} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
-                    <td className="px-6 py-4 font-medium text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-yellow-500"></span>
-                        {field}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm bg-red-50/50 dark:bg-red-900/10">
-                      <pre className="whitespace-pre-wrap break-all font-mono text-xs text-red-800 dark:text-red-300">
-                        {formatValue(change.old)}
-                      </pre>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <Icon
-                        icon="arrow_right_alt"
-                        size={5}
-                        className="text-yellow-600 dark:text-yellow-400 mx-auto"
-                      />
-                    </td>
-                    <td className="px-6 py-4 text-sm bg-green-50/50 dark:bg-green-900/10">
-                      <pre className="whitespace-pre-wrap break-all font-mono text-xs text-green-800 dark:text-green-300">
-                        {formatValue(change.new)}
-                      </pre>
-                    </td>
-                  </tr>
-                ))
+                changesArray.map(([field, change]) => {
+                  const oldBlob = normalizeBlobValue(change.old);
+                  const newBlob = normalizeBlobValue(change.new);
+                  return (
+                    <tr key={String(field)} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
+                      <td className="px-6 py-4 font-medium text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="size-2 rounded-full bg-yellow-500"></span>
+                          {field}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-sm bg-red-50/50 dark:bg-red-900/10">
+                        {oldBlob ? (
+                          <BlobValueRenderer value={oldBlob} colorClass="text-red-800 dark:text-red-300" />
+                        ) : (
+                          <pre className="whitespace-pre-wrap break-all font-mono text-xs text-red-800 dark:text-red-300">
+                            {formatValue(change.old)}
+                          </pre>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <Icon
+                          icon="arrow_right_alt"
+                          size={5}
+                          className="text-yellow-600 dark:text-yellow-400 mx-auto"
+                        />
+                      </td>
+                      <td className="px-6 py-4 text-sm bg-green-50/50 dark:bg-green-900/10">
+                        {newBlob ? (
+                          <BlobValueRenderer value={newBlob} colorClass="text-green-800 dark:text-green-300" />
+                        ) : (
+                          <pre className="whitespace-pre-wrap break-all font-mono text-xs text-green-800 dark:text-green-300">
+                            {formatValue(change.new)}
+                          </pre>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

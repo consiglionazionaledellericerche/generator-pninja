@@ -36,7 +36,8 @@ function jdlTypeToOpenApi(type, enums = []) {
         case 'Blob':
         case 'AnyBlob':
         case 'ImageBlob':
-            return { type: 'string', format: 'byte', description: 'Base64 encoded binary content' };
+            // Blob fields are handled separately as JSON objects — this case should not be reached
+            return { type: 'object' };
         default:
             if (enums.find(e => e.name === type)) {
                 return { $ref: `#/components/schemas/${type}` };
@@ -76,9 +77,10 @@ function applyValidations(schema, validations, fieldType) {
 }
 
 // Builds the schema properties for an entity READ response (fields + FK ids from relationships).
-// Blobs: _blob is in $hidden on the model (Base64BinaryCast), not exposed in JSON responses.
-// Only _type and _name are returned. Binary content is served via the serveBlob endpoint.
-// Write payloads use a separate schema (EntityNameWrite) with nested objects per field.
+// Blobs: returned as JSON objects { type, name, size } in list responses (data omitted).
+// In single-record responses (show), the full object including data is returned.
+// Binary content is also served via the serveBlob endpoint.
+// Write payloads use a separate schema (EntityNameWrite) with { data, type, name, size }.
 function buildEntityProperties(entity, relationships, enums) {
     const properties = {
         id: { type: 'integer', format: 'int64', readOnly: true },
@@ -93,21 +95,21 @@ function buildEntityProperties(entity, relationships, enums) {
         const isRequired = field.validations.some(v => v.key === 'required');
 
         if (isBlob) {
-            // _blob is in model $hidden — only _type and _name appear in GET responses
-            properties[`${to.snake(field.name)}_type`] = {
-                type: 'string',
+            // Blob fields are stored as JSON objects. In list responses, 'data' is omitted.
+            // Binary content is served via the serveBlob endpoint.
+            properties[to.snake(field.name)] = {
+                type: 'object',
                 nullable: !isRequired,
-                description: 'MIME type of the stored file',
+                description: isRequired
+                    ? `File attachment for ${field.name}. 'data' (base64) is omitted in list responses.`
+                    : `Optional file attachment for ${field.name}. 'data' (base64) is omitted in list responses. Null means no file.`,
+                properties: {
+                    type: { type: 'string', description: 'MIME type of the stored file' },
+                    name: { type: 'string', description: 'Original file name' },
+                    size: { type: 'integer', format: 'int64', description: 'File size in bytes', nullable: true },
+                },
             };
-            properties[`${to.snake(field.name)}_name`] = {
-                type: 'string',
-                nullable: !isRequired,
-                description: 'Original file name',
-            };
-            if (isRequired) {
-                required.push(`${to.snake(field.name)}_type`);
-                required.push(`${to.snake(field.name)}_name`);
-            }
+            if (isRequired) required.push(to.snake(field.name));
         } else {
             const schema = applyValidations(
                 jdlTypeToOpenApi(field.type, enums),
@@ -178,8 +180,9 @@ function buildEntityProperties(entity, relationships, enums) {
 }
 
 // Builds the write schema properties for POST/PUT payloads.
-// Blob fields are sent as nested objects { data, mimeType, originalName, size, delete }
-// matching the FileField.tsx → controller contract.
+// Blob fields are sent as nested objects { data, type, name, size }
+// matching the BlobCast → controller contract.
+// Send null for a blob field to remove the existing file.
 function buildWriteProperties(entity, relationships, enums) {
     const properties = {};
     const required = [];
@@ -193,7 +196,7 @@ function buildWriteProperties(entity, relationships, enums) {
 
         if (isBlob) {
             const nestedRequired = [];
-            if (isRequired) nestedRequired.push('data', 'mimeType', 'originalName');
+            if (isRequired) nestedRequired.push('data', 'type', 'name');
 
             const dataSchema = {
                 type: 'string',
@@ -205,17 +208,18 @@ function buildWriteProperties(entity, relationships, enums) {
 
             properties[to.snake(field.name)] = {
                 type: 'object',
+                nullable: true,
                 description: isRequired
-                    ? `Required file upload for ${field.name}`
-                    : `Optional file upload for ${field.name}. Send { delete: true } to remove the existing file.`,
+                    ? `Required file upload for ${field.name}. Send null to remove the existing file.`
+                    : `Optional file upload for ${field.name}. Send null to remove the existing file.`,
                 properties: {
                     data: dataSchema,
-                    mimeType: {
+                    type: {
                         type: 'string',
                         description: 'MIME type of the file',
                         ...(isImageBlob ? { pattern: '^image/' } : {}),
                     },
-                    originalName: {
+                    name: {
                         type: 'string',
                         description: 'Original file name',
                     },
@@ -223,11 +227,7 @@ function buildWriteProperties(entity, relationships, enums) {
                         type: 'integer',
                         format: 'int64',
                         description: 'File size in bytes',
-                    },
-                    delete: {
-                        type: 'boolean',
-                        description: 'Set to true to delete the existing file without uploading a new one',
-                        default: false,
+                        nullable: true,
                     },
                 },
                 ...(nestedRequired.length ? { required: nestedRequired } : {}),

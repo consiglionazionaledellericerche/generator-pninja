@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use App\Rules\Base64MaxSize;
-use App\Rules\Base64MinSize;
+use App\Rules\BlobMaxSize;
+use App\Rules\BlobMinSize;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,22 +30,22 @@ class AppServiceProvider extends ServiceProvider
             return "The " . str_replace(['_'], ' ', $attribute) . " field must be a valid image MIME type.";
         });
 
-        Validator::extend('base64_max_size', function ($attribute, $value, $parameters) {
-            return (new Base64MaxSize($parameters[0] ?? 0))->passes($attribute, $value);
+        Validator::extend('blob_max_size', function ($attribute, $value, $parameters) {
+            return (new BlobMaxSize($parameters[0] ?? 0))->passes($attribute, $value);
         });
 
-        Validator::replacer('base64_max_size', function ($message, $attribute, $rule, $parameters, $validator) {
-            $rule = new Base64MaxSize($parameters[0] ?? 0);
+        Validator::replacer('blob_max_size', function ($message, $attribute, $rule, $parameters, $validator) {
+            $rule = new BlobMaxSize($parameters[0] ?? 0);
             $rule->passes($attribute, data_get($validator->getData(), $attribute));
             return str_replace(':attribute', str_replace(['_'], ' ', $attribute), $rule->message());
         });
 
-        Validator::extend('base64_min_size', function ($attribute, $value, $parameters) {
-            return (new Base64MinSize($parameters[0] ?? 0))->passes($attribute, $value);
+        Validator::extend('blob_min_size', function ($attribute, $value, $parameters) {
+            return (new BlobMinSize($parameters[0] ?? 0))->passes($attribute, $value);
         });
 
-        Validator::replacer('base64_min_size', function ($message, $attribute, $rule, $parameters, $validator) {
-            $rule = new Base64MinSize($parameters[0] ?? 0);
+        Validator::replacer('blob_min_size', function ($message, $attribute, $rule, $parameters, $validator) {
+            $rule = new BlobMinSize($parameters[0] ?? 0);
             $rule->passes($attribute, data_get($validator->getData(), $attribute));
             return str_replace(':attribute', str_replace(['_'], ' ', $attribute), $rule->message());
         });

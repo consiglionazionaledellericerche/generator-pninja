@@ -1,0 +1,77 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Casts;
+
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
+use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
+
+class BlobCast implements CastsAttributes
+{
+    /**
+     * Cast the given value from DB → PHP.
+     *
+     * @param  array<string, mixed>  $attributes
+     * @return array{data: string|null, type: string|null, name: string|null, size: int|null}|null
+     */
+    public function get(Model $model, string $key, mixed $value, array $attributes): ?array
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        $decoded = is_string($value)
+            ? json_decode($value, true)
+            : $value;
+
+        if (!is_array($decoded)) {
+            return null;
+        }
+
+        return [
+            'data' => isset($decoded['data']) ? (string) $decoded['data'] : null,
+            'type' => isset($decoded['type']) ? (string) $decoded['type'] : null,
+            'name' => isset($decoded['name']) ? (string) $decoded['name'] : null,
+            'size' => isset($decoded['size']) ? (int) $decoded['size'] : null,
+        ];
+    }
+
+    /**
+     * Cast the given value from PHP → DB.
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    public function set(Model $model, string $key, mixed $value, array $attributes): ?string
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        if (!is_array($value)) {
+            throw new InvalidArgumentException(
+                "BlobCast: field [{$key}] must be an array or null."
+            );
+        }
+
+        $payload = array_filter([
+            'data' => isset($value['data']) ? (string) $value['data'] : null,
+            'type' => isset($value['type']) ? (string) $value['type'] : null,
+            'name' => isset($value['name']) ? (string) $value['name'] : null,
+            'size' => isset($value['size']) ? (int) $value['size'] : null,
+        ], fn($v) => !is_null($v));
+
+        if (empty($payload)) {
+            return null;
+        }
+
+        if (!isset($payload['data'])) {
+            throw new InvalidArgumentException(
+                "BlobCast: field [{$key}] requires 'data' when not null."
+            );
+        }
+
+        return json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    }
+}

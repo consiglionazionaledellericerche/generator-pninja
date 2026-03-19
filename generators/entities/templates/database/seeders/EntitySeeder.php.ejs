@@ -14,6 +14,9 @@ class <%= entity.name %>Seeder extends Seeder
 {
     use WithoutModelEvents, SeederHelpers;
 
+    /** Blob field column names for this entity. */
+    protected array $blobFields = [<%- blobFields.map(f => `'${f}'`).join(', ') %>];
+
     /**
      * Run the database seeds.
      */

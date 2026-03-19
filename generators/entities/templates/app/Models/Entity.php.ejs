@@ -13,7 +13,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use Laravel\Scout\Searchable;
 <% }; -%>
 <% if (hasBlobs) { -%>
-use App\Casts\Base64BinaryCast;
+use App\Casts\BlobCast;
 <% }; -%>
 <% if (locking) { -%>
 use App\Traits\Lockable;

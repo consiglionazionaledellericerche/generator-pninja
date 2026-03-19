@@ -20,7 +20,7 @@ trait SeederHelpers
 
                 $data = array_combine($headers, $row);
                 $data = array_filter($data, fn($value) => $value !== '' && $value !== null);
-                $data = $this->resolveBlobFields($data, $headers);
+                $data = $this->resolveBlobFields($data, $this->blobFields ?? []);
 
                 try {
                     $modelClass::create($data);
@@ -42,83 +42,117 @@ trait SeederHelpers
     /**
      * Resolve blob fields in a CSV row.
      *
-     * A column ending in `_blob` is treated as a blob only if both companion
-     * columns `_name` and `_type` are present in the CSV headers. This avoids
-     * false positives for fields whose name happens to end in `_blob`.
+     * Only columns listed in $blobFields are treated as blobs.
+     * Each value is interpreted as:
+     * - starts with '{' → JSON blob object {data, type, name, size}
+     * - starts with 'data:' → data URI (data:<mime>;base64,<data>)
+     * - looks like a filesystem path or has a file extension → file read from disk
+     * - valid plain base64 string → decoded and wrapped in a blob object
      *
-     * The blob value is interpreted as:
-     * - a data URI  (data:<mime>;base64,<data>) → decoded binary + mime extracted
-     * - a plain base64 string                   → decoded binary
-     * - an absolute or relative filesystem path → file contents read from disk
-     *
-     * Companion columns present in the CSV always take precedence over inferred
-     * values. Empty / absent blob values are left as-is (NULL).
+     * The resolved value is always an array {data, type, name, size} compatible
+     * with BlobCast, or null if resolution fails.
      */
-    private function resolveBlobFields(array $data, array $headers): array
+    private function resolveBlobFields(array $data, array $blobFields): array
     {
-        foreach ($data as $key => $value) {
-            if (!str_ends_with($key, '_blob')) continue;
+        foreach ($blobFields as $key) {
+            if (!isset($data[$key]) || $data[$key] === '' || $data[$key] === null) continue;
 
-            $fieldPrefix = substr($key, 0, -5); // strip '_blob'
-            $nameKey     = $fieldPrefix . '_name';
-            $typeKey     = $fieldPrefix . '_type';
-
-            // Only treat as blob if both companion columns exist in the CSV headers
-            if (!in_array($nameKey, $headers) || !in_array($typeKey, $headers)) continue;
-
-            if ($value === '' || $value === null) continue;
-
-            // ── data URI: data:<mime>;base64,<payload> ──────────────────────────
-            if (str_starts_with($value, 'data:')) {
-                if (preg_match('/^data:([^;]+);base64,(.+)$/s', $value, $m)) {
-                    $data[$key] = base64_decode($m[2]);
-
-                    if (empty($data[$typeKey])) {
-                        $data[$typeKey] = $m[1];
-                    }
-                }
-                continue;
-            }
-
-            // ── filesystem path ──────────────────────────────────────────────────
-            $looksLikePath = str_contains($value, DIRECTORY_SEPARATOR)
-                || str_contains($value, '/')
-                || preg_match('/\.[a-zA-Z0-9]{1,10}$/', $value);
-
-            if ($looksLikePath) {
-                $resolved = str_starts_with($value, '/') ? $value : base_path($value);
-
-                if (File::exists($resolved)) {
-                    $data[$key] = File::get($resolved);
-
-                    if (empty($data[$nameKey])) {
-                        $data[$nameKey] = basename($resolved);
-                    }
-                    if (empty($data[$typeKey])) {
-                        $data[$typeKey] = mime_content_type($resolved) ?: 'application/octet-stream';
-                    }
-                } else {
-                    $message = "SeederHelpers: blob file not found, field [{$key}] set to NULL: {$resolved}";
-                    $this->command?->warn($message);
-                    Log::warning($message);
-                    unset($data[$key]);
-                }
-                continue;
-            }
-
-            // ── plain base64 ─────────────────────────────────────────────────────
-            $decoded = base64_decode($value, strict: true);
-            if ($decoded !== false) {
-                $data[$key] = $decoded;
+            $resolved = $this->resolveBlobField($key, $data[$key]);
+            if ($resolved !== null) {
+                $data[$key] = $resolved;
             } else {
-                $message = "SeederHelpers: could not decode base64 value for field [{$key}], field set to NULL.";
-                $this->command?->warn($message);
-                Log::warning($message);
                 unset($data[$key]);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Attempt to resolve a single CSV value as a blob.
+     * Returns a blob array on success, or null if resolution fails.
+     */
+    private function resolveBlobField(string $key, string $value): ?array
+    {
+        // ── JSON inline: {"data":"...","type":"...","name":"...","size":...} ──────
+        if (str_starts_with(trim($value), '{')) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded) && isset($decoded['data'])) {
+                return [
+                    'data' => $decoded['data'],
+                    'type' => $decoded['type'] ?? 'application/octet-stream',
+                    'name' => $decoded['name'] ?? $key,
+                    'size' => isset($decoded['size']) ? (int) $decoded['size'] : null,
+                ];
+            }
+            $message = "SeederHelpers: invalid JSON blob for field [{$key}], field set to NULL.";
+            $this->command?->warn($message);
+            Log::warning($message);
+            return null;
+        }
+
+        // ── data URI: data:<mime>;base64,<payload> ───────────────────────────────
+        if (str_starts_with($value, 'data:')) {
+            if (preg_match('/^data:([^;]+);base64,(.+)$/s', $value, $m)) {
+                $binary = base64_decode($m[2]);
+                if ($binary === false) {
+                    $message = "SeederHelpers: could not decode data URI for field [{$key}], field set to NULL.";
+                    $this->command?->warn($message);
+                    Log::warning($message);
+                    return null;
+                }
+                return [
+                    'data' => $m[2],
+                    'type' => $m[1],
+                    'name' => $key,
+                    'size' => strlen($binary),
+                ];
+            }
+            $message = "SeederHelpers: malformed data URI for field [{$key}], field set to NULL.";
+            $this->command?->warn($message);
+            Log::warning($message);
+            return null;
+        }
+
+        // ── filesystem path ──────────────────────────────────────────────────────
+        $looksLikePath = str_contains($value, DIRECTORY_SEPARATOR)
+            || str_contains($value, '/')
+            || preg_match('/\.[a-zA-Z0-9]{1,10}$/', $value);
+
+        if ($looksLikePath) {
+            $resolved = str_starts_with($value, '/') ? $value : base_path($value);
+
+            if (File::exists($resolved)) {
+                $binary = File::get($resolved);
+                return [
+                    'data' => base64_encode($binary),
+                    'type' => mime_content_type($resolved) ?: 'application/octet-stream',
+                    'name' => basename($resolved),
+                    'size' => strlen($binary),
+                ];
+            }
+
+            $message = "SeederHelpers: blob file not found, field [{$key}] set to NULL: {$resolved}";
+            $this->command?->warn($message);
+            Log::warning($message);
+            return null;
+        }
+
+        // ── plain base64 ─────────────────────────────────────────────────────────
+        $binary = base64_decode($value, strict: true);
+        if ($binary !== false) {
+            return [
+                'data' => $value,
+                'type' => 'application/octet-stream',
+                'name' => $key,
+                'size' => strlen($binary),
+            ];
+        }
+
+        $message = "SeederHelpers: could not resolve blob value for field [{$key}], field set to NULL.";
+        $this->command?->warn($message);
+        Log::warning($message);
+        return null;
     }
 
     private function seedManyToManyFromCsv(string $modelClass, string $relatedClass, string $relationName): bool
