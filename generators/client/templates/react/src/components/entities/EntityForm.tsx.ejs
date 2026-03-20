@@ -206,8 +206,8 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
+      setDisableButtons(false);
     }
-    setDisableButtons(false);
   };
 
   useEffect(() => {
@@ -398,7 +398,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
 <%      }-%>
         </div>
         <div className="flex justify-center gap-4 my-8">
-          <button type="button" onClick={onCancel} className="cancel-button">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="cancel-button"
+            disabled={isSubmitting || disableButtons}
+          >
             {t('actions.crud.cancel')}
           </button>
           <Can resource="<%= entity.name %>" action={<%= to.camel(entity.name)-%>?.id ? 'update' : 'create'}>
