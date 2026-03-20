@@ -176,6 +176,7 @@ import {
 <% } -%>
 } from '../formElements';
 import { detect } from 'detect-browser';
+import { FullPageLoader } from '../FullPageLoader';
 
 const isMac = detect()?.os?.toLowerCase().includes('mac');
 
@@ -191,7 +192,7 @@ interface <%= entity.name %>FormProps {
 
 export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, onCancel, onDelete<%- locking ? ', readOnly' : ''  %> }: <%= entity.name%>FormProps) {
   useAutoShortcuts();
-  const [disableButtons, setDisableButtons] = useState(false);
+  const [dataSaving, setDataSaving] = useState(false);
   const { t } = useTranslation();
   const formMethods = useForm();
   const {
@@ -201,12 +202,12 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
   } = formMethods;
 
   const handleFormSubmit = async (data: I<%= entity.name %>) => {
-    setDisableButtons(true);
+    setDataSaving(true);
     try {
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
-      setDisableButtons(false);
+      setDataSaving(false);
     }
   };
 
@@ -232,6 +233,7 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
         <div className="max-w-5xl mx-auto space-y-4">
+          <FullPageLoader loading={dataSaving} />
 <%      for({name, type, validations} of entity.fields) {-%>
           <div>
 <%        if ((enums.filter(enm => enm.name === type)).length === 1) {-%>
@@ -402,15 +404,25 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             type="button"
             onClick={onCancel}
             className="cancel-button"
-            disabled={isSubmitting || disableButtons}
+            disabled={isSubmitting || dataSaving}
           >
             {t('actions.crud.cancel')}
           </button>
-          <Can resource="<%= entity.name %>" action={<%= to.camel(entity.name)-%>?.id ? 'update' : 'create'}>
+          <Can
+            resource="<%= entity.name %>"
+            action={<%= to.camel(entity.name)-%>?.id ? 'update' : 'create'}
+            loader={
+              <button className="primary-button" disabled>
+                {t('actions.crud.save')}
+                <kbd className="kdb-shortcut">{isMac ? '⌘' : 'Ctrl'}</kbd>
+                <kbd className="kdb-shortcut">↵</kbd>
+              </button>
+            }
+          >
             <button
               data-shortcut="ctrl+enter"
               type="submit"
-              disabled={isSubmitting || disableButtons}
+              disabled={isSubmitting || dataSaving}
               className="primary-button"
             >
               {t(isSubmitting ? 'actions.crud.saving' : 'actions.crud.save')}
@@ -419,13 +431,21 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
             </button>
           </Can>
           {<%= to.camel(entity.name)-%>?.id && (
-            <Can resource="<%= entity.name %>" action="delete">
+            <Can
+              resource="<%= entity.name %>"
+              action="delete"
+              loader={
+                <button className="danger-button" disabled>
+                  {t('actions.crud.delete')}
+                </button>
+              }
+            >
               <<%= entity.name %>DeleteButton
                 id={<%= to.camel(entity.name)-%>.id}
-                disabled={isSubmitting || disableButtons}
-                onConfirm={() => setDisableButtons(true)}
+                disabled={isSubmitting || dataSaving}
+                onConfirm={() => setDataSaving(true)}
                 onDelete={onDelete}
-                onError={() => setDisableButtons(false)}
+                onError={() => setDataSaving(false)}
               />
             </Can>
           )}

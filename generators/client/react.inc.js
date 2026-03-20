@@ -247,6 +247,7 @@ export async function createReactClient(that) {
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/LoginRedirector.tsx.ejs"), that.destinationPath(`client/src/components/LoginRedirector.tsx`));
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SearchInput.css"), that.destinationPath(`client/src/components/SearchInput.css`), {});
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SearchInput.tsx.ejs"), that.destinationPath(`client/src/components/SearchInput.tsx`), {});
+    that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/FullPageLoader.tsx.ejs"), that.destinationPath(`client/src/components/FullPageLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/SimpleLoader.tsx.ejs"), that.destinationPath(`client/src/components/SimpleLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/TableSkeletonLoader.tsx.ejs"), that.destinationPath(`client/src/components/TableSkeletonLoader.tsx`), {});
     that.fs.copyTpl(that.templatePath("../../client/templates/react/src/components/Toast.tsx.ejs"), that.destinationPath(`client/src/components/Toast.tsx`));

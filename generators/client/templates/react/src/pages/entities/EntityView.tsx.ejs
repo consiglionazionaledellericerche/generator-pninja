@@ -163,12 +163,28 @@ export default function <%= entity.name %>View() {
             <Icon icon="arrow_left_alt" size={5} />
           {t('actions.crud.back')}
         </Link>
-        <Can resource="<%= entity.name %>" action="update">
+        <Can
+          resource="<%= entity.name %>"
+          action="update"
+          loader={
+            <button className="primary-button" disabled>
+              {t('actions.crud.edit')}
+            </button>
+          }
+        >
           <Link to={`/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%-to.slug(pluralize(entity.name))%>/edit/${id}`} className="primary-button">
             {t('actions.crud.edit')}
           </Link>
         </Can>
-        <Can resource="<%= entity.name %>" action="delete">
+        <Can
+          resource="<%= entity.name %>"
+          action="delete"
+          loader={
+            <button className="danger-button" disabled>
+              {t('actions.crud.delete')}
+            </button>
+          }
+        >
           <<%= entity.name %>DeleteButton id={id} onDelete={handleDelete} />
         </Can>
       </div>
