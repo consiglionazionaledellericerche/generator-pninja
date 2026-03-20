@@ -11,6 +11,9 @@ import { DurationFieldViewer } from '../../components/formElements/DurationField
 <% } -%>
 import { I<%= entity.name %> } from '../../shared/model/<%= to.slug(entity.name)%>.model';
 import { Icon } from '../../components/Icon';
+<% if (fileColumns.length) { -%>
+import { BlobViewer } from '../../components/BlobViewer';
+<% } -%>
 import { IconEntity<%= entity.name %> } from '../../shared/entitiesIcons';
 import <%= entity.name %>DeleteButton from '../../components/entities/<%= entity.name %>DeleteButton';
 import { <%= entity.name %>Service } from '../../shared/services/<%= to.slug(entity.name) %>.service';
@@ -54,33 +57,7 @@ export function <%= entity.name %>DataView({ data }: <%= entity.name %>DataViewP
 <%          }-%>
 <%        } else {-%>
           <td>
-            {data?.<%= column%>?.name && (
-              <div>
-                <p>{data.<%= column%>?.name}</p>
-                {['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/avif'].includes(data.<%= column%>?.type ?? '') ? (
-                  <a
-                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
-                      alt={data.<%= column%>?.name}
-                      className="max-w-xs mt-2"
-                    />
-                  </a>
-                ) : (
-                  <a
-                    href={`/api/<%=to.slug(pluralize(entity.name))%>/${data.id}/<%- column %>/${data.<%- column %>?.name}`}
-                    className="text-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t('actions.crud.file.viewOrDownload')}
-                  </a>
-                )}
-              </div>
-            )}
+            <BlobViewer blob={data?.<%= column%>} />
           </td>
 <%      } -%>
         </tr>

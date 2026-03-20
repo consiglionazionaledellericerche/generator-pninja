@@ -1,0 +1,238 @@
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Icon } from './Icon';
+
+type BlobValue = {
+  data: string;
+  type: string;
+  name: string;
+  size?: number | null;
+};
+
+const INLINE_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'image/avif',
+  'image/apng',
+];
+
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+// ─── Image viewer ────────────────────────────────────────────────────────────
+
+const ImageViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
+  <div className="space-y-2">
+    <a href={objectUrl} target="_blank" rel="noopener noreferrer">
+      <img
+        src={objectUrl}
+        alt={name}
+        className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+      />
+    </a>
+  </div>
+);
+
+// ─── Video viewer ────────────────────────────────────────────────────────────
+
+const VideoViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
+  <div className="space-y-2">
+    <a href={objectUrl} target="_blank" rel="noopener noreferrer" className="inline-block relative">
+      <video
+        src={objectUrl}
+        preload="metadata"
+        className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+      />
+      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+        <Icon icon="play_circle" size={12} className="text-white drop-shadow" />
+      </div>
+    </a>
+  </div>
+);
+
+// ─── PDF viewer ──────────────────────────────────────────────────────────────
+
+const PdfViewer: React.FC<{ blob: BlobValue; objectUrl: string }> = ({ blob, objectUrl }) => {
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [pdfError, setPdfError] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const render = async () => {
+      try {
+        const pdfjsLib = await import('pdfjs-dist');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+          'pdfjs-dist/build/pdf.worker.mjs',
+          import.meta.url
+        ).toString();
+
+        const bytes = base64ToUint8Array(blob.data);
+        const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1 });
+
+        // Scale to fit within 320px wide
+        const scale = Math.min(1, 320 / viewport.width);
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+
+        await page.render({
+          canvasContext: canvas.getContext('2d')!,
+          viewport: scaledViewport,
+          canvas,
+        }).promise;
+
+        if (cancelled) return;
+
+        canvas.toBlob((canvasBlob) => {
+          if (!canvasBlob) return;
+          const url = URL.createObjectURL(canvasBlob);
+          if (cancelled) {
+            URL.revokeObjectURL(url);
+          } else {
+            setThumbnailUrl((prev) => {
+              if (prev) URL.revokeObjectURL(prev);
+              return url;
+            });
+          }
+        }, 'image/png');
+      } catch {
+        if (!cancelled) setPdfError(true);
+      }
+    };
+
+    render();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [blob.data]);
+
+  return (
+    <div className="space-y-2">
+      {thumbnailUrl && !pdfError && (
+        <a href={objectUrl} target="_blank" rel="noopener noreferrer" className="block">
+          <img
+            src={thumbnailUrl}
+            alt={blob.name}
+            className="max-w-xs rounded border border-gray-200 dark:border-gray-700"
+          />
+        </a>
+      )}
+      {(pdfError || !thumbnailUrl) && (
+        <Icon icon="picture_as_pdf" size={10} className="text-red-500" />
+      )}
+    </div>
+  );
+};
+
+// ─── Generic file viewer ─────────────────────────────────────────────────────
+
+const GenericViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
+  <div className="flex items-center gap-2">
+    <Icon icon="draft" size={8} className="text-gray-400" />
+    <a
+      href={objectUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sm text-link truncate max-w-xs"
+    >
+      {name}
+    </a>
+  </div>
+);
+
+// ─── Audio viewer ─────────────────────────────────────────────────────────────
+
+const AudioViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
+  <div className="flex items-center gap-2">
+    <Icon icon="audio_file" size={8} className="text-gray-400" />
+    <a
+      href={objectUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sm text-link truncate max-w-xs"
+    >
+      {name}
+    </a>
+  </div>
+);
+
+// ─── BlobViewer ──────────────────────────────────────────────────────────────
+
+interface BlobViewerProps {
+  blob: BlobValue | null | undefined;
+  className?: string;
+}
+
+const BlobViewer: React.FC<BlobViewerProps> = ({ blob, className }) => {
+  const { t } = useTranslation();
+  const [objectUrl, setObjectUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!blob?.data) return;
+    const bytes = base64ToUint8Array(blob.data);
+    const blobObj = new Blob([bytes], { type: blob.type });
+    const url = URL.createObjectURL(blobObj);
+    setObjectUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [blob?.data, blob?.type]);
+
+  if (!blob?.name) return null;
+
+  const isInlineImage = INLINE_IMAGE_TYPES.includes(blob.type);
+  const isVideo = blob.type.startsWith('video/');
+  const isAudio = blob.type.startsWith('audio/');
+  const isPdf = blob.type === 'application/pdf';
+
+  return (
+    <div className={className}>
+      {objectUrl && isInlineImage && <ImageViewer objectUrl={objectUrl} name={blob.name} />}
+      {objectUrl && isVideo && <VideoViewer objectUrl={objectUrl} name={blob.name} />}
+      {objectUrl && isPdf && <PdfViewer blob={blob} objectUrl={objectUrl} />}
+      {objectUrl && isAudio && <AudioViewer objectUrl={objectUrl} name={blob.name} />}
+      {objectUrl && !isInlineImage && !isVideo && !isPdf && !isAudio && (
+        <GenericViewer objectUrl={objectUrl} name={blob.name} />
+      )}
+      {objectUrl && (
+        <div className="flex items-center gap-3 mt-1">
+          <span className="text-xs text-gray-500 truncate max-w-xs">{blob.name}</span>
+          {blob.size != null && (
+            <span className="text-xs text-gray-400">{blob.size.toLocaleString()} bytes</span>
+          )}
+          <a
+            href={objectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-link"
+            aria-label={t('actions.crud.file.openInNewWindow')}
+          >
+            <Icon icon="open_in_new" size={4} />
+          </a>
+          <a
+            href={objectUrl}
+            download={blob.name}
+            className="inline-flex items-center gap-1 text-xs text-link"
+            aria-label={t('actions.crud.file.download')}
+          >
+            <Icon icon="download" size={4} />
+          </a>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export { BlobViewer };
+export type { BlobValue };

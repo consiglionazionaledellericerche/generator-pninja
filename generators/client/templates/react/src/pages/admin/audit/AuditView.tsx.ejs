@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axiosInstance from '../../../shared/axiosInstance';
@@ -6,13 +6,8 @@ import { AxiosError } from 'axios';
 import { ErrorResponseData, useNotifications } from '../../../contexts/NotificationContext';
 import { SimpleLoader } from '../../../components/SimpleLoader';
 import { Icon } from '../../../components/Icon';
-
-type BlobValue = {
-  data: string;
-  type: string;
-  name: string;
-  size?: number | null;
-};
+import { BlobViewer } from '../../../components/BlobViewer';
+import type { BlobValue } from '../../../components/BlobViewer';
 
 const normalizeBlobValue = (value: unknown): BlobValue | null => {
   if (typeof value !== 'string') return null;
@@ -29,68 +24,6 @@ const normalizeBlobValue = (value: unknown): BlobValue | null => {
     // not a blob JSON string
   }
   return null;
-};
-
-const BlobValueRenderer: React.FC<{ value: BlobValue; colorClass: string }> = ({ value, colorClass }) => {
-  const [objectUrl, setObjectUrl] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    if (!value?.data) return;
-    try {
-      const binary = atob(value.data);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: value.type });
-      const url = URL.createObjectURL(blob);
-      setObjectUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } catch {
-      setObjectUrl(null);
-    }
-  }, [value?.data, value?.type]);
-
-  const INLINE_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/avif'];
-  const isInlineImage = INLINE_IMAGE_TYPES.includes(value?.type);
-
-  return (
-    <div className="space-y-2">
-      <p className={`font-mono text-xs ${colorClass}`}>{value.name}</p>
-      {value.size != null && (
-        <p className={`font-mono text-xs opacity-70 ${colorClass}`}>{value.size.toLocaleString()} bytes</p>
-      )}
-      {objectUrl && isInlineImage && (
-        <a href={objectUrl} target="_blank" rel="noopener noreferrer">
-          <img
-            src={objectUrl}
-            alt={value.name}
-            className="max-w-xs max-h-48 rounded border border-gray-200 dark:border-gray-700 mt-1"
-          />
-        </a>
-      )}
-      {objectUrl && !isInlineImage && (
-        <div className="flex items-center gap-3">
-          <a
-            href={objectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1 text-xs underline ${colorClass}`}
-          >
-            <Icon icon="open_in_new" size={4} />
-          </a>
-          <a
-            href={objectUrl}
-            download={value.name}
-            className={`inline-flex items-center gap-1 text-xs underline ${colorClass}`}
-          >
-            <Icon icon="download" size={4} />
-          </a>
-        </div>
-      )}
-      {!objectUrl && (
-        <p className={`font-mono text-xs opacity-50 ${colorClass}`}>—</p>
-      )}
-    </div>
-  );
 };
 
 interface IAudit {
@@ -343,7 +276,7 @@ export default function AuditView() {
                       </td>
                       <td className="px-6 py-4 text-sm bg-red-50/50 dark:bg-red-900/10">
                         {oldBlob ? (
-                          <BlobValueRenderer value={oldBlob} colorClass="text-red-800 dark:text-red-300" />
+                          <BlobViewer blob={oldBlob} />
                         ) : (
                           <pre className="whitespace-pre-wrap break-all font-mono text-xs text-red-800 dark:text-red-300">
                             {formatValue(change.old)}
@@ -359,7 +292,7 @@ export default function AuditView() {
                       </td>
                       <td className="px-6 py-4 text-sm bg-green-50/50 dark:bg-green-900/10">
                         {newBlob ? (
-                          <BlobValueRenderer value={newBlob} colorClass="text-green-800 dark:text-green-300" />
+                          <BlobViewer blob={newBlob} />
                         ) : (
                           <pre className="whitespace-pre-wrap break-all font-mono text-xs text-green-800 dark:text-green-300">
                             {formatValue(change.new)}
