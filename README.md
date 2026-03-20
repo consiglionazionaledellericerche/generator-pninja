@@ -135,6 +135,7 @@ Fully wired together: auth, routing, forms, CRUD, migrations.
   }
 ```
 
+- **Blob Fields** - Binary attachments (`Blob`, `AnyBlob`, `ImageBlob`) are stored as a single JSON column `{data, type, name, size}` per field. In list responses `data` (base64) is omitted for performance; it is included in single-record responses. The `serveBlob` endpoint serves the raw binary directly. Validation uses `blob_min_size` / `blob_max_size` rules; `ImageBlob` enforces MIME type via `image_mimetype`. Supported databases: SQLite (`json`), MySQL/MariaDB (`json`), PostgreSQL (`jsonb`).
 - **CSV Database Seeding** - Populate your database from CSV files
 - **Seeding Administration** - Web interface to run seeders individually or in bulk, with direct CSV upload from the browser
 - **Migration Administration** - Web interface to run `migrate`, `rollback`, `migrate:fresh` and check `migrate:status` without the command line
@@ -231,7 +232,7 @@ The API docs are accessible at `/support/api-docs` in the generated React client
 - **Interactive console** — execute API calls directly from the browser
 - **Authentication** — supports both Bearer token and OAuth2 (Keycloak) login via the **Authorize** button
 - **Full endpoint coverage** — all generated entities, auth, user, and locks endpoints are documented
-- **Schema reference** — read and write schemas for every entity, including blob field handling
+- **Schema reference** — read and write schemas for every entity, including blob fields (stored as JSON objects `{data, type, name, size}`; `data` is omitted in list responses and included only in single-record responses)
 
 **Authenticating via Swagger UI:**
 

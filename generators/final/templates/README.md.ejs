@@ -115,6 +115,26 @@ model_id,related_id
 2,3
 ```
 
+**CSV format for blob fields:**
+
+Blob fields accept three formats in the CSV:
+
+- **Filesystem path**: the seeder reads the file from disk and encodes it automatically
+  ```csv
+  name,photo
+  Alice,storage/seeds/alice.jpg
+  ```
+- **Data URI**: `data:<mime>;base64,<payload>`
+  ```csv
+  name,photo
+  Alice,data:image/jpeg;base64,/9j/4AAQSkZJRgAB...
+  ```
+- **JSON object**: `{"data":"<base64>","type":"<mime>","name":"<filename>","size":<bytes>}`
+  ```csv
+  name,photo
+  Alice,"{"data":"/9j/4AAQ...","type":"image/jpeg","name":"alice.jpg","size":12345}"
+  ```
+
 - First row contains database column names
 - Empty fields are ignored
 - Completely empty rows are skipped
@@ -353,6 +373,8 @@ column_a,column_b,column_c,column_d,related_id
 colA001,colB001,colC001,colD001,1
 colA002,colB002,colC002,colD002,2
 ```
+
+Blob fields accept a filesystem path, a data URI, or a JSON object — see the [Database Seeding](#database-seeding-csv-vs-factory) section for details.
 
 **CSV format for many-to-many relationships:**
 ```csv
