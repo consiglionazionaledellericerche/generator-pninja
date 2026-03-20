@@ -10,17 +10,11 @@ export class ModelsGenerator {
         const className = entity.name;
         const tableName = entity.tableName;
         // fillable from entity property
-        const fillable = entity.fields.reduce((acc, prop) => {
-            acc.push(`'${to.snake(prop.name)}'`);
-            return acc;
-        }, []);
+        const fillable = entity.fields.map(({ name }) => `'${to.snake(name)}'`);
         // blob columns from entity property
-        const blobs = entity.fields.reduce((acc, prop) => {
-            if (['Blob', 'AnyBlob', 'ImageBlob'].includes(prop.type)) {
-                acc.push(`'${to.snake(prop.name)}'`);
-            }
-            return acc;
-        }, []);
+        const blobs = entity.fields
+            .filter(({ type }) => ['Blob', 'AnyBlob', 'ImageBlob'].includes(type))
+            .map(({ name }) => `'${to.snake(name)}'`);
         // boolean columns from entity property
         const booleans = entity.fields.reduce((acc, prop) => {
             if (prop.type === 'Boolean') {

@@ -33,11 +33,6 @@ function jdlTypeToOpenApi(type, enums = []) {
             return { type: 'string', format: 'time' };
         case 'Duration':
             return { type: 'integer', format: 'int64', description: 'Duration in milliseconds' };
-        case 'Blob':
-        case 'AnyBlob':
-        case 'ImageBlob':
-            // Blob fields are handled separately as JSON objects — this case should not be reached
-            return { type: 'object' };
         default:
             if (enums.find(e => e.name === type)) {
                 return { $ref: `#/components/schemas/${type}` };

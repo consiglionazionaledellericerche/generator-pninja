@@ -108,10 +108,7 @@ export default class ServerGenerator extends Generator {
     if (this.config.get('authentication') === 'keycloak') {
       this.fs.copyTpl(this.templatePath("app/Resolvers/Keycloak__UserResolver.php.ejs"), this.destinationPath(`server/app/Resolvers/UserResolver.php`));
     }
-    this.fs.copyTpl(this.templatePath("Casts/Base64BinaryCast.php.ejs"), this.destinationPath(`server/app/Casts/Base64BinaryCast.php`), {});
     this.fs.copyTpl(this.templatePath("Casts/BlobCast.php.ejs"), this.destinationPath(`server/app/Casts/BlobCast.php`), {});
-    this.fs.copyTpl(this.templatePath("Rules/Base64MaxSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MaxSize.php`), {});
-    this.fs.copyTpl(this.templatePath("Rules/Base64MinSize.php.ejs"), this.destinationPath(`server/app/Rules/Base64MinSize.php`), {});
     this.fs.copyTpl(this.templatePath("Rules/BlobMaxSize.php.ejs"), this.destinationPath(`server/app/Rules/BlobMaxSize.php`), {});
     this.fs.copyTpl(this.templatePath("Rules/BlobMinSize.php.ejs"), this.destinationPath(`server/app/Rules/BlobMinSize.php`), {});
   }
