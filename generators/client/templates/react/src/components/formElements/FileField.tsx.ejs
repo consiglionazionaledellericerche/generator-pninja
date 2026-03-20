@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { Icon } from '../Icon';
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormContext, useController, FieldError } from 'react-hook-form';
 import { FormLabel, FormFieldInfo } from './index';
 import { useId } from 'react-aria';
+import { DropZone as AriaDropZone, FileTrigger, Button } from 'react-aria-components';
+import { BlobViewer } from '../BlobViewer';
 
 type BlobValue = {
   data: string;
@@ -45,21 +47,146 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
+const INLINE_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'image/avif',
+  'image/apng',
+];
+
 const getFileIcon = (mimeType: string | undefined): JSX.Element => {
-  if (!mimeType) {
-    return <Icon icon="draft" size={6} fill />;
-  }
-  if (mimeType.startsWith('image/')) {
-    return <Icon icon="imagesmode" size={6} fill />;
-  }
-  if (mimeType.startsWith('video/')) {
-    return <Icon icon="video_file" size={6} fill />;
-  }
-  if (mimeType.startsWith('audio/')) {
-    return <Icon icon="audio_file" size={6} fill />;
-  }
+  if (!mimeType) return <Icon icon="draft" size={6} fill />;
+  if (mimeType.startsWith('image/')) return <Icon icon="imagesmode" size={6} fill />;
+  if (mimeType.startsWith('video/')) return <Icon icon="video_file" size={6} fill />;
+  if (mimeType.startsWith('audio/')) return <Icon icon="audio_file" size={6} fill />;
+  if (mimeType === 'application/pdf') return <Icon icon="picture_as_pdf" size={6} fill />;
   return <Icon icon="draft" size={6} fill />;
 };
+
+// ─── FilePreview ──────────────────────────────────────────────────────────────
+
+const FilePreview: React.FC<{
+  file: File;
+  onRemove: () => void;
+}> = ({ file, onRemove }) => {
+  const { t } = useTranslation();
+  const [blobValue, setBlobValue] = useState<{ data: string; type: string; name: string; size: number } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const url = URL.createObjectURL(file);
+    // Convert to base64 for BlobViewer
+    fetch(url)
+      .then((r) => r.arrayBuffer())
+      .then((buf) => {
+        if (cancelled) return;
+        const bytes = new Uint8Array(buf);
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        setBlobValue({
+          data: btoa(binary),
+          type: file.type,
+          name: file.name,
+          size: file.size,
+        });
+      })
+      .catch(() => { if (!cancelled) setBlobValue(null); });
+    URL.revokeObjectURL(url);
+    return () => { cancelled = true; };
+  }, [file]);
+
+  return (
+    <div className="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-700 rounded-md border border-slate-300 dark:border-slate-600">
+      {blobValue ? (
+        <BlobViewer blob={blobValue} compact />
+      ) : (
+        <div className="w-20 h-20 flex-shrink-0 rounded bg-slate-200 dark:bg-slate-600 flex items-center justify-center">
+          {getFileIcon(file.type)}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium truncate">{file.name}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{prettyBytes(file.size)}</p>
+      </div>
+      <button
+        type="button"
+        onClick={onRemove}
+        className="flex-shrink-0 flex items-center text-sm cursor-pointer font-medium gap-1 text-slate-600 dark:text-slate-300"
+        aria-label={t('actions.crud.file.removeSelection')}
+      >
+        <Icon icon="close" size={5} />
+      </button>
+    </div>
+  );
+};
+
+// ─── DropZone ─────────────────────────────────────────────────────────────────
+
+const DropZone: React.FC<{
+  accept?: string;
+  isDisabled?: boolean;
+  onFileSelected: (file: File) => void;
+  hasError: boolean;
+}> = ({ accept, isDisabled, onFileSelected, hasError }) => {
+  const { t } = useTranslation();
+
+  const handleDrop = async (e: import('react-aria-components').DropEvent) => {
+    const droppedItem = e.items.find((item) => item.kind === 'file');
+    if (!droppedItem || droppedItem.kind !== 'file') return;
+    const file = await droppedItem.getFile();
+    onFileSelected(file);
+  };
+
+  return (
+    <AriaDropZone
+      onDrop={handleDrop}
+      isDisabled={isDisabled}
+      className={({ isDropTarget }) =>
+        [
+          'flex flex-col items-center justify-center gap-2 p-6 rounded-md border-2 border-dashed transition-colors outline-none',
+          isDropTarget
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+            : hasError
+              ? 'border-red-400 bg-red-50/30 dark:bg-red-900/10'
+              : 'border-slate-300 dark:border-slate-600',
+          isDisabled ? 'opacity-50' : '',
+        ].join(' ')
+      }
+    >
+      {({ isDropTarget }) => (
+        <FileTrigger
+          acceptedFileTypes={accept ? [accept] : undefined}
+          isDisabled={isDisabled}
+          onSelect={(files) => {
+            const file = files?.[0];
+            if (file) onFileSelected(file);
+          }}
+        >
+          <Button
+            isDisabled={isDisabled}
+            className="flex flex-col items-center gap-2 cursor-pointer w-full focus:outline-none"
+          >
+            <Icon
+              icon="cloud_upload"
+              size={8}
+              className={isDropTarget ? 'text-blue-500' : 'text-slate-400'}
+            />
+            <span className="text-sm text-slate-600 dark:text-slate-400 text-center">
+              {isDropTarget
+                ? t('actions.crud.file.dropHere')
+                : t('actions.crud.file.dragOrClick')}
+            </span>
+          </Button>
+        </FileTrigger>
+      )}
+    </AriaDropZone>
+  );
+};
+
+// ─── FileField ────────────────────────────────────────────────────────────────
 
 const FileField: React.FC<FileFieldProps> = ({
   accept,
@@ -76,8 +203,8 @@ const FileField: React.FC<FileFieldProps> = ({
   const hasFile = !!existingBlob?.name;
   const [shouldShowInput, setShouldShowInput] = useState(!hasFile);
   const [isMarkedForDeletion, setIsMarkedForDeletion] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const { required, minbytes, maxbytes } = validations || {};
-  const inputRef = useRef<HTMLInputElement>(null);
   const {
     control,
     register,
@@ -97,12 +224,11 @@ const FileField: React.FC<FileFieldProps> = ({
   const markForDeletion = (mark: boolean) => {
     setIsMarkedForDeletion(mark);
     setValue(fieldName, mark ? null : existingBlob);
-    setTimeout(() => {
-      trigger(fieldName);
-    }, 0);
+    setTimeout(() => trigger(fieldName), 0);
   };
 
-  const registerProps = register(fieldName, {
+  // Register the field in RHF for validation — not bound to a native input
+  register(fieldName, {
     validate: (value: unknown | undefined) => {
       const fileData = value as BlobValue | null;
 
@@ -122,17 +248,8 @@ const FileField: React.FC<FileFieldProps> = ({
     },
   });
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-
-    if (!file) {
-      setValue(fieldName, null);
-      setTimeout(() => {
-        trigger(fieldName);
-      }, 0);
-      return;
-    }
-
+  const processFile = async (file: File) => {
+    setSelectedFile(file);
     try {
       const fileData = await fileToBase64(file);
       const blobValue: BlobValue = {
@@ -141,28 +258,27 @@ const FileField: React.FC<FileFieldProps> = ({
         name: file.name,
         size: file.size,
       };
-
       setValue(fieldName, blobValue);
-      setTimeout(() => {
-        trigger(fieldName);
-      }, 0);
-    } catch (error) {
-      console.error('Error converting file to base64:', error);
+      setTimeout(() => trigger(fieldName), 0);
+    } catch (err) {
+      console.error('Error converting file to base64:', err);
+      setSelectedFile(null);
       setValue(fieldName, null);
-      setTimeout(() => {
-        trigger(fieldName);
-      }, 0);
+      setTimeout(() => trigger(fieldName), 0);
     }
+  };
+
+  const removeSelection = () => {
+    setSelectedFile(null);
+    setValue(fieldName, hasFile ? existingBlob : null);
+    setTimeout(() => trigger(fieldName), 0);
   };
 
   const undoEdit = () => {
     setShouldShowInput(false);
+    setSelectedFile(null);
     setValue(fieldName, existingBlob);
-    const input = document.querySelector(`[name=${fieldName}]`) as HTMLInputElement;
-    if (input) input.value = '';
-    setTimeout(() => {
-      trigger(fieldName);
-    }, 0);
+    setTimeout(() => trigger(fieldName), 0);
   };
 
   const fieldId = useId();
@@ -170,31 +286,37 @@ const FileField: React.FC<FileFieldProps> = ({
   const errorId = useId();
   const descriptionId = useId();
 
+  const showDropZone = shouldShowInput && !isMarkedForDeletion;
+
   return (
     <div className={className}>
       <FormLabel id={labelId} validations={validations}>
         {label}
       </FormLabel>
-      <div>
+      <div className="space-y-2">
+
+        {/* File esistente */}
         {hasFile && !shouldShowInput && !isMarkedForDeletion && (
-          <div className="p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md">
+          <div className="p-3 bg-slate-200 text-slate-800 dark:bg-slate-600 dark:text-slate-200 rounded-md space-y-2">
             <div className="flex items-center justify-between">
               <a
                 href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${existingBlob?.name}`}
-                className="hover:underline flex items-center gap-2"
+                className="hover:underline flex items-center gap-2 text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${t('actions.crud.file.viewOrDownload')} ${existingBlob?.name} (${t('common.opensInNewWindow')})`}
               >
                 {getFileIcon(existingBlob?.type)}
-                {t('actions.crud.file.viewOrDownload')}{' '}
-                {existingBlob?.name} ({t('common.opensInNewWindow')})
+                {existingBlob?.name}
+                {existingBlob?.size != null && (
+                  <span className="text-xs opacity-70">({prettyBytes(existingBlob.size)})</span>
+                )}
               </a>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setShouldShowInput(true)}
-                  className="flex items-center text-sm  cursor-pointer font-medium gap-1"
+                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
                 >
                   <Icon icon="swap_horiz" size={5} />
                   {t('actions.crud.edit')}
@@ -202,16 +324,20 @@ const FileField: React.FC<FileFieldProps> = ({
                 <button
                   type="button"
                   onClick={() => markForDeletion(true)}
-                  className="flex items-center text-sm  cursor-pointer font-medium gap-1"
+                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
                 >
                   <Icon icon="delete" size={5} />
                   {t('actions.crud.delete')}
                 </button>
               </div>
             </div>
+            {existingBlob && (
+              <BlobViewer blob={existingBlob} compact />
+            )}
           </div>
         )}
 
+        {/* Marcato per eliminazione */}
         {isMarkedForDeletion && (
           <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
             <div className="flex items-center justify-between">
@@ -233,45 +359,44 @@ const FileField: React.FC<FileFieldProps> = ({
           </div>
         )}
 
-        <div className={shouldShowInput && !isMarkedForDeletion ? 'block' : 'hidden'}>
-          {hasFile && shouldShowInput && (
-            <div className="p-3 mb-1 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center text-yellow-800 dark:text-yellow-200 gap-2">
-                  <Icon icon="info" size={6} />
-                  <span className="text-sm font-medium">
-                    {t('actions.crud.file.replaceWarning')}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => undoEdit()}
-                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
-                >
-                  <Icon icon="undo" size={5} />
-                  {t('common.cancel')}
-                </button>
+        {/* Warning sostituzione */}
+        {hasFile && shouldShowInput && (
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-yellow-800 dark:text-yellow-200 gap-2">
+                <Icon icon="info" size={6} />
+                <span className="text-sm font-medium">
+                  {t('actions.crud.file.replaceWarning')}
+                </span>
               </div>
+              <button
+                type="button"
+                onClick={undoEdit}
+                className="flex items-center text-sm cursor-pointer font-medium gap-1"
+              >
+                <Icon icon="undo" size={5} />
+                {t('common.cancel')}
+              </button>
             </div>
-          )}
-          <input
-            type="file"
-            disabled={props.isDisabled}
-            required={required && !hasFile && !isMarkedForDeletion}
-            aria-invalid={!!error}
-            aria-labelledby={labelId}
-            aria-describedby={
-              [validations ? descriptionId : '', error ? errorId : ''].join(' ').trim() || undefined
-            }
-            id={fieldId}
-            accept={accept ?? '*/*'}
-            {...registerProps}
-            onChange={handleFileChange}
-            ref={inputRef}
-            className={errors?.[fieldName]?.message ? 'form-field-error' : 'form-field'}
+          </div>
+        )}
+
+        {/* Preview file selezionato */}
+        {showDropZone && selectedFile && (
+          <FilePreview file={selectedFile} onRemove={removeSelection} />
+        )}
+
+        {/* Drop zone — nascosta se file già selezionato */}
+        {showDropZone && !selectedFile && (
+          <DropZone
+            accept={accept}
+            isDisabled={props.isDisabled}
+            onFileSelected={processFile}
+            hasError={!!error}
           />
-        </div>
+        )}
       </div>
+
       {!error && <FormFieldInfo id={descriptionId} validations={validations || {}} />}
       {error && <Error id={errorId} error={error} />}
     </div>

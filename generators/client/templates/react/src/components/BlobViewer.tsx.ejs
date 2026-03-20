@@ -29,32 +29,33 @@ function base64ToUint8Array(base64: string): Uint8Array {
 // ─── Image viewer ────────────────────────────────────────────────────────────
 
 const ImageViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
-  <div className="space-y-2">
-    <a href={objectUrl} target="_blank" rel="noopener noreferrer">
-      <img
-        src={objectUrl}
-        alt={name}
-        className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
-      />
-    </a>
-  </div>
+  <a href={objectUrl} target="_blank" rel="noopener noreferrer">
+    <img
+      src={objectUrl}
+      alt={name}
+      className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+    />
+  </a>
 );
 
 // ─── Video viewer ────────────────────────────────────────────────────────────
 
 const VideoViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
-  <div className="space-y-2">
-    <a href={objectUrl} target="_blank" rel="noopener noreferrer" className="inline-block relative">
-      <video
-        src={objectUrl}
-        preload="metadata"
-        className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
-      />
-      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-        <Icon icon="play_circle" size={12} className="text-white drop-shadow" />
-      </div>
-    </a>
-  </div>
+  <a
+    href={objectUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="h-full inline-block relative"
+  >
+    <video
+      src={objectUrl}
+      preload="metadata"
+      className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+    />
+    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+      <Icon icon="play_circle" size={12} className="text-white drop-shadow" />
+    </div>
+  </a>
 );
 
 // ─── PDF viewer ──────────────────────────────────────────────────────────────
@@ -120,7 +121,7 @@ const PdfViewer: React.FC<{ blob: BlobValue; objectUrl: string }> = ({ blob, obj
   }, [blob.data]);
 
   return (
-    <div className="space-y-2">
+    <>
       {thumbnailUrl && !pdfError && (
         <a href={objectUrl} target="_blank" rel="noopener noreferrer" className="block">
           <img
@@ -133,7 +134,7 @@ const PdfViewer: React.FC<{ blob: BlobValue; objectUrl: string }> = ({ blob, obj
       {(pdfError || !thumbnailUrl) && (
         <Icon icon="picture_as_pdf" size={10} className="text-red-500" />
       )}
-    </div>
+    </>
   );
 };
 
@@ -174,9 +175,11 @@ const AudioViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl,
 interface BlobViewerProps {
   blob: BlobValue | null | undefined;
   className?: string;
+  /** When true, suppresses the filename/size/link bar below the preview */
+  compact?: boolean;
 }
 
-const BlobViewer: React.FC<BlobViewerProps> = ({ blob, className }) => {
+const BlobViewer: React.FC<BlobViewerProps> = ({ blob, className, compact = false }) => {
   const { t } = useTranslation();
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
 
@@ -196,15 +199,34 @@ const BlobViewer: React.FC<BlobViewerProps> = ({ blob, className }) => {
   const isAudio = blob.type.startsWith('audio/');
   const isPdf = blob.type === 'application/pdf';
 
-  return (
-    <div className={className}>
-      {objectUrl && isInlineImage && <ImageViewer objectUrl={objectUrl} name={blob.name} />}
-      {objectUrl && isVideo && <VideoViewer objectUrl={objectUrl} name={blob.name} />}
-      {objectUrl && isPdf && <PdfViewer blob={blob} objectUrl={objectUrl} />}
-      {objectUrl && isAudio && <AudioViewer objectUrl={objectUrl} name={blob.name} />}
-      {objectUrl && !isInlineImage && !isVideo && !isPdf && !isAudio && (
+  const preview = objectUrl && (
+    <>
+      {isInlineImage && <ImageViewer objectUrl={objectUrl} name={blob.name} />}
+      {isVideo && <VideoViewer objectUrl={objectUrl} name={blob.name} />}
+      {isPdf && <PdfViewer blob={blob} objectUrl={objectUrl} />}
+      {isAudio && <AudioViewer objectUrl={objectUrl} name={blob.name} />}
+      {!isInlineImage && !isVideo && !isPdf && !isAudio && (
         <GenericViewer objectUrl={objectUrl} name={blob.name} />
       )}
+    </>
+  );
+
+  if (compact) {
+    return (
+      <div
+        className={[
+          'w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-slate-200 dark:bg-slate-600 flex items-center justify-center [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_video]:w-full [&_video]:h-full [&_video]:object-cover [&_a]:w-full [&_a]:h-full',
+          className,
+        ].filter(Boolean).join(' ')}
+      >
+        {preview}
+      </div>
+    );
+  }
+
+  return (
+    <div className={className}>
+      {preview}
       {objectUrl && (
         <div className="flex items-center gap-3 mt-1">
           <span className="text-xs text-gray-500 truncate max-w-xs">{blob.name}</span>

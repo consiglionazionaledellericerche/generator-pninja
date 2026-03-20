@@ -55,30 +55,30 @@ export default function <%= entity.name %>Edit() {
     }
   }, [id, addNotification, navigate, t]);
 
-  const handleSubmit = (data: I<%= entity.name %>) => {
-    (id
-      ? <%= entity.name %>Service.update(Number(id), data)
-      : <%= entity.name %>Service.create(data)
-    )
-      .then((data: I<%= entity.name %>) => {
+  const handleSubmit = async (data: I<%= entity.name %>) => {
+    try {
+      const result = await (id
+        ? <%= entity.name %>Service.update(Number(id), data)
+        : <%= entity.name %>Service.create(data)
+      );
 <%_ if (entity.pessimisticLock) { _%>
-        release();
+      release();
 <%_ } _%>
-        addNotification({
-          type: 'success',
-          message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
-            id: id || data.id,
-          }),
-        });
-        navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
-      })
-      .catch((error: AxiosError<ErrorResponseData>) => {
-        addNotification({
-          type: 'error',
-          message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
-          error,
-        });
+      addNotification({
+        type: 'success',
+        message: t(`actions.crud.successfully${id ? 'Updated' : 'Created'}`, {
+          id: id || result.id,
+        }),
       });
+      navigate('/<%- entity.name === 'AcRule' ? 'admin' : 'entities' %>/<%=to.slug(pluralize(entity.name))%>');
+    } catch (error) {
+      addNotification({
+        type: 'error',
+        message: `${t(id ? 'errors.entities.update' : 'errors.entities.create')} ${t('entities:<%-to.snake(entity.name)%>.<%= entity.name %>')}${id ? ` ID ${id}` : ''}`,
+        error: error as AxiosError<ErrorResponseData>,
+      });
+      throw error;
+    }
   };
 
   const handleCancel = () => {
