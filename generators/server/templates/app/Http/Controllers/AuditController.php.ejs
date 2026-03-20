@@ -14,7 +14,8 @@ class AuditController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Audit::query()->with('auditable');
+        $query = Audit::query()
+            ->select(['id', 'event', 'auditable_type', 'auditable_id', 'user_id', 'user_type', 'url', 'ip_address', 'user_agent', 'tags', 'created_at', 'updated_at']);
 
         // Ricerca testuale su più campi
         if ($request->has('search') && $request->search) {
