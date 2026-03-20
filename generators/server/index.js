@@ -51,9 +51,14 @@ export default class ServerGenerator extends Generator {
       { entities: [AcRule], manyToMany: [], recycle: [] }
     );
     (new MigrationsGenerator(this)).createTable({ entity: AcRule, enums: [] });
-    this.fs.copyTpl(this.templatePath("../../entities/templates/database/migrations/create_audits_table.php.ejs"), this.destinationPath(`server/database/migrations/${this.baseTimestamp}_000_${randomstring.generate(5)}_create_audits_table.php`), {
-      authentication: this.config.get('authentication'),
-    });
+    this.fs.copyTpl(
+      this.templatePath("../../entities/templates/database/migrations/create_audits_table.php.ejs"),
+      this.destinationPath(`server/database/migrations/${this.baseTimestamp}_000_${randomstring.generate(5)}_create_audits_table.php`),
+      {
+        authentication: this.config.get('authentication'),
+        dbms: this.config.get('dbms'),
+      }
+    );
     (new ModelsGenerator(this)).generateModel(AcRule, [], [], searchEngine);
     (new ControllersGenerator(this)).generateEntityController(AcRule, [], searchEngine);
     this.fs.copyTpl(this.templatePath("../../entities/templates/database/seeders/csv/.gitkeep"), this.destinationPath(`server/database/seeders/csv/.gitkeep`));

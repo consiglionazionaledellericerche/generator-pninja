@@ -27,8 +27,13 @@ return new class extends Migration
 <% }  -%>
             $table->string('event');
             $table->morphs('auditable');
-            $table->text('old_values')->nullable();
-            $table->text('new_values')->nullable();
+<%_ if (dbms === 'pgsql') { _%>
+            $table->addColumn('jsonb', 'old_values')->nullable();
+            $table->addColumn('jsonb', 'new_values')->nullable();
+<%_ } else { _%>
+            $table->json('old_values')->nullable();
+            $table->json('new_values')->nullable();
+<%_ } _%>
             $table->text('url')->nullable();
             $table->ipAddress('ip_address')->nullable();
             $table->string('user_agent', 1023)->nullable();
