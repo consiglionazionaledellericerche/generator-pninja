@@ -26,14 +26,17 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes;
 }
 
+const linkClass =
+  'inline-block rounded-sm  hover:outline-2 hover:outline-offset-2 hover:outline-blue-600 hover:dark:outline-sky-300 focus:outline-2 focus:outline-offset-2 focus:outline-blue-600 focus:dark:outline-sky-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300';
+
 // ─── Image viewer ────────────────────────────────────────────────────────────
 
 const ImageViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl, name }) => (
-  <a href={objectUrl} target="_blank" rel="noopener noreferrer">
+  <a href={objectUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
     <img
       src={objectUrl}
       alt={name}
-      className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+      className="max-w-xs max-h-80 rounded-sm border border-gray-200 dark:border-gray-700"
     />
   </a>
 );
@@ -45,12 +48,13 @@ const VideoViewer: React.FC<{ objectUrl: string; name: string }> = ({ objectUrl,
     href={objectUrl}
     target="_blank"
     rel="noopener noreferrer"
-    className="h-full inline-block relative"
+    // className="h-full inline-block relative"
+    className={`relative ${linkClass}`}
   >
     <video
       src={objectUrl}
       preload="metadata"
-      className="max-w-xs max-h-80 rounded border border-gray-200 dark:border-gray-700"
+      className="max-w-xs max-h-80 rounded-sm border border-gray-200 dark:border-gray-700"
     />
     <div className="absolute inset-0 flex items-center justify-center bg-black/30">
       <Icon icon="play_circle" size={12} className="text-white drop-shadow" />
@@ -123,11 +127,11 @@ const PdfViewer: React.FC<{ blob: BlobValue; objectUrl: string }> = ({ blob, obj
   return (
     <>
       {thumbnailUrl && !pdfError && (
-        <a href={objectUrl} target="_blank" rel="noopener noreferrer" className="block">
+        <a href={objectUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
           <img
             src={thumbnailUrl}
             alt={blob.name}
-            className="max-w-xs rounded border border-gray-200 dark:border-gray-700"
+            className="max-w-xs rounded-sm border border-gray-200 dark:border-gray-700"
           />
         </a>
       )}
@@ -211,13 +215,17 @@ const BlobViewer: React.FC<BlobViewerProps> = ({ blob, className, compact = fals
     </>
   );
 
+  if (compact && !isInlineImage && !isVideo && !isPdf) return null;
+
   if (compact) {
     return (
       <div
         className={[
-          'w-20 h-20 flex-shrink-0 rounded overflow-hidden bg-slate-200 dark:bg-slate-600 flex items-center justify-center [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_video]:w-full [&_video]:h-full [&_video]:object-cover [&_a]:w-full [&_a]:h-full',
+          'w-20 h-20 p-1 outline-2 -outline-offset-2 focus-within:outline-0 hover:outline-0 flex-shrink-0 rounded-md overflow-hidden bg-slate-200 dark:bg-slate-600 flex items-center justify-center [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_video]:w-full [&_video]:h-full [&_video]:object-cover [&_a]:w-full [&_a]:h-full',
           className,
-        ].filter(Boolean).join(' ')}
+        ]
+          .filter(Boolean)
+          .join(' ')}
       >
         {preview}
       </div>
