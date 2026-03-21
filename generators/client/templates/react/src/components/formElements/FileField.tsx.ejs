@@ -207,18 +207,35 @@ const FileField: React.FC<FileFieldProps> = ({
   const { required, minbytes, maxbytes } = validations || {};
   const {
     control,
-    register,
     setValue,
     trigger,
-    formState: { errors },
   } = useFormContext();
 
   const {
+    field: { ref: fieldRef },
     fieldState: { error },
   } = useController({
     name: fieldName,
     control,
-    rules: {},
+    rules: {
+      validate: (value: unknown | undefined) => {
+        const fileData = value as BlobValue | null;
+
+        if (fileData?.type && !fileData.type.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
+          return `errors.validations.file.invalidType:${accept}:${fileData.type}`;
+        }
+        if (typeof fileData?.size === 'number' && minbytes && fileData?.size < minbytes) {
+          return `errors.validations.file.minSize:${prettyBytes(minbytes)}:${prettyBytes(fileData?.size)}`;
+        }
+        if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
+          return `errors.validations.file.maxSize:${prettyBytes(maxbytes)}:${prettyBytes(fileData?.size)}`;
+        }
+        if (required && (isMarkedForDeletion || (!fileData && !existingBlob?.name))) {
+          return 'errors.validations.file.required';
+        }
+        return true;
+      },
+    },
   });
 
   const markForDeletion = (mark: boolean) => {
@@ -226,28 +243,6 @@ const FileField: React.FC<FileFieldProps> = ({
     setValue(fieldName, mark ? null : existingBlob);
     setTimeout(() => trigger(fieldName), 0);
   };
-
-  // Register the field in RHF for validation — not bound to a native input
-  register(fieldName, {
-    validate: (value: unknown | undefined) => {
-      const fileData = value as BlobValue | null;
-
-      if (fileData?.type && !fileData.type.startsWith(accept?.replace(/\/\*$/, '') ?? '')) {
-        return `errors.validations.file.invalidType:${accept}:${fileData.type}`;
-      }
-      if (typeof fileData?.size === 'number' && minbytes && fileData?.size < minbytes) {
-        return `errors.validations.file.minSize:${prettyBytes(minbytes)}:${prettyBytes(fileData?.size)}`;
-      }
-      if (typeof fileData?.size === 'number' && maxbytes && fileData?.size > maxbytes) {
-        return `errors.validations.file.maxSize:${prettyBytes(maxbytes)}:${prettyBytes(fileData?.size)}`;
-      }
-      if (required && (isMarkedForDeletion || (!fileData && !existingBlob?.name))) {
-        return 'errors.validations.file.required';
-      }
-      return true;
-    },
-  });
-
   const processFile = async (file: File) => {
     setSelectedFile(file);
     try {
@@ -294,6 +289,8 @@ const FileField: React.FC<FileFieldProps> = ({
         {label}
       </FormLabel>
       <div className="space-y-2">
+        {/* Focus anchor for RHF scroll-to-error */}
+        <span ref={fieldRef} tabIndex={-1} className="sr-only" aria-hidden="true" />
 
         {/* File esistente */}
         {hasFile && !shouldShowInput && !isMarkedForDeletion && (
