@@ -207,7 +207,6 @@ export function <%= entity.name %>Form({ <%= to.camel(entity.name)%>, onSubmit, 
       await onSubmit(data);
     } catch (error) {
       console.error('Form submission error:', error);
-      setDataSaving(false);
     } finally {
       setDataSaving(false);
     }
