@@ -75,6 +75,14 @@
     focus:inset-ring-0 focus:outline-2 focus:outline-offset-2 focus:outline-red-600 dark:focus:outline-red-500
     inset-ring-2 inset-ring-red-600 dark:inset-ring-red-500;
   }
+  .drop-zone-button {
+    @apply outline-0 rounded-md w-full cursor-pointer transition-colors;
+  }
+  .icon-text-button {
+    @apply rounded-full cursor-pointer
+    focus:outline-2 focus:outline-offset-2 focus:outline-blue-600 focus:dark:outline-sky-300
+    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 focus-visible:dark:outline-sky-300;
+  }
   .kdb-shortcut {
     @apply font-sans text-xs h-5 min-w-5 items-center justify-center rounded border px-1 hidden xl:inline-flex;
   }

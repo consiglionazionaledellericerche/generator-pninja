@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import prettyBytes from 'pretty-bytes';
 import { Icon } from '../Icon';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useFormContext, useController, FieldError } from 'react-hook-form';
 import { FormLabel, FormFieldInfo } from './index';
 import { useId } from 'react-aria';
@@ -114,7 +114,7 @@ const FilePreview: React.FC<{
       <button
         type="button"
         onClick={onRemove}
-        className="flex-shrink-0 flex items-center text-sm cursor-pointer font-medium gap-1 text-slate-600 dark:text-slate-300"
+        className="icon-text-button flex-shrink-0 flex items-center text-sm cursor-pointer font-medium gap-1 text-slate-600 dark:text-slate-300"
         aria-label={t('actions.crud.file.removeSelection')}
       >
         <Icon icon="close" size={5} />
@@ -132,6 +132,19 @@ const DropZone: React.FC<{
   hasError: boolean;
 }> = ({ accept, isDisabled, onFileSelected, hasError }) => {
   const { t } = useTranslation();
+  const [isFocused, setIsFocused] = useState(false);
+  const dropZoneRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropZoneRef.current) return;
+    // RAC renders an internal button with aria-label for screen reader accessibility.
+    // We remove it from the tab order since our FileTrigger Button handles keyboard interaction.
+    // Screen readers can still reach it via arrow key navigation.
+    const internalButton = dropZoneRef.current.querySelector<HTMLElement>(
+      'button[data-react-aria-pressable][aria-label]'
+    );
+    if (internalButton) internalButton.tabIndex = -1;
+  }, []);
 
   const handleDrop = async (e: import('react-aria-components').DropEvent) => {
     const droppedItem = e.items.find((item) => item.kind === 'file');
@@ -142,13 +155,17 @@ const DropZone: React.FC<{
 
   return (
     <AriaDropZone
+      ref={dropZoneRef}
       onDrop={handleDrop}
       isDisabled={isDisabled}
+      tabIndex={-1}
       className={({ isDropTarget }) =>
         [
-          'flex flex-col items-center justify-center gap-2 p-6 rounded-md border-2 border-dashed transition-colors outline-none',
-          isDropTarget
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+          'rounded-md border-2 border-dashed transition-colors',
+          isDropTarget || isFocused
+            ? hasError
+              ? 'border-red-400 bg-red-50 dark:bg-red-900/20'
+              : 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
             : hasError
               ? 'border-red-400 bg-red-50/30 dark:bg-red-900/10'
               : 'border-slate-300 dark:border-slate-600',
@@ -167,14 +184,20 @@ const DropZone: React.FC<{
         >
           <Button
             isDisabled={isDisabled}
-            className="flex flex-col items-center gap-2 cursor-pointer w-full focus:outline-none"
+            isInvalid={hasError}
+            className="drop-zone-button flex flex-col items-center justify-center gap-2 p-6"
+            onFocusChange={setIsFocused}
           >
             <Icon
               icon="cloud_upload"
               size={8}
-              className={isDropTarget ? 'text-blue-500' : 'text-slate-400'}
+              className={isDropTarget || isFocused
+                ? hasError ? 'text-red-400' : 'text-blue-500'
+                : 'text-slate-400'}
             />
-            <span className="text-sm text-slate-600 dark:text-slate-400 text-center">
+            <span className={`text-sm text-center ${isDropTarget || isFocused
+              ? hasError ? 'text-red-600 dark:text-red-400' : 'text-blue-600 dark:text-blue-400'
+              : 'text-slate-600 dark:text-slate-400'}`}>
               {isDropTarget
                 ? t('actions.crud.file.dropHere')
                 : t('actions.crud.file.dragOrClick')}
@@ -276,6 +299,7 @@ const FileField: React.FC<FileFieldProps> = ({
     setTimeout(() => trigger(fieldName), 0);
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const fieldId = useId();
   const labelId = useId();
   const errorId = useId();
@@ -284,13 +308,24 @@ const FileField: React.FC<FileFieldProps> = ({
   const showDropZone = shouldShowInput && !isMarkedForDeletion;
 
   return (
-    <div className={className}>
+    <div className={className} ref={containerRef}>
       <FormLabel id={labelId} validations={validations}>
         {label}
       </FormLabel>
       <div className="space-y-2">
         {/* Focus anchor for RHF scroll-to-error */}
-        <span ref={fieldRef} tabIndex={-1} className="sr-only" aria-hidden="true" />
+        <span
+          ref={fieldRef}
+          tabIndex={-1}
+          className="sr-only"
+          aria-hidden="true"
+          onFocus={() => {
+            const firstButton = containerRef.current?.querySelector<HTMLElement>(
+              'button:not([tabindex="-1"]), [tabindex="0"]'
+            );
+            firstButton?.focus();
+          }}
+        />
 
         {/* File esistente */}
         {hasFile && !shouldShowInput && !isMarkedForDeletion && (
@@ -298,7 +333,7 @@ const FileField: React.FC<FileFieldProps> = ({
             <div className="flex items-center justify-between">
               <a
                 href={`${location.pathname.replace('entities', 'api').replace('edit/', '')}/${fieldName}/${existingBlob?.name}`}
-                className="hover:underline flex items-center gap-2 text-sm"
+                className="icon-text-button hover:underline flex items-center gap-2 text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${t('actions.crud.file.viewOrDownload')} ${existingBlob?.name} (${t('common.opensInNewWindow')})`}
@@ -313,7 +348,7 @@ const FileField: React.FC<FileFieldProps> = ({
                 <button
                   type="button"
                   onClick={() => setShouldShowInput(true)}
-                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
+                  className="icon-text-button flex items-center text-sm cursor-pointer font-medium gap-1"
                 >
                   <Icon icon="swap_horiz" size={5} />
                   {t('actions.crud.edit')}
@@ -321,7 +356,7 @@ const FileField: React.FC<FileFieldProps> = ({
                 <button
                   type="button"
                   onClick={() => markForDeletion(true)}
-                  className="flex items-center text-sm cursor-pointer font-medium gap-1"
+                  className="icon-text-button flex items-center text-sm cursor-pointer font-medium gap-1"
                 >
                   <Icon icon="delete" size={5} />
                   {t('actions.crud.delete')}
@@ -347,7 +382,7 @@ const FileField: React.FC<FileFieldProps> = ({
               <button
                 type="button"
                 onClick={() => markForDeletion(false)}
-                className="flex items-center text-sm cursor-pointer font-medium gap-1"
+                className="icon-text-button flex items-center text-sm cursor-pointer font-medium gap-1"
               >
                 <Icon icon="undo" size={5} />
                 {t('common.undo')}
@@ -369,7 +404,7 @@ const FileField: React.FC<FileFieldProps> = ({
               <button
                 type="button"
                 onClick={undoEdit}
-                className="flex items-center text-sm cursor-pointer font-medium gap-1"
+                className="icon-text-button flex items-center text-sm cursor-pointer font-medium gap-1"
               >
                 <Icon icon="undo" size={5} />
                 {t('common.cancel')}
