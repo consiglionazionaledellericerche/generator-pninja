@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <AuthorizationProvider cacheDuration={1 * 1000}>
+        <AuthorizationProvider>
           <App />
         </AuthorizationProvider>
       </AuthProvider>
