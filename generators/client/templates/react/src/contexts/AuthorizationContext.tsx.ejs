@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useCallback, useRef, ReactNode } from 'react';
 import axios from 'axios';
 
 interface AuthorizationContextType {
@@ -20,72 +20,49 @@ interface AuthorizationProviderProps {
 
 export const AuthorizationProvider: React.FC<AuthorizationProviderProps> = ({
   children,
-  cacheDuration = 60 * 1000,
+  cacheDuration = 5 * 60 * 1000,
 }) => {
-  const [cache, setCache] = useState<Map<string, CacheEntry>>(new Map());
-  const pendingRequestsRef = useRef<Map<string, Promise<boolean>>>(new Map());
-
-  const getCacheKey = (resource: string, action: string): string => {
-    return `${resource}:${action}`;
-  };
+  const cacheRef = useRef<Map<string, CacheEntry>>(new Map());
+  const pendingRef = useRef<Map<string, Promise<boolean>>>(new Map());
 
   const refresh = useCallback(() => {
-    setCache(new Map());
-    pendingRequestsRef.current = new Map();
+    cacheRef.current = new Map();
+    pendingRef.current = new Map();
   }, []);
 
-  const can = useCallback(
-    async (resource: string, action: string): Promise<boolean> => {
-      const key = getCacheKey(resource, action);
-      const now = Date.now();
+  const can = useCallback(async (resource: string, action: string): Promise<boolean> => {
+    const key = `${resource}:${action}`;
+    const now = Date.now();
 
-      // 1. Controlla cache
-      const cached = cache.get(key);
-      if (cached && now - cached.timestamp < cacheDuration) {
-        return cached.allowed;
-      }
+    // 1. Valid cache
+    const cached = cacheRef.current.get(key);
+    if (cached && now - cached.timestamp < cacheDuration) {
+      return cached.allowed;
+    }
 
-      // 2. Controlla se c'è già una richiesta in corso (SINCRONO con ref)
-      const pending = pendingRequestsRef.current.get(key);
-      if (pending) {
-        return pending;
-      }
+    // 2. Request pending: reuse the promise
+    const pending = pendingRef.current.get(key);
+    if (pending) {
+      return pending;
+    }
 
-      // 3. Crea nuova richiesta
-      const request = axios
-        .post<{ allowed: boolean }>('/api/user/can', {
-          resource,
-          action,
-        })
-        .then((response) => {
-          const allowed = response.data.allowed;
+    // 3. New request
+    const request = axios
+      .post<{ allowed: boolean }>('/api/user/can', { resource, action })
+      .then((response) => {
+        const allowed = response.data.allowed;
+        cacheRef.current.set(key, { allowed, timestamp: Date.now() });
+        pendingRef.current.delete(key);
+        return allowed;
+      })
+      .catch(() => {
+        pendingRef.current.delete(key);
+        return false;
+      });
 
-          // Aggiorna cache
-          setCache((prev) =>
-            new Map(prev).set(key, {
-              allowed,
-              timestamp: now,
-            })
-          );
-
-          // Rimuovi dalla pending (SINCRONO)
-          pendingRequestsRef.current.delete(key);
-
-          return allowed;
-        })
-        .catch(() => {
-          // Rimuovi dalla pending anche in caso di errore
-          pendingRequestsRef.current.delete(key);
-          return false;
-        });
-
-      // Salva la promise come pending (SINCRONO)
-      pendingRequestsRef.current.set(key, request);
-
-      return request;
-    },
-    [cache, cacheDuration]
-  );
+    pendingRef.current.set(key, request);
+    return request;
+  }, [cacheDuration]);
 
   return (
     <AuthorizationContext.Provider value={{ can, refresh }}>
